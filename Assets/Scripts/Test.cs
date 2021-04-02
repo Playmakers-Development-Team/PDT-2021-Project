@@ -5,15 +5,10 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     private int test;
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void Start() {}
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() {}
 }
