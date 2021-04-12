@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Commands;
+using ManagerLocator;
 
-public class CommandManager : MonoBehaviour
+public class CommandManager : IManager
 {
     private List<Command> commandQueue = new List<Command>();
     private List<Command> commandHistory = new List<Command>();
@@ -27,9 +26,5 @@ public class CommandManager : MonoBehaviour
         command.Execute();
         currentCommandHistoryIndex = commandHistory.Count - 1;
     }
-
-    void Start() {}
-
-    // Update is called once per frame
-    void Update() {}
+    
 }

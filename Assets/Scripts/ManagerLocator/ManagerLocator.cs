@@ -22,6 +22,12 @@ namespace ManagerLocator
         {
             Current = new ManagerLocator();
             
+            Register(new CommandManager());
+            Register(new PlayerManager());
+            Register(new TurnManager());
+            Register(new GridManager());
+
+
             // REGISTER SERVICES HERE
         }
         
