@@ -1,13 +1,17 @@
+using Units;
+
 namespace Commands
 {
     public abstract class Command
     {
-        //*protected IUnit unit;
+        private IUnit unit;
 
-        //* public Command (IUnit unit)
-        //{
+        protected Command(IUnit unit)
+        {
+            this.unit = unit;
+        }
 
-        //} 
+        public abstract void Queue();
 
         public abstract void Execute();
 
