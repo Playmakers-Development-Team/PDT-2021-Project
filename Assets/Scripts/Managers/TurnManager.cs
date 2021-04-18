@@ -1,4 +1,4 @@
-using ManagerLocator;
+using Managers;
 
 public class TurnManager : IManager
 {

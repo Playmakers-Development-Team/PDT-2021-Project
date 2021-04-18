@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Commands;
-using ManagerLocator;
+using Managers;
 
 public class CommandManager : IManager
 {
