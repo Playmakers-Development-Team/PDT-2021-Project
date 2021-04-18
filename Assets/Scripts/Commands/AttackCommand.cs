@@ -1,19 +1,19 @@
-using Commands;
 using Units;
 
-public class AttackCommand : Command
+namespace Commands
 {
-    public AttackCommand(IUnit unit) : base(unit) {}
+    public class AttackCommand : Command
+    {
+        public AttackCommand(IUnit unit) : base(unit) {}
 
-    public override void Queue() {}
+        public override void Queue() {}
 
-    public override void Execute() {}
+        public override void Execute() {}
 
-    public override void Undo() {}
+        public override void Undo() {}
 
-    // Start is called before the first frame update
-    void Start() {}
+        void Start() {}
 
-    // Update is called once per frame
-    void Update() {}
+        void Update() {}
+    }
 }

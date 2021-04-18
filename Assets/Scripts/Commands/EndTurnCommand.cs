@@ -1,19 +1,20 @@
-using Commands;
 using Units;
 
-public class EndTurn : Command
+namespace Commands
 {
-    public EndTurn(IUnit unit) : base(unit) {}
+    public class EndTurn : Command
+    {
+        public EndTurn(IUnit unit) : base(unit) {}
 
-    public override void Queue() {}
+        public override void Queue() {}
 
-    public override void Execute() {}
+        public override void Execute() {}
 
-    public override void Undo() {}
+        public override void Undo() {}
 
-    // Start is called before the first frame update
-    void Start() {}
+        void Start() {}
 
-    // Update is called once per frame
-    void Update() {}
+        void Update() {}
+    }
+
 }
