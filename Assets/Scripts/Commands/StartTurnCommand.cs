@@ -11,10 +11,5 @@ namespace Commands
         public override void Execute() {}
 
         public override void Undo() {}
-
-        void Start() {}
-
-        void Update() {}
     }
-
 }
