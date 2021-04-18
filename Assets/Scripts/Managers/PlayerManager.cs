@@ -1,8 +1,4 @@
-using Managers;
-
-public class PlayerManager: IManager
+namespace Managers
 {
-    
-}   
-
-
+    public class PlayerManager : IManager {}
+}

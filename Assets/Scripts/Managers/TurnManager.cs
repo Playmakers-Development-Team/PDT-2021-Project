@@ -1,6 +1,4 @@
-using Managers;
-
-public class TurnManager : IManager
+namespace Managers
 {
-   
+    public class TurnManager : IManager {}
 }

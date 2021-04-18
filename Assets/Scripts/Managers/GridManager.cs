@@ -1,6 +1,4 @@
-using Managers;
-
-public class GridManager : IManager
+namespace Managers
 {
-    
+    public class GridManager : IManager {}
 }
