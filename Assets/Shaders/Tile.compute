@@ -1,0 +1,9 @@
+#pragma kernel fill
+
+RWTexture2D<float4> original;
+
+[numthreads(8,8,1)]
+void fill (const uint3 id : SV_DispatchThreadID)
+{
+    original[id.xy] = float4(1, 1, 1, original[id.xy].a);
+}
