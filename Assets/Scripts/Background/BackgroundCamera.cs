@@ -4,6 +4,5 @@ namespace Background
 {
     public class BackgroundCamera : MonoBehaviour
     {
-        
     }
 }
