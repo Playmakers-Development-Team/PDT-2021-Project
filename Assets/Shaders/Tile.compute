@@ -1,9 +1,16 @@
 #pragma kernel fill
 
-RWTexture2D<float4> original;
+RWTexture2D<float4> output;
+sampler2D input;
 
 [numthreads(8,8,1)]
 void fill (const uint3 id : SV_DispatchThreadID)
 {
-    original[id.xy] = float4(1, 1, 1, original[id.xy].a);
+    int2 resolution;
+    output.GetDimensions(resolution.x, resolution.y);
+
+    const float2 uv = id.xy / (resolution - 1.0);
+    const float4 samp = tex2Dlod(input, float4(uv, 0, 0));
+    
+    output[id.xy] = float4(1, 1, 1, samp.a);
 }
