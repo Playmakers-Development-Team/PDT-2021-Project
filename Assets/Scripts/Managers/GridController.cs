@@ -13,17 +13,23 @@ namespace Managers
 
         [SerializeField] private List<TileData> tileDatas = new List<TileData>();
 
-        private Grid grid { get; set; }
+        private Grid grid;
 
         private void Awake()
         {
             grid = GetComponent<Grid>();
             ManagerLocator.Get<GridManager>().Controller = this;
             tilemap = GetComponentInChildren<Tilemap>();
-            
+
+            InitializeTileDatas();
+        }
+
+        private void InitializeTileDatas()
+        {
+            //NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
-            
+
             for (int x = 0; x < bounds.size.x; x++)
             {
                 for (int y = 0; y < bounds.size.y; y++)
@@ -33,24 +39,28 @@ namespace Managers
                     if (tile != null)
                     {
                         TileData tileData = new TileData(tile, new Vector2(x, y));
+                        
+                        //TODO: Add items on the tile and add them to tile data
+                        
                         tileDatas.Add(tileData);
+                        
                         //Debug.Log(tileData.Tile.name + " is at position " + tileData.Position);
                     }
                 }
             }
             
-            TestingGetGridObjectsByCoordinate(10);
-            
+            DrawGridOutline(bounds);
+            TestingGetGridObjectsByCoordinate(100, bounds);
         }
         
-        public TileBase GetGridObjectsByCoordinate(float x, float z)
+        public TileData GetGridObjectsByCoordinate(float x, float z)
         {
             Vector2 coordinate = new Vector2(x, z);
             foreach (TileData tileData in tileDatas)
             {
                 if (tileData.Position == coordinate)
                 {
-                    return tileData.Tile;
+                    return tileData;
                 }
             }
 
@@ -59,19 +69,40 @@ namespace Managers
         }
 
         #region Function Testing
+
+        private void DrawGridOutline(BoundsInt bounds)
+        {
+            Vector3[] gridCorners =  new Vector3[]
+            {
+                new Vector3(bounds.xMin, 0, bounds.yMin),
+                new Vector3(bounds.xMax, 0, bounds.yMin),
+                new Vector3(bounds.xMax, 0, bounds.yMax),
+                new Vector3(bounds.xMin, 0, bounds.yMax)
+            };
+
+            for (int i = 0; i < gridCorners.Length ; i++)
+            {
+                if (i == gridCorners.Length - 1)
+                {
+                    Debug.DrawLine(gridCorners[i], gridCorners[0], Color.green, float.MaxValue);
+                }
+                else
+                {
+                    Debug.DrawLine(gridCorners[i], gridCorners[i+1], Color.green, float.MaxValue);
+                }
+            }
+
+        }
         
-        private void TestingGetGridObjectsByCoordinate(float successfulCases)
+        private void TestingGetGridObjectsByCoordinate(float successfulCases, BoundsInt bounds)
         {
             for (int i = 0; i < successfulCases; i++)
             {
-                Vector2 randomCoordinates = new Vector2(Random.Range(2,18), Random.Range(0,12));
-                print(GetGridObjectsByCoordinate(randomCoordinates.x, randomCoordinates.y) + " is at the provided coordinates " + randomCoordinates);
+                Vector2 randomCoordinates = new Vector2(Random.Range(0, bounds.size.x), Random.Range(0, bounds.size.y));
+                print(GetGridObjectsByCoordinate(randomCoordinates.x, randomCoordinates.y).Tile + " is at the provided coordinates " + randomCoordinates);
             }
-            
-            // print(GetGridObjectsByCoordinate(1, -1) + "Error should return since coordinates are out of bounds");
-            // print(GetGridObjectsByCoordinate(18, 12) + "Error should return since coordinates are out of bounds");
         }
-        
+
         #endregion
     }
 }
