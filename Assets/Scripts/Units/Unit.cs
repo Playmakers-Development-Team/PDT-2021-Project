@@ -2,26 +2,20 @@
 
 namespace Units
 {
-    public abstract class Unit : UnitBase<UnitDataBase>
+    public static class UnitUtility
     {
-        public static IUnit Spawn(GameObject prefab, Vector2 position)
-        {
-            GameObject instance = Instantiate(prefab, position, Quaternion.identity);
-            return instance.GetComponent<IUnit>();
-        }
-
         public static IUnit Spawn(GameObject prefab, Vector2Int coordinate)
         {
-            // TODO: Replace line once required functionality in GridManager has been implemented!
+            // TODO: Uncomment once required functionality in GridManager has been implemented!
             // Vector2 position = GridManager.GridToWorld(coordinate);
-            Vector2 position = Vector2.one;
-            return Spawn(prefab, position);
-        }
-
-        public static IUnit Spawn(string unitName, Vector2 position)
-        {
-            GameObject prefab = UnitSettings.GetPrefab(unitName);
-            return Spawn(prefab, position);
+            Vector2 position = coordinate;
+            
+            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            IUnit unit = instance.GetComponent<IUnit>();
+            
+            // GridManager.Occupy(unit);
+            
+            return unit;
         }
 
         public static IUnit Spawn(string unitName, Vector2Int coordinate)

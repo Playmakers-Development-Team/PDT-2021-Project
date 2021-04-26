@@ -6,14 +6,12 @@ namespace Units
 {
     public class UnitSettings : ScriptableObject
     {
-        // Member variables
         [SerializeField] private List<GameObject> unitPrefabs;
         
         private static UnitSettings instance;
         private const string resourcePath = "Settings/UnitSettings/UnitSettings";
 
         
-        // Properties
         private static UnitSettings Instance
         {
             get
@@ -33,8 +31,7 @@ namespace Units
             }
         }
 
-
-        // Functions
+        
         public static GameObject GetPrefab(string unitName)
         {
             GameObject prefab = Instance.unitPrefabs.Find(o => o.name.Equals(unitName));

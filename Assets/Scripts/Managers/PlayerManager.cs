@@ -14,7 +14,7 @@ namespace Managers
         
         public IUnit Spawn(GameObject prefab, Vector2Int gridPosition)
         {
-            IUnit unit = Unit.Spawn(prefab, gridPosition);
+            IUnit unit = UnitUtility.Spawn(prefab, gridPosition);
             
             if (!(unit is PlayerUnit))
                 return null;
@@ -26,7 +26,7 @@ namespace Managers
         
         public IUnit Spawn(string playerName, Vector2Int gridPosition)
         {
-            IUnit unit = Unit.Spawn(playerName, gridPosition);
+            IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
 
             if (!(unit is PlayerUnit))
                 return null;
