@@ -11,7 +11,7 @@ namespace Managers
     {
         [SerializeField] private Tilemap tilemap;
 
-        [SerializeField] private List<TileData> tileDatas = new List<TileData>();
+        [SerializeField] private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
 
         private Grid grid;
 
@@ -38,38 +38,37 @@ namespace Managers
 
                     if (tile != null)
                     {
-                        TileData tileData = new TileData(tile, new Vector2(x, y));
+                        //TODO: Add a way to detect gridObjects before tileDatas.Add
                         
-                        //TODO: Add items on the tile and add them to tile data
-                        
-                        tileDatas.Add(tileData);
-                        
+                        tileDatas.Add(new Vector2(x, y), new TileData(tile));
+
                         //Debug.Log(tileData.Tile.name + " is at position " + tileData.Position);
                     }
                 }
             }
             
             DrawGridOutline(bounds);
-            TestingGetGridObjectsByCoordinate(100, bounds);
+            TestingGetGridObjectsByCoordinate(1, bounds);
         }
         
         public TileData GetGridObjectsByCoordinate(float x, float z)
         {
             Vector2 coordinate = new Vector2(x, z);
-            foreach (TileData tileData in tileDatas)
+            
+            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
             {
-                if (tileData.Position == coordinate)
-                {
-                    return tileData;
-                }
+                return tileData;
             }
-
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
-            return null;
+            else
+            {
+                Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+                return null;
+            }
         }
 
         #region Function Testing
-
+        
+        //DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
         private void DrawGridOutline(BoundsInt bounds)
         {
             Vector3[] gridCorners =  new Vector3[]

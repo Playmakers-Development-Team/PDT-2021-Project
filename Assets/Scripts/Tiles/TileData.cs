@@ -7,16 +7,13 @@ namespace Tiles
     public class TileData
     {
         private TileBase tile;
-        private Vector2 position;
         private List<GameObject> gridObjects;
         
         public TileBase Tile => tile;
-        public Vector2 Position => position;
-        
-        public TileData(TileBase tileBase, Vector2 tilePosition)
+
+        public TileData(TileBase tileBase)
         {
             tile = tileBase;
-            position = tilePosition;
         }
 
         public void AddGridObjects(GameObject gameObject)
