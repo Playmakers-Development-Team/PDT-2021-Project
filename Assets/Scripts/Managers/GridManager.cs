@@ -26,7 +26,6 @@ namespace Managers
                     {
                         TileData tileData = new TileData(tile, new Vector2(x, y));
                         tileDatas.Add(tileData);
-                        //Debug.Log(tileData.Tile.name + " is at position " + tileData.Position);
                     }
                 }
             }
