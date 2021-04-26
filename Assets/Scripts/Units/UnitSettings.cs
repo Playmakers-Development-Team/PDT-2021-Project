@@ -35,9 +35,33 @@ namespace Units
 
 
         // Functions
-        public static GameObject GetPrefab<T>() where T : UnitDataBase
+        public static GameObject GetPrefab(string unitName)
         {
-            return Instance.unitPrefabs.Find(o => !(o.GetComponent<UnitBase<T>>() is null));
+            GameObject prefab = Instance.unitPrefabs.Find(o => o.name.Equals(unitName));
+            
+            if (prefab is null)
+            {
+                throw new System.Exception(
+                    $"Prefab for Unit with name '{unitName}' not assigned to UnitSettings" +
+                    " ScriptableObject at Assets/Resources/Settings/UnitSettings.asset.");
+            }
+            
+            return prefab;
+        }
+
+        public static string[] GetNames<T>() where T : UnitDataBase
+        {
+            List<string> names = new List<string>();
+            
+            foreach (GameObject prefab in Instance.unitPrefabs)
+            {
+                if (prefab.GetComponent<UnitBase<T>>() is null)
+                    continue;
+
+                names.Add(prefab.name);
+            }
+
+            return names.ToArray();
         }
 }
 }
