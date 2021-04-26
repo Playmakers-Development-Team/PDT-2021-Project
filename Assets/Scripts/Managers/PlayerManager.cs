@@ -12,9 +12,9 @@ namespace Managers
         public int Count => players.Count;
 
         
-        public IUnit Spawn(GameObject prefab, Vector2Int gridPosition)
+        public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(prefab, gridPosition);
+            IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
             
             if (!(unit is PlayerUnit))
                 return null;

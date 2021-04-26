@@ -9,6 +9,7 @@ namespace Units
         [SerializeField] private List<GameObject> unitPrefabs;
         
         private static UnitSettings instance;
+        
         private const string resourcePath = "Settings/UnitSettings/UnitSettings";
 
         

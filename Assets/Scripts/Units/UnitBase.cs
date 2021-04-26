@@ -7,8 +7,6 @@ namespace Units
     {
         [SerializeField] protected T data;
         
-        public Vector3 Position => transform.position;
-        
         public static Type DataType => typeof(T);
     }
 }
