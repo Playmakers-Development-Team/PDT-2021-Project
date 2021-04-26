@@ -9,13 +9,13 @@ namespace Managers
     {
         public GridController Controller { get; set; }
         
-        private List<TileData> tileDatas = new List<TileData>();
+        private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
 
-        public void Initialise(Tilemap tilemap)
+        public void InitialiseTileDatas(Tilemap tilemap)
         {
             BoundsInt bounds = tilemap.cellBounds;
             TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
-            
+
             for (int x = 0; x < bounds.size.x; x++)
             {
                 for (int y = 0; y < bounds.size.y; y++)
@@ -24,22 +24,23 @@ namespace Managers
 
                     if (tile != null)
                     {
-                        TileData tileData = new TileData(tile, new Vector2(x, y));
-                        tileDatas.Add(tileData);
+                        // TODO: Add a way to detect gridObjects before tileDatas.Add
+                        
+                        tileDatas.Add(new Vector2(x, y), new TileData(tile));
+
+                        // Debug.Log(tileData.Tile.name + " is at position " + tileData.Position);
                     }
                 }
             }
         }
         
-        public TileBase GetGridObjectsByCoordinate(float x, float z)
+        public TileData GetGridObjectsByCoordinate(float x, float z)
         {
             Vector2 coordinate = new Vector2(x, z);
-            foreach (TileData tileData in tileDatas)
+            
+            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
             {
-                if (tileData.Position == coordinate)
-                {
-                    return tileData.Tile;
-                }
+                return tileData;
             }
 
             Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
