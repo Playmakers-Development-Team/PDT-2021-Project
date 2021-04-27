@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units
 {
-    public abstract class UnitBase<T> : MonoBehaviour, IUnit where T : UnitDataBase
+    public abstract class Unit<T> : MonoBehaviour, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
         

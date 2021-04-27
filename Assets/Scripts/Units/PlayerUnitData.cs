@@ -3,7 +3,8 @@
 namespace Units
 {
     [Serializable]
-    public class PlayerUnitData : UnitDataBase
+    public class PlayerUnitData : UnitData
     {
+        // Put player-specific stats here
     }
 }

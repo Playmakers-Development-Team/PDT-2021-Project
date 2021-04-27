@@ -1,6 +1,6 @@
 ﻿namespace Units
 {
-    public class PlayerUnit : UnitBase<PlayerUnitData>
+    public class PlayerUnit : Unit<PlayerUnitData>
     {
     }
 }

@@ -3,7 +3,7 @@
 namespace Units
 {
     [Serializable]
-    public abstract class UnitDataBase
+    public abstract class UnitData
     {
     }
 }

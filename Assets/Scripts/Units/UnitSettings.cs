@@ -6,26 +6,30 @@ namespace Units
 {
     public class UnitSettings : ScriptableObject
     {
-        [SerializeField] private List<GameObject> unitPrefabs;
+        [SerializeField] private List<GameObject> unitPrefabs = new List<GameObject>();
         
         private static UnitSettings instance;
         
-        private const string resourcePath = "Settings/UnitSettings/UnitSettings";
+        private const string resourcePath = "Settings/UnitSettings/";
 
         
         private static UnitSettings Instance
         {
             get
             {
-                if (instance || (instance =
-                    Resources.Load<UnitSettings>(resourcePath)))
+                if (instance)
+                    return instance;
+
+                instance = Resources.Load<UnitSettings>(resourcePath + "UnitSettings");
+                
+                if (instance)
                     return instance;
                 
 #if UNITY_EDITOR
                 System.IO.Directory.CreateDirectory(Application.dataPath + "/Resources/" +
                                                     resourcePath);
                 AssetDatabase.CreateAsset(instance = CreateInstance<UnitSettings>(),
-                    "Assets/Resources/" + resourcePath + ".asset");
+                    "Assets/Resources/" + resourcePath + "UnitSettings.asset");
 #endif
 
                 return instance;
@@ -47,13 +51,13 @@ namespace Units
             return prefab;
         }
 
-        public static string[] GetNames<T>() where T : UnitDataBase
+        public static string[] GetNames<T>() where T : UnitData
         {
             List<string> names = new List<string>();
             
             foreach (GameObject prefab in Instance.unitPrefabs)
             {
-                if (prefab.GetComponent<UnitBase<T>>() is null)
+                if (prefab.GetComponent<Unit<T>>() is null)
                     continue;
 
                 names.Add(prefab.name);
