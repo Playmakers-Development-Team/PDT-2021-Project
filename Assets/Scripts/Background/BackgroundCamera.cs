@@ -12,18 +12,12 @@ namespace Background
         
         [Header("Output Parameters")]
         
-        [SerializeField] private LayerMask washLayer;
         [SerializeField] private Renderer washRenderer;
-        [SerializeField] private string washTexturePropertyName;
-        
-        [Space]
-        
-        [SerializeField] private LayerMask lineLayer;
         [SerializeField] private Renderer lineRenderer;
-        [SerializeField] private string lineTexturePropertyName;
 
         [Header("Features")]
-        [SerializeField] private DisplacementFeature displacement;
+        [SerializeField] private LineFeature lineFeature;
+        [SerializeField] private DisplacementFeature displacementFeature;
         
         private new Camera camera;
         private RenderTexture washTexture;
@@ -78,14 +72,14 @@ namespace Background
         {
             if (Application.isPlaying)
             {
-                washRenderer.material.SetTexture(washTexturePropertyName, washTexture);
-                lineRenderer.material.SetTexture(lineTexturePropertyName, lineTexture);
+                washRenderer.material.SetTexture(Settings.WashTexturePropertyName, washTexture);
+                lineRenderer.material.SetTexture(Settings.LineTexturePropertyName, lineTexture);
             }
 #if UNITY_EDITOR
             else
             {
-                washRenderer.sharedMaterial.SetTexture(washTexturePropertyName, washTexture);
-                lineRenderer.sharedMaterial.SetTexture(lineTexturePropertyName, lineTexture);
+                washRenderer.sharedMaterial.SetTexture(Settings.WashTexturePropertyName, washTexture);
+                lineRenderer.sharedMaterial.SetTexture(Settings.LineTexturePropertyName, lineTexture);
             }
 #endif
         }
@@ -103,18 +97,19 @@ namespace Background
         private void RenderLine()
         {
             camera.targetTexture = lineTexture;
-            camera.cullingMask = lineLayer;
+            camera.cullingMask = Settings.LineLayer;
             camera.backgroundColor = Color.clear;
 
             RenderCamera();
             
-            // TODO: Dispatch the Line feature here...
+            lineFeature.input = lineTexture;
+            lineFeature.Execute();
         }
 
         private void RenderWash()
         {
             camera.targetTexture = washTexture;
-            camera.cullingMask = washLayer;
+            camera.cullingMask = Settings.WashLayer;
             camera.backgroundColor = canvasColour;
             
             RenderCamera();
@@ -122,8 +117,8 @@ namespace Background
             // TODO: Dispatch each wash Feature here...
 
             // TODO: Uncomment once the compute code has been written...
-            // displacement.input = washTexture;
-            // displacement.Execute();
+            // displacementFeature.input = washTexture;
+            // displacementFeature.Execute();
         }
 
         

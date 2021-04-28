@@ -1,0 +1,13 @@
+#include "Background.cginc"
+
+#pragma kernel line_occlusion
+[numthreads(8,8,1)]
+void line_occlusion (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 uv = pixel_to_uv(id.xy, get_output_resolution());
+
+    const float4 input = tex2Dlod(_input, float4(uv, 0, 0));
+    const float brightness = input.r;
+
+    output[id.xy] = float4(1, 1, 1, brightness);
+}
