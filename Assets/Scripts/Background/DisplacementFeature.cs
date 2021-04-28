@@ -16,7 +16,7 @@ namespace Background
         
         protected override bool IsReady() => !(input is null) && !(texture is null);
 
-        protected override int GetKernelIndex() => 1;
+        protected override int GetKernelIndex() => (int) KernelIndex.Displacement;
 
         public override void Execute()
         {
@@ -35,13 +35,9 @@ namespace Background
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", input);
             
             Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.width / 8, input.height / 8, 1);
-
-            // TODO: Figure out a smart way to get textures and buffers you want to keep for a bit
-            // TODO:    out of the function... Maybe 'Settings' could come in handy? Or a manager!
-            
             Graphics.CopyTexture(output, input);
-            output.Release();
             
+            output.Release();
             buffer.Release();
         }
         

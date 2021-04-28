@@ -22,13 +22,12 @@ namespace Managers
         {
             Current = new ManagerLocator();
             
+            // REGISTER SERVICES HERE
             Register(new CommandManager());
             Register(new PlayerManager());
             Register(new TurnManager());
             Register(new GridManager());
-
-
-            // REGISTER SERVICES HERE
+            Register(new BackgroundManager());
         }
         
         public static T Get<T>() where T : IManager

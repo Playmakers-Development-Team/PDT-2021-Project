@@ -4,14 +4,14 @@ using UnityEngine;
 namespace Background
 {
     [Serializable]
-    public class LineFeature : Feature
+    public class LineOcclusionFeature : Feature
     {
         [HideInInspector] public RenderTexture input;
         
         
         protected override bool IsReady() => !(input is null);
 
-        protected override int GetKernelIndex() => 0;
+        protected override int GetKernelIndex() => (int) KernelIndex.LineOcclusion;
 
         public override void Execute()
         {

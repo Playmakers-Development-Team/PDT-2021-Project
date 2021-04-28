@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 
 namespace Background
 {
@@ -16,7 +17,7 @@ namespace Background
         [SerializeField] private Renderer lineRenderer;
 
         [Header("Features")]
-        [SerializeField] private LineFeature lineFeature;
+        [SerializeField] private LineOcclusionFeature lineOcclusionFeature;
         [SerializeField] private DisplacementFeature displacementFeature;
         
         private new Camera camera;
@@ -31,6 +32,8 @@ namespace Background
             
             RenderLine();
             RenderWash();
+
+            BackgroundManager.Execute(lineTexture, washTexture);
 
             Apply();
         }
@@ -101,9 +104,6 @@ namespace Background
             camera.backgroundColor = Color.clear;
 
             RenderCamera();
-            
-            lineFeature.input = lineTexture;
-            lineFeature.Execute();
         }
 
         private void RenderWash()
@@ -113,12 +113,6 @@ namespace Background
             camera.backgroundColor = canvasColour;
             
             RenderCamera();
-            
-            // TODO: Dispatch each wash Feature here...
-
-            // TODO: Uncomment once the compute code has been written...
-            // displacementFeature.input = washTexture;
-            // displacementFeature.Execute();
         }
 
         
