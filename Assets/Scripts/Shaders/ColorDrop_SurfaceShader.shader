@@ -2,13 +2,15 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
-        _BaseMap ("Albedo (RGB)", 2D) = "white" {}
+        [MainColor] _Color ("Color", Color) = (1,1,1,1)
+        [MainTexture] _BaseMap ("Base Map", 2D) = "white" {}
+        _Cutoff("Alpha Cutoff", Range(0, 1)) = 1.0
     }
-    SubShader
-    {
-        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
-        LOD 200
+        SubShader
+        {
+            Tags { "Queue" = "Transparent" "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+            ZWrite Off
+            Blend One One
 
         Pass
         {
@@ -22,8 +24,10 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
             #pragma prefer_hlslcc gles
             #pragma exclude_renderers d3d11_9x
             #pragma require geometry
+            #pragma target 4.5
 
             // Lighting and shadow keywords
+            #pragma shader_feature_local_fragment _ALPHATEST_ON
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile _ _ADDITIONAL_LIGHTS
@@ -39,9 +43,6 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             //#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Macros.hlsl"
 
-            // The structure definition defines which variables it contains.
-            // This example uses the Attributes structure as an input structure in
-            // the vertex shader.
             struct Attributes
             {
                 // The positionOS variable contains the vertex positions in object
@@ -58,10 +59,13 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 float3 positionWS       : TEXCOORD0;
                 float2 uv               : TEXCOORD1;
                 float3 normalWS         : TEXCOORD2;
+                float4 color            : TEXCOORD3;
                 float4 positionCS       : SV_POSITION;
             };
 
             uniform float4 _Color;
+            uniform float _Smoothing;
+            uniform float _Cutoff;
 
             TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
 
@@ -93,26 +97,22 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
             
             float4 frag(VertexOutput input) : SV_TARGET
             {
-                float4 baseMap = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
-                float4 color = baseMap * _Color;
+                UNITY_SETUP_INSTANCE_ID(input);
+                float3 color = float3(1,1,1);
+                float4 tex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
+                color = color * tex.rgb;
+                float alpha = _Color.a * tex.a;
+                AlphaDiscard(alpha, _Cutoff);
 
-                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS.xyz);
-                Light light = GetMainLight(shadowCoord);
-
-                float3 diffuse = LightingLambert(light.color, light.direction, input.normalWS);
-                return float4(color.rgb * diffuse * light.shadowAttenuation, color.a);
+                color *= alpha;
+                return float4(color, alpha);
 
 
-                /*
-                // Initialise information
-                InputData lightingInput;
-                lightingInput.positionWS = input.positionWS;
-                lightingInput.normalWS = NormalizeNormalPerPixel(input.normalWS);
-                //lightingInput.viewDirectionWS = GetViewDirectionFromPosition(input.positionWS);
+                /*float4 sdf = tex2D(_MainTex, input.uv); // Distance sampler
+                float alpha = smoothstep(0.5 - _Smoothing, 0.5 + _Smoothing, sdf.a); // Smoothing alpha value
 
-                float3 albedo = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).rgb;
-
-                return UniversalFragmentBlinnPhong(lightingInput, albedo, 1, 0, 0, 1);*/
+                float4 c;
+                c.rgb = input.color.rgb;*/
             }
 
             ENDHLSL
