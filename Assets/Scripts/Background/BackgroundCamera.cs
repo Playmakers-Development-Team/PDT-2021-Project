@@ -6,7 +6,7 @@ namespace Background
     [RequireComponent(typeof(Camera)), AddComponentMenu("Background/Background Camera")]
     public class BackgroundCamera : MonoBehaviour
     {
-        [Header("Texture Settings")]
+        [Header("Texture Parameters")]
         
         [SerializeField] private Vector2Int resolution;
         [SerializeField] private Color canvasColour;
@@ -16,9 +16,10 @@ namespace Background
         [SerializeField] private Renderer washRenderer;
         [SerializeField] private Renderer lineRenderer;
 
-        [Header("Features")]
-        [SerializeField] private LineOcclusionFeature lineOcclusionFeature;
-        [SerializeField] private DisplacementFeature displacementFeature;
+        [Header("Pipeline Parameters")]
+        
+        [SerializeField] private bool overrideGlobalPipeline;
+        [SerializeField] private Pipeline pipeline;
         
         private new Camera camera;
         private RenderTexture washTexture;
@@ -33,7 +34,10 @@ namespace Background
             RenderLine();
             RenderWash();
 
-            BackgroundManager.Execute(lineTexture, washTexture);
+            if (overrideGlobalPipeline)
+                BackgroundManager.Execute(pipeline, lineTexture, washTexture);
+            else
+                BackgroundManager.Execute(lineTexture, washTexture);
 
             Apply();
         }

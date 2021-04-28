@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 
 namespace Background
@@ -23,11 +24,15 @@ namespace Background
             base.Execute();
 
             ComputeBuffer buffer = SetInput(new Input(textureParams, amount));
+            BackgroundManager.MarkToRelease(buffer);
 
             RenderTexture output = new RenderTexture(input.descriptor)
             {
                 filterMode = input.filterMode
             };
+            output.Create();
+            BackgroundManager.MarkToRelease(output);
+            
             Graphics.CopyTexture(input, output);
 
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_displacement", texture);
@@ -36,9 +41,6 @@ namespace Background
             
             Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.width / 8, input.height / 8, 1);
             Graphics.CopyTexture(output, input);
-            
-            output.Release();
-            buffer.Release();
         }
         
 

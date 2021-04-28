@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 
 namespace Background
@@ -22,6 +23,7 @@ namespace Background
                 filterMode = input.filterMode
             };
             output.Create();
+            BackgroundManager.MarkToRelease(output);
 
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
@@ -30,7 +32,6 @@ namespace Background
                 1);
             
             Graphics.CopyTexture(output, input);
-            output.Release();
         }
     }
 }
