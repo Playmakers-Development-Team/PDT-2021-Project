@@ -2,6 +2,17 @@
 RWTexture2D<float4> output;
 
 sampler2D _input;
+sampler2D _displacement;
+
+// Kernel input structs
+struct displacement_input
+{
+    float4 texture_params;
+    float amount;
+};
+
+// Buffers
+StructuredBuffer<displacement_input> displacement_in;
 
 // Functions
 float2 get_output_resolution()

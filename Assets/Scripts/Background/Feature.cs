@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 
 namespace Background
@@ -6,15 +7,7 @@ namespace Background
     [Serializable]
     public abstract class Feature
     {
-        public virtual void Execute()
-        {
-            if (IsReady())
-                return;
-            
-            throw new Exception($"Not all parameters for {GetType().Name} were assigned!");
-        }
-
-        protected abstract bool IsReady();
+        public abstract void Execute();
 
         protected abstract int GetKernelIndex();
 
@@ -25,6 +18,8 @@ namespace Background
 
             Settings.BackgroundCompute.SetBuffer(GetKernelIndex(), input.GetName(), buffer);
 
+            BackgroundManager.MarkToRelease(buffer);
+            
             return buffer;
         }
     }

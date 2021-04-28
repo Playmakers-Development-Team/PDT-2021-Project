@@ -7,6 +7,7 @@ namespace Background
     public class Pipeline : ScriptableObject
     {
         [SerializeField] private LineOcclusionFeature lineOcclusionFeature;
+        [SerializeField] private DisplacementFeature displacementFeature;
 
         public void Execute(RenderTexture line, RenderTexture wash)
         {
@@ -27,6 +28,9 @@ namespace Background
         {
             if (washTexture is null)
                 Debug.LogError("Pipeline executed with null wash texture!");
+
+            displacementFeature.input = washTexture;
+            displacementFeature.Execute();
         }
     }
 }

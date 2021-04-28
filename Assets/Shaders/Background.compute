@@ -11,3 +11,17 @@ void line_occlusion (const uint3 id : SV_DispatchThreadID)
 
     output[id.xy] = float4(1, 1, 1, brightness);
 }
+
+#pragma kernel displacement
+[numthreads(8, 8, 1)]
+void displacement (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    float2 displacement_value = sample_params(_displacement, uv, displacement_in[0].texture_params).rg;
+    displacement_value = displacement_value * 2 - 1;
+    displacement_value *= displacement_in[0].amount;
+
+    output[id.xy] = tex2Dlod(_input, float4(uv + displacement_value, 0, 0)); 
+}

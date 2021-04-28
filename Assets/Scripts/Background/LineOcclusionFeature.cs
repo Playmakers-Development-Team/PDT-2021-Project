@@ -9,15 +9,11 @@ namespace Background
     {
         [HideInInspector] public RenderTexture input;
         
-        
-        protected override bool IsReady() => !(input is null);
 
         protected override int GetKernelIndex() => (int) KernelIndex.LineOcclusion;
 
         public override void Execute()
         {
-            base.Execute();
-
             RenderTexture output = new RenderTexture(input.descriptor)
             {
                 filterMode = input.filterMode

@@ -15,14 +15,10 @@ namespace Background
         public float amount;
         
         
-        protected override bool IsReady() => !(input is null) && !(texture is null);
-
         protected override int GetKernelIndex() => (int) KernelIndex.Displacement;
 
         public override void Execute()
         {
-            base.Execute();
-
             ComputeBuffer buffer = SetInput(new Input(textureParams, amount));
             BackgroundManager.MarkToRelease(buffer);
 
@@ -32,12 +28,10 @@ namespace Background
             };
             output.Create();
             BackgroundManager.MarkToRelease(output);
-            
-            Graphics.CopyTexture(input, output);
 
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_displacement", texture);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", input);
+            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
             
             Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.width / 8, input.height / 8, 1);
             Graphics.CopyTexture(output, input);
