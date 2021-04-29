@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-1319285123824372718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f0b5b906ff42ca9b76c96a6a5cde5a, type: 3}
+  m_Name: New DisplacementFeature
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+  textureParams: {x: 2, y: 2, z: 0, w: 0}
+  amount: 0.01
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26172cfa3cc4a3fbbf9308a415c1461, type: 3}
+  m_Name: Global
+  m_EditorClassIdentifier: 
+  features:
+  - {fileID: 5675356334319904871}
+  - {fileID: -1319285123824372718}
+--- !u!114 &5675356334319904871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79a6f143e137490fa77de581eb1948ab, type: 3}
+  m_Name: Line Occlusion
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: line

@@ -7,16 +7,18 @@ namespace Background
     [Serializable]
     public class LineOcclusionFeature : Feature
     {
-        [HideInInspector] public RenderTexture input;
+        public FeatureTexture input;
         
 
         protected override int GetKernelIndex() => (int) KernelIndex.LineOcclusion;
 
         public override void Execute()
         {
-            RenderTexture output = new RenderTexture(input.descriptor)
+            input.Find();
+            
+            RenderTexture output = new RenderTexture(input.Texture.descriptor)
             {
-                filterMode = input.filterMode
+                filterMode = input.Texture.filterMode
             };
             output.Create();
             BackgroundManager.MarkToRelease(output);
@@ -24,7 +26,7 @@ namespace Background
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
 
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.width / 8, input.height / 8,
+            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8,
                 1);
             
             Graphics.CopyTexture(output, input);

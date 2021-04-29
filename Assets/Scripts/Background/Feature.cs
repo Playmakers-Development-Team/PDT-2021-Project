@@ -5,8 +5,15 @@ using UnityEngine;
 namespace Background
 {
     [Serializable]
-    public abstract class Feature
+    public abstract class Feature : ScriptableObject
     {
+        [SerializeField, HideInInspector] private bool active = true;
+
+        [SerializeField, HideInInspector] private string featureName;
+        
+        public bool IsActive => active;
+        
+        
         public abstract void Execute();
 
         protected abstract int GetKernelIndex();

@@ -7,7 +7,7 @@ namespace Background
     [Serializable]
     public class DisplacementFeature : Feature
     {
-        [HideInInspector] public RenderTexture input;
+        public FeatureTexture input;
         
         public Texture2D texture;
         public Vector4 textureParams;
@@ -19,12 +19,14 @@ namespace Background
 
         public override void Execute()
         {
+            input.Find();
+            
             ComputeBuffer buffer = SetInput(new Input(textureParams, amount));
             BackgroundManager.MarkToRelease(buffer);
 
-            RenderTexture output = new RenderTexture(input.descriptor)
+            RenderTexture output = new RenderTexture(input.Texture.descriptor)
             {
-                filterMode = input.filterMode
+                filterMode = input.Texture.filterMode
             };
             output.Create();
             BackgroundManager.MarkToRelease(output);
@@ -32,8 +34,9 @@ namespace Background
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_displacement", texture);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
-            
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.width / 8, input.height / 8, 1);
+
+            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8,
+                input.Texture.height / 8, 1);
             Graphics.CopyTexture(output, input);
         }
         

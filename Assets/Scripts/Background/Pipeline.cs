@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Background
 {
@@ -6,31 +7,26 @@ namespace Background
     [CreateAssetMenu(menuName = "Background/Pipeline", fileName = "NewPipeline", order = 50)]
     public class Pipeline : ScriptableObject
     {
-        [SerializeField] private LineOcclusionFeature lineOcclusionFeature;
-        [SerializeField] private DisplacementFeature displacementFeature;
+        [SerializeField] private List<Feature> features = new List<Feature>();
+
+        private readonly Dictionary<string, RenderTexture> featureTextures =
+            new Dictionary<string, RenderTexture>();
 
         public void Execute(RenderTexture line, RenderTexture wash)
         {
-            RenderLine(line);
-            RenderWash(wash);
-        }
+            featureTextures.Add("line", line);
+            featureTextures.Add("wash", wash);
 
-        private void RenderLine(RenderTexture lineTexture)
-        {
-            if (lineTexture is null)
-                Debug.LogError("Pipeline executed with null line texture!");
+            foreach (Feature feature in features)
+            {
+                if (feature.IsActive)
+                    feature.Execute();
+            }
             
-            lineOcclusionFeature.input = lineTexture;
-            lineOcclusionFeature.Execute();
+            featureTextures.Clear();
         }
 
-        private void RenderWash(RenderTexture washTexture)
-        {
-            if (washTexture is null)
-                Debug.LogError("Pipeline executed with null wash texture!");
-
-            displacementFeature.input = washTexture;
-            displacementFeature.Execute();
-        }
+        public RenderTexture GetTexture(string key) =>
+            featureTextures.ContainsKey(key) ? featureTextures[key] : null;
     }
 }
