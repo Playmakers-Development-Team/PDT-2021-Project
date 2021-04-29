@@ -11,7 +11,6 @@ namespace Units
         private static UnitSettings instance;
         
         private const string resourcePath = "Settings/UnitSettings/";
-
         
         private static UnitSettings Instance
         {
@@ -35,7 +34,6 @@ namespace Units
                 return instance;
             }
         }
-
         
         public static GameObject GetPrefab(string unitName)
         {
@@ -65,5 +63,5 @@ namespace Units
 
             return names.ToArray();
         }
-}
+    }
 }

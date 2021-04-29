@@ -1,9 +1,4 @@
-﻿using System;
-
-namespace Units
+﻿namespace Units
 {
-    [Serializable]
-    public abstract class UnitData
-    {
-    }
+    public abstract class UnitData {}
 }

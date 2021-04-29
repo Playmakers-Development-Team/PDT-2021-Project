@@ -6,11 +6,9 @@ namespace Managers
 {
     public class PlayerManager : IManager
     {
-        private readonly List<IUnit> players = new List<IUnit>();
-
+        private readonly List<IUnit> playerUnits = new List<IUnit>();
         
-        public int Count => players.Count;
-
+        public int Count => playerUnits.Count;
         
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
@@ -19,7 +17,7 @@ namespace Managers
             if (!(unit is PlayerUnit))
                 return null;
             
-            players.Add(unit);
+            playerUnits.Add(unit);
             
             return unit;
         }
@@ -31,22 +29,22 @@ namespace Managers
             if (!(unit is PlayerUnit))
                 return null;
             
-            players.Add(unit);
+            playerUnits.Add(unit);
             
             return unit;
         }
         
         public void Clear()
         {
-            players.Clear();
+            playerUnits.Clear();
         }
 
         public void Clean()
         {
-            for (int i = players.Count; i >= 0; i--)
+            for (int i = playerUnits.Count; i >= 0; i--)
             {
-                if (players[i] is null)
-                    players.RemoveAt(i);
+                if (playerUnits[i] is null)
+                    playerUnits.RemoveAt(i);
             }
         }
     }
