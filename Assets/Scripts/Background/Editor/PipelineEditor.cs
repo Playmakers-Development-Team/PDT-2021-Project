@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
-using Object = System.Object;
 
 namespace Background.Editor
 {
@@ -12,8 +11,7 @@ namespace Background.Editor
     public class PipelineEditor : UnityEditor.Editor
     {
         private SerializedProperty features;
-        
-        private List<UnityEditor.Editor> editors = new List<UnityEditor.Editor>();
+        private readonly List<UnityEditor.Editor> editors = new List<UnityEditor.Editor>();
 
         private void OnEnable()
         {
@@ -33,6 +31,24 @@ namespace Background.Editor
             DrawFeatures();
         }
 
+        private void UpdateEditors()
+        {
+            foreach (UnityEditor.Editor editor in editors)
+                DestroyImmediate(editor);
+            
+            editors.Clear();
+
+            for (int i = 0; i < features.arraySize; i++)
+            {
+                editors.Add(CreateEditor(features.GetArrayElementAtIndex(i).objectReferenceValue));
+            }
+        }
+
+        private void ForceSave()
+        {
+            EditorUtility.SetDirty(target);
+        }
+        
         private void DrawFeatures()
         {
             EditorGUILayout.LabelField("Render Features", EditorStyles.boldLabel);
@@ -57,69 +73,6 @@ namespace Background.Editor
 
             if (GUILayout.Button("Add Feature", EditorStyles.miniButton))
                 AddFeatureMenu();
-        }
-
-        private void AddFeatureMenu()
-        {
-            GenericMenu menu = new GenericMenu();
-            TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom<Feature>();
-            foreach (Type type in types)
-            {
-                string path = type.Name;
-                path = Regex.Replace(
-                    Regex.Replace(path, "([a-z])([A-Z])", "$1 $2", RegexOptions.Compiled),
-                    "([A-Z])([A-Z][a-z])", "$1 $2", RegexOptions.Compiled);
-                
-                menu.AddItem(new GUIContent(path), false, AddFeature, type.Name);
-            }
-            menu.ShowAsContext();
-        }
-
-        private void AddFeature(object type)
-        {
-            serializedObject.Update();
-
-            ScriptableObject feature = CreateInstance((string) type);
-            feature.name = $"New {(string) type}";
-
-            if (EditorUtility.IsPersistent(target))
-                AssetDatabase.AddObjectToAsset(feature, target);
-
-            features.arraySize++;
-            SerializedProperty featureProperty =
-                features.GetArrayElementAtIndex(features.arraySize - 1);
-            featureProperty.objectReferenceValue = feature;
-
-            if (EditorUtility.IsPersistent(target))
-                ForceSave();
-            
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void RemoveFeature(int index)
-        {
-            SerializedProperty property = features.GetArrayElementAtIndex(index);
-            UnityEngine.Object feature = property.objectReferenceValue;
-            property.objectReferenceValue = null;
-
-            features.DeleteArrayElementAtIndex(index);
-            UpdateEditors();
-            serializedObject.ApplyModifiedProperties();
-            
-            if (feature)
-                Undo.DestroyObjectImmediate(feature);
-
-            ForceSave();
-        }
-
-        private void MoveFeature(int index, int offset)
-        {
-            serializedObject.Update();
-            features.MoveArrayElement(index, index + offset);
-            UpdateEditors();
-            serializedObject.ApplyModifiedProperties();
-            
-            ForceSave();
         }
 
         private bool DrawRendererFeature(int index, ref SerializedProperty featureProperty)
@@ -180,12 +133,6 @@ namespace Background.Editor
             return renamed;
         }
         
-        private string ValidateName(string name)
-        {
-            name = Regex.Replace(name, @"[^a-zA-Z0-9 ]", "");
-            return name;
-        }
-
         private void OnContextClick(Vector2 position, int id)
         {
             var menu = new GenericMenu();
@@ -206,22 +153,73 @@ namespace Background.Editor
             menu.DropDown(new Rect(position, Vector2.zero));
         }
 
-        private void UpdateEditors()
+        private void AddFeatureMenu()
         {
-            foreach (UnityEditor.Editor editor in editors)
-                DestroyImmediate(editor);
-            
-            editors.Clear();
-
-            for (int i = 0; i < features.arraySize; i++)
+            GenericMenu menu = new GenericMenu();
+            TypeCache.TypeCollection types = TypeCache.GetTypesDerivedFrom<Feature>();
+            foreach (Type type in types)
             {
-                editors.Add(CreateEditor(features.GetArrayElementAtIndex(i).objectReferenceValue));
+                string path = type.Name;
+                path = Regex.Replace(
+                    Regex.Replace(path, "([a-z])([A-Z])", "$1 $2", RegexOptions.Compiled),
+                    "([A-Z])([A-Z][a-z])", "$1 $2", RegexOptions.Compiled);
+                
+                menu.AddItem(new GUIContent(path), false, AddFeature, type.Name);
             }
+            menu.ShowAsContext();
+        }
+        
+        private void AddFeature(object type)
+        {
+            serializedObject.Update();
+
+            ScriptableObject feature = CreateInstance((string) type);
+            feature.name = $"New {(string) type}";
+
+            if (EditorUtility.IsPersistent(target))
+                AssetDatabase.AddObjectToAsset(feature, target);
+
+            features.arraySize++;
+            SerializedProperty featureProperty =
+                features.GetArrayElementAtIndex(features.arraySize - 1);
+            featureProperty.objectReferenceValue = feature;
+
+            if (EditorUtility.IsPersistent(target))
+                ForceSave();
+            
+            serializedObject.ApplyModifiedProperties();
         }
 
-        private void ForceSave()
+        private void RemoveFeature(int index)
         {
-            EditorUtility.SetDirty(target);
+            SerializedProperty property = features.GetArrayElementAtIndex(index);
+            UnityEngine.Object feature = property.objectReferenceValue;
+            property.objectReferenceValue = null;
+
+            features.DeleteArrayElementAtIndex(index);
+            UpdateEditors();
+            serializedObject.ApplyModifiedProperties();
+            
+            if (feature)
+                DestroyImmediate(feature, true);
+
+            ForceSave();
+        }
+
+        private void MoveFeature(int index, int offset)
+        {
+            serializedObject.Update();
+            features.MoveArrayElement(index, index + offset);
+            UpdateEditors();
+            serializedObject.ApplyModifiedProperties();
+            
+            ForceSave();
+        }
+        
+        private static string ValidateName(string name)
+        {
+            name = Regex.Replace(name, @"[^a-zA-Z0-9 ]", "");
+            return name;
         }
     }
 }
