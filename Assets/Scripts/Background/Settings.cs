@@ -7,7 +7,6 @@ namespace Background
     public class Settings : ScriptableObject
     {
         [SerializeField] private ComputeShader backgroundCompute;
-        [SerializeField] private Pipeline globalPipeline;
         
         [SerializeField] private LayerMask washLayer;
         [SerializeField] private string washTexturePropertyName;
@@ -21,6 +20,8 @@ namespace Background
         
         [SerializeField] private ComputeShader tileCompute;
         
+        [SerializeField, HideInInspector] private Pipeline globalPipeline;
+        
         private const string instanceDirectory = "Background/Settings/";
         private const string instanceFileName = "settingsInstance";
 
@@ -28,12 +29,12 @@ namespace Background
 
 
         public static ComputeShader BackgroundCompute => Instance.backgroundCompute;
-        public static Pipeline GlobalPipeline => Instance.globalPipeline;
         public static LayerMask WashLayer => Instance.washLayer;
         public static string WashTexturePropertyName => Instance.washTexturePropertyName;
         public static LayerMask LineLayer => Instance.lineLayer;
         public static string LineTexturePropertyName => Instance.lineTexturePropertyName;
         public static ComputeShader TileCompute => Instance.tileCompute;
+        public static Pipeline GlobalPipeline => Instance.globalPipeline;
         
         
         public static Settings Instance

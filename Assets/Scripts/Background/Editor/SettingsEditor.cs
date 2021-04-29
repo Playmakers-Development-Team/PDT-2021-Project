@@ -29,13 +29,7 @@ namespace Background.Editor
                 }
             };
 
-            pipelineProperty = serializedObject.FindProperty("globalPipeline");
-            Pipeline pipeline = pipelineProperty.objectReferenceValue as Pipeline;
-
-            if (pipeline is null)
-                return;
-
-            pipelineEditor = CreateEditor(pipeline);
+            UpdatePipeline();
         }
 
         public override void OnInspectorGUI()
@@ -43,12 +37,22 @@ namespace Background.Editor
             // Null checks
             if (pipelineProperty.objectReferenceValue is null)
                 pipelineEditor = null;
-            else if (pipelineEditor is null)
-                OnEnable();
+            else if (pipelineEditor is null) 
+                UpdatePipeline();
             
             // Default inspector
             DrawDefaultInspector();
+            
+            // Pipeline field
+            EditorGUI.BeginChangeCheck();
+            pipelineProperty.objectReferenceValue = (Pipeline) EditorGUILayout.ObjectField("Global Pipeline",
+                pipelineProperty.objectReferenceValue, typeof(Pipeline), false);
+            if (EditorGUI.EndChangeCheck())
+                UpdatePipeline();
+            
             EditorGUILayout.Space();
+
+            serializedObject.ApplyModifiedProperties();
 
             // Global pipeline header
             CoreEditorUtils.DrawSplitter();
@@ -56,7 +60,7 @@ namespace Background.Editor
             headerRect.width += 4;
             headerRect.xMin = 0;
             EditorGUI.DrawRect(headerRect, new Color(0.1647058f, 0.1647058f, 0.1647058f, 1));
-            EditorGUI.LabelField(headerRect, "Global Pipeline", pipelineHeaderStyle);
+            EditorGUI.LabelField(headerRect, $"{pipelineProperty.objectReferenceValue.name} Settings (Global)", pipelineHeaderStyle);
 
             // Global pipeline editor
             pipelineScroll = EditorGUILayout.BeginScrollView(pipelineScroll);
@@ -69,6 +73,17 @@ namespace Background.Editor
                 pipelineEditor.OnInspectorGUI();
             
             EditorGUILayout.EndScrollView();
+        }
+
+        private void UpdatePipeline()
+        {
+            if (!(pipelineEditor is null))
+                DestroyImmediate(pipelineEditor);
+            
+            pipelineProperty = serializedObject.FindProperty("globalPipeline");
+
+            if (pipelineProperty.objectReferenceValue is Pipeline pipeline)
+                pipelineEditor = CreateEditor(pipeline);
         }
     }
 }

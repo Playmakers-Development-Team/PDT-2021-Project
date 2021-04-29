@@ -8,6 +8,8 @@ namespace Managers
     {
         private static readonly List<RenderTexture> textures = new List<RenderTexture>();
         private static readonly List<ComputeBuffer> buffers = new List<ComputeBuffer>();
+        private static readonly Dictionary<string, RenderTexture> featureTextures =
+            new Dictionary<string, RenderTexture>();
         
         
         public static Pipeline ActivePipeline { get; private set; }
@@ -48,12 +50,34 @@ namespace Managers
 
         public static void Execute(Pipeline pipeline, RenderTexture line, RenderTexture wash)
         {
+            featureTextures.Clear();
+            
+            TryAddTexture("line", line);
+            TryAddTexture("wash", wash);
+
             ActivePipeline = pipeline;
 
             ActivePipeline.Execute(line, wash);
             Release();
             
             ActivePipeline = null;
+            featureTextures.Clear();
         }
+
+        private static void TryAddTexture(string key, RenderTexture texture)
+        {
+            if (featureTextures.ContainsKey(key))
+                featureTextures[key] = texture;
+            else
+                featureTextures.Add(key, texture);
+        }
+
+        public static void SetTexture(FeatureTexture texture)
+        {
+            TryAddTexture(texture.Name, texture.Texture);
+        }
+
+        public static RenderTexture GetTexture(string key) =>
+            featureTextures.ContainsKey(key) ? featureTextures[key] : null;
     }
 }

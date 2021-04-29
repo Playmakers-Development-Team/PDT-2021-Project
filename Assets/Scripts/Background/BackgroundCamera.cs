@@ -118,16 +118,11 @@ namespace Background
             
             RenderCamera();
         }
-
         
-        #region Utility
-
         private static void TryRelease(RenderTexture texture)
         {
             if (texture)
                 texture.Release();
         }
-        
-        #endregion
     }
 }

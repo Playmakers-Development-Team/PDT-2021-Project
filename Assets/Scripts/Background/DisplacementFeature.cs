@@ -19,7 +19,7 @@ namespace Background
 
         public override void Execute()
         {
-            input.Find();
+            input.Pull();
             
             ComputeBuffer buffer = SetInput(new Input(textureParams, amount));
             BackgroundManager.MarkToRelease(buffer);

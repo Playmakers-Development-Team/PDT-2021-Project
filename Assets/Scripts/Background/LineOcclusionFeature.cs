@@ -14,7 +14,7 @@ namespace Background
 
         public override void Execute()
         {
-            input.Find();
+            input.Pull();
             
             RenderTexture output = new RenderTexture(input.Texture.descriptor)
             {

@@ -7,14 +7,17 @@ namespace Background
     [Serializable]
     public class FeatureTexture
     {
-        [SerializeField] private string name;
+        [SerializeField] protected string name;
         
-        public RenderTexture Texture { get; private set; }
+        
+        public string Name => name;
+        public RenderTexture Texture { get; protected set; }
 
-        public void Find()
-        {
-            Texture = BackgroundManager.ActivePipeline.GetTexture(name);
-        }
+
+        public void Push() => BackgroundManager.SetTexture(this);
+
+        public void Pull() => Texture = BackgroundManager.GetTexture(Name);
+        
 
         public static implicit operator RenderTexture(FeatureTexture f) => f.Texture;
     }
