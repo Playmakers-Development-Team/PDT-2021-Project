@@ -3,7 +3,31 @@
 	<Events>
 		<WorkUnit Name="Default Work Unit" ID="{6858235C-6A08-4340-9EF9-C0F0BFDA6A32}" PersistMode="Standalone">
 			<ChildrenList>
-				<Event Name="Francisco_sucks" ID="{A7A78E54-A100-4CC1-ACD8-3F09FF359D4D}"/>
+				<Event Name="Francisco_sucks" ID="{A7A78E54-A100-4CC1-ACD8-3F09FF359D4D}">
+					<ChildrenList>
+						<Action Name="" ID="{6EA41014-85EB-457E-B960-A22FA4602578}" ShortID="947680074">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mountain_Trail_Battle_Active_Piano_180_210428" ID="{B7F3D824-6432-4400-BEFC-981168C57944}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Francico_SucKZ" ID="{F554986A-53EA-42E5-97DE-13DCB2A3F872}">
+					<ChildrenList>
+						<Action Name="" ID="{1C1D02B3-2BA9-418A-B0B8-17F994A9E216}" ShortID="849821598">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mountain_Trail_Battle_Active_Piano_180_210428" ID="{B7F3D824-6432-4400-BEFC-981168C57944}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
