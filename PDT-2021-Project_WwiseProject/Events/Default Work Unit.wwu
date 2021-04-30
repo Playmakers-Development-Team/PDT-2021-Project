@@ -28,7 +28,17 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="FrS2" ID="{1032855B-42BB-4EE8-9283-97D3C5619379}"/>
+				<Event Name="FrS2" ID="{1032855B-42BB-4EE8-9283-97D3C5619379}">
+					<ChildrenList>
+						<Action Name="" ID="{5C992381-7C67-4EAA-B6E4-E43276DB48A4}" ShortID="647517526">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mountain_Trail_Battle_Active_Piano_180_210428" ID="{B7F3D824-6432-4400-BEFC-981168C57944}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
