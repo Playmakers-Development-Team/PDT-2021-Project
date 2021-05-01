@@ -21,13 +21,13 @@
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="2005704188" Language="SFX" Hash="13454601">
+		<SoundBank Id="2005704188" Language="SFX" Hash="2761101810">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main_Menu</ObjectPath>
 			<ShortName>Main_Menu</ShortName>
 			<Path>Main_Menu.bnk</Path>
 			<IncludedEvents>
 				<Event Id="2896490611" Name="Francico_SucKZ" ObjectPath="\Events\Default Work Unit\Francico_SucKZ" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
-				<Event Id="3610251637" Name="Francisco_sucks" ObjectPath="\Events\Default Work Unit\Francisco_sucks" DurationType="OneShot" DurationMin="196.719452" DurationMax="196.719452">
+				<Event Id="3610251637" Name="Francisco_sucks" ObjectPath="\Events\Default Work Unit\Francisco_sucks" DurationType="Infinite">
 					<IncludedMemoryFiles>
 						<File Id="358378944" Language="SFX">
 							<ShortName>Mountain_Trail_Battle_Active_Piano_180_210428.wav</ShortName>
