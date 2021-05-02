@@ -19,7 +19,7 @@ namespace Background
         [Header("Pipeline Parameters")]
         
         [SerializeField] private bool overrideGlobalPipeline;
-        [SerializeField] private Pipeline pipeline;
+        [SerializeField, HideInInspector] private Pipeline pipeline;
         
         private new Camera camera;
         private RenderTexture washTexture;

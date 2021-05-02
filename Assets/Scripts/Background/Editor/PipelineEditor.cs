@@ -49,11 +49,10 @@ namespace Background.Editor
             EditorUtility.SetDirty(target);
         }
 
-        // BUG: Adding a feature via global settings throws exception...
         private void DrawFeatures()
         {
-            EditorGUILayout.LabelField("Render Features", EditorStyles.boldLabel);
-            EditorGUILayout.Space();
+            // EditorGUILayout.LabelField("Render Features", EditorStyles.boldLabel);
+            // EditorGUILayout.Space();
             
             if (features.arraySize == 0)
                 EditorGUILayout.HelpBox("No Features added", MessageType.Info);
