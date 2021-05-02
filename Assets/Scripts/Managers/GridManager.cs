@@ -7,8 +7,6 @@ namespace Managers
 {
     public class GridManager : IManager
     {
-        public GridController Controller { get; set; }
-        
         private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
 
         public void InitialiseTileDatas(Tilemap tilemap)
