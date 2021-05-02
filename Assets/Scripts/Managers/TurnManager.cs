@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Commands;
 using Units;
 using UnityEngine;
@@ -131,8 +132,7 @@ namespace Managers
         /// <returns>True if there are no <c>EnemyUnit</c> in the turnQueue</returns>
         public bool HasEnemyUnitInQueue()
         {
-            // TODO
-            throw new NotImplementedException();
+            return turnQueue.Any(u => u is EnemyUnit);
         }
 
         /// <summary>
