@@ -8,10 +8,21 @@ namespace Background
     public class FeatureTexture
     {
         [SerializeField] protected string name;
-        
+
+        private RenderTexture texture;
         
         public string Name => name;
-        public RenderTexture Texture { get; protected set; }
+        public RenderTexture Texture
+        {
+            get
+            {
+                if (texture is null)
+                    throw new Exception($"Feature Texture with name '{name}' could not be found in pipeline.");
+
+                return texture;
+            }
+            protected set => texture = value;
+        }
 
 
         public void Push() => BackgroundManager.SetTexture(this);
