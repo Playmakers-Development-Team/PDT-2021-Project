@@ -3,6 +3,8 @@
     public enum KernelIndex
     {
         LineOcclusion,
-        Displacement
+        Displacement,
+        OpacityExtraction,
+        EdgeDetection
     }
 }

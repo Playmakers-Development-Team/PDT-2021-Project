@@ -25,3 +25,46 @@ void displacement (const uint3 id : SV_DispatchThreadID)
 
     output[id.xy] = tex2Dlod(_input, float4(uv + displacement_value, 0, 0)); 
 }
+
+#pragma kernel opacity_extraction
+[numthreads(8, 8, 1)]
+void opacity_extraction (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    const float4 samp = tex2Dlod(_input, float4(uv, 0, 0));
+    const float opacity = saturate(1.0 - max(samp.r, max(samp.g, samp.b)));
+
+    output[id.xy] = float4(samp.rgb, opacity + opacity_extraction_in[0].exposure * samp.a);
+}
+
+#pragma kernel edge_detection
+[numthreads(8, 8, 1)]
+void edge_detection (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    const float4 input = tex2Dlod(_input, float4(uv, 0, 0));
+
+    for (uint i = 0; i < edge_detection_in[0].radius; i++)
+    {
+        for (uint j = 0; j < 9; j++)
+        {
+            const float2 offset = offsets[j] * (i + 1);
+            const float2 offset_uv = uv + pixel_to_uv(offset, resolution);
+            
+            const float4 value = tex2Dlod(_input, float4(offset_uv, 0, 0));
+            const float4 diff = abs(value - input);
+            
+            if (max(diff.r, max(diff.g, diff.b)) < edge_detection_in[0].threshold)
+                continue;
+            
+            output[id.xy] = float4(uv, 0, 1);
+            return;
+        }
+    }
+    
+    output[id.xy] = 0;
+}

@@ -66,7 +66,7 @@ namespace Managers
 
         private static void TryAddTexture(string key, RenderTexture texture)
         {
-            if (featureTextures.ContainsKey(key))
+            if (ContainsTexture(key))
                 featureTextures[key] = texture;
             else
                 featureTextures.Add(key, texture);
@@ -78,6 +78,10 @@ namespace Managers
         }
 
         public static RenderTexture GetTexture(string key) =>
-            featureTextures.ContainsKey(key) ? featureTextures[key] : null;
+            ContainsTexture(key) ? featureTextures[key] : null;
+
+        public static bool ContainsTexture(string key) => featureTextures.ContainsKey(key);
+
+        public static bool IsMarked(RenderTexture texture) => textures.Contains(texture);
     }
 }

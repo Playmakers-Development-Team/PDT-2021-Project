@@ -21,13 +21,17 @@ namespace Background
 
                 return texture;
             }
-            protected set => texture = value;
+            set => texture = value;
         }
 
 
         public void Push() => BackgroundManager.SetTexture(this);
 
         public void Pull() => Texture = BackgroundManager.GetTexture(Name);
+
+        public bool Exists() => BackgroundManager.ContainsTexture(Name);
+
+        public bool IsMarked() => BackgroundManager.IsMarked(Texture);
         
 
         public static implicit operator RenderTexture(FeatureTexture f) => f.Texture;
