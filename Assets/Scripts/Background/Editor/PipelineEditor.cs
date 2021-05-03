@@ -19,7 +19,6 @@ namespace Background.Editor
             if (features is null || features.arraySize != editors.Count)
                 UpdateEditors();
             
-            // serializedObject.Update();
             DrawFeatures();
         }
 
@@ -45,9 +44,6 @@ namespace Background.Editor
 
         private void DrawFeatures()
         {
-            // EditorGUILayout.LabelField("Render Features", EditorStyles.boldLabel);
-            // EditorGUILayout.Space();
-            
             if (features.arraySize == 0)
                 EditorGUILayout.HelpBox("No Features added", MessageType.Info);
             else
