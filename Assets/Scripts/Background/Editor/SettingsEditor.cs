@@ -82,6 +82,9 @@ namespace Background.Editor
         {
             if (pipelineEditor)
                 DestroyImmediate(pipelineEditor);
+
+            if (pipelineProperty?.objectReferenceValue is null) 
+                return;
             
             pipelineEditor = CreateEditor(pipelineProperty.objectReferenceValue);
         }

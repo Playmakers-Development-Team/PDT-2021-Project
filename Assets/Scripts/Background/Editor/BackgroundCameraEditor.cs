@@ -68,7 +68,7 @@ namespace Background.Editor
             if (pipelineEditor)
                 pipelineEditor.OnInspectorGUI();
             // pipelineEditor.serializedObject.ApplyModifiedProperties();
-            GUI.enabled = true;
+            GUI.enabled = true; 
         }
 
         private void UpdatePipelineEditor()
