@@ -70,8 +70,6 @@ namespace Background.Editor
             // Global pipeline editor
             pipelineScroll = EditorGUILayout.BeginScrollView(pipelineScroll);
             
-            EditorGUILayout.Space();
-            
             if (pipelineEditor is null)
                 EditorGUILayout.HelpBox("No global Pipeline assigned.", MessageType.Error);
             else

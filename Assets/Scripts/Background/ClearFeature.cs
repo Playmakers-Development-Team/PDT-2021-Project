@@ -1,8 +1,9 @@
 ﻿using Background;
+using UnityEngine;
 
 public class ClearFeature : Feature
 {
-    public FeatureTexture input;
+    [SerializeField] private FeatureTexture input;
     
     public override void Execute()
     {

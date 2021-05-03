@@ -7,7 +7,7 @@ namespace Background
     [Serializable]
     public class LineOcclusionFeature : Feature
     {
-        public FeatureTexture input;
+        [SerializeField] private FeatureTexture input;
         
 
         protected override int GetKernelIndex() => (int) KernelIndex.LineOcclusion;

@@ -13,6 +13,7 @@ namespace Background.Editor
         private SerializedProperty features;
         private readonly List<UnityEditor.Editor> editors = new List<UnityEditor.Editor>();
 
+        
         private void OnEnable()
         {
             features = serializedObject.FindProperty("features");

@@ -7,12 +7,12 @@ namespace Background
     [Serializable]
     public class DisplacementFeature : Feature
     {
-        public FeatureTexture input;
+        [SerializeField] private FeatureTexture input;
         
-        public Texture2D texture;
-        public Vector4 textureParams;
+        [SerializeField] private Texture2D texture;
+        [SerializeField] private Vector4 textureParams;
         
-        public float amount;
+        [SerializeField] private float amount;
         
         
         protected override int GetKernelIndex() => (int) KernelIndex.Displacement;
