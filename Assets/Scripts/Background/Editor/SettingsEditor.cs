@@ -16,6 +16,8 @@ namespace Background.Editor
 
         private void OnEnable()
         {
+            pipelineProperty = serializedObject.FindProperty("globalPipeline");
+            
             pipelineHeaderStyle = new GUIStyle
             {
                 fontStyle = FontStyle.Bold,
@@ -31,6 +33,7 @@ namespace Background.Editor
             UpdatePipeline();
         }
 
+        // BUG: Multiple issues with null properties, disposed serialized objects, unable to enter text, etc.
         public override void OnInspectorGUI()
         {
             // Null checks
@@ -59,7 +62,10 @@ namespace Background.Editor
             headerRect.width += 4;
             headerRect.xMin = 0;
             EditorGUI.DrawRect(headerRect, new Color(0.1647058f, 0.1647058f, 0.1647058f, 1));
-            EditorGUI.LabelField(headerRect, $"{pipelineProperty.objectReferenceValue.name} Settings (Global)", pipelineHeaderStyle);
+            string headerText = pipelineProperty.objectReferenceValue is null
+                ? "No Pipeline Assigned!"
+                : $"{pipelineProperty.objectReferenceValue.name} Settings (Global)";
+            EditorGUI.LabelField(headerRect, headerText, pipelineHeaderStyle);
 
             // Global pipeline editor
             pipelineScroll = EditorGUILayout.BeginScrollView(pipelineScroll);
@@ -76,13 +82,10 @@ namespace Background.Editor
 
         private void UpdatePipeline()
         {
-            if (!(pipelineEditor is null))
+            if (pipelineEditor)
                 DestroyImmediate(pipelineEditor);
             
-            pipelineProperty = serializedObject.FindProperty("globalPipeline");
-
-            if (pipelineProperty.objectReferenceValue is Pipeline pipeline)
-                pipelineEditor = CreateEditor(pipeline);
+            pipelineEditor = CreateEditor(pipelineProperty.objectReferenceValue);
         }
     }
 }

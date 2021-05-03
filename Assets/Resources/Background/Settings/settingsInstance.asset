@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc115ee01fd24c7e95efaeaad30c336c, type: 3}
   m_Name: settingsInstance
   m_EditorClassIdentifier: 
-  backgroundCompute: {fileID: 0}
+  backgroundCompute: {fileID: 7200000, guid: 1fa6f9861bd9d6a448eff5b1ebe32425, type: 3}
   washLayer:
     serializedVersion: 2
-    m_Bits: 0
-  washTexturePropertyName: 
+    m_Bits: 64
+  washTexturePropertyName: _BaseMap
   lineLayer:
     serializedVersion: 2
-    m_Bits: 0
-  lineTexturePropertyName: 
+    m_Bits: 128
+  lineTexturePropertyName: _BaseMap
   tileCompute: {fileID: 0}
-  globalPipeline: {fileID: 0}
+  globalPipeline: {fileID: 11400000, guid: 22cabea01cc14e445b0c157bc33a48fa, type: 2}

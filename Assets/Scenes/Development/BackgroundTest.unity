@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!84 &46016534
+--- !u!84 &358069776
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1648,13 +1648,9 @@ PrefabInstance:
       propertyPath: pipeline
       value: 
       objectReference: {fileID: 695003664}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: overrideGlobalPipeline
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
       propertyPath: m_TargetTexture
       value: 
-      objectReference: {fileID: 46016534}
+      objectReference: {fileID: 358069776}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}

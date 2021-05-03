@@ -38,8 +38,24 @@ namespace Background.Editor
 
         public override void OnInspectorGUI()
         {
+            if (!(target is BackgroundCamera camera))
+                return;
+            
+            // Render/clear buttons
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Render"))
+                camera.Render();
+
+            if (GUILayout.Button("Clear"))
+                camera.Clear();
+            GUILayout.EndHorizontal();
+            
+            EditorGUILayout.Space();
+            
+            // Default inspector
             DrawDefaultInspector();
 
+            // Pipeline header
             CoreEditorUtils.DrawSplitter();
             Rect headerRect = GUILayoutUtility.GetRect(1f, 20f);
             headerRect.width += 4;
@@ -47,6 +63,7 @@ namespace Background.Editor
             EditorGUI.DrawRect(headerRect, new Color(0.1647058f, 0.1647058f, 0.1647058f, 1));
             EditorGUI.LabelField(headerRect, "Override Pipeline", pipelineHeaderStyle);
             
+            // Pipeline editor
             GUI.enabled = overrideProperty.boolValue;
             pipelineEditor.OnInspectorGUI();
             // pipelineEditor.serializedObject.ApplyModifiedProperties();
