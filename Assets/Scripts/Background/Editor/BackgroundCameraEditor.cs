@@ -65,7 +65,8 @@ namespace Background.Editor
             
             // Pipeline editor
             GUI.enabled = overrideProperty.boolValue;
-            pipelineEditor.OnInspectorGUI();
+            if (pipelineEditor)
+                pipelineEditor.OnInspectorGUI();
             // pipelineEditor.serializedObject.ApplyModifiedProperties();
             GUI.enabled = true;
         }
