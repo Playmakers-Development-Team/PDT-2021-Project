@@ -18,9 +18,6 @@ namespace Background.Editor
         
         private void OnEnable()
         {
-            overrideProperty = serializedObject.FindProperty("overrideGlobalPipeline");
-            pipelineProperty = serializedObject.FindProperty("pipeline");
-            
             pipelineHeaderStyle = new GUIStyle
             {
                 fontStyle = FontStyle.Bold,
@@ -32,6 +29,12 @@ namespace Background.Editor
                         : Color.black
                 }
             };
+        }
+
+        private void Awake()
+        {
+            overrideProperty = serializedObject.FindProperty("overrideGlobalPipeline");
+            pipelineProperty = serializedObject.FindProperty("pipeline");
             
             UpdatePipelineEditor();
         }
@@ -75,7 +78,7 @@ namespace Background.Editor
         {
             if (pipelineEditor)
                 DestroyImmediate(pipelineEditor);
-
+            
             if (pipelineProperty.objectReferenceValue is null)
             {
                 pipelineProperty.objectReferenceValue = CreateInstance<Pipeline>();

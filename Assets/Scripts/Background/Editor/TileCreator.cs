@@ -100,21 +100,17 @@ namespace Background.Editor
         private void CreateTile()
         {
             // STEP 1. Generate fill texture if it hasn't been assigned.
-            RenderTexture fillRT =
-                new RenderTexture(colourTexture.width, colourTexture.height, 0)
-                {
-                    enableRandomWrite = true
-                };
+            RenderTexture fillRT = new RenderTexture(colourTexture.width, colourTexture.height, 0)
+            {
+                enableRandomWrite = true
+            };
             fillRT.Create();
-
-            ComputeShader shader =
-                AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/Shaders/Tile.compute");
-            shader.SetTexture(0, "input", colourTexture);
-            shader.SetTexture(0, "output", fillRT);
-            shader.Dispatch(0, fillRT.width / 8, fillRT.height / 8, 1);
+            
+            Settings.TileCompute.SetTexture(0, "input", colourTexture);
+            Settings.TileCompute.SetTexture(0, "output", fillRT);
+            Settings.TileCompute.Dispatch(0, fillRT.width / 8, fillRT.height / 8, 1);
                 
-            fillTexture =
-                new Texture2D(fillRT.width, fillRT.height, TextureFormat.RGBA32, true);
+            fillTexture = new Texture2D(fillRT.width, fillRT.height, TextureFormat.RGBA32, true);
                 
             RenderTexture.active = fillRT;
             fillTexture.ReadPixels(new Rect(0, 0, fillRT.width, fillRT.height), 0, 0);

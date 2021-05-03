@@ -12,11 +12,15 @@ namespace Background.Editor
     {
         private SerializedProperty features;
         private readonly List<UnityEditor.Editor> editors = new List<UnityEditor.Editor>();
-        
-        
+
+        private void Awake()
+        {
+            features = serializedObject.FindProperty("features");
+        }
+
         public override void OnInspectorGUI()
         {
-            if (features is null || features.arraySize != editors.Count)
+            if (features.arraySize != editors.Count)
                 UpdateEditors();
             
             DrawFeatures();
@@ -28,8 +32,6 @@ namespace Background.Editor
                 DestroyImmediate(editor);
             
             editors.Clear();
-            
-            features = serializedObject.FindProperty("features");
 
             for (int i = 0; i < features.arraySize; i++)
             {
