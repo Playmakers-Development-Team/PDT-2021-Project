@@ -68,3 +68,35 @@ void edge_detection (const uint3 id : SV_DispatchThreadID)
     
     output[id.xy] = 0;
 }
+
+#pragma kernel jump_flood
+[numthreads(8, 8, 1)]
+void jump_flood (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    float4 final_value = 0;
+    float max_dist = 1;
+
+    for (int i = 0; i < 9; i++)
+    {
+        const float2 offset = offsets[i] * jump_flood_in[0].step_size;
+        const uint2 neighbour_id = id.xy + offset;
+        
+        const float4 neighbour = tex2Dlod(_input, float4(pixel_to_uv(neighbour_id, resolution), 0, 0));
+
+        if (neighbour.a <= 0)
+            continue;
+
+        const float dist = distance(neighbour.rg, uv) / root_two;
+
+        if (dist < max_dist)
+        {
+            max_dist = dist;
+            final_value = float4(neighbour.rg, 0, dist);
+        }
+    }
+
+    output[id.xy] = final_value;
+}

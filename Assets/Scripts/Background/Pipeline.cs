@@ -8,7 +8,7 @@ namespace Background
     {
         [SerializeField] private List<Feature> features = new List<Feature>();
 
-        public void Execute(RenderTexture line, RenderTexture wash)
+        public void Execute()
         {
             foreach (Feature feature in features)
             {

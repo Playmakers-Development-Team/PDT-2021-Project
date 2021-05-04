@@ -5,6 +5,7 @@
         LineOcclusion,
         Displacement,
         OpacityExtraction,
-        EdgeDetection
+        EdgeDetection,
+        JumpFlood
     }
 }

@@ -5,6 +5,8 @@ sampler2D _input;
 sampler2D _displacement;
 
 // Static members
+static float root_two = 1.41421356237;
+
 static float3 greyscale_constant = float3(0.3, 0.59, 0.11);
 
 static float2 offsets[9] = {
@@ -37,10 +39,16 @@ struct edge_detection_input
     float threshold;
 };
 
+struct jump_flood_input
+{
+    int2 step_size;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
 StructuredBuffer<edge_detection_input> edge_detection_in;
+StructuredBuffer<jump_flood_input> jump_flood_in;
 
 // Functions
 float2 get_output_resolution()

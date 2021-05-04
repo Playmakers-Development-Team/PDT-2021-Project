@@ -17,12 +17,14 @@ namespace Managers
 
         public static void MarkToRelease(RenderTexture texture)
         {
-            textures.Add(texture);
+            if (!textures.Contains(texture))
+                textures.Add(texture);
         }
 
         public static void MarkToRelease(ComputeBuffer buffer)
         {
-            buffers.Add(buffer);
+            if (!buffers.Contains(buffer))
+                buffers.Add(buffer);
         }
 
         private static void ReleaseTextures()
@@ -57,7 +59,9 @@ namespace Managers
 
             ActivePipeline = pipeline;
 
-            ActivePipeline.Execute(line, wash);
+            ActivePipeline.Execute();
+            Graphics.SetRenderTarget(null);
+            
             Release();
             
             ActivePipeline = null;
