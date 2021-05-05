@@ -6,20 +6,23 @@ namespace GridObjects
     public class GridObject
     {
         private Vector2Int position;
-        private ITakeDamageBehaviour takeDamageBehaviour;
-        private ITakeKnockbackBehaviour takeKnockbackBehaviour;
+        public Stat DealDamageModifier { get; }
+        public Stat TakeDamageModifier { get; }
+        public Stat TakeKnockbackModifier { get; }
         
         private GridManager gridManager;
 
         public GridObject(
             Vector2Int position,
-            ITakeDamageBehaviour takeDamageBehaviour,
-            ITakeKnockbackBehaviour takeKnockbackBehaviour
+            Stat dealDamageModifier,
+            Stat takeDamageModifier,
+            Stat takeKnockbackModifier
         )
         {
             this.position = position;
-            this.takeDamageBehaviour = takeDamageBehaviour;
-            this.takeKnockbackBehaviour = takeKnockbackBehaviour;
+            DealDamageModifier = dealDamageModifier;
+            TakeDamageModifier = takeDamageModifier;
+            TakeKnockbackModifier = takeKnockbackModifier;
 
             gridManager = ManagerLocator.Get<GridManager>();
 
@@ -28,13 +31,13 @@ namespace GridObjects
 
         public void TakeDamage(int amount)
         {
-            int damageTaken = takeDamageBehaviour.TakeDamage(amount);
+            int damageTaken = (int) TakeDamageModifier.Modify(amount);
             Debug.Log(damageTaken + " damage taken.");
         }
 
         public void TakeKnockback(int amount)
         {
-            int knockbackTaken = takeKnockbackBehaviour.TakeKnockback(amount);
+            int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
         }
     }

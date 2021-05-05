@@ -70,15 +70,16 @@ namespace Managers
         {
             Unit unit = new Unit(
                 Vector2Int.one,
-                new TakeWeightedDamageBehaviour(2),
-                new TakeWeightedKnockbackBehaviour(0)
+                new Stat(1, 2),
+                new Stat(2, 0),
+                new Stat(0, 0)
             );
             
             Shape shape = new Point(Vector2Int.one);
 
             AbilityCommand ability = new AbilityCommand(unit, shape, 4, 2);
             
-            ability.Execute(); // Unit should take 8 damage and 0 knockback
+            ability.Execute(); // Unit should take 12 damage and 0 knockback
         }
 
         #endregion

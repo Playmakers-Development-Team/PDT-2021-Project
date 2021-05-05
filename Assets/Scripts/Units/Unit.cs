@@ -7,8 +7,9 @@ namespace Units
     {
         public Unit(
             Vector2Int position,
-            ITakeDamageBehaviour takeDamageBehaviour,
-            ITakeKnockbackBehaviour takeKnockbackBehaviour
-        ) : base(position, takeDamageBehaviour, takeKnockbackBehaviour) {}
+            Stat dealDamageModifier,
+            Stat takeDamageModifier,
+            Stat takeKnockbackModifier
+        ) : base(position, dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
     }
 }
