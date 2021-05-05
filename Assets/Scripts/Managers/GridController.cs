@@ -1,3 +1,7 @@
+using Commands;
+using Commands.Shapes;
+using GridObjects;
+using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -20,6 +24,7 @@ namespace Managers
             BoundsInt bounds = tilemap.cellBounds;
             DrawGridOutline(bounds);
             TestingGetGridObjectsByCoordinate(1, bounds);
+            TestAbility();
         }
 
         #region Function Testing
@@ -59,6 +64,21 @@ namespace Managers
                 TileBase tile = gridManager.GetTileDataByCoordinate(randomCoordinates).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
+        }
+
+        private void TestAbility()
+        {
+            Unit unit = new Unit(
+                Vector2Int.one,
+                new TakeWeightedDamageBehaviour(2),
+                new TakeWeightedKnockbackBehaviour(0)
+            );
+            
+            Shape shape = new Point(Vector2Int.one);
+
+            AbilityCommand ability = new AbilityCommand(unit, shape, 4, 2);
+            
+            ability.Execute(); // Unit should take 8 damage and 0 knockback
         }
 
         #endregion
