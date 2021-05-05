@@ -6,13 +6,14 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
         [MainTexture] _BaseMap ("Base Map", 2D) = "white" {}
         _Cutoff("Alpha Cutoff", Range(0, 1)) = 1.0
         _Smoothing("Smoothing", Range(0, 0.5)) = 0
+
     }
-        SubShader
-        {
-            Tags { "Queue" = "Transparent" "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
-            ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha // Traditional Alpha Blending
-            //Blend One One
+    SubShader
+    {
+        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha // Traditional Alpha Blending
+        //Blend One One
 
         Pass
         {
@@ -120,7 +121,7 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 float distance = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).a;
                 float alpha = smoothstep(0.5 - _Smoothing, 0.5 + _Smoothing, distance);
 
-                float4 c = float4(1,1,1,1);
+                float4 c;
                 //c.rgb = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
                 c.rgb = float3(1,1,1);
                 c.a = alpha;
