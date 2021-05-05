@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GridObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using TileData = Tiles.TileData;
@@ -9,7 +10,7 @@ namespace Managers
     {
         public GridController Controller { get; set; }
         
-        private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
+        private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
 
         public void InitialiseTileDatas(Tilemap tilemap)
         {
@@ -25,22 +26,31 @@ namespace Managers
                     if (tile != null)
                     {
                         // TODO: Add a way to detect gridObjects before tileDatas.Add
-                        
-                        tileDatas.Add(new Vector2(x, y), new TileData(tile));
+
+                        tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
 
                         // Debug.Log(tileData.Tile.name + " is at position " + tileData.Position);
                     }
                 }
             }
         }
-        
-        public TileData GetGridObjectsByCoordinate(float x, float z)
+
+        public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
-            Vector2 coordinate = new Vector2(x, z);
-            
             if(tileDatas.TryGetValue(coordinate, out TileData tileData))
             {
                 return tileData;
+            }
+
+            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            return null;
+        }
+        
+        public List<GridObject> GetGridObjectsByCoordinate(Vector2Int coordinate)
+        {
+            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
+            {
+                return tileData.GridObjects;
             }
 
             Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);

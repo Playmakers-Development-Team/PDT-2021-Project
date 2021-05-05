@@ -52,11 +52,11 @@ namespace Managers
         {
             for (int i = 0; i < testCases; i++)
             {
-                Vector2 randomCoordinates = new Vector2(Random.Range(0, bounds.size.x), Random.Range(0, bounds.size.y));
-                TileBase tile = gridManager.GetGridObjectsByCoordinate(
-                    randomCoordinates.x,
-                    randomCoordinates.y
-                ).Tile;
+                Vector2Int randomCoordinates = new Vector2Int(
+                    Random.Range(0, bounds.size.x),
+                    Random.Range(0, bounds.size.y)
+                );
+                TileBase tile = gridManager.GetTileDataByCoordinate(randomCoordinates).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
         }
