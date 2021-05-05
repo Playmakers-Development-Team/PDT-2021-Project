@@ -48,13 +48,22 @@ namespace Managers
         
         public List<GridObject> GetGridObjectsByCoordinate(Vector2Int coordinate)
         {
-            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
-            {
-                return tileData.GridObjects;
-            }
+            TileData tileData = GetTileDataByCoordinate(coordinate);
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
-            return null;
+            if (tileData is null)
+                return new List<GridObject>();
+
+            return tileData.GridObjects;
+        }
+
+        public void AddGridObject(Vector2Int position, GridObject gridObject)
+        {
+            TileData tileData = GetTileDataByCoordinate(position);
+
+            if (!(tileData is null))
+            {
+                tileData.AddGridObjects(gridObject);
+            }
         }
     }
 }
