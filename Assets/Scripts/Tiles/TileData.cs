@@ -7,8 +7,8 @@ namespace Tiles
     public class TileData
     {
         private TileBase tile;
-        public List<GridObject> GridObjects { get; }
-        
+        public List<GridObject> GridObjects { get; } = new List<GridObject>();
+
         public TileBase Tile => tile;
 
         public TileData(TileBase tileBase)
