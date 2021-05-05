@@ -1,19 +1,29 @@
+using Managers;
 using UnityEngine;
 
 namespace GridObjects
 {
     public class GridObject
     {
+        private Vector2Int position;
         private ITakeDamageBehaviour takeDamageBehaviour;
         private ITakeKnockbackBehaviour takeKnockbackBehaviour;
         
+        private GridManager gridManager;
+
         public GridObject(
+            Vector2Int position,
             ITakeDamageBehaviour takeDamageBehaviour,
             ITakeKnockbackBehaviour takeKnockbackBehaviour
         )
         {
+            this.position = position;
             this.takeDamageBehaviour = takeDamageBehaviour;
             this.takeKnockbackBehaviour = takeKnockbackBehaviour;
+
+            gridManager = ManagerLocator.Get<GridManager>();
+
+            gridManager.AddGridObject(position, this);
         }
 
         public void TakeDamage(int amount)
