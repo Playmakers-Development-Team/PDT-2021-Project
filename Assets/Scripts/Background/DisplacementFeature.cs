@@ -31,7 +31,7 @@ namespace Background
             output.Create();
             BackgroundManager.MarkToRelease(output);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_displacement", texture);
+            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", texture);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
 

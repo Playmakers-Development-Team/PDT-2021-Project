@@ -6,6 +6,7 @@
         Displacement,
         OpacityExtraction,
         EdgeDetection,
-        JumpFlood
+        JumpFlood,
+        ColourSeparation
     }
 }

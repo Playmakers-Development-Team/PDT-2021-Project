@@ -2,7 +2,8 @@
 RWTexture2D<float4> output;
 
 sampler2D _input;
-sampler2D _displacement;
+sampler2D _tex1;
+sampler2D _tex2;
 
 // Static members
 static float root_two = 1.41421356237;
@@ -44,11 +45,18 @@ struct jump_flood_input
     int2 step_size;
 };
 
+struct colour_separation_input
+{
+    float4 strength_params;
+    float amount;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
 StructuredBuffer<edge_detection_input> edge_detection_in;
 StructuredBuffer<jump_flood_input> jump_flood_in;
+StructuredBuffer<colour_separation_input> colour_separation_in;
 
 // Functions
 float2 get_output_resolution()

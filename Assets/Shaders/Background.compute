@@ -19,7 +19,7 @@ void displacement (const uint3 id : SV_DispatchThreadID)
     const float2 resolution = get_output_resolution();
     const float2 uv = pixel_to_uv(id.xy, resolution);
 
-    float2 displacement_value = sample_params(_displacement, uv, displacement_in[0].texture_params).rg;
+    float2 displacement_value = sample_params(_tex1, uv, displacement_in[0].texture_params).rg;
     displacement_value = displacement_value * 2 - 1;
     displacement_value *= displacement_in[0].amount;
 
@@ -34,9 +34,11 @@ void opacity_extraction (const uint3 id : SV_DispatchThreadID)
     const float2 uv = pixel_to_uv(id.xy, resolution);
 
     const float4 samp = tex2Dlod(_input, float4(uv, 0, 0));
-    const float opacity = saturate(1.0 - max(samp.r, max(samp.g, samp.b)));
-
-    output[id.xy] = float4(samp.rgb, opacity + opacity_extraction_in[0].exposure * samp.a);
+    float opacity = saturate(1.0 - max(samp.r, max(samp.g, samp.b)));
+    if (opacity > 0)
+        opacity += opacity_extraction_in[0].exposure * samp.a;
+    
+    output[id.xy] = float4(samp.rgb, opacity);
 }
 
 #pragma kernel edge_detection
@@ -99,4 +101,20 @@ void jump_flood (const uint3 id : SV_DispatchThreadID)
     }
 
     output[id.xy] = final_value;
+}
+
+#pragma kernel colour_separation
+[numthreads(8, 8, 1)]
+void colour_separation (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+    
+    const float distance_field_value = smoothstep(0, .01, tex2Dlod(_tex1, float4(uv, 0, 0)).a);
+
+    const float strength = sample_params(_tex2, uv, colour_separation_in[0].strength_params).r;
+
+    // TODO: Implement a smoother transition...
+    if (distance_field_value < colour_separation_in[0].amount * pow(strength, 2))
+        output[id.xy] = 0;
 }
