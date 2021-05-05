@@ -62,6 +62,7 @@ namespace Managers
 
             if (!(tileData is null))
             {
+                Debug.Log("GridObject added to tile " + position.x + ", " + position.y);
                 tileData.AddGridObjects(gridObject);
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Managers;
 using UnityEngine;
 
 namespace Units
@@ -8,5 +9,21 @@ namespace Units
         [SerializeField] protected T data;
         
         public static Type DataType => typeof(T);
+        
+        private GridManager gridManager;
+        private Unit unit;
+        
+        // BUG: Putting the following in Awake creates a race condition with GridController 
+        protected virtual void Start()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+
+            unit = new Unit(
+                Vector2Int.one,
+                data.dealDamageModifier,
+                data.takeDamageModifier,
+                data.takeKnockbackModifier
+            );
+        }
     }
 }
