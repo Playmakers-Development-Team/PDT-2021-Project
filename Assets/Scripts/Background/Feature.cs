@@ -12,6 +12,8 @@ namespace Background
         [SerializeField, HideInInspector] private string featureName;
         
         public bool IsActive => active;
+        // TODO: Implement this in all subclasses.
+        public ComputeShader Shader => Settings.BackgroundCompute;
         
         
         public abstract void Execute();

@@ -9,6 +9,7 @@
         JumpFlood,
         ColourSeparation,
         OpacityShift,
-        Kuwahara
+        Kuwahara,
+        EdgePigment
     }
 }

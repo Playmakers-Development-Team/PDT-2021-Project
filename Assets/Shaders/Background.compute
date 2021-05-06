@@ -60,7 +60,7 @@ void edge_detection (const uint3 id : SV_DispatchThreadID)
             const float4 value = tex2Dlod(_input, float4(offset_uv, 0, 0));
             const float4 diff = abs(value - input);
             
-            if (max(diff.r, max(diff.g, diff.b)) < edge_detection_in[0].threshold)
+            if (max(diff.r, max(diff.g, max(diff.b, diff.a))) < edge_detection_in[0].threshold)
                 continue;
             
             output[id.xy] = float4(uv, 0, 1);
@@ -137,13 +137,13 @@ void opacity_shift (const uint3 id : SV_DispatchThreadID)
     const float2 resolution = get_output_resolution();
     const float2 uv = pixel_to_uv(id.xy, resolution);
     
-    const float amount = opacity_shift_in[0].amount;
+    const float samp = sample_params(_tex1, uv, opacity_shift_in[0].strength_params).r;
+    
+    const float amount = opacity_shift_in[0].amount;// * (1.0 - output[id.xy].a);
     const float balance = (opacity_shift_in[0].balance + 1) * 0.5;
 
     const float lower = lerp(-amount, 0, balance);
     const float upper = lerp(0, amount, balance);
-    
-    const float samp = sample_params(_tex1, uv, opacity_shift_in[0].strength_params).r;
     
     const float offset = lerp(lower, upper, samp);
 
@@ -190,4 +190,27 @@ void kuwahara (const uint3 id : SV_DispatchThreadID)
     }
                 
     output[id.xy] = final_color;
+}
+
+#pragma kernel edge_pigment
+[numthreads(8, 8, 1)]
+void edge_pigment (const uint3 id : SV_DispatchThreadID)
+{
+    if (output[id.xy].a == 0)
+        return;
+    
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    const float amount = edge_pigment_in[0].amount;
+    const float exponent = edge_pigment_in[0].exponent;
+    
+    const float flood_value = 1.0 - tex2Dlod(_tex1, float4(uv, 0, 0)).a;
+    
+    const float mask_value = sample_params(_tex2, uv, edge_pigment_in[0].strength_params).r;
+    
+    float opacity = output[id.xy].a;
+    opacity += mask_value * amount * pow(abs(flood_value), 1.0 / exponent);
+
+    output[id.xy] = float4(output[id.xy].rgb, opacity);
 }

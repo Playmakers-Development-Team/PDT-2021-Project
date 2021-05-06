@@ -23,6 +23,68 @@ MonoBehaviour:
     tiling: {x: 5, y: 5}
     offset: {x: 0, y: 0}
   amount: 0.3
+--- !u!114 &-7732304396027734820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d0c983a7104f6087cc593a80edf5be, type: 3}
+  m_Name: Edge Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  flood:
+    name: floodPigment
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 2, y: 2}
+    offset: {x: 0.5, y: 0.5}
+  amount: 0.85
+  exponent: 0.001
+--- !u!114 &-7630628547020576401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c430da5f1d4582a5e781f13c1dc0fc, type: 3}
+  m_Name: Edge Detection for Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  output:
+    name: edgePigment
+  radius: 1
+  threshold: 0.1
+--- !u!114 &-6078177490707043805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dce8182fc32474aa2cc53aae03d64d6, type: 3}
+  m_Name: Jump Flood Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  edge:
+    name: edgePigment
+  output:
+    name: floodPigment
 --- !u!114 &-6035205486268318926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   features:
   - {fileID: -6035205486268318926}
+  - {fileID: 3666622412901975677}
   - {fileID: 6990570700037077543}
   - {fileID: 6332557607202063239}
   - {fileID: -669268930892035431}
@@ -94,6 +157,10 @@ MonoBehaviour:
   - {fileID: 4511386523098065728}
   - {fileID: 3857676446291343206}
   - {fileID: 6971834853436027771}
+  - {fileID: -7630628547020576401}
+  - {fileID: -6078177490707043805}
+  - {fileID: -7732304396027734820}
+  - {fileID: 7883439738147048352}
 --- !u!114 &1790342275941716843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +182,22 @@ MonoBehaviour:
     tiling: {x: 0, y: 0}
     offset: {x: 0, y: 0}
   amount: 0
+--- !u!114 &3666622412901975677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24af442e79b64760b68f557267b6a730, type: 3}
+  m_Name: Line Clear
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  input:
+    name: line
 --- !u!114 &3857676446291343206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,7 +237,7 @@ MonoBehaviour:
     name: wash
   strengthMap:
     texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
-    tiling: {x: 2, y: 3}
+    tiling: {x: 1, y: 2}
     offset: {x: 0, y: 0}
   amount: 0.5
   balance: -0.5
@@ -231,3 +314,22 @@ MonoBehaviour:
   input:
     name: wash
   exposure: 0.3
+--- !u!114 &7883439738147048352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0276811e1f674b1ca8e093c66a52dc05, type: 3}
+  m_Name: Edge Copy
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  source:
+    name: floodPigment
+  destination:
+    name: wash
+  copySettings: 0

@@ -66,6 +66,13 @@ struct kuwahara_input
     float2 radius;
 };
 
+struct edge_pigment_input
+{
+    float4 strength_params;
+    float amount;
+    float exponent;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
@@ -74,6 +81,7 @@ StructuredBuffer<jump_flood_input> jump_flood_in;
 StructuredBuffer<colour_separation_input> colour_separation_in;
 StructuredBuffer<opacity_shift_input> opacity_shift_in;
 StructuredBuffer<kuwahara_input> kuwahara_in;
+StructuredBuffer<edge_pigment_input> edge_pigment_in;
 
 // Functions
 float2 get_output_resolution()
