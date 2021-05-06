@@ -22,7 +22,7 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: a612e43a643367e43853dd3dc8a42f1e, type: 3}
     tiling: {x: 5, y: 5}
     offset: {x: 0, y: 0}
-  amount: 0.344
+  amount: 0.3
 --- !u!114 &-6035205486268318926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,6 +91,9 @@ MonoBehaviour:
   - {fileID: 6332557607202063239}
   - {fileID: -669268930892035431}
   - {fileID: -8191227741815696132}
+  - {fileID: 4511386523098065728}
+  - {fileID: 3857676446291343206}
+  - {fileID: 6971834853436027771}
 --- !u!114 &1790342275941716843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,9 +110,54 @@ MonoBehaviour:
   featureName: 
   input:
     name: 
-  texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
-  textureParams: {x: 1, y: 1, z: 0, w: 0}
+  strengthMap:
+    texture: {fileID: 0}
+    tiling: {x: 0, y: 0}
+    offset: {x: 0, y: 0}
   amount: 0
+--- !u!114 &3857676446291343206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f0b5b906ff42ca9b76c96a6a5cde5a, type: 3}
+  m_Name: Displacement
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 3, y: 3}
+    offset: {x: 0, y: 0}
+  amount: 0.007
+--- !u!114 &4511386523098065728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b869167c45f44d07b755a1d34ce75ace, type: 3}
+  m_Name: Opacity Shift
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 2, y: 3}
+    offset: {x: 0, y: 0}
+  amount: 0.5
+  balance: -0.5
 --- !u!114 &5675850521398351355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,6 +197,23 @@ MonoBehaviour:
     name: edge
   radius: 1
   threshold: 0.1
+--- !u!114 &6971834853436027771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49b57b12bb54f6da0e3fe5c9b6573b1, type: 3}
+  m_Name: Kuwahara
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  radius: {x: 10, y: 5}
 --- !u!114 &6990570700037077543
 MonoBehaviour:
   m_ObjectHideFlags: 0

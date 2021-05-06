@@ -7,6 +7,8 @@
         OpacityExtraction,
         EdgeDetection,
         JumpFlood,
-        ColourSeparation
+        ColourSeparation,
+        OpacityShift,
+        Kuwahara
     }
 }

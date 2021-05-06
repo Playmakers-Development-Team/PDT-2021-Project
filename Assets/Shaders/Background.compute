@@ -107,6 +107,9 @@ void jump_flood (const uint3 id : SV_DispatchThreadID)
 [numthreads(8, 8, 1)]
 void colour_separation (const uint3 id : SV_DispatchThreadID)
 {
+    if (output[id.xy].a == 0)
+        return;
+    
     const float2 resolution = get_output_resolution();
     const float2 uv = pixel_to_uv(id.xy, resolution);
     
@@ -115,6 +118,76 @@ void colour_separation (const uint3 id : SV_DispatchThreadID)
     const float strength = sample_params(_tex2, uv, colour_separation_in[0].strength_params).r;
 
     // TODO: Implement a smoother transition...
-    if (distance_field_value < colour_separation_in[0].amount * pow(strength, 2))
-        output[id.xy] = 0;
+    const float threshold = colour_separation_in[0].amount * pow(strength, 2) + 0.02;
+    if (distance_field_value < threshold)
+    {
+        // 1 V T   0
+        const float opacity = smoothstep(threshold - 0.02, threshold, distance_field_value);
+        output[id.xy] = float4(output[id.xy].rgb, opacity);
+    }
+}
+
+#pragma kernel opacity_shift
+[numthreads(8, 8, 1)]
+void opacity_shift (const uint3 id : SV_DispatchThreadID)
+{
+    if (output[id.xy].a == 0)
+        return;
+    
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+    
+    const float amount = opacity_shift_in[0].amount;
+    const float balance = (opacity_shift_in[0].balance + 1) * 0.5;
+
+    const float lower = lerp(-amount, 0, balance);
+    const float upper = lerp(0, amount, balance);
+    
+    const float samp = sample_params(_tex1, uv, opacity_shift_in[0].strength_params).r;
+    
+    const float offset = lerp(lower, upper, samp);
+
+    output[id.xy] = float4(output[id.xy].rgb, output[id.xy].a + offset);
+}
+
+#pragma kernel kuwahara
+[numthreads(8, 8, 1)]
+void kuwahara (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    float2 radius = kuwahara_in[0].radius;
+    
+    float4 colors[4];
+    float variances[4];
+
+    const float angle = get_pixel_angle(resolution, uv);
+    const float2x2 rotation_matrix = float2x2(cos(angle), -sin(angle), sin(angle), cos(angle));
+
+    float4 range = float4(-radius.x, 0, -radius.y, 0);
+    colors[0] = kuwahara_kernel(resolution, uv, range, rotation_matrix, variances[0]);
+
+    range = float4(0, radius.x, -radius.y, 0);
+    colors[1] = kuwahara_kernel(resolution, uv, range, rotation_matrix, variances[1]);
+
+    range = float4(-radius.x, 0, 0, radius.y);
+    colors[2] = kuwahara_kernel(resolution, uv, range, rotation_matrix, variances[2]);
+
+    range = float4(0, radius.x, 0, radius.y);
+    colors[3] = kuwahara_kernel(resolution, uv, range, rotation_matrix, variances[3]);
+
+    float4 final_color = colors[0];
+    float minimum_variance = variances[0];
+
+    for (int i = 1; i < 4; i++)
+    {
+        if (variances[i] < minimum_variance)
+        {
+            final_color = colors[i];
+            minimum_variance = variances[i];
+        }
+    }
+                
+    output[id.xy] = final_color;
 }

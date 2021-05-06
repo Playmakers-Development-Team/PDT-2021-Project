@@ -8,9 +8,8 @@ namespace Background
     public class DisplacementFeature : Feature
     {
         [SerializeField] private FeatureTexture input;
-        
-        [SerializeField] private Texture2D texture;
-        [SerializeField] private Vector4 textureParams;
+
+        [SerializeField] private TextureParameters strengthMap;
         
         [SerializeField] private float amount;
         
@@ -21,7 +20,7 @@ namespace Background
         {
             input.Pull();
             
-            ComputeBuffer buffer = SetInput(new Input(textureParams, amount));
+            ComputeBuffer buffer = SetInput(new Input(strengthMap.Parameters, amount));
             BackgroundManager.MarkToRelease(buffer);
 
             RenderTexture output = new RenderTexture(input.Texture.descriptor)
@@ -31,7 +30,7 @@ namespace Background
             output.Create();
             BackgroundManager.MarkToRelease(output);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", texture);
+            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", strengthMap.Texture);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
             Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
 
