@@ -9,6 +9,23 @@
 							<ObjectRef Name="System" ID="{A53DF4AB-B0B0-4EC4-8037-A030E5AB476C}" WorkUnitID="{BBA4502D-12AF-4554-BB46-45550497F83B}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="SFX Bus" ID="{E6F7F0E0-29D3-4FA4-94B8-BFCB461DF33C}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Atmos Bus" ID="{B42F8346-B751-463E-BAB9-0F286D73D8E1}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Music Bus" ID="{5173105C-3DE3-4A9A-B3CF-CF7B2E200A63}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Foley Bus" ID="{6E7162F5-D04F-42D2-9D2E-F5E76B7E26FF}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="DX Bus" ID="{99C9A15F-798F-4B2A-8972-CB3DFF04CB2F}">
+							<ObjectLists/>
+						</Bus>
+					</ChildrenList>
 					<ObjectLists/>
 				</Bus>
 			</ChildrenList>

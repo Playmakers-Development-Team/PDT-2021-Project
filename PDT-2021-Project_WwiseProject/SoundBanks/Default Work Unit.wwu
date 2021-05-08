@@ -8,6 +8,14 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="Main_Menu" ID="{34460A5F-7742-44A6-8DCF-A54C9C0C0EE7}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Francico_SucKZ" ID="{F554986A-53EA-42E5-97DE-13DCB2A3F872}" WorkUnitID="{6858235C-6A08-4340-9EF9-C0F0BFDA6A32}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Francisco_sucks" ID="{A7A78E54-A100-4CC1-ACD8-3F09FF359D4D}" WorkUnitID="{6858235C-6A08-4340-9EF9-C0F0BFDA6A32}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>
