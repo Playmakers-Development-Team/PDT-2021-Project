@@ -700,16 +700,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09589cac2ab60cb498ebffd189dfd298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source:
-  - {fileID: 21300000, guid: 3da65d3be08a9b94baa252f5e7d73945, type: 3}
+  sampleSpriteSources:
   - {fileID: 21300000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
-  texRenderer: {fileID: 328819467}
+  - {fileID: 21300000, guid: 3da65d3be08a9b94baa252f5e7d73945, type: 3}
+  meshRenderer: {fileID: 328819467}
+  dstRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
   minScale: 1
   maxScale: 1
   minAspectRatio: 1
-  width: 512
-  height: 512
-  testRender: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
 --- !u!4 &965521402
 Transform:
   m_ObjectHideFlags: 0

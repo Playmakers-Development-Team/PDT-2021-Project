@@ -3,9 +3,15 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
     Properties
     {
         [MainColor] _Color ("Color", Color) = (1,1,1,1)
+        _BorderColor("Border Color", Color) = (1,1,1,1)
         [MainTexture] _BaseMap ("Base Map", 2D) = "white" {}
         _Cutoff("Alpha Cutoff", Range(0, 1)) = 1.0
         _Smoothing("Smoothing", Range(0, 0.5)) = 0
+        _BorderSize("Border Size", Range(0, 0.25)) = 0.5
+        _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
+
+        // Texture Detail
+        _DetailDiffuse("Detail Diffuse", 2D) = "white" {}
 
     }
     SubShader
@@ -68,6 +74,9 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
             };
 
             uniform float4 _Color;
+            uniform float4 _BorderColor;
+            uniform float _BorderSize;
+            uniform float _BorderSmoothing;
             uniform float _Smoothing;
             uniform float _Cutoff;
 
@@ -103,27 +112,16 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
             float4 frag(VertexOutput input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
-                //float4 sdf = tex2D(_BaseMap, input.uv);
-                //float3 color = float3(1,1,1);
                 float4 tex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
-                //color = color * sdf.rgb;
-                //float alpha = _Color.a * tex.a;
-                //AlphaDiscard(alpha, _Cutoff);
-
-                //color *= alpha;
-                //return float4(color, alpha);
-                //float alpha = smoothstep(0.5 - _Smoothing, 0.5 + _Smoothing, tex.a); // Smoothing alpha value
-                //AlphaDiscard(alpha, _Cutoff);
-
-                /*float4 c;
-                c.rgb = input.color.rgb;
-                c.a = input.color.a * alpha;*/
                 float distance = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).a;
                 float alpha = smoothstep(0.5 - _Smoothing, 0.5 + _Smoothing, distance);
 
+                float borderCenter = 0.5 + _BorderSize;
+                float border = 1 - smoothstep(borderCenter - _BorderSmoothing, borderCenter + _BorderSmoothing, distance);
+
                 float4 c;
-                //c.rgb = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
-                c.rgb = float3(1,1,1);
+                c.rgb = _Color.rgb;
+                c.rgb = lerp(c.rgb, _BorderColor, border);
                 c.a = alpha;
                 return c;
             }
