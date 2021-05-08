@@ -5,8 +5,8 @@ Tile Set: This should follow folder naming conventions, e.g. 'MyTileSet'.
 
 Tile Name: This is the name of the tile and should follow asset naming conventions, e.g. 'my-tile_03'. 
 
-Line Texture: The line texture goes here.
+Line Texture: The line texture goes here. Must be different to Colour Texture.
 
-Colour Texture: The colour texture goes here.
+Colour Texture: The colour texture goes here. Must be different to Line Texture.
 
 'Create Tile' will be greyed out if any of the inputs are invalid, but it doesn't guarantee that naming conventions are adhered to.
