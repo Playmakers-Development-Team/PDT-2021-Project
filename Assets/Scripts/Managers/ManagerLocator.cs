@@ -26,6 +26,7 @@ namespace Managers
             Register(new PlayerManager());
             Register(new TurnManager());
             Register(new GridManager());
+            Register(new AudioManager());
 
 
             // REGISTER SERVICES HERE
