@@ -17,7 +17,10 @@ namespace Background
             get
             {
                 if (texture is null)
-                    throw new Exception($"Feature Texture with name '{name}' could not be found in pipeline.");
+                {
+                    throw new Exception($"Feature Texture with name '{name}' could not be found in pipeline." +
+                                        "Make sure you're calling Pull(), and the texture exists.");
+                }
 
                 return texture;
             }

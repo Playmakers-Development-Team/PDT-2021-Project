@@ -210,7 +210,31 @@ void edge_pigment (const uint3 id : SV_DispatchThreadID)
     const float mask_value = sample_params(_tex2, uv, edge_pigment_in[0].strength_params).r;
     
     float opacity = output[id.xy].a;
-    opacity += mask_value * amount * pow(abs(flood_value), 1.0 / exponent);
+    opacity += pow(mask_value, 2) * amount * pow(abs(flood_value), 1.0 / exponent);
 
+    output[id.xy] = float4(output[id.xy].rgb, opacity);
+}
+
+#pragma kernel bump
+[numthreads(8, 8, 1)]
+void bump (const uint3 id : SV_DispatchThreadID)
+{
+    if (output[id.xy].a == 0)
+        return;
+    
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    const float bump_value = sample_params(_tex2, uv, bump_in[0].bump_params).r;
+    const float strength_value = sample_params(_tex3, uv, bump_in[0].strength_params).r;
+    
+    float opacity = output[id.xy].a;
+
+    const float bump_mask = bump_in[0].amount * bump_value * strength_value; 
+    opacity -= bump_mask;
+
+    const float edge_mask = smoothstep(.998, 1, 1.0 - tex2Dlod(_tex1, float4(uv, 0, 0)).a) * smoothstep(.6, .9, opacity);
+    opacity -= pow(edge_mask, .5) * smoothstep(.78, .8, 1.0 - bump_value) * pow(smoothstep(.5, .7, strength_value), 7);
+    
     output[id.xy] = float4(output[id.xy].rgb, opacity);
 }

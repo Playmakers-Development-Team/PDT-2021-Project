@@ -10,6 +10,7 @@
         ColourSeparation,
         OpacityShift,
         Kuwahara,
-        EdgePigment
+        EdgePigment,
+        Bump
     }
 }

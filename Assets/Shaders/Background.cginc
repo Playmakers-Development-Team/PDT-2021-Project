@@ -4,6 +4,7 @@ RWTexture2D<float4> output;
 sampler2D _input;
 sampler2D _tex1;
 sampler2D _tex2;
+sampler2D _tex3;
 
 // Static members
 static float root_two = 1.41421356237;
@@ -73,6 +74,13 @@ struct edge_pigment_input
     float exponent;
 };
 
+struct bump_input
+{
+    float4 bump_params;
+    float4 strength_params;
+    float amount;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
@@ -82,6 +90,7 @@ StructuredBuffer<colour_separation_input> colour_separation_in;
 StructuredBuffer<opacity_shift_input> opacity_shift_in;
 StructuredBuffer<kuwahara_input> kuwahara_in;
 StructuredBuffer<edge_pigment_input> edge_pigment_in;
+StructuredBuffer<bump_input> bump_in;
 
 // Functions
 float2 get_output_resolution()
