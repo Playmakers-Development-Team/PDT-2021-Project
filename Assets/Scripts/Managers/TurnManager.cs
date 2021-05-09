@@ -94,6 +94,29 @@ namespace Managers
         private void UpdateNextTurnQueue()
         {
             nextTurnQueue = CreateTurnQueue();
+            // TODO might want to update UI here
+        }
+
+        /// <summary>
+        /// Remove a unit completely from the current turn queue and future turn queues.
+        /// For situations such as when a unit is killed.
+        /// </summary>
+        /// <param name="targetIndex">The index of the unit</param>
+        /// <exception cref="IndexOutOfRangeException">If the index is not valid</exception>
+        public void RemoveUnitFromQueue(int targetIndex)
+        {
+            if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
+                throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
+
+            if (TurnIndex >= targetIndex)
+                TurnIndex--;
+
+            bool removingCurrentUnit = targetIndex == TurnIndex;
+            currentTurnQueue.RemoveAt(targetIndex);
+            UpdateNextTurnQueue();
+            
+            if (removingCurrentUnit)
+                NextTurn();
         }
 
         /// <summary>
@@ -162,7 +185,7 @@ namespace Managers
         /// <summary>
         /// Finish the current turn, and end the round if this is the last Unit.
         /// </summary>
-        private void EndTurn()
+        private void NextTurn()
         {
             TurnCount++;
             TotalTurnCount++;
@@ -174,7 +197,7 @@ namespace Managers
             }
             else
             {
-                EndRound();
+                NextRound();
             }
         }
         
@@ -182,7 +205,7 @@ namespace Managers
         /// Finish the current Round. May transition to the next round. If there are no enemies units
         /// or no player units left, finish the encounter. 
         /// </summary>
-        private void EndRound()
+        private void NextRound()
         {
             // TODO might want to call the next round command or something here
             RoundCount++;
