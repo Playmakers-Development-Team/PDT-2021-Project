@@ -14,12 +14,17 @@ namespace Managers
         private List<IUnit> nextTurnQueue = new List<IUnit>();
         
         /// <summary>
+        /// Gives how many turns has passed throughout the entire level
+        /// </summary>
+        public int TotalTurnCount { get; private set; }
+        
+        /// <summary>
         /// Gives how many round has passed
         /// </summary>
         public int RoundCount { get; private set; }
         
         /// <summary>
-        /// Gives how many turns has passed
+        /// Gives how many turns has passed for the current round
         /// </summary>
         public int TurnCount { get; private set; }
 
@@ -55,6 +60,10 @@ namespace Managers
         /// </summary>
         public void SetupTurnQueue()
         {
+            RoundCount = 0;
+            TurnCount = 0;
+            TotalTurnCount = 0;
+            TurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
@@ -156,6 +165,7 @@ namespace Managers
         private void EndTurn()
         {
             TurnCount++;
+            TotalTurnCount++;
 
             if (TurnCount < currentTurnQueue.Count)
             {
