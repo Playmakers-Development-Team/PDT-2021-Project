@@ -9,7 +9,9 @@ namespace Managers
 {
     public class TurnManager : IManager
     {
-        private readonly List<IUnit> turnQueue = new List<IUnit>();
+        private List<IUnit> previousTurnQueue = new List<IUnit>();
+        private List<IUnit> currentTurnQueue = new List<IUnit>();
+        private List<IUnit> nextTurnQueue = new List<IUnit>();
         
         /// <summary>
         /// Gives how many round has passed
@@ -29,22 +31,60 @@ namespace Managers
         /// <summary>
         /// The Unit that is currently having a turn
         /// </summary>
-        public IUnit CurrentUnit => turnQueue[TurnIndex];
+        public IUnit CurrentUnit => currentTurnQueue[TurnIndex];
 
         /// <summary>
         /// The order in which turns between Units execute
         /// </summary>
-        public IReadOnlyList<IUnit> TurnQueue => turnQueue.AsReadOnly();
+        public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
 
         /// <summary>
-        /// Take every available Unit in the scene, calculate the turn orders based on the parameters
-        /// and finally create a turn queue.
+        /// The order in which turns between Units execute for the next round
         /// </summary>
-        private void CalculateQueueOrder()
+        public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
+
+        /// <summary>
+        /// The order in which turns between Units execute for the previous round
+        /// </summary>
+        public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
+
+        // TODO Call this function when level is loaded
+        /// <summary>
+        /// Create a turn queue based on existing player and enemy units.
+        /// Should be called when the level is loaded after all the units are ready.
+        /// </summary>
+        public void SetupTurnQueue()
         {
-            // UnitManager unitManager = ManagerLocator.Get<UnitManager>();
-            // turnQueue.AddRange(unitManager.Units);
-            // TODO get all units from unit manager and make a turn order queue
+            previousTurnQueue = new List<IUnit>();
+            UpdateNextTurnQueue();
+            currentTurnQueue = new List<IUnit>(nextTurnQueue);
+            
+            // TODO might want to register listeners e.g EndTurnCommand here
+        }
+        
+        /// <summary>
+        /// Create a turn queue from every available Unit in the scene, calculate the turn orders
+        /// based on the parameters.
+        /// </summary>
+        private List<IUnit> CreateTurnQueue()
+        {
+            // TODO Do the same thing for enemies
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            
+            List<IUnit> turnQueue = new List<IUnit>();
+            turnQueue.AddRange(playerManager.PlayerUnits);
+            
+            // TODO sort the list based on some parameters
+
+            return turnQueue;
+        }
+
+        /// <summary>
+        /// Should be called whenever the units in the turn queue has been changed.
+        /// </summary>
+        private void UpdateNextTurnQueue()
+        {
+            nextTurnQueue = CreateTurnQueue();
         }
 
         /// <summary>
@@ -58,9 +98,9 @@ namespace Managers
                 return;
 
             int aboveIndex = TurnIndex - 1;
-            IUnit targetUnit = turnQueue[targetIndex];
+            IUnit targetUnit = currentTurnQueue[targetIndex];
             ShiftTurnQueue(aboveIndex, targetIndex);
-            turnQueue[aboveIndex] = targetUnit;
+            currentTurnQueue[aboveIndex] = targetUnit;
             
             // Set the current turn to be the Unit before first, later coming back to the current unit
             TurnIndex = aboveIndex;
@@ -75,13 +115,13 @@ namespace Managers
         /// <param name="targetIndex">The index of the Unit</param>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            if (TurnIndex >= turnQueue.Count - 1 || TurnIndex == targetIndex || TurnIndex == targetIndex + 1)
+            if (TurnIndex >= currentTurnQueue.Count - 1 || TurnIndex == targetIndex || TurnIndex == targetIndex + 1)
                 return;
 
             int belowIndex = TurnIndex + 1;
-            IUnit targetUnit = turnQueue[targetIndex];
+            IUnit targetUnit = currentTurnQueue[targetIndex];
             ShiftTurnQueue(belowIndex, targetIndex);
-            turnQueue[belowIndex] = targetUnit;
+            currentTurnQueue[belowIndex] = targetUnit;
         }
 
         /// <summary>
@@ -103,8 +143,10 @@ namespace Managers
             while (currentIndex != targetIndex)
             {
                 currentIndex += increment;
-                turnQueue[currentIndex] = turnQueue[currentIndex - increment];
+                currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex - increment];
             }
+            
+            UpdateNextTurnQueue();
         }
 
         // TODO listen to EndTurnCommand somehow
@@ -115,7 +157,7 @@ namespace Managers
         {
             TurnCount++;
 
-            if (TurnCount < turnQueue.Count)
+            if (TurnCount < currentTurnQueue.Count)
             {
                 CommandManager commandManager = ManagerLocator.Get<CommandManager>();
                 commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
@@ -125,6 +167,31 @@ namespace Managers
                 EndRound();
             }
         }
+        
+        /// <summary>
+        /// Finish the current Round. May transition to the next round. If there are no enemies units
+        /// or no player units left, finish the encounter. 
+        /// </summary>
+        private void EndRound()
+        {
+            // TODO might want to call the next round command or something here
+            RoundCount++;
+            TurnCount = 0;
+
+            if (!HasEnemyUnitInQueue())
+            {
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+            }
+
+            if (!HasPlayerUnitInQueue())
+            {
+                // TODO Player loses. End the encounter somehow, probably inform the GameManager
+            }
+
+            previousTurnQueue = currentTurnQueue;
+            currentTurnQueue = nextTurnQueue;
+            nextTurnQueue = CreateTurnQueue();
+        }
 
         /// <summary>
         /// Check if there are any enemy Units.
@@ -132,25 +199,16 @@ namespace Managers
         /// <returns>True if there are no <c>EnemyUnit</c> in the turnQueue</returns>
         public bool HasEnemyUnitInQueue()
         {
-            return turnQueue.Any(u => u is EnemyUnit);
+            return currentTurnQueue.Any(u => u is EnemyUnit);
         }
-
+        
         /// <summary>
-        /// Finish the current Round. Either transition to the next round or if there are no enemies
-        /// left, finish the encounter. 
+        /// Check if there are any player units.
         /// </summary>
-        private void EndRound()
+        /// <returns>True if there are no <c>PlayerUnit</c> in the turnQueue</returns>
+        public bool HasPlayerUnitInQueue()
         {
-            // TODO might want to call the next round command or something
-            RoundCount++;
-            TurnCount = 0;
-
-            if (!HasEnemyUnitInQueue())
-            {
-                // TODO End the encounter somehow, probably inform the GameManager
-            }
-            
-            CalculateQueueOrder();
+            return currentTurnQueue.Any(u => u is PlayerUnit);
         }
     }
 }
