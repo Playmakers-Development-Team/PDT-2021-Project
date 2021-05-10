@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Background.Editor
 {   
@@ -179,31 +180,43 @@ namespace Background.Editor
             ApplyImportSettings(previewTexture);
             
             AssetDatabase.Refresh();
-
             
+            
+            // STEP X. Create Tiles from sprites
+            string tilesDirectory = "/TileObjects/Tiles/" + tileSet + "/";
+            Directory.CreateDirectory(Application.dataPath + tilesDirectory);
+            
+            Tile lineTile = CreateInstance<Tile>();
+            lineTile.sprite = SpritesFromTextureAsset(lineTexture)[0];
+            AssetDatabase.CreateAsset(lineTile, "Assets" + tilesDirectory + tileName + "_line.asset");
+            
+            Tile colourTile = CreateInstance<Tile>();
+            colourTile.sprite = SpritesFromTextureAsset(colourTexture)[0];
+            AssetDatabase.CreateAsset(colourTile, "Assets" + tilesDirectory + tileName + "_colour.asset");
+            
+            Tile fillTile = CreateInstance<Tile>();
+            fillTile.sprite = SpritesFromTextureAsset(fillTexture)[0];
+            AssetDatabase.CreateAsset(fillTile, "Assets" + tilesDirectory + tileName + "_fill.asset");
+            
+            Tile previewTile = CreateInstance<Tile>();
+            previewTile.sprite = SpritesFromTextureAsset(previewTexture)[0];
+            AssetDatabase.CreateAsset(previewTile, "Assets" + tilesDirectory + tileName + "_preview.asset");
+
+
             // STEP 5. Create tile ScriptableObject
-            TileSpriteReference tileSpriteReference = CreateInstance<TileSpriteReference>();
-            tileSpriteReference.name = tileName;
-            tileSpriteReference.Initialize(
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(lineTexture)).
-                    OfType<Sprite>().ToArray()[0],
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(colourTexture)).
-                    OfType<Sprite>().ToArray()[0],
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(fillTexture)).
-                    OfType<Sprite>().ToArray()[0],
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(previewTexture)).
-                    OfType<Sprite>().ToArray()[0]
-            );
+            TileReference tileReference = CreateInstance<TileReference>();
+            tileReference.name = tileName;
+            tileReference.Initialize(lineTile, colourTile, fillTile, previewTile);
 
             
-            // STEP 6. Save tile as asset
-            string directory = "/ScriptableObjects/Background/Tiles/" + tileSet + "/";
+            // STEP 6. Save TileReference as asset
+            string directory = "/ScriptableObjects/Background/TileReferences/" + tileSet + "/";
             Directory.CreateDirectory(Application.dataPath + directory);
-            AssetDatabase.CreateAsset(tileSpriteReference, "Assets" + directory + tileName + ".asset");
+            AssetDatabase.CreateAsset(tileReference, "Assets" + directory + tileName + ".asset");
             
             AssetDatabase.Refresh();
-            Selection.activeObject = tileSpriteReference;
-            EditorGUIUtility.PingObject(tileSpriteReference);
+            Selection.activeObject = tileReference;
+            EditorGUIUtility.PingObject(tileReference);
         }
 
         private static void ApplyImportSettings(Texture texture)
@@ -257,5 +270,8 @@ namespace Background.Editor
             bool texturesValid = lineTexture && colourTexture && lineTexture != colourTexture;
             return tileSetValid && tileNameValid && texturesValid;
         }
+
+        private Sprite[] SpritesFromTextureAsset(Texture2D asset) =>
+            AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(asset)).OfType<Sprite>().ToArray();
     }
 }
