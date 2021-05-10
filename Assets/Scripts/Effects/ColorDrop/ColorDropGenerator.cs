@@ -14,6 +14,8 @@ public class ColorDropGenerator : MonoBehaviour
     [SerializeField] private RenderTexture dstRenderTexture;
 
     [Header("Texture Attributes")]
+    [SerializeField] private int scaleWidth;
+    [SerializeField] private int scaleHeight;
     [SerializeField] private float minScale;
     [SerializeField] private float maxScale;
     [SerializeField] private float minAspectRatio;
@@ -27,9 +29,18 @@ public class ColorDropGenerator : MonoBehaviour
     void Awake()
     {
         random = new System.Random();
-
+        //ResizeToSpecified();
         CombineSpriteTextures();
         RenderTexture();
+    }
+
+    private void ResizeToSpecified()
+    {
+        foreach (Sprite sprite in sampleSpriteSources)
+        {
+            sprite.texture.Resize(scaleWidth, scaleHeight);
+            sprite.texture.Apply();
+        }
     }
 
     private void CombineSpriteTextures()
@@ -49,7 +60,7 @@ public class ColorDropGenerator : MonoBehaviour
         float scaleY = scaleX * aspectRatio;
 
         // Calculate destination
-        Rect dstRect = CreateTextureRect(src.textureRect.width, src.textureRect.height, dst.width, dst.height);
+        Rect dstRect = CreateTextureRect(dstRenderTexture.width, dstRenderTexture.height, dst.width, dst.height);
 
         MergeSourceToDestination(src, dst, dstRect, scaleX, scaleY);
     }
@@ -57,13 +68,14 @@ public class ColorDropGenerator : MonoBehaviour
     private void MergeSourceToDestination(Sprite src, Texture2D dst, Rect dstRect, float scaleX, float scaleY)
     {
         Color srcColor, dstColor;
+        float scaleMultiplier = src.textureRect.width / dst.width;
 
         for (int y = 0; y < dstRect.height; y++)
         {
             for (int x = 0; x < dstRect.width; x++)
             {
                 // GetPixelBilinear does not give the desired result
-                srcColor = src.texture.GetPixel((int)(src.textureRect.x + x / scaleX), (int)(src.textureRect.y + y / scaleY));
+                srcColor = src.texture.GetPixel((int)(src.textureRect.x + x * scaleMultiplier), (int)(src.textureRect.y + y * scaleMultiplier));
                 dstColor = dst.GetPixel((int)dstRect.x + x, (int)dstRect.y + y);
                 dstColor.a = srcColor.a;
 
