@@ -183,7 +183,7 @@ namespace Background.Editor
             
             
             // STEP X. Create Tiles from sprites
-            string tilesDirectory = "/TileObjects/Tiles/" + tileSet + "/";
+            string tilesDirectory = "/TileObjects/Tiles/" + tileSet + "/" + tileName + "/";
             Directory.CreateDirectory(Application.dataPath + tilesDirectory);
             
             Tile lineTile = CreateInstance<Tile>();
@@ -233,9 +233,9 @@ namespace Background.Editor
             TextureImporterSettings settings = new TextureImporterSettings();
             
             importer.textureType = TextureImporterType.Sprite;
-            importer.spritePixelsPerUnit = 512;
+            importer.spritePixelsPerUnit = 1024;
             importer.spritePivot = 
-                new Vector2(0.5f, 0.5f * ((float) texture.width / texture.height));
+                new Vector2(0.5f, 0.25f * ((float) texture.width / texture.height));
             
             importer.ReadTextureSettings(settings);
             settings.spriteAlignment = (int) SpriteAlignment.Custom;
