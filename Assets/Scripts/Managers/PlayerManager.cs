@@ -14,7 +14,7 @@ namespace Managers
         {
             IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
             
-            if (!(unit is PlayerUnit))
+            if (!(unit is PlayerUnitController))
                 return null;
             
             playerUnits.Add(unit);
@@ -26,7 +26,7 @@ namespace Managers
         {
             IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
 
-            if (!(unit is PlayerUnit))
+            if (!(unit is PlayerUnitController))
                 return null;
             
             playerUnits.Add(unit);
