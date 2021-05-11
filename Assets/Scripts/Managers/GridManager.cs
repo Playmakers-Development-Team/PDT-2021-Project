@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 using TileData = Tiles.TileData;
 
 namespace Managers
@@ -9,16 +11,17 @@ namespace Managers
     {
         private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
 
-        public void InitialiseTileDatas(Tilemap tilemap)
-        {
-            BoundsInt bounds = tilemap.cellBounds;
-            TileBase[] allTiles = tilemap.GetTilesBlock(bounds);
+        public Tilemap levelTilemap { get; set; }
 
-            for (int x = 0; x < bounds.size.x; x++)
+        public void InitialiseTileDatas()
+        {
+            BoundsInt bounds = levelTilemap.cellBounds;
+
+            for (int x = -bounds.size.x/2 - 1; x <= bounds.size.x/2; x++)
             {
-                for (int y = 0; y < bounds.size.y; y++)
+                for (int y = -bounds.size.y/2 - 1; y <= bounds.size.y/2; y++)
                 {
-                    TileBase tile = allTiles[x + y * bounds.size.x];
+                    TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
 
                     if (tile != null)
                     {
@@ -43,6 +46,12 @@ namespace Managers
 
             Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
             return null;
+        }
+
+        public Vector3 ConvertWorldSpaceToGridSpace(Vector3 worldSpace)
+        {
+            Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + levelTilemap.layoutGrid.WorldToCell(worldSpace));
+            return levelTilemap.layoutGrid.WorldToCell(worldSpace);
         }
     }
 }
