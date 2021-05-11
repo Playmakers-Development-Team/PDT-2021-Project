@@ -5,7 +5,7 @@ namespace GridObjects
 {
     public class GridObject
     {
-        private Vector2Int position;
+        private Vector2 position;
         public Stat DealDamageModifier { get; }
         public Stat TakeDamageModifier { get; }
         public Stat TakeKnockbackModifier { get; }
@@ -13,7 +13,7 @@ namespace GridObjects
         private GridManager gridManager;
 
         public GridObject(
-            Vector2Int position,
+            Vector2 position,
             Stat dealDamageModifier,
             Stat takeDamageModifier,
             Stat takeKnockbackModifier
@@ -39,6 +39,11 @@ namespace GridObjects
         {
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
+        }
+        
+        public Vector2 GetGridPosition()
+        {
+            return gridManager.ConvertWorldSpaceToGridSpace(position);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Managers
             return levelTilemap.layoutGrid.WorldToCell(worldSpace);
         }
 
-        public void AddGridObject(Vector2Int position, GridObject gridObject)
+        public void AddGridObject(Vector2 position, GridObject gridObject)
         {
             TileData tileData = GetTileDataByCoordinate(position);
 
