@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: settingsInstance
   m_EditorClassIdentifier: 
   backgroundCompute: {fileID: 7200000, guid: 1fa6f9861bd9d6a448eff5b1ebe32425, type: 3}
+  previewLayer:
+    serializedVersion: 2
+    m_Bits: 2048
   washLayer:
     serializedVersion: 2
     m_Bits: 64

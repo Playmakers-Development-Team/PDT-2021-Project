@@ -8,6 +8,12 @@ namespace Background
     {
         [SerializeField] private ComputeShader backgroundCompute;
         
+        [Space]
+        
+        [SerializeField] private LayerMask previewLayer;
+        
+        [Space]
+        
         [SerializeField] private LayerMask washLayer;
         [SerializeField] private string washTexturePropertyName;
         
@@ -29,6 +35,7 @@ namespace Background
 
 
         public static ComputeShader BackgroundCompute => Instance.backgroundCompute;
+        public static LayerMask PreviewLayer => Instance.previewLayer;
         public static LayerMask WashLayer => Instance.washLayer;
         public static string WashTexturePropertyName => Instance.washTexturePropertyName;
         public static LayerMask LineLayer => Instance.lineLayer;

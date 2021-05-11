@@ -215,8 +215,6 @@ namespace Background.Editor
             AssetDatabase.CreateAsset(tileReference, "Assets" + directory + tileName + ".asset");
             
             AssetDatabase.Refresh();
-            // Selection.activeObject = tileReference;
-            // EditorGUIUtility.PingObject(tileReference);
         }
 
         private static void ApplyImportSettings(Texture texture)

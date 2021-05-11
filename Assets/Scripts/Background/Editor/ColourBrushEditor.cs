@@ -3,6 +3,6 @@
 namespace Background.Editor
 {
     [CustomEditor(typeof(ColourBrush))]
-    public class ColourBrush : UnityEditor.Tilemaps.GridBrushEditor
+    public class ColourBrushEditor : UnityEditor.Tilemaps.GridBrushEditorBase
     {}
 }

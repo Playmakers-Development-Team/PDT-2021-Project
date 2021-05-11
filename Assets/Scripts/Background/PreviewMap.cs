@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,8 +10,9 @@ namespace Background
     public class PreviewMap : MonoBehaviour
     {
         [SerializeField] private Tilemap lineMap;
-        [SerializeField] private Tilemap fillMap;
         [SerializeField] private Tilemap washMap;
+
+        [SerializeField] private BackgroundCamera previewCamera;
 
         private Tilemap map;
         private new TilemapRenderer renderer;
@@ -26,36 +28,11 @@ namespace Background
             ReplaceTiles(lineMap, TileType.Line);
         }
 
-        private void GenerateFill()
-        {
-            fillMap = CreateClone("Fill Map");
-            ReplaceTiles(fillMap, TileType.Colour);
-        }
-
         private void GenerateWash()
         {
             washMap = CreateClone("Wash Map");
             washMap.gameObject.layer = GetLayerIndex(Settings.WashLayer);
             ReplaceTiles(washMap, TileType.Colour);
-
-            BoundsInt bounds = washMap.cellBounds;
-
-            for (int x = bounds.position.x; x < bounds.position.x + bounds.size.x; x++)
-            {
-                for (int y = bounds.position.y; y < bounds.position.y + bounds.size.y; y++)
-                {
-                    Vector3Int position = new Vector3Int(x, y, 0);
-                    TileBase inWash = washMap.GetTile(position);
-                    TileBase inFill = fillMap.GetTile(position);
-
-                    if (!inWash || inFill)
-                        continue;
-                    
-                    Tile replacement = references.Find(reference => reference.HasTile(inWash as Tile))?.GetTile(TileType.Fill);
-                    if (replacement)
-                        washMap.SetTile(position, replacement);
-                }
-            }
         }
 
         private void Initialise()
@@ -73,47 +50,55 @@ namespace Background
             }
         }
         
-        public void GenerateStageOne()
+        public void Generate()
         {
             Initialise();
 
             Clear();
+            
+            ReplaceTiles(map, TileType.Preview);
 
             GenerateLine();
-            GenerateFill();
-            
+            GenerateWash();
+
+            SceneVisibilityManager.instance.Hide(map.gameObject, false); 
             SceneVisibilityManager.instance.Hide(lineMap.gameObject, false);
-            SceneVisibilityManager.instance.Hide(map.gameObject, false);
-            
-            EditorGUIUtility.PingObject(fillMap.gameObject);
-            Selection.activeObject = fillMap.gameObject;
+
+            EditorGUIUtility.PingObject(washMap.gameObject);
+            Selection.activeObject = washMap.gameObject;
         }
 
-        public void GenerateStageTwo()
+        public void Finalise()
         {
             Initialise();
             
-            Clear(ref washMap);
-            
-            GenerateWash();
+            SceneVisibilityManager.instance.Hide(map.gameObject, true);
 
-            Clear(ref fillMap);
+            gameObject.layer = GetLayerIndex(Settings.PreviewLayer);
             
-            SceneVisibilityManager.instance.Hide(washMap.gameObject, false);
+            if (previewCamera)
+                previewCamera.Render();
+
+            Selection.activeObject = null;
         }
+
+        public bool CanFinalise() => lineMap && washMap;
 
         [ContextMenu("Clear")]
         public void Clear()
         {
+            Initialise();
+            
             Clear(ref lineMap);
-            Clear(ref fillMap);
             Clear(ref washMap);
 
-            if (SceneVisibilityManager.instance)
-                SceneVisibilityManager.instance.Show(map.gameObject, false);
-        }
+            SceneVisibilityManager.instance.Show(map.gameObject, false);
 
-        public bool CanProgress() => lineMap && fillMap;
+            gameObject.layer = 0;
+            
+            if (previewCamera)
+                previewCamera.Clear();
+        }
         
         private static void Clear(ref Tilemap tilemap)
         {
@@ -145,7 +130,25 @@ namespace Background
         private void ReplaceTiles(Tilemap tilemap, TileType type)
         {
             foreach (TileReference reference in references)
-                tilemap.SwapTile(reference.GetTile(TileType.Preview), reference.GetTile(type));
+            {
+                BoundsInt bounds = tilemap.cellBounds;
+
+                for (int x = bounds.position.x; x < bounds.position.x + bounds.size.x; x++)
+                {
+                    for (int y = bounds.position.y; y < bounds.position.y + bounds.size.y; y++)
+                    {
+                        Vector3Int position = new Vector3Int(x, y, 0);
+                        TileBase current = tilemap.GetTile(position);
+
+                        if (!current || !reference.HasTile(current as Tile))
+                            continue;
+                        
+                        Tile replacement = reference.GetTile(type);
+                        if (replacement)
+                            tilemap.SetTile(position, replacement);
+                    }
+                }
+            }
         }
         
         private Tilemap CreateClone(string mapName)
