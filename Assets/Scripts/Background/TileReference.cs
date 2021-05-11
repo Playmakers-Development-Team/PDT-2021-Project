@@ -18,5 +18,19 @@ namespace Background
             fill = fillSprite;
             preview = previewSprite;
         }
+
+        public Tile GetTile(TileType type)
+        {
+            return type switch
+            {
+                TileType.Line => line,
+                TileType.Colour => colour,
+                TileType.Fill => fill,
+                TileType.Preview => preview,
+                _ => null
+            };
+        }
+
+        public bool HasTile(Tile tile) => line.Equals(tile) || colour.Equals(tile) || fill.Equals(tile) || preview.Equals(tile);
     }
 }
