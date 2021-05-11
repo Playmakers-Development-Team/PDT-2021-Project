@@ -32,5 +32,22 @@ namespace Background
         }
 
         public bool HasTile(Tile tile) => line.Equals(tile) || colour.Equals(tile) || fill.Equals(tile) || preview.Equals(tile);
+
+        public TileType GetType(Tile tile)
+        {
+            if (tile.Equals(line))
+                return TileType.Line;
+
+            if (tile.Equals(colour))
+                return TileType.Colour;
+
+            if (tile.Equals(fill))
+                return TileType.Fill;
+
+            if (tile.Equals(preview))
+                return TileType.Preview;
+
+            return 0;
+        }
     }
 }
