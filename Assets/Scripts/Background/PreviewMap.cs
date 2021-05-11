@@ -10,9 +10,6 @@ namespace Background
         [SerializeField] private Tilemap lineMap;
         [SerializeField] private Tilemap washMap;
 
-        [SerializeField] private LayerMask lineLayer;
-        [SerializeField] private LayerMask washLayer;
-
         private Tilemap map;
         private new TilemapRenderer renderer;
         
@@ -39,12 +36,13 @@ namespace Background
             }
 
             lineMap = CreateClone("Line Map");
-            lineMap.gameObject.layer = lineLayer;   // TODO: Replace with Settings.lineLayer;
+            lineMap.gameObject.layer = GetLayerIndex(Settings.LineLayer);
             SceneVisibilityManager.instance.Hide(lineMap.gameObject, true);
+            
             washMap = CreateClone("Wash Map");
-            washMap.gameObject.layer = washLayer;   // TODO: Replace with Settings.washLayer;
+            washMap.gameObject.layer = GetLayerIndex(Settings.WashLayer);
             SceneVisibilityManager.instance.Hide(washMap.gameObject, true);
-
+            
             ReplaceTiles(lineMap, TileType.Line, references);
             ReplaceTiles(washMap, TileType.Colour, references);
         }
@@ -63,6 +61,23 @@ namespace Background
                 DestroyImmediate(washMap.gameObject);
                 washMap = null;
             }
+        }
+
+        private static int GetLayerIndex(LayerMask mask)
+        {
+            int index = 0;
+            int value = mask.value;
+
+            while (index < 32)
+            {
+                if ((value & 1) != 0)
+                    return index;
+
+                value >>= 1;
+                index++;
+            }
+
+            return 0;
         }
 
         private void ReplaceTiles(Tilemap tilemap, TileType type, IEnumerable<TileReference> references)
