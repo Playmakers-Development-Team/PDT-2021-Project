@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Background.Editor
 {   
@@ -10,10 +11,13 @@ namespace Background.Editor
         private string tileName;
         private string tileSet;
         
+        private Color previewLineColour = Color.black;
+        
         private Texture2D lineTexture;
         private Texture2D colourTexture;
 
         private Texture2D fillTexture;
+        private Texture2D previewTexture;
 
         private static GUIStyle textureLabelStyle;
         private static GUIStyle strongStyle;
@@ -63,6 +67,7 @@ namespace Background.Editor
         {
             tileSet = EditorGUILayout.TextField("Tile Set", tileSet);
             tileName = EditorGUILayout.TextField("Tile Name", tileName);
+            previewLineColour = EditorGUILayout.ColorField("Preview Line Colour", previewLineColour);
 
             EditorGUILayout.Space();
             
@@ -75,10 +80,8 @@ namespace Background.Editor
 
             EditorGUILayout.Space();
             
-            // 'Create' button
-            bool tileSetValid = !(tileSet is null) && tileSet.Length > 0 && !tileSet.Contains(" ");
-            bool tileNameValid = !(tileName is null) && tileName.Length > 0;
-            GUI.enabled = tileSetValid && tileNameValid && lineTexture && colourTexture;
+            // 'Create Tile' button
+            GUI.enabled = InputsValid();
 
             if (GUILayout.Button("Create Tile"))
                 CreateTile();
@@ -99,70 +102,121 @@ namespace Background.Editor
 
         private void CreateTile()
         {
-            // STEP 1. Generate fill texture if it hasn't been assigned.
+            ComputeShader shader = AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/Shaders/Tile.compute");
+            
+            
+            // STEP 1. Generate fill texture.
             RenderTexture fillRT = new RenderTexture(colourTexture.width, colourTexture.height, 0)
             {
                 enableRandomWrite = true
             };
             fillRT.Create();
-            
-            Settings.TileCompute.SetTexture(0, "input", colourTexture);
-            Settings.TileCompute.SetTexture(0, "output", fillRT);
-            Settings.TileCompute.Dispatch(0, fillRT.width / 8, fillRT.height / 8, 1);
+
+            shader.SetTexture(0, "_colour", colourTexture);
+            shader.SetTexture(0, "output", fillRT);
+            shader.Dispatch(0, fillRT.width / 8, fillRT.height / 8, 1);
                 
-            fillTexture = new Texture2D(fillRT.width, fillRT.height, TextureFormat.RGBA32, true);
+            fillTexture =
+                new Texture2D(fillRT.width, fillRT.height, TextureFormat.RGBA32, true);
                 
             RenderTexture.active = fillRT;
             fillTexture.ReadPixels(new Rect(0, 0, fillRT.width, fillRT.height), 0, 0);
             fillTexture.Apply();
             
-            // STEP 2. Save textures to file.
+            
+            // STEP 2. Generate preview texture.
+            RenderTexture previewRT = new RenderTexture(colourTexture.width, colourTexture.height, 0)
+            {
+                enableRandomWrite = true
+            };
+            previewRT.Create();
+            
+            shader.SetVector("line_colour", previewLineColour);
+            shader.SetTexture(1, "_line", lineTexture);
+            shader.SetTexture(1, "_colour", colourTexture);
+            shader.SetTexture(1, "output", previewRT);
+            shader.Dispatch(1, fillRT.width / 8, fillRT.height / 8, 1);
+
+            previewTexture = new Texture2D(previewRT.width, previewRT.height, TextureFormat.RGBA32, true);
+
+            RenderTexture.active = previewRT;
+            previewTexture.ReadPixels(new Rect(0, 0, previewRT.width, previewRT.height), 0, 0);
+            previewTexture.Apply();
+
+
+            // STEP 3. Save textures to file.
             string path = AssetDatabase.GetAssetPath(colourTexture);
             path = path.Replace(Path.GetFileName(path), "");
-            path += tileName + "_fill.png";
-            
-            byte[] bytes = fillTexture.EncodeToPNG();
-            DestroyImmediate(fillTexture);
             
             string dataPath = Application.dataPath;
             dataPath = dataPath.Remove(dataPath.Length - 6);
             
-            File.WriteAllBytes(dataPath + path, bytes);
+            string fillPath = path + tileName + "_fill.png";
+            string previewPath = path + tileName + "_preview.png";
+            
+            byte[] fillBytes = fillTexture.EncodeToPNG();
+            DestroyImmediate(fillTexture);
+            File.WriteAllBytes(dataPath + fillPath, fillBytes);
+
+            byte[] previewBytes = previewTexture.EncodeToPNG();
+            DestroyImmediate(previewTexture);
+            File.WriteAllBytes(dataPath + previewPath, previewBytes);
+            
             AssetDatabase.Refresh();
             
-            fillTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            fillTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(fillPath);
+            previewTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(previewPath);
 
-            // STEP 3. Apply correct import settings to textures.
+            
+            // STEP 4. Apply correct import settings to textures.
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(colourTexture),
                 tileName + "_colour");
             AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(lineTexture),
                 tileName + "_line");
+            
             ApplyImportSettings(lineTexture);
             ApplyImportSettings(colourTexture);
             ApplyImportSettings(fillTexture);
+            ApplyImportSettings(previewTexture);
             
             AssetDatabase.Refresh();
+            
+            
+            // STEP X. Create Tiles from sprites
+            string tilesDirectory = "/TileObjects/Tiles/" + tileSet + "/" + tileName + "/";
+            Directory.CreateDirectory(Application.dataPath + tilesDirectory);
+            
+            Tile lineTile = CreateInstance<Tile>();
+            lineTile.sprite = SpritesFromTextureAsset(lineTexture)[0];
+            AssetDatabase.CreateAsset(lineTile, "Assets" + tilesDirectory + tileName + "_line.asset");
+            
+            Tile colourTile = CreateInstance<Tile>();
+            colourTile.sprite = SpritesFromTextureAsset(colourTexture)[0];
+            AssetDatabase.CreateAsset(colourTile, "Assets" + tilesDirectory + tileName + "_colour.asset");
+            
+            Tile fillTile = CreateInstance<Tile>();
+            fillTile.sprite = SpritesFromTextureAsset(fillTexture)[0];
+            AssetDatabase.CreateAsset(fillTile, "Assets" + tilesDirectory + tileName + "_fill.asset");
+            
+            Tile previewTile = CreateInstance<Tile>();
+            previewTile.sprite = SpritesFromTextureAsset(previewTexture)[0];
+            AssetDatabase.CreateAsset(previewTile, "Assets" + tilesDirectory + tileName + "_preview.asset");
 
-            // STEP 4. Create tile ScriptableObject
-            TileSpriteReference tileSpriteReference = CreateInstance<TileSpriteReference>();
-            tileSpriteReference.name = tileName;
-            tileSpriteReference.Initialize(
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(lineTexture)).
-                    OfType<Sprite>().ToArray()[0],
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(colourTexture)).
-                    OfType<Sprite>().ToArray()[0],
-                AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(fillTexture)).
-                    OfType<Sprite>().ToArray()[0]
-            );
 
-            // STEP 5. Save tile as asset
-            string directory = "/ScriptableObjects/Background/Tiles/" + tileSet + "/";
+            // STEP 5. Create tile ScriptableObject
+            TileReference tileReference = CreateInstance<TileReference>();
+            tileReference.name = tileName;
+            tileReference.Initialize(lineTile, colourTile, fillTile, previewTile);
+
+            
+            // STEP 6. Save TileReference as asset
+            string directory = "/ScriptableObjects/Background/TileReferences/" + tileSet + "/";
             Directory.CreateDirectory(Application.dataPath + directory);
-            AssetDatabase.CreateAsset(tileSpriteReference, "Assets" + directory + tileName + ".asset");
+            AssetDatabase.CreateAsset(tileReference, "Assets" + directory + tileName + ".asset");
             
             AssetDatabase.Refresh();
-            Selection.activeObject = tileSpriteReference;
-            EditorGUIUtility.PingObject(tileSpriteReference);
+            Selection.activeObject = tileReference;
+            EditorGUIUtility.PingObject(tileReference);
         }
 
         private static void ApplyImportSettings(Texture texture)
@@ -179,9 +233,9 @@ namespace Background.Editor
             TextureImporterSettings settings = new TextureImporterSettings();
             
             importer.textureType = TextureImporterType.Sprite;
-            importer.spritePixelsPerUnit = 512;
+            importer.spritePixelsPerUnit = 1024;
             importer.spritePivot = 
-                new Vector2(0.5f, 0.5f * ((float) texture.width / texture.height));
+                new Vector2(0.5f, 0.25f * ((float) texture.width / texture.height));
             
             importer.ReadTextureSettings(settings);
             settings.spriteAlignment = (int) SpriteAlignment.Custom;
@@ -208,5 +262,16 @@ namespace Background.Editor
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         }
+
+        private bool InputsValid()
+        {
+            bool tileSetValid = !(tileSet is null) && tileSet.Length > 0 && !tileSet.Contains(" ");
+            bool tileNameValid = !(tileName is null) && tileName.Length > 0;
+            bool texturesValid = lineTexture && colourTexture && lineTexture != colourTexture;
+            return tileSetValid && tileNameValid && texturesValid;
+        }
+
+        private Sprite[] SpritesFromTextureAsset(Texture2D asset) =>
+            AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(asset)).OfType<Sprite>().ToArray();
     }
 }
