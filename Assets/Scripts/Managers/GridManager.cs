@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using GridObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UIElements;
@@ -35,10 +36,8 @@ namespace Managers
             }
         }
         
-        public TileData GetGridObjectsByCoordinate(float x, float z)
+        public TileData GetTileDataByCoordinate(Vector2 coordinate)
         {
-            Vector2 coordinate = new Vector2(x, z);
-            
             if(tileDatas.TryGetValue(coordinate, out TileData tileData))
             {
                 return tileData;
@@ -47,11 +46,32 @@ namespace Managers
             Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
             return null;
         }
+        
+        public List<GridObject> GetGridObjectsByCoordinate(Vector2 coordinate)
+        {
+            TileData tileData = GetTileDataByCoordinate(coordinate);
+
+            if (tileData is null)
+                return new List<GridObject>();
+
+            return tileData.GridObjects;
+        }
 
         public Vector3 ConvertWorldSpaceToGridSpace(Vector3 worldSpace)
         {
             Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + levelTilemap.layoutGrid.WorldToCell(worldSpace));
             return levelTilemap.layoutGrid.WorldToCell(worldSpace);
+        }
+
+        public void AddGridObject(Vector2Int position, GridObject gridObject)
+        {
+            TileData tileData = GetTileDataByCoordinate(position);
+
+            if (!(tileData is null))
+            {
+                Debug.Log("GridObject added to tile " + position.x + ", " + position.y);
+                tileData.AddGridObjects(gridObject);
+            }
         }
     }
 }

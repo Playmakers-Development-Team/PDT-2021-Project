@@ -58,10 +58,8 @@ namespace Managers
                     Random.Range(bounds.xMin, bounds.xMax), 
                     Random.Range(bounds.yMin, bounds.yMax));
                 
-                TileBase tile = gridManager.GetGridObjectsByCoordinate(
-                    randomCoordinates.x,
-                    randomCoordinates.y
-                ).Tile;
+                TileBase tile = gridManager.GetTileDataByCoordinate(
+                    new Vector2(randomCoordinates.x, randomCoordinates.y)).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
         }
