@@ -16,8 +16,9 @@ namespace Background
             input.Pull();
 
             SetInput(new Input(amount));
-            Shader.SetTexture(GetKernelIndex(), "output", input);
-            Shader.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            SetTexture("output", input);
+            
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.SaturationFeature;

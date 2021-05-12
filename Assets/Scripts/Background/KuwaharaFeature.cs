@@ -14,18 +14,16 @@ namespace Background
         {
             input.Pull();
             
-            // TODO: This could probably be made into a function.
-            RenderTexture output = new RenderTexture(input);
-            output.Create();
-            BackgroundManager.MarkToRelease(output);
+            RenderTexture copy = new RenderTexture(input);
+            copy.Create();
+            Graphics.Blit(input, copy);
+            BackgroundManager.MarkToRelease(copy);
 
             SetInput(new Input(radius));
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
+            SetTexture("_input", copy);
+            SetTexture("output", input);
             
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), output.width / 8, output.height / 8, 1);
-
-            Graphics.Blit(output, input);
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.Kuwahara;

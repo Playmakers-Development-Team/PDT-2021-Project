@@ -10,7 +10,7 @@ namespace Background
         [SerializeField] private TextureParameters bumpMap;
         [SerializeField] private TextureParameters strengthMap;
         [SerializeField, Range(0f, 1f)] private float amount;
-        
+
         public override void Execute()
         {
             input.Pull();
@@ -18,12 +18,12 @@ namespace Background
 
             SetInput(new Input(bumpMap.Parameters, strengthMap.Parameters, amount));
             
-            Shader.SetTexture(GetKernelIndex(), "output", input);
-            Shader.SetTexture(GetKernelIndex(), "_tex1", flood);
-            Shader.SetTexture(GetKernelIndex(), "_tex2", bumpMap.Texture);
-            Shader.SetTexture(GetKernelIndex(), "_tex3", strengthMap.Texture);
+            SetTexture("output", input);
+            SetTexture("_tex1", flood);
+            SetTexture("_tex2", bumpMap.Texture);
+            SetTexture("_tex3", strengthMap.Texture);
 
-            Shader.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.Bump;

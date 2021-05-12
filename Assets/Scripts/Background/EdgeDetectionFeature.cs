@@ -18,7 +18,7 @@ namespace Background
         {
             input.Pull();
 
-            BackgroundManager.MarkToRelease(SetInput(new Input(radius, threshold)));
+            SetInput(new Input(radius, threshold));
             
             output.Texture = new RenderTexture(input.Texture.descriptor)
             {
@@ -29,10 +29,10 @@ namespace Background
             output.Texture.Create();
             BackgroundManager.MarkToRelease(output);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
+            SetTexture("_input", input);
+            SetTexture("output", output);
 
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            Dispatch(input.Width, input.Height);
 
             output.Push();
         }

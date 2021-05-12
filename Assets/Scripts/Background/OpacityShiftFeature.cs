@@ -19,10 +19,10 @@ namespace Background
             input.Pull();
 
             SetInput(new Input(strengthMap.Parameters, amount, balance));
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", strengthMap.Texture);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", input);
+            SetTexture("_tex1", strengthMap.Texture);
+            SetTexture("output", input);
             
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.OpacityShift;

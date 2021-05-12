@@ -12,6 +12,8 @@ namespace Background
         private RenderTexture texture;
         
         public string Name => name;
+        public int Width => Texture ? Texture.width : -1;
+        public int Height => Texture ? Texture.height : -1;
         public RenderTexture Texture
         {
             get

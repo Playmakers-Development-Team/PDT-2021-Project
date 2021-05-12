@@ -16,20 +16,18 @@ namespace Background
         {
             input.Pull();
             
-            RenderTexture output = new RenderTexture(input.Texture.descriptor)
+            RenderTexture copy = new RenderTexture(input.Texture.descriptor)
             {
                 filterMode = input.Texture.filterMode
             };
-            output.Create();
-            BackgroundManager.MarkToRelease(output);
+            copy.Create();
+            Graphics.Blit(input, copy);
+            BackgroundManager.MarkToRelease(copy);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
+            SetTexture("_input", copy);
+            SetTexture("output", input);
 
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8,
-                1);
-            
-            Graphics.CopyTexture(output, input);
+            Dispatch(input.Width, input.Height);
         }
     }
 }

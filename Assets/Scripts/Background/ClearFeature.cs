@@ -8,7 +8,6 @@ public class ClearFeature : Feature
     public override void Execute()
     {
         input.Pull();
-        
         input.Texture.Release();
         input.Texture.Create();
     }

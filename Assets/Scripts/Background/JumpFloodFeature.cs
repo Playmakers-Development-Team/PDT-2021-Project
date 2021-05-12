@@ -27,7 +27,7 @@ namespace Background
 
             Graphics.Blit(edge, output);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
+            SetTexture("output", output);
 
             Input input = new Input(new Vector2Int(output.Texture.width, output.Texture.height));
             while (input.Width > 1 || input.Height > 1)
@@ -35,10 +35,10 @@ namespace Background
                 input.StepSize = new Vector2Int(Mathf.Max(1, input.Width / 2), Mathf.Max(1, input.Height / 2));
                 Graphics.Blit(output, edge);
 
-                Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", edge);
+                SetTexture("_input", edge);
                 ComputeBuffer buffer = SetInput(input);
                 
-                Settings.BackgroundCompute.Dispatch(GetKernelIndex(), output.Texture.width / 8, output.Texture.height / 8, 1);
+                Dispatch(output.Width, output.Height);
                 
                 buffer.Release();
             }

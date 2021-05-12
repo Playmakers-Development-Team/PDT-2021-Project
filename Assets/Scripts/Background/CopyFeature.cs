@@ -9,9 +9,6 @@ namespace Background
     {
         [SerializeField] private FeatureTexture source;
         [SerializeField] private FeatureTexture destination;
-        
-        // TODO: Implement this
-        [SerializeField] private bool copySettings;
 
         
         public override void Execute()
@@ -34,6 +31,6 @@ namespace Background
             Graphics.Blit(source, destination);
         }
 
-        protected override int GetKernelIndex() => throw new NotImplementedException();
+        protected override int GetKernelIndex() => -1;
     }
 }

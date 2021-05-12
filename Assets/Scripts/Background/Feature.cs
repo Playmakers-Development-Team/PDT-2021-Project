@@ -11,8 +11,10 @@ namespace Background
 
         [SerializeField, HideInInspector] private string featureName;
         
+
+        protected virtual Vector3Int Threads => new Vector3Int(8, 8, 1);
+        
         public bool IsActive => active;
-        // TODO: Implement this in all subclasses.
         public ComputeShader Shader => Settings.BackgroundCompute;
         
         
@@ -25,11 +27,21 @@ namespace Background
             ComputeBuffer buffer = new ComputeBuffer(1, input.GetSize());
             buffer.SetData(new[] {input});
 
-            Settings.BackgroundCompute.SetBuffer(GetKernelIndex(), input.GetName(), buffer);
+            Shader.SetBuffer(GetKernelIndex(), input.GetName(), buffer);
 
             BackgroundManager.MarkToRelease(buffer);
             
             return buffer;
+        }
+
+        protected void SetTexture(string textureName, Texture texture)
+        {
+            Shader.SetTexture(GetKernelIndex(), textureName, texture);
+        }
+
+        protected void Dispatch(int xResolution, int yResolution, int zResolution = 1)
+        {
+            Shader.Dispatch(GetKernelIndex(), xResolution / Threads.x, yResolution / Threads.y, zResolution / Threads.z);
         }
     }
 }

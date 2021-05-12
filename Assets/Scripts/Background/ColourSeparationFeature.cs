@@ -18,13 +18,13 @@ namespace Background
             input.Pull();
             distanceField.Pull();
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", input);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", distanceField);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex2", strengthMap.Texture);
+            SetTexture("output", input);
+            SetTexture("_tex1", distanceField);
+            SetTexture("_tex2", strengthMap.Texture);
 
             SetInput(new Input(strengthMap.Parameters, amount));
             
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.ColourSeparation;

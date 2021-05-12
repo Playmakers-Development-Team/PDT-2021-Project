@@ -13,31 +13,29 @@ namespace Background
         
         [SerializeField] private float amount;
         
-        
-        protected override int GetKernelIndex() => (int) KernelIndex.Displacement;
 
         public override void Execute()
         {
             input.Pull();
-            
-            ComputeBuffer buffer = SetInput(new Input(strengthMap.Parameters, amount));
-            BackgroundManager.MarkToRelease(buffer);
 
-            RenderTexture output = new RenderTexture(input.Texture.descriptor)
+            SetInput(new Input(strengthMap.Parameters, amount));
+
+            RenderTexture output = new RenderTexture(input)
             {
                 filterMode = input.Texture.filterMode
             };
             output.Create();
+            Graphics.Blit(input, output);
             BackgroundManager.MarkToRelease(output);
 
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_tex1", strengthMap.Texture);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "_input", input);
-            Settings.BackgroundCompute.SetTexture(GetKernelIndex(), "output", output);
+            SetTexture("_tex1", strengthMap.Texture);
+            SetTexture("_input", output);
+            SetTexture("output", input);
 
-            Settings.BackgroundCompute.Dispatch(GetKernelIndex(), input.Texture.width / 8,
-                input.Texture.height / 8, 1);
-            Graphics.CopyTexture(output, input);
+            Dispatch(input.Width, input.Height);
         }
+        
+        protected override int GetKernelIndex() => (int) KernelIndex.Displacement;
         
 
         private struct Input : IKernelInput

@@ -21,11 +21,11 @@ namespace Background
             
             SetInput(new Input(strengthMap.Parameters, amount, exponent));
             
-            Shader.SetTexture(GetKernelIndex(), "output", input);
-            Shader.SetTexture(GetKernelIndex(), "_tex1", flood);
-            Shader.SetTexture(GetKernelIndex(), "_tex2", strengthMap.Texture);
+            SetTexture("output", input);
+            SetTexture("_tex1", flood);
+            SetTexture("_tex2", strengthMap.Texture);
 
-            Shader.Dispatch(GetKernelIndex(), input.Texture.width / 8, input.Texture.height / 8, 1);
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.EdgePigment;
