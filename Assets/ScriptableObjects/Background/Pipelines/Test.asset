@@ -166,6 +166,8 @@ MonoBehaviour:
     offset: {x: 0.25, y: 0.25}
   amount: 0.5
   balance: 0
+  valueInfluence: 0
+  boost: 1
 --- !u!114 &-669268930892035431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,7 +310,7 @@ MonoBehaviour:
   featureName: 
   input:
     name: wash
-  amount: 0
+  amount: -1
 --- !u!114 &5675850521398351355
 MonoBehaviour:
   m_ObjectHideFlags: 0

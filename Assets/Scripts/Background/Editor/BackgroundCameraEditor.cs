@@ -29,12 +29,16 @@ namespace Background.Editor
                         : Color.black
                 }
             };
+            
+            Initialise();
         }
 
-        private void Awake()
+        private void Awake() => Initialise();
+
+        private void Initialise()
         {
-            overrideProperty = serializedObject.FindProperty("overrideGlobalPipeline");
-            pipelineProperty = serializedObject.FindProperty("pipeline");
+            overrideProperty ??= serializedObject.FindProperty("overrideGlobalPipeline");
+            pipelineProperty ??= serializedObject.FindProperty("pipeline");
             
             UpdatePipelineEditor();
         }

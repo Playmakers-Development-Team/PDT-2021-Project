@@ -86,6 +86,8 @@ struct hue_shift_input
     float4 strength_params;
     float amount;
     float balance;
+    float value_influence;
+    float boost;
 };
 
 struct saturation_input

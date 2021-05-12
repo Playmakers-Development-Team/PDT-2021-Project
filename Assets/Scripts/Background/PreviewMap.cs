@@ -23,20 +23,22 @@ namespace Background
 
         private void GenerateLine()
         {
-            lineMap = CreateClone("Line Map");
+            lineMap = CreateClone(gameObject.name + " (Line)");
             lineMap.gameObject.layer = GetLayerIndex(Settings.LineLayer);
             ReplaceTiles(lineMap, TileType.Line);
         }
 
         private void GenerateWash()
         {
-            washMap = CreateClone("Wash Map");
+            washMap = CreateClone(gameObject.name + " (Wash)");
             washMap.gameObject.layer = GetLayerIndex(Settings.WashLayer);
             ReplaceTiles(washMap, TileType.Colour);
         }
 
         private void Initialise()
         {
+            gameObject.SetActive(true);
+            
             TryGetComponent(out map);
             TryGetComponent(out renderer);
             

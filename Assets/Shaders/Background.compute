@@ -248,16 +248,16 @@ void hue_shift (const uint3 id : SV_DispatchThreadID)
     
     const float samp = sample_params(_tex1, uv, hue_shift_in[0].strength_params).r;
     
-    const float amount = hue_shift_in[0].amount;
-    const float balance = (hue_shift_in[0].balance + 1) * 0.5;
+    const float amount = 0.5 * hue_shift_in[0].amount * hue_shift_in[0].boost;
+    const float balance = -hue_shift_in[0].balance;
 
-    const float lower = lerp(-amount, 0, balance);
-    const float upper = lerp(0, amount, balance);
+    const float lower = amount * (1.0 - abs(clamp(balance, -1, 0)));
+    const float upper = -amount * (1.0 - abs(clamp(balance, 0, 1)));
     
     const float offset = lerp(lower, upper, samp);
 
     float3 hsv = to_hsv(output[id.xy].rgb);
-    hsv.r = saturate(hsv.r + offset * (1.0 - hsv.b));
+    hsv.r = (hsv.r + offset * (1.0 - hsv.b * hue_shift_in[0].value_influence)) % 1.0;
     const float4 final_value = float4(to_rgb(hsv), output[id.xy].a);
     
     output[id.xy] = final_value;
