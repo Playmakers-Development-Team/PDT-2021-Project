@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Converts brightness to opacity.
+    /// </summary>
     [Serializable]
     public class LineOcclusionFeature : Feature
     {

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Applies a Kuwahara filter to a texture.
+    /// </summary>
     public class KuwaharaFeature : Feature
     {
         [SerializeField] private FeatureTexture input;

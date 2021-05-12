@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Makes pixels above a given threshold transparent according to a distance field.
+    /// </summary>
     [Serializable]
     public class ColourSeparationFeature : Feature
     {

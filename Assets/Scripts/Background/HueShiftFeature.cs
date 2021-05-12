@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Varies the hue of the input texture according to a strength map.
+    /// </summary>
     [Serializable]
     public class HueShiftFeature : Feature
     {

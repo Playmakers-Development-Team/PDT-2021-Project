@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Modifies the total saturation of a texture.
+    /// </summary>
     [Serializable]
     public class SaturationFeature : Feature
     {

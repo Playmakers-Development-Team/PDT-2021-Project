@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Increases opacity according to a distance field.
+    /// </summary>
     [Serializable]
     public class EdgePigmentFeature : Feature
     {

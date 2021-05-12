@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Generates an edge texture based on pixel kernel greyscale value.
+    /// </summary>
     [Serializable]
     public class EdgeDetectionFeature : Feature
     {

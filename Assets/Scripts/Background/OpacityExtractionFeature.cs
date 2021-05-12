@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Derives opacity from the maximum colour channel value of each pixel disregarding completely transparent pixels.
+    /// </summary>
     [Serializable]
     public class OpacityExtractionFeature : Feature
     {

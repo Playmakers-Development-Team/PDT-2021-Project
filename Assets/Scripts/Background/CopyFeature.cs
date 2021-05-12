@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Perform a blit operation from one <see cref="FeatureTexture"/> to another. 
+    /// </summary>
     [Serializable]
     public class CopyFeature : Feature
     {

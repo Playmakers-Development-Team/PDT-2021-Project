@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 namespace Background
 {
     /// <summary>
-    /// 
+    /// Substitutes tiles for the specified <see cref="TileType"/> variant.
     /// </summary>
     [CustomGridBrush(true, false, false, "Colour Brush")]
     public class SubstituteBrush : GridBrushBase

@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Executes the Jump Flooding Algorithm on a seed texture.
+    /// </summary>
     [Serializable]
     public class JumpFloodFeature : Feature
     {

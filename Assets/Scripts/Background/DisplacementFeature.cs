@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Applies uv displacement.
+    /// </summary>
     [Serializable]
     public class DisplacementFeature : Feature
     {

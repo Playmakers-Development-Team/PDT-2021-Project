@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Background
 {
+    /// <summary>
+    /// Automates the process of converting a preview map, to the constituent maps required for rendering backgrounds.
+    /// </summary>
     [RequireComponent(typeof(Tilemap), typeof(TilemapRenderer))]
     public class PreviewMap : MonoBehaviour
     {
@@ -20,20 +22,6 @@ namespace Background
         private readonly List<TileReference> references = new List<TileReference>();
 
 #if UNITY_EDITOR
-
-        private void GenerateLine()
-        {
-            lineMap = CreateClone(gameObject.name + " (Line)");
-            lineMap.gameObject.layer = GetLayerIndex(Settings.LineLayer);
-            ReplaceTiles(lineMap, TileType.Line);
-        }
-
-        private void GenerateWash()
-        {
-            washMap = CreateClone(gameObject.name + " (Wash)");
-            washMap.gameObject.layer = GetLayerIndex(Settings.WashLayer);
-            ReplaceTiles(washMap, TileType.Colour);
-        }
 
         private void Initialise()
         {
@@ -70,6 +58,20 @@ namespace Background
             Selection.activeObject = washMap.gameObject;
         }
 
+        private void GenerateLine()
+        {
+            lineMap = CreateClone(gameObject.name + " (Line)");
+            lineMap.gameObject.layer = GetLayerIndex(Settings.LineLayer);
+            ReplaceTiles(lineMap, TileType.Line);
+        }
+
+        private void GenerateWash()
+        {
+            washMap = CreateClone(gameObject.name + " (Wash)");
+            washMap.gameObject.layer = GetLayerIndex(Settings.WashLayer);
+            ReplaceTiles(washMap, TileType.Colour);
+        }
+
         public void Finalise()
         {
             Initialise();
@@ -86,7 +88,6 @@ namespace Background
 
         public bool CanFinalise() => lineMap && washMap;
 
-        [ContextMenu("Clear")]
         public void Clear()
         {
             Initialise();
@@ -110,23 +111,6 @@ namespace Background
             DestroyImmediate(tilemap.gameObject);
 
             tilemap = null;
-        }
-
-        private static int GetLayerIndex(LayerMask mask)
-        {
-            int index = 0;
-            int value = mask.value;
-
-            while (index < 32)
-            {
-                if ((value & 1) != 0)
-                    return index;
-
-                value >>= 1;
-                index++;
-            }
-
-            return 0;
         }
 
         private void ReplaceTiles(Tilemap tilemap, TileType type)
@@ -167,6 +151,23 @@ namespace Background
             CopyValues(renderer, tilemapRenderer);
 
             return tilemap;
+        }
+        
+        private static int GetLayerIndex(LayerMask mask)
+        {
+            int index = 0;
+            int value = mask.value;
+
+            while (index < 32)
+            {
+                if ((value & 1) != 0)
+                    return index;
+
+                value >>= 1;
+                index++;
+            }
+
+            return 0;
         }
         
         private static void CopyValues<T>(T original, T other) where T : Component

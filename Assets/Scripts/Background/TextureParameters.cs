@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Represents a Texture2D, with additional tilling and offset information.
+    /// </summary>
     [Serializable]
     public struct TextureParameters
     {

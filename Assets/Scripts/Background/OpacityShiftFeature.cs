@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Varies the opacity of a texture, according to a strength map.
+    /// </summary>
     [Serializable]
     public class OpacityShiftFeature : Feature
     {
