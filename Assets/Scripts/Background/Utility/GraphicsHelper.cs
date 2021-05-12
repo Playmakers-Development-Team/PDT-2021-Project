@@ -6,8 +6,11 @@ using UnityEngine.Rendering;
 
 namespace Background.Utility
 {
-    #if UNITY_EDITOR
 
+    /// <summary>
+    /// Ensures the grid sorting mode is correct.
+    /// </summary>
+#if UNITY_EDITOR
     [InitializeOnLoad]
 #endif
     public class GraphicsHelper

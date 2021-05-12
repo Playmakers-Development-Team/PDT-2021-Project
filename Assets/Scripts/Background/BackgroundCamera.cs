@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Background
 {
+    /// <summary>
+    /// Initialises the background rendering process, deriving the initial line and wash textures from its viewport.
+    /// </summary>
     [RequireComponent(typeof(Camera)), AddComponentMenu("Background/Background Camera")]
     public class BackgroundCamera : MonoBehaviour
     {
@@ -25,8 +28,7 @@ namespace Background
         private RenderTexture washTexture;
         private RenderTexture lineTexture;
         
-
-        [ContextMenu("Render")]
+        
         public void Render()
         {
             Initialize();
@@ -42,7 +44,6 @@ namespace Background
             Apply();
         }
 
-        [ContextMenu("Clear")]
         public void Clear()
         {
             Initialize();

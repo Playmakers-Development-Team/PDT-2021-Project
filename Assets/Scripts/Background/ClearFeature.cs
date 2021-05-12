@@ -1,16 +1,22 @@
 ﻿using Background;
 using UnityEngine;
 
-public class ClearFeature : Feature
+namespace Background
 {
-    [SerializeField] private FeatureTexture input;
-    
-    public override void Execute()
+    /// <summary>
+    /// Clears a <see cref="FeatureTexture"/>.
+    /// </summary>
+    public class ClearFeature : Feature
     {
-        input.Pull();
-        input.Texture.Release();
-        input.Texture.Create();
-    }
+        [SerializeField] private FeatureTexture input;
+    
+        public override void Execute()
+        {
+            input.Pull();
+            input.Texture.Release();
+            input.Texture.Create();
+        }
 
-    protected override int GetKernelIndex() => -1;
+        protected override int GetKernelIndex() => -1;
+    }
 }

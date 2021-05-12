@@ -5,10 +5,13 @@ using UnityEngine.Tilemaps;
 
 namespace Background
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [CustomGridBrush(true, false, false, "Colour Brush")]
-    public class ColourBrush : GridBrushBase
+    public class SubstituteBrush : GridBrushBase
     {
-        [SerializeField] private bool white;
+        [SerializeField] private TileType type;
         
         public override void Paint(GridLayout gridLayout, GameObject brushTarget, Vector3Int position)
         {
@@ -28,7 +31,7 @@ namespace Background
                 return;
 
             TileReference tileReference = references.Find(reference => reference.HasTile(current as Tile));
-            Tile replacement = tileReference.GetTile(white ? TileType.Fill : TileType.Colour);
+            Tile replacement = tileReference.GetTile(type);
             
             if (replacement)
                 map.SetTile(position, replacement);

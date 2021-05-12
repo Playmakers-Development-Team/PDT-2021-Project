@@ -5,10 +5,10 @@ using UnityEngine.Tilemaps;
 
 namespace Background.Editor
 {
-    [CustomEditor(typeof(ColourBrush))]
-    public class ColourBrushEditor : UnityEditor.Tilemaps.GridBrushEditorBase
+    [CustomEditor(typeof(SubstituteBrush))]
+    public class SubstituteBrushEditor : UnityEditor.Tilemaps.GridBrushEditorBase
     {
-        public override GameObject[] validTargets
+        /*public override GameObject[] validTargets
         {
             get
             {
@@ -23,6 +23,6 @@ namespace Background.Editor
 
                 return washMaps.Count == 0 ? null : washMaps.ToArray();
             }
-        }
+        }*/
     }
 }

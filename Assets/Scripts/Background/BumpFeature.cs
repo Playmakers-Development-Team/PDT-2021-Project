@@ -2,6 +2,9 @@
 
 namespace Background
 {
+    /// <summary>
+    /// Applies the effect of an uneven surface such as watercolour paper.
+    /// </summary>
     public class BumpFeature : Feature
     {
         [SerializeField] private FeatureTexture input;
