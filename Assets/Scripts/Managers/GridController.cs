@@ -13,7 +13,6 @@ namespace Managers
             tilemap = GetComponentInChildren<Tilemap>();
             
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.Controller = this;
             gridManager.InitialiseTileDatas(tilemap);
         
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
@@ -28,10 +27,10 @@ namespace Managers
         private void DrawGridOutline(BoundsInt bounds)
         {
             Vector3[] gridCorners = {
-                new Vector3(bounds.xMin, 0, bounds.yMin),
-                new Vector3(bounds.xMax, 0, bounds.yMin),
-                new Vector3(bounds.xMax, 0, bounds.yMax),
-                new Vector3(bounds.xMin, 0, bounds.yMax)
+                new Vector3(bounds.xMin, bounds.yMin, 0),
+                new Vector3(bounds.xMax, bounds.yMin, 0),
+                new Vector3(bounds.xMax, bounds.yMax, 0),
+                new Vector3(bounds.xMin, bounds.yMax, 0)
             };
 
             for (int i = 0; i < gridCorners.Length ; i++)

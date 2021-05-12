@@ -75,10 +75,8 @@ namespace Background.Editor
 
             EditorGUILayout.Space();
             
-            // 'Create' button
-            bool tileSetValid = !(tileSet is null) && tileSet.Length > 0 && !tileSet.Contains(" ");
-            bool tileNameValid = !(tileName is null) && tileName.Length > 0;
-            GUI.enabled = tileSetValid && tileNameValid && lineTexture && colourTexture;
+            // 'Create Tile' button
+            GUI.enabled = InputsValid();
 
             if (GUILayout.Button("Create Tile"))
                 CreateTile();
@@ -211,6 +209,14 @@ namespace Background.Editor
         private static void Divider()
         {
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        }
+
+        private bool InputsValid()
+        {
+            bool tileSetValid = !(tileSet is null) && tileSet.Length > 0 && !tileSet.Contains(" ");
+            bool tileNameValid = !(tileName is null) && tileName.Length > 0;
+            bool texturesValid = lineTexture && colourTexture && lineTexture != colourTexture;
+            return tileSetValid && tileNameValid && texturesValid;
         }
     }
 }
