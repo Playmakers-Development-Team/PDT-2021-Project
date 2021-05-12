@@ -203,7 +203,7 @@ void edge_pigment (const uint3 id : SV_DispatchThreadID)
     const float2 uv = pixel_to_uv(id.xy, resolution);
 
     const float amount = edge_pigment_in[0].amount;
-    const float exponent = edge_pigment_in[0].exponent;
+    const float exponent = edge_pigment_in[0].exponent * 0.005;
     
     const float flood_value = 1.0 - tex2Dlod(_tex1, float4(uv, 0, 0)).a;
     
