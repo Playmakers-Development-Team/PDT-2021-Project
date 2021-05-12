@@ -3,25 +3,23 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
     Properties
     {
         [MainColor] _Color ("Color", Color) = (1,1,1,1)
-        _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
         _Alpha("Alpha", Range(0, 1)) = 1
         [MainTexture] _BaseMap ("Base Map", 2D) = "white" {}
-        _Cutoff("Alpha Cutoff", Range(0, 1)) = 1.0
         _Smoothing("Smoothing", Range(0, 0.5)) = 0
+
+        // Border Attributes
+        _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
         _BorderSize("Border Size", Range(0, 0.25)) = 0.5
         _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
 
         // Texture Detail
         _DetailDiffuse("Detail Diffuse", 2D) = "white" {}
-
-
     }
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
         ZWrite Off
         Blend SrcAlpha OneMinusSrcAlpha // Traditional Alpha Blending
-        //Blend One One
 
         Pass
         {
@@ -52,7 +50,6 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            //#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Macros.hlsl"
 
             struct Attributes
             {
@@ -75,20 +72,22 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 float4 positionCS       : SV_POSITION;
             };
 
+            // Variables 
             uniform float4 _Color;
             uniform float _Alpha;
             uniform float4 _BorderColor;
             uniform float _BorderSize;
             uniform float _BorderSmoothing;
             uniform float _Smoothing;
-            uniform float _Cutoff;
 
+            // Textures
             TEXTURE2D(_DetailDiffuse);
             SAMPLER(sampler_DetailDiffuse);
 
             TEXTURE2D(_BaseMap); 
             SAMPLER(sampler_BaseMap);
 
+            // Buffers
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 float4 _DetailDiffuse_ST;
@@ -99,6 +98,7 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 return normalize(GetCameraPositionWS() - positionWS);
             }
 
+            // Vert node processor
             VertexOutput vert(Attributes input) 
             {
                 VertexOutput output = (VertexOutput)0;
@@ -116,6 +116,7 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 return output;
             }
             
+            // Graphic fragment section
             float4 frag(VertexOutput input) : SV_TARGET
             {
                 UNITY_SETUP_INSTANCE_ID(input);
@@ -133,7 +134,6 @@ Shader "Custom/Universal_Render_Pipeline/ColorDrop_SurfaceShader"
                 c.a = alpha * _Alpha;
                 return c;
             }
-
             ENDHLSL
         }
     }
