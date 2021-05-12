@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d053e68797544c35af01e8ab4861f69e, type: 3}
   m_Name: Hue Shift
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   featureName: 
   input:
     name: wash
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f73d3e8e56044fa853fc92b35d2cd4b, type: 3}
   m_Name: Saturation
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
