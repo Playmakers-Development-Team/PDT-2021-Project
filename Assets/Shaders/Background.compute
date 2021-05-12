@@ -238,3 +238,27 @@ void bump (const uint3 id : SV_DispatchThreadID)
     
     output[id.xy] = float4(output[id.xy].rgb, opacity);
 }
+
+#pragma kernel hue_shift
+[numthreads(8, 8, 1)]
+void hue_shift (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+    
+    const float samp = sample_params(_tex1, uv, hue_shift_in[0].strength_params).r;
+    
+    const float amount = hue_shift_in[0].amount;
+    const float balance = (hue_shift_in[0].balance + 1) * 0.5;
+
+    const float lower = lerp(-amount, 0, balance);
+    const float upper = lerp(0, amount, balance);
+    
+    const float offset = lerp(lower, upper, samp);
+
+    float3 hsv = to_hsv(output[id.xy].rgb);
+    hsv.r = saturate(hsv.r + offset * (1.0 - hsv.b));
+    const float4 final_value = float4(to_rgb(hsv), output[id.xy].a);
+    
+    output[id.xy] = final_value;
+}

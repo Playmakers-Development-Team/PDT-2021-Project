@@ -11,6 +11,7 @@
         OpacityShift,
         Kuwahara,
         EdgePigment,
-        Bump
+        Bump,
+        HueShiftFeature
     }
 }

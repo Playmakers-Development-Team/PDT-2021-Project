@@ -81,6 +81,13 @@ struct bump_input
     float amount;
 };
 
+struct hue_shift_input
+{
+    float4 strength_params;
+    float amount;
+    float balance;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
@@ -91,6 +98,7 @@ StructuredBuffer<opacity_shift_input> opacity_shift_in;
 StructuredBuffer<kuwahara_input> kuwahara_in;
 StructuredBuffer<edge_pigment_input> edge_pigment_in;
 StructuredBuffer<bump_input> bump_in;
+StructuredBuffer<hue_shift_input> hue_shift_in;
 
 // Functions
 float2 get_output_resolution()
@@ -160,4 +168,23 @@ float4 kuwahara_kernel(float2 resolution, float2 uv, float4 range, float2x2 rota
     variance = length(variance);
     
     return mean;
+}
+
+// Thanks: https://www.shadertoy.com/view/MsS3Wc
+float3 to_rgb(float3 hsv)
+{
+    float3 rgb = clamp( abs(fmod(hsv.x*6.0+float3(0.0,4.0,2.0),6)-3.0)-1.0, 0, 1);
+    rgb = rgb*rgb*(3.0-2.0*rgb);
+    return hsv.z * lerp( float3(1,1,1), rgb, hsv.y);
+}
+
+float3 to_hsv(float3 rgb)
+{
+    float4 K = float4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    float4 p = lerp(float4(rgb.bg, K.wz), float4(rgb.gb, K.xy), step(rgb.b, rgb.g));
+    float4 q = lerp(float4(p.xyw, rgb.r), float4(rgb.r, p.yzx), step(p.x, rgb.r));
+
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return float3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
 }
