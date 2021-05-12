@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 
 namespace Background
 {
+    [CreateAssetMenu(menuName = "Background/Tile Reference", fileName = "NewTileReference", order = 50)]
     public class TileReference : ScriptableObject
     {
         [SerializeField] private Tile line;
