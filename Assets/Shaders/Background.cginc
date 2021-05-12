@@ -88,6 +88,11 @@ struct hue_shift_input
     float balance;
 };
 
+struct saturation_input
+{
+    float amount;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
@@ -99,6 +104,7 @@ StructuredBuffer<kuwahara_input> kuwahara_in;
 StructuredBuffer<edge_pigment_input> edge_pigment_in;
 StructuredBuffer<bump_input> bump_in;
 StructuredBuffer<hue_shift_input> hue_shift_in;
+StructuredBuffer<saturation_input> saturation_in;
 
 // Functions
 float2 get_output_resolution()

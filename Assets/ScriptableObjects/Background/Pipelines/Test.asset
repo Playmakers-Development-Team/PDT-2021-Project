@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d053e68797544c35af01e8ab4861f69e, type: 3}
   m_Name: Hue Shift
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -209,6 +209,7 @@ MonoBehaviour:
   - {fileID: -7630628547020576401}
   - {fileID: -6078177490707043805}
   - {fileID: -7732304396027734820}
+  - {fileID: 5164301769336187567}
   - {fileID: -2408236371934135774}
   - {fileID: -4115419309747824141}
 --- !u!114 &1790342275941716843
@@ -291,6 +292,23 @@ MonoBehaviour:
     offset: {x: 0, y: 0}
   amount: 0.634
   balance: -0.5
+--- !u!114 &5164301769336187567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f73d3e8e56044fa853fc92b35d2cd4b, type: 3}
+  m_Name: Saturation
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  amount: 0
 --- !u!114 &5675850521398351355
 MonoBehaviour:
   m_ObjectHideFlags: 0

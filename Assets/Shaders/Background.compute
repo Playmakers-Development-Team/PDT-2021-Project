@@ -262,3 +262,13 @@ void hue_shift (const uint3 id : SV_DispatchThreadID)
     
     output[id.xy] = final_value;
 }
+
+#pragma kernel saturation
+[numthreads(8, 8, 1)]
+void saturation (const uint3 id : SV_DispatchThreadID)
+{
+    float3 hsv = to_hsv(output[id.xy].rgb);
+    hsv.g = saturate(hsv.g + saturation_in[0].amount);
+
+    output[id.xy] = float4(to_rgb(hsv), output[id.xy].a);
+}

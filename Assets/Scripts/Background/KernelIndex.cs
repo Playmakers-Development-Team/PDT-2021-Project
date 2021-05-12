@@ -12,6 +12,7 @@
         Kuwahara,
         EdgePigment,
         Bump,
-        HueShiftFeature
+        HueShiftFeature,
+        SaturationFeature
     }
 }

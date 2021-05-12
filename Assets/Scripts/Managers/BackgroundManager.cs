@@ -30,13 +30,20 @@ namespace Managers
         private static void ReleaseTextures()
         {
             foreach (RenderTexture texture in textures)
-                texture.Release();
+            {
+                if (texture)
+                    texture.Release();
+            }
+            
         }
 
         private static void ReleaseBuffers()
         {
             foreach (ComputeBuffer buffer in buffers)
-                buffer.Release();
+            {
+                if (!(buffer is null))
+                    buffer.Release();
+            }
         }
 
         private static void Release()
