@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6807482313409312481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6807482313409312492}
+  - component: {fileID: 6807482313409312495}
+  m_Layer: 0
+  m_Name: Color Drop Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6807482313409312492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807482313409312481}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.97, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6807482313409312495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807482313409312481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09589cac2ab60cb498ebffd189dfd298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSpriteSources:
+  - {fileID: 21300000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
+  - {fileID: 21300000, guid: 3da65d3be08a9b94baa252f5e7d73945, type: 3}
+  detailSpritePatterns: []
+  colorSamples:
+  - primaryColor: {r: 1, g: 0, b: 0, a: 0}
+    borderColor: {r: 1, g: 0.26845244, b: 0, a: 0}
+    alpha: 1
+  meshRenderer: {fileID: 0}
+  dstRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
+  scaleWidth: 256
+  scaleHeight: 256
