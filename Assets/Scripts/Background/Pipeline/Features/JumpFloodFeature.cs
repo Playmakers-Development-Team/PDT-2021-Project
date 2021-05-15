@@ -2,7 +2,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Executes the Jump Flooding Algorithm on a seed texture.

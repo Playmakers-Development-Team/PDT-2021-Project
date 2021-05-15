@@ -2,7 +2,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Derives opacity from the maximum colour channel value of each pixel disregarding completely transparent pixels.

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Background.Pipeline.Features;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 
 namespace Background.Editor
 {
-    [CustomEditor(typeof(Pipeline))]
+    [CustomEditor(typeof(Pipeline.Pipeline))]
     public class PipelineEditor : UnityEditor.Editor
     {
         private SerializedProperty features;
@@ -15,15 +16,30 @@ namespace Background.Editor
 
         private void Awake()
         {
+            Initialise();
+        }
+
+        private void OnEnable()
+        {
+            Initialise();
+        }
+
+        private void Initialise()
+        {
             features = serializedObject.FindProperty("features");
         }
 
         public override void OnInspectorGUI()
         {
-            if (features.arraySize != editors.Count)
+            if (features is null || features.arraySize != editors.Count)
                 UpdateEditors();
             
             DrawFeatures();
+        }
+
+        private void OnDestroy()
+        {
+            features = null;
         }
 
         private void UpdateEditors()
@@ -32,6 +48,9 @@ namespace Background.Editor
                 DestroyImmediate(editor);
             
             editors.Clear();
+
+            if (features?.serializedObject is null)
+                return;
 
             for (int i = 0; i < features.arraySize; i++)
             {
@@ -46,7 +65,7 @@ namespace Background.Editor
 
         private void DrawFeatures()
         {
-            if (features.arraySize == 0)
+            if (features is null || features.arraySize == 0)
                 EditorGUILayout.HelpBox("No Features added", MessageType.Info);
             else
             {

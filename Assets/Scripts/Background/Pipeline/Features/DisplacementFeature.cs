@@ -2,7 +2,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Applies uv displacement.

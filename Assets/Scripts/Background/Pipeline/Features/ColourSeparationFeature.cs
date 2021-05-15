@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Makes pixels above a given threshold transparent according to a distance field.

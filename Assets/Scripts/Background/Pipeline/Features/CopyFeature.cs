@@ -2,7 +2,7 @@
 using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Perform a blit operation from one <see cref="FeatureTexture"/> to another. 

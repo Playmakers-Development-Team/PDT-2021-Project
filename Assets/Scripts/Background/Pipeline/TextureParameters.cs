@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline
 {
     /// <summary>
     /// Represents a Texture2D, with additional tilling and offset information.

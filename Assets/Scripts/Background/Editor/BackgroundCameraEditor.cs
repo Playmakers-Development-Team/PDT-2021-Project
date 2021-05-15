@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Background.Pipeline;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
@@ -85,7 +86,7 @@ namespace Background.Editor
             
             if (pipelineProperty.objectReferenceValue is null)
             {
-                pipelineProperty.objectReferenceValue = CreateInstance<Pipeline>();
+                pipelineProperty.objectReferenceValue = CreateInstance<Pipeline.Pipeline>();
                 serializedObject.ApplyModifiedProperties();
             }
 

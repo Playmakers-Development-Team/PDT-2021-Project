@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline
 {
     /// <summary>
     /// ScriptableObject singleton settings class for the background rendering system.

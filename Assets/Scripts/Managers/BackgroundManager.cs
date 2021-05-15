@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Background;
+using Background.Pipeline;
 using UnityEngine;
 
 namespace Managers

@@ -1,8 +1,9 @@
 ﻿using System;
+using Background.Pipeline.Features;
 using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline
 {
     /// <summary>
     /// Represents a RenderTexture, incorporating <see cref="Pipeline"/> functionality so that it can be used by multiple <see cref="Feature"/>s.

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Background.Pipeline.Features;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline
 {
     /// <summary>
     /// A scriptable pipeline for rendering backgrounds.
@@ -18,8 +19,10 @@ namespace Background
         {
             foreach (Feature feature in features)
             {
-                if (feature.IsActive)
-                    feature.Execute();
+                if (feature is null || !feature.IsActive)
+                    continue;
+                
+                feature.Execute();
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Applies the effect of an uneven surface such as watercolour paper.

@@ -1,7 +1,6 @@
-﻿using Background;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Clears a <see cref="FeatureTexture"/>.

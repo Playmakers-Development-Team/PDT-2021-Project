@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Increases opacity according to a distance field.

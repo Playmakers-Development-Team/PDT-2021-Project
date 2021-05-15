@@ -1,4 +1,6 @@
-﻿namespace Background
+﻿using Background.Pipeline.Features;
+
+namespace Background.Pipeline
 {
     /// <summary>
     /// Interface defining the required functionality for structs that can be passed from a <see cref="Feature"/> into a compute buffer.

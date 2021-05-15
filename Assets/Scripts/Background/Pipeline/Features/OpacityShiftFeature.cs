@@ -1,13 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
-    /// Varies the hue of the input texture according to a strength map.
+    /// Varies the opacity of a texture, according to a strength map.
     /// </summary>
     [Serializable]
-    public class HueShiftFeature : Feature
+    public class OpacityShiftFeature : Feature
     {
         [SerializeField] private FeatureTexture input;
 
@@ -15,44 +15,37 @@ namespace Background
 
         [SerializeField, Range(0f, 1f)] private float amount;
         [SerializeField, Range(-1f, 1f)] private float balance;
-        [SerializeField, Range(0f, 1f)] private float valueInfluence = 1f;
-        [SerializeField] private float boost = 1f;
-        
         
         public override void Execute()
         {
             input.Pull();
 
-            SetInput(new Input(strengthMap.Parameters, amount, balance, valueInfluence, boost));
+            SetInput(new Input(strengthMap.Parameters, amount, balance));
             SetTexture("_tex1", strengthMap.Texture);
             SetTexture("output", input);
             
             Dispatch(input.Width, input.Height);
         }
 
-        protected override int GetKernelIndex() => (int) KernelIndex.HueShiftFeature;
-        
+        protected override int GetKernelIndex() => (int) KernelIndex.OpacityShift;
+    
         
         private struct Input : IKernelInput
         {
             private Vector4 strengthParams;
             private float amount;
             private float balance;
-            private float valueInfluence;
-            private float boost;
 
-            public Input(Vector4 strengthParams, float amount, float balance, float valueInfluence, float boost)
+            public Input(Vector4 strengthParams, float amount, float balance)
             {
                 this.strengthParams = strengthParams;
                 this.amount = amount;
                 this.balance = balance;
-                this.valueInfluence = valueInfluence;
-                this.boost = boost;
             }
-            
-            public string GetName() => "hue_shift_in";
 
-            public int GetSize() => sizeof(float) * 8;
+            public string GetName() => "opacity_shift_in";
+
+            public int GetSize() => sizeof(float) * 6;
         }
     }
 }

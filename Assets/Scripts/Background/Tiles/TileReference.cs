@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Background
+namespace Background.Tiles
 {
     /// <summary>
     /// A ScriptableObject that stores references to related tiles of each <see cref="TileType"/>.

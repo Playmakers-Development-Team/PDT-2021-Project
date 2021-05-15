@@ -1,4 +1,4 @@
-﻿namespace Background
+﻿namespace Background.Tiles
 {
     /// <summary>
     /// Enum for each of the tile variants required for rendering backgrounds.

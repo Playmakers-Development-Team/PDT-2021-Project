@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Background.Pipeline;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Background
+namespace Background.Tiles
 {
     /// <summary>
     /// Automates the process of converting a preview map, to the constituent maps required for rendering backgrounds.

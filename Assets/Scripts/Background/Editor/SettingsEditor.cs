@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Background.Pipeline;
+using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -47,8 +48,8 @@ namespace Background.Editor
             
             // Pipeline field
             EditorGUI.BeginChangeCheck();
-            pipelineProperty.objectReferenceValue = (Pipeline) EditorGUILayout.ObjectField("Global Pipeline",
-                pipelineProperty.objectReferenceValue, typeof(Pipeline), false);
+            pipelineProperty.objectReferenceValue = (Pipeline.Pipeline) EditorGUILayout.ObjectField("Global Pipeline",
+                pipelineProperty.objectReferenceValue, typeof(Pipeline.Pipeline), false);
             if (EditorGUI.EndChangeCheck())
                 UpdatePipeline();
             
@@ -70,7 +71,7 @@ namespace Background.Editor
             // Global pipeline editor
             pipelineScroll = EditorGUILayout.BeginScrollView(pipelineScroll);
             
-            if (pipelineEditor is null)
+            if (pipelineProperty is null || pipelineEditor is null)
                 EditorGUILayout.HelpBox("No global Pipeline assigned.", MessageType.Error);
             else
                 pipelineEditor.OnInspectorGUI();

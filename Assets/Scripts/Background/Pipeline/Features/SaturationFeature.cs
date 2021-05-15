@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Modifies the total saturation of a texture.

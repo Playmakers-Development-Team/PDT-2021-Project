@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Background.Pipeline;
+using UnityEditor;
 using UnityEngine;
 
 namespace Background.Editor
@@ -21,26 +22,18 @@ namespace Background.Editor
             tilingPosition.height = EditorGUIUtility.singleLineHeight;
             
             SerializedProperty tiling = property.FindPropertyRelative("tiling");
-            
-            EditorGUILayout.BeginHorizontal();
-            
+
             Rect controlRect = EditorGUI.PrefixLabel(tilingPosition, new GUIContent("Tiling"));
             EditorGUI.PropertyField(controlRect, tiling, new GUIContent());
-            
-            EditorGUILayout.EndHorizontal();
 
             Rect offsetPosition = new Rect(tilingPosition.position, position.size);
             offsetPosition.y += tilingPosition.height + 2f;
             offsetPosition.height = EditorGUIUtility.singleLineHeight;
             
             SerializedProperty offset = property.FindPropertyRelative("offset");
-            
-            EditorGUILayout.BeginHorizontal();
-            
+
             controlRect = EditorGUI.PrefixLabel(offsetPosition, new GUIContent("Offset"));
             EditorGUI.PropertyField(controlRect, offset, new GUIContent());
-            
-            EditorGUILayout.EndHorizontal();
 
             EditorGUI.indentLevel = indent;
         }

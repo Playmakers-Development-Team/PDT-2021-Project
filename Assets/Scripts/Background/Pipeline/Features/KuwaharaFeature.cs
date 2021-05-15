@@ -1,7 +1,7 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline.Features
 {
     /// <summary>
     /// Applies a Kuwahara filter to a texture.

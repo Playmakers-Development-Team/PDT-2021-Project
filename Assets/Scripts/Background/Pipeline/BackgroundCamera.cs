@@ -1,7 +1,7 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace Background
+namespace Background.Pipeline
 {
     /// <summary>
     /// Initialises the background rendering process, deriving the initial line and wash textures from its viewport.

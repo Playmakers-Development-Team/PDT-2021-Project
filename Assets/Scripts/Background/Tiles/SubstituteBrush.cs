@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Background
+namespace Background.Tiles
 {
     /// <summary>
     /// Substitutes tiles for the specified <see cref="TileType"/> variant.
