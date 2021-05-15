@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class TurnManager : IManager
+    public class TurnManager : Manager
     {
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();

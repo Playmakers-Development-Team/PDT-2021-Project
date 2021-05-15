@@ -3,7 +3,7 @@ using Commands;
 
 namespace Managers
 {
-    public class CommandManager : IManager
+    public class CommandManager : Manager
     {
         private List<Command> commandQueue = new List<Command>();
         private List<Command> commandHistory = new List<Command>();

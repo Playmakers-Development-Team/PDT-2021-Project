@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class PlayerManager : IManager
+    public class PlayerManager : Manager
     {
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
