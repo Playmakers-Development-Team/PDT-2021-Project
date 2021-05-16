@@ -10,7 +10,7 @@ namespace Managers
 {
     public class GridManager : IManager
     {
-        private Dictionary<Vector2, TileData> tileDatas = new Dictionary<Vector2, TileData>();
+        private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
 
         public Tilemap levelTilemap { get; set; }
 
@@ -26,7 +26,7 @@ namespace Managers
 
                     if (tile != null)
                     {
-                        tileDatas.Add(new Vector2(x, y), new TileData(tile));
+                        tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
                     }
                 }
             }
@@ -34,7 +34,7 @@ namespace Managers
         
         #region GETTERS
         
-        public TileData GetTileDataByCoordinate(Vector2 coordinate)
+        public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
             if(tileDatas.TryGetValue(coordinate, out TileData tileData))
             {
@@ -45,7 +45,7 @@ namespace Managers
             return null;
         }
         
-        public List<GridObject> GetGridObjectsByCoordinate(Vector2 coordinate)
+        public List<GridObject> GetGridObjectsByCoordinate(Vector2Int coordinate)
         {
             TileData tileData = GetTileDataByCoordinate(coordinate);
 
@@ -57,51 +57,50 @@ namespace Managers
         
         #endregion
         
-        public Vector3 ConvertWorldSpaceToGridSpace(Vector3 worldSpace)
+        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2Int worldSpace)
         {
-            Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return levelTilemap.layoutGrid.WorldToCell(worldSpace);
+            Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
+                      (Vector2Int) levelTilemap.layoutGrid.WorldToCell((Vector2) worldSpace));
+            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell((Vector2) worldSpace);
         }
         
         #region GRID OBJECT FUNCTIONS
 
-        // NOTE: Input positions should be grid space not world space
-        
-        public bool AddGridObject(Vector2 position, GridObject gridObject)
+        public bool AddGridObject(Vector2Int gridPosition, GridObject gridObject)
         {
-            TileData tileData = GetTileDataByCoordinate(position);
+            TileData tileData = GetTileDataByCoordinate(gridPosition);
 
             if (!(tileData is null))
             {
-                Debug.Log("GridObject added to tile " + position.x + ", " + position.y);
+                Debug.Log("GridObject added to tile " + gridPosition.x + ", " + gridPosition.y);
                 tileData.AddGridObjects(gridObject);
                 return true;
             }
 
-            Debug.LogWarning("Failed to add grid object at " + position.x + ", " + position.y +
+            Debug.LogWarning("Failed to add grid object at " + gridPosition.x + ", " + gridPosition.y +
                              " due to null tileData");
             
             return false;
         }
         
-        public bool RemoveGridObject(Vector2 position, GridObject gridObject)
+        public bool RemoveGridObject(Vector2Int gridPosition, GridObject gridObject)
         {
-            TileData tileData = GetTileDataByCoordinate(position);
+            TileData tileData = GetTileDataByCoordinate(gridPosition);
 
             if (tileData.GridObjects.Contains(gridObject))
             {
-                Debug.Log("GridObject removed from tile " + position.x + ", " + position.y);
+                Debug.Log("GridObject removed from tile " + gridPosition.x + ", " + gridPosition.y);
                 tileData.RemoveGridObjects(gridObject);
                 return true;
             }
             
-            Debug.LogWarning("Failed to remove gridObject at " + position.x + ", " + position.y + 
+            Debug.LogWarning("Failed to remove gridObject at " + gridPosition.x + ", " + gridPosition.y + 
                       ". Tile does not contain gridObject");
 
             return false;
         }
         
-        public void MoveTileData(Vector2 currentPosition, Vector2 newPosition)
+        public void MoveObjectsFromTile(Vector2Int currentPosition, Vector2Int newPosition)
         {
             List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentPosition);
 
@@ -114,11 +113,11 @@ namespace Managers
             }
         }
 
-        public void MoveGridObject(Vector2 position, GridObject gridObject)
+        public void MoveGridObject(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject)
         {
-            if (AddGridObject(position, gridObject))
+            if (AddGridObject(newPosition, gridObject))
             {
-                RemoveGridObject(position, gridObject);
+                RemoveGridObject(currentPosition, gridObject);
             }
         }
         
