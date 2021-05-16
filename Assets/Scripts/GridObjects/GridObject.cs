@@ -41,9 +41,9 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
         
-        public Vector2Int GetGridPosition()
+        public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
-            return gridManager.ConvertWorldSpaceToGridSpace(position);
+            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
         }
     }
 }

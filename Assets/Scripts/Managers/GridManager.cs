@@ -57,11 +57,11 @@ namespace Managers
         
         #endregion
         
-        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2Int worldSpace)
+        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2 worldSpace)
         {
             Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
-                      (Vector2Int) levelTilemap.layoutGrid.WorldToCell((Vector2) worldSpace));
-            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell((Vector2) worldSpace);
+                      (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
+            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace);
         }
         
         #region GRID OBJECT FUNCTIONS
