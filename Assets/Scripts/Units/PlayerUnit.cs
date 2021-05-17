@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Units
 {
-    public class EnemyUnit : Unit
+    public class PlayerUnit : Unit
     {
-        public EnemyUnit(
+        public PlayerUnit(
             Vector2Int position,
             Stat dealDamageModifier,
             Stat takeDamageModifier,
