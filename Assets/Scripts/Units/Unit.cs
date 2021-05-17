@@ -1,12 +1,15 @@
-﻿using System;
+using GridObjects;
 using UnityEngine;
 
 namespace Units
 {
-    public abstract class Unit<T> : MonoBehaviour, IUnit where T : UnitData
+    public class Unit : GridObject, IUnit
     {
-        [SerializeField] protected T data;
-        
-        public static Type DataType => typeof(T);
+        public Unit(
+            Vector2Int position,
+            Stat dealDamageModifier,
+            Stat takeDamageModifier,
+            Stat takeKnockbackModifier
+        ) : base(position, dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
     }
 }

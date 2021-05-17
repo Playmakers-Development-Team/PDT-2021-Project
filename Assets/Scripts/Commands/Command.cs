@@ -4,9 +4,9 @@ namespace Commands
 {
     public abstract class Command
     {
-        private IUnit unit;
+        protected Unit unit;
 
-        protected Command(IUnit unit)
+        protected Command(Unit unit)
         {
             this.unit = unit;
         }
