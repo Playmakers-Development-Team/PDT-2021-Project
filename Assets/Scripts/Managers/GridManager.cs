@@ -8,7 +8,7 @@ using TileData = Tiles.TileData;
 
 namespace Managers
 {
-    public class GridManager : IManager
+    public class GridManager : Manager
     {
         private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
 
