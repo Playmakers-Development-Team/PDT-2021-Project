@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class AudioManager : IManager
+    public class AudioManager : Manager
     {
         public void ChangeVolume(string volume, float value)
         {
