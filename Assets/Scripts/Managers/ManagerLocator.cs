@@ -27,7 +27,8 @@ namespace Managers
             Register(new PlayerManager());
             Register(new TurnManager());
             Register(new GridManager());
-            
+            Register(new AudioManager());
+
             foreach (var manager in Current.managers.Values)
             {
                 manager.ManagerStart();
