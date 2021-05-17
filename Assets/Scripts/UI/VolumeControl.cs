@@ -1,11 +1,13 @@
 using Managers;
 using UnityEngine;
+using Utility;
 
 namespace UI
 {
     public class VolumeControl : MonoBehaviour
     {
-        [SerializeField] private string volume; // Volume parameter set by Wwise
+        // Volume parameter set by Wwise
+        [SerializeField] private VolumeParameter volumeParameter; 
         private AudioManager audioManager;
 
         private void Start()
@@ -16,7 +18,9 @@ namespace UI
         // Called by sliders to change volume
         public void ChangeVolume(float value)
         {
-            audioManager.ChangeVolume(volume, value);
+            if (volumeParameter == VolumeParameter.None)
+                return;
+            audioManager.ChangeVolume(volumeParameter.ToString(), value);
         }
     }
 }

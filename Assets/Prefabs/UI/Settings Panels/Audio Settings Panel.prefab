@@ -854,6 +854,10 @@ PrefabInstance:
       propertyPath: volume
       value: SFXVolume
       objectReference: {fileID: 0}
+    - target: {fileID: 6915735487854706323, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
+      propertyPath: volumeParameter
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
 --- !u!224 &4589938436490983525 stripped
@@ -1028,6 +1032,10 @@ PrefabInstance:
       propertyPath: volume
       value: MusicVolume
       objectReference: {fileID: 0}
+    - target: {fileID: 6915735487854706323, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
+      propertyPath: volumeParameter
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
 --- !u!224 &8061384705480825108 stripped
@@ -1201,6 +1209,10 @@ PrefabInstance:
     - target: {fileID: 6915735487854706323, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
       propertyPath: volume
       value: MasterVolume
+      objectReference: {fileID: 0}
+    - target: {fileID: 6915735487854706323, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
+      propertyPath: volumeParameter
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cb2ecce926c06943bc44f03050a710b, type: 3}
