@@ -24,7 +24,7 @@ MonoBehaviour:
     ParentPath: Virtual Acoustics\Default Work Unit
     guid: eeb5ecbb14faf14e8a6f6fb09313d3e5
     GuidInternal: 
-    m_lastTime: -8585809557032936450
+    m_lastTime: -8585817246138414334
     List: []
   AuxBusWwu:
   - PhysicalPath: Master-Mixer Hierarchy\Default Work Unit.wwu
@@ -38,7 +38,7 @@ MonoBehaviour:
     ParentPath: Master-Mixer Hierarchy\Default Work Unit
     guid: b03ec316436bb049a04fe981517f2d9b
     GuidInternal: 
-    m_lastTime: -8585803834744269058
+    m_lastTime: -8585811508090732480
     List:
     - name: Atmos Bus
       guid: 46832fb451b73e46bab90f286d73d8e1
@@ -151,7 +151,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: de8539867b21b149a81959618050655e
     GuidInternal: 
-    m_lastTime: -8585803834739541705
+    m_lastTime: -8585811512415718119
     List:
     - name: Main_Menu
       guid: 5f0a46344277a6448dcfa54c9c0c0ee7
@@ -193,7 +193,7 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: 5c235868086a40439ef9c0f0bfda6a32
     GuidInternal: 
-    m_lastTime: -8585803834752556894
+    m_lastTime: -8585811500245320730
     List:
     - name: Francico_SucKZ
       guid: 6a9854f5ea53e54297de13dcb2a3f872
@@ -258,8 +258,86 @@ MonoBehaviour:
     ParentPath: Game Parameters\Default Work Unit
     guid: baf1413caee5c64a8cca6b107e82bed8
     GuidInternal: 
-    m_lastTime: -8585809557033983637
+    m_lastTime: -8585817246139074932
     List: []
+  - PhysicalPath: Game Parameters\In-game Settings.wwu
+    PathAndIcons:
+    - ElementName: Game Parameters
+      ObjectType: 5
+      guid: 00000000000000000000000000000000
+    - ElementName: In-game Settings
+      ObjectType: 12
+      guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+    ParentPath: Game Parameters\In-game Settings
+    guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+    GuidInternal: 
+    m_lastTime: -8585811508090592349
+    List:
+    - name: MasterVolume
+      guid: 5adc3122789cfc40b91d26b8931a8181
+      id: 2918011349
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: In-game Settings
+        ObjectType: 12
+        guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+      - ElementName: Volume
+        ObjectType: 4
+        guid: 394e85795c10714099f7332d433f2935
+      - ElementName: MasterVolume
+        ObjectType: 13
+        guid: 5adc3122789cfc40b91d26b8931a8181
+      Path: Game Parameters\In-game Settings\Volume\MasterVolume
+    - name: MusicVolume
+      guid: 2ffc094d7d8403489d6704f56bde922e
+      id: 2346531308
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: In-game Settings
+        ObjectType: 12
+        guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+      - ElementName: Volume
+        ObjectType: 4
+        guid: 394e85795c10714099f7332d433f2935
+      - ElementName: MusicVolume
+        ObjectType: 13
+        guid: 2ffc094d7d8403489d6704f56bde922e
+      Path: Game Parameters\In-game Settings\Volume\MusicVolume
+    - name: SFXVolume
+      guid: 5ce03e639492bc40847be4df95304327
+      id: 988953028
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: In-game Settings
+        ObjectType: 12
+        guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+      - ElementName: Volume
+        ObjectType: 4
+        guid: 394e85795c10714099f7332d433f2935
+      - ElementName: SFXVolume
+        ObjectType: 13
+        guid: 5ce03e639492bc40847be4df95304327
+      Path: Game Parameters\In-game Settings\Volume\SFXVolume
+    - name: Volume
+      guid: 394e85795c10714099f7332d433f2935
+      id: 2415836739
+      PathAndIcons:
+      - ElementName: Game Parameters
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: In-game Settings
+        ObjectType: 12
+        guid: 568c1f27e3f3a248bd3e4e70ad978b5c
+      - ElementName: Volume
+        ObjectType: 4
+        guid: 394e85795c10714099f7332d433f2935
+      Path: Game Parameters\In-game Settings\Volume
   StateWwu:
   - PhysicalPath: States\Default Work Unit.wwu
     PathAndIcons:
@@ -272,7 +350,7 @@ MonoBehaviour:
     ParentPath: States\Default Work Unit
     guid: 33e448cd3d1dd1408de43e7ff8afa676
     GuidInternal: 
-    m_lastTime: -8585809557033066081
+    m_lastTime: -8585817246140105855
     List: []
   SwitchWwu:
   - PhysicalPath: Switches\Default Work Unit.wwu
@@ -286,7 +364,7 @@ MonoBehaviour:
     ParentPath: Switches\Default Work Unit
     guid: a158e61cc04d874190f6da0ed716f49a
     GuidInternal: 
-    m_lastTime: -8585809557033016235
+    m_lastTime: -8585817246139385212
     List: []
   TriggerWwu:
   - PhysicalPath: Triggers\Default Work Unit.wwu
@@ -300,10 +378,10 @@ MonoBehaviour:
     ParentPath: Triggers\Default Work Unit
     guid: 6e6bcdff8791e6429692dae4736663e4
     GuidInternal: 
-    m_lastTime: -8585809557032976354
+    m_lastTime: -8585817246138654554
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 0500000006000000
+  ExpandedWaapiItemIds: 05000000060000000c0000000d000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0
