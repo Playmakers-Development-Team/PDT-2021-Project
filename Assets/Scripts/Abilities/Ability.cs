@@ -8,23 +8,30 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject
     {
-        [SerializeField] private int damage;
-        [SerializeField] private int defence;
         [SerializeField] private int knockback;
         
-        [SerializeField] private Effect[] effects;
+        [SerializeField] private Effect[] targetEffects;
+        [SerializeField] private Effect[] userEffects;
         
 
-        public void Use(UnitData user, UnitData target)
+        public void Use(IUnit user, IUnit target)
         {
-            int damageBonus = CalculateBonus(user, true);
-            int defenceBonus = CalculateBonus(user, false);
-
-            target.Damage(damage + damageBonus);
-            target.Defend(defence + defenceBonus);
+            Use(user, target, targetEffects);
+            Use(user, user, userEffects);
         }
 
-        private int CalculateBonus(UnitData user, bool isDamage)
+        private void Use(IUnit user, IUnit target, Effect[] effects)
+        {
+            int damage = CalculateAmount(user, effects, true);
+            int defence = CalculateAmount(user, effects, false);
+
+            target.Damage(damage);
+            target.Defend(defence);
+            
+            // TODO: Knockback??
+        }
+
+        private int CalculateAmount(IUnit user, Effect[] effects, bool isDamage)
         {
             int bonus = 0;
             
@@ -33,7 +40,7 @@ namespace Abilities
                 if (!effect.CanUse(user))
                     continue;
 
-                bonus += isDamage ? effect.CalculateDamageModifier(user) : effect.CalculateDefenceModifier(user);
+                bonus += effect.CalculateModifier(user, isDamage);
                 effect.Expend(user);
             }
 

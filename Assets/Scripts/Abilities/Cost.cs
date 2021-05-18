@@ -7,11 +7,15 @@ namespace Abilities
     [Serializable]
     public class Cost
     {
+        [SerializeField, HideInInspector] private string name;
         [SerializeField] private CostType costType;
         [SerializeField] private Tenet tenet;
 
+        
+        public Tenet Tenet => tenet;
+        
 
-        public int CalculateCost(UnitData user)
+        public int CalculateCost(IUnit user)
         {
             return costType switch
             {
@@ -22,25 +26,23 @@ namespace Abilities
             };
         }
 
-        public int CalculateValue(UnitData user)
+        public int CalculateValue(IUnit user, int modifier)
         {
             return costType switch
             {
-                CostType.With => 1,
+                CostType.With => modifier,
                 CostType.Per => user.GetStacks(tenet),
-                CostType.Spend => 1,
+                CostType.Spend => modifier,
                 _ => 0
             };
         }
-        
-        public bool CanAfford(UnitData user) => user.GetStacks(tenet) >= 1;
 
-        public void Expend(UnitData user)
+        public void Expend(IUnit user)
         {
             switch (costType)
             {
                 case CostType.With:
-                    user.Expend(tenet, 1);
+                    user.Expend(tenet, 0);
                     break;
                 
                 case CostType.Per:

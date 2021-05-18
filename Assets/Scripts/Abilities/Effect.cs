@@ -7,26 +7,29 @@ namespace Abilities
     [Serializable]
     public class Effect
     {
-        [SerializeField] private int damageModifier;
-        [SerializeField] private int defenceModifier;
+        [SerializeField, HideInInspector] private string name;
+        [SerializeField] private int damageValue;
+        [SerializeField] private int defenceValue;
         [SerializeField] private Cost[] costs;
-
-        public bool CanUse(UnitData user)
+        
+        
+        public bool CanUse(IUnit user)
         {
-            UnitData clone = new UnitData(user);
-            
-            foreach (Cost cost in costs)
-            {
-                if (!cost.CanAfford(clone))
-                    return false;
+            int[] totalCosts = new int[Enum.GetValues(typeof(Tenet)).Length];
 
-                cost.Expend(clone);
+            foreach (Cost cost in costs)
+                totalCosts[(int) cost.Tenet] += cost.CalculateCost(user);
+
+            for (int i = 0; i < totalCosts.Length; i++)
+            {
+                if (user.GetStacks((Tenet) i) < totalCosts[i])
+                    return false;
             }
 
             return true;
         }
 
-        public void Expend(UnitData user)
+        public void Expend(IUnit user)
         {
             if (!CanUse(user))
                 return;
@@ -35,8 +38,16 @@ namespace Abilities
                 cost.Expend(user);
         }
 
-        public int CalculateDamageModifier(UnitData user) => throw new NotImplementedException();
-        
-        public int CalculateDefenceModifier(UnitData user) => throw new NotImplementedException();
+        public int CalculateModifier(IUnit user, bool isDamage)
+        {
+            int bonus = costs.Length == 0
+                ? isDamage ? damageValue : defenceValue
+                : 0;
+            
+            foreach (Cost cost in costs)
+                bonus += cost.CalculateValue(user, isDamage ? damageValue : defenceValue);
+            
+            return bonus;
+        }
     }
 }
