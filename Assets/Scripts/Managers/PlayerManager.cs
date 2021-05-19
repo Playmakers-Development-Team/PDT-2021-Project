@@ -6,14 +6,14 @@ namespace Managers
 {
     public class PlayerManager : Manager
     {
-        private readonly List<IUnit> playerUnits = new List<IUnit>();
+        private readonly List<Unit> playerUnits = new List<Unit>();
 
-        public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
+        public IReadOnlyList<Unit> PlayerUnits => playerUnits.AsReadOnly();
         public int Count => playerUnits.Count;
         
-        public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
+        public Unit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
+            Unit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
             
             if (!(unit is PlayerUnitController))
                 return null;
@@ -23,9 +23,9 @@ namespace Managers
             return unit;
         }
         
-        public IUnit Spawn(string playerName, Vector2Int gridPosition)
+        public Unit Spawn(string playerName, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
+            Unit unit = UnitUtility.Spawn(playerName, gridPosition);
 
             if (!(unit is PlayerUnitController))
                 return null;
