@@ -4,17 +4,18 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class PlayerManager : IManager
+    public class PlayerManager : Manager
     {
         private readonly List<IUnit> playerUnits = new List<IUnit>();
-        
+
+        public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public int Count => playerUnits.Count;
         
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
             IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
             
-            if (!(unit is PlayerUnit))
+            if (!(unit is PlayerUnitController))
                 return null;
             
             playerUnits.Add(unit);
@@ -26,7 +27,7 @@ namespace Managers
         {
             IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
 
-            if (!(unit is PlayerUnit))
+            if (!(unit is PlayerUnitController))
                 return null;
             
             playerUnits.Add(unit);
