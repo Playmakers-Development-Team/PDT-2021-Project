@@ -13,7 +13,7 @@ namespace Units
         private const int maxStatusEffectCount = 2;
 
         public int StatusEffectCount => statusEffectSlots.Count;
-        
+
         public IEnumerable<TenetStatusEffect> StatusEffects => statusEffectSlots.AsEnumerable();
 
         public Unit(Vector2Int position,
@@ -50,7 +50,7 @@ namespace Units
             }
         }
 
-        public void RemoveTenet(TenetType tenetType, int amount = int.MaxValue)
+        public bool RemoveTenet(TenetType tenetType, int amount = int.MaxValue)
         {
             LinkedListNode<TenetStatusEffect> node = statusEffectSlots.First;
 
@@ -64,18 +64,20 @@ namespace Units
                     
                     if (node.Value.IsEmpty)
                         statusEffectSlots.Remove(node);
-                    break;
+                    return true;
                 }
                 
                 node = node.Next;
             }
+
+            return false;
         }
 
         public void ClearAllStatusEffects()
         {
             statusEffectSlots.Clear();
         }
-        
+
         public bool TryGetTenet(TenetType tenetType, out TenetStatusEffect tenetStatusEffect)
         {
             bool isFound = TryGetTenetNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
