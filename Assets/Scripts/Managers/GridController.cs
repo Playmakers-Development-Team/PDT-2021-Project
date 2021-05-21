@@ -5,32 +5,35 @@ namespace Managers
 {
     public class GridController : MonoBehaviour
     {
-        private Tilemap tilemap;
         private GridManager gridManager;
+
+        private BoundsInt bounds;
+        private Vector3 tilemapOriginPoint;
 
         private void Awake()
         {
-            tilemap = GetComponentInChildren<Tilemap>();
-            
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.InitialiseTileDatas(tilemap);
-        
+            gridManager.levelTilemap = GetComponentInChildren<Tilemap>();
+            gridManager.InitialiseTileDatas();
+
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
-            BoundsInt bounds = tilemap.cellBounds;
-            DrawGridOutline(bounds);
-            TestingGetGridObjectsByCoordinate(1, bounds);
+            bounds = gridManager.levelTilemap.cellBounds;
+            tilemapOriginPoint = gridManager.levelTilemap.transform.position;
+            
+            DrawGridOutline();
+            TestingGetGridObjectsByCoordinate(0);
         }
 
-        #region Function Testing
+        #region Unit Testing
         
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
-        private void DrawGridOutline(BoundsInt bounds)
+        private void DrawGridOutline()
         {
             Vector3[] gridCorners = {
-                new Vector3(bounds.xMin, bounds.yMin, 0),
-                new Vector3(bounds.xMax, bounds.yMin, 0),
-                new Vector3(bounds.xMax, bounds.yMax, 0),
-                new Vector3(bounds.xMin, bounds.yMax, 0)
+                new Vector3(bounds.xMin + tilemapOriginPoint.x, bounds.yMin + tilemapOriginPoint.y, 0),
+                new Vector3(bounds.xMax + tilemapOriginPoint.x, bounds.yMin+ tilemapOriginPoint.y, 0),
+                new Vector3(bounds.xMax + tilemapOriginPoint.x, bounds.yMax+ tilemapOriginPoint.y, 0),
+                new Vector3(bounds.xMin + tilemapOriginPoint.x, bounds.yMax+ tilemapOriginPoint.y, 0)
             };
 
             for (int i = 0; i < gridCorners.Length ; i++)
@@ -47,15 +50,16 @@ namespace Managers
 
         }
         
-        private void TestingGetGridObjectsByCoordinate(int testCases, BoundsInt bounds)
+        private void TestingGetGridObjectsByCoordinate(int testCases)
         {
             for (int i = 0; i < testCases; i++)
             {
-                Vector2 randomCoordinates = new Vector2(Random.Range(0, bounds.size.x), Random.Range(0, bounds.size.y));
-                TileBase tile = gridManager.GetGridObjectsByCoordinate(
-                    randomCoordinates.x,
-                    randomCoordinates.y
-                ).Tile;
+                Vector2Int randomCoordinates = new Vector2Int(
+                    Random.Range(bounds.xMin, bounds.xMax), 
+                    Random.Range(bounds.yMin, bounds.yMax));
+                
+                TileBase tile = gridManager.GetTileDataByCoordinate(
+                    new Vector2Int(randomCoordinates.x, randomCoordinates.y)).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
         }

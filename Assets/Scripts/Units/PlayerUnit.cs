@@ -1,31 +1,21 @@
-﻿using System;
+using Units;
+using GridObjects;
 using UnityEngine;
 
 namespace Units
 {
-    public class PlayerUnit : Unit<PlayerUnitData>
+    public class PlayerUnit : Unit
     {
-        [Header("PlayerUnitStats")]
-        [SerializeField] private int healthPoints;
-        [SerializeField] private int movementActionPoints;
-        [SerializeField] private float damageModifier;
-        [SerializeField] private float defenceModifier;
-
-        void Start()
-        {
-            
-        }
-
-        void TakeDamage(int amount)
-        {
-            data.CurrentHealth = amount;
-        }
-
-
-        //[Header("AvailableAbilities")]
-        // private List<Abilities> availableAbilities;
-        
-
-
+        public PlayerUnit(
+        int healthPoints,
+        int movementActionPoints,
+        Vector2Int position, 
+        Stat dealDamageModifier,
+        Stat takeDamageModifier,
+        Stat takeKnockbackModifier
+        ) : base(healthPoints,movementActionPoints,position, dealDamageModifier, takeDamageModifier, 
+        takeKnockbackModifier) {}
     }
 }
+  
+
