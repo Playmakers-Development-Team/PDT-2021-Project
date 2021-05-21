@@ -15,6 +15,7 @@ namespace Units
         private readonly LinkedList<TenetStatusEffect> statusEffectSlots = new LinkedList<TenetStatusEffect>();
         private const int maxStatusEffectCount = 2;
 
+
         public int StatusEffectCount => statusEffectSlots.Count;
 
         public IEnumerable<TenetStatusEffect> StatusEffects => statusEffectSlots.AsEnumerable();
@@ -22,13 +23,15 @@ namespace Units
         public Unit(
         int healthPoints,
         int movementActionPoints,
+        int speed,
         Vector2Int position,
         Stat dealDamageModifier,
         Stat takeDamageModifier,
-        Stat takeKnockbackModifier) : base(position, dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
+        Stat takeKnockbackModifier) : base(healthPoints,movementActionPoints,speed,position, 
+        dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
+
+
         
-        
-      
 
         public void AddOrReplaceTenet(TenetType tenetType, int stackCount = 1)
         {

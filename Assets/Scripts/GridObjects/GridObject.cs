@@ -6,6 +6,12 @@ namespace GridObjects
     public class GridObject
     {
         private Vector2Int position;
+
+        private int HealthPoints { get; set; }
+        private int MovementActionPoints { get; set; }
+        
+        private int Speed { get; set; }
+
         public Stat DealDamageModifier { get; }
         public Stat TakeDamageModifier { get; }
         public Stat TakeKnockbackModifier { get; }
@@ -13,6 +19,9 @@ namespace GridObjects
         private GridManager gridManager;
 
         public GridObject(
+            int healthPoints,
+            int movementActionPoints,
+            int speed,
             Vector2Int position,
             Stat dealDamageModifier,
             Stat takeDamageModifier,
@@ -20,6 +29,9 @@ namespace GridObjects
         )
         {
             this.position = position;
+            HealthPoints = healthPoints;
+            MovementActionPoints = movementActionPoints;
+            Speed = speed;
             DealDamageModifier = dealDamageModifier;
             TakeDamageModifier = takeDamageModifier;
             TakeKnockbackModifier = takeKnockbackModifier;
@@ -32,7 +44,11 @@ namespace GridObjects
         public void TakeDamage(int amount)
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
+            HealthPoints = damageTaken;
+            CheckDeath();
             Debug.Log(damageTaken + " damage taken.");
+            Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
+
         }
 
         public void TakeKnockback(int amount)
@@ -45,5 +61,12 @@ namespace GridObjects
         {
             return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
         }
+
+        public void CheckDeath()
+        {
+            if (HealthPoints <= 0)
+                Debug.Log($"This Grid Object was cringe and died");
+        }
+        
     }
 }

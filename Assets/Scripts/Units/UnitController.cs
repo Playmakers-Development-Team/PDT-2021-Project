@@ -21,6 +21,7 @@ namespace Units
             unit = new Unit(
                 data.healthPoints,
                 data.movementActionPoints,
+                data.speed,
                 Vector2Int.one,
                 data.dealDamageModifier,
                 data.takeDamageModifier,
