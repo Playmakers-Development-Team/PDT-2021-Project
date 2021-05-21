@@ -10,6 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28ab46bf115233143a7e2a47b51f6d84, type: 3}
-  m_Name: New ColorDropSettings
+  m_Name: ColorDropSetting
   m_EditorClassIdentifier: 
-  colorSelections: []
+  scaleWidth: 256
+  scaleHeight: 256
+  colorSelections:
+  - primaryColor: {r: 1, g: 0.84232986, b: 0, a: 0}
+    borderColor: {r: 0, g: 0, b: 0, a: 0}
+    alpha: 0
+  - primaryColor: {r: 1, g: 0, b: 0, a: 0}
+    borderColor: {r: 0, g: 0, b: 0, a: 0}
+    alpha: 0
+  - primaryColor: {r: 0, g: 0, b: 0, a: 0}
+    borderColor: {r: 0, g: 0, b: 0, a: 0}
+    alpha: 0
+  - primaryColor: {r: 0, g: 0, b: 0, a: 0}
+    borderColor: {r: 0, g: 0, b: 0, a: 0}
+    alpha: 0
+  sdfSelections:
+  - textureSmoothing: 1
+    borderSmoothing: 0
+    borderSize: 0
+  textureSelections:
+  - {fileID: 0}
