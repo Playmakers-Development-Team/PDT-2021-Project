@@ -5,6 +5,9 @@ namespace Units
     [Serializable]
     public class PlayerUnitData : UnitData
     {
-        // Put player-specific stats here
+        public int CurrentHealth { get => CurrentHealth; set => CurrentHealth = value; }    
+        private int currentMovementActionPoints;
+        
+        
     }
 }

@@ -1,4 +1,9 @@
+using UnityEngine;
+
 namespace Units
 {
-    public interface IUnit {}
+    public interface IUnit
+    {
+        
+    }
 }
