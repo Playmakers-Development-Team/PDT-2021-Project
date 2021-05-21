@@ -9,7 +9,6 @@ namespace GridObjects
 
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
-        private int Speed { get; set; }
         public Stat DealDamageModifier { get; }
         public Stat TakeDamageModifier { get; }
         public Stat TakeKnockbackModifier { get; }
@@ -19,7 +18,6 @@ namespace GridObjects
         public GridObject(
             int healthPoints,
             int movementActionPoints,
-            int speed,
             Vector2Int position,
             Stat dealDamageModifier,
             Stat takeDamageModifier,
@@ -29,7 +27,6 @@ namespace GridObjects
             this.position = position;
             HealthPoints = healthPoints;
             MovementActionPoints = movementActionPoints;
-            Speed = speed;
             DealDamageModifier = dealDamageModifier;
             TakeDamageModifier = takeDamageModifier;
             TakeKnockbackModifier = takeKnockbackModifier;

@@ -27,7 +27,7 @@ namespace Units
         Vector2Int position,
         Stat dealDamageModifier,
         Stat takeDamageModifier,
-        Stat takeKnockbackModifier) : base(healthPoints,movementActionPoints,speed,position, 
+        Stat takeKnockbackModifier) : base(healthPoints,movementActionPoints,position, 
         dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
 
 
