@@ -9,9 +9,7 @@ namespace GridObjects
 
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
-        
         private int Speed { get; set; }
-
         public Stat DealDamageModifier { get; }
         public Stat TakeDamageModifier { get; }
         public Stat TakeKnockbackModifier { get; }
