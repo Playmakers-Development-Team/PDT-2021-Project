@@ -5,7 +5,7 @@ namespace Commands
 {
     public class MoveCommand : Command
     {
-        public MoveCommand(Unit unit) : base(unit) {}
+        public MoveCommand(IUnit unit) : base(unit) {}
 
         public override void Queue() {}
 
