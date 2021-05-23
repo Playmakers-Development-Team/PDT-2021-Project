@@ -27,7 +27,7 @@ namespace Managers
         /// <summary>
         /// The unit that is currently taking its turn.
         /// </summary>
-        public IUnit CurrentIUnit => currentTurnQueue[TurnIndex];
+        public IUnit CurrentUnit => currentTurnQueue[TurnIndex];
 
         /// <summary>
         /// The order in which units will take their turns for the current round.
@@ -119,7 +119,7 @@ namespace Managers
             
             // Set the current turn to be the unit before first, later coming back to the current unit
             TurnIndex = aboveIndex;
-            commandManager.QueueCommand(new StartTurnCommand(CurrentIUnit));
+            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
         }
 
         // TODO Test
@@ -202,7 +202,7 @@ namespace Managers
 
             if (TurnIndex < currentTurnQueue.Count)
             {
-                commandManager.QueueCommand(new StartTurnCommand(CurrentIUnit));
+                commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
             }
             else
             {
@@ -220,7 +220,7 @@ namespace Managers
             RoundCount++;
             TurnIndex = 0;
             
-            commandManager.QueueCommand(new StartTurnCommand(CurrentIUnit));
+            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
 
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
