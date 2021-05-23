@@ -11,11 +11,11 @@ namespace Units
             Vector2 position = coordinate;
             
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            IUnit unit = instance.GetComponent<IUnit>();
+            IUnit IUnit = instance.GetComponent<IUnit>();
             
             // GridManager.Occupy(unit);
             
-            return unit;
+            return IUnit;
         }
 
         public static IUnit Spawn(string unitName, Vector2Int coordinate)

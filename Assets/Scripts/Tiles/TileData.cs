@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEngine;
+using GridObjects;
 using UnityEngine.Tilemaps;
 
 namespace Tiles
@@ -7,8 +7,8 @@ namespace Tiles
     public class TileData
     {
         private TileBase tile;
-        private List<GameObject> gridObjects;
-        
+        public List<GridObject> GridObjects { get; } = new List<GridObject>();
+
         public TileBase Tile => tile;
 
         public TileData(TileBase tileBase)
@@ -16,22 +16,22 @@ namespace Tiles
             tile = tileBase;
         }
 
-        public void AddGridObjects(GameObject gameObject)
+        public void AddGridObjects(GridObject gridObject)
         {
-            if (!gridObjects.Contains(gameObject))
+            if (!GridObjects.Contains(gridObject))
             {
-                gridObjects.Add(gameObject);
+                GridObjects.Add(gridObject);
             }
         }
         
-        public void RemoveGridObjects(GameObject gameObject)
+        public void RemoveGridObjects(GridObject gridObject)
         {
-            gridObjects.Remove(gameObject);
+            GridObjects.Remove(gridObject);
         }
         
         public void ClearGridObjects()
         {
-            gridObjects.Clear();
+            GridObjects.Clear();
         }
     }
 }
