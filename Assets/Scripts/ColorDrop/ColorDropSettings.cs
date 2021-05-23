@@ -10,10 +10,15 @@ namespace ColorDrop
         public int scaleWidth = 256;
         public int scaleHeight = 256;
 
+        [Range(0, 1)]
+        public float alpha = 1;
+
+
         [SerializeField]
         public ColorSelection[] colorSelections;
         [SerializeField]
         public SDFSelection[] sdfSelections;
+        public Texture2D[] textureShapes;
         public Texture2D[] textureSelections;
 
         public void CreateNewColorSelection()
@@ -40,6 +45,20 @@ namespace ColorDrop
 
             tempArray[tempArray.Length - 1] = selection;
             sdfSelections = tempArray;
+        }
+
+        public void CreateNewTextureShape()
+        {
+            Texture2D[] tempArray = new Texture2D[textureShapes.Length + 1];
+            Texture2D selection = textureShapes.Length == 0 ? Texture2D.whiteTexture : textureShapes[textureShapes.Length - 1];
+
+            for (int i = 0; i < textureShapes.Length; i++)
+            {
+                tempArray[i] = textureShapes[i];
+            }
+
+            tempArray[tempArray.Length - 1] = selection;
+            textureShapes = tempArray;
         }
 
         public void CreateNewTextureSelection()

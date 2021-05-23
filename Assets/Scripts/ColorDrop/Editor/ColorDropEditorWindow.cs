@@ -7,17 +7,22 @@ namespace ColorDrop.Editor
 {
     public class ColorDropEditorWindow : EditorWindow
     {
-        Texture2D gameObject;
-        UnityEditor.Editor gameObjectEditor;
-        Vector2 scrollPosition = Vector2.zero;
+        // Fields
+        private Texture2D gameObject;
+        private UnityEditor.Editor gameObjectEditor;
+        private Vector2 scrollPosition = Vector2.zero;
         public ColorDropSettings colorSettings;
+        private Vector2 dimensions = Vector2.one;
 
         private ColorDropEditorWindow dropWindow;
         private SerializedObject serializedObject;
         private SerializedProperty currentProperty;
-        bool showColorSelections;
-        bool showSDFSelections;
-        bool showTextureSelections;
+
+        // Foldout variabels
+        private bool showColorSelections;
+        private bool showSDFSelections;
+        private bool showShapeSelections;
+        private bool showTextureSelections;
 
 
         public static void Open(ColorDropSettings settingsObject)
@@ -34,12 +39,11 @@ namespace ColorDrop.Editor
             serializedObject.Update();
 
             // Update window dimensions
-            Vector2 dimensions = CalculatePropertyWindowDimensions();
+            dimensions = CalculatePropertyWindowDimensions();
             scrollPosition = GUILayout.BeginScrollView(scrollPosition, true, true, GUILayout.Width(dimensions.x), GUILayout.Height(dimensions.y));
 
-            // SDF Selection
-            //DrawGUILine(Color.grey, 2, 10);
-            GUILayout.Label("Texture Attributes", EditorStyles.boldLabel);
+            // Texture Attributes
+            DisplayTextureAttributes();
 
             // Color Selection
             DrawGUILine(Color.grey, 2, 10);
@@ -54,8 +58,9 @@ namespace ColorDrop.Editor
             //gameObject = (Texture2D)EditorGUILayout.ObjectField(gameObject, typeof(Texture2D), true);
             gameObject = new Texture2D(256, 256);
 
-            //DrawGUILine(Color.grey, 2, 10);
-            
+            currentProperty = serializedObject.FindProperty("textureShapes");
+            DisplayTextureShapeSection();
+
             currentProperty = serializedObject.FindProperty("textureSelections");
             DrawTextureSelectionSection();
 
@@ -84,11 +89,6 @@ namespace ColorDrop.Editor
             return dimensions;
         }
 
-        private void DrawProperty(SerializedProperty prop, bool drawChildren)
-        {
-
-        }
-
         private void DrawArrayProperties(SerializedProperty prop, bool drawChildren)
         {
             string lastPropPath = string.Empty;
@@ -113,7 +113,7 @@ namespace ColorDrop.Editor
                 {
                     if (!string.IsNullOrEmpty(lastPropPath) && p.propertyPath.Contains(lastPropPath)) { continue; }
                     lastPropPath = p.propertyPath;
-                    EditorGUILayout.PropertyField(p, drawChildren);
+                    EditorGUILayout.PropertyField(p, drawChildren, GUILayout.MaxWidth(dimensions.x), GUILayout.MinWidth(dimensions.x/3));
                 }
                 GUILayout.EndVertical();
             }
@@ -141,13 +141,27 @@ namespace ColorDrop.Editor
                 else
                 {
                     if (!string.IsNullOrEmpty(lastPropPath) && p.propertyPath.Contains(lastPropPath)) { continue; }
+                    EditorGUI.indentLevel++;
                     lastPropPath = p.propertyPath;
-                    EditorGUILayout.PropertyField(p, drawChildren);
+                    EditorGUILayout.PropertyField(p, drawChildren, GUILayout.MaxWidth(dimensions.x), GUILayout.MinWidth(dimensions.x / 3));
+                    EditorGUI.indentLevel--;
                 }
             }
         }
 
+        private void DisplayTextureAttributes()
+        {
+            EditorGUI.indentLevel = 1;
+            GUILayout.BeginVertical("GroupBox");
+            GUILayout.Label("Texture Attributes", EditorStyles.boldLabel);
 
+            currentProperty = serializedObject.FindProperty("scaleWidth");
+            EditorGUILayout.PropertyField(currentProperty, false);
+            currentProperty = serializedObject.FindProperty("scaleHeight");
+            EditorGUILayout.PropertyField(currentProperty, false);
+
+            GUILayout.EndVertical();
+        }
 
         private void DrawColorSelectionSection()
         {
@@ -170,7 +184,7 @@ namespace ColorDrop.Editor
 
                 GUILayoutOption[] buttonLayout =
                 {
-                    GUILayout.Width(600),
+                    GUILayout.Width(dimensions.x / 2),
                     GUILayout.Height(50)
                 };
 
@@ -196,7 +210,7 @@ namespace ColorDrop.Editor
 
             EditorGUI.indentLevel = 1;
             GUILayout.BeginVertical("GroupBox");
-            GUILayout.Label("SDF Selection", EditorStyles.boldLabel);
+            GUILayout.Label("SDF Attribute Selection", EditorStyles.boldLabel);
             GUILayout.Space(5);
 
             showSDFSelections = EditorGUILayout.Foldout(showSDFSelections, "SDF");
@@ -222,6 +236,42 @@ namespace ColorDrop.Editor
             EditorGUI.indentLevel = 0;
         }
 
+        private void DisplayTextureShapeSection()
+        {
+            string lastPropPath = string.Empty;
+
+            // GUIStyle bgColor = new GUIStyle();
+            // bgColor.normal.background = ColorToTexture(new Color(0.3f, 0.3f, 0.3f));
+
+            EditorGUI.indentLevel = 1;
+            GUILayout.BeginVertical("GroupBox");
+            GUILayout.Label("Texture Shapes List", EditorStyles.boldLabel);
+            GUILayout.Space(5);
+
+            showShapeSelections = EditorGUILayout.Foldout(showShapeSelections, "Shapes");
+            if (showShapeSelections)
+            {
+                DrawSimpleArrayProperties(currentProperty, true);
+
+                GUILayoutOption[] buttonLayout =
+                {
+                    GUILayout.MaxWidth(dimensions.x),
+                    GUILayout.MinWidth(dimensions.x/2),
+                    GUILayout.Height(50)
+                };
+
+                GUILayout.Space(20);
+                if (GUILayout.Button("Add New Texture", buttonLayout))
+                {
+                    Debug.Log("button Pressed");
+                    colorSettings.CreateNewTextureShape();
+                }
+            }
+
+            GUILayout.EndVertical();
+            EditorGUI.indentLevel = 0;
+        }
+
         private void DrawTextureSelectionSection()
         {
             string lastPropPath = string.Empty;
@@ -235,7 +285,7 @@ namespace ColorDrop.Editor
             GUILayout.Label("Texture List", EditorStyles.boldLabel);
             GUILayout.Space(5);
 
-            showTextureSelections = EditorGUILayout.Foldout(showTextureSelections, "Textures");
+            showTextureSelections = EditorGUILayout.Foldout(showTextureSelections, "Texutres");
             if (showTextureSelections)
             {
                 DrawSimpleArrayProperties(currentProperty, true);
@@ -303,8 +353,8 @@ namespace ColorDrop.Editor
             Rect r = EditorGUILayout.GetControlRect(GUILayout.Height(padding + thickness));
             r.height = thickness;
             r.y += padding / 2;
-            r.x -= 2;
-            r.width += 6;
+            r.x = (dimensions.x / 2) / 2;
+            r.width = dimensions.x / 2;
             EditorGUI.DrawRect(r, color);
         }
     }
