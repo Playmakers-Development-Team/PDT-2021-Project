@@ -4,7 +4,7 @@ namespace Commands
 {
     public class EndTurn : Command
     {
-        public EndTurn(Unit unit) : base(unit) {}
+        public EndTurn(IUnit unit) : base(unit) {}
 
         public override void Queue() {}
 

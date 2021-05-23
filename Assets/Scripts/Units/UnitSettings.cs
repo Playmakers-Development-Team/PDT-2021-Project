@@ -55,7 +55,7 @@ namespace Units
             
             foreach (GameObject prefab in Instance.unitPrefabs)
             {
-                if (prefab.GetComponent<UnitController<T>>() is null)
+                if (prefab.GetComponent<Unit<T>>() is null)
                     continue;
 
                 names.Add(prefab.name);
