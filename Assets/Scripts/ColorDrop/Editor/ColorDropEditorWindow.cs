@@ -24,6 +24,14 @@ namespace ColorDrop.Editor
         private bool showShapeSelections;
         private bool showTextureSelections;
 
+        GUILayoutOption[] foldoutLayout =
+        {
+            GUILayout.Width(300),
+            GUILayout.MaxWidth(340),
+            GUILayout.MinWidth(290),
+            GUILayout.Height(40)
+        };
+
 
         public static void Open(ColorDropSettings settingsObject)
         {
@@ -40,7 +48,8 @@ namespace ColorDrop.Editor
 
             // Update window dimensions
             dimensions = CalculatePropertyWindowDimensions();
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition, true, true, GUILayout.Width(dimensions.x), GUILayout.Height(dimensions.y));
+            dropWindow.minSize = new Vector2(350, 100);
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition, true, true, GUIStyle.none, GUIStyle.none, GUILayout.Width(dimensions.x), GUILayout.Height(dimensions.y));
 
             // Texture Attributes
             DisplayTextureAttributes();
@@ -67,7 +76,7 @@ namespace ColorDrop.Editor
             //GUILayout.EndArea();
             GUILayout.EndScrollView();
 
-            GUIStyle bgColor = new GUIStyle();
+            /*GUIStyle bgColor = new GUIStyle();
             bgColor.normal.background = Texture2D.grayTexture;
 
             if (gameObject != null)
@@ -78,14 +87,14 @@ namespace ColorDrop.Editor
                 gameObjectEditor.OnInteractivePreviewGUI(GUILayoutUtility.GetRect(256, 256), bgColor);
             }
 
-            serializedObject.ApplyModifiedProperties();
+            serializedObject.ApplyModifiedProperties();*/
         }
 
         private Vector2 CalculatePropertyWindowDimensions()
         {
             Vector2 dimensions = Vector2.zero;
             dimensions.x = dropWindow.position.width;
-            dimensions.y = dropWindow.position.height * 0.65f;
+            dimensions.y = dropWindow.position.height;
             return dimensions;
         }
 
@@ -95,7 +104,7 @@ namespace ColorDrop.Editor
 
             foreach (SerializedProperty p in prop)
             {
-                GUILayout.BeginVertical("GroupBox");
+                GUILayout.BeginVertical("box", foldoutLayout);
                 if (p.isArray && p.propertyType == SerializedPropertyType.Generic)
                 {
                     EditorGUILayout.BeginHorizontal();
@@ -167,37 +176,55 @@ namespace ColorDrop.Editor
         {
             string lastPropPath = string.Empty;
 
-            // GUIStyle bgColor = new GUIStyle();
-            // bgColor.normal.background = ColorToTexture(new Color(0.3f, 0.3f, 0.3f));
+            GUIStyle foldoutStyle = new GUIStyle("RL Background");
+            foldoutStyle.margin = new RectOffset(10, 10, 5, 5);
+            foldoutStyle.padding = new RectOffset(20, 20, 5, 5);
+            foldoutStyle.normal.background = Texture2D.grayTexture;
+
 
             EditorGUI.indentLevel = 1;
-            GUILayout.BeginVertical("GroupBox");
+            GUILayout.BeginVertical("GroupBox", foldoutLayout);
             GUILayout.Label("Color Selection", EditorStyles.boldLabel);
             GUILayout.Space(5);
+
 
             showColorSelections = EditorGUILayout.Foldout(showColorSelections, "Colors");
             if (showColorSelections)
             {
-                GUILayout.BeginVertical("GroupBox");
+                GUILayout.BeginVertical("GroupBox", foldoutLayout);
                 DrawArrayProperties(currentProperty, true);
                 GUILayout.EndVertical();
-
+                /*
                 GUILayoutOption[] buttonLayout =
                 {
-                    GUILayout.Width(dimensions.x / 2),
-                    GUILayout.Height(50)
+                    GUILayout.MaxWidth(50),
+                    GUILayout.MinWidth(dimensions.x/2 - 10),
+                    GUILayout.Height(40)
                 };
+                EditorGUI.indentLevel = 0;
 
-                GUILayout.Space(20);
+                GUIStyle actionButtons = new GUIStyle();
+                actionButtons.margin = new RectOffset(5, 5, 0, 0);
+
+                GUILayout.Space(5);
+                GUILayout.BeginHorizontal(GUILayout.Width(200));
+
                 if (GUILayout.Button("Add New Color", buttonLayout))
                 {
                     Debug.Log("button Pressed");
                     colorSettings.CreateNewColorSelection();
                 }
+
+                if (GUILayout.Button("Delete Last Color", buttonLayout))
+                {
+                    Debug.Log("button Pressed");
+                    //colorSettings.CreateNewColorSelection();
+                }
+
+                GUILayout.EndHorizontal();*/
             }
 
             GUILayout.EndVertical();
-            EditorGUI.indentLevel = 0;
         }
 
         private void DrawSDFSelectionSection()
@@ -306,8 +333,6 @@ namespace ColorDrop.Editor
 
                 GUILayout.EndVertical();
             EditorGUI.indentLevel = 0;
-
-            
         }
 
         private void RemoveButton()
