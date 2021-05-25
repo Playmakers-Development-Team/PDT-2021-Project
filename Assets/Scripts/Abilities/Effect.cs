@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Abilities
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatusEffect providingTenet;
-        [SerializeField] private Cost[] costs;
+        [SerializeField] private List<Cost> costs;
         
         
         public bool CanUse(IUnit user)
@@ -54,7 +55,7 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
             
-            int bonus = costs.Length == 0 ? value : 0;
+            int bonus = costs.Count == 0 ? value : 0;
             
             foreach (Cost cost in costs)
                 bonus += cost.CalculateValue(user, value);
