@@ -191,11 +191,10 @@ namespace Managers
             currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
         }
 
-        // TODO listen to EndTurnCommand somehow
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
-        private void NextTurn()
+        public void NextTurn()
         {
             TurnIndex++;
             TotalTurnCount++;
