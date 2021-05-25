@@ -1,33 +1,18 @@
+using System;
 using Managers;
 using UnityEngine;
 
 namespace GridObjects
 {
-    public class GridObject
+    public class GridObject : MonoBehaviour
     {
-        private Vector2Int position;
-        public Stat DealDamageModifier { get; }
-        public Stat TakeDamageModifier { get; }
-        public Stat TakeKnockbackModifier { get; }
+        public Stat TakeDamageModifier { get; protected set; }
+        public Stat TakeKnockbackModifier { get; protected set; }
         
         private GridManager gridManager;
-
-        public GridObject(
-            Vector2Int position,
-            Stat dealDamageModifier,
-            Stat takeDamageModifier,
-            Stat takeKnockbackModifier
-        )
-        {
-            this.position = position;
-            DealDamageModifier = dealDamageModifier;
-            TakeDamageModifier = takeDamageModifier;
-            TakeKnockbackModifier = takeKnockbackModifier;
-
-            gridManager = ManagerLocator.Get<GridManager>();
-
-            gridManager.AddGridObject(position, this);
-        }
+        
+        // TODO Initialise position
+        private Vector2Int position;
 
         public void TakeDamage(int amount)
         {
@@ -44,6 +29,13 @@ namespace GridObjects
         public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
             return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
+        }
+        
+        protected virtual void Start()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+
+            gridManager.AddGridObject(position, this);
         }
     }
 }

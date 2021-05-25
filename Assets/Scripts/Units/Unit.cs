@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -6,20 +7,27 @@ using UnityEngine;
 
 namespace Units
 {
-    public class Unit : GridObject, IUnit
+    public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
+        [SerializeField] protected T data;
+        
+        public static Type DataType => typeof(T);
+        
+        public Stat DealDamageModifier { get; protected set; }
+        
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
         public IEnumerable<TenetStatusEffect> TenetStatusEffects => tenetStatusEffectSlots.AsEnumerable();
         
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
         private const int maxTenetStatusEffectCount = 2;
-
-        public Unit(Vector2Int position,
-                    Stat dealDamageModifier,
-                    Stat takeDamageModifier,
-                    Stat takeKnockbackModifier) : base(position, dealDamageModifier,
-            takeDamageModifier, takeKnockbackModifier) {}
+        
+        protected override void Start()
+        {
+            DealDamageModifier = data.dealDamageModifier;
+            TakeDamageModifier = data.takeDamageModifier;
+            TakeKnockbackModifier = data.takeKnockbackModifier;
+        }
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
@@ -84,8 +92,9 @@ namespace Units
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
-        
-        private bool TryGetTenetStatusEffectNode(TenetType tenetType, out LinkedListNode<TenetStatusEffect> foundNode)
+
+        private bool TryGetTenetStatusEffectNode(TenetType tenetType,
+                                                 out LinkedListNode<TenetStatusEffect> foundNode)
         {
             LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
 
@@ -96,7 +105,7 @@ namespace Units
                     foundNode = node;
                     return true;
                 }
-                
+
                 node = node.Next;
             }
 

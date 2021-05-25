@@ -4,7 +4,7 @@ namespace Commands
 {
     public class StartTurnCommand : Command
     {
-        public StartTurnCommand(Unit unit) : base(unit) {}
+        public StartTurnCommand(IUnit unit) : base(unit) {}
 
         public override void Queue() {}
 
