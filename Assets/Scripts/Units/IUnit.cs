@@ -1,4 +1,5 @@
 using System;
+using GridObjects;
 using Abilities;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ namespace Units
 {
     public interface IUnit
     {
+        public Stat DealDamageModifier { get; }
+        
         Type GetDataType();
         
         void Damage(int amount);

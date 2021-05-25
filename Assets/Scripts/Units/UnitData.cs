@@ -1,11 +1,18 @@
 ﻿using System;
 using Abilities;
+using GridObjects;
 
 namespace Units
 {
-    // TODO: Implement functions
-    public class UnitData
+    public abstract class UnitData
     {
+        public int healthPoints;
+        public int movementActionPoints;
+        public int speed;
+        public Stat dealDamageModifier;
+        public Stat takeDamageModifier;
+        public Stat takeKnockbackModifier;
+        
         public void Damage(int amount) => throw new NotImplementedException();
 
         public void Defend(int amount) => throw new NotImplementedException();
