@@ -1,7 +1,4 @@
 namespace Units
 {
-    public class EnemyUnit : Unit<EnemyUnitData>
-    {
-        
-    }
+    public class EnemyUnit : Unit<EnemyUnitData> {}
 }

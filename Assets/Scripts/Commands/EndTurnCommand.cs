@@ -16,7 +16,7 @@ namespace Commands
 
         public override void Execute()
         {
-            turnManager.EndTurn();
+            turnManager.NextTurn();
         }
 
         public override void Undo() {}
