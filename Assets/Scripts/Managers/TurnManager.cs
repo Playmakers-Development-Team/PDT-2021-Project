@@ -107,11 +107,10 @@ namespace Managers
             }
         }
 
-        // TODO listen to EndTurnCommand somehow
         /// <summary>
         /// Finish the current turn, and end the round if this is the last Unit.
         /// </summary>
-        private void EndTurn()
+        public void EndTurn()
         {
             TurnCount++;
 
