@@ -16,8 +16,8 @@ namespace Commands.Shapes
         {
             public OrdinalDirectionMask direction;
             public List<Vector2Int> coordinates;
-            [Tooltip("This only works for cardinal directions")]
-            public bool autoRotateFromNorth;
+            [Tooltip("This only works for cardinal directions. Rotates from North for cardinal directions and rotates from North-East for non-cardinal directions")]
+            public bool autoRotate;
             [Tooltip("This will try to raycast on the grid towards the first found unit")]
             public bool isLineOfSight;
         }
@@ -63,11 +63,20 @@ namespace Commands.Shapes
                 {
                     IEnumerable<Vector2Int> coordinates = p.coordinates;
 
-                    if (p.autoRotateFromNorth && isDiagonalShape)
+                    if (p.autoRotate)
                     {
-                        coordinates = coordinates.Select(c =>
-                            CardinalDirectionUtility.RotateVector2Int(c, CardinalDirection.North,
-                                direction.ToCardinalDirection()));
+                        if (direction.IsDiagonal())
+                        {
+                            coordinates = coordinates.Select(c =>
+                                CardinalDirectionUtility.RotateVector2Int(c, CardinalDirection.North,
+                                    direction.RotateAntiClockwise().ToCardinalDirection()));
+                        }
+                        else
+                        {
+                            coordinates = coordinates.Select(c =>
+                                CardinalDirectionUtility.RotateVector2Int(c, CardinalDirection.North,
+                                    direction.ToCardinalDirection()));
+                        }
                     }
 
                     if (p.isLineOfSight)
