@@ -41,7 +41,7 @@ namespace Managers
             playerUnits.Clear();
         }
 
-        public void Clean()
+        public void ClearUnits()
         {
             for (int i = playerUnits.Count; i >= 0; i--)
             {
