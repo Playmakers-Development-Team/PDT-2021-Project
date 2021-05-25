@@ -4,8 +4,6 @@ namespace StatusEffects
 {
     public struct TenetStatusEffect
     {
-        private int stackCount;
-        
         public TenetType TenetType { get; }
 
         public int StackCount
@@ -15,6 +13,8 @@ namespace StatusEffects
         }
 
         public bool IsEmpty => StackCount <= 0;
+        
+        private int stackCount;
 
         public TenetStatusEffect(TenetType tenetType, int stackCount)
         {

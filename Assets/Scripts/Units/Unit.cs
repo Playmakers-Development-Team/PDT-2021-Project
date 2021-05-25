@@ -8,12 +8,12 @@ namespace Units
 {
     public class Unit : GridObject, IUnit
     {
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
-        private const int maxTenetStatusEffectCount = 2;
-
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
         public IEnumerable<TenetStatusEffect> TenetStatusEffects => tenetStatusEffectSlots.AsEnumerable();
+        
+        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
+        private const int maxTenetStatusEffectCount = 2;
 
         public Unit(Vector2Int position,
                     Stat dealDamageModifier,
@@ -79,6 +79,12 @@ namespace Units
             return isFound;
         }
 
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
+        {
+            return tenetStatusEffectSlots.Any(s =>
+                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
+        }
+        
         private bool TryGetTenetStatusEffectNode(TenetType tenetType, out LinkedListNode<TenetStatusEffect> foundNode)
         {
             LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
@@ -96,12 +102,6 @@ namespace Units
 
             foundNode = null;
             return false;
-        }
-
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return tenetStatusEffectSlots.Any(s =>
-                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
     }
 }
