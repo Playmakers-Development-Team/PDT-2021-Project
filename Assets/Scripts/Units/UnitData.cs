@@ -1,4 +1,5 @@
-﻿using GridObjects;
+﻿using System;
+using GridObjects;
 
 namespace Units
 {
@@ -10,6 +11,5 @@ namespace Units
         public Stat dealDamageModifier;
         public Stat takeDamageModifier;
         public Stat takeKnockbackModifier;
-
     }
 }

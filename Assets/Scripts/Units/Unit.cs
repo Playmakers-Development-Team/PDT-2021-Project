@@ -13,7 +13,7 @@ namespace Units
         
         public static Type DataType => typeof(T);
         
-        public Stat DealDamageModifier { get; protected set; }
+        public Stat DealDamageModifier { get ; protected set; }
         
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
@@ -22,7 +22,7 @@ namespace Units
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
         private const int maxTenetStatusEffectCount = 2;
         
-        protected override void Start()
+        protected void Awake()
         {
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;

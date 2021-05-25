@@ -12,6 +12,7 @@ namespace GridObjects
         private float multiplier;
         private float adder;
 
+        // TODO: Create a setup function
         public Stat(float baseMultiplier, float baseAdder)
         {
             this.baseMultiplier = baseMultiplier;
@@ -22,5 +23,7 @@ namespace GridObjects
         }
 
         public float Modify(float amount) => amount * multiplier + adder;
+
+        public float Value => baseAdder * baseMultiplier;
     }
 }

@@ -6,7 +6,8 @@ namespace GridObjects
 {
     public class GridObject : MonoBehaviour
     {
-        private int HealthPoints { get; set; }
+        // TODO Remove this (data isn't on all gridObject)
+        public int HealthPoints { get; private set; }
         private int MovementActionPoints { get; set; }
         private int Speed { get; set; }
         public Stat TakeDamageModifier { get; protected set; }
