@@ -170,7 +170,7 @@ namespace Utility
             (mask & CardinalDirectionMask.East) != 0 || (mask & CardinalDirectionMask.West) != 0;
     }
 
-    public static class CardinalDirectionUtil
+    public static class CardinalDirectionUtility
     {
         public static CardinalDirection From(Vector2 fromPos, Vector2 toPos)
         {

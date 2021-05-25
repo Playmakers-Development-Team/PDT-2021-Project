@@ -265,7 +265,7 @@ namespace Utility
                                                   || (mask & OrdinalDirectionMask.SouthWest) != 0;
     }
 
-    public static class OrdinalDirectionUtil
+    public static class OrdinalDirectionUtility
     {
         public static OrdinalDirection From(Vector2 fromPos, Vector2 toPos)
         {
