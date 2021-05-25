@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Commands.Shapes;
 using Units;
 using UnityEngine;
 
@@ -8,29 +11,43 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject
     {
+        [SerializeField] private BasicShapeData shape;
         [SerializeField] private int knockback;
-        
+
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
-        
 
-        public void Use(IUnit user, IUnit target)
+
+        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
-            Use(user, target, targetEffects);
-            Use(user, user, userEffects);
+            Use(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        private void Use(IUnit user, IUnit target, Effect[] effects)
+        public void Use(IUnit user, params IUnit[] targets) => Use(user, targets.AsEnumerable());
+        
+        public void Use(IUnit user, IEnumerable<IUnit> targets)
+        {
+            Use(user, targetEffects, targets);
+            Use(user, userEffects, user);
+        }
+
+        private void Use(IUnit user, Effect[] effects, params IUnit[] targets) =>
+            Use(user, effects, targets.AsEnumerable());
+
+        private void Use(IUnit user, Effect[] effects, IEnumerable<IUnit> targets)
         {
             int damage = CalculateAmount(user, effects, EffectValueType.Damage);
             int defence = CalculateAmount(user, effects, EffectValueType.Defence);
             int attack = CalculateAmount(user, effects, EffectValueType.Attack);
 
-            target.TakeDamage(damage);
-            target.AddAttack(attack);
-            target.AddDefence(defence);
-            
-            // TODO: Knockback??
+            foreach (IUnit target in targets)
+            {
+                target.TakeDamage(damage);
+                target.AddAttack(attack);
+                target.AddDefence(defence);
+                
+                // TODO: Knockback??
+            }
         }
 
         private int CalculateAmount(IUnit user, Effect[] effects, EffectValueType valueType)
