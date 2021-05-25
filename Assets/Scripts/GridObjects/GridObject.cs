@@ -1,40 +1,24 @@
+using System;
 using Managers;
 using UnityEngine;
 
 namespace GridObjects
 {
-    public class GridObject
+    public class GridObject : MonoBehaviour
     {
-        private Vector2Int position;
-
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
-        
         private int Speed { get; set; }
-        public Stat DealDamageModifier { get; }
-        public Stat TakeDamageModifier { get; }
-        public Stat TakeKnockbackModifier { get; }
+        public Stat TakeDamageModifier { get; protected set; }
+        public Stat TakeKnockbackModifier { get; protected set; }
+        
+        // TODO Initialise position
+        private Vector2Int position;
         
         private GridManager gridManager;
 
-        public GridObject(
-            int healthPoints,
-            int movementActionPoints,
-            int speed,
-            Vector2Int position,
-            Stat dealDamageModifier,
-            Stat takeDamageModifier,
-            Stat takeKnockbackModifier
-        )
+        protected virtual void Start()
         {
-            this.position = position;
-            HealthPoints = healthPoints;
-            MovementActionPoints = movementActionPoints;
-            Speed = speed;
-            DealDamageModifier = dealDamageModifier;
-            TakeDamageModifier = takeDamageModifier;
-            TakeKnockbackModifier = takeKnockbackModifier;
-
             gridManager = ManagerLocator.Get<GridManager>();
 
             gridManager.AddGridObject(position, this);
@@ -66,6 +50,5 @@ namespace GridObjects
             if (HealthPoints <= 0)
                 Debug.Log($"This Grid Object was cringe and died");
         }
-        
     }
 }

@@ -15,7 +15,7 @@ namespace Commands
 
         private GridManager gridManager;
 
-        public AbilityCommand(Unit unit, Shape shape, int damage, int knockback) : base(unit)
+        public AbilityCommand(IUnit unit, Shape shape, int damage, int knockback) : base(unit)
         {
             this.shape = shape;
             this.damage = damage;

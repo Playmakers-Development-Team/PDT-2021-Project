@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -6,75 +7,65 @@ using UnityEngine;
 
 namespace Units
 {
-    public class Unit : GridObject, IUnit
+    public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
-        // [SerializeField] protected T data;
-        // public static Type DataType => typeof(T);
+        [SerializeField] protected T data;
         
-        // In the future, we might want to support other types of status effect
-        private readonly LinkedList<TenetStatusEffect> statusEffectSlots = new LinkedList<TenetStatusEffect>();
-        private const int maxStatusEffectCount = 2;
-
-
-        public int StatusEffectCount => statusEffectSlots.Count;
-
-        public IEnumerable<TenetStatusEffect> StatusEffects => statusEffectSlots.AsEnumerable();
-
-        public Unit(
-        int healthPoints,
-        int movementActionPoints,
-        int speed,
-        Vector2Int position,
-        Stat dealDamageModifier,
-        Stat takeDamageModifier,
-        Stat takeKnockbackModifier) : base(healthPoints,movementActionPoints,speed,position, 
-        dealDamageModifier, takeDamageModifier, takeKnockbackModifier) {}
-
-
+        public static Type DataType => typeof(T);
         
+        public Stat DealDamageModifier { get; protected set; }
+        
+        public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
-        public void AddOrReplaceTenet(TenetType tenetType, int stackCount = 1)
+        public IEnumerable<TenetStatusEffect> TenetStatusEffects => tenetStatusEffectSlots.AsEnumerable();
+        
+        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
+        private const int maxTenetStatusEffectCount = 2;
+        
+        protected override void Start()
         {
-            AddOrReplaceStatusEffect(new TenetStatusEffect(tenetType, stackCount));
+            DealDamageModifier = data.dealDamageModifier;
+            TakeDamageModifier = data.takeDamageModifier;
+            TakeKnockbackModifier = data.takeKnockbackModifier;
         }
 
-        private void AddOrReplaceStatusEffect(TenetStatusEffect statusEffect)
+        public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
+            TenetStatusEffect statusEffect = new TenetStatusEffect(tenetType, stackCount);
+
             if (statusEffect.IsEmpty)
                 return;
             
             // Try to add on top of an existing tenet type
-            if (TryGetTenetNode(statusEffect.TenetType, out LinkedListNode<TenetStatusEffect> foundNode))
+            if (TryGetTenetStatusEffectNode(statusEffect.TenetType, out LinkedListNode<TenetStatusEffect> foundNode))
             {
                 foundNode.Value += statusEffect;
             }
             else
             {
                 // When we are already utilizing all the slots
-                if (StatusEffectCount == maxStatusEffectCount)
+                if (TenetStatusEffectCount == maxTenetStatusEffectCount)
                 {
                     // Remove the oldest status effect to make space for the new status effect
-                    statusEffectSlots.RemoveFirst();
+                    tenetStatusEffectSlots.RemoveFirst();
                 }
                 
-                statusEffectSlots.AddLast(statusEffect);
+                tenetStatusEffectSlots.AddLast(statusEffect);
             }
         }
 
-        public bool RemoveTenet(TenetType tenetType, int amount = int.MaxValue)
+        public bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue)
         {
-            LinkedListNode<TenetStatusEffect> node = statusEffectSlots.First;
+            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
-                TenetStatusEffect tenetStatusEffect = node.Value;
-
-                if (tenetStatusEffect.TenetType == tenetType)
+                if (node.Value.TenetType == tenetType)
                 {
                     node.Value -= amount;
                     
                     if (node.Value.IsEmpty)
-                        statusEffectSlots.Remove(node);
+                        tenetStatusEffectSlots.Remove(node);
                     return true;
                 }
                 
@@ -84,43 +75,42 @@ namespace Units
             return false;
         }
 
-        public void ClearAllStatusEffects()
+        public void ClearAllTenetStatusEffects()
         {
-            statusEffectSlots.Clear();
+            tenetStatusEffectSlots.Clear();
         }
 
-        public bool TryGetTenet(TenetType tenetType, out TenetStatusEffect tenetStatusEffect)
+        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect)
         {
-            bool isFound = TryGetTenetNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
+            bool isFound = TryGetTenetStatusEffectNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
             tenetStatusEffect = isFound ? foundNode.Value : default;
             return isFound;
         }
 
-        private bool TryGetTenetNode(TenetType tenetType, out LinkedListNode<TenetStatusEffect> foundNode)
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
         {
-            LinkedListNode<TenetStatusEffect> node = statusEffectSlots.First;
+            return tenetStatusEffectSlots.Any(s =>
+                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
+        }
+
+        private bool TryGetTenetStatusEffectNode(TenetType tenetType,
+                                                 out LinkedListNode<TenetStatusEffect> foundNode)
+        {
+            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
-                TenetStatusEffect currentStatusEffect = node.Value;
-
-                if (currentStatusEffect.TenetType == tenetType)
+                if (node.Value.TenetType == tenetType)
                 {
                     foundNode = node;
                     return true;
                 }
-                
+
                 node = node.Next;
             }
 
             foundNode = null;
             return false;
-        }
-
-        public bool HasTenet(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return statusEffectSlots.Any(s =>
-                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
     }
 }
