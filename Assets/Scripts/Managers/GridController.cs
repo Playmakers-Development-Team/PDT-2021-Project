@@ -62,6 +62,25 @@ namespace Managers
             }
         }
 
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0)) 
+            {
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+                Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+                Vector2Int gridPos = gridManager.ConvertWorldSpaceToGridSpace(mousePos2D);
+                PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+                foreach (Units.PlayerUnit unit in playerManager.PlayerUnits)
+                {
+                    if(gridManager.ConvertWorldSpaceToGridSpace(unit.transform.position) == gridPos)
+                    {
+                        playerManager.SelectUnit(unit);
+                        return;
+                    }
+                }
+                playerManager.SelectUnit(null);
+            }
+        }
         #endregion
     }
 }
