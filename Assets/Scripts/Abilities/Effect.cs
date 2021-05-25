@@ -12,6 +12,7 @@ namespace Abilities
         [SerializeField] private int damageValue;
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
+        [SerializeField] private TenetStatusEffect providingTenet;
         [SerializeField] private Cost[] costs;
         
         
@@ -30,6 +31,9 @@ namespace Abilities
 
             return true;
         }
+
+        public void Provide(IUnit user) => 
+            user.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
 
         public void Expend(IUnit user)
         {

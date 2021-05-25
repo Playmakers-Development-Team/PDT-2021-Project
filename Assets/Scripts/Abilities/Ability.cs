@@ -44,6 +44,7 @@ namespace Abilities
 
                 bonus += effect.CalculateModifier(user, valueType);
                 effect.Expend(user);
+                effect.Provide(user);
             }
 
             return bonus;
