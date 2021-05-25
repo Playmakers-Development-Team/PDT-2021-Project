@@ -33,7 +33,6 @@ namespace GridObjects
             CheckDeath();
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
-
         }
 
         public void TakeKnockback(int amount)
