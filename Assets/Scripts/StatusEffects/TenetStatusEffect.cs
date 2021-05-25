@@ -2,17 +2,16 @@ using System;
 
 namespace StatusEffects
 {
-    // We might want to create an interface IStatusEffect in the future
     public struct TenetStatusEffect
     {
         private int stackCount;
         
-        public TenetType TenetType { get; set; }
+        public TenetType TenetType { get; }
 
         public int StackCount
         {
             get => stackCount;
-            set => stackCount = Math.Max(0, value);
+            private set => stackCount = Math.Max(0, value);
         }
 
         public bool IsEmpty => StackCount <= 0;
