@@ -6,25 +6,16 @@ namespace GridObjects
 {
     public class GridObject : MonoBehaviour
     {
+        private int HealthPoints { get; set; }
+        private int MovementActionPoints { get; set; }
+        private int Speed { get; set; }
         public Stat TakeDamageModifier { get; protected set; }
         public Stat TakeKnockbackModifier { get; protected set; }
         
-        private GridManager gridManager;
-        
         // TODO Initialise position
         private Vector2Int position;
-
-        public void TakeDamage(int amount)
-        {
-            int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            Debug.Log(damageTaken + " damage taken.");
-        }
-
-        public void TakeKnockback(int amount)
-        {
-            int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
-            Debug.Log(knockbackTaken + " knockback taken.");
-        }
+        
+        private GridManager gridManager;
 
         protected virtual void Start()
         {
@@ -33,6 +24,32 @@ namespace GridObjects
             position = gridManager.ConvertWorldSpaceToGridSpace(transform.position);
 
             gridManager.AddGridObject(position, this);
+        }
+
+        public void TakeDamage(int amount)
+        {
+            int damageTaken = (int) TakeDamageModifier.Modify(amount);
+            HealthPoints = damageTaken;
+            CheckDeath();
+            Debug.Log(damageTaken + " damage taken.");
+            Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
+        }
+
+        public void TakeKnockback(int amount)
+        {
+            int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
+            Debug.Log(knockbackTaken + " knockback taken.");
+        }
+        
+        public Vector2Int GetGridPosition(Vector2 worldPosition)
+        {
+            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
+        }
+
+        public void CheckDeath()
+        {
+            if (HealthPoints <= 0)
+                Debug.Log($"This Grid Object was cringe and died");
         }
     }
 }
