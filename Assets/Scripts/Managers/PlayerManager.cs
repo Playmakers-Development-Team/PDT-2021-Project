@@ -54,7 +54,7 @@ namespace Managers
         {
             //if((Object)selectedUnit != unit) ManagerLocator.Get<CommandManager>().QueueCommand(new Commands.UnitSelectedCommand(unit)); //Update UI
             SelectedUnit = unit;
-            Debug.Log(unit + " selected!");
+            //Debug.Log(unit + " selected!");
         }
     }
 }
