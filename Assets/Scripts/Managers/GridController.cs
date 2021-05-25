@@ -23,7 +23,28 @@ namespace Managers
             DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0)) ClickUnit();
+        }
+        #region Unit Selection
+        private void ClickUnit(){
+                            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+                Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+                Vector2Int gridPos = gridManager.ConvertWorldSpaceToGridSpace(mousePos2D);
+                PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+                foreach (Units.PlayerUnit unit in playerManager.PlayerUnits)
+                {
+                    if(gridManager.ConvertWorldSpaceToGridSpace(unit.transform.position) == gridPos)
+                    {
+                        playerManager.SelectUnit(unit);
+                        return;
+                    }
+                }
+                playerManager.SelectUnit(null);
+        }
+        #endregion
+        
         #region Unit Testing
         
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
@@ -59,26 +80,6 @@ namespace Managers
                 TileBase tile = gridManager.GetTileDataByCoordinate(
                     new Vector2Int(randomCoordinates.x, randomCoordinates.y)).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
-            }
-        }
-
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.Mouse0)) 
-            {
-                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
-                Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
-                Vector2Int gridPos = gridManager.ConvertWorldSpaceToGridSpace(mousePos2D);
-                PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-                foreach (Units.PlayerUnit unit in playerManager.PlayerUnits)
-                {
-                    if(gridManager.ConvertWorldSpaceToGridSpace(unit.transform.position) == gridPos)
-                    {
-                        playerManager.SelectUnit(unit);
-                        return;
-                    }
-                }
-                playerManager.SelectUnit(null);
             }
         }
         #endregion
