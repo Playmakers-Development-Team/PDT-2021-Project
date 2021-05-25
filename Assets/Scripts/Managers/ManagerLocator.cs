@@ -25,6 +25,7 @@ namespace Managers
             // REGISTER SERVICES HERE
             Register(new CommandManager());
             Register(new PlayerManager());
+            Register(new EnemyManager());
             Register(new TurnManager());
             Register(new GridManager());
             Register(new AudioManager());

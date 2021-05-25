@@ -24,6 +24,8 @@ namespace Units
         
         protected override void Start()
         {
+            base.Start();
+            
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;

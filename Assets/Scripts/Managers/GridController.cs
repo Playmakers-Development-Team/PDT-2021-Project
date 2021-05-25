@@ -54,9 +54,7 @@ namespace Managers
         {
             for (int i = 0; i < testCases; i++)
             {
-                Vector2Int randomCoordinates = new Vector2Int(
-                    Random.Range(bounds.xMin, bounds.xMax), 
-                    Random.Range(bounds.yMin, bounds.yMax));
+                Vector2Int randomCoordinates = gridManager.GetRandomCoordinates();
                 
                 TileBase tile = gridManager.GetTileDataByCoordinate(
                     new Vector2Int(randomCoordinates.x, randomCoordinates.y)).Tile;
