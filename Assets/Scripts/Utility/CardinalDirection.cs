@@ -37,9 +37,11 @@ namespace Utility
                     return Vector2Int.down;
                 case CardinalDirection.West:
                     return Vector2Int.left;
-                default:
+                case CardinalDirection.North:
                     return Vector2Int.up;
             }
+
+            throw new Exception($"{nameof(CardinalDirection)} {direction} is not handled");
         }
 
         public static Vector2 ToVector2(this CardinalDirection direction)
@@ -52,9 +54,11 @@ namespace Utility
                     return Vector2.down;
                 case CardinalDirection.West:
                     return Vector2.left;
-                default:
+                case CardinalDirection.North:
                     return Vector2.up;
             }
+
+            throw new Exception($"{nameof(CardinalDirection)} {direction} is not handled");
         }
 
         public static CardinalDirectionMask ToMask(this CardinalDirection direction)
@@ -67,12 +71,14 @@ namespace Utility
                     return CardinalDirectionMask.South;
                 case CardinalDirection.West:
                     return CardinalDirectionMask.West;
-                default:
+                case CardinalDirection.North:
                     return CardinalDirectionMask.North;
             }
+
+            throw new Exception($"{nameof(CardinalDirection)} {direction} is not handled");
         }
 
-        public static OrdinalDirection ToDirection(this CardinalDirection direction)
+        public static OrdinalDirection ToOrdinalDirection(this CardinalDirection direction)
         {
             switch (direction)
             {
@@ -82,9 +88,11 @@ namespace Utility
                     return OrdinalDirection.South;
                 case CardinalDirection.West:
                     return OrdinalDirection.West;
-                default:
+                case CardinalDirection.North:
                     return OrdinalDirection.North;
             }
+
+            throw new Exception($"{nameof(CardinalDirection)} {direction} is not handled");
         }
 
         public static bool IsVertical(this CardinalDirection direction) =>
@@ -193,6 +201,53 @@ namespace Utility
             }
 
             return CardinalDirection.South;
+        }
+
+        public static Vector2Int RotateVector2Int(Vector2Int point,
+                                                       CardinalDirection fromDirection,
+                                                       CardinalDirection toDirection)
+        {
+            float angle = Vector2.SignedAngle(fromDirection.ToVector2(), toDirection.ToVector2());
+
+            if (angle >= 45 && angle < 135)
+            {
+                return new Vector2Int(-point.y, point.x);
+            }
+
+            if (angle < -45 && angle >= -135)
+            {
+                return new Vector2Int(point.y, -point.x);
+            }
+
+            if (angle >= -45 && angle < 45)
+            {
+                return point;
+            }
+
+            return new Vector2Int(-point.x, -point.y);
+        }
+
+        public static Vector2 RotateVector2(Vector2 point, CardinalDirection fromDirection,
+                                                 CardinalDirection toDirection)
+        {
+            float angle = Vector2.SignedAngle(fromDirection.ToVector2(), toDirection.ToVector2());
+
+            if (angle >= 45 && angle < 135)
+            {
+                return new Vector2(-point.y, point.x);
+            }
+
+            if (angle < -45 && angle >= -135)
+            {
+                return new Vector2(point.y, -point.x);
+            }
+
+            if (angle >= -45 && angle < 45)
+            {
+                return point;
+            }
+
+            return new Vector2(-point.x, -point.y);
         }
 
         public static CardinalDirectionMask GetMaskFrom(params CardinalDirection[] directions) =>
