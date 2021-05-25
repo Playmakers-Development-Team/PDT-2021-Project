@@ -72,7 +72,7 @@ namespace Utility
             }
         }
 
-        public static OrdinalDirection ToDirection(this CardinalDirection direction)
+        public static OrdinalDirection ToOrdinalDirection(this CardinalDirection direction)
         {
             switch (direction)
             {
