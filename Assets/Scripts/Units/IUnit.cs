@@ -12,14 +12,24 @@ namespace Units
         
         Type GetDataType();
         
-        void Damage(int amount);
+        void TakeDamage(int amount);
 
-        void Defend(int amount);
+        void AddDefence(int amount);
+        
+        void AddAttack(int amount);
 
         void Knockback(Vector2Int translation);
 
-        int GetStacks(TenetType tenetType);
+        void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 
-        void Expend(TenetType tenetType, int amount);
+        bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue);
+
+        void ClearAllTenetStatusEffects();
+
+        public int GetTenetStatusEffectCount(TenetType tenetType);
+
+        bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
+
+        bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
     }
 }

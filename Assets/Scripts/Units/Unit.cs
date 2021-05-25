@@ -31,14 +31,11 @@ namespace Units
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
         }
-        
-        public void Damage(int amount) => data.Damage(amount);
-        public void Defend(int amount) => data.Defend(amount);
-        
+
+        public void AddDefence(int amount) => data.AddDefence(amount);
+        public void AddAttack(int amount) => data.AddAttack(amount);
+
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
-        
-        public int GetStacks(TenetType tenet) => data.GetStacks(tenet);
-        public void Expend(TenetType tenet, int amount) => data.Expend(tenet, amount);
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
@@ -96,6 +93,13 @@ namespace Units
             bool isFound = TryGetTenetStatusEffectNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
             tenetStatusEffect = isFound ? foundNode.Value : default;
             return isFound;
+        }
+
+        public int GetTenetStatusEffectCount(TenetType tenetType)
+        {
+            return HasTenetStatusEffect(tenetType)
+                ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
+                : 0;
         }
 
         public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)

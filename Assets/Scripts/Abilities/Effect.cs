@@ -23,7 +23,7 @@ namespace Abilities
 
             for (int i = 0; i < totalCosts.Length; i++)
             {
-                if (user.GetStacks((TenetType) i) < totalCosts[i])
+                if (user.GetTenetStatusEffectCount((TenetType) i) < totalCosts[i])
                     return false;
             }
 
