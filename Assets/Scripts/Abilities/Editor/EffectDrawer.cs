@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using StatusEffects;
+using UnityEditor;
 using UnityEngine;
 
 namespace Abilities.Editor
@@ -69,7 +70,7 @@ namespace Abilities.Editor
                         }
 
                         // Tenet
-                        string tenet = ((Tenet) costProperty.FindPropertyRelative("tenet").enumValueIndex).ToString();
+                        string tenet = ((TenetType) costProperty.FindPropertyRelative("tenet").enumValueIndex).ToString();
                         nameProperty.stringValue += tenet;
                         costName += tenet;
 

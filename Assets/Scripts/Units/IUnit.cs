@@ -1,6 +1,7 @@
 using System;
 using GridObjects;
 using Abilities;
+using StatusEffects;
 using UnityEngine;
 
 namespace Units
@@ -17,8 +18,8 @@ namespace Units
 
         void Knockback(Vector2Int translation);
 
-        int GetStacks(Tenet tenet);
+        int GetStacks(TenetType tenetType);
 
-        void Expend(Tenet tenet, int amount);
+        void Expend(TenetType tenetType, int amount);
     }
 }

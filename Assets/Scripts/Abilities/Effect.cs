@@ -1,4 +1,5 @@
 ﻿using System;
+using StatusEffects;
 using Units;
 using UnityEngine;
 
@@ -15,14 +16,14 @@ namespace Abilities
         
         public bool CanUse(IUnit user)
         {
-            int[] totalCosts = new int[Enum.GetValues(typeof(Tenet)).Length];
+            int[] totalCosts = new int[Enum.GetValues(typeof(TenetType)).Length];
 
             foreach (Cost cost in costs)
-                totalCosts[(int) cost.Tenet] += cost.CalculateCost(user);
+                totalCosts[(int) cost.TenetType] += cost.CalculateCost(user);
 
             for (int i = 0; i < totalCosts.Length; i++)
             {
-                if (user.GetStacks((Tenet) i) < totalCosts[i])
+                if (user.GetStacks((TenetType) i) < totalCosts[i])
                     return false;
             }
 

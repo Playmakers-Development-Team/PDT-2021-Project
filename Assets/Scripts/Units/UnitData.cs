@@ -1,6 +1,7 @@
 ﻿using System;
 using Abilities;
 using GridObjects;
+using StatusEffects;
 
 namespace Units
 {
@@ -17,8 +18,8 @@ namespace Units
 
         public void Defend(int amount) => throw new NotImplementedException();
 
-        public void Expend(Tenet tenet, int amount) => throw new NotImplementedException();
+        public void Expend(TenetType tenet, int amount) => throw new NotImplementedException();
 
-        public int GetStacks(Tenet tenet) => throw new NotImplementedException();
+        public int GetStacks(TenetType tenet) => throw new NotImplementedException();
     }
 }

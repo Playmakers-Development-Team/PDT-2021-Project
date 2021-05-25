@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Abilities;
+using GridObjects;
+using StatusEffects;
 using UnityEngine;
 
 namespace Units
@@ -32,8 +37,8 @@ namespace Units
         
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
         
-        public int GetStacks(Tenet tenet) => data.GetStacks(tenet);
-        public void Expend(Tenet tenet, int amount) => data.Expend(tenet, amount);
+        public int GetStacks(TenetType tenet) => data.GetStacks(tenet);
+        public void Expend(TenetType tenet, int amount) => data.Expend(tenet, amount);
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
