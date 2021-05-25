@@ -8,11 +8,11 @@ namespace GridObjects
     {
         public Stat TakeDamageModifier { get; protected set; }
         public Stat TakeKnockbackModifier { get; protected set; }
-        
+
+        public Vector2Int Coordinate =>
+            gridManager.ConvertWorldSpaceToGridSpace(transform.position);
+
         private GridManager gridManager;
-        
-        // TODO Initialise position
-        private Vector2Int position;
 
         public void TakeDamage(int amount)
         {
@@ -35,7 +35,7 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            gridManager.AddGridObject(position, this);
+            gridManager.AddGridObject(Coordinate, this);
         }
     }
 }
