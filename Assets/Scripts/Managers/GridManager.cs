@@ -30,8 +30,6 @@ namespace Managers
                     }
                 }
             }
-            
-            Debug.Log("InitialiseTileDatas");
         }
         
         #region GETTERS
@@ -53,25 +51,38 @@ namespace Managers
 
             if (tileData is null)
                 return new List<GridObject>();
-
+            
             return tileData.GridObjects;
+        }
+
+        public Vector2Int GetRandomCoordinates()
+        {
+            BoundsInt bounds = levelTilemap.cellBounds;
+            
+            return new Vector2Int(
+                Random.Range(bounds.xMin, bounds.xMax), 
+                Random.Range(bounds.yMin, bounds.yMax));
         }
         
         #endregion
+
+        #region CONVERSIONS
         
         public Vector2Int ConvertWorldSpaceToGridSpace(Vector2 worldSpace)
         {
-            Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
-                      (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
+            // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
+            //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
             return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace);
         }
         
         public Vector2 ConvertGridSpaceToWorldSpace(Vector2Int gridSpace)
         {
-            Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
-                      levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
+            // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
+            //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
             return levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace);
         }
+        
+        #endregion
         
         #region GRID OBJECT FUNCTIONS
 
