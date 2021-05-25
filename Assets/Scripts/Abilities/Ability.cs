@@ -11,12 +11,14 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject
     {
+        [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         [SerializeField] private int knockback;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
 
+        public string Description => description;
 
         public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
