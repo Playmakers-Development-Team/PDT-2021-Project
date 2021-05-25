@@ -10,34 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Standup
+  m_Name: A Common Strive
   m_EditorClassIdentifier: 
-  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   knockback: 0
   targetEffects:
-  - name: Default, 1 Damage
-    damageValue: 1
-    defenceValue: 0
-    attackValue: 0
+  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
+    damageValue: 0
+    defenceValue: 1
+    attackValue: 1
     providingTenet:
       tenetType: 0
-      stackCount: 0
+      stackCount: 1
     costs: []
-  - name: 3 Damage with Pride
-    damageValue: 3
+  - name: 2 Attack spend Passion
+    damageValue: 0
     defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: With Pride
-      costType: 0
-      tenetType: 0
-  - name: 2 Damage spend Passion
-    damageValue: 2
-    defenceValue: 0
-    attackValue: 0
+    attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -45,4 +34,15 @@ MonoBehaviour:
     - name: Spend Passion
       costType: 2
       tenetType: 2
+  - name: 2 Defence spend Humility
+    damageValue: 0
+    defenceValue: 2
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: Spend Humility
+      costType: 2
+      tenetType: 1
   userEffects: []
