@@ -11,17 +11,17 @@ namespace GridObjects
         private int Speed { get; set; }
         public Stat TakeDamageModifier { get; protected set; }
         public Stat TakeKnockbackModifier { get; protected set; }
-        
-        // TODO Initialise position
-        private Vector2Int position;
-        
+
+        public Vector2Int Coordinate =>
+            gridManager.ConvertWorldSpaceToGridSpace(transform.position);
+
         private GridManager gridManager;
 
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            gridManager.AddGridObject(position, this);
+            gridManager.AddGridObject(Coordinate, this);
         }
 
         public void TakeDamage(int amount)
@@ -31,7 +31,6 @@ namespace GridObjects
             CheckDeath();
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
-
         }
 
         public void TakeKnockback(int amount)
@@ -44,7 +43,7 @@ namespace GridObjects
         {
             return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
         }
-
+        
         public void CheckDeath()
         {
             if (HealthPoints <= 0)

@@ -4,22 +4,25 @@ using Commands.Shapes;
 using GridObjects;
 using Managers;
 using Units;
+using UnityEngine;
 
 namespace Commands
 {
     public class AbilityCommand : Command
     {
-        private Shape shape;
+        private IShape shape;
         private int damage;
         private int knockback;
+        private Vector2 targetVector;
 
         private GridManager gridManager;
 
-        public AbilityCommand(IUnit unit, Shape shape, int damage, int knockback) : base(unit)
+        public AbilityCommand(IUnit unit, Vector2 targetVector, IShape shape, int damage, int knockback) : base(unit)
         {
             this.shape = shape;
             this.damage = damage;
             this.knockback = knockback;
+            this.targetVector = targetVector;
 
             gridManager = ManagerLocator.Get<GridManager>();
         }
@@ -46,9 +49,10 @@ namespace Commands
 
         private void ForEachTarget(Action<GridObject> action)
         {
-            foreach (var cell in shape.Cells)
+            foreach (IUnit targetUnit in shape.GetTargets(unit.Coordinate, targetVector))
             {
-                List<GridObject> gridObjects = gridManager.GetGridObjectsByCoordinate(cell);
+                Vector2Int coordinate = targetUnit.Coordinate;
+                List<GridObject> gridObjects = gridManager.GetGridObjectsByCoordinate(coordinate);
 
                 foreach (var gridObject in gridObjects)
                 {

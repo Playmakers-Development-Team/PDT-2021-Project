@@ -10,6 +10,8 @@ namespace Units
     {
         public Stat DealDamageModifier { get; }
         
+        public Vector2Int Coordinate { get; }
+        
         Type GetDataType();
         
         void TakeDamage(int amount);
