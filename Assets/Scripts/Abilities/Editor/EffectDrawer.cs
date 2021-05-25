@@ -1,4 +1,5 @@
-﻿using StatusEffects;
+﻿using System.Collections.Generic;
+using StatusEffects;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,35 +15,54 @@ namespace Abilities.Editor
             if (EditorGUI.EndChangeCheck())
             {
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
+                SerializedProperty attackProperty = property.FindPropertyRelative("attackValue");
                 SerializedProperty defenceProperty = property.FindPropertyRelative("defenceValue");
+                SerializedProperty provideProperty = property.FindPropertyRelative("providingTenet");
+                SerializedProperty provideTenetTypeProperty = provideProperty.FindPropertyRelative("tenetType");
+                SerializedProperty provideCountProperty = provideProperty.FindPropertyRelative("stackCount");
                 
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
                 SerializedProperty costsProperty = property.FindPropertyRelative("costs");
 
+                List<string> valueNameList = new List<string>();
+                nameProperty.stringValue = string.Empty;
+                
+                bool hasValues = damageProperty.intValue != 0 
+                                    || defenceProperty.intValue != 0
+                                    || attackProperty.intValue != 0 
+                                    || provideCountProperty.intValue != 0;
+                
                 if (costsProperty.arraySize == 0)
                 {
-                    nameProperty.stringValue = "Default";
-                    // Damage and defence
-                    if (damageProperty.intValue > 0 && defenceProperty.intValue > 0)
-                        nameProperty.stringValue += $", {damageProperty.intValue} Damage and {defenceProperty.intValue} Defense ";
-                    else if (damageProperty.intValue > 0)
-                        nameProperty.stringValue += $", {damageProperty.intValue} Damage ";
-                    else if (defenceProperty.intValue > 0)
-                        nameProperty.stringValue += $", {defenceProperty.intValue} Defence ";
-                    else
-                        nameProperty.stringValue += ", nothing";
+                    nameProperty.stringValue += "Default, ";
                 }
-                else
+
+                // Damage and defence
+                if (hasValues)
                 {
-                    // Damage and defence
-                    if (damageProperty.intValue > 0 && defenceProperty.intValue > 0)
-                        nameProperty.stringValue = $"{damageProperty.intValue} Damage and {defenceProperty.intValue} Defense ";
-                    else if (damageProperty.intValue > 0)
-                        nameProperty.stringValue = $"{damageProperty.intValue} Damage ";
-                    else if (defenceProperty.intValue > 0)
-                        nameProperty.stringValue = $"{defenceProperty.intValue} Defence ";
-                    else
-                        nameProperty.stringValue = "Nothing ";
+                    if (damageProperty.intValue != 0)
+                        valueNameList.Add($"{damageProperty.intValue} Damage");
+                    
+                    if (attackProperty.intValue != 0)
+                        valueNameList.Add($"{attackProperty.intValue} Attack");
+                    
+                    if (defenceProperty.intValue != 0)
+                        valueNameList.Add($"{defenceProperty.intValue} Defence");
+                    
+                    if (provideCountProperty.intValue != 0)
+                        valueNameList.Add($"Provide {provideCountProperty.intValue} {(TenetType)provideTenetTypeProperty.enumValueIndex}");
+                }
+                
+                if (!hasValues)
+                {
+                    valueNameList.Add("Nothing");
+                }
+
+                nameProperty.stringValue += string.Join(" and ", valueNameList);
+                
+                if (costsProperty.arraySize != 0)
+                {
+                    nameProperty.stringValue += " ";
                     
                     for (int i = 0; i < costsProperty.arraySize; i++)
                     {
@@ -70,7 +90,7 @@ namespace Abilities.Editor
                         }
 
                         // Tenet
-                        string tenet = ((TenetType) costProperty.FindPropertyRelative("tenet").enumValueIndex).ToString();
+                        string tenet = ((TenetType) costProperty.FindPropertyRelative("tenetType").enumValueIndex).ToString();
                         nameProperty.stringValue += tenet;
                         costName += tenet;
 
