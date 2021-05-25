@@ -8,7 +8,7 @@ using Utility;
 
 namespace Commands.Shapes
 {
-    [CreateAssetMenu(fileName = "BasicShapeData", menuName = "ScriptableObjects/ShapeData", order = 0)]
+    [CreateAssetMenu(fileName = "BasicShapeData", menuName = "ScriptableObjects/BasicShapeData", order = 0)]
     public class BasicShapeData : ScriptableObject, IShape
     {
         [Serializable]
