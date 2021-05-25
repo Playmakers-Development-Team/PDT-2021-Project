@@ -30,6 +30,8 @@ namespace Managers
                     }
                 }
             }
+            
+            Debug.Log("InitialiseTileDatas");
         }
         
         #region GETTERS
@@ -64,6 +66,13 @@ namespace Managers
             return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace);
         }
         
+        public Vector2 ConvertGridSpaceToWorldSpace(Vector2Int gridSpace)
+        {
+            Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
+                      levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
+            return levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace);
+        }
+        
         #region GRID OBJECT FUNCTIONS
 
         public bool AddGridObject(Vector2Int gridPosition, GridObject gridObject)
@@ -76,7 +85,7 @@ namespace Managers
                 tileData.AddGridObjects(gridObject);
                 return true;
             }
-
+            
             Debug.LogWarning("Failed to add grid object at " + gridPosition.x + ", " + gridPosition.y +
                              " due to null tileData");
             

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 
 namespace Units
 {
@@ -6,10 +7,9 @@ namespace Units
     {
         public static IUnit Spawn(GameObject prefab, Vector2Int coordinate)
         {
-            // TODO: Uncomment once required functionality in GridManager has been implemented!
-            // Vector2 position = GridManager.GridToWorld(coordinate);
-            Vector2 position = coordinate;
-            
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            Vector2 position = gridManager.ConvertGridSpaceToWorldSpace(coordinate);
+
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             IUnit IUnit = instance.GetComponent<IUnit>();
             

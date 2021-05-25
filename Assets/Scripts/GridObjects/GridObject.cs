@@ -25,15 +25,12 @@ namespace GridObjects
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
         }
-        
-        public Vector2Int GetGridPosition(Vector2 worldPosition)
-        {
-            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
-        }
-        
+
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
+
+            position = gridManager.ConvertWorldSpaceToGridSpace(transform.position);
 
             gridManager.AddGridObject(position, this);
         }
