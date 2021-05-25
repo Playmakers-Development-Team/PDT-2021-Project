@@ -1,7 +1,6 @@
-using Managers;
 using UnityEngine;
 
-namespace Units
+namespace Managers
 {
     public class EnemyController : MonoBehaviour
     {
