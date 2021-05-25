@@ -8,7 +8,8 @@ using Utility;
 
 namespace Commands.Shapes
 {
-    [CreateAssetMenu(fileName = "BasicShapeData", menuName = "ScriptableObjects/ShapeData", order = 0)]
+    [CreateAssetMenu(fileName = "BasicShapeData", menuName = "ScriptableObjects/ShapeData", 
+        order = 0)]
     public class BasicShapeData : ScriptableObject, IShape
     {
         [Serializable]
@@ -16,13 +17,17 @@ namespace Commands.Shapes
         {
             public OrdinalDirectionMask direction;
             public List<Vector2Int> coordinates;
+            [Tooltip("This only works for cardinal directions")]
+            public bool autoRotateFromNorth;
         }
 
         [SerializeField] private List<ShapePart> shapeParts;
-        [SerializeField] private bool shouldFollowMouse;
+        [Tooltip("This only works for shapes with no specific direction")]
+        [SerializeField, HideInInspector] private bool shouldFollowMouse;
 
-        private bool IsDiagonalShape => shapeParts.Any(p => p.direction.HasDiagonal());
-        private bool HasNoDirection => 
+        public bool IsDiagonalShape => shapeParts.Any(p => p.direction.HasDiagonal());
+
+        public bool HasNoDirection =>
             shapeParts.All(p => p.direction == OrdinalDirectionMask.None);
 
         public IEnumerable<Vector2Int> GetHighlightedCells(Vector2 targetVector) =>
@@ -46,14 +51,20 @@ namespace Commands.Shapes
 
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2 targetVector)
         {
+            bool isDiagonalShape = IsDiagonalShape;
+
             // We want to convert to cardinal direction first because we don't want to get the ordinal
             // directions e.g NorthEast. Only return the cardinal directions based on the vector.
-            OrdinalDirection direction = IsDiagonalShape
+            OrdinalDirection direction = isDiagonalShape
                 ? OrdinalDirectionUtility.From(Vector2.zero, targetVector)
                 : CardinalDirectionUtility.From(Vector2.zero, targetVector).ToOrdinalDirection();
 
-            return shapeParts.Where(p => p.direction.Contains(direction))
-                .SelectMany(p => p.coordinates);
+            return shapeParts.Where(p => p.direction.Contains(direction)).SelectMany(p =>
+                p.autoRotateFromNorth && isDiagonalShape
+                    ? p.coordinates.Select(c =>
+                        CardinalDirectionUtility.RotateVector2Int(c, CardinalDirection.North,
+                            direction.ToCardinalDirection()))
+                    : p.coordinates);
         }
     }
 }
