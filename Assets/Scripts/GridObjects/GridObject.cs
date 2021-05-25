@@ -21,6 +21,8 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
+            position = gridManager.ConvertWorldSpaceToGridSpace(transform.position);
+
             gridManager.AddGridObject(position, this);
         }
 
@@ -40,15 +42,6 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
-        protected virtual void Start()
-        {
-            gridManager = ManagerLocator.Get<GridManager>();
-
-            position = gridManager.ConvertWorldSpaceToGridSpace(transform.position);
-
-            gridManager.AddGridObject(position, this);
-		}
-        
         public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
             return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
