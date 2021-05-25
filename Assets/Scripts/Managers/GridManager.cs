@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using GridObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
 namespace Managers
@@ -50,7 +50,10 @@ namespace Managers
             TileData tileData = GetTileDataByCoordinate(coordinate);
 
             if (tileData is null)
-                return new List<GridObject>();
+            {
+                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
+                return null;
+            }
             
             return tileData.GridObjects;
         }
@@ -64,57 +67,87 @@ namespace Managers
                 Random.Range(bounds.yMin, bounds.yMax));
         }
         
+        public Vector2Int GetRandomUnoccupiedCoordinates()
+        {
+            Vector2Int coordinate = GetRandomCoordinates();
+            
+            while (GetGridObjectsByCoordinate(coordinate).Count > 0)
+            {
+                coordinate = GetRandomCoordinates();
+            }
+            
+            return coordinate;
+        }
+        
         #endregion
 
         #region CONVERSIONS
+
+        [Obsolete("Use ConvertPositionToCoordinate instead from now on")]
+        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2 worldSpace) =>
+            ConvertPositionToCoordinate(worldSpace);
+
+        [Obsolete("Use ConvertCoordinateToPosition instead from now on")]
+        public Vector2 ConvertGridSpaceToWorldSpace(Vector2Int gridSpace) =>
+            ConvertCoordinateToPosition(gridSpace);
         
-        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2 worldSpace)
+        public Vector2Int ConvertPositionToCoordinate(Vector2 position)
         {
             // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
             //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace);
+            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(position);
         }
         
-        public Vector2 ConvertGridSpaceToWorldSpace(Vector2Int gridSpace)
+        public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate)
         {
             // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
             //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace);
+            return levelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate);
         }
         
         #endregion
         
         #region GRID OBJECT FUNCTIONS
 
-        public bool AddGridObject(Vector2Int gridPosition, GridObject gridObject)
+        public bool AddGridObject(Vector2Int coordinate, GridObject gridObject)
         {
-            TileData tileData = GetTileDataByCoordinate(gridPosition);
-
-            if (!(tileData is null))
+            TileData tileData = GetTileDataByCoordinate(coordinate);
+            
+            if (tileData != null)
             {
-                Debug.Log("GridObject added to tile " + gridPosition.x + ", " + gridPosition.y);
+                if (tileData.GridObjects.Count > 0)
+                {
+                    // Can change this later if we want to allow multiple grid objects on a tile
+                    Debug.LogWarning("Failed to add " + gridObject +
+                                     " at " + coordinate.x + ", " + coordinate.y +
+                                     " due to tile being occupied by " + tileData.GridObjects[0]);
+                    return false;
+                }
+
+                Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
                 tileData.AddGridObjects(gridObject);
                 return true;
             }
             
-            Debug.LogWarning("Failed to add grid object at " + gridPosition.x + ", " + gridPosition.y +
+            Debug.LogWarning("Failed to add " + gridObject + 
+                             " at " + coordinate.x + ", " + coordinate.y +
                              " due to null tileData");
             
             return false;
         }
         
-        public bool RemoveGridObject(Vector2Int gridPosition, GridObject gridObject)
+        public bool RemoveGridObject(Vector2Int coordinate, GridObject gridObject)
         {
-            TileData tileData = GetTileDataByCoordinate(gridPosition);
+            TileData tileData = GetTileDataByCoordinate(coordinate);
 
             if (tileData.GridObjects.Contains(gridObject))
             {
-                Debug.Log("GridObject removed from tile " + gridPosition.x + ", " + gridPosition.y);
+                Debug.Log("GridObject removed from tile " + coordinate.x + ", " + coordinate.y);
                 tileData.RemoveGridObjects(gridObject);
                 return true;
             }
             
-            Debug.LogWarning("Failed to remove gridObject at " + gridPosition.x + ", " + gridPosition.y + 
+            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
                       ". Tile does not contain gridObject");
 
             return false;

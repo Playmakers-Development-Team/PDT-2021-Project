@@ -20,7 +20,7 @@ namespace Managers
             bounds = gridManager.levelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.levelTilemap.transform.position;
             
-            DrawGridOutline();
+            //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
 
