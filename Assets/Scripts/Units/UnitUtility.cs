@@ -8,7 +8,7 @@ namespace Units
         public static IUnit Spawn(GameObject prefab, Vector2Int coordinate)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-            Vector2 position = gridManager.ConvertGridSpaceToWorldSpace(coordinate);
+            Vector2 position = gridManager.ConvertCoordinateToPosition(coordinate);
 
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             IUnit IUnit = instance.GetComponent<IUnit>();
