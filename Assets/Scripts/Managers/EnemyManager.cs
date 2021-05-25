@@ -40,7 +40,7 @@ namespace Managers
             enemyUnits.Clear();
         }
 
-        public void Clean()
+        public void ClearUnits()
         {
             for (int i = enemyUnits.Count; i >= 0; i--)
             {
