@@ -7,36 +7,35 @@ namespace Utility
 {
     public enum QuadDirection
     {
-        Up, Right, Down, Left
+        North,
+        East,
+        South,
+        West
     }
 
     public static class QuadDirectionExtensions
     {
-        public static QuadDirection Opposite(this QuadDirection direction)
-        {
-            return (QuadDirection) (((int) direction + 2) % 4);
-        }
+        public static QuadDirection Opposite(this QuadDirection direction) =>
+            (QuadDirection) (((int) direction + 2) % 4);
 
-        public static QuadDirection RotateClockwise(this QuadDirection direction)
-        {
-            return (QuadDirection) (((int) direction + 1) % 4);
-        }
-        
+        public static QuadDirection RotateClockwise(this QuadDirection direction) =>
+            (QuadDirection) (((int) direction + 1) % 4);
+
         public static QuadDirection RotateAntiClockwise(this QuadDirection direction)
         {
             int directionIndex = (int) direction - 1;
             return (QuadDirection) (directionIndex < 0 ? 3 : directionIndex % 4);
         }
-        
+
         public static Vector2Int ToVector2Int(this QuadDirection direction)
         {
             switch (direction)
             {
-                case QuadDirection.Right:
+                case QuadDirection.East:
                     return Vector2Int.right;
-                case QuadDirection.Down:
+                case QuadDirection.South:
                     return Vector2Int.down;
-                case QuadDirection.Left:
+                case QuadDirection.West:
                     return Vector2Int.left;
                 default:
                     return Vector2Int.up;
@@ -47,11 +46,11 @@ namespace Utility
         {
             switch (direction)
             {
-                case QuadDirection.Right:
+                case QuadDirection.East:
                     return Vector2.right;
-                case QuadDirection.Down:
+                case QuadDirection.South:
                     return Vector2.down;
-                case QuadDirection.Left:
+                case QuadDirection.West:
                     return Vector2.left;
                 default:
                     return Vector2.up;
@@ -62,88 +61,113 @@ namespace Utility
         {
             switch (direction)
             {
-                case QuadDirection.Right:
-                    return QuadDirectionMask.Right;
-                case QuadDirection.Down:
-                    return QuadDirectionMask.Down;
-                case QuadDirection.Left:
-                    return QuadDirectionMask.Left;
+                case QuadDirection.East:
+                    return QuadDirectionMask.East;
+                case QuadDirection.South:
+                    return QuadDirectionMask.South;
+                case QuadDirection.West:
+                    return QuadDirectionMask.West;
                 default:
-                    return QuadDirectionMask.Up;
+                    return QuadDirectionMask.North;
             }
         }
+
+        public static Direction ToDirection(this QuadDirection direction)
+        {
+            switch (direction)
+            {
+                case QuadDirection.East:
+                    return Direction.East;
+                case QuadDirection.South:
+                    return Direction.South;
+                case QuadDirection.West:
+                    return Direction.West;
+                default:
+                    return Direction.North;
+            }
+        }
+
+        public static bool IsVertical(this QuadDirection direction) =>
+            direction == QuadDirection.North || direction == QuadDirection.South;
+
+        public static bool IsHorizontal(this QuadDirection direction) =>
+            direction == QuadDirection.East || direction == QuadDirection.West;
     }
 
     [Flags]
     public enum QuadDirectionMask
     {
         None = 0,
-        Up = 1,
-        Right = 2,
-        Down = 4,
-        Left = 8,
+        North = 1,
+        East = 2,
+        South = 4,
+        West = 8,
     }
 
     public static class QuadDirectionMaskExtensions
     {
-        public static bool Contains(this QuadDirectionMask mask, QuadDirection direction)
-        {
-            return (mask & direction.ToMask()) != 0;
-        }
-        
+        public static bool Contains(this QuadDirectionMask mask, QuadDirection direction) =>
+            (mask & direction.ToMask()) != 0;
+
         public static IEnumerable<QuadDirectionMask> Split(this QuadDirectionMask mask)
         {
             List<QuadDirectionMask> enumerable = new List<QuadDirectionMask>(4);
-            
-            if ((mask & QuadDirectionMask.Up) != 0)
+
+            if ((mask & QuadDirectionMask.North) != 0)
             {
-                enumerable.Add(QuadDirectionMask.Up);
+                enumerable.Add(QuadDirectionMask.North);
             }
-            
-            if ((mask & QuadDirectionMask.Right) != 0)
+
+            if ((mask & QuadDirectionMask.East) != 0)
             {
-                enumerable.Add(QuadDirectionMask.Right);
+                enumerable.Add(QuadDirectionMask.East);
             }
-            
-            if ((mask & QuadDirectionMask.Left) != 0)
+
+            if ((mask & QuadDirectionMask.West) != 0)
             {
-                enumerable.Add(QuadDirectionMask.Left);
+                enumerable.Add(QuadDirectionMask.West);
             }
-            
-            if ((mask & QuadDirectionMask.Down) != 0)
+
+            if ((mask & QuadDirectionMask.South) != 0)
             {
-                enumerable.Add(QuadDirectionMask.Down);
+                enumerable.Add(QuadDirectionMask.South);
             }
 
             return enumerable;
         }
-        
+
         public static IEnumerable<QuadDirection> GetDirections(this QuadDirectionMask mask)
         {
             List<QuadDirection> enumerable = new List<QuadDirection>(4);
-            
-            if ((mask & QuadDirectionMask.Up) != 0)
+
+            if ((mask & QuadDirectionMask.North) != 0)
             {
-                enumerable.Add(QuadDirection.Up);
+                enumerable.Add(QuadDirection.North);
             }
-            
-            if ((mask & QuadDirectionMask.Right) != 0)
+
+            if ((mask & QuadDirectionMask.East) != 0)
             {
-                enumerable.Add(QuadDirection.Right);
+                enumerable.Add(QuadDirection.East);
             }
-            
-            if ((mask & QuadDirectionMask.Left) != 0)
+
+            if ((mask & QuadDirectionMask.West) != 0)
             {
-                enumerable.Add(QuadDirection.Left);
+                enumerable.Add(QuadDirection.West);
             }
-            
-            if ((mask & QuadDirectionMask.Down) != 0)
+
+            if ((mask & QuadDirectionMask.South) != 0)
             {
-                enumerable.Add(QuadDirection.Down);
+                enumerable.Add(QuadDirection.South);
             }
 
             return enumerable;
         }
+
+        public static bool HasVertical(this QuadDirectionMask mask) =>
+            (mask & QuadDirectionMask.North) != 0 || (mask & QuadDirectionMask.South) != 0;
+
+        public static bool HasHorizontal(this QuadDirectionMask mask) =>
+            (mask & QuadDirectionMask.East) != 0 || (mask & QuadDirectionMask.West) != 0;
     }
 
     public static class QuadDirectionUtil
@@ -155,21 +179,24 @@ namespace Utility
 
             if (angle >= 45 && angle < 135)
             {
-                return QuadDirection.Left;
-            }
-            
-            if (angle < -45 && angle >= -135)
-            {
-                return QuadDirection.Right;
-            } 
-            
-            if (angle >= -45 && angle < 45)
-            {
-                return QuadDirection.Up;
+                return QuadDirection.West;
             }
 
-            return QuadDirection.Down;
+            if (angle < -45 && angle >= -135)
+            {
+                return QuadDirection.East;
+            }
+
+            if (angle >= -45 && angle < 45)
+            {
+                return QuadDirection.North;
+            }
+
+            return QuadDirection.South;
         }
+
+        public static QuadDirectionMask GetMaskFrom(params QuadDirection[] directions) =>
+            GetMaskFrom(directions.AsEnumerable());
 
         public static QuadDirectionMask GetMaskFrom(IEnumerable<QuadDirection> directions)
         {
