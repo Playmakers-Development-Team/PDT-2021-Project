@@ -21,6 +21,8 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
+            position = gridManager.ConvertPositionToCoordinate(transform.position);
+
             gridManager.AddGridObject(position, this);
         }
 
@@ -31,7 +33,6 @@ namespace GridObjects
             CheckDeath();
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
-
         }
 
         public void TakeKnockback(int amount)
@@ -39,10 +40,10 @@ namespace GridObjects
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
         }
-        
+
         public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
-            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
+            return gridManager.ConvertPositionToCoordinate(worldPosition);
         }
 
         public void CheckDeath()
