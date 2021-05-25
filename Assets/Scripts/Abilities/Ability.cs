@@ -22,16 +22,18 @@ namespace Abilities
 
         private void Use(IUnit user, IUnit target, Effect[] effects)
         {
-            int damage = CalculateAmount(user, effects, true);
-            int defence = CalculateAmount(user, effects, false);
+            int damage = CalculateAmount(user, effects, EffectValueType.Damage);
+            int defence = CalculateAmount(user, effects, EffectValueType.Defence);
+            int attack = CalculateAmount(user, effects, EffectValueType.Attack);
 
-            target.Damage(damage);
-            target.Defend(defence);
+            target.TakeDamage(damage);
+            target.AddAttack(attack);
+            target.AddDefence(defence);
             
             // TODO: Knockback??
         }
 
-        private int CalculateAmount(IUnit user, Effect[] effects, bool isDamage)
+        private int CalculateAmount(IUnit user, Effect[] effects, EffectValueType valueType)
         {
             int bonus = 0;
             
@@ -40,7 +42,7 @@ namespace Abilities
                 if (!effect.CanUse(user))
                     continue;
 
-                bonus += effect.CalculateModifier(user, isDamage);
+                bonus += effect.CalculateModifier(user, valueType);
                 effect.Expend(user);
             }
 

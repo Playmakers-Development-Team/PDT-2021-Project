@@ -11,6 +11,7 @@ namespace Abilities
         [SerializeField, HideInInspector] private string name;
         [SerializeField] private int damageValue;
         [SerializeField] private int defenceValue;
+        [SerializeField] private int attackValue;
         [SerializeField] private Cost[] costs;
         
         
@@ -39,14 +40,20 @@ namespace Abilities
                 cost.Expend(user);
         }
 
-        public int CalculateModifier(IUnit user, bool isDamage)
+        public int CalculateModifier(IUnit user, EffectValueType valueType)
         {
-            int bonus = costs.Length == 0
-                ? isDamage ? damageValue : defenceValue
-                : 0;
+            int value = valueType switch
+            {
+                EffectValueType.Damage => damageValue,
+                EffectValueType.Defence => defenceValue,
+                EffectValueType.Attack => attackValue,
+                _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
+            };
+            
+            int bonus = costs.Length == 0 ? value : 0;
             
             foreach (Cost cost in costs)
-                bonus += cost.CalculateValue(user, isDamage ? damageValue : defenceValue);
+                bonus += cost.CalculateValue(user, value);
             
             return bonus;
         }
