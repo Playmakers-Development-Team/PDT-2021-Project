@@ -10,15 +10,6 @@ namespace Units
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             Vector2 position = gridManager.ConvertGridSpaceToWorldSpace(coordinate);
 
-            Vector2Int spawnCoordinate = coordinate;
-            while (gridManager.GetGridObjectsByCoordinate(spawnCoordinate).Count > 0)
-            {
-                Debug.LogWarning(prefab + " has attempted to spawn in an occupied location." +
-                                 "Now randomizing spawn location");
-                
-                spawnCoordinate = gridManager.GetRandomCoordinates();
-            }
-
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             IUnit IUnit = instance.GetComponent<IUnit>();
             

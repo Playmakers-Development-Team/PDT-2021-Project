@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using GridObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UIElements;
 using TileData = Tiles.TileData;
 
 namespace Managers
@@ -34,23 +32,26 @@ namespace Managers
         
         #region GETTERS
         
-        public TileData GetTileDataByCoordinate(Vector2Int coordinate)
+        public TileData GetTileDataByCoordinate(Vector2Int gridPosition)
         {
-            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
+            if(tileDatas.TryGetValue(gridPosition, out TileData tileData))
             {
                 return tileData;
             }
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            Debug.LogError("ERROR: No tile was found for the provided coordinates " + gridPosition);
             return null;
         }
         
-        public List<GridObject> GetGridObjectsByCoordinate(Vector2Int coordinate)
+        public List<GridObject> GetGridObjectsByCoordinate(Vector2Int gridPosition)
         {
-            TileData tileData = GetTileDataByCoordinate(coordinate);
+            TileData tileData = GetTileDataByCoordinate(gridPosition);
 
             if (tileData is null)
-                return new List<GridObject>();
+            {
+                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + gridPosition);
+                return null;
+            }
             
             return tileData.GridObjects;
         }
@@ -62,6 +63,18 @@ namespace Managers
             return new Vector2Int(
                 Random.Range(bounds.xMin, bounds.xMax), 
                 Random.Range(bounds.yMin, bounds.yMax));
+        }
+        
+        public Vector2Int GetRandomUnoccupiedCoordinates()
+        {
+            Vector2Int coordinates = GetRandomCoordinates();
+            
+            while (GetGridObjectsByCoordinate(coordinates).Count > 0)
+            {
+                coordinates = GetRandomCoordinates();
+            }
+            
+            return coordinates;
         }
         
         #endregion
@@ -89,15 +102,25 @@ namespace Managers
         public bool AddGridObject(Vector2Int gridPosition, GridObject gridObject)
         {
             TileData tileData = GetTileDataByCoordinate(gridPosition);
-
-            if (!(tileData is null))
+            
+            if (tileData != null)
             {
-                Debug.Log("GridObject added to tile " + gridPosition.x + ", " + gridPosition.y);
+                if (tileData.GridObjects.Count > 0)
+                {
+                    // Can change this later if we want to allow multiple grid objects on a tile
+                    Debug.LogWarning("Failed to add " + gridObject +
+                                     " at " + gridPosition.x + ", " + gridPosition.y +
+                                     " due to tile being occupied by " + tileData.GridObjects[0]);
+                    return false;
+                }
+
+                Debug.Log(gridObject + " added to tile " + gridPosition.x + ", " + gridPosition.y);
                 tileData.AddGridObjects(gridObject);
                 return true;
             }
             
-            Debug.LogWarning("Failed to add grid object at " + gridPosition.x + ", " + gridPosition.y +
+            Debug.LogWarning("Failed to add " + gridObject + 
+                             " at " + gridPosition.x + ", " + gridPosition.y +
                              " due to null tileData");
             
             return false;
