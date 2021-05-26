@@ -96,6 +96,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
+    healthPoints: 1
+    movementActionPoints: 1
+    speed: 1
     dealDamageModifier:
       baseMultiplier: 1
       baseAdder: 1

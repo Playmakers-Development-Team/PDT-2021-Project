@@ -48,5 +48,18 @@ namespace Managers
                     playerUnits.RemoveAt(i);
             }
         }
+
+        public void RemovePlayerUnit(IUnit playerUnit)
+        {
+            if (playerUnits.Contains(playerUnit))
+            {
+                playerUnits.Remove(playerUnit);
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + playerUnit +
+                                 " from PlayerManager but it isn't a part of the playerUnits list");
+            }
+        }
     }
 }
