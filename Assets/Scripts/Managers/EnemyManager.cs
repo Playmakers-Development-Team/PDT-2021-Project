@@ -17,7 +17,7 @@ namespace Managers
             
             if (!(unit is EnemyUnit))
                 return null;
-            
+
             enemyUnits.Add(unit);
             
             return unit;

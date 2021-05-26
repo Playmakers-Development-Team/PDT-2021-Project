@@ -4,6 +4,7 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Units
 {
@@ -14,6 +15,8 @@ namespace Units
         public static Type DataType => typeof(T);
         
         public ModifierStat DealDamageModifier { get; protected set; }
+        
+        public int Speed { get; protected set; }
         
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
@@ -26,6 +29,7 @@ namespace Units
         {
             base.Start();
             
+            Speed = data.speed + Random.Range(10,50);
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;

@@ -1,3 +1,4 @@
+using System;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -47,6 +48,7 @@ namespace Managers
                     if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
+                        Debug.Log($"Unit Selected!");
                         return;
                     }
                 }

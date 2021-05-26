@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -21,6 +23,9 @@ namespace Managers
             
             playerUnits.Add(unit);
             SelectUnit((PlayerUnit)unit);
+            
+            
+            
             return unit;
         }
         

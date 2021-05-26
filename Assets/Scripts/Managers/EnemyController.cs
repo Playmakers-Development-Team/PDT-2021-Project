@@ -27,6 +27,8 @@ namespace Managers
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyTemp", typeof(GameObject));
             
             isSpawningEnemies = true;
+            
+            
         }
 
         private void Update()

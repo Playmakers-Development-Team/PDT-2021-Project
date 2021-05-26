@@ -46,6 +46,7 @@ namespace Managers
         
         private PlayerManager playerManager;
         private CommandManager commandManager;
+        private UnitManager unitManager;
         
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
@@ -55,6 +56,7 @@ namespace Managers
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
         }
 
         // TODO Call this function when level is loaded
@@ -150,9 +152,19 @@ namespace Managers
         {
             // TODO Do the same thing for enemies
             List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(playerManager.PlayerUnits);
-            
-            // TODO sort the list based on some parameters
+            turnQueue.AddRange(unitManager.GetAllUnits());
+            for (int i = 0; i < turnQueue.Count - 1; i++)
+            {
+                for (int j = i + 1; j > 0; j--)
+                {
+                    if (turnQueue[j - 1].Speed > turnQueue[j].Speed)
+                    {
+                        IUnit temp = turnQueue[j - 1];
+                        turnQueue[j - 1] = turnQueue[j];
+                        turnQueue[j] = temp;
+                    }
+                }
+            }
 
             return turnQueue;
         }
