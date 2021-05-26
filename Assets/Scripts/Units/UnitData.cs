@@ -7,9 +7,9 @@ namespace Units
         public int healthPoints;
         public int movementActionPoints;
         public int speed;
-        public Stat dealDamageModifier;
-        public Stat takeDamageModifier;
-        public Stat takeKnockbackModifier;
+        public ModifierStat dealDamageModifier;
+        public ModifierStat takeDamageModifier;
+        public ModifierStat takeKnockbackModifier;
 
     }
 }

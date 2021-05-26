@@ -4,6 +4,6 @@ namespace Units
 {
     public interface IUnit
     {
-        public Stat DealDamageModifier { get; }
+        public ModifierStat DealDamageModifier { get; }
     }
 }
