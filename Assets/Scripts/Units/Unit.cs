@@ -29,6 +29,10 @@ namespace Units
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
+
+            DealDamageModifier.Reset();
+            TakeDamageModifier.Reset();
+            TakeKnockbackModifier.Reset();
         }
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
