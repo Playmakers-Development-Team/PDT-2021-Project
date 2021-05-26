@@ -26,6 +26,8 @@ namespace Units
         {
             base.Start();
             
+            data.Initialise();
+            
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
