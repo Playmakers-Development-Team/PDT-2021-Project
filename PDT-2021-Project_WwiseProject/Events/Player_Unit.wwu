@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{0A334EA1-F366-422F-A755-6722C06BA33D}" SchemaVersion="103">
+	<Events>
+		<WorkUnit Name="Player_Unit" ID="{0A334EA1-F366-422F-A755-6722C06BA33D}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Play_Marie_Attack" ID="{D1E441FC-A66F-4A34-8652-F9D3217F8BFE}">
+					<ChildrenList>
+						<Action Name="" ID="{67B0543A-A6FB-4CB8-86C0-F92DF14E4CA6}" ShortID="325351215">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Marie_Attack-01" ID="{280BADB6-9687-4F43-A59A-877A9DB18CDA}" WorkUnitID="{3DD48015-FAC5-4D0A-907B-632DAF420123}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Niles_Attack" ID="{966B5C72-AA99-45E3-8F15-7572D2265F1A}">
+					<ChildrenList>
+						<Action Name="" ID="{49B7637F-9413-4C8A-BEC4-B39FFC7B0DA2}" ShortID="1002634292">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Niles_Attack-01v2" ID="{F8F72D1E-31BD-4CBD-AC94-BAEF1A857609}" WorkUnitID="{C28E0166-1ABF-430A-B74C-D2418AFCE797}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>
