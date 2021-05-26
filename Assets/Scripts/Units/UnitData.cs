@@ -4,8 +4,12 @@ namespace Units
 {
     public abstract class UnitData
     {
-        public Stat dealDamageModifier;
-        public Stat takeDamageModifier;
-        public Stat takeKnockbackModifier;
+        public int healthPoints;
+        public int movementActionPoints;
+        public int speed;
+        public ModifierStat dealDamageModifier;
+        public ModifierStat takeDamageModifier;
+        public ModifierStat takeKnockbackModifier;
+
     }
 }

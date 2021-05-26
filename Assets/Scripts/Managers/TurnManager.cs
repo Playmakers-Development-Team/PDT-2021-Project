@@ -27,29 +27,29 @@ namespace Managers
         /// <summary>
         /// The unit that is currently taking its turn.
         /// </summary>
-        public Unit CurrentUnit => currentTurnQueue[TurnIndex];
+        public IUnit CurrentUnit => currentTurnQueue[TurnIndex];
 
         /// <summary>
         /// The order in which units will take their turns for the current round.
         /// </summary>
-        public IReadOnlyList<Unit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
+        public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
 
         /// <summary>
         /// The order in which units will take their turns for the next round.
         /// </summary>
-        public IReadOnlyList<Unit> NextTurnQueue => nextTurnQueue.AsReadOnly();
+        public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
 
         /// <summary>
         /// The order in which units took their turns for the previous round.
         /// </summary>
-        public IReadOnlyList<Unit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
+        public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         
         private PlayerManager playerManager;
         private CommandManager commandManager;
         
-        private List<Unit> previousTurnQueue = new List<Unit>();
-        private List<Unit> currentTurnQueue = new List<Unit>();
-        private List<Unit> nextTurnQueue = new List<Unit>();
+        private List<IUnit> previousTurnQueue = new List<IUnit>();
+        private List<IUnit> currentTurnQueue = new List<IUnit>();
+        private List<IUnit> nextTurnQueue = new List<IUnit>();
         
         public override void ManagerStart()
         {
@@ -67,9 +67,9 @@ namespace Managers
             RoundCount = 0;
             TotalTurnCount = 0;
             TurnIndex = 0;
-            previousTurnQueue = new List<Unit>();
+            previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
-            currentTurnQueue = new List<Unit>(nextTurnQueue);
+            currentTurnQueue = new List<IUnit>(nextTurnQueue);
             
             // TODO might want to register listeners e.g EndTurnCommand here
         }
@@ -146,10 +146,10 @@ namespace Managers
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
         /// </summary>
-        private List<Unit> CreateTurnQueue()
+        private List<IUnit> CreateTurnQueue()
         {
             // TODO Do the same thing for enemies
-            List<Unit> turnQueue = new List<Unit>();
+            List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(playerManager.PlayerUnits);
             
             // TODO sort the list based on some parameters
@@ -191,11 +191,10 @@ namespace Managers
             currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
         }
 
-        // TODO listen to EndTurnCommand somehow
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
-        private void NextTurn()
+        public void NextTurn()
         {
             TurnIndex++;
             TotalTurnCount++;
