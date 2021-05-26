@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace GridObjects
 {
+    [Serializable]
     public class ValueStat
     {
         [field: SerializeField] public float BaseValue { get; set; }
