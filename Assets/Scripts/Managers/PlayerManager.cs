@@ -16,28 +16,23 @@ namespace Managers
         
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
-            
-            if (!(unit is PlayerUnit))
-                return null;
-            
-            playerUnits.Add(unit);
-            SelectUnit((PlayerUnit)unit);
-            
-            
-            
-            return unit;
+            return Spawn(UnitUtility.Spawn(playerPrefab, gridPosition));
         }
         
         public IUnit Spawn(string playerName, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
+            return Spawn(UnitUtility.Spawn(playerName, gridPosition));
+        }
 
+        public IUnit Spawn(IUnit unit)
+        {
             if (!(unit is PlayerUnit))
                 return null;
             
             playerUnits.Add(unit);
+            
             SelectUnit((PlayerUnit)unit);
+            
             return unit;
         }
         
