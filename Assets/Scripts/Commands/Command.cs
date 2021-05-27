@@ -4,7 +4,7 @@ namespace Commands
 {
     public abstract class Command
     {
-        private IUnit unit;
+        protected IUnit unit;
 
         protected Command(IUnit unit)
         {

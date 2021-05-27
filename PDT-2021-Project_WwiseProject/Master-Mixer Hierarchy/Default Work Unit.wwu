@@ -4,11 +4,118 @@
 		<WorkUnit Name="Default Work Unit" ID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}" PersistMode="Standalone">
 			<ChildrenList>
 				<Bus Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}">
+					<PropertyList>
+						<Property Name="BusVolume" Type="Real64">
+							<RTPCList>
+								<RTPC Name="" ID="{D07F1FCD-B9F1-45EF-9D8E-18A69B7B0291}" ShortID="630347163">
+									<ReferenceList>
+										<Reference Name="ControlInput">
+											<ObjectRef Name="MasterVolume" ID="{2231DC5A-9C78-40FC-B91D-26B8931A8181}" WorkUnitID="{271F8C56-F3E3-48A2-BD3E-4E70AD978B5C}"/>
+										</Reference>
+									</ReferenceList>
+									<Curve Name="" ID="{BC4B81CE-628B-4B75-AD52-7BC109A1ED70}">
+										<PropertyList>
+											<Property Name="Flags" Type="int32" Value="3"/>
+										</PropertyList>
+										<PointList>
+											<Point>
+												<XPos>0</XPos>
+												<YPos>-200</YPos>
+												<Flags>5</Flags>
+											</Point>
+											<Point>
+												<XPos>100</XPos>
+												<YPos>0</YPos>
+												<Flags>37</Flags>
+											</Point>
+										</PointList>
+									</Curve>
+								</RTPC>
+							</RTPCList>
+						</Property>
+					</PropertyList>
 					<ReferenceList>
 						<Reference Name="AudioDevice">
 							<ObjectRef Name="System" ID="{A53DF4AB-B0B0-4EC4-8037-A030E5AB476C}" WorkUnitID="{BBA4502D-12AF-4554-BB46-45550497F83B}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="SFX Bus" ID="{E6F7F0E0-29D3-4FA4-94B8-BFCB461DF33C}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<RTPCList>
+										<RTPC Name="" ID="{8270B121-D4C4-417D-9593-CCC9784234A2}" ShortID="711823212">
+											<ReferenceList>
+												<Reference Name="ControlInput">
+													<ObjectRef Name="SFXVolume" ID="{633EE05C-9294-40BC-847B-E4DF95304327}" WorkUnitID="{271F8C56-F3E3-48A2-BD3E-4E70AD978B5C}"/>
+												</Reference>
+											</ReferenceList>
+											<Curve Name="" ID="{58B16C4E-00AE-4F81-B9DD-356B8F961059}">
+												<PropertyList>
+													<Property Name="Flags" Type="int32" Value="3"/>
+												</PropertyList>
+												<PointList>
+													<Point>
+														<XPos>0</XPos>
+														<YPos>-200</YPos>
+														<Flags>5</Flags>
+													</Point>
+													<Point>
+														<XPos>100</XPos>
+														<YPos>0</YPos>
+														<Flags>37</Flags>
+													</Point>
+												</PointList>
+											</Curve>
+										</RTPC>
+									</RTPCList>
+								</Property>
+							</PropertyList>
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Atmos Bus" ID="{B42F8346-B751-463E-BAB9-0F286D73D8E1}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Music Bus" ID="{5173105C-3DE3-4A9A-B3CF-CF7B2E200A63}">
+							<PropertyList>
+								<Property Name="BusVolume" Type="Real64">
+									<RTPCList>
+										<RTPC Name="" ID="{2677C541-28B2-41DC-A41A-8BE2FA2A67C0}" ShortID="446798648">
+											<ReferenceList>
+												<Reference Name="ControlInput">
+													<ObjectRef Name="MusicVolume" ID="{4D09FC2F-847D-4803-9D67-04F56BDE922E}" WorkUnitID="{271F8C56-F3E3-48A2-BD3E-4E70AD978B5C}"/>
+												</Reference>
+											</ReferenceList>
+											<Curve Name="" ID="{9F6AEFF3-D2EE-41C5-BA77-8DBDED4DF33C}">
+												<PropertyList>
+													<Property Name="Flags" Type="int32" Value="3"/>
+												</PropertyList>
+												<PointList>
+													<Point>
+														<XPos>0</XPos>
+														<YPos>-200</YPos>
+														<Flags>5</Flags>
+													</Point>
+													<Point>
+														<XPos>100</XPos>
+														<YPos>0</YPos>
+														<Flags>37</Flags>
+													</Point>
+												</PointList>
+											</Curve>
+										</RTPC>
+									</RTPCList>
+								</Property>
+							</PropertyList>
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Foley Bus" ID="{6E7162F5-D04F-42D2-9D2E-F5E76B7E26FF}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="DX Bus" ID="{99C9A15F-798F-4B2A-8972-CB3DFF04CB2F}">
+							<ObjectLists/>
+						</Bus>
+					</ChildrenList>
 					<ObjectLists/>
 				</Bus>
 			</ChildrenList>
