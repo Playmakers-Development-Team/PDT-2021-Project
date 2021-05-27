@@ -176,7 +176,7 @@ namespace Managers
             {
                 for (int j = i + 1; j > 0; j--)
                 {
-                    if (turnQueue[j - 1].Speed > turnQueue[j].Speed)
+                    if (turnQueue[j - 1].Speed.Value > turnQueue[j].Speed.Value)
                     {
                         IUnit temp = turnQueue[j - 1];
                         turnQueue[j - 1] = turnQueue[j];

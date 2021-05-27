@@ -6,6 +6,6 @@ namespace Units
     {
         public ModifierStat DealDamageModifier { get; }
         
-        public int Speed { get; }
+        public ValueStat Speed { get; }
     }
 }
