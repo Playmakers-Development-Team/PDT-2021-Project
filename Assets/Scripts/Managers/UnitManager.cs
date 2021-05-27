@@ -21,7 +21,9 @@ namespace Managers
         }
 
 
-
+        /// <summary>
+        /// Get all the current player units in the game
+        /// </summary>
         public List<IUnit> GetAllPlayerUnits()
         { 
             List<IUnit> playerUnits = new List<IUnit>();
@@ -29,6 +31,9 @@ namespace Managers
            return playerUnits;
         }
         
+        /// <summary>
+        /// Get all the current enemy units in the game
+        /// </summary>
         public List<IUnit> GetAllEnemyUnits()
         {
             List<IUnit> enemyUnits = new List<IUnit>();
@@ -36,10 +41,13 @@ namespace Managers
             return enemyUnits;
         }
         
+        /// <summary>
+        /// Get all the units in the game
+        /// </summary>
         public List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-                allUnits.AddRange(GetAllPlayerUnits());
+            allUnits.AddRange(GetAllPlayerUnits());
             allUnits.AddRange(GetAllEnemyUnits());
             return allUnits;
         }
