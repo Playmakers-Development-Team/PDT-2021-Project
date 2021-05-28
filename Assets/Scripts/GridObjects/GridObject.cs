@@ -59,6 +59,8 @@ namespace GridObjects
             gridManager.RemoveGridObject(position, this);
 
             IUnit unit = (IUnit) this;
+            
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(unit);
 
             if (unit is PlayerUnit)
             {
