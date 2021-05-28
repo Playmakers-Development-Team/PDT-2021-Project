@@ -6,6 +6,7 @@ namespace Managers
 {
     public class PlayerManager : Manager
     {
+        public IUnit SelectedUnit { get; private set; }
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
@@ -19,7 +20,7 @@ namespace Managers
                 return null;
             
             playerUnits.Add(unit);
-            
+            SelectUnit((PlayerUnit)unit);
             return unit;
         }
         
@@ -31,7 +32,7 @@ namespace Managers
                 return null;
             
             playerUnits.Add(unit);
-            
+            SelectUnit((PlayerUnit)unit);
             return unit;
         }
         
@@ -40,13 +41,20 @@ namespace Managers
             playerUnits.Clear();
         }
 
-        public void Clean()
+        public void ClearUnits()
         {
             for (int i = playerUnits.Count; i >= 0; i--)
             {
                 if (playerUnits[i] is null)
                     playerUnits.RemoveAt(i);
             }
+        }
+
+        public void SelectUnit(PlayerUnit unit)
+        {
+            //if((Object)selectedUnit != unit) ManagerLocator.Get<CommandManager>().QueueCommand(new Commands.UnitSelectedCommand(unit)); //Update UI
+            SelectedUnit = unit;
+            //Debug.Log(unit + " selected!");
         }
     }
 }
