@@ -55,6 +55,8 @@ namespace Managers
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+
+            commandManager.ListenExecuteCommand<EndTurnCommand>((cmd) => NextTurn());
         }
 
         // TODO Call this function when level is loaded
@@ -119,7 +121,7 @@ namespace Managers
             
             // Set the current turn to be the unit before first, later coming back to the current unit
             TurnIndex = aboveIndex;
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
         }
 
         // TODO Test
@@ -201,7 +203,7 @@ namespace Managers
 
             if (TurnIndex < currentTurnQueue.Count)
             {
-                commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+                commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             }
             else
             {
@@ -219,7 +221,7 @@ namespace Managers
             RoundCount++;
             TurnIndex = 0;
             
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
 
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())

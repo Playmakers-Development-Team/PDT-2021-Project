@@ -14,10 +14,7 @@ namespace Commands
 
         public override void Queue() {}
 
-        public override void Execute()
-        {
-            turnManager.NextTurn();
-        }
+        public override void Execute() {}
 
         public override void Undo() {}
     }
