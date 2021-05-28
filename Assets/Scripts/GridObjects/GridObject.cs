@@ -9,8 +9,8 @@ namespace GridObjects
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
         private int Speed { get; set; }
-        public Stat TakeDamageModifier { get; protected set; }
-        public Stat TakeKnockbackModifier { get; protected set; }
+        public ModifierStat TakeDamageModifier { get; protected set; }
+        public ModifierStat TakeKnockbackModifier { get; protected set; }
         
         // TODO Initialise position
         private Vector2Int position;

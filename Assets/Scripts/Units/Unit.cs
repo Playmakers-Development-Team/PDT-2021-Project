@@ -13,7 +13,7 @@ namespace Units
         
         public static Type DataType => typeof(T);
         
-        public Stat DealDamageModifier { get; protected set; }
+        public ModifierStat DealDamageModifier { get; protected set; }
         
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
@@ -26,9 +26,15 @@ namespace Units
         {
             base.Start();
             
+            data.Initialise();
+            
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
+
+            DealDamageModifier.Reset();
+            TakeDamageModifier.Reset();
+            TakeKnockbackModifier.Reset();
         }
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
