@@ -1,4 +1,4 @@
-using GridObjects;
+using Commands;
 using UnityEngine;
 
 namespace Managers
@@ -13,8 +13,6 @@ namespace Managers
         private GridManager gridManager;
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
-
-        public bool killEnemyButton = false;
         
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -47,14 +45,8 @@ namespace Managers
                 else
                 {
                     isSpawningEnemies = false;
+                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
                 }
-            }
-
-            if (killEnemyButton)
-            {
-                GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
-                enemy.TakeDamage(1);
-                killEnemyButton = false;
             }
         }
     }
