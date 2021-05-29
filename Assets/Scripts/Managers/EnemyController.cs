@@ -100,8 +100,11 @@ namespace Managers
             {
                 foreach (var enemy in enemyManager.EnemyUnits)
                 {
-                    if (enemyManager.IsPlayerAdjacent((GridObject) enemy))
+                    GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
+                    if (firstAdjacentPlayer != null)
                     {
+                        // TODO: Get proper damage formula here
+                        firstAdjacentPlayer.TakeDamage(5);
                         debugDamagePlayerButton = false;
                         return;
                     }

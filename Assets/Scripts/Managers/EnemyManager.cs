@@ -62,7 +62,7 @@ namespace Managers
         
         // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
         // otherwise will return false
-        public bool IsPlayerAdjacent(GridObject gridObject)
+        public GridObject FindAdjacentPlayer(GridObject gridObject)
         {
             Vector2Int gridObjectPosition = gridObject.GetGridPosition();
             
@@ -78,13 +78,11 @@ namespace Managers
             {
                 if (adjacentGridObject.CompareTag("PlayerUnit"))
                 {
-                    // TODO: Get proper damage formula here
-                    adjacentGridObject.TakeDamage(5);
-                    return true;
+                    return adjacentGridObject;
                 }
             }
             
-            return false;
+            return null;
         }
     }
 }
