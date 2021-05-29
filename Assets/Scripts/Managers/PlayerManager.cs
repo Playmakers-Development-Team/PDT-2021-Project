@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -14,25 +16,23 @@ namespace Managers
         
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
-            
-            if (!(unit is PlayerUnit))
-                return null;
-            
-            playerUnits.Add(unit);
-            SelectUnit((PlayerUnit)unit);
-            return unit;
+            return Spawn(UnitUtility.Spawn(playerPrefab, gridPosition));
         }
         
         public IUnit Spawn(string playerName, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(playerName, gridPosition);
+            return Spawn(UnitUtility.Spawn(playerName, gridPosition));
+        }
 
+        public IUnit Spawn(IUnit unit)
+        {
             if (!(unit is PlayerUnit))
                 return null;
             
             playerUnits.Add(unit);
+            
             SelectUnit((PlayerUnit)unit);
+            
             return unit;
         }
         
@@ -52,9 +52,21 @@ namespace Managers
 
         public void SelectUnit(PlayerUnit unit)
         {
-            //if((Object)selectedUnit != unit) ManagerLocator.Get<CommandManager>().QueueCommand(new Commands.UnitSelectedCommand(unit)); //Update UI
-            SelectedUnit = unit;
-            //Debug.Log(unit + " selected!");
+            if ((PlayerUnit) SelectedUnit != unit)
+            {
+                ManagerLocator.Get<CommandManager>().
+                    QueueCommand(new Commands.UnitSelectedCommand(unit));
+                
+                SelectedUnit = unit;
+                
+                // Debug.Log(unit + " selected!");
+            }
+        }
+
+        public void DeselectUnit()
+        {
+            SelectedUnit = null;
+            // Debug.Log("Units deselected.");
         }
     }
 }

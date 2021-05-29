@@ -10,6 +10,16 @@ namespace Managers
     public class TurnManager : Manager
     {
         /// <summary>
+        /// An event that triggers when a round has ended
+        /// </summary>
+        public event Action<TurnManager> onTurnEnd;
+
+        /// <summary>
+        /// An event that triggers when a round has started
+        /// </summary>
+        public event Action<TurnManager> onRoundStart; 
+        
+        /// <summary>
         /// Gives how many turns have passed throughout the entire level.
         /// </summary>
         public int TotalTurnCount { get; private set; }
@@ -30,6 +40,11 @@ namespace Managers
         public IUnit CurrentUnit => currentTurnQueue[TurnIndex];
 
         /// <summary>
+        ///  The unit that took its turn before the current unit.
+        /// </summary>
+        public IUnit PreviousUnit => TurnIndex == 0 ? null : currentTurnQueue[TurnIndex - 1];
+
+        /// <summary>
         /// The order in which units will take their turns for the current round.
         /// </summary>
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
@@ -44,8 +59,9 @@ namespace Managers
         /// </summary>
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         
-        private PlayerManager playerManager;
         private CommandManager commandManager;
+        private PlayerManager playerManager;
+        private UnitManager unitManager;
         
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
@@ -53,8 +69,9 @@ namespace Managers
         
         public override void ManagerStart()
         {
-            playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
         }
 
         // TODO Call this function when level is loaded
@@ -148,11 +165,11 @@ namespace Managers
         /// </summary>
         private List<IUnit> CreateTurnQueue()
         {
-            // TODO Do the same thing for enemies
             List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(playerManager.PlayerUnits);
             
-            // TODO sort the list based on some parameters
+            turnQueue.AddRange(unitManager.GetAllUnits());
+            
+            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
 
             return turnQueue;
         }
@@ -198,15 +215,25 @@ namespace Managers
         {
             TurnIndex++;
             TotalTurnCount++;
-
-            if (TurnIndex < currentTurnQueue.Count)
-            {
-                commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
-            }
-            else
+            
+            if (TurnIndex >= currentTurnQueue.Count)
             {
                 NextRound();
             }
+            
+            // Debug.Log(CurrentUnit.ToString());
+            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            
+            if (CurrentUnit is PlayerUnit)
+            {
+                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+            }
+            else
+            {
+                playerManager.DeselectUnit();
+            }
+            
+            onTurnEnd?.Invoke(this);
         }
         
         /// <summary>
@@ -219,8 +246,6 @@ namespace Managers
             RoundCount++;
             TurnIndex = 0;
             
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
-
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
@@ -235,6 +260,7 @@ namespace Managers
             previousTurnQueue = currentTurnQueue;
             currentTurnQueue = nextTurnQueue;
             nextTurnQueue = CreateTurnQueue();
+            onRoundStart?.Invoke(this);
         }
 
         /// <summary>
