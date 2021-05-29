@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Commands;
 using UI;
 using Units;
 using UnityEngine;
@@ -16,13 +17,30 @@ namespace Managers
 
         private GameObject currentTurnIndicator;
         private TurnManager turnManager;
+        private bool isPlayerUnitsReady;
+        private bool isEnemyUnitsReady;
         
-        // TODO Have a way to not cheat the start method race condition
-        private IEnumerator Start()
+        private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            
+            commandManager.ListenExecuteCommand<EnemyUnitsReadyCommand>(cmd =>
+            {
+                isEnemyUnitsReady = true;
+                SetupTurnQueue();
+            });
+            commandManager.ListenExecuteCommand<PlayerUnitsReadyCommand>(cmd =>
+            {
+                isPlayerUnitsReady = true;
+                SetupTurnQueue();
+            });
+        }
 
-            yield return new WaitForSeconds(0.1f);
+        private void SetupTurnQueue()
+        {
+            if (!isPlayerUnitsReady || !isEnemyUnitsReady)
+                return;
             
             turnManager.SetupTurnQueue();
             

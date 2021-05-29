@@ -1,3 +1,4 @@
+using Commands;
 using UnityEngine;
 
 namespace Managers
@@ -44,6 +45,7 @@ namespace Managers
                 else
                 {
                     isSpawningEnemies = false;
+                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
                 }
             }
         }

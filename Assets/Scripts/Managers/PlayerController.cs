@@ -1,3 +1,4 @@
+using Commands;
 using UnityEngine;
 
 namespace Managers
@@ -16,6 +17,7 @@ namespace Managers
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
             playerManager.Spawn(playerPrefab, Vector2Int.zero);
             playerManager.Spawn(playerPrefab, Vector2Int.up);
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand(null));
         }
     }
 }
