@@ -13,27 +13,23 @@ namespace Managers
         
         public IUnit Spawn(GameObject enemyPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(enemyPrefab, gridPosition);
-            
-            if (!(unit is EnemyUnit))
-                return null;
-            
-            enemyUnits.Add(unit);
-            
-            return unit;
+            return Spawn(UnitUtility.Spawn(enemyPrefab, gridPosition));
         }
         
         public IUnit Spawn(string enemyName, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(enemyName, gridPosition);
+            return Spawn(UnitUtility.Spawn(enemyName, gridPosition));
+        }
 
+        private IUnit Spawn(IUnit unit)
+        {
             if (!(unit is EnemyUnit))
                 return null;
             
             enemyUnits.Add(unit);
             
             return unit;
-        }
+        } 
         
         public void Clear()
         {
