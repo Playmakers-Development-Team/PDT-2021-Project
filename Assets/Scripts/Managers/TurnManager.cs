@@ -89,8 +89,6 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            
-            // TODO might want to register listeners e.g EndTurnCommand here
         }
 
         // TODO Test
