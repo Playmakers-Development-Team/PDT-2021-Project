@@ -30,7 +30,7 @@ namespace Commands
         {
             ForEachTarget(gridObject =>
             {
-                gridObject.TakeDamage((int) unit.DealDamageModifier.Modify(damage));
+                gridObject.TakeDamage((int) Unit.DealDamageModifier.Modify(damage));
                 gridObject.TakeKnockback(knockback);
             });
         }
@@ -39,7 +39,7 @@ namespace Commands
         {
             ForEachTarget(gridObject =>
             {
-                gridObject.TakeDamage((int) unit.DealDamageModifier.Modify(damage) * -1);
+                gridObject.TakeDamage((int) Unit.DealDamageModifier.Modify(damage) * -1);
                 gridObject.TakeKnockback(knockback * -1);
             });
         }
