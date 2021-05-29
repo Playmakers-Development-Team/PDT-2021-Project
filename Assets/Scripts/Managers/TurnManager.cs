@@ -156,12 +156,6 @@ namespace Managers
             if (removingCurrentUnit)
                 NextTurn();
         }
-        
-        public void RemoveUnitFromQueue(IUnit unit)
-        {
-            int targetIndex = currentTurnQueue.IndexOf(unit);
-            RemoveUnitFromQueue(targetIndex);
-        }
 
         // TODO Test
         /// <summary>
