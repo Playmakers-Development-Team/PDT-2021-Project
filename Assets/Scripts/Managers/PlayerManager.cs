@@ -52,9 +52,21 @@ namespace Managers
 
         public void SelectUnit(PlayerUnit unit)
         {
-            //if((Object)selectedUnit != unit) ManagerLocator.Get<CommandManager>().QueueCommand(new Commands.UnitSelectedCommand(unit)); //Update UI
-            SelectedUnit = unit;
-            //Debug.Log(unit + " selected!");
+            if ((PlayerUnit) SelectedUnit != unit)
+            {
+                ManagerLocator.Get<CommandManager>().
+                    QueueCommand(new Commands.UnitSelectedCommand(unit));
+                
+                SelectedUnit = unit;
+                
+                // Debug.Log(unit + " selected!");
+            }
+        }
+
+        public void DeselectUnit()
+        {
+            SelectedUnit = null;
+            // Debug.Log("Units deselected.");
         }
     }
 }

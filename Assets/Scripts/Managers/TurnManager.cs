@@ -60,6 +60,7 @@ namespace Managers
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         
         private CommandManager commandManager;
+        private PlayerManager playerManager;
         private UnitManager unitManager;
         
         private List<IUnit> previousTurnQueue = new List<IUnit>();
@@ -69,6 +70,7 @@ namespace Managers
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
         }
 
@@ -214,14 +216,21 @@ namespace Managers
             TurnIndex++;
             TotalTurnCount++;
             
-            if (TurnIndex < currentTurnQueue.Count)
+            if (TurnIndex >= currentTurnQueue.Count)
             {
-                Debug.Log(CurrentUnit.ToString());
-                commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+                NextRound();
+            }
+            
+            // Debug.Log(CurrentUnit.ToString());
+            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            
+            if (CurrentUnit is PlayerUnit)
+            {
+                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
             }
             else
             {
-                NextRound();
+                playerManager.DeselectUnit();
             }
             
             onTurnEnd?.Invoke(this);
@@ -237,8 +246,6 @@ namespace Managers
             RoundCount++;
             TurnIndex = 0;
             
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
-
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
