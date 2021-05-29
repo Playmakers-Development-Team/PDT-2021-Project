@@ -146,10 +146,15 @@ namespace Managers
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
 
-            if (CurrentTurnIndex >= targetIndex)
-                CurrentTurnIndex--;
-
             bool removingCurrentUnit = targetIndex == CurrentTurnIndex;
+            
+            // If we're removing something, the list becomes smaller and therefore we need to 
+            // decrement the CurrentTurnIndex to point to the same unit.
+            // If the unit removed is the current unit, then we want to decrement it so we can
+            // call NextTurn() later.
+            if (CurrentTurnIndex <= targetIndex)
+                CurrentTurnIndex--;
+            
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
             
