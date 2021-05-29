@@ -28,8 +28,8 @@ namespace Managers
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0)) 
-                ClickUnit();
+            // if(Input.GetKeyDown(KeyCode.Mouse0)) 
+                // ClickUnit();
         }
 
         #region Unit Selection

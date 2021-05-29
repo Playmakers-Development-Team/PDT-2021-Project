@@ -9,49 +9,43 @@ namespace Managers
 {
     public class TurnController : MonoBehaviour
     {
-        
         [SerializeField] private Transform timeline;
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject currentTurnIndicatorPrefab;
-        [SerializeField] private List<GameObject> allUnitCards;
+        [SerializeField] private List<UnitCard> allUnitCards;
 
         private GameObject currentTurnIndicator;
-        private UnitManager unitManager;
         private TurnManager turnManager;
-
-     
         
-        //TODO Have a way to not cheat the start method race condition
+        // TODO Have a way to not cheat the start method race condition
         private IEnumerator Start()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
 
             yield return new WaitForSeconds(0.1f);
+            
             turnManager.SetupTurnQueue();
-            IReadOnlyList<IUnit> allUnits = turnManager.CurrentTurnQueue;
-            foreach (IUnit unit in allUnits)
-            {
-                var unitCard = Instantiate(unitCardPrefab, timeline);
-                unitCard.GetComponent<UnitCard>().SetCardImageAs(unit);
-                unitCard.GetComponent<UnitCard>().SetUnit(unit);
-                unitCard.GetComponent<UnitCard>().SetUnitText(unit.ToString());
-                allUnitCards.Add(unitCard);
-            }
             
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
             
-            foreach (GameObject unitcard in allUnitCards) 
+            foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
-                if (unitcard.GetComponent<UnitCard>().Unit == turnManager.CurrentUnit)
+                var unitCardObject = Instantiate(unitCardPrefab, timeline);
+                var unitCard = unitCardObject.GetComponent<UnitCard>();
+                
+                unitCard.SetUnit(unit);
+                
+                allUnitCards.Add(unitCard);
+
+                if (unit == turnManager.CurrentUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitcard.transform);
+                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                 }
             }
-            
+
             turnManager.onTurnEnd += UpdateTurnUI;
             turnManager.onRoundStart += UpdateForNewRound;
-
         }
 
         private void UpdateTurnUI(TurnManager turnManager)
@@ -59,18 +53,16 @@ namespace Managers
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
             
-            foreach (GameObject unitcard in allUnitCards)
+            foreach (UnitCard unitCard in allUnitCards)
             {
-                if (unitcard.GetComponent<UnitCard>().Unit == turnManager.PreviousUnit)
-                    unitcard.GetComponent<Image>().color = Color.black;
+                if (unitCard.Unit == turnManager.PreviousUnit)
+                    unitCard.GetComponent<Image>().color = Color.black;
 
-                if (unitcard.GetComponent<UnitCard>().Unit == turnManager.CurrentUnit)
+                if (unitCard.Unit == turnManager.CurrentUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitcard.transform);
-                    unitcard.GetComponent<Image>().color = Color.red;
-
+                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+                    unitCard.GetComponent<Image>().color = Color.red;
                 }
-                
             }
         }
 
@@ -79,19 +71,15 @@ namespace Managers
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
             
-            foreach (GameObject unitcard in allUnitCards) 
+            foreach (UnitCard unitCard in allUnitCards) 
             {
-                unitcard.GetComponent<Image>().color = Color.red;
+                unitCard.GetComponent<Image>().color = Color.red;
 
-                if (unitcard.GetComponent<UnitCard>().Unit == turnManager.CurrentUnit)
+                if (unitCard.Unit == turnManager.CurrentUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitcard.transform);
+                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                 }
             }
-            
-            
-
         }
-        
     }
 }

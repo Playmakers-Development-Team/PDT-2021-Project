@@ -5,9 +5,6 @@ namespace Managers
     public class PlayerController : MonoBehaviour
     {
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
-
-      
-        
         private void Start()
         {
             // TODO: Obtain the number of players, their tenets and starting positions
@@ -15,12 +12,10 @@ namespace Managers
             // For now placeholders will be used
             
             GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerTemp", typeof(GameObject));
-            Vector2Int startGridPosition = Vector2Int.zero;
-            Vector2Int secondStartingGridPos = Vector2Int.up;
             
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            playerManager.Spawn(playerPrefab, startGridPosition);
-            playerManager.Spawn(playerPrefab, secondStartingGridPos);
+            playerManager.Spawn(playerPrefab, Vector2Int.zero);
+            playerManager.Spawn(playerPrefab, Vector2Int.up);
         }
     }
 }

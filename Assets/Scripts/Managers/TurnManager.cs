@@ -19,7 +19,6 @@ namespace Managers
         /// </summary>
         public event Action<TurnManager> onRoundStart; 
         
-        
         /// <summary>
         /// Gives how many turns have passed throughout the entire level.
         /// </summary>
@@ -40,7 +39,10 @@ namespace Managers
         /// </summary>
         public IUnit CurrentUnit => currentTurnQueue[TurnIndex];
 
-        public IUnit PreviousUnit => GetPreviousUnit();
+        /// <summary>
+        ///  The unit that took its turn before the current unit.
+        /// </summary>
+        public IUnit PreviousUnit => TurnIndex == 0 ? null : currentTurnQueue[TurnIndex - 1];
 
         /// <summary>
         /// The order in which units will take their turns for the current round.
@@ -56,10 +58,7 @@ namespace Managers
         /// The order in which units took their turns for the previous round.
         /// </summary>
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
-
         
-        
-        //private PlayerManager playerManager;
         private CommandManager commandManager;
         private UnitManager unitManager;
         
@@ -67,13 +66,8 @@ namespace Managers
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
         
-        
-        
-        
-        
         public override void ManagerStart()
         {
-            //playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
         }
@@ -169,21 +163,11 @@ namespace Managers
         /// </summary>
         private List<IUnit> CreateTurnQueue()
         {
-            // TODO Do the same thing for enemies
             List<IUnit> turnQueue = new List<IUnit>();
+            
             turnQueue.AddRange(unitManager.GetAllUnits());
-            for (int i = 0; i < turnQueue.Count - 1; i++)
-            {
-                for (int j = i + 1; j > 0; j--)
-                {
-                    if (turnQueue[j - 1].Speed.Value > turnQueue[j].Speed.Value)
-                    {
-                        IUnit temp = turnQueue[j - 1];
-                        turnQueue[j - 1] = turnQueue[j];
-                        turnQueue[j] = temp;
-                    }
-                }
-            }
+            
+            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
 
             return turnQueue;
         }
@@ -198,22 +182,13 @@ namespace Managers
         }
 
         /// <summary>
-        /// Gets the previous unit
-        /// </summary>
-        /// <returns> returns the previous unit unless the unit was first</returns>
-        private IUnit GetPreviousUnit() 
-        {
-            return TurnIndex == 0 ? null : currentTurnQueue[TurnIndex - 1];
-        }
-
-        /// <summary>
         /// Shift everything towards the <c>targetIndex</c> in the <c>currentTurnQueue</c>.
         /// This means every element in the list will be moved up or down by 1.
         /// </summary>
         /// <param name="startIndex">Shift everything starting from <c>startIndex</c>.
         /// The Unit in startIndex will not be shifted.</param>
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
-        public void ShiftTurnQueue(int startIndex, int endIndex)
+        private void ShiftTurnQueue(int startIndex, int endIndex)
         {
             if (startIndex == endIndex)
                 return;
@@ -238,6 +213,7 @@ namespace Managers
         {
             TurnIndex++;
             TotalTurnCount++;
+            
             if (TurnIndex < currentTurnQueue.Count)
             {
                 Debug.Log(CurrentUnit.ToString());
@@ -249,7 +225,6 @@ namespace Managers
             }
             
             onTurnEnd?.Invoke(this);
-            
         }
         
         /// <summary>
