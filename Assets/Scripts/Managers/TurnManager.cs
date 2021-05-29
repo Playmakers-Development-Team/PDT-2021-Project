@@ -72,6 +72,8 @@ namespace Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
+
+            commandManager.ListenExecuteCommand<EndTurnCommand>((cmd) => NextTurn());
         }
 
         // TODO Call this function when level is loaded
@@ -87,8 +89,6 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            
-            // TODO might want to register listeners e.g EndTurnCommand here
         }
 
         // TODO Test
@@ -136,7 +136,7 @@ namespace Managers
             
             // Set the current turn to be the unit before first, later coming back to the current unit
             TurnIndex = aboveIndex;
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
         }
 
         // TODO Test
@@ -222,7 +222,7 @@ namespace Managers
             }
             
             // Debug.Log(CurrentUnit.ToString());
-            commandManager.QueueCommand(new StartTurnCommand(CurrentUnit));
+            commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             
             if (CurrentUnit is PlayerUnit)
             {
