@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Commands;
 using GridObjects;
 using UnityEngine;
@@ -15,7 +16,9 @@ namespace Managers
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
 
+        // Temporary debug buttons, likely to be removed later
         public bool debugKillEnemyButton = false;
+        public bool debugDamagePlayerButton = false;
         
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -42,8 +45,7 @@ namespace Managers
             {
                 if (currentEnemies < totalEnemies)
                 {
-                    enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-                    currentEnemies++;
+                    SpawnEnemy();
                 }
                 else
                 {
@@ -51,7 +53,35 @@ namespace Managers
                     ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
                 }
             }
-            
+
+            DebugKillEnemyFunction();
+            DebugDamagePlayerButton();
+        }
+
+        private void SpawnEnemy()
+        {
+            //TODO: Remove this later, currently used to test enemy attacks
+            if (currentEnemies == 0)
+            {
+                SpawnAdjacentToPlayer();
+            }
+            else
+            {
+                enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
+            }
+                    
+            currentEnemies++;
+        }
+        
+        private void SpawnAdjacentToPlayer()
+        {
+            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
+            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
+            currentEnemies++;
+        }
+        
+        private void DebugKillEnemyFunction()
+        {
             if (debugKillEnemyButton)
             {
                 if (currentEnemies > 0)
@@ -61,6 +91,24 @@ namespace Managers
                     currentEnemies--;
                 }
                 debugKillEnemyButton = false;
+            }
+        }
+        
+        private void DebugDamagePlayerButton()
+        {
+            if (debugDamagePlayerButton)
+            {
+                foreach (var enemy in enemyManager.EnemyUnits)
+                {
+                    if (enemyManager.IsPlayerAdjacent((GridObject) enemy))
+                    {
+                        debugDamagePlayerButton = false;
+                        return;
+                    }
+                }
+                
+                Debug.Log("No players adjacent to enemies found, no damage dealt");
+                debugDamagePlayerButton = false;
             }
         }
     }

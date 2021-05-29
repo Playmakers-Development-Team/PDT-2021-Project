@@ -41,9 +41,9 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
-        public Vector2Int GetGridPosition(Vector2 worldPosition)
+        public Vector2Int GetGridPosition()
         {
-            return gridManager.ConvertPositionToCoordinate(worldPosition);
+            return position;
         }
 
         public void CheckDeath()
@@ -55,7 +55,7 @@ namespace GridObjects
         private void KillGridObject()
         {
             Debug.Log($"This Grid Object was cringe and died");
-
+            
             gridManager.RemoveGridObject(position, this);
 
             IUnit unit = (IUnit) this;

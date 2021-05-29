@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GridObjects;
 using Units;
 using UnityEngine;
 
@@ -57,6 +58,33 @@ namespace Managers
                 Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
                                  " from EnemyManager but it isn't a part of the enemyUnits list");
             }
+        }
+        
+        // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
+        // otherwise will return false
+        public bool IsPlayerAdjacent(GridObject gridObject)
+        {
+            Vector2Int gridObjectPosition = gridObject.GetGridPosition();
+            
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.left));
+
+            foreach (var adjacentGridObject in adjacentGridObjects)
+            {
+                if (adjacentGridObject.CompareTag("PlayerUnit"))
+                {
+                    // TODO: Get proper damage formula here
+                    adjacentGridObject.TakeDamage(5);
+                    return true;
+                }
+            }
+            
+            return false;
         }
     }
 }
