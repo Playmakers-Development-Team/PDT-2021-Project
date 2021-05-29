@@ -1,16 +1,12 @@
-using GridObjects;
-using Managers;
 using UnityEngine;
 
-namespace Units
+namespace Managers
 {
     public class EnemyController : MonoBehaviour
     {
         private bool isSpawningEnemies = false;
         private int totalEnemies = 3; //Max is 203 at the moment
         private int currentEnemies = 0;
-
-        public bool damageEnemyButton = false; // Currently just used for testing
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
@@ -50,26 +46,6 @@ namespace Units
                     isSpawningEnemies = false;
                 }
             }
-
-            EnemyDamageTest();
         }
-        
-        #region Unit Testing
-
-        private void EnemyDamageTest()
-        {
-            if (damageEnemyButton)
-            {
-                damageEnemyButton = false;
-                if (enemyManager.EnemyUnits.Count > 0)
-                {
-                    GridObject enemyGridObject = (GridObject) enemyManager.EnemyUnits[0];
-                    enemyGridObject.TakeDamage(0);
-                    //enemyManager.ClearUnits();
-                }
-            }
-        }
-        
-        #endregion
     }
 }
