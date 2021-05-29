@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using Managers;
+using TMPro;
 using Units;
 using UnityEngine;
 
@@ -30,6 +33,9 @@ namespace GridObjects
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
             HealthPoints = damageTaken;
+
+            StartCoroutine(SpawnDamageText(damageTaken));
+            
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
             CheckDeath();
@@ -78,6 +84,19 @@ namespace GridObjects
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+        }
+
+        private IEnumerator SpawnDamageText(int damageAmount)
+        {
+            GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas", typeof(GameObject));
+            GameObject damageAmountGameObject = Instantiate(prefab, transform.position, Quaternion.identity);
+
+            damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
+                damageAmount.ToString();
+            
+            yield return new WaitForSeconds(1.0f);
+            
+            Destroy(damageAmountGameObject);
         }
     }
 }
