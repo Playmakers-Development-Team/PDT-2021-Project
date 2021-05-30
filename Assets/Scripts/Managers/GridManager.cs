@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GridObjects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utility;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -11,6 +13,8 @@ namespace Managers
     public class GridManager : Manager
     {
         private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
+
+        private const int GridLineCastDefaultLimit = 10;
 
         public Tilemap levelTilemap { get; set; }
 
@@ -77,6 +81,58 @@ namespace Managers
             }
             
             return coordinate;
+        }
+
+        /// <summary>
+        /// Similar to ray casting but done on the grid space.
+        /// </summary>
+        /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
+        public List<GridObject> GridLineCast(Vector2Int originCoordinate, Vector2 targetVector,
+                                             int limit = GridLineCastDefaultLimit) =>
+            GridLineCast(originCoordinate, OrdinalDirectionUtility.From(Vector2.up, targetVector));
+
+        /// <summary>
+        /// Similar to ray casting but done on the grid space.
+        /// </summary>
+        /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
+        public List<T> GridLineCast<T>(Vector2Int originCoordinate, Vector2 targetVector,
+                                       int limit = GridLineCastDefaultLimit) where T : GridObject =>
+            GridLineCast<T>(originCoordinate, OrdinalDirectionUtility.From(Vector2.up, targetVector), limit);
+
+        /// <summary>
+        /// Similar to ray casting but done on the grid space.
+        /// </summary>
+        /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
+        public List<GridObject> GridLineCast(Vector2Int originCoordinate,
+                                             OrdinalDirection direction,
+                                             int limit = GridLineCastDefaultLimit) =>
+            GridLineCast<GridObject>(originCoordinate, direction, limit);
+
+        /// <summary>
+        /// Similar to ray casting but done on the grid space.
+        /// </summary>
+        /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
+        public List<T> GridLineCast<T>(Vector2Int originCoordinate, OrdinalDirection direction,
+                                       int limit = GridLineCastDefaultLimit) where T : GridObject
+        {
+            Vector2Int increment = direction.ToVector2Int();
+            Vector2Int currentCoordinate = originCoordinate;
+
+            for (int i = 0; i < limit; i++)
+            {
+                currentCoordinate += increment;
+                var gridObjects = GetGridObjectsByCoordinate(currentCoordinate);
+
+                if (gridObjects.Count > 0)
+                {
+                    var foundObjects = gridObjects.OfType<T>().ToList();
+
+                    if (foundObjects.Any())
+                        return foundObjects;
+                }
+            }
+
+            return null;
         }
         
         #endregion

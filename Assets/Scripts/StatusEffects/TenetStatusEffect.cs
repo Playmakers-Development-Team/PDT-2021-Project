@@ -1,10 +1,15 @@
 using System;
+using UnityEngine;
 
 namespace StatusEffects
 {
+    [Serializable]
     public struct TenetStatusEffect
     {
-        public TenetType TenetType { get; }
+        [SerializeField] private TenetType tenetType;
+        [SerializeField] private int stackCount;
+
+        public TenetType TenetType => tenetType;
 
         public int StackCount
         {
@@ -13,12 +18,10 @@ namespace StatusEffects
         }
 
         public bool IsEmpty => StackCount <= 0;
-        
-        private int stackCount;
 
         public TenetStatusEffect(TenetType tenetType, int stackCount)
         {
-            TenetType = tenetType;
+            this.tenetType = tenetType;
             this.stackCount = 0;
             StackCount = stackCount;
         }
