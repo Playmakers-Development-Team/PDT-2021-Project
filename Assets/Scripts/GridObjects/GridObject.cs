@@ -18,6 +18,8 @@ namespace GridObjects
         
         private GridManager gridManager;
 
+        private float damageTextLifetime = 1.0f;
+
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -31,6 +33,9 @@ namespace GridObjects
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
             HealthPoints.Value -= damageTaken;
+
+            SpawnDamageText(damageTaken);
+            
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
             CheckDeath();
@@ -81,7 +86,7 @@ namespace GridObjects
             gameObject.SetActive(false);
         }
 
-        private IEnumerator SpawnDamageText(int damageAmount)
+        private void SpawnDamageText(int damageAmount)
         {
             GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas", typeof(GameObject));
             GameObject damageAmountGameObject = Instantiate(prefab, transform.position, Quaternion.identity);
@@ -89,9 +94,7 @@ namespace GridObjects
             damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
                 damageAmount.ToString();
             
-            yield return new WaitForSeconds(1.0f);
-            
-            Destroy(damageAmountGameObject);
+            Destroy(damageAmountGameObject, damageTextLifetime);
         }
     }
 }
