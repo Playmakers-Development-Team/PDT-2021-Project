@@ -98,9 +98,9 @@ namespace Managers
         #endregion
         
         public void AddObstacles(){
-            for(int counter = 0, counter < 4, counter++)
+            for(int counter = 0; counter < 4; counter++)
             {
-                Vector2Int coord = gridManager.GetRandomUnoccupiedCoordinates();
+                //Vector2Int coord = gridManager.GetRandomUnoccupiedCoordinates();
                 //gridManager.AddGridObject(gridManager.GetRandomUnoccupiedCoordinates(),)
             }
         }
