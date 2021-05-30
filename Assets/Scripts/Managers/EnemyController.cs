@@ -7,19 +7,18 @@ namespace Managers
 {
     public class EnemyController : MonoBehaviour
     {
+        // Temporary debug buttons, likely to be removed later
+        [SerializeField] private bool debugKillEnemyButton = false;
+        [SerializeField] private bool debugDamagePlayerButton = false;
+        
         private bool isSpawningEnemies = false;
         private int totalEnemies = 3; //Max is 203 at the moment
-        private int currentEnemies = 0;
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
 
-        // Temporary debug buttons, likely to be removed later
-        public bool debugKillEnemyButton = false;
-        public bool debugDamagePlayerButton = false;
-        
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
         {
@@ -43,7 +42,7 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (currentEnemies < totalEnemies)
+                if (enemyManager.Count < totalEnemies)
                 {
                     SpawnEnemy();
                 }
@@ -61,7 +60,7 @@ namespace Managers
         private void SpawnEnemy()
         {
             //TODO: Remove this later, currently used to test enemy attacks
-            if (currentEnemies == 0)
+            if (enemyManager.Count == 0)
             {
                 SpawnAdjacentToPlayer();
             }
@@ -69,26 +68,22 @@ namespace Managers
             {
                 enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
             }
-                    
-            currentEnemies++;
         }
         
         private void SpawnAdjacentToPlayer()
         {
             enemyManager.Spawn(enemyPrefab, Vector2Int.left);
             enemyManager.Spawn(enemyPrefab, Vector2Int.right);
-            currentEnemies++;
         }
         
         private void DebugKillEnemyFunction()
         {
             if (debugKillEnemyButton)
             {
-                if (currentEnemies > 0)
+                if (enemyManager.Count > 0)
                 {
                     GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
                     enemy.TakeDamage(1);
-                    currentEnemies--;
                 }
                 debugKillEnemyButton = false;
             }

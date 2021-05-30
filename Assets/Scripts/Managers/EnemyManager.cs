@@ -64,7 +64,7 @@ namespace Managers
         // otherwise will return false
         public GridObject FindAdjacentPlayer(GridObject gridObject)
         {
-            Vector2Int gridObjectPosition = gridObject.GetGridPosition();
+            Vector2Int gridObjectPosition = gridObject.GetCoordinate();
             
             GridManager gridManager = ManagerLocator.Get<GridManager>();
 
