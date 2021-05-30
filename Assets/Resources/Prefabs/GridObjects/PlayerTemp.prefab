@@ -97,17 +97,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     healthPoints:
-      <BaseValue>k__BackingField: 0
+      <BaseValue>k__BackingField: 1
     movementActionPoints:
-      <BaseValue>k__BackingField: 0
+      <BaseValue>k__BackingField: 1
     speed:
-      <BaseValue>k__BackingField: 0
+      <BaseValue>k__BackingField: 1
     dealDamageModifier:
-      <BaseMultiplier>k__BackingField: 0
+      <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
     takeDamageModifier:
-      <BaseMultiplier>k__BackingField: 0
+      <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
     takeKnockbackModifier:
-      <BaseMultiplier>k__BackingField: 0
+      <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
