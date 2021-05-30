@@ -12,8 +12,7 @@ namespace GridObjects
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
-        // TODO Initialise position
-        private Vector2Int position;
+        private Vector2Int coordinate;
         
         private GridManager gridManager;
 
@@ -21,9 +20,9 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            position = gridManager.ConvertPositionToCoordinate(transform.position);
+            coordinate = gridManager.ConvertPositionToCoordinate(transform.position);
 
-            gridManager.AddGridObject(position, this);
+            gridManager.AddGridObject(coordinate, this);
         }
 
         public void TakeDamage(int amount)
@@ -41,9 +40,9 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
-        public Vector2Int GetGridPosition()
+        public Vector2Int GetCoordinate()
         {
-            return position;
+            return coordinate;
         }
 
         private void CheckDeath()
@@ -56,7 +55,7 @@ namespace GridObjects
         {
             Debug.Log($"This Grid Object was cringe and died");
             
-            gridManager.RemoveGridObject(position, this);
+            gridManager.RemoveGridObject(coordinate, this);
 
             IUnit unit = (IUnit) this;
             
