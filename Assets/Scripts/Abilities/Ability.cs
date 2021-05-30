@@ -52,12 +52,51 @@ namespace Abilities
             {
                 if (target is IUnit targetUnit)
                 {
-                    targetUnit.AddAttack(attack);
-                    targetUnit.AddDefence(defence);
+                    targetUnit.TakeAttack(attack);
+                    targetUnit.TakeDefence(defence);
                 }
                 
                 target.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
                 target.TakeKnockback(knockback);
+            }
+        }
+        
+        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
+        {
+            Undo(user, shape.GetTargets(originCoordinate, targetVector));
+        }
+
+        public void Undo(IUnit user, params GridObject[] targets) => Undo(user, targets.AsEnumerable());
+        
+        public void Undo(IUnit user, IEnumerable<GridObject> targets)
+        {
+            Undo(user, targetEffects, targets);
+            
+            // It can be assumed that IUnit can be converted to GridObject.
+            if (user is GridObject userGridObject)
+                Undo(user, userEffects, userGridObject);
+        }
+
+        private void Undo(IUnit user, Effect[] effects, params GridObject[] targets) =>
+            Undo(user, effects, targets.AsEnumerable());
+
+        private void Undo(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        {
+            int damage = CalculateAmount(user, effects, EffectValueType.Damage);
+            int defence = CalculateAmount(user, effects, EffectValueType.Defence);
+            int attack = CalculateAmount(user, effects, EffectValueType.Attack);
+            ProcessTenets(user, effects);
+
+            foreach (GridObject target in targets)
+            {
+                if (target is IUnit targetUnit)
+                {
+                    targetUnit.TakeAttack(-attack);
+                    targetUnit.TakeDefence(-defence);
+                }
+                
+                target.TakeDamage(-Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
+                target.TakeKnockback(-knockback);
             }
         }
 
