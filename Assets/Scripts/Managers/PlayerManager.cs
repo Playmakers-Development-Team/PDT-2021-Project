@@ -30,7 +30,7 @@ namespace Managers
                 return null;
             
             playerUnits.Add(unit);
-            
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             SelectUnit((PlayerUnit)unit);
             
             return unit;

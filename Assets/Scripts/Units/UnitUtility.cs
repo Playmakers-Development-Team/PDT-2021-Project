@@ -13,7 +13,6 @@ namespace Units
             GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
             IUnit IUnit = instance.GetComponent<IUnit>();
             
-            // GridManager.Occupy(unit);
             
             return IUnit;
         }

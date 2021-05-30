@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Commands;
+using Cysharp.Threading.Tasks;
 using UI;
 using Units;
 using UnityEngine;
@@ -64,26 +65,86 @@ namespace Managers
 
             turnManager.onTurnEnd += UpdateTurnUI;
             turnManager.onRoundStart += UpdateForNewRound;
+            turnManager.onUnitDeath += RefreshTimelineUI;
+            turnManager.newUnitAdded += AddUnitToTimeline;
         }
-
+        
+        /// <summary>
+        /// Updates the timeline UI when a new turn has started, leaving the previous unit  greyed out
+        /// </summary>
+        /// <param name="turnManager"></param>
         private void UpdateTurnUI(TurnManager turnManager)
         {
+            
+            
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
-            
+
             foreach (UnitCard unitCard in allUnitCards)
             {
-                if (unitCard.Unit == turnManager.PreviousUnit)
-                    unitCard.GetComponent<Image>().color = Color.black;
+                if (turnManager.PreviousUnit != null){
+                    if (unitCard.Unit == turnManager.PreviousUnit)
+                        unitCard.GetComponent<Image>().color = Color.black;
+                 }
 
-                if (unitCard.Unit == turnManager.CurrentUnit)
+            if (unitCard.Unit == turnManager.CurrentUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                     unitCard.GetComponent<Image>().color = Color.red;
                 }
             }
         }
+        
+        /// <summary>
+        /// Completely refreshes the timeline UI
+        /// </summary>
+        /// <param name="turnManager"></param>
+        private void RefreshTimelineUI(TurnManager turnManager)
+        {
+            allUnitCards.ForEach(unitCard =>
+            {
+                if (unitCard.Unit != turnManager.RecentUnitDeath)
+                    return;
+                
+                Destroy(unitCard.gameObject);
+            });
+            
+            if (currentTurnIndicator != null)
+                Destroy(currentTurnIndicator);
+            
+            
+            foreach (UnitCard unitCard in allUnitCards)
+            {
+                if (unitCard.Unit == turnManager.CurrentUnit)
+                {
+                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+                }
+            }
+        }
 
+        private void AddUnitToTimeline(TurnManager turnManager)
+        {
+            var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
+            allUnits.ForEach(unit =>
+            {
+                for (var i = 0; i < allUnitCards.Count; i++)
+                {
+                    if (allUnitCards[i].Unit == allUnits)
+                        break;
+                    
+                    var unitCardObject = Instantiate(unitCardPrefab, timeline);
+                    var unitCard = unitCardObject.GetComponent<UnitCard>();
+                    unitCard.SetUnit(unit);
+                    allUnitCards.Add(unitCard);
+                }
+            });
+        }
+        
+        
+        /// <summary>
+        /// Updates the timeline UI for the new round
+        /// </summary>
+        /// <param name="turnManager"></param>
         private void UpdateForNewRound(TurnManager turnManager)
         {
             if (currentTurnIndicator != null)
