@@ -29,7 +29,7 @@ namespace UI
         {
             GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerTemp", typeof(GameObject));
 
-            playerManager.Spawn(playerPrefab, gridManager.GetRandomUnoccupiedCoordinates());
+            playerManager.Spawn(playerPrefab, Vector2Int.left);
         }
         
         public void SpawnEnemy()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using Commands;
 using Cysharp.Threading.Tasks;
 using UI;
@@ -15,6 +16,8 @@ namespace Managers
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject currentTurnIndicatorPrefab;
         [SerializeField] private List<UnitCard> allUnitCards;
+
+        [SerializeField] private List<IUnit> lastKnownUnits;
 
         private GameObject currentTurnIndicator;
         private TurnManager turnManager;
@@ -52,9 +55,9 @@ namespace Managers
             {
                 var unitCardObject = Instantiate(unitCardPrefab, timeline);
                 var unitCard = unitCardObject.GetComponent<UnitCard>();
-                
+
                 unitCard.SetUnit(unit);
-                
+
                 allUnitCards.Add(unitCard);
 
                 if (unit == turnManager.CurrentUnit)
@@ -125,19 +128,60 @@ namespace Managers
         private void AddUnitToTimeline(TurnManager turnManager)
         {
             var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
-            allUnits.ForEach(unit =>
+
+            var flag = false;
+
+            foreach (var unit in allUnits)
             {
-                for (var i = 0; i < allUnitCards.Count; i++)
+                foreach (var unit2 in allUnitCards)
                 {
-                    if (allUnitCards[i].Unit == allUnits)
+                    if (unit == unit2.Unit)
+                    {
+                        flag = true;
                         break;
-                    
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+
+                Debug.Log("current flag " + flag);
+                if (!flag)
+                {
                     var unitCardObject = Instantiate(unitCardPrefab, timeline);
                     var unitCard = unitCardObject.GetComponent<UnitCard>();
                     unitCard.SetUnit(unit);
+
                     allUnitCards.Add(unitCard);
+                    break;
                 }
-            });
+            }
+            
+            // for (var i = 0; i < allUnits.Count; i++)
+            // {
+            //     foreach (var t in allUnitCards)
+            //     {
+            //         if (allUnits[i] != t.Unit)
+            //             continue;
+            //         
+            //         flag = true;
+            //         break;
+            //     }
+            //
+            //     if (!flag)
+            //         continue;
+            //     
+            //     var unitCardObject = Instantiate(unitCardPrefab, timeline);
+            //     var unitCard = unitCardObject.GetComponent<UnitCard>();
+            //     unitCard.SetUnit(allUnits[i]);
+            //     allUnitCards.Add(unitCard);
+            //     break;
+            //
+            // }
+           
+            
+                
         }
         
         
@@ -147,18 +191,46 @@ namespace Managers
         /// <param name="turnManager"></param>
         private void UpdateForNewRound(TurnManager turnManager)
         {
+            
+            allUnitCards.ForEach(unitCard =>
+            {
+                
+                
+                Destroy(unitCard.gameObject);
+            });
+            
+            allUnitCards.Clear();
+            
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
             
-            foreach (UnitCard unitCard in allUnitCards) 
+            foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
-                unitCard.GetComponent<Image>().color = Color.red;
+                var unitCardObject = Instantiate(unitCardPrefab, timeline);
+                var unitCard = unitCardObject.GetComponent<UnitCard>();
 
-                if (unitCard.Unit == turnManager.CurrentUnit)
+                unitCard.SetUnit(unit);
+
+                allUnitCards.Add(unitCard);
+
+                if (unit == turnManager.CurrentUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                 }
             }
+
+            // if (currentTurnIndicator != null)
+            //     Destroy(currentTurnIndicator);
+            //
+            // foreach (UnitCard unitCard in allUnitCards) 
+            // {
+            //     unitCard.GetComponent<Image>().color = Color.red;
+            //
+            //     if (unitCard.Unit == turnManager.CurrentUnit)
+            //     {
+            //         currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+            //     }
+            // }
         }
     }
 }

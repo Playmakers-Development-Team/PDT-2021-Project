@@ -85,6 +85,8 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+
+        private bool unitSpawned = false;
         
         public override void ManagerStart()
         {
@@ -190,6 +192,14 @@ namespace Managers
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
             
+            if (CurrentUnit is PlayerUnit)
+            {
+                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+            }
+            else
+            {
+                playerManager.DeselectUnit();
+            }
         
             
             onUnitDeath?.Invoke(this);
@@ -278,7 +288,9 @@ namespace Managers
         public void AddNewUnitToTimeline(IUnit unit)
         {
             currentTurnQueue.Add(unit);
+            nextTurnQueue.Add(unit);
             newUnitAdded?.Invoke(this);
+            unitSpawned = true;
         }
 
         /// <summary>
@@ -362,7 +374,10 @@ namespace Managers
             }
 
             previousTurnQueue = currentTurnQueue;
-            currentTurnQueue = nextTurnQueue;
+
+            // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
+            currentTurnQueue = unitSpawned ? CreateTurnQueue() : nextTurnQueue;
+            unitSpawned = false;
             nextTurnQueue = CreateTurnQueue();
             onRoundStart?.Invoke(this);
         }
