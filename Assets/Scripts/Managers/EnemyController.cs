@@ -6,6 +6,8 @@ namespace Managers
 {
     public class EnemyController : MonoBehaviour
     {
+        [SerializeField] private bool debugKillEnemyButton = false;
+        
         private bool isSpawningEnemies = false;
         private int totalEnemies = 3; //Max is 203 at the moment
         private int currentEnemies = 0;
@@ -14,8 +16,6 @@ namespace Managers
         private GridManager gridManager;
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
-
-        public bool debugKillEnemyButton = false;
         
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
