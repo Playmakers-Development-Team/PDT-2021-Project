@@ -29,7 +29,7 @@ namespace GridObjects
         public void TakeDamage(int amount)
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            HealthPoints = damageTaken;
+            HealthPoints -= damageTaken;
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
             CheckDeath();
@@ -46,7 +46,7 @@ namespace GridObjects
             return position;
         }
 
-        public void CheckDeath()
+        private void CheckDeath()
         {
             if (HealthPoints <= 0)
                 KillGridObject();
