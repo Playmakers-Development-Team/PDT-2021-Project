@@ -6,8 +6,8 @@ namespace GridObjects
 {
     public class GridObject : MonoBehaviour
     {
-        private int HealthPoints { get; set; }
-        private int MovementActionPoints { get; set; }
+        protected ValueStat HealthPoints { get; set; }
+        protected ValueStat MovementActionPoints { get; set; }
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
@@ -27,9 +27,9 @@ namespace GridObjects
         public void TakeDamage(int amount)
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            HealthPoints -= damageTaken;
+            HealthPoints.Value -= damageTaken;
             Debug.Log(damageTaken + " damage taken.");
-            Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
+            Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
             CheckDeath();
         }
 
@@ -46,7 +46,7 @@ namespace GridObjects
 
         private void CheckDeath()
         {
-            if (HealthPoints <= 0)
+            if (HealthPoints.Value <= 0)
                 KillGridObject();
         }
 
