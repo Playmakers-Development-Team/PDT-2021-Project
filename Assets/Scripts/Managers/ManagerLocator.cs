@@ -8,7 +8,7 @@ namespace Managers
     
     public class ManagerLocator
     {
-        private readonly Dictionary<string, IManager> managers = new Dictionary<string, IManager>();
+        private readonly Dictionary<string, Manager> managers = new Dictionary<string, Manager>();
         
         public static ManagerLocator Current { get; private set; }
         
@@ -25,12 +25,20 @@ namespace Managers
             // REGISTER SERVICES HERE
             Register(new CommandManager());
             Register(new PlayerManager());
+            Register(new EnemyManager());
             Register(new TurnManager());
             Register(new GridManager());
+            Register(new AudioManager());
+            Register(new UnitManager());
             Register(new BackgroundManager());
+
+            foreach (var manager in Current.managers.Values)
+            {
+                manager.ManagerStart();
+            }
         }
         
-        public static T Get<T>() where T : IManager
+        public static T Get<T>() where T : Manager
         {
             string key = typeof(T).Name;
             
@@ -40,7 +48,7 @@ namespace Managers
             return (T) Current.managers[key];
         }
 
-        public static void Register<T>(T service) where T : IManager
+        public static void Register<T>(T service) where T : Manager
         {
             string key = typeof(T).Name;
             
@@ -55,7 +63,7 @@ namespace Managers
             Current.managers.Add(key, service);
         }
 
-        public static void Unregister<T>() where T : IManager
+        public static void Unregister<T>() where T : Manager
         {
             string key = typeof(T).Name;
             

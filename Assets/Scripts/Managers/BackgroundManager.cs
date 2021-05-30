@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class BackgroundManager : IManager
+    public class BackgroundManager : Manager
     {
         private static readonly List<RenderTexture> textures = new List<RenderTexture>();
         private static readonly List<ComputeBuffer> buffers = new List<ComputeBuffer>();

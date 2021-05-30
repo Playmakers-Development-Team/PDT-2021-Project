@@ -2,9 +2,9 @@ using Units;
 
 namespace Commands
 {
-    public class EndTurn : Command
+    public class EndTurnCommand : Command
     {
-        public EndTurn(IUnit unit) : base(unit) {}
+        public EndTurnCommand(IUnit unit) : base(unit) {}
 
         public override void Queue() {}
 
