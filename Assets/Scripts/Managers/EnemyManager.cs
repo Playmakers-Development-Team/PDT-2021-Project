@@ -44,5 +44,19 @@ namespace Managers
                     enemyUnits.RemoveAt(i);
             }
         }
+        
+        public void RemoveEnemyUnit(IUnit enemyUnit)
+        {
+            if (enemyUnits.Contains(enemyUnit))
+            {
+                enemyUnits.Remove(enemyUnit);
+                Debug.Log(enemyUnits.Count + " enemies remain");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
+                                 " from EnemyManager but it isn't a part of the enemyUnits list");
+            }
+        }
     }
 }

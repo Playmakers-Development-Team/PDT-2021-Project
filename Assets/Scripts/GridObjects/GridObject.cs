@@ -1,5 +1,5 @@
-using System;
 using Managers;
+using Units;
 using UnityEngine;
 
 namespace GridObjects
@@ -29,10 +29,10 @@ namespace GridObjects
         public void TakeDamage(int amount)
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            HealthPoints = damageTaken;
-            CheckDeath();
+            HealthPoints -= damageTaken;
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
+            CheckDeath();
         }
 
         public void TakeKnockback(int amount)
@@ -46,10 +46,38 @@ namespace GridObjects
             return gridManager.ConvertPositionToCoordinate(worldPosition);
         }
 
-        public void CheckDeath()
+        private void CheckDeath()
         {
             if (HealthPoints <= 0)
-                Debug.Log($"This Grid Object was cringe and died");
+                KillGridObject();
+        }
+
+        private void KillGridObject()
+        {
+            Debug.Log($"This Grid Object was cringe and died");
+
+            gridManager.RemoveGridObject(position, this);
+
+            IUnit unit = (IUnit) this;
+            
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(unit);
+
+            if (unit is PlayerUnit)
+            {
+                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(unit);
+            }
+            else if (unit is EnemyUnit)
+            {
+                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(unit);
+            }
+            else
+            {
+                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                               " as it is an unidentified unit");
+            }
+            
+            // "Delete" the gridObject (setting it to inactive just in case we still need it)
+            gameObject.SetActive(false);
         }
     }
 }
