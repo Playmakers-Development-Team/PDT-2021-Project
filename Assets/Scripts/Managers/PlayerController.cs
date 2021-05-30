@@ -1,8 +1,7 @@
-using GridObjects;
-using Managers;
+using Commands;
 using UnityEngine;
 
-namespace Units
+namespace Managers
 {
     public class PlayerController : MonoBehaviour
     {
@@ -14,10 +13,11 @@ namespace Units
             // For now placeholders will be used
             
             GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerTemp", typeof(GameObject));
-            Vector2Int startGridPosition = Vector2Int.zero;
-
+            
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            playerManager.Spawn(playerPrefab, startGridPosition);
+            playerManager.Spawn(playerPrefab, Vector2Int.zero);
+            playerManager.Spawn(playerPrefab, Vector2Int.up);
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand(null));
         }
     }
 }

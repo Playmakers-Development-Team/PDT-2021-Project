@@ -13,27 +13,23 @@ namespace Managers
         
         public IUnit Spawn(GameObject enemyPrefab, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(enemyPrefab, gridPosition);
-            
-            if (!(unit is EnemyUnit))
-                return null;
-            
-            enemyUnits.Add(unit);
-            
-            return unit;
+            return Spawn(UnitUtility.Spawn(enemyPrefab, gridPosition));
         }
         
         public IUnit Spawn(string enemyName, Vector2Int gridPosition)
         {
-            IUnit unit = UnitUtility.Spawn(enemyName, gridPosition);
+            return Spawn(UnitUtility.Spawn(enemyName, gridPosition));
+        }
 
+        private IUnit Spawn(IUnit unit)
+        {
             if (!(unit is EnemyUnit))
                 return null;
             
             enemyUnits.Add(unit);
             
             return unit;
-        }
+        } 
         
         public void Clear()
         {
@@ -46,6 +42,20 @@ namespace Managers
             {
                 if (enemyUnits[i] is null)
                     enemyUnits.RemoveAt(i);
+            }
+        }
+        
+        public void RemoveEnemyUnit(IUnit enemyUnit)
+        {
+            if (enemyUnits.Contains(enemyUnit))
+            {
+                enemyUnits.Remove(enemyUnit);
+                Debug.Log(enemyUnits.Count + " enemies remain");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
+                                 " from EnemyManager but it isn't a part of the enemyUnits list");
             }
         }
     }
