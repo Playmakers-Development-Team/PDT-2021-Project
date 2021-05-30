@@ -59,7 +59,7 @@ namespace Managers
                 
                 SelectedUnit = unit;
                 
-                // Debug.Log(unit + " selected!");
+                 Debug.Log(unit + " selected!");
             }
         }
 
