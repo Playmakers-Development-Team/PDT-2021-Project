@@ -1,8 +1,8 @@
-using TMPro;
 using System;
 using System.Collections.Generic;
 using Units;
-using StatusEffects;
+using UI;
+using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -16,11 +16,10 @@ namespace Managers
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
-        private List<TextMeshProUGUI> abilityUIText;
+        private List<AbilityCard> maxAbilities = new List<AbilityCard>();
         [SerializeField] private GameObject abilityUIPrefab;
-        [SerializeField] private GameObject abilityParent;
-
-        private int Count => abilityUIText.Count;
+        [SerializeField] private Transform abilityParent;
+        //private int Count => maxAbilities.Count;
         
         private void Awake()
         {
@@ -69,24 +68,29 @@ namespace Managers
 
         private void UpdateAbility(PlayerUnit unit)
         {
-            int i = 0;
-            foreach (TenetStatusEffect s in unit.TenetStatusEffects)
+            List<Ability> currentAbilities = unit.GetAbilities();
+            for (int i = 0; i < currentAbilities.Count; i++)
             {
-                if(i > Count) AddAbilityField(s.TenetType.ToString());
-                else SetAbilityText(i,s.TenetType.ToString());
-                //Debug.Log(s);
-                i++;
+                if(i >= maxAbilities.Count) AddAbilityField(currentAbilities[i]);
+                else SetAbilityText(i,currentAbilities[i]);
+            }
+            for (int i = currentAbilities.Count; i < maxAbilities.Count; i++)
+            {
+                maxAbilities[i].gameObject.SetActive(false);
             }
         }
 
-        public void AddAbilityField(string abilityName)
+        public void AddAbilityField(Ability ability)
         {
-            GameObject abilityUI = Instantiate(abilityUIPrefab, transform);
+            var abilityCardObject = Instantiate(abilityUIPrefab, abilityParent);
+            var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
+            abilityCard.SetAbility(ability);
+            maxAbilities.Add(abilityCard);
         }
 
-        private void SetAbilityText(int index, string abilityName)
+        private void SetAbilityText(int index, Ability ability)
         {
-            abilityUIText[index].text = abilityName;
+            maxAbilities[index].SetAbility(ability);
         }
         #endregion
         

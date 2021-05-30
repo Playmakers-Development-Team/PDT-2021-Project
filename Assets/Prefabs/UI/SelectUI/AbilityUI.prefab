@@ -221,7 +221,7 @@ GameObject:
   - component: {fileID: 5527309076745317966}
   - component: {fileID: 2119160468527143559}
   - component: {fileID: 1103665740000615838}
-  - component: {fileID: 5138920767548493097}
+  - component: {fileID: 659522978371908552}
   m_Layer: 5
   m_Name: AbilityUI
   m_TagString: Untagged
@@ -314,7 +314,7 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &5138920767548493097
+--- !u!114 &659522978371908552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -323,8 +323,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6997312461207497942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d559a5adce8feb24283b6841abea1365, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b2f03b22dfbe754699bbed28daf26fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitImage: {fileID: 8310885300959135962}
-  unitName: {fileID: 3137598711542612059}
+  abilityName: {fileID: 3137598711542612059}

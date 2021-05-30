@@ -54,6 +54,8 @@ namespace Units
 
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
 
+        public List<Ability> GetAbilities() => data.abilities;
+
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
             TenetStatusEffect statusEffect = new TenetStatusEffect(tenetType, stackCount);
