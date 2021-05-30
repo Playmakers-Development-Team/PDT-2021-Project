@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using UnityEngine;
 
 namespace Background.Pipeline
@@ -9,6 +10,9 @@ namespace Background.Pipeline
     [RequireComponent(typeof(Camera)), AddComponentMenu("Background/Background Camera")]
     public class BackgroundCamera : MonoBehaviour
     {
+        [SerializeField] private bool renderOnAwake;
+        [Space]
+        
         [Header("Texture Parameters")]
         
         [SerializeField] private Vector2Int resolution;
@@ -27,8 +31,19 @@ namespace Background.Pipeline
         private new Camera camera;
         private RenderTexture washTexture;
         private RenderTexture lineTexture;
-        
-        
+
+        private void Awake()
+        {
+            // Right now, there is the option to render when the camera is loaded (or on camera Awake),
+            // though we usually want to render as the level is loaded which is before the scene is actually loaded.
+            if (renderOnAwake)
+                Render();
+        }
+
+        /// <summary>
+        /// We want to call this before the actual scene is loaded, most probably during the loading
+        /// of a level. It takes a few milliseconds before the rendering is complete.
+        /// </summary>
         public void Render()
         {
             Initialize();
