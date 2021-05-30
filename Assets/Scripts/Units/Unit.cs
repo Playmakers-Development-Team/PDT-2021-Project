@@ -46,8 +46,9 @@ namespace Units
             TakeKnockbackModifier.Reset();
         }
 
-        public void AddDefence(int amount) => data.AddDefence(amount);
-        public void AddAttack(int amount) => data.AddAttack(amount);
+        public void TakeDefence(int amount) => data.dealDamageModifier.Adder -= amount;
+
+        public void TakeAttack(int amount) => data.takeDamageModifier.Adder += amount;
 
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
 

@@ -18,9 +18,9 @@ namespace Units
         
         void TakeDamage(int amount);
 
-        void AddDefence(int amount);
+        void TakeDefence(int amount);
         
-        void AddAttack(int amount);
+        void TakeAttack(int amount);
 
         void Knockback(Vector2Int translation);
 

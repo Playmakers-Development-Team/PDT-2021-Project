@@ -23,9 +23,5 @@ namespace Units
             takeDamageModifier.Reset();
             takeKnockbackModifier.Reset();
         }
-        
-        public void AddDefence(int amount) => throw new NotImplementedException();
-
-        public void AddAttack(int amount) => throw new NotImplementedException();
     }
 }
