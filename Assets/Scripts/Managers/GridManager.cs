@@ -94,23 +94,35 @@ namespace Managers
                 //Implement Method to increase maintainability
                 if (gridArray[current.x + 1, current.y] == 0)
                 {
-                    gridArray[current.x + 1, current.y] = currentMoveCount + 1;
-                    coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
+                    if (GetGridObjectsByCoordinate(current) != null)// will need to be updated to allow allies through
+                    {
+                        gridArray[current.x + 1, current.y] = currentMoveCount + 1;
+                        coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
+                    }
                 }
                 if (gridArray[current.x, current.y - 1] == 0)
                 {
-                    gridArray[current.x, current.y - 1] = currentMoveCount + 1;
-                    coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
+                    if (GetGridObjectsByCoordinate(current) != null) 
+                    {
+                        gridArray[current.x, current.y - 1] = currentMoveCount + 1;
+                        coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
+                    }
                 }
                 if (gridArray[current.x - 1, current.y] == 0)
                 {
-                    gridArray[current.x - 1, current.y] = currentMoveCount + 1;
-                    coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
+                    if (GetGridObjectsByCoordinate(current) != null)
+                    {
+                        gridArray[current.x - 1, current.y] = currentMoveCount + 1;
+                        coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
+                    }
                 }
                 if (gridArray[current.x, current.y + 1] == 0)
                 {
-                    gridArray[current.x, current.y + 1] = currentMoveCount + 1;
-                    coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
+                    if (GetGridObjectsByCoordinate(current) != null)
+                    {
+                        gridArray[current.x, current.y + 1] = currentMoveCount + 1;
+                        coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
+                    }
                 }
                 coordQueue.Dequeue();
                 //repeat until queue empty
