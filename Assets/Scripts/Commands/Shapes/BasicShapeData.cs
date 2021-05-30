@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GridObjects;
 using Managers;
 using Units;
 using UnityEngine;
@@ -20,6 +21,7 @@ namespace Commands.Shapes
             public bool autoRotate;
             [Tooltip("This will try to raycast on the grid towards the first found unit")]
             public bool isLineOfSight;
+            public int lineOfSightRange;
         }
 
         [SerializeField] private List<ShapePart> shapeParts;
@@ -37,15 +39,11 @@ namespace Commands.Shapes
         public IEnumerable<Vector2Int> GetHighlightedCells(Vector2Int originCoordinate, Vector2 targetVector) =>
             GetAffectedCoordinates(originCoordinate, targetVector);
 
-        public IEnumerable<IUnit> GetTargets(Vector2Int originCoordinate, Vector2 targetVector)
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 targetVector)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-
             IEnumerable<Vector2Int> coordinates = GetAffectedCoordinates(originCoordinate, targetVector);
-
-            throw new NotImplementedException();
-            // TODO how do you get a unit from a coordinate (a.k.a grid position)?
-            //return cells.Select(coor => ?????);
+            return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
         }
 
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2Int originCoordinate, Vector2 targetVector)
@@ -81,10 +79,15 @@ namespace Commands.Shapes
 
                     if (p.isLineOfSight)
                     {
-                        // TODO somehow do linecasting or raycasting from somewhere relative to origin
-                        Vector2Int hitVector = Vector2Int.zero;
+                        GridManager gridManager = ManagerLocator.Get<GridManager>();
+                        Vector2Int offset = direction.ToVector2Int();
+                        var gridObjects = gridManager.GridLineCast(originCoordinate, direction, p.lineOfSightRange);
 
-                        coordinates = coordinates.Select(c => c + hitVector);
+                        if (gridObjects.Any())
+                        {
+                            Vector2Int hitVector = gridObjects.First().Coordinate - originCoordinate;
+                            coordinates = coordinates.Select(c => c + hitVector - offset);
+                        }
                     }
 
                     return coordinates;
