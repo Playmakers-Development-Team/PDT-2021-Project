@@ -24,6 +24,7 @@ namespace Managers
             
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
+            AddObstacles();
         }
 
         private void Update()
@@ -97,11 +98,15 @@ namespace Managers
         }
         #endregion
         
-        public void AddObstacles(){
-            for(int counter = 0; counter < 4; counter++)
+        public void AddObstacles()
+        {
+            GameObject obstaclePrefab =
+                (GameObject) Resources.Load("Prefabs/GridObjects/ObstacleTemp", typeof(GameObject));
+            for(int counter = 0; counter < 3; counter++)
             {
                 //Vector2Int coord = gridManager.GetRandomUnoccupiedCoordinates();
                 //gridManager.AddGridObject(gridManager.GetRandomUnoccupiedCoordinates(),)
+                UnitUtility.Spawn(obstaclePrefab, gridManager.GetRandomUnoccupiedCoordinates());
             }
         }
     }
