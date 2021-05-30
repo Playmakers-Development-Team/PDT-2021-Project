@@ -178,19 +178,21 @@ namespace Managers
             //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
-                if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1])
-                {
-                    CurrentTurnIndex--;
-                }
-                else if (targetIndex == 0)
-                {
-                    CurrentTurnIndex--;
-                }
+                CurrentTurnIndex--;
+                // if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1])
+                // {
+                //     CurrentTurnIndex--;
+                // }
+                // else if (targetIndex == 0)
+                // {
+                //     CurrentTurnIndex--;
+                // }
             }
             
             
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
+            
             
             if (CurrentUnit is PlayerUnit)
             {
