@@ -14,6 +14,7 @@ namespace Abilities
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         [SerializeField] private int knockback;
+        [SerializeField] private bool onlyHitUnits = true;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
@@ -41,12 +42,13 @@ namespace Abilities
             int damage = CalculateAmount(user, effects, EffectValueType.Damage);
             int defence = CalculateAmount(user, effects, EffectValueType.Defence);
             int attack = CalculateAmount(user, effects, EffectValueType.Attack);
+            ProcessTenet(user, effects);
 
             foreach (IUnit target in targets)
             {
-                target.TakeDamage(damage);
                 target.AddAttack(attack);
                 target.AddDefence(defence);
+                target.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
                 
                 // TODO: Knockback??
             }
@@ -58,15 +60,25 @@ namespace Abilities
             
             foreach (Effect effect in effects)
             {
-                if (!effect.CanUse(user))
-                    continue;
-
-                bonus += effect.CalculateModifier(user, valueType);
-                effect.Expend(user);
-                effect.Provide(user);
+                if (effect.CanUse(user))
+                {
+                    bonus += effect.CalculateModifier(user, valueType);
+                }
             }
 
             return bonus;
+        }
+
+        private void ProcessTenet(IUnit user, Effect[] effects)
+        {
+            foreach (Effect effect in effects)
+            {
+                if (effect.CanUse(user))
+                {
+                    effect.Expend(user);
+                    effect.Provide(user);
+                }
+            }
         }
     }
 }
