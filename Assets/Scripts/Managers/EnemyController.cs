@@ -10,7 +10,6 @@ namespace Managers
         
         private bool isSpawningEnemies = false;
         private int totalEnemies = 3; //Max is 203 at the moment
-        private int currentEnemies = 0;
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
@@ -40,10 +39,9 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (currentEnemies < totalEnemies)
+                if (enemyManager.Count < totalEnemies)
                 {
                     enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-                    currentEnemies++;
                 }
                 else
                 {
@@ -54,11 +52,10 @@ namespace Managers
             
             if (debugKillEnemyButton)
             {
-                if (currentEnemies > 0)
+                if (enemyManager.Count > 0)
                 {
                     GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
                     enemy.TakeDamage(1);
-                    currentEnemies--;
                 }
                 debugKillEnemyButton = false;
             }
