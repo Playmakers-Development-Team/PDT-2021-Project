@@ -79,6 +79,79 @@ namespace Managers
             return coordinate;
         }
         
+        public int[,] getUnitRange(int[,] gridArray, int moveRange, Vector2Int initialPos){
+            
+            Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
+            coordQueue.Enqueue(initialPos);
+            
+            while (coordQueue.Count > 0)
+            {
+                Vector2Int current = coordQueue.Peek();
+                int currentMoveCount = gridArray[current.x, current.y];
+                if(currentMoveCount == moveRange){coordQueue.Clear(); break;}
+                //mark adjacent grids and add them to the back of the queue
+                //Only mark if 0
+                //Implement Method to increase maintainability
+                if (gridArray[current.x + 1, current.y] == 0)
+                {
+                    gridArray[current.x + 1, current.y] = currentMoveCount + 1;
+                    coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
+                }
+                if (gridArray[current.x, current.y - 1] == 0)
+                {
+                    gridArray[current.x, current.y - 1] = currentMoveCount + 1;
+                    coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
+                }
+                if (gridArray[current.x - 1, current.y] == 0)
+                {
+                    gridArray[current.x - 1, current.y] = currentMoveCount + 1;
+                    coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
+                }
+                if (gridArray[current.x, current.y + 1] == 0)
+                {
+                    gridArray[current.x, current.y + 1] = currentMoveCount + 1;
+                    coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
+                }
+                coordQueue.Dequeue();
+                //repeat until queue empty
+            }
+            return gridArray;
+        }
+        public Queue<Vector2Int> getUnitPath(int[,] gridArray, Vector2Int targetPos){
+            
+            Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
+            Queue<Vector2Int> pathQueue = new Queue<Vector2Int>();
+            coordQueue.Enqueue(targetPos);
+            
+            while (coordQueue.Count > 0)
+            {
+                Vector2Int current = coordQueue.Peek();
+                int currentMoveCount = gridArray[current.x, current.y];
+                if (gridArray[current.x + 1, current.y] == currentMoveCount - 1)
+                {
+                    coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
+                }else
+                if (gridArray[current.x, current.y - 1] == currentMoveCount - 1)
+                {
+                    coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
+                }else
+                if (gridArray[current.x - 1, current.y] == currentMoveCount - 1)
+                {
+                    coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
+                }else
+                if (gridArray[current.x, current.y + 1]== currentMoveCount - 1)
+                {
+                    coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
+                }
+                pathQueue.Enqueue(current);
+                coordQueue.Dequeue();
+                //repeat until queue empty
+            }
+            return pathQueue;
+        }
+        
+        
+        
         #endregion
 
         #region CONVERSIONS
@@ -173,6 +246,15 @@ namespace Managers
                 RemoveGridObject(currentPosition, gridObject);
             }
         }
+
+        public void CheckIfInRange()
+        {
+            //if(coords not 0 in grid array)
+            
+            //MoveGridObject()
+        }
+        
+        
         
         #endregion
     }
