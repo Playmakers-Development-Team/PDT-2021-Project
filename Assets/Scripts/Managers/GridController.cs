@@ -1,7 +1,11 @@
+using TMPro;
 using System;
+using System.Collections.Generic;
 using Units;
+using StatusEffects;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -12,6 +16,12 @@ namespace Managers
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
+        private List<TextMeshProUGUI> abilityUIText;
+        [SerializeField] private GameObject abilityUIPrefab;
+        [SerializeField] private GameObject abilityParent;
+
+        private int Count => abilityUIText.Count;
+        
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -28,8 +38,8 @@ namespace Managers
 
         private void Update()
         {
-            // if(Input.GetKeyDown(KeyCode.Mouse0)) 
-                // ClickUnit();
+            if(Input.GetKeyDown(KeyCode.Mouse0)) 
+                ClickUnit();
         }
 
         #region Unit Selection
@@ -48,6 +58,7 @@ namespace Managers
                     if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
+                        UpdateAbility(playerUnit);
                         Debug.Log($"Unit Selected!");
                         return;
                     }
@@ -56,6 +67,27 @@ namespace Managers
             playerManager.SelectUnit(null);
         }
 
+        private void UpdateAbility(PlayerUnit unit)
+        {
+            int i = 0;
+            foreach (TenetStatusEffect s in unit.TenetStatusEffects)
+            {
+                if(i > Count) AddAbilityField(s.TenetType.ToString());
+                else SetAbilityText(i,s.TenetType.ToString());
+                //Debug.Log(s);
+                i++;
+            }
+        }
+
+        public void AddAbilityField(string abilityName)
+        {
+            GameObject abilityUI = Instantiate(abilityUIPrefab, transform);
+        }
+
+        private void SetAbilityText(int index, string abilityName)
+        {
+            abilityUIText[index].text = abilityName;
+        }
         #endregion
         
         #region Unit Testing
