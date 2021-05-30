@@ -74,7 +74,7 @@ namespace Managers
             if (playerUnits.Contains(playerUnit))
             {
                 playerUnits.Remove(playerUnit);
-                Debug.Log(playerUnits.Count + " enemies remain");
+                Debug.Log(playerUnits.Count + " players remain");
             }
             else
             {
