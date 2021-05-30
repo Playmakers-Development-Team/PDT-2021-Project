@@ -68,5 +68,19 @@ namespace Managers
             SelectedUnit = null;
             // Debug.Log("Units deselected.");
         }
+        
+        public void RemovePlayerUnit(IUnit playerUnit)
+        {
+            if (playerUnits.Contains(playerUnit))
+            {
+                playerUnits.Remove(playerUnit);
+                Debug.Log(playerUnits.Count + " players remain");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + playerUnit +
+                                 " from PlayerManager but it isn't a part of the playerUnits list");
+            }
+        }
     }
 }

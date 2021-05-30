@@ -32,7 +32,9 @@ namespace Units
             base.Start();
             
             data.Initialise();
-            
+
+            HealthPoints = data.healthPoints;
+            MovementActionPoints = data.movementActionPoints;
             Speed = data.speed;
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;

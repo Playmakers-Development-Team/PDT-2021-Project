@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6708204597060251326}
   m_Layer: 0
   m_Name: PlayerTemp
-  m_TagString: Untagged
+  m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,12 +96,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
+    healthPoints:
+      <BaseValue>k__BackingField: 1
+    movementActionPoints:
+      <BaseValue>k__BackingField: 1
+    speed:
+      <BaseValue>k__BackingField: 1
     dealDamageModifier:
-      baseMultiplier: 1
-      baseAdder: 1
+      <BaseMultiplier>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeDamageModifier:
-      baseMultiplier: 1
-      baseAdder: 1
+      <BaseMultiplier>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeKnockbackModifier:
-      baseMultiplier: 1
-      baseAdder: 1
+      <BaseMultiplier>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
