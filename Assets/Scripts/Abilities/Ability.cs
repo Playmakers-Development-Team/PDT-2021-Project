@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Commands.Shapes;
+using GridObjects;
 using Units;
 using UnityEngine;
 
@@ -26,31 +27,37 @@ namespace Abilities
             Use(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void Use(IUnit user, params IUnit[] targets) => Use(user, targets.AsEnumerable());
+        public void Use(IUnit user, params GridObject[] targets) => Use(user, targets.AsEnumerable());
         
-        public void Use(IUnit user, IEnumerable<IUnit> targets)
+        public void Use(IUnit user, IEnumerable<GridObject> targets)
         {
             Use(user, targetEffects, targets);
-            Use(user, userEffects, user);
+            
+            // It can be assumed that IUnit can be converted to GridObject.
+            if (user is GridObject userGridObject)
+                Use(user, userEffects, userGridObject);
         }
 
-        private void Use(IUnit user, Effect[] effects, params IUnit[] targets) =>
+        private void Use(IUnit user, Effect[] effects, params GridObject[] targets) =>
             Use(user, effects, targets.AsEnumerable());
 
-        private void Use(IUnit user, Effect[] effects, IEnumerable<IUnit> targets)
+        private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
             int damage = CalculateAmount(user, effects, EffectValueType.Damage);
             int defence = CalculateAmount(user, effects, EffectValueType.Defence);
             int attack = CalculateAmount(user, effects, EffectValueType.Attack);
-            ProcessTenet(user, effects);
+            ProcessTenets(user, effects);
 
-            foreach (IUnit target in targets)
+            foreach (GridObject target in targets)
             {
-                target.AddAttack(attack);
-                target.AddDefence(defence);
-                target.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
+                if (target is IUnit targetUnit)
+                {
+                    targetUnit.AddAttack(attack);
+                    targetUnit.AddDefence(defence);
+                }
                 
-                // TODO: Knockback??
+                target.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
+                target.TakeKnockback(knockback);
             }
         }
 
@@ -69,7 +76,7 @@ namespace Abilities
             return bonus;
         }
 
-        private void ProcessTenet(IUnit user, Effect[] effects)
+        private void ProcessTenets(IUnit user, Effect[] effects)
         {
             foreach (Effect effect in effects)
             {
