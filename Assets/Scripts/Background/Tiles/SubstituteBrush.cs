@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,6 +15,7 @@ namespace Background.Tiles
     {
         [SerializeField] private TileType type;
         
+#if UNITY_EDITOR
         public override void Paint(GridLayout gridLayout, GameObject brushTarget, Vector3Int position)
         {
             List<TileReference> references = new List<TileReference>();
@@ -36,5 +39,6 @@ namespace Background.Tiles
             if (replacement)
                 map.SetTile(position, replacement);
         }
+#endif
     }
 }

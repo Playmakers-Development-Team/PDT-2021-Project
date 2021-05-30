@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Background.Pipeline;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
