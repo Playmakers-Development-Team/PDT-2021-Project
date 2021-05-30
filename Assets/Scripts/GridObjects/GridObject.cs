@@ -9,12 +9,15 @@ namespace GridObjects
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
         private int Speed { get; set; }
-        public Stat TakeDamageModifier { get; protected set; }
-        public Stat TakeKnockbackModifier { get; protected set; }
 
-        public Vector2Int Coordinate =>
-            gridManager.ConvertWorldSpaceToGridSpace(transform.position);
+        public ModifierStat TakeDamageModifier { get; protected set; }
+        public ModifierStat TakeKnockbackModifier { get; protected set; }
+        
+        // TODO Initialise position
+        private Vector2Int position;
 
+        public Vector2Int Coordinate => gridManager.ConvertPositionToCoordinate(transform.position);
+        
         private GridManager gridManager;
 
         protected virtual void Start()
@@ -38,10 +41,10 @@ namespace GridObjects
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
         }
-        
+
         public Vector2Int GetGridPosition(Vector2 worldPosition)
         {
-            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
+            return gridManager.ConvertPositionToCoordinate(worldPosition);
         }
         
         public void CheckDeath()

@@ -1,3 +1,5 @@
+using System;
+using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -20,10 +22,42 @@ namespace Managers
             bounds = gridManager.levelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.levelTilemap.transform.position;
             
-            DrawGridOutline();
+            //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
 
+        private void Update()
+        {
+            // if(Input.GetKeyDown(KeyCode.Mouse0)) 
+                // ClickUnit();
+        }
+
+        #region Unit Selection
+
+        private void ClickUnit()
+        { 
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+
+            foreach (IUnit unit in playerManager.PlayerUnits)
+            {
+                if (unit is PlayerUnit playerUnit)
+                {
+                    if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
+                    {
+                        playerManager.SelectUnit(playerUnit);
+                        Debug.Log($"Unit Selected!");
+                        return;
+                    }
+                }
+            }
+            playerManager.SelectUnit(null);
+        }
+
+        #endregion
+        
         #region Unit Testing
         
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
@@ -54,16 +88,13 @@ namespace Managers
         {
             for (int i = 0; i < testCases; i++)
             {
-                Vector2Int randomCoordinates = new Vector2Int(
-                    Random.Range(bounds.xMin, bounds.xMax), 
-                    Random.Range(bounds.yMin, bounds.yMax));
+                Vector2Int randomCoordinates = gridManager.GetRandomCoordinates();
                 
                 TileBase tile = gridManager.GetTileDataByCoordinate(
                     new Vector2Int(randomCoordinates.x, randomCoordinates.y)).Tile;
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
         }
-
         #endregion
     }
 }

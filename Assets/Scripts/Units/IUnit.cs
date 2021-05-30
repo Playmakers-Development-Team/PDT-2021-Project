@@ -8,7 +8,9 @@ namespace Units
 {
     public interface IUnit
     {
-        public Stat DealDamageModifier { get; }
+        public ModifierStat DealDamageModifier { get; }
+        
+        public ValueStat Speed { get; }
         
         public Vector2Int Coordinate { get; }
         

@@ -5,6 +5,7 @@ using Abilities;
 using GridObjects;
 using StatusEffects;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Units
 {
@@ -13,10 +14,11 @@ namespace Units
         [SerializeField] protected T data;
         
         public static Type DataType => typeof(T);
+
+        public ModifierStat DealDamageModifier { get; protected set; }
+        public ValueStat Speed { get; protected set; }
         
         public Type GetDataType() => DataType;
-        
-        public Stat DealDamageModifier { get; protected set; }
         
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
@@ -27,9 +29,21 @@ namespace Units
         
         protected override void Start()
         {
+            base.Start();
+            
+            data.Initialise();
+            
+            Speed = data.speed;
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
+            
+            // TODO Are speeds are random or defined in UnitData?
+            Speed.Value += Random.Range(10,50);
+
+            DealDamageModifier.Reset();
+            TakeDamageModifier.Reset();
+            TakeKnockbackModifier.Reset();
         }
 
         public void AddDefence(int amount) => data.AddDefence(amount);
