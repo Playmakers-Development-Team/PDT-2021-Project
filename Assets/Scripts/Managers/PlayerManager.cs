@@ -1,36 +1,37 @@
+using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Managers
 {
     public class PlayerManager : Manager
     {
-        private readonly List<Unit> playerUnits = new List<Unit>();
+        public IUnit SelectedUnit { get; private set; }
+        private readonly List<IUnit> playerUnits = new List<IUnit>();
 
-        public IReadOnlyList<Unit> PlayerUnits => playerUnits.AsReadOnly();
+        public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public int Count => playerUnits.Count;
         
-        public Unit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
+        public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            Unit unit = UnitUtility.Spawn(playerPrefab, gridPosition);
-            
-            if (!(unit is PlayerUnitController))
-                return null;
-            
-            playerUnits.Add(unit);
-            
-            return unit;
+            return Spawn(UnitUtility.Spawn(playerPrefab, gridPosition));
         }
         
-        public Unit Spawn(string playerName, Vector2Int gridPosition)
+        public IUnit Spawn(string playerName, Vector2Int gridPosition)
         {
-            Unit unit = UnitUtility.Spawn(playerName, gridPosition);
+            return Spawn(UnitUtility.Spawn(playerName, gridPosition));
+        }
 
-            if (!(unit is PlayerUnitController))
+        public IUnit Spawn(IUnit unit)
+        {
+            if (!(unit is PlayerUnit))
                 return null;
             
             playerUnits.Add(unit);
+            
+            SelectUnit((PlayerUnit)unit);
             
             return unit;
         }
@@ -40,12 +41,45 @@ namespace Managers
             playerUnits.Clear();
         }
 
-        public void Clean()
+        public void ClearUnits()
         {
             for (int i = playerUnits.Count; i >= 0; i--)
             {
                 if (playerUnits[i] is null)
                     playerUnits.RemoveAt(i);
+            }
+        }
+
+        public void SelectUnit(PlayerUnit unit)
+        {
+            if ((PlayerUnit) SelectedUnit != unit)
+            {
+                ManagerLocator.Get<CommandManager>().
+                    QueueCommand(new Commands.UnitSelectedCommand(unit));
+                
+                SelectedUnit = unit;
+                
+                // Debug.Log(unit + " selected!");
+            }
+        }
+
+        public void DeselectUnit()
+        {
+            SelectedUnit = null;
+            // Debug.Log("Units deselected.");
+        }
+        
+        public void RemovePlayerUnit(IUnit playerUnit)
+        {
+            if (playerUnits.Contains(playerUnit))
+            {
+                playerUnits.Remove(playerUnit);
+                Debug.Log(playerUnits.Count + " players remain");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + playerUnit +
+                                 " from PlayerManager but it isn't a part of the playerUnits list");
             }
         }
     }
