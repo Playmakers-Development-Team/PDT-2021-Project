@@ -8,7 +8,6 @@ namespace GridObjects
     {
         private int HealthPoints { get; set; }
         private int MovementActionPoints { get; set; }
-        private int Speed { get; set; }
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
