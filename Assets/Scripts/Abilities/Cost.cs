@@ -29,12 +29,6 @@ namespace Abilities
                 user.RemoveTenetStatusEffect(tenetType, 1);
         }
         
-        public bool MeetsRequirements(IUnit user)
-        {
-            if (costType == CostType.Per)
-                return true;
-
-            return user.GetTenetStatusEffectCount(tenetType) > 0;
-        }
+        public bool MeetsRequirements(IUnit user) => user.GetTenetStatusEffectCount(tenetType) > 0;
     }
 }
