@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -15,37 +16,35 @@ namespace Abilities
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatusEffect providingTenet;
         [SerializeField] private List<Cost> costs;
-        
-        
-        public bool CanUse(IUnit user)
+
+        public void Use(IUnit user)
         {
-            int[] totalCosts = new int[Enum.GetValues(typeof(TenetType)).Length];
-
-            foreach (Cost cost in costs)
-                totalCosts[(int) cost.TenetType] += cost.CalculateCost(user);
-
-            for (int i = 0; i < totalCosts.Length; i++)
+            if (CanBeUsedBy(user))
             {
-                if (user.GetTenetStatusEffectCount((TenetType) i) < totalCosts[i])
-                    return false;
+                Provide(user);
+                Expend(user);
             }
-
-            return true;
+        }
+        
+        public bool CanBeUsedBy(IUnit user)
+        {
+            return costs.All(cost => cost.MeetsRequirements(user));
         }
 
-        public void Provide(IUnit user) => 
+        private void Provide(IUnit user) => 
             user.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
 
-        public void Expend(IUnit user)
+        private void Expend(IUnit user)
         {
-            if (!CanUse(user))
+            if (!CanBeUsedBy(user))
                 return;
 
             foreach (Cost cost in costs)
                 cost.Expend(user);
         }
 
-        public int CalculateModifier(IUnit user, EffectValueType valueType)
+        // TODO: Test
+        public int CalculateValue(IUnit user, EffectValueType valueType)
         {
             int value = valueType switch
             {
@@ -54,13 +53,10 @@ namespace Abilities
                 EffectValueType.Attack => attackValue,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
-            
-            int bonus = costs.Count == 0 ? value : 0;
-            
-            foreach (Cost cost in costs)
-                bonus += cost.CalculateValue(user, value);
-            
-            return bonus;
+
+            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user));
+
+            return bonusMultiplierSum == 0 ? value : bonusMultiplierSum * value;
         }
     }
 }

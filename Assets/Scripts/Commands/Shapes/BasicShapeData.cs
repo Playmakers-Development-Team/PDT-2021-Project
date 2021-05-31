@@ -48,11 +48,9 @@ namespace Commands.Shapes
 
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2Int originCoordinate, Vector2 targetVector)
         {
-            bool isDiagonalShape = IsDiagonalShape;
-
             // We want to convert to cardinal direction first because we don't want to get the ordinal
             // directions e.g NorthEast. Only return the cardinal directions based on the vector.
-            OrdinalDirection direction = isDiagonalShape
+            OrdinalDirection direction = IsDiagonalShape
                 ? OrdinalDirectionUtility.From(Vector2.zero, targetVector)
                 : CardinalDirectionUtility.From(Vector2.zero, targetVector).ToOrdinalDirection();
 
