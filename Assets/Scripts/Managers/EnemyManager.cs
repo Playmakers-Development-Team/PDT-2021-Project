@@ -27,8 +27,8 @@ namespace Managers
             if (!(unit is EnemyUnit))
                 return null;
             
-            
             enemyUnits.Add(unit);
+            
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
 
             return unit;
