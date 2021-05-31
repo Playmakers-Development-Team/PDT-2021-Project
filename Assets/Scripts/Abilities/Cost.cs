@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -41,6 +41,14 @@ namespace Abilities
         public void Expend(IUnit user)
         {
             user.RemoveTenetStatusEffect(tenetType, CalculateCost(user));
+        }
+        
+        public bool MeetsRequirements(IUnit user)
+        {
+            if (costType == CostType.Per)
+                return true;
+
+            return user.GetTenetStatusEffectCount(tenetType) > 0;
         }
     }
 }
