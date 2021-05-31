@@ -1,23 +1,14 @@
-using Managers;
 using Units;
 
 namespace Commands
 {
     public class EndTurnCommand : Command
     {
-        private TurnManager turnManager;
-        
-        public EndTurnCommand(IUnit unit) : base(unit)
-        {
-            turnManager = ManagerLocator.Get<TurnManager>();
-        }
+        public EndTurnCommand(IUnit unit) : base(unit) {}
 
         public override void Queue() {}
 
-        public override void Execute()
-        {
-            turnManager.NextTurn();
-        }
+        public override void Execute() {}
 
         public override void Undo() {}
     }

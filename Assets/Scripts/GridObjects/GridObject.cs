@@ -1,38 +1,35 @@
 using System;
 using Managers;
+using Units;
 using UnityEngine;
 
 namespace GridObjects
 {
     public class GridObject : MonoBehaviour
     {
-        // TODO Remove this (data isn't on all gridObject)
-        public int HealthPoints { get; private set; }
-        private int MovementActionPoints { get; set; }
-        private int Speed { get; set; }
-        public Stat TakeDamageModifier { get; protected set; }
-        public Stat TakeKnockbackModifier { get; protected set; }
+        protected ValueStat HealthPoints { get; set; }
+        protected ValueStat MovementActionPoints { get; set; }
+        public ModifierStat TakeDamageModifier { get; protected set; }
+        public ModifierStat TakeKnockbackModifier { get; protected set; }
         
-        // TODO Initialise position
-        private Vector2Int position;
-        
+        public Vector2Int Coordinate => gridManager.ConvertPositionToCoordinate(transform.position);
+
         private GridManager gridManager;
 
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            gridManager.AddGridObject(position, this);
+            gridManager.AddGridObject(Coordinate, this);
         }
 
         public void TakeDamage(int amount)
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            HealthPoints = damageTaken;
-            CheckDeath();
+            HealthPoints.Value -= damageTaken;
             Debug.Log(damageTaken + " damage taken.");
-            Debug.Log($"Health Before: {HealthPoints + damageTaken}  |  Health After: {HealthPoints}");
-
+            Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
+            CheckDeath();
         }
 
         public void TakeKnockback(int amount)
@@ -40,16 +37,45 @@ namespace GridObjects
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
             Debug.Log(knockbackTaken + " knockback taken.");
         }
-        
-        public Vector2Int GetGridPosition(Vector2 worldPosition)
+
+        [Obsolete("Use Coordinate property instead.")]
+        public Vector2Int GetCoordinate()
         {
-            return gridManager.ConvertWorldSpaceToGridSpace(worldPosition);
+            return Coordinate;
         }
 
-        public void CheckDeath()
+        private void CheckDeath()
         {
-            if (HealthPoints <= 0)
-                Debug.Log($"This Grid Object was cringe and died");
+            if (HealthPoints.Value <= 0)
+                KillGridObject();
+        }
+
+        private void KillGridObject()
+        {
+            Debug.Log($"This Grid Object was cringe and died");
+            
+            gridManager.RemoveGridObject(Coordinate, this);
+
+            IUnit unit = (IUnit) this;
+            
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(unit);
+
+            if (unit is PlayerUnit)
+            {
+                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(unit);
+            }
+            else if (unit is EnemyUnit)
+            {
+                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(unit);
+            }
+            else
+            {
+                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                               " as it is an unidentified unit");
+            }
+            
+            // "Delete" the gridObject (setting it to inactive just in case we still need it)
+            gameObject.SetActive(false);
         }
     }
 }
