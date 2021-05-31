@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace ColorDrop
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ColorDropGenerator : MonoBehaviour
     {
         // Inspector Accessible Fields

@@ -51,28 +51,24 @@ namespace ColorDrop
         public void CreateNewTextureShape()
         {
             Texture2D[] tempArray = new Texture2D[textureShapes.Length + 1];
-            //Texture2D selection = textureSelections.Length == 0 ? Texture2D.whiteTexture : textureSelections[textureSelections.Length - 1];
 
             for (int i = 0; i < textureShapes.Length; i++)
             {
                 tempArray[i] = textureShapes[i];
             }
 
-            //tempArray[tempArray.Length - 1] = selection;
             textureShapes = tempArray;
         }
 
         public void CreateNewTextureSelection()
         {
             Texture2D[] tempArray = new Texture2D[textureSelections.Length + 1];
-            //Texture2D selection = textureSelections.Length == 0 ? Texture2D.whiteTexture : textureSelections[textureSelections.Length - 1];
 
             for (int i = 0; i < textureSelections.Length; i++)
             {
                 tempArray[i] = textureSelections[i];
             }
 
-            //tempArray[tempArray.Length - 1] = selection;
             textureSelections = tempArray;
         }
 
