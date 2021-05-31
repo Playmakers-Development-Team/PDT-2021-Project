@@ -43,9 +43,9 @@ namespace Abilities
 
         private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            int damage = CalculateAmount(user, effects, EffectValueType.Damage);
-            int defence = CalculateAmount(user, effects, EffectValueType.Defence);
-            int attack = CalculateAmount(user, effects, EffectValueType.Attack);
+            int damage = CalculateValue(user, effects, EffectValueType.Damage);
+            int defence = CalculateValue(user, effects, EffectValueType.Defence);
+            int attack = CalculateValue(user, effects, EffectValueType.Attack);
             ProcessTenets(user, effects);
 
             foreach (GridObject target in targets)
@@ -82,9 +82,9 @@ namespace Abilities
 
         private void Undo(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            int damage = CalculateAmount(user, effects, EffectValueType.Damage);
-            int defence = CalculateAmount(user, effects, EffectValueType.Defence);
-            int attack = CalculateAmount(user, effects, EffectValueType.Attack);
+            int damage = CalculateValue(user, effects, EffectValueType.Damage);
+            int defence = CalculateValue(user, effects, EffectValueType.Defence);
+            int attack = CalculateValue(user, effects, EffectValueType.Attack);
             ProcessTenets(user, effects);
 
             foreach (GridObject target in targets)
@@ -100,7 +100,7 @@ namespace Abilities
             }
         }
 
-        private int CalculateAmount(IUnit user, Effect[] effects, EffectValueType valueType)
+        private int CalculateValue(IUnit user, Effect[] effects, EffectValueType valueType)
         {
             int bonus = 0;
             
