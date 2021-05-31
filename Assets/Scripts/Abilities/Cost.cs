@@ -40,23 +40,7 @@ namespace Abilities
 
         public void Expend(IUnit user)
         {
-            switch (costType)
-            {
-                case CostType.With:
-                    user.RemoveTenetStatusEffect(tenetType, 0);
-                    break;
-                
-                case CostType.Per:
-                    user.RemoveTenetStatusEffect(tenetType, user.GetTenetStatusEffectCount(tenetType));
-                    break;
-                
-                case CostType.Spend:
-                    user.RemoveTenetStatusEffect(tenetType, user.GetTenetStatusEffectCount(tenetType));
-                    break;
-                
-                default:
-                    return;
-            }
+            user.RemoveTenetStatusEffect(tenetType, CalculateCost(user));
         }
     }
 }
