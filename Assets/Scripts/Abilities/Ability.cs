@@ -119,11 +119,7 @@ namespace Abilities
         {
             foreach (Effect effect in effects)
             {
-                if (effect.CanBeUsedBy(user))
-                {
-                    effect.Expend(user);
-                    effect.Provide(user);
-                }
+                effect.Use(user);
             }
         }
     }

@@ -15,7 +15,15 @@ namespace Abilities
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatusEffect providingTenet;
         [SerializeField] private List<Cost> costs;
-        
+
+        public void Use(IUnit user)
+        {
+            if (CanBeUsedBy(user))
+            {
+                Provide(user);
+                Expend(user);
+            }
+        }
         
         public bool CanBeUsedBy(IUnit user)
         {
@@ -33,10 +41,10 @@ namespace Abilities
             return true;
         }
 
-        public void Provide(IUnit user) => 
+        private void Provide(IUnit user) => 
             user.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
 
-        public void Expend(IUnit user)
+        private void Expend(IUnit user)
         {
             if (!CanBeUsedBy(user))
                 return;
