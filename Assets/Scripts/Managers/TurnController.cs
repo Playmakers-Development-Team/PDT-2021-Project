@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Commands;
 using UI;
 using Units;
@@ -160,24 +161,10 @@ namespace Managers
         private void AddUnitToTimeline(TurnManager turnManager)
         {
             var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
-            var flag = false;
 
             foreach (var unit in allUnits)
             {
-                foreach (var unit2 in allUnitCards)
-                {
-                    if (unit == unit2.Unit)
-                    {
-                        flag = true;
-                        break;
-                    }
-                    else
-                    {
-                        flag = false;
-                    }
-                }
-
-                if (!flag)
+                if (allUnitCards.All(unitCard => unitCard.Unit != unit))
                 {
                     var unitCardObject = Instantiate(unitCardPrefab, timeline);
                     var unitCard = unitCardObject.GetComponent<UnitCard>();
@@ -187,7 +174,6 @@ namespace Managers
                     break;
                 }
             }
-            
         }
         
         /// <summary>
