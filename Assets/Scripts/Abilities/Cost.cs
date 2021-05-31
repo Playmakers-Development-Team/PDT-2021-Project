@@ -25,8 +25,15 @@ namespace Abilities
 
         public void Expend(IUnit user)
         {
-            if (costType == CostType.Per)
-                user.RemoveTenetStatusEffect(tenetType, 1);
+            switch (costType)
+            {
+                case CostType.Per:
+                    user.RemoveTenetStatusEffect(tenetType);
+                    break;
+                case CostType.Spend:
+                    user.RemoveTenetStatusEffect(tenetType, 1);
+                    break;
+            }
         }
         
         public bool MeetsRequirements(IUnit user) => user.GetTenetStatusEffectCount(tenetType) > 0;
