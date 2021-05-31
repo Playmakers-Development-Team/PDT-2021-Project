@@ -1,3 +1,4 @@
+using System;
 using Managers;
 using Units;
 using UnityEngine;
@@ -11,17 +12,15 @@ namespace GridObjects
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
-        private Vector2Int coordinate;
-        
+        public Vector2Int Coordinate => gridManager.ConvertPositionToCoordinate(transform.position);
+
         private GridManager gridManager;
 
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            coordinate = gridManager.ConvertPositionToCoordinate(transform.position);
-
-            gridManager.AddGridObject(coordinate, this);
+            gridManager.AddGridObject(Coordinate, this);
         }
 
         public void TakeDamage(int amount)
@@ -39,9 +38,10 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
+        [Obsolete("Use Coordinate property instead.")]
         public Vector2Int GetCoordinate()
         {
-            return coordinate;
+            return Coordinate;
         }
 
         private void CheckDeath()
@@ -54,7 +54,7 @@ namespace GridObjects
         {
             Debug.Log($"This Grid Object was cringe and died");
             
-            gridManager.RemoveGridObject(coordinate, this);
+            gridManager.RemoveGridObject(Coordinate, this);
 
             IUnit unit = (IUnit) this;
             
