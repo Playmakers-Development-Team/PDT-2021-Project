@@ -22,18 +22,18 @@ namespace Abilities
             {
                 CostType.With => 1,
                 CostType.Per => user.GetTenetStatusEffectCount(tenetType),
-                CostType.Spend => user.GetTenetStatusEffectCount(tenetType),
+                CostType.Spend => 1,
                 _ => 0
             };
         }
 
-        public int CalculateValue(IUnit user, int modifier)
+        public int CalculateValue(IUnit user, int baseValue)
         {
             return costType switch
             {
-                CostType.With => modifier,
-                CostType.Per => user.GetTenetStatusEffectCount(tenetType),
-                CostType.Spend => modifier,
+                CostType.With => baseValue,
+                CostType.Per => baseValue * user.GetTenetStatusEffectCount(tenetType),
+                CostType.Spend => baseValue,
                 _ => 0
             };
         }
@@ -42,20 +42,13 @@ namespace Abilities
         {
             switch (costType)
             {
-                case CostType.With:
-                    user.RemoveTenetStatusEffect(tenetType, 0);
-                    break;
-                
                 case CostType.Per:
                     user.RemoveTenetStatusEffect(tenetType, user.GetTenetStatusEffectCount(tenetType));
                     break;
                 
                 case CostType.Spend:
-                    user.RemoveTenetStatusEffect(tenetType, user.GetTenetStatusEffectCount(tenetType));
+                    user.RemoveTenetStatusEffect(tenetType, 1);
                     break;
-                
-                default:
-                    return;
             }
         }
     }

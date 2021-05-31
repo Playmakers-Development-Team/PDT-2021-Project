@@ -55,8 +55,11 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
             
-            int bonus = costs.Count == 0 ? value : 0;
+            if (costs.Count == 0)
+                return value;
             
+            int bonus = value;
+
             foreach (Cost cost in costs)
                 bonus += cost.CalculateValue(user, value);
             
