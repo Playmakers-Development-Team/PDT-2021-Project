@@ -12,18 +12,15 @@ namespace Abilities
         [SerializeField] private CostType costType;
         [SerializeField] private TenetType tenetType;
 
-        
+        public CostType CostType => costType;
         public TenetType TenetType => tenetType;
 
-        public int CalculateValue(IUnit user, int modifier)
+        public int CalculateBonusValue(IUnit user)
         {
-            return costType switch
-            {
-                CostType.With => modifier,
-                CostType.Per => user.GetTenetStatusEffectCount(tenetType),
-                CostType.Spend => modifier,
-                _ => 0
-            };
+            if (costType == CostType.Per)
+                return user.GetTenetStatusEffectCount(tenetType);
+            
+            return 0;
         }
 
         public void Expend(IUnit user)

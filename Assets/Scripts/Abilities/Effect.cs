@@ -52,13 +52,13 @@ namespace Abilities
                 EffectValueType.Attack => attackValue,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
-            
-            int bonus = costs.Count == 0 ? value : 0;
+
+            int bonusValue = 0;
             
             foreach (Cost cost in costs)
-                bonus += cost.CalculateValue(user, value);
+                bonusValue += cost.CalculateBonusValue(user);
             
-            return bonus;
+            return bonusValue == 0 ? value : bonusValue * value;
         }
     }
 }
