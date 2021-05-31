@@ -82,17 +82,7 @@ namespace Managers
             
             foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
-                var unitCardObject = Instantiate(unitCardPrefab, timeline);
-                var unitCard = unitCardObject.GetComponent<UnitCard>();
-
-                unitCard.SetUnit(unit);
-
-                allUnitCards.Add(unitCard);
-
-                if (unit == turnManager.CurrentUnit)
-                {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
-                }
+                CreateUnitCard(unit);
             }
 
             turnManager.onTurnEnd += UpdateTurnUI;
@@ -166,18 +156,29 @@ namespace Managers
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
                 {
-                    var unitCardObject = Instantiate(unitCardPrefab, timeline);
-                    var unitCard = unitCardObject.GetComponent<UnitCard>();
-                    unitCard.SetUnit(unit);
-
-                    allUnitCards.Add(unitCard);
+                    CreateUnitCard(unit);
+                    
                     break;
                 }
             }
         }
+
+        private void CreateUnitCard(IUnit unit)
+        {
+            var unitCardObject = Instantiate(unitCardPrefab, timeline);
+            var unitCard = unitCardObject.GetComponent<UnitCard>();
+            unitCard.SetUnit(unit);
+
+            allUnitCards.Add(unitCard);
+            
+            if (unit == turnManager.CurrentUnit)
+            {
+                currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+            }
+        }
         
         /// <summary>
-        /// Updates the timeline UI for the new round
+        /// Updates the timeline UI for the new round.
         /// </summary>
         /// <param name="turnManager"></param>
         private void UpdateForNewRound(TurnManager turnManager)
@@ -194,17 +195,7 @@ namespace Managers
             
             foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
-                var unitCardObject = Instantiate(unitCardPrefab, timeline);
-                var unitCard = unitCardObject.GetComponent<UnitCard>();
-
-                unitCard.SetUnit(unit);
-
-                allUnitCards.Add(unitCard);
-
-                if (unit == turnManager.CurrentUnit)
-                {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
-                }
+                CreateUnitCard(unit);
             }
         }
     }
