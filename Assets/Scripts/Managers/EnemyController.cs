@@ -1,19 +1,24 @@
-using Managers;
+using System.Collections.Generic;
+using Commands;
+using GridObjects;
 using UnityEngine;
 
-namespace Units
+namespace Managers
 {
     public class EnemyController : MonoBehaviour
     {
+        // Temporary debug buttons, likely to be removed later
+        [SerializeField] private bool debugKillEnemyButton = false;
+        [SerializeField] private bool debugDamagePlayerButton = false;
+        
         private bool isSpawningEnemies = false;
         private int totalEnemies = 3; //Max is 203 at the moment
-        private int currentEnemies = 0;
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
-        
+
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
         {
@@ -37,15 +42,71 @@ namespace Units
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (currentEnemies < totalEnemies)
+                if (enemyManager.Count < totalEnemies)
                 {
-                    enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-                    currentEnemies++;
+                    SpawnEnemy();
                 }
                 else
                 {
                     isSpawningEnemies = false;
+                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
                 }
+            }
+
+            DebugKillEnemyFunction();
+            DebugDamagePlayerButton();
+        }
+
+        private void SpawnEnemy()
+        {
+            //TODO: Remove this later, currently used to test enemy attacks
+            if (enemyManager.Count == 0)
+            {
+                SpawnAdjacentToPlayer();
+            }
+            else
+            {
+                enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
+            }
+        }
+        
+        private void SpawnAdjacentToPlayer()
+        {
+            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
+            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
+        }
+        
+        private void DebugKillEnemyFunction()
+        {
+            if (debugKillEnemyButton)
+            {
+                if (enemyManager.Count > 0)
+                {
+                    GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
+                    enemy.TakeDamage(1);
+                }
+                debugKillEnemyButton = false;
+            }
+        }
+        
+        private void DebugDamagePlayerButton()
+        {
+            if (debugDamagePlayerButton)
+            {
+                foreach (var enemy in enemyManager.EnemyUnits)
+                {
+                    GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
+                    if (firstAdjacentPlayer != null)
+                    {
+                        // TODO: Get proper damage formula here
+                        firstAdjacentPlayer.TakeDamage(5);
+                        debugDamagePlayerButton = false;
+                        return;
+                    }
+                }
+                
+                Debug.Log("No players adjacent to enemies found, no damage dealt");
+                debugDamagePlayerButton = false;
             }
         }
     }
