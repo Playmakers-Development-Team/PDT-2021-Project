@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -27,18 +28,7 @@ namespace Abilities
         
         public bool CanBeUsedBy(IUnit user)
         {
-            int[] totalCosts = new int[Enum.GetValues(typeof(TenetType)).Length];
-
-            foreach (Cost cost in costs)
-                totalCosts[(int) cost.TenetType] += cost.CalculateCost(user);
-
-            for (int i = 0; i < totalCosts.Length; i++)
-            {
-                if (user.GetTenetStatusEffectCount((TenetType) i) < totalCosts[i])
-                    return false;
-            }
-
-            return true;
+            return costs.All(cost => cost.MeetsRequirements(user));
         }
 
         private void Provide(IUnit user) => 
