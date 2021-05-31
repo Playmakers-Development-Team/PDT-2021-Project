@@ -54,12 +54,9 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusValue = 0;
-            
-            foreach (Cost cost in costs)
-                bonusValue += cost.CalculateBonusValue(user);
-            
-            return bonusValue == 0 ? value : bonusValue * value;
+            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user));
+
+            return bonusMultiplierSum == 0 ? value : bonusMultiplierSum * value;
         }
     }
 }

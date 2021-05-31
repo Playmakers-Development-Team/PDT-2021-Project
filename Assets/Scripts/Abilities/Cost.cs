@@ -15,7 +15,7 @@ namespace Abilities
         public CostType CostType => costType;
         public TenetType TenetType => tenetType;
 
-        public int CalculateBonusValue(IUnit user)
+        public int CalculateBonusMultiplier(IUnit user)
         {
             if (costType == CostType.Per)
                 return user.GetTenetStatusEffectCount(tenetType);
