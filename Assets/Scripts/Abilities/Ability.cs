@@ -108,7 +108,7 @@ namespace Abilities
             {
                 if (effect.CanBeUsedBy(user))
                 {
-                    bonus += effect.CalculateModifier(user, valueType);
+                    bonus += effect.CalculateValue(user, valueType);
                 }
             }
 

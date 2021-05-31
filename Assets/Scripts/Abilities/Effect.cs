@@ -43,7 +43,7 @@ namespace Abilities
                 cost.Expend(user);
         }
 
-        public int CalculateModifier(IUnit user, EffectValueType valueType)
+        public int CalculateValue(IUnit user, EffectValueType valueType)
         {
             int value = valueType switch
             {
