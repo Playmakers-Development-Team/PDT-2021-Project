@@ -14,18 +14,6 @@ namespace Abilities
 
         
         public TenetType TenetType => tenetType;
-        
-
-        public int CalculateCost(IUnit user)
-        {
-            return costType switch
-            {
-                CostType.With => 1,
-                CostType.Per => user.GetTenetStatusEffectCount(tenetType),
-                CostType.Spend => user.GetTenetStatusEffectCount(tenetType),
-                _ => 0
-            };
-        }
 
         public int CalculateValue(IUnit user, int modifier)
         {
