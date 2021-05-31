@@ -43,6 +43,7 @@ namespace Abilities
                 cost.Expend(user);
         }
 
+        // TODO: Test
         public int CalculateValue(IUnit user, EffectValueType valueType)
         {
             int value = valueType switch

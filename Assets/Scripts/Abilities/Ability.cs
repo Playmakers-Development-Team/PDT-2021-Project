@@ -100,6 +100,7 @@ namespace Abilities
             }
         }
 
+        // TODO: Test
         private int CalculateValue(IUnit user, Effect[] effects, EffectValueType valueType)
         {
             int bonus = 0;
