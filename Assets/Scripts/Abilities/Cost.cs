@@ -40,7 +40,8 @@ namespace Abilities
 
         public void Expend(IUnit user)
         {
-            user.RemoveTenetStatusEffect(tenetType, CalculateCost(user));
+            if (costType == CostType.Per)
+                user.RemoveTenetStatusEffect(tenetType, 1);
         }
         
         public bool MeetsRequirements(IUnit user)
