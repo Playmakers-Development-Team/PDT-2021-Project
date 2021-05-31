@@ -106,7 +106,7 @@ namespace Abilities
             
             foreach (Effect effect in effects)
             {
-                if (effect.CanUse(user))
+                if (effect.CanBeUsedBy(user))
                 {
                     bonus += effect.CalculateModifier(user, valueType);
                 }
@@ -119,7 +119,7 @@ namespace Abilities
         {
             foreach (Effect effect in effects)
             {
-                if (effect.CanUse(user))
+                if (effect.CanBeUsedBy(user))
                 {
                     effect.Expend(user);
                     effect.Provide(user);

@@ -17,7 +17,7 @@ namespace Abilities
         [SerializeField] private List<Cost> costs;
         
         
-        public bool CanUse(IUnit user)
+        public bool CanBeUsedBy(IUnit user)
         {
             int[] totalCosts = new int[Enum.GetValues(typeof(TenetType)).Length];
 
@@ -38,7 +38,7 @@ namespace Abilities
 
         public void Expend(IUnit user)
         {
-            if (!CanUse(user))
+            if (!CanBeUsedBy(user))
                 return;
 
             foreach (Cost cost in costs)
