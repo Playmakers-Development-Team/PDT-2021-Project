@@ -32,7 +32,7 @@ namespace Units
 
         private PlayerManager playerManager;
         
-        protected override void Start()
+        protected void Awake()
         {
             base.Start();
             

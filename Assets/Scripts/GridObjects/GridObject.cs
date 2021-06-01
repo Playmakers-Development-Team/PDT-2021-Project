@@ -10,8 +10,8 @@ namespace GridObjects
 {
     public class GridObject : MonoBehaviour
     {
-        protected ValueStat HealthPoints { get; set; }
-        protected ValueStat MovementActionPoints { get; set; }
+        public ValueStat HealthPoints { get; protected set; }
+        public ValueStat MovementActionPoints { get; protected set; }
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
