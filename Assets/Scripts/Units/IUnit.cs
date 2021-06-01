@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GridObjects;
 using Abilities;
 using StatusEffects;
@@ -24,6 +25,8 @@ namespace Units
 
         void Knockback(Vector2Int translation);
 
+        List<Ability> GetAbilities();
+
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 
         bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue);
@@ -35,5 +38,9 @@ namespace Units
         bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
 
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
+
+        bool IsActing();
+
+        bool IsSelected();
     }
 }
