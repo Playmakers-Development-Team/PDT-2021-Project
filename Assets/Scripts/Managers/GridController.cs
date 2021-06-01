@@ -1,30 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Units;
 using UI;
 using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Utility;
 
 namespace Managers
 {
     public class GridController : MonoBehaviour
     {
+        [SerializeField] private Tilemap levelTilemap;
+        [SerializeField] private Tilemap highlightTilemap;
+        [SerializeField] private GameObject abilityUIPrefab;
+        [SerializeField] private Transform abilityParent;
+        [SerializeField] private TileBase abilityHighlightTile;
+
         private GridManager gridManager;
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
         private List<AbilityCard> abilityCards = new List<AbilityCard>();
-        [SerializeField] private GameObject abilityUIPrefab;
-        [SerializeField] private Transform abilityParent;
         //private int Count => maxAbilities.Count;
         
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.levelTilemap = GetComponentInChildren<Tilemap>();
+            gridManager.levelTilemap = levelTilemap;
             gridManager.InitialiseTileDatas();
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
@@ -70,10 +76,11 @@ namespace Managers
 
         private void UpdateAbilityUI(PlayerUnit unit)
         {
+            ClearAbilityUI();
+            
             if (unit is null)
             {
                 Debug.LogWarning("GridController.UpdateAbilityUI should not be passed a null value. Use GridController.ClearAbilityUI instead.");
-                ClearAbilityUI();
                 return;
             }
             
@@ -81,7 +88,13 @@ namespace Managers
             {
                 AddAbilityField(ability);
             }
+
+            // TODO remove Test ability highlight
+            TestAbilityHighlight(unit, unit.GetAbilities().First());
         }
+        #endregion
+        
+        #region Abilities
 
         private void ClearAbilityUI()
         {
@@ -101,8 +114,24 @@ namespace Managers
             abilityCards.Add(abilityCard);
         }
 
+        private void HighlightAbility(Vector2Int originCoordinate, Vector2 targetVector, Ability ability)
+        {
+            ClearAbilityHighlight();
+            var highlightedCoordinates = ability.Shape.GetHighlightedCoordinates(originCoordinate, targetVector);
+
+            foreach (Vector2Int highlightedCoordinate in highlightedCoordinates)
+            {
+                highlightTilemap.SetTile((Vector3Int) highlightedCoordinate, abilityHighlightTile);
+            }
+        }
+
+        private void ClearAbilityHighlight()
+        {
+            highlightTilemap.ClearAllTiles();
+        }
+
         #endregion
-        
+
         #region Unit Testing
         
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
@@ -140,6 +169,14 @@ namespace Managers
                 print(tile + " is at the provided coordinates " + randomCoordinates);
             }
         }
+
+        private void TestAbilityHighlight(IUnit unit, Ability ability)
+        {
+            HighlightAbility(unit.Coordinate,
+            ((OrdinalDirection) UnityEngine.Random.Range(0,
+                Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
+        }
+        
         #endregion
     }
 }

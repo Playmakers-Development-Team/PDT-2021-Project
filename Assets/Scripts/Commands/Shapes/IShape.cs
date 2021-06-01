@@ -11,7 +11,7 @@ namespace Commands.Shapes
         /// <summary>
         /// Get all the cells within this shape. May be empty if this shape is not an AoE.
         /// </summary>
-        public IEnumerable<Vector2Int> GetHighlightedCells(Vector2Int originCoordinate, Vector2 targetVector);
+        public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, Vector2 targetVector);
 
         public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 targetVector);
     }
