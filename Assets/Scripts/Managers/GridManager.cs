@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
+using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
@@ -304,6 +305,22 @@ namespace Managers
                 {
                     RemoveGridObject(currentPosition, gridObject);
                 }
+            }
+        }
+
+        public void MoveUnit(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject, IUnit iUnit)
+        {
+            GameObject gameObject = iUnit.gameObject;
+            TileData tileData = GetTileDataByCoordinate(newPosition);
+
+            if (tileData.GridObjects.Count == 0)
+            {
+                gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
+                MoveGridObject(currentPosition, newPosition, gridObject);
+            }
+            else
+            {
+                Debug.Log("Space occupied");
             }
         }
 

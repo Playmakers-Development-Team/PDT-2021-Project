@@ -12,12 +12,14 @@ namespace Commands
         private Vector2Int targetCoords, currentCoords;
         private GridObject gridObject;
         private GridManager gridManager;
+        private IUnit iUnit;
         public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current, GridObject x) : base(unit)
         {
             gridManager = ManagerLocator.Get<GridManager>();
             targetCoords = target;
             currentCoords = current;
             gridObject = x;
+            iUnit = unit;
         }
         
         
@@ -26,7 +28,7 @@ namespace Commands
 
         public override void Execute()
         {
-            gridManager.MoveGridObject(currentCoords, targetCoords, gridObject);
+            gridManager.MoveUnit(currentCoords, targetCoords, gridObject,iUnit);
         }
 
         public override void Undo() {}
