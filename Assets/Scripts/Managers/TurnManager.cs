@@ -287,10 +287,30 @@ namespace Managers
         /// </summary>
         public void AddNewUnitToTimeline(IUnit unit)
         {
-            currentTurnQueue.Add(unit);
-            nextTurnQueue.Add(unit);
+            AddUnitSortBySpeed(unit);
+            UpdateNextTurnQueue();
             newUnitAdded?.Invoke(this);
             unitSpawned = true;
+        }
+
+        /// <summary>
+        /// Tries to add the unit appropriately to the turn queue, sorted by it's speed
+        /// </summary>
+        private void AddUnitSortBySpeed(IUnit unit)
+        {
+            for (int i = 0; i < currentTurnQueue.Count; i++)
+            {
+                IUnit unitAtIndex = currentTurnQueue[i];
+
+                if (unit.Speed.Value < unitAtIndex.Speed.Value)
+                {
+                    currentTurnQueue.Insert(i, unit);
+                    return;
+                }
+            }
+            
+            // When it never got added which means the unit has the slowest speed
+            currentTurnQueue.Add(unit);
         }
 
         /// <summary>
