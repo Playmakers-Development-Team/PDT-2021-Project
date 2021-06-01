@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
 using StatusEffects;
+using Abilities;
+using Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,6 +27,10 @@ namespace Units
         
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
         private const int maxTenetStatusEffectCount = 2;
+
+        private TurnManager turnManager;
+
+        private PlayerManager playerManager;
         
         protected override void Start()
         {
@@ -45,6 +51,9 @@ namespace Units
             DealDamageModifier.Reset();
             TakeDamageModifier.Reset();
             TakeKnockbackModifier.Reset();
+
+            turnManager = ManagerLocator.Get<TurnManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
         public void TakeDefence(int amount) => data.dealDamageModifier.Adder -= amount;
@@ -52,6 +61,8 @@ namespace Units
         public void TakeAttack(int amount) => data.takeDamageModifier.Adder += amount;
 
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
+
+        public List<Ability> GetAbilities() => data.abilities;
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
@@ -123,6 +134,10 @@ namespace Units
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
+        
+        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
+
+        public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
                                                  out LinkedListNode<TenetStatusEffect> foundNode)

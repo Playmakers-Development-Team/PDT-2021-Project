@@ -4,8 +4,11 @@ using System.Linq;
 using Commands;
 using GridObjects;
 using Units;
+using UI;
+using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -17,6 +20,11 @@ namespace Managers
         private Vector3 tilemapOriginPoint;
         private bool selected;
 
+        private List<AbilityCard> abilityCards = new List<AbilityCard>();
+        [SerializeField] private GameObject abilityUIPrefab;
+        [SerializeField] private Transform abilityParent;
+        //private int Count => maxAbilities.Count;
+        
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -30,22 +38,11 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
+        
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if (!selected)
-                {
-                    ClickUnit();
-                }
-                else
-                {
-                    ClickCoordGrid();
-                }
-
-            }
-            
+            if(Input.GetKeyDown(KeyCode.Mouse0)) 
+                ClickUnit();
         }
 
         #region Unit Selection
@@ -56,41 +53,57 @@ namespace Managers
             Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-
+        
             foreach (IUnit unit in playerManager.PlayerUnits)
             {
                 if (unit is PlayerUnit playerUnit)
                 {
-                    if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
+                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) == gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
+                        UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
                         selected = true;
                         return;
                     }
                 }
             }
-            playerManager.SelectUnit(null);
-            selected = false;
+            playerManager.DeselectUnit();
+            ClearAbilityUI();
+            Debug.Log($"Unit Deselected!");
         }
 
-        #endregion
-        
-        #region Grid Coord Selection
-
-        private void ClickCoordGrid()
+        private void UpdateAbilityUI(PlayerUnit unit)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
-            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            IUnit playerUnit = playerManager.SelectedUnit;
+            if (unit is null)
+            {
+                Debug.LogWarning("GridController.UpdateAbilityUI should not be passed a null value. Use GridController.ClearAbilityUI instead.");
+                ClearAbilityUI();
+                return;
+            }
+            
+            foreach (var ability in unit.GetAbilities())
+            {
+                AddAbilityField(ability);
+            }
+        }
 
-            Debug.Log(playerUnit.Coordinate + " to " +gridPos + " selected");
-                    List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
-                    ManagerLocator.Get<CommandManager>().
-                        ExecuteCommand(new Commands.MoveCommand(playerUnit,gridPos,playerUnit.Coordinate,gridUnit.First()));
-                    selected = false;
+        private void ClearAbilityUI()
+        {
+            foreach (var abilityCard in abilityCards)
+            {
+                Destroy(abilityCard.gameObject);
+            }
+            
+            abilityCards.Clear();
+        }
+
+        private void AddAbilityField(Ability ability)
+        {
+            var abilityCardObject = Instantiate(abilityUIPrefab, abilityParent);
+            var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
+            abilityCard.SetAbility(ability);
+            abilityCards.Add(abilityCard);
         }
 
         #endregion
