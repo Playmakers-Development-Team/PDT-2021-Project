@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using Managers;
 using TMPro;
 using Units;
@@ -14,8 +15,8 @@ namespace GridObjects
         public ModifierStat TakeDamageModifier { get; protected set; }
         public ModifierStat TakeKnockbackModifier { get; protected set; }
         
-        private Vector2Int coordinate;
-        
+        public Vector2Int Coordinate => gridManager.ConvertPositionToCoordinate(transform.position);
+
         private GridManager gridManager;
 
         private float damageTextLifetime = 1.0f;
@@ -24,9 +25,7 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
 
-            coordinate = gridManager.ConvertPositionToCoordinate(transform.position);
-
-            gridManager.AddGridObject(coordinate, this);
+            gridManager.AddGridObject(Coordinate, this);
         }
 
         public void TakeDamage(int amount)
@@ -47,9 +46,10 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
+        [Obsolete("Use Coordinate property instead.")]
         public Vector2Int GetCoordinate()
         {
-            return coordinate;
+            return Coordinate;
         }
 
         private void CheckDeath()
@@ -62,7 +62,7 @@ namespace GridObjects
         {
             Debug.Log($"This Grid Object was cringe and died");
             
-            gridManager.RemoveGridObject(coordinate, this);
+            gridManager.RemoveGridObject(Coordinate, this);
 
             IUnit unit = (IUnit) this;
             
