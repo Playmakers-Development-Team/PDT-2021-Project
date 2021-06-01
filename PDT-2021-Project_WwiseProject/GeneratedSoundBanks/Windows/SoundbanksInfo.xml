@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="140">
 	<RootPaths>
-		<ProjectRoot>C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\</ProjectRoot>
-		<SourceFilesRoot>C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Windows\</SourceFilesRoot>
-		<SoundBanksRoot>C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ProjectRoot>/Users/jakeamante/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/PDT-2021-Project/PDT-2021-Project_WwiseProject/</ProjectRoot>
+		<SourceFilesRoot>/Users/jakeamante/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/PDT-2021-Project/PDT-2021-Project_WwiseProject/.cache/Windows/</SourceFilesRoot>
+		<SoundBanksRoot>/Users/jakeamante/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/PDT-2021-Project/PDT-2021-Project_WwiseProject/GeneratedSoundBanks/Windows/</SoundBanksRoot>
 		<ExternalSourcesInputFile></ExternalSourcesInputFile>
-		<ExternalSourcesOutputRoot>C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+		<ExternalSourcesOutputRoot>/Users/jakeamante/Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/PDT-2021-Project/PDT-2021-Project_WwiseProject/GeneratedSoundBanks/Windows</ExternalSourcesOutputRoot>
 	</RootPaths>
 	<DialogueEvents/>
 	<StreamedFiles/>
@@ -26,7 +26,38 @@
 				<GameParameter Id="2918011349" Name="MasterVolume" ObjectPath="\Game Parameters\In-game Settings\Volume\MasterVolume"/>
 			</GameParameters>
 		</SoundBank>
-		<SoundBank Id="2005704188" Language="SFX" Hash="3659255187">
+		<SoundBank Id="1548734028" Language="SFX" Hash="167594648">
+			<ObjectPath>\SoundBanks\Default Work Unit\Placeholder</ObjectPath>
+			<ShortName>Placeholder</ShortName>
+			<Path>Placeholder.bnk</Path>
+			<IncludedEvents>
+				<Event Id="822824111" Name="Play_Marie_Attack" ObjectPath="\Events\Player_Unit\Play_Marie_Attack" DurationType="OneShot" DurationMin="1.416417" DurationMax="1.416417">
+					<IncludedMemoryFiles>
+						<File Id="849732774" Language="SFX">
+							<ShortName>Marie_Attack-01.wav</ShortName>
+							<Path>SFX/Marie_Attack-01_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="3399001768" Name="Play_Mountain_Trail_Theme" ObjectPath="\Events\Music\Play_Mountain_Trail_Theme" DurationType="Infinite">
+					<IncludedMemoryFiles>
+						<File Id="702098740" Language="SFX">
+							<ShortName>Mountain-Trail_70bpm6-8_L96M.wav</ShortName>
+							<Path>SFX/Mountain-Trail_70bpm6-8_L96M_D79FB2B7.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1713481986" Name="Play_Niles_Attack" ObjectPath="\Events\Player_Unit\Play_Niles_Attack" DurationType="OneShot" DurationMin="2.623855" DurationMax="2.623855">
+					<IncludedMemoryFiles>
+						<File Id="460477972" Language="SFX">
+							<ShortName>Niles_Attack-01v2.wav</ShortName>
+							<Path>SFX/Niles_Attack-01v2_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+			</IncludedEvents>
+		</SoundBank>
+		<SoundBank Id="2005704188" Language="SFX" Hash="1097578077">
 			<ObjectPath>\SoundBanks\Default Work Unit\Main_Menu</ObjectPath>
 			<ShortName>Main_Menu</ShortName>
 			<Path>Main_Menu.bnk</Path>
@@ -34,9 +65,9 @@
 				<Event Id="2896490611" Name="Francico_SucKZ" ObjectPath="\Events\Default Work Unit\Francico_SucKZ" MaxAttenuation="0.000000" DurationType="OneShot" DurationMin="0.000000" DurationMax="0.000000"/>
 				<Event Id="3610251637" Name="Francisco_sucks" ObjectPath="\Events\Default Work Unit\Francisco_sucks" DurationType="Infinite">
 					<IncludedMemoryFiles>
-						<File Id="358378944" Language="SFX">
-							<ShortName>Mountain_Trail_Battle_Active_Piano_180_210428.wav</ShortName>
-							<Path>SFX\Mountain_Trail_Battle_Active_Piano_180_210428_D79FB2B7.wem</Path>
+						<File Id="702098740" Language="SFX">
+							<ShortName>Mountain-Trail_70bpm6-8_L96M.wav</ShortName>
+							<Path>SFX/Mountain-Trail_70bpm6-8_L96M_D79FB2B7.wem</Path>
 						</File>
 					</IncludedMemoryFiles>
 				</Event>

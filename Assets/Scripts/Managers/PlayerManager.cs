@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Units;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Managers
 {
@@ -31,6 +29,8 @@ namespace Managers
             
             playerUnits.Add(unit);
             
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            
             SelectUnit((PlayerUnit)unit);
             
             return unit;
@@ -52,6 +52,13 @@ namespace Managers
 
         public void SelectUnit(PlayerUnit unit)
         {
+            if (unit is null)
+            {
+                Debug.LogWarning("PlayerManager.SelectUnit should not be passed a null value. Use PlayerManager.DeselectUnit instead.");
+                DeselectUnit();
+                return;
+            }
+            
             if ((PlayerUnit) SelectedUnit != unit)
             {
                 ManagerLocator.Get<CommandManager>().
@@ -59,7 +66,7 @@ namespace Managers
                 
                 SelectedUnit = unit;
                 
-                // Debug.Log(unit + " selected!");
+                Debug.Log(unit + " selected!");
             }
         }
 
@@ -67,6 +74,20 @@ namespace Managers
         {
             SelectedUnit = null;
             // Debug.Log("Units deselected.");
+        }
+        
+        public void RemovePlayerUnit(IUnit playerUnit)
+        {
+            if (playerUnits.Contains(playerUnit))
+            {
+                playerUnits.Remove(playerUnit);
+                Debug.Log(playerUnits.Count + " players remain");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: Tried to remove " + playerUnit +
+                                 " from PlayerManager but it isn't a part of the playerUnits list");
+            }
         }
     }
 }
