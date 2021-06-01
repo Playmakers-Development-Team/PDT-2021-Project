@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using GridObjects;
 using Abilities;
 using StatusEffects;
@@ -23,6 +24,8 @@ namespace Units
         void TakeAttack(int amount);
 
         void Knockback(Vector2Int translation);
+
+        List<Ability> GetAbilities();
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 

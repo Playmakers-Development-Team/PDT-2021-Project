@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Units;
+using UI;
+using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -12,6 +16,11 @@ namespace Managers
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
+        private List<AbilityCard> maxAbilities = new List<AbilityCard>();
+        [SerializeField] private GameObject abilityUIPrefab;
+        [SerializeField] private Transform abilityParent;
+        //private int Count => maxAbilities.Count;
+        
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -25,7 +34,7 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
+        
         // private void Update()
         // {
         //     if(Input.GetKeyDown(KeyCode.Mouse0)) 
@@ -36,27 +45,53 @@ namespace Managers
 
         // private void ClickUnit()
         // { 
-        //      [*OLDSYSTEM REMOVED]
-        //      Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
-        //      Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
-        //      Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
-        //      PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-        //     
-        //      foreach (IUnit unit in playerManager.PlayerUnits)
-        //      {
-        //          if (unit is PlayerUnit playerUnit)
-        //          {
-        //              if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
-        //              {
-        //                  playerManager.SelectUnit(playerUnit);
-        //                  Debug.Log($"Unit Selected!");
-        //                  return;
-        //              }
-        //          }
-        //      }
-        //      playerManager.SelectUnit(null);
+        //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+        //     Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+        //     Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+        //     PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+        //
+        //     foreach (IUnit unit in playerManager.PlayerUnits)
+        //     {
+        //         if (unit is PlayerUnit playerUnit)
+        //         {
+        //             if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
+        //             {
+        //                 playerManager.SelectUnit(playerUnit);
+        //                 UpdateAbility(playerUnit);
+        //                 Debug.Log($"Unit Selected!");
+        //                 return;
+        //             }
+        //         }
+        //     }
+        //     playerManager.SelectUnit(null);
         // }
 
+        private void UpdateAbility(PlayerUnit unit)
+        {
+            List<Ability> currentAbilities = unit.GetAbilities();
+            for (int i = 0; i < currentAbilities.Count; i++)
+            {
+                if(i >= maxAbilities.Count) AddAbilityField(currentAbilities[i]);
+                else SetAbilityText(i,currentAbilities[i]);
+            }
+            for (int i = currentAbilities.Count; i < maxAbilities.Count; i++)
+            {
+                maxAbilities[i].gameObject.SetActive(false);
+            }
+        }
+
+        public void AddAbilityField(Ability ability)
+        {
+            var abilityCardObject = Instantiate(abilityUIPrefab, abilityParent);
+            var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
+            abilityCard.SetAbility(ability);
+            maxAbilities.Add(abilityCard);
+        }
+
+        private void SetAbilityText(int index, Ability ability)
+        {
+            maxAbilities[index].SetAbility(ability);
+        }
         #endregion
         
         #region Unit Testing
