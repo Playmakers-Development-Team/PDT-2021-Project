@@ -42,13 +42,14 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-        
+
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
                 if (ManagerLocator.Get<PlayerManager>().SelectedUnit != null)
                 {
-                    ClickCoordGrid();
+                    ClickCoordinateGrid();
                     ManagerLocator.Get<PlayerManager>().DeselectUnit();
                     ClearAbilityUI();
                     Debug.Log($"Unit Deselected!");
@@ -57,6 +58,7 @@ namespace Managers
                 {
                     ClickUnit();
                 }
+            }
         }
 
         #region Unit Selection
@@ -86,7 +88,8 @@ namespace Managers
             Debug.Log($"Unit Deselected!");
         }
 
-        private void ClickCoordGrid() {
+        private void ClickCoordinateGrid()
+        {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
             Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y + 0.5f);
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
@@ -94,8 +97,7 @@ namespace Managers
             IUnit playerUnit = playerManager.SelectedUnit;
 
             Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
-            List<GridObject> gridUnit =
-                gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
             ManagerLocator.Get<CommandManager>().
                 ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
                     gridUnit.First()));
