@@ -24,7 +24,7 @@ namespace Managers
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
-        private List<AbilityCard> maxAbilities = new List<AbilityCard>();
+        private List<AbilityCard> abilityCards = new List<AbilityCard>();
         //private int Count => maxAbilities.Count;
         
         private void Awake()
@@ -40,7 +40,7 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
+        
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Mouse0)) 
@@ -55,54 +55,62 @@ namespace Managers
             Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-
+        
             foreach (IUnit unit in playerManager.PlayerUnits)
             {
                 if (unit is PlayerUnit playerUnit)
                 {
-                    if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
+                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) == gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
-                        UpdateAbility(playerUnit);
+                        UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
                         return;
                     }
                 }
             }
-            playerManager.SelectUnit(null);
+            playerManager.DeselectUnit();
+            ClearAbilityUI();
+            Debug.Log($"Unit Deselected!");
         }
 
-        private void UpdateAbility(PlayerUnit unit)
+        private void UpdateAbilityUI(PlayerUnit unit)
         {
-            List<Ability> currentAbilities = unit.GetAbilities();
-            for (int i = 0; i < currentAbilities.Count; i++)
+            if (unit is null)
             {
-                if(i >= maxAbilities.Count) AddAbilityField(currentAbilities[i]);
-                else SetAbilityText(i,currentAbilities[i]);
+                Debug.LogWarning("GridController.UpdateAbilityUI should not be passed a null value. Use GridController.ClearAbilityUI instead.");
+                ClearAbilityUI();
+                return;
             }
-            for (int i = currentAbilities.Count; i < maxAbilities.Count; i++)
+            
+            foreach (var ability in unit.GetAbilities())
             {
-                maxAbilities[i].gameObject.SetActive(false);
+                AddAbilityField(ability);
             }
 
             // TODO remove Test ability highlight
-            TestAbilityHighlight(unit, currentAbilities.First());
+            TestAbilityHighlight(unit, unit.GetAbilities().First());
         }
         #endregion
-
-        #region Abilities
         
-        public void AddAbilityField(Ability ability)
+        #region Abilities
+
+        private void ClearAbilityUI()
+        {
+            foreach (var abilityCard in abilityCards)
+            {
+                Destroy(abilityCard.gameObject);
+            }
+            
+            abilityCards.Clear();
+        }
+
+        private void AddAbilityField(Ability ability)
         {
             var abilityCardObject = Instantiate(abilityUIPrefab, abilityParent);
             var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
             abilityCard.SetAbility(ability);
-            maxAbilities.Add(abilityCard);
-        }
-
-        private void SetAbilityText(int index, Ability ability)
-        {
-            maxAbilities[index].SetAbility(ability);
+            abilityCards.Add(abilityCard);
         }
 
         private void HighlightAbility(Vector2Int originCoordinate, Vector2 targetVector, Ability ability)
