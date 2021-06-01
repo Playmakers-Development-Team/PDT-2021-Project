@@ -1,7 +1,10 @@
-﻿using System;
+using System;
+using Abilities;
 
 namespace Units
 {
-    [Serializable]
-    public class PlayerUnit : Unit<PlayerUnitData> {}
+    public class PlayerUnit : Unit<PlayerUnitData>
+    {
+        public Ability CurrentlySelectedAbility;
+    }
 }

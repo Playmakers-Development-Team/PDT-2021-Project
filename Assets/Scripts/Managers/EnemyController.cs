@@ -12,7 +12,8 @@ namespace Managers
         [SerializeField] private bool debugDamagePlayerButton = false;
         
         private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; //Max is 203 at the moment
+        private int totalEnemies = 3; //Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
+        
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;

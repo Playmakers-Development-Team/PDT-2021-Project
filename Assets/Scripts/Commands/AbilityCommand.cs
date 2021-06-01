@@ -11,6 +11,8 @@ namespace Commands
         private readonly Vector2Int originCoordinate;
         private readonly IUnit unit;
 
+
+
         public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
             this.ability = ability;
@@ -19,7 +21,8 @@ namespace Commands
             this.unit = unit;
         }
 
-        public override void Queue() {}
+        public override void Queue() 
+        {}
 
         public override void Execute()
         {
