@@ -46,6 +46,8 @@ namespace Managers
         /// </summary>
         private int abilityIndex;
 
+        private bool isCastingAbility;
+
         private void Awake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -168,6 +170,32 @@ namespace Managers
                 actingUnit.CurrentlySelectedAbility = null;
                 uiManager.ClearAbilityHighlight();
                 abilityIndex = 0;
+            }
+            
+            HandleAbilityCasting();
+        }
+
+        private void HandleAbilityCasting()
+        {
+            if (actingUnit == null || actingUnit.CurrentlySelectedAbility == null)
+                return;
+            
+            Vector2 castVector = Camera.main.ScreenToWorldPoint(Input.mousePosition)
+                                 - actingUnit.transform.position;
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                isCastingAbility = !isCastingAbility;
+            }
+
+            if (isCastingAbility)
+            {
+                uiManager.HighlightAbility(actingUnit.Coordinate, castVector, actingUnit.CurrentlySelectedAbility);
+            }
+
+            if (isCastingAbility && Input.GetMouseButtonDown(1))
+            {
+                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate, castVector);
             }
         }
     }

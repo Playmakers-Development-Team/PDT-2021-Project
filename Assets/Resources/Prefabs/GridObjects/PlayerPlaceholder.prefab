@@ -148,9 +148,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     healthPoints:
-      <BaseValue>k__BackingField: 1
+      <BaseValue>k__BackingField: 10
     movementActionPoints:
-      <BaseValue>k__BackingField: 1
+      <BaseValue>k__BackingField: 3
     speed:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
@@ -164,3 +164,4 @@ MonoBehaviour:
       <BaseAdder>k__BackingField: 0
     abilities:
     - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
+  CurrentlySelectedAbility: {fileID: 0}
