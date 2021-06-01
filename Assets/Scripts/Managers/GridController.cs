@@ -13,6 +13,8 @@ namespace Managers
 {
     public class GridController : MonoBehaviour
     {
+        [SerializeField] private Vector2Int levelBounds;
+        [SerializeField] private Vector2 gridOffset;
         [SerializeField] private Tilemap levelTilemap;
         [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private GameObject abilityUIPrefab;
@@ -30,12 +32,11 @@ namespace Managers
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.levelTilemap = levelTilemap;
-            gridManager.InitialiseTileDatas();
+            gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
-            bounds = gridManager.levelTilemap.cellBounds;
-            tilemapOriginPoint = gridManager.levelTilemap.transform.position;
+            bounds = gridManager.LevelTilemap.cellBounds;
+            tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
             
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
@@ -45,16 +46,20 @@ namespace Managers
         {
             if(Input.GetKeyDown(KeyCode.Mouse0)) 
                 ClickUnit();
+            
+            DrawGridOutline();
         }
 
         #region Unit Selection
 
         private void ClickUnit()
         { 
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
-            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos);
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            Vector2Int actualGridPos = (Vector2Int) levelTilemap.layoutGrid.WorldToCell(mousePos);
+            
+            Debug.Log($"Click mouse grid {gridPos} actually {actualGridPos} at mouse pos {mousePos}");
         
             foreach (IUnit unit in playerManager.PlayerUnits)
             {
@@ -70,6 +75,7 @@ namespace Managers
                 }
             }
             playerManager.DeselectUnit();
+            ClearAbilityHighlight();
             ClearAbilityUI();
             Debug.Log($"Unit Deselected!");
         }

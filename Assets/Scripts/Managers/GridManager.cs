@@ -16,22 +16,30 @@ namespace Managers
 
         private const int GridLineCastDefaultLimit = 10;
 
-        public Tilemap levelTilemap { get; set; }
+        public Tilemap LevelTilemap { get; private set; }
+        public Vector2Int LevelBounds { get; private set; }
+        public Vector2 GridOffset { get; private set; }
 
-        public void InitialiseTileDatas()
+        public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
         {
-            BoundsInt bounds = levelTilemap.cellBounds;
-
-            for (int x = -bounds.size.x/2 - 1; x <= bounds.size.x/2; x++)
+            LevelBounds = levelBounds;
+            LevelTilemap = levelTilemap;
+            GridOffset = gridOffset;
+            
+            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
             {
-                for (int y = -bounds.size.y/2 - 1; y <= bounds.size.y/2; y++)
+                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
-
-                    if (tile != null)
-                    {
-                        tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
-                    }
+                    // This is going to be null, if there is no tile there but that's fine
+                    tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
+                    
+                    // Debug.Log($"Register tiledata at {x}, {y}");
+                    //
+                    // if (tile != null)
+                    // {
+                    //     tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
+                    // }
                 }
             }
         }
@@ -64,11 +72,9 @@ namespace Managers
 
         public Vector2Int GetRandomCoordinates()
         {
-            BoundsInt bounds = levelTilemap.cellBounds;
-            
             return new Vector2Int(
-                Random.Range(bounds.xMin, bounds.xMax), 
-                Random.Range(bounds.yMin, bounds.yMax));
+                Random.Range(-(LevelBounds.x / 2), (LevelBounds.x / 2)), 
+                Random.Range(-(LevelBounds.y / 2), (LevelBounds.y / 2)));
         }
         
         public Vector2Int GetRandomUnoccupiedCoordinates()
@@ -151,14 +157,14 @@ namespace Managers
         {
             // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
             //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return (Vector2Int) levelTilemap.layoutGrid.WorldToCell(position);
+            return (Vector2Int) LevelTilemap.layoutGrid.WorldToCell(position);
         }
         
         public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate)
         {
             // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
             //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return levelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate);
+            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) + GridOffset;
         }
         
         #endregion
