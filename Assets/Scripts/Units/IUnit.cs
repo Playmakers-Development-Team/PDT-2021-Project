@@ -15,6 +15,8 @@ namespace Units
         
         public Vector2Int Coordinate { get; }
         
+        GameObject gameObject { get; }
+        
         Type GetDataType();
         
         void TakeDamage(int amount);

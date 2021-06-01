@@ -73,6 +73,22 @@ namespace Managers
             Debug.Log($"Unit Deselected!");
         }
 
+        private void ClickCoordGrid() {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y + 0.5f);
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            IUnit playerUnit = playerManager.SelectedUnit;
+
+            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit =
+                gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
+            ManagerLocator.Get<CommandManager>().
+                ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
+                    gridUnit.First()));
+            selected = false;
+        }
+
         private void UpdateAbilityUI(PlayerUnit unit)
         {
             if (unit is null)
