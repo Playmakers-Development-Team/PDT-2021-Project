@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GridObjects;
 using Managers;
 using Units;
 using UnityEngine;
@@ -8,11 +9,15 @@ namespace Commands
 {
     public class MoveCommand : Command
     {
-        private Vector2Int targetCoords;
+        private Vector2Int targetCoords, currentCoords;
+        private GridObject gridObject;
         private GridManager gridManager;
-        public MoveCommand(IUnit unit) : base(unit)
+        public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current, GridObject x) : base(unit)
         {
             gridManager = ManagerLocator.Get<GridManager>();
+            targetCoords = target;
+            currentCoords = current;
+            gridObject = x;
         }
         
         
@@ -21,7 +26,7 @@ namespace Commands
 
         public override void Execute()
         {
-            //gridManager.MoveGridObject(targetCoords,targetCoords,m);
+            gridManager.MoveGridObject(currentCoords, targetCoords, gridObject);
         }
 
         public override void Undo() {}

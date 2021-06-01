@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Commands;
+using GridObjects;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -11,6 +15,7 @@ namespace Managers
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
+        private bool selected;
 
         private void Awake()
         {
@@ -30,9 +35,17 @@ namespace Managers
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                
+                if (!selected)
+                {
+                    ClickUnit();
+                }
+                else
+                {
+                    ClickCoordGrid();
+                }
+
             }
-            //ClickUnit();
+            
         }
 
         #region Unit Selection
@@ -52,12 +65,13 @@ namespace Managers
                     {
                         playerManager.SelectUnit(playerUnit);
                         Debug.Log($"Unit Selected!");
+                        selected = true;
                         return;
                     }
                 }
             }
-            ClickCoordGrid();
             playerManager.SelectUnit(null);
+            selected = false;
         }
 
         #endregion
@@ -65,13 +79,18 @@ namespace Managers
         #region Grid Coord Selection
 
         private void ClickCoordGrid()
-        { 
-            Debug.Log("Click");
+        {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
             Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
-            
-            Debug.Log(gridPos + " selected");
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            IUnit playerUnit = playerManager.SelectedUnit;
+
+            Debug.Log(playerUnit.Coordinate + " to " +gridPos + " selected");
+                    List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
+                    ManagerLocator.Get<CommandManager>().
+                        ExecuteCommand(new Commands.MoveCommand(playerUnit,gridPos,playerUnit.Coordinate,gridUnit.First()));
+                    selected = false;
         }
 
         #endregion
