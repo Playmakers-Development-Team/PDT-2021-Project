@@ -12,7 +12,7 @@ namespace Managers
             // Maybe do this through a level dictionary that contains these details?
             // For now placeholders will be used
             
-            GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerTemp", typeof(GameObject));
+            GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerPlaceholder", typeof(GameObject));
             
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
             playerManager.Spawn(playerPrefab, Vector2Int.zero);

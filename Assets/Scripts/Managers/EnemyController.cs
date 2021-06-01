@@ -30,7 +30,7 @@ namespace Managers
             enemyManager = ManagerLocator.Get<EnemyManager>();
 
             enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyTemp", typeof(GameObject));
+                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             isSpawningEnemies = true;
         }

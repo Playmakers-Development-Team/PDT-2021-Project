@@ -55,9 +55,10 @@ namespace Managers
         private void ClickUnit()
         { 
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos);
+            // TODO look into this later, put the subtraction somewhere better
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            Vector2Int actualGridPos = (Vector2Int) levelTilemap.layoutGrid.WorldToCell(mousePos);
+            Vector2Int actualGridPos = (Vector2Int) levelTilemap.layoutGrid.WorldToCell(mousePos) ;
             
             Debug.Log($"Click mouse grid {gridPos} actually {actualGridPos} at mouse pos {mousePos}");
         
