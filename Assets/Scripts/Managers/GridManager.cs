@@ -136,7 +136,7 @@ namespace Managers
             return null;
         }
         
-        public int[,] getUnitRange(int[,] gridArray, int moveRange, Vector2Int initialPos){
+        public int[,] getUnitRangeOLD(int[,] gridArray, int moveRange, Vector2Int initialPos){
             
             Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
             coordQueue.Enqueue(initialPos);
@@ -186,7 +186,7 @@ namespace Managers
             }
             return gridArray;
         }
-        public Queue<Vector2Int> getUnitPath(int[,] gridArray, Vector2Int targetPos){
+        public Queue<Vector2Int> getUnitPathOLD(int[,] gridArray, Vector2Int targetPos){
             
             Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
             Queue<Vector2Int> pathQueue = new Queue<Vector2Int>();
@@ -218,8 +218,49 @@ namespace Managers
             }
             return pathQueue;
         }
-        
-        
+
+        public List<Vector2Int> allReachableTiles(Vector2Int startingPosition, int range, Dictionary<Vector2Int, TileData> grid)
+        {
+            List<Vector2Int> reachable = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            
+            coordinateQueue.Enqueue(startingPosition);
+            int distance = 0;
+            visited.Add(startingPosition, distance);
+            
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int current = coordinateQueue.Peek();
+                distance = visited[current];
+                Debug.Log("On this node now"+current);
+                if (distance > range) { break;}
+                
+                //add neighbours
+                visitNode(grid, current + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, current + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, current + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, current + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                
+                
+                reachable.Add(current);
+                coordinateQueue.Dequeue();
+            }
+
+            return reachable;
+        }
+        private void visitNode(Dictionary<Vector2Int, TileData> grid, Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
+        {
+            Debug.Log("Adding " + node + " with distance" + distance + 1);
+            if ((grid.ContainsKey(node)) && grid[node].GridObjects.Count == 0)
+            {
+                if (!(visited.ContainsKey(node)))
+                {
+                    visited.Add(node, distance + 1);
+                    coordinateQueue.Enqueue(node);
+                }
+            }
+        }
         
         #endregion
 
@@ -312,16 +353,31 @@ namespace Managers
         {
             GameObject gameObject = iUnit.gameObject;
             TileData tileData = GetTileDataByCoordinate(newPosition);
+            //Check if in range
 
             if (tileData.GridObjects.Count == 0)
             {
-                gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
-                MoveGridObject(currentPosition, newPosition, gridObject);
+                Debug.Log(allReachableTiles(currentPosition, 4, tileDatas).ToString());
+                if (allReachableTiles(currentPosition, 4, tileDatas).Contains(newPosition))
+                {
+                    gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
+                    MoveGridObject(currentPosition, newPosition, gridObject);
+                }
+                else
+                {
+                    Debug.Log("Out of range");
+                }
+                
             }
             else
             {
                 Debug.Log("Space occupied");
             }
+        }
+
+        public void teleportUnit(Vector2Int newPosition, IUnit unit)
+        {
+            
         }
 
         public void MoveGridObject(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject)
@@ -331,13 +387,7 @@ namespace Managers
                 RemoveGridObject(currentPosition, gridObject);
             }
         }
-
-        public void CheckIfInRange()
-        {
-            //if(coords not 0 in grid array)
-            
-            //MoveGridObject()
-        }
+        
         
         
         
