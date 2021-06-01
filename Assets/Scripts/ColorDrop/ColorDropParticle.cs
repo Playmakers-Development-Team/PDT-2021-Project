@@ -21,6 +21,6 @@ namespace ColorDrop.Particle
     [Serializable]
     public struct ColorDropParticleAttributes
     {
-
+        public Color defaultColor;
     }
 }

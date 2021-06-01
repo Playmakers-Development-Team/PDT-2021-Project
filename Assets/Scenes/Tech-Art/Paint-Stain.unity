@@ -791,6 +791,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607371e617bc74d4f9e6efe1b36a2582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleAttributes:
+    defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  startDelay: 0
+  startRotation: 0
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  initialAlpha: 0
+  dropScale: {x: 0, y: 0}
+  material: {fileID: 0}
+  sortLayer: 0
 --- !u!1 &698846669
 GameObject:
   m_ObjectHideFlags: 0

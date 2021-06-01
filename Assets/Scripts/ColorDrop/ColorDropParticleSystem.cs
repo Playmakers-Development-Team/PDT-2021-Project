@@ -15,6 +15,16 @@ namespace ColorDrop
 
         [HideInInspector] public ColorDropParticleAttributes particleAttributes;
 
+        [HideInInspector] public float startDelay;
+        [HideInInspector] public float startRotation;
+
+        [HideInInspector] public Color defaultColor;
+        [HideInInspector] public float initialAlpha;
+        [HideInInspector] public Vector2 dropScale;
+
+        [HideInInspector] public Material material;
+        [HideInInspector] public int sortLayer;
+
         private void Awake()
         {
             
