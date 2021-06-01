@@ -136,89 +136,6 @@ namespace Managers
             return null;
         }
         
-        public int[,] getUnitRangeOLD(int[,] gridArray, int moveRange, Vector2Int initialPos){
-            
-            Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
-            coordQueue.Enqueue(initialPos);
-            
-            while (coordQueue.Count > 0)
-            {
-                Vector2Int current = coordQueue.Peek();
-                int currentMoveCount = gridArray[current.x, current.y];
-                if(currentMoveCount == moveRange){coordQueue.Clear(); break;}
-                //mark adjacent grids and add them to the back of the queue
-                //Only mark if 0
-                //Implement Method to increase maintainability
-                if (gridArray[current.x + 1, current.y] == 0)
-                {
-                    if (GetGridObjectsByCoordinate(current) != null)// will need to be updated to allow allies through
-                    {
-                        gridArray[current.x + 1, current.y] = currentMoveCount + 1;
-                        coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
-                    }
-                }
-                if (gridArray[current.x, current.y - 1] == 0)
-                {
-                    if (GetGridObjectsByCoordinate(current) != null) 
-                    {
-                        gridArray[current.x, current.y - 1] = currentMoveCount + 1;
-                        coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
-                    }
-                }
-                if (gridArray[current.x - 1, current.y] == 0)
-                {
-                    if (GetGridObjectsByCoordinate(current) != null)
-                    {
-                        gridArray[current.x - 1, current.y] = currentMoveCount + 1;
-                        coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
-                    }
-                }
-                if (gridArray[current.x, current.y + 1] == 0)
-                {
-                    if (GetGridObjectsByCoordinate(current) != null)
-                    {
-                        gridArray[current.x, current.y + 1] = currentMoveCount + 1;
-                        coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
-                    }
-                }
-                coordQueue.Dequeue();
-                //repeat until queue empty
-            }
-            return gridArray;
-        }
-        public Queue<Vector2Int> getUnitPathOLD(int[,] gridArray, Vector2Int targetPos){
-            
-            Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
-            Queue<Vector2Int> pathQueue = new Queue<Vector2Int>();
-            coordQueue.Enqueue(targetPos);
-            
-            while (coordQueue.Count > 0)
-            {
-                Vector2Int current = coordQueue.Peek();
-                int currentMoveCount = gridArray[current.x, current.y];
-                if (gridArray[current.x + 1, current.y] == currentMoveCount - 1)
-                {
-                    coordQueue.Enqueue(new Vector2Int(current.x + 1, current.y)); //right 
-                }else
-                if (gridArray[current.x, current.y - 1] == currentMoveCount - 1)
-                {
-                    coordQueue.Enqueue(new Vector2Int(current.x, current.y - 1)); //down
-                }else
-                if (gridArray[current.x - 1, current.y] == currentMoveCount - 1)
-                {
-                    coordQueue.Enqueue(new Vector2Int(current.x - 1, current.y)); //left
-                }else
-                if (gridArray[current.x, current.y + 1]== currentMoveCount - 1)
-                {
-                    coordQueue.Enqueue(new Vector2Int(current.x, current.y + 1)); //up 
-                }
-                pathQueue.Enqueue(current);
-                coordQueue.Dequeue();
-                //repeat until queue empty
-            }
-            return pathQueue;
-        }
-
         public List<Vector2Int> allReachableTiles(Vector2Int startingPosition, int range, Dictionary<Vector2Int, TileData> grid)
         {
             List<Vector2Int> reachable = new List<Vector2Int>();
@@ -233,7 +150,7 @@ namespace Managers
             {
                 Vector2Int current = coordinateQueue.Peek();
                 distance = visited[current];
-                Debug.Log("On this node now"+current);
+                //Debug.Log("On this node now"+current);
                 if (distance > range) { break;}
                 
                 //add neighbours
@@ -251,11 +168,12 @@ namespace Managers
         }
         private void visitNode(Dictionary<Vector2Int, TileData> grid, Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
         {
-            Debug.Log("Adding " + node + " with distance" + distance + 1);
+            
             if ((grid.ContainsKey(node)) && grid[node].GridObjects.Count == 0)
             {
                 if (!(visited.ContainsKey(node)))
                 {
+                    //Debug.Log("Adding " + node + " with distance" + distance + 1);
                     visited.Add(node, distance + 1);
                     coordinateQueue.Enqueue(node);
                 }
@@ -354,11 +272,9 @@ namespace Managers
             GameObject gameObject = iUnit.gameObject;
             TileData tileData = GetTileDataByCoordinate(newPosition);
             //Check if in range
-
             if (tileData.GridObjects.Count == 0)
             {
-                Debug.Log(allReachableTiles(currentPosition, 4, tileDatas).ToString());
-                if (allReachableTiles(currentPosition, 4, tileDatas).Contains(newPosition))
+                if (allReachableTiles(currentPosition, 3, tileDatas).Contains(newPosition))
                 {
                     gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
                     MoveGridObject(currentPosition, newPosition, gridObject);
