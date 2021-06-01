@@ -8,6 +8,7 @@ namespace Commands
 {
     public class MoveCommand : Command
     {
+        private Vector2Int targetCoords;
         private GridManager gridManager;
         public MoveCommand(IUnit unit) : base(unit)
         {
@@ -18,7 +19,10 @@ namespace Commands
 
         public override void Queue() {}
 
-        public override void Execute() {}
+        public override void Execute()
+        {
+            //gridManager.MoveGridObject(targetCoords,targetCoords,m);
+        }
 
         public override void Undo() {}
 

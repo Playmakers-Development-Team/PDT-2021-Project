@@ -28,14 +28,17 @@ namespace Managers
 
         private void Update()
         {
-            // if(Input.GetKeyDown(KeyCode.Mouse0)) 
-                // ClickUnit();
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                
+            }
+            //ClickUnit();
         }
 
         #region Unit Selection
 
         private void ClickUnit()
-        { 
+        {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
             Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
@@ -53,7 +56,22 @@ namespace Managers
                     }
                 }
             }
+            ClickCoordGrid();
             playerManager.SelectUnit(null);
+        }
+
+        #endregion
+        
+        #region Grid Coord Selection
+
+        private void ClickCoordGrid()
+        { 
+            Debug.Log("Click");
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+            
+            Debug.Log(gridPos + " selected");
         }
 
         #endregion
