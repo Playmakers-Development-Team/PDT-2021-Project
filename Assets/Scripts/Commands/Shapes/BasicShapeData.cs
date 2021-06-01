@@ -46,6 +46,7 @@ namespace Commands.Shapes
             return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
         }
 
+        // TODO: Refactor this function to make it more readable
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2Int originCoordinate, Vector2 targetVector)
         {
             // We want to convert to cardinal direction first because we don't want to get the ordinal
@@ -96,7 +97,7 @@ namespace Commands.Shapes
                         }
                     }
 
-                    // Remember to offset so that the shape is starting from the origin coordinate
+                    // Offset so that the shape is starting from the origin coordinate
                     return coordinates.Select(c => c + originCoordinate);
                 });
 
