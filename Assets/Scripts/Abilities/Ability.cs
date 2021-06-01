@@ -21,6 +21,7 @@ namespace Abilities
         [SerializeField] private Effect[] userEffects;
 
         public string Description => description;
+        public IShape Shape => shape;
 
         public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
