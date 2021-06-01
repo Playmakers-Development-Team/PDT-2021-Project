@@ -1,5 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using System;
 using Managers;
+using TMPro;
 using Units;
 using UnityEngine;
 
@@ -16,6 +19,8 @@ namespace GridObjects
 
         private GridManager gridManager;
 
+        private float damageTextLifetime = 1.0f;
+
         protected virtual void Start()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -27,6 +32,9 @@ namespace GridObjects
         {
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
             HealthPoints.Value -= damageTaken;
+
+            SpawnDamageText(damageTaken);
+            
             Debug.Log(damageTaken + " damage taken.");
             Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
             CheckDeath();
@@ -76,6 +84,17 @@ namespace GridObjects
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+        }
+
+        private void SpawnDamageText(int damageAmount)
+        {
+            GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas", typeof(GameObject));
+            GameObject damageAmountGameObject = Instantiate(prefab, transform.position, Quaternion.identity);
+
+            damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
+                damageAmount.ToString();
+            
+            Destroy(damageAmountGameObject, damageTextLifetime);
         }
     }
 }
