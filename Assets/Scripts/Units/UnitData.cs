@@ -1,4 +1,8 @@
-﻿using GridObjects;
+﻿using System;
+using System.Collections.Generic;
+using Abilities;
+using GridObjects;
+using StatusEffects;
 
 namespace Units
 {
@@ -10,7 +14,7 @@ namespace Units
         public ModifierStat dealDamageModifier;
         public ModifierStat takeDamageModifier;
         public ModifierStat takeKnockbackModifier;
-
+        public List<Ability> abilities;
         public void Initialise()
         {
             healthPoints.Reset();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
 using StatusEffects;
+using Abilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -52,6 +53,8 @@ namespace Units
         public void TakeAttack(int amount) => data.takeDamageModifier.Adder += amount;
 
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
+
+        public List<Ability> GetAbilities() => data.abilities;
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
