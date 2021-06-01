@@ -41,7 +41,17 @@ namespace Managers
         private void Update()
         {
             if(Input.GetKeyDown(KeyCode.Mouse0))
-                ClickUnit();
+                if (ManagerLocator.Get<PlayerManager>().SelectedUnit != null)
+                {
+                    ClickCoordGrid();
+                    ManagerLocator.Get<PlayerManager>().DeselectUnit();
+                    ClearAbilityUI();
+                    Debug.Log($"Unit Deselected!");
+                }
+                else
+                {
+                    ClickUnit();
+                }
         }
 
         #region Unit Selection
