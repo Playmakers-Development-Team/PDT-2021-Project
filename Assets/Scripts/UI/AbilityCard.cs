@@ -7,6 +7,7 @@ namespace UI
 {
     public class AbilityCard : MonoBehaviour
     {
+        [SerializeField] private Image abilityImg;
         [SerializeField] private TextMeshProUGUI abilityName;
         
         public Ability Ability { get; private set; }
@@ -22,5 +23,18 @@ namespace UI
         {
             this.abilityName.text = abilityName;
         }
+
+        public void HighlightAbility()
+        {
+            abilityImg.color = Color.red;
+        }
+
+        public void UnHighlightAbility()
+        {
+            abilityImg.color = Color.black;
+
+        }
+        
+        
     }
 }
