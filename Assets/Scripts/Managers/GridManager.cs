@@ -138,29 +138,32 @@ namespace Managers
         
         public List<Vector2Int> allReachableTiles(Vector2Int startingPosition, int range, Dictionary<Vector2Int, TileData> grid)
         {
+            //Returns a list of all coordinates reachablefrom a startting position within a set range
+            
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
             
+            //add starting node
             coordinateQueue.Enqueue(startingPosition);
             int distance = 0;
             visited.Add(startingPosition, distance);
             
+            //loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
-                Vector2Int current = coordinateQueue.Peek();
-                distance = visited[current];
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
                 //Debug.Log("On this node now"+current);
                 if (distance > range) { break;}
                 
-                //add neighbours
-                visitNode(grid, current + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, current + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, current + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, current + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                //add neighbours of node to queue
+                visitNode(grid, currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
+                visitNode(grid, currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
                 
-                
-                reachable.Add(current);
+                reachable.Add(currentNode);
                 coordinateQueue.Dequeue();
             }
 
@@ -168,7 +171,7 @@ namespace Managers
         }
         private void visitNode(Dictionary<Vector2Int, TileData> grid, Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
         {
-            
+            //Iff grid node exists add to queue and mark distance taken to arrive at it
             if ((grid.ContainsKey(node)) && grid[node].GridObjects.Count == 0)
             {
                 if (!(visited.ContainsKey(node)))
@@ -271,13 +274,13 @@ namespace Managers
         {
             GameObject gameObject = iUnit.gameObject;
             TileData tileData = GetTileDataByCoordinate(newPosition);
+            int moveRange = 4;
             //Check if in range
             if (tileData.GridObjects.Count == 0)
             {
-                if (allReachableTiles(currentPosition, 3, tileDatas).Contains(newPosition))
+                if (allReachableTiles(currentPosition, moveRange, tileDatas).Contains(newPosition))
                 {
-                    gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
-                    MoveGridObject(currentPosition, newPosition, gridObject);
+                    teleportUnit(currentPosition,newPosition,iUnit,gridObject);
                 }
                 else
                 {
@@ -291,9 +294,12 @@ namespace Managers
             }
         }
 
-        public void teleportUnit(Vector2Int newPosition, IUnit unit)
+        public void teleportUnit(Vector2Int currentPosition, Vector2Int newPosition, IUnit unit, GridObject gridObject)
         {
-            
+            //Moves units gameobject along with the gridobject straight to a new position
+            GameObject gameObject = unit.gameObject;
+            gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
+            MoveGridObject(currentPosition, newPosition, gridObject);
         }
 
         public void MoveGridObject(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject)
