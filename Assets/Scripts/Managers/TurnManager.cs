@@ -10,22 +10,22 @@ namespace Managers
     public class TurnManager : Manager
     {
         /// <summary>
-        /// An event that triggers when a round has ended
+        /// An event that triggers when a round has ended.
         /// </summary>
         public event Action<TurnManager> onTurnEnd;
 
         /// <summary>
-        /// An event that triggers when a round has started
+        /// An event that triggers when a round has started.
         /// </summary>
         public event Action<TurnManager> onRoundStart;
 
         /// <summary>
-        /// An event that triggers when a unit has died
+        /// An event that triggers when a unit has died.
         /// </summary>
-        public event Action<TurnManager> onUnitDeath; // im not sure if this should be converted into a command or not as there might be other interactions with unit death
+        public event Action<TurnManager> onUnitDeath;
 
         /// <summary>
-        /// An event that triggers when a new unit has spawned
+        /// An event that triggers when a new unit has spawned.
         /// </summary>
         public event Action<TurnManager> newUnitAdded;
         
@@ -53,15 +53,14 @@ namespace Managers
         public IUnit CurrentUnit => currentTurnQueue[CurrentTurnIndex];
 
         /// <summary>
-        ///  The unit that took its turn before the current unit.
+        /// The unit that took its turn before the current unit.
         /// </summary>
         public IUnit PreviousUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
 
         /// <summary>
-        ///  The unit that has died the most recent
+        /// The unit that most recently died.
         /// </summary>
         public IUnit RecentUnitDeath { get; private set; }
-
 
         /// <summary>
         /// The order in which units will take their turns for the current round.
@@ -87,7 +86,8 @@ namespace Managers
         private List<IUnit> nextTurnQueue = new List<IUnit>();
 
         /// <summary>
-        /// Checks if the next turn timeline needs to be updated due to a change in the queue
+        /// Checks if the next turn timeline needs to be updated due to a change in the current
+        /// timeline.
         /// </summary>
         private bool timelineNeedsUpdating = false;
 
@@ -164,7 +164,8 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void RemoveUnitFromQueue(int targetIndex)
         {
-            Debug.Log("what is current index : " + targetIndex);
+            // Debug.Log("Target Index: " + targetIndex);
+            
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
             
@@ -278,7 +279,7 @@ namespace Managers
         public void AddNewUnitToTimeline(IUnit unit)
         {
             currentTurnQueue.Add(unit);
-            nextTurnQueue.Add(unit);
+            nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
             newUnitAdded?.Invoke(this);
             timelineNeedsUpdating = true;
         }
