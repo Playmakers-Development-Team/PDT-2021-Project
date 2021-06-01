@@ -70,10 +70,11 @@ namespace Managers
 
         private void UpdateAbilityUI(PlayerUnit unit)
         {
+            ClearAbilityUI();
+            
             if (unit is null)
             {
                 Debug.LogWarning("GridController.UpdateAbilityUI should not be passed a null value. Use GridController.ClearAbilityUI instead.");
-                ClearAbilityUI();
                 return;
             }
             
