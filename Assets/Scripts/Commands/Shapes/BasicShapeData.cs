@@ -83,12 +83,16 @@ namespace Commands.Shapes
                     {
                         GridManager gridManager = ManagerLocator.Get<GridManager>();
                         Vector2Int offset = direction.ToVector2Int();
-                        var gridObjects = gridManager.GridLineCast(originCoordinate, direction, p.lineOfSightRange);
+                        var gridObjects = gridManager.GridLineCast(originCoordinate, direction, p.lineOfSightRange - 1);
 
                         if (gridObjects.Any())
                         {
                             Vector2Int hitVector = gridObjects.First().Coordinate - originCoordinate;
                             coordinates = coordinates.Select(c => c + hitVector - offset);
+                        }
+                        else
+                        {
+                            coordinates = coordinates.Select(c => c + offset * (p.lineOfSightRange - 1));
                         }
                     }
 

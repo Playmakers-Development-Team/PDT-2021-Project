@@ -85,7 +85,7 @@ namespace Managers
                 maxAbilities[i].gameObject.SetActive(false);
             }
 
-            // Test ability highlight
+            // TODO remove Test ability highlight
             TestAbilityHighlight(unit, currentAbilities.First());
         }
         #endregion

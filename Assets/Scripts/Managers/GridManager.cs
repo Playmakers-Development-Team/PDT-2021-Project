@@ -132,7 +132,7 @@ namespace Managers
                 }
             }
 
-            return null;
+            return new List<T>();
         }
         
         #endregion
