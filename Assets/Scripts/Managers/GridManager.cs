@@ -270,6 +270,13 @@ namespace Managers
             }
         }
 
+        public void placeTiles(Vector2Int currentPosition, int range, Dictionary<Vector2Int, TileData> grid)
+        {
+            //todo show range of units
+            //unfinished
+            List <Vector2Int> x = allReachableTiles(currentPosition, range, grid);
+        }
+
         public void MoveUnit(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject, IUnit iUnit)
         {
             GameObject gameObject = iUnit.gameObject;
