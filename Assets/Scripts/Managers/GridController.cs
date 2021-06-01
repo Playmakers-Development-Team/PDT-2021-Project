@@ -16,7 +16,7 @@ namespace Managers
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
 
-        private List<AbilityCard> maxAbilities = new List<AbilityCard>();
+        private List<AbilityCard> abilityCards = new List<AbilityCard>();
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
         //private int Count => maxAbilities.Count;
@@ -35,63 +35,72 @@ namespace Managers
             TestingGetGridObjectsByCoordinate(0);
         }
         
-        // private void Update()
-        // {
-        //     if(Input.GetKeyDown(KeyCode.Mouse0)) 
-        //         ClickUnit();
-        // }
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.Mouse0)) 
+                ClickUnit();
+        }
 
         #region Unit Selection
 
-        // private void ClickUnit()
-        // { 
-        //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
-        //     Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
-        //     Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
-        //     PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-        //
-        //     foreach (IUnit unit in playerManager.PlayerUnits)
-        //     {
-        //         if (unit is PlayerUnit playerUnit)
-        //         {
-        //             if (gridManager.ConvertWorldSpaceToGridSpace(playerUnit.transform.position) == gridPos)
-        //             {
-        //                 playerManager.SelectUnit(playerUnit);
-        //                 UpdateAbility(playerUnit);
-        //                 Debug.Log($"Unit Selected!");
-        //                 return;
-        //             }
-        //         }
-        //     }
-        //     playerManager.SelectUnit(null);
-        // }
-
-        private void UpdateAbility(PlayerUnit unit)
-        {
-            List<Ability> currentAbilities = unit.GetAbilities();
-            for (int i = 0; i < currentAbilities.Count; i++)
+        private void ClickUnit()
+        { 
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition - Camera.main.transform.position);
+            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y+0.5f);
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+        
+            foreach (IUnit unit in playerManager.PlayerUnits)
             {
-                if(i >= maxAbilities.Count) AddAbilityField(currentAbilities[i]);
-                else SetAbilityText(i,currentAbilities[i]);
+                if (unit is PlayerUnit playerUnit)
+                {
+                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) == gridPos)
+                    {
+                        playerManager.SelectUnit(playerUnit);
+                        UpdateAbilityUI(playerUnit);
+                        Debug.Log($"Unit Selected!");
+                        return;
+                    }
+                }
             }
-            for (int i = currentAbilities.Count; i < maxAbilities.Count; i++)
+            playerManager.DeselectUnit();
+            ClearAbilityUI();
+            Debug.Log($"Unit Deselected!");
+        }
+
+        private void UpdateAbilityUI(PlayerUnit unit)
+        {
+            if (unit is null)
             {
-                maxAbilities[i].gameObject.SetActive(false);
+                Debug.LogWarning("GridController.UpdateAbilityUI should not be passed a null value. Use GridController.ClearAbilityUI instead.");
+                ClearAbilityUI();
+                return;
+            }
+            
+            foreach (var ability in unit.GetAbilities())
+            {
+                AddAbilityField(ability);
             }
         }
 
-        public void AddAbilityField(Ability ability)
+        private void ClearAbilityUI()
+        {
+            foreach (var abilityCard in abilityCards)
+            {
+                Destroy(abilityCard.gameObject);
+            }
+            
+            abilityCards.Clear();
+        }
+
+        private void AddAbilityField(Ability ability)
         {
             var abilityCardObject = Instantiate(abilityUIPrefab, abilityParent);
             var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
             abilityCard.SetAbility(ability);
-            maxAbilities.Add(abilityCard);
+            abilityCards.Add(abilityCard);
         }
 
-        private void SetAbilityText(int index, Ability ability)
-        {
-            maxAbilities[index].SetAbility(ability);
-        }
         #endregion
         
         #region Unit Testing

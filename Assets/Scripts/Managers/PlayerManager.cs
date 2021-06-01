@@ -52,6 +52,13 @@ namespace Managers
 
         public void SelectUnit(PlayerUnit unit)
         {
+            if (unit is null)
+            {
+                Debug.LogWarning("PlayerManager.SelectUnit should not be passed a null value. Use PlayerManager.DeselectUnit instead.");
+                DeselectUnit();
+                return;
+            }
+            
             if ((PlayerUnit) SelectedUnit != unit)
             {
                 ManagerLocator.Get<CommandManager>().
