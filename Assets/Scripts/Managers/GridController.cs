@@ -18,7 +18,6 @@ namespace Managers
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
-        private bool selected;
 
         private List<AbilityCard> abilityCards = new List<AbilityCard>();
         [SerializeField] private GameObject abilityUIPrefab;
@@ -41,7 +40,7 @@ namespace Managers
         
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0)) 
+            if(Input.GetKeyDown(KeyCode.Mouse0))
                 ClickUnit();
         }
 
@@ -63,7 +62,6 @@ namespace Managers
                         playerManager.SelectUnit(playerUnit);
                         UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
-                        selected = true;
                         return;
                     }
                 }
@@ -86,7 +84,6 @@ namespace Managers
             ManagerLocator.Get<CommandManager>().
                 ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
                     gridUnit.First()));
-            selected = false;
         }
 
         private void UpdateAbilityUI(PlayerUnit unit)
