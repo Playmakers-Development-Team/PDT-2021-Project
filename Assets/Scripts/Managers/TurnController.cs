@@ -78,21 +78,21 @@ namespace Managers
         /// <param name="turnManager"></param>
         private void UpdateTurnUI(TurnManager turnManager)
         {
-            
-            
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
 
             foreach (UnitCard unitCard in allUnitCards)
             {
-                if (turnManager.PreviousUnit != null){
+                if (turnManager.PreviousUnit != null)
+                {
                     if (unitCard.Unit == turnManager.PreviousUnit)
                         unitCard.GetComponent<Image>().color = Color.black;
-                 }
+                }
 
-            if (unitCard.Unit == turnManager.CurrentUnit)
+                if (unitCard.Unit == turnManager.CurrentUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+                    currentTurnIndicator =
+                        Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                     unitCard.GetComponent<Image>().color = Color.red;
                 }
             }
@@ -146,7 +146,8 @@ namespace Managers
                     }
                 }
 
-                Debug.Log("current flag " + flag);
+                //Debug.Log("current flag " + flag);
+                
                 if (!flag)
                 {
                     var unitCardObject = Instantiate(unitCardPrefab, timeline);
@@ -179,9 +180,6 @@ namespace Managers
             //     break;
             //
             // }
-           
-            
-                
         }
         
         
@@ -194,8 +192,6 @@ namespace Managers
             
             allUnitCards.ForEach(unitCard =>
             {
-                
-                
                 Destroy(unitCard.gameObject);
             });
             
