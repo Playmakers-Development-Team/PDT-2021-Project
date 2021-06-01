@@ -55,6 +55,7 @@ namespace Commands.Shapes
                 ? OrdinalDirectionUtility.From(Vector2.zero, targetVector)
                 : CardinalDirectionUtility.From(Vector2.zero, targetVector).ToOrdinalDirection();
 
+            // TODO: Refactor this function to make it more readable
             IEnumerable<Vector2Int> affectedCoordinates = shapeParts.
                 Where(p => p.direction == OrdinalDirectionMask.None 
                            || (p.autoRotate && ((direction.IsDiagonal() && p.direction == OrdinalDirectionMask.NorthEast)
