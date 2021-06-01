@@ -62,7 +62,7 @@ namespace Managers
             if ((PlayerUnit) SelectedUnit != unit)
             {
                 ManagerLocator.Get<CommandManager>().
-                    QueueCommand(new Commands.UnitSelectedCommand(unit));
+                    ExecuteCommand(new Commands.UnitSelectedCommand(unit));
                 
                 SelectedUnit = unit;
                 

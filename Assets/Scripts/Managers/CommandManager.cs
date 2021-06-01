@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
+using Units;
 
 namespace Managers
 {
@@ -9,7 +10,6 @@ namespace Managers
     
     public class CommandManager : Manager
     { 
-        private List<Command> commandQueue = new List<Command>();
         private List<Command> commandHistory = new List<Command>();
 
         private readonly Dictionary<Type, LinkedList<CommandAction>> executeListeners =
@@ -20,24 +20,30 @@ namespace Managers
 
         // private List<Command> turnOrder = new List<Command>();
 
-        private int currentCommandQueueIndex;
         private int currentCommandHistoryIndex;
 
         public void QueueCommand(Command command)
         {
-            Type commandType = command.GetType();
-            commandQueue.Add(command);
-            command.Queue();
-
-            if (executeListeners.ContainsKey(commandType))
+            if (command.Unit is EnemyUnit unit)
             {
-                foreach (var action in executeListeners[command.GetType()])
+                Type commandType = command.GetType();
+
+                unit.QueueCommand(command);
+                
+                command.Queue();
+
+                if (queueListeners.ContainsKey(commandType))
                 {
-                    action.Invoke(command);
+                    foreach (var action in queueListeners[commandType])
+                    {
+                        action.Invoke(command);
+                    }
                 }
             }
-            
-            currentCommandQueueIndex = commandQueue.Count - 1;
+            else
+            {
+                throw new Exception($"Unit is not an {nameof(EnemyUnit)}. Cannot queue a command.");
+            }
         }
 
         public void ExecuteCommand(Command command)
@@ -48,7 +54,7 @@ namespace Managers
             
             if (executeListeners.ContainsKey(commandType))
             {
-                foreach (var action in executeListeners[command.GetType()])
+                foreach (var action in executeListeners[commandType])
                 {
                     action.Invoke(command);
                 }

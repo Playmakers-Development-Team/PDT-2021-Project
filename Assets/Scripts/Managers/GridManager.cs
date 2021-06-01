@@ -133,7 +133,7 @@ namespace Managers
                 }
             }
 
-            return null;
+            return new List<T>();
         }
         
         public List<Vector2Int> allReachableTiles(Vector2Int startingPosition, int range, Dictionary<Vector2Int, TileData> grid)

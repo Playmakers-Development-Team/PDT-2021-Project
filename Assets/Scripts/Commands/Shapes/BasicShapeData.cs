@@ -17,7 +17,7 @@ namespace Commands.Shapes
         {
             public OrdinalDirectionMask direction;
             public List<Vector2Int> coordinates;
-            [Tooltip("This only works for cardinal directions. Rotates from North for cardinal directions and rotates from North-East for non-cardinal directions")]
+            [Tooltip("Rotates from North for cardinal directions and rotates from North-East for non-cardinal directions")]
             public bool autoRotate;
             [Tooltip("This will try to raycast on the grid towards the first found unit")]
             public bool isLineOfSight;
@@ -36,7 +36,7 @@ namespace Commands.Shapes
 
         public bool IsLineOfSight => shapeParts.All(p => p.isLineOfSight);
 
-        public IEnumerable<Vector2Int> GetHighlightedCells(Vector2Int originCoordinate, Vector2 targetVector) =>
+        public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, Vector2 targetVector) =>
             GetAffectedCoordinates(originCoordinate, targetVector);
 
         public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 targetVector)
@@ -54,8 +54,13 @@ namespace Commands.Shapes
                 ? OrdinalDirectionUtility.From(Vector2.zero, targetVector)
                 : CardinalDirectionUtility.From(Vector2.zero, targetVector).ToOrdinalDirection();
 
+            // TODO: Refactor this function to make it more readable
             IEnumerable<Vector2Int> affectedCoordinates = shapeParts.
-                Where(p => p.direction.Contains(direction)).SelectMany(p =>
+                Where(p => p.direction == OrdinalDirectionMask.None 
+                           || (p.autoRotate && ((direction.IsDiagonal() && p.direction == OrdinalDirectionMask.NorthEast)
+                                                || p.direction == OrdinalDirectionMask.North)) 
+                           || p.direction.Contains(direction))
+                .SelectMany(p =>
                 {
                     IEnumerable<Vector2Int> coordinates = p.coordinates;
 
@@ -79,16 +84,21 @@ namespace Commands.Shapes
                     {
                         GridManager gridManager = ManagerLocator.Get<GridManager>();
                         Vector2Int offset = direction.ToVector2Int();
-                        var gridObjects = gridManager.GridLineCast(originCoordinate, direction, p.lineOfSightRange);
+                        var gridObjects = gridManager.GridLineCast(originCoordinate, direction, p.lineOfSightRange - 1);
 
                         if (gridObjects.Any())
                         {
                             Vector2Int hitVector = gridObjects.First().Coordinate - originCoordinate;
                             coordinates = coordinates.Select(c => c + hitVector - offset);
                         }
+                        else
+                        {
+                            coordinates = coordinates.Select(c => c + offset * (p.lineOfSightRange - 1));
+                        }
                     }
 
-                    return coordinates;
+                    // Offset so that the shape is starting from the origin coordinate
+                    return coordinates.Select(c => c + originCoordinate);
                 });
 
             if (HasNoDirection && shouldFollowMouse)
