@@ -31,6 +31,7 @@ namespace Managers
             Register(new AudioManager());
             Register(new UnitManager());
             Register(new BackgroundManager());
+            Register(new UIManager());
 
             foreach (var manager in Current.managers.Values)
             {

@@ -13,29 +13,35 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
+
         public static Type DataType => typeof(T);
 
         public ModifierStat DealDamageModifier { get; protected set; }
         public ValueStat Speed { get; protected set; }
-        
+
         public Type GetDataType() => DataType;
-        
+
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
-        public IEnumerable<TenetStatusEffect> TenetStatusEffects => tenetStatusEffectSlots.AsEnumerable();
-        
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
+        public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
+            tenetStatusEffectSlots.AsEnumerable();
+
+        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
+            new LinkedList<TenetStatusEffect>();
+
         private const int maxTenetStatusEffectCount = 2;
 
         private TurnManager turnManager;
 
         private PlayerManager playerManager;
+
+
+        protected void Awake(){}
         
         protected override void Start()
         {
             base.Start();
-            
+
             data.Initialise();
 
             HealthPoints = data.healthPoints;
@@ -44,9 +50,8 @@ namespace Units
             DealDamageModifier = data.dealDamageModifier;
             TakeDamageModifier = data.takeDamageModifier;
             TakeKnockbackModifier = data.takeKnockbackModifier;
-            
             // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10,50);
+            Speed.Value += Random.Range(10, 50);
 
             DealDamageModifier.Reset();
             TakeDamageModifier.Reset();
@@ -70,9 +75,10 @@ namespace Units
 
             if (statusEffect.IsEmpty)
                 return;
-            
+
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusEffectNode(statusEffect.TenetType, out LinkedListNode<TenetStatusEffect> foundNode))
+            if (TryGetTenetStatusEffectNode(statusEffect.TenetType,
+                out LinkedListNode<TenetStatusEffect> foundNode))
             {
                 foundNode.Value += statusEffect;
             }
@@ -84,7 +90,7 @@ namespace Units
                     // Remove the oldest status effect to make space for the new status effect
                     tenetStatusEffectSlots.RemoveFirst();
                 }
-                
+
                 tenetStatusEffectSlots.AddLast(statusEffect);
             }
         }
@@ -98,12 +104,12 @@ namespace Units
                 if (node.Value.TenetType == tenetType)
                 {
                     node.Value -= amount;
-                    
+
                     if (node.Value.IsEmpty)
                         tenetStatusEffectSlots.Remove(node);
                     return true;
                 }
-                
+
                 node = node.Next;
             }
 
@@ -115,9 +121,11 @@ namespace Units
             tenetStatusEffectSlots.Clear();
         }
 
-        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect)
+        public bool TryGetTenetStatusEffect(TenetType tenetType,
+                                            out TenetStatusEffect tenetStatusEffect)
         {
-            bool isFound = TryGetTenetStatusEffectNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
+            bool isFound = TryGetTenetStatusEffectNode(tenetType,
+                out LinkedListNode<TenetStatusEffect> foundNode);
             tenetStatusEffect = isFound ? foundNode.Value : default;
             return isFound;
         }
@@ -134,7 +142,7 @@ namespace Units
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
-        
+
         public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
 
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;

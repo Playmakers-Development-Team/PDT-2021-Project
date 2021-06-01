@@ -205,7 +205,7 @@ namespace Managers
             
             Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
                       ". Tile does not contain gridObject");
-
+        
             return false;
         }
         

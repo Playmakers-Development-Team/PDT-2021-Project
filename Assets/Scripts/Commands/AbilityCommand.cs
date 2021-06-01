@@ -9,15 +9,20 @@ namespace Commands
         private readonly Ability ability;
         private readonly Vector2 targetVector;
         private readonly Vector2Int originCoordinate;
+        private readonly IUnit unit;
+
+
 
         public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
             this.ability = ability;
             this.targetVector = targetVector;
             this.originCoordinate = unit.Coordinate;
+            this.unit = unit;
         }
 
-        public override void Queue() {}
+        public override void Queue() 
+        {}
 
         public override void Execute()
         {

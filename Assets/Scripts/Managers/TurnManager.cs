@@ -113,6 +113,8 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new TurnQueueCreatedCommand(null));
+            
         }
 
         /// <summary>
@@ -193,13 +195,10 @@ namespace Managers
                 
             // reselects the unit if the current unit has died
             if (CurrentUnit is PlayerUnit)
-            {
                 playerManager.SelectUnit((PlayerUnit) CurrentUnit);
-            }
             else
-            {
                 playerManager.DeselectUnit();
-            }
+            
 
             onUnitDeath?.Invoke(this);
         }
@@ -323,6 +322,7 @@ namespace Managers
                 
             }
             
+
             // Debug.Log(CurrentUnit.ToString());
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             
@@ -338,6 +338,7 @@ namespace Managers
             Debug.Log("next turn has started");
             
             onTurnEnd?.Invoke(this);
+            
         }
         
         /// <summary>
