@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc115ee01fd24c7e95efaeaad30c336c, type: 3}
+  m_Name: settingsInstance
+  m_EditorClassIdentifier: 
+  backgroundCompute: {fileID: 7200000, guid: 1fa6f9861bd9d6a448eff5b1ebe32425, type: 3}
+  previewLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  washLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  washTexturePropertyName: _BaseMap
+  lineLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  lineTexturePropertyName: _BaseMap
+  tileCompute: {fileID: 7200000, guid: f23225f19a512d4488fe2fb282a54151, type: 3}
+  globalPipeline: {fileID: 11400000, guid: abf0d85046599bf4f943665b6a736c23, type: 2}

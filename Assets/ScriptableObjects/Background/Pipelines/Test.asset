@@ -1,0 +1,403 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8191227741815696132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd86d9d0f54846dbad1e9463d5801a02, type: 3}
+  m_Name: Colour Separation
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  distanceField:
+    name: flood
+  strengthMap:
+    texture: {fileID: 2800000, guid: a612e43a643367e43853dd3dc8a42f1e, type: 3}
+    tiling: {x: 5, y: 5}
+    offset: {x: 0, y: 0}
+  amount: 0.1
+--- !u!114 &-7732304396027734820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1d0c983a7104f6087cc593a80edf5be, type: 3}
+  m_Name: Edge Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  flood:
+    name: floodPigment
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 2, y: 2}
+    offset: {x: 0.5, y: 0.5}
+  amount: 1
+  exponent: 0.2
+--- !u!114 &-7630628547020576401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c430da5f1d4582a5e781f13c1dc0fc, type: 3}
+  m_Name: Edge Detection for Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  output:
+    name: edgePigment
+  radius: 1
+  threshold: 0.2
+--- !u!114 &-6078177490707043805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dce8182fc32474aa2cc53aae03d64d6, type: 3}
+  m_Name: Jump Flood Pigment
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  edge:
+    name: edgePigment
+  output:
+    name: floodPigment
+--- !u!114 &-6035205486268318926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79a6f143e137490fa77de581eb1948ab, type: 3}
+  m_Name: Line Occlusion
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: line
+--- !u!114 &-4115419309747824141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4603026ca11e45b1b938e4791607da07, type: 3}
+  m_Name: Bump
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  flood:
+    name: floodPigment
+  bumpMap:
+    texture: {fileID: 2800000, guid: 4fc1e626c8cf30c4a97a74fd8989a561, type: 3}
+    tiling: {x: 7, y: 7}
+    offset: {x: 0, y: 0}
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 2, y: 2}
+    offset: {x: 0, y: 0}
+  amount: 0.471
+--- !u!114 &-2474234015324300541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24af442e79b64760b68f557267b6a730, type: 3}
+  m_Name: Line Clear
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  input:
+    name: line
+--- !u!114 &-2408236371934135774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d053e68797544c35af01e8ab4861f69e, type: 3}
+  m_Name: Hue Shift
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 1, y: 1}
+    offset: {x: 0.25, y: 0.25}
+  amount: 0.8
+  balance: 0
+  valueInfluence: 1
+  boost: 1
+--- !u!114 &-669268930892035431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dce8182fc32474aa2cc53aae03d64d6, type: 3}
+  m_Name: Jump Flood
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  edge:
+    name: edge
+  output:
+    name: flood
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e26172cfa3cc4a3fbbf9308a415c1461, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  features:
+  - {fileID: -6035205486268318926}
+  - {fileID: 3666622412901975677}
+  - {fileID: 6990570700037077543}
+  - {fileID: 6332557607202063239}
+  - {fileID: -669268930892035431}
+  - {fileID: -8191227741815696132}
+  - {fileID: 4511386523098065728}
+  - {fileID: 0}
+  - {fileID: 6971834853436027771}
+  - {fileID: -7630628547020576401}
+  - {fileID: -6078177490707043805}
+  - {fileID: -7732304396027734820}
+  - {fileID: 5164301769336187567}
+  - {fileID: -2408236371934135774}
+  - {fileID: -4115419309747824141}
+--- !u!114 &1790342275941716843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f0b5b906ff42ca9b76c96a6a5cde5a, type: 3}
+  m_Name: Displacement
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: 
+  strengthMap:
+    texture: {fileID: 0}
+    tiling: {x: 0, y: 0}
+    offset: {x: 0, y: 0}
+  amount: 0
+--- !u!114 &3666622412901975677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24af442e79b64760b68f557267b6a730, type: 3}
+  m_Name: Line Clear
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  input:
+    name: line
+--- !u!114 &3857676446291343206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f0b5b906ff42ca9b76c96a6a5cde5a, type: 3}
+  m_Name: Displacement
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 3, y: 3}
+    offset: {x: 0, y: 0}
+  amount: 0.003
+--- !u!114 &4511386523098065728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b869167c45f44d07b755a1d34ce75ace, type: 3}
+  m_Name: Opacity Shift
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  strengthMap:
+    texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+    tiling: {x: 1, y: 2}
+    offset: {x: 0, y: 0}
+  amount: 0.634
+  balance: -0.5
+--- !u!114 &5164301769336187567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f73d3e8e56044fa853fc92b35d2cd4b, type: 3}
+  m_Name: Saturation
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  input:
+    name: wash
+  amount: -1
+--- !u!114 &5675850521398351355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0276811e1f674b1ca8e093c66a52dc05, type: 3}
+  m_Name: Edge To Wash
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  source:
+    name: edge
+  destination:
+    name: wash
+--- !u!114 &6332557607202063239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c430da5f1d4582a5e781f13c1dc0fc, type: 3}
+  m_Name: Edge Detection
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  output:
+    name: edge
+  radius: 1
+  threshold: 0.1
+--- !u!114 &6971834853436027771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b49b57b12bb54f6da0e3fe5c9b6573b1, type: 3}
+  m_Name: Kuwahara
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  radius: {x: 10, y: 10}
+--- !u!114 &6990570700037077543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6806a545dc204bd9912e14dc9cef613e, type: 3}
+  m_Name: Opacity Extraction
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
+  exposure: 0.3
+--- !u!114 &7883439738147048352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0276811e1f674b1ca8e093c66a52dc05, type: 3}
+  m_Name: Edge Copy
+  m_EditorClassIdentifier: 
+  active: 0
+  featureName: 
+  source:
+    name: floodPigment
+  destination:
+    name: wash
