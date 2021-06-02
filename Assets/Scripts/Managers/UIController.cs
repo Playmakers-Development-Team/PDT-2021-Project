@@ -246,10 +246,9 @@ namespace Managers
 
         private Vector2Int GetCoordinateFromClick()
         {
-            Vector3 mousePosScreenSpace = Input.mousePosition - Camera.main.transform.position;
-            Vector3 mousePosWorldSpace = Camera.main.ScreenToWorldPoint(mousePosScreenSpace);
-            Vector2 mousePos2D = new Vector2(mousePosWorldSpace.x + 0.5f, mousePosWorldSpace.y + 0.5f);
-            return gridManager.ConvertPositionToCoordinate(mousePos2D);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // TODO look into this later, put the subtraction somewhere better
+            return gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
         }
 
         private void HandleAbilityCasting()
