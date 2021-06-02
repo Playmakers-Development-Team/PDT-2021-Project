@@ -182,24 +182,24 @@ namespace Managers
                     return;
 
                 nextClickWillMove = true;
+                Debug.Log("Next click will move.");
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
-                if (playerManager.SelectedUnit != null)
+                if (nextClickWillMove)
                 {
                     MoveUnit();
-                    playerManager.DeselectUnit();
-                    Debug.Log($"Unit Deselected!");
+                    nextClickWillMove = false;
                 }
                 else
                 {
-                    ClickUnit();
+                    SelectUnit();
                 }
             }
         }
 
-        private void ClickUnit()
+        private void SelectUnit()
         {
             Vector2Int gridPos = GetCoordinateFromClick();
 
@@ -211,7 +211,6 @@ namespace Managers
                         gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
-                        //UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
                         return;
                     }
@@ -220,20 +219,26 @@ namespace Managers
             
             playerManager.DeselectUnit();
             Debug.Log($"Unit Deselected!");
-            // ClearAbilityUI();
         }
 
         private void MoveUnit()
         {
             Vector2Int gridPos = GetCoordinateFromClick();
             
-            IUnit playerUnit = playerManager.SelectedUnit;
+            IUnit playerUnit = actingUnit;
 
             Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            
             List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
-                    gridUnit.First()));
+            
+            var moveCommand = new MoveCommand(
+                playerUnit,
+                gridPos,
+                playerUnit.Coordinate,
+                gridUnit.First()
+            );
+            
+            commandManager.ExecuteCommand(moveCommand);
         }
 
         private Vector2Int GetCoordinateFromClick()
