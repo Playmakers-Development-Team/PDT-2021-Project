@@ -136,32 +136,37 @@ namespace Managers
             return new List<T>();
         }
         
-        public List<Vector2Int> allReachableTiles(Vector2Int startingPosition, int range, Dictionary<Vector2Int, TileData> grid)
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position
+        /// within the given range.
+        /// </summary>
+        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
+        /// <param name="range">The range from the starting tile using manhattan distance.</param>
+        /// <returns>A list of the coordinates of reachable tiles.</returns>
+        public List<Vector2Int> AllReachableTiles(Vector2Int startingCoordinate, int range)
         {
-            //Returns a list of all coordinates reachablefrom a startting position within a set range
-            
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
             
-            //add starting node
-            coordinateQueue.Enqueue(startingPosition);
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
             int distance = 0;
-            visited.Add(startingPosition, distance);
+            visited.Add(startingCoordinate, distance);
             
-            //loop until all nodes are processed
+            // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
-                //Debug.Log("On this node now"+current);
+                
                 if (distance > range) { break;}
                 
-                //add neighbours of node to queue
-                visitNode(grid, currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
-                visitNode(grid, currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                // Add neighbours of node to queue
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
                 
                 reachable.Add(currentNode);
                 coordinateQueue.Dequeue();
@@ -169,14 +174,13 @@ namespace Managers
 
             return reachable;
         }
-        private void visitNode(Dictionary<Vector2Int, TileData> grid, Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
         {
-            //Iff grid node exists add to queue and mark distance taken to arrive at it
-            if ((grid.ContainsKey(node)) && grid[node].GridObjects.Count == 0)
+            // If grid node exists add to queue and mark distance taken to arrive at it
+            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
             {
-                if (!(visited.ContainsKey(node)))
+                if (!visited.ContainsKey(node))
                 {
-                    //Debug.Log("Adding " + node + " with distance" + distance + 1);
                     visited.Add(node, distance + 1);
                     coordinateQueue.Enqueue(node);
                 }
@@ -257,53 +261,48 @@ namespace Managers
             return false;
         }
         
-        public void MoveObjectsFromTile(Vector2Int currentPosition, Vector2Int newPosition)
+        public void MoveAllGridObjects(Vector2Int currentPosition, Vector2Int newPosition)
         {
             List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentPosition);
 
             foreach (var gridObject in gridObjects)
             {
-                if (AddGridObject(newPosition, gridObject))
-                {
-                    RemoveGridObject(currentPosition, gridObject);
-                }
+                MoveGridObject(currentPosition, newPosition, gridObject);
             }
         }
 
-        public void placeTiles(Vector2Int currentPosition, int range, Dictionary<Vector2Int, TileData> grid)
+        public void PlaceTiles(Vector2Int currentPosition, int range, Dictionary<Vector2Int, TileData> grid)
         {
             //todo show range of units
             //unfinished
-            List <Vector2Int> x = allReachableTiles(currentPosition, range, grid);
+            List <Vector2Int> x = AllReachableTiles(currentPosition, range);
         }
 
         public void MoveUnit(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject, IUnit iUnit)
         {
-            GameObject gameObject = iUnit.gameObject;
             TileData tileData = GetTileDataByCoordinate(newPosition);
             int moveRange = 4;
-            //Check if in range
-            if (tileData.GridObjects.Count == 0)
+            
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
             {
-                if (allReachableTiles(currentPosition, moveRange, tileDatas).Contains(newPosition))
-                {
-                    teleportUnit(currentPosition,newPosition,iUnit,gridObject);
-                }
-                else
-                {
-                    Debug.Log("Out of range");
-                }
-                
+                Debug.Log("Target tile is occupied.");
+                return;
             }
-            else
+            
+            // Check if tile is in range
+            if (!AllReachableTiles(currentPosition, moveRange).Contains(newPosition))
             {
-                Debug.Log("Space occupied");
+                Debug.Log("Target tile out of range.");
+                return;
             }
+            
+            TeleportUnit(currentPosition, newPosition, iUnit, gridObject);
         }
 
-        public void teleportUnit(Vector2Int currentPosition, Vector2Int newPosition, IUnit unit, GridObject gridObject)
+        private void TeleportUnit(Vector2Int currentPosition, Vector2Int newPosition, IUnit unit, GridObject gridObject)
         {
-            //Moves units gameobject along with the gridobject straight to a new position
+            // Moves a unit's GameObject along with the GridObject straight to a new position
             GameObject gameObject = unit.gameObject;
             gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
             MoveGridObject(currentPosition, newPosition, gridObject);
@@ -316,9 +315,6 @@ namespace Managers
                 RemoveGridObject(currentPosition, gridObject);
             }
         }
-        
-        
-        
         
         #endregion
     }
