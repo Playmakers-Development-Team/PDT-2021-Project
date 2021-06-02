@@ -234,8 +234,7 @@ namespace Managers
             var moveCommand = new MoveCommand(
                 playerUnit,
                 gridPos,
-                playerUnit.Coordinate,
-                gridUnit.First()
+                playerUnit.Coordinate
             );
             
             commandManager.ExecuteCommand(moveCommand);

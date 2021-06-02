@@ -10,22 +10,20 @@ namespace Commands
     public class MoveCommand : Command
     {
         private Vector2Int targetCoords, currentCoords;
-        private GridObject gridObject;
         private GridManager gridManager;
         
-        public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current, GridObject x) : base(unit)
+        public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current) : base(unit)
         {
             gridManager = ManagerLocator.Get<GridManager>();
             targetCoords = target;
             currentCoords = current;
-            gridObject = x;
         }
 
         public override void Queue() {}
 
         public override void Execute()
         {
-            gridManager.MoveUnit(currentCoords, targetCoords, gridObject, Unit);
+            gridManager.MoveUnit(currentCoords, targetCoords, Unit);
         }
 
         public override void Undo() {}

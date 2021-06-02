@@ -261,26 +261,27 @@ namespace Managers
             return false;
         }
         
-        public void MoveAllGridObjects(Vector2Int currentPosition, Vector2Int newPosition)
+        public void MoveAllGridObjects(Vector2Int currentCoordinate, Vector2Int newCoordinate)
         {
-            List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentPosition);
+            List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentCoordinate);
 
             foreach (var gridObject in gridObjects)
             {
-                MoveGridObject(currentPosition, newPosition, gridObject);
+                MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
 
-        public void PlaceTiles(Vector2Int currentPosition, int range, Dictionary<Vector2Int, TileData> grid)
+        public void PlaceTiles(Vector2Int currentCoordinate, int range, Dictionary<Vector2Int, TileData> grid)
         {
             //todo show range of units
             //unfinished
-            List <Vector2Int> x = AllReachableTiles(currentPosition, range);
+            List <Vector2Int> x = AllReachableTiles(currentCoordinate, range);
         }
 
-        public void MoveUnit(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject, IUnit iUnit)
+        // TODO: CurrentCoordinate should not be necessary
+        public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
         {
-            TileData tileData = GetTileDataByCoordinate(newPosition);
+            TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = 4;
             
             // Check if tile is unoccupied
@@ -291,28 +292,37 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentPosition, moveRange).Contains(newPosition))
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
             {
                 Debug.Log("Target tile out of range.");
                 return;
             }
             
-            TeleportUnit(currentPosition, newPosition, iUnit, gridObject);
+            TeleportUnit(currentCoordinate, newCoordinate, unit);
         }
 
-        private void TeleportUnit(Vector2Int currentPosition, Vector2Int newPosition, IUnit unit, GridObject gridObject)
+        // TODO: CurrentCoordinate should not be necessary
+        /// <summary>
+        /// Moves a unit's GridObject and GameObject directly to a new position.
+        /// </summary>
+        /// <param name="currentCoordinate">The unit's current coordinate.</param>
+        /// <param name="newCoordinate">The coordinate to move the unit to.</param>
+        /// <param name="unit">The unit to teleport.</param>
+        private void TeleportUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
         {
-            // Moves a unit's GameObject along with the GridObject straight to a new position
-            GameObject gameObject = unit.gameObject;
-            gameObject.transform.position = ConvertCoordinateToPosition(newPosition);
-            MoveGridObject(currentPosition, newPosition, gridObject);
+            var gridObject = (GridObject) unit;
+            
+            gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
+            
+            MoveGridObject(currentCoordinate, newCoordinate, gridObject);
         }
 
-        public void MoveGridObject(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject)
+        // TODO: CurrentCoordinate should not be necessary
+        public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate, GridObject gridObject)
         {
-            if (AddGridObject(newPosition, gridObject))
+            if (AddGridObject(newCoordinate, gridObject))
             {
-                RemoveGridObject(currentPosition, gridObject);
+                RemoveGridObject(currentCoordinate, gridObject);
             }
         }
         
