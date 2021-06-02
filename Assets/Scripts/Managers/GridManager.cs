@@ -289,6 +289,7 @@ namespace Managers
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
             {
+                // TODO: Provide feedback to the player
                 Debug.Log("Target tile is occupied.");
                 return;
             }
@@ -296,6 +297,7 @@ namespace Managers
             // Check if tile is in range
             if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
             {
+                // TODO: Provide feedback to the player
                 Debug.Log("Target tile out of range.");
                 return;
             }
