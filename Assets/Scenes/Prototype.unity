@@ -3160,10 +3160,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2286655906781208972, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5511968117276585404, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -3208,17 +3204,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5511968117276585405, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
-      propertyPath: gridOffset.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5511968117276585406, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
       propertyPath: m_Name
       value: GridIsometric
-      objectReference: {fileID: 0}
-    - target: {fileID: 6679826391952737064, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}

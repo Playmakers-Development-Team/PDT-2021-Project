@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2669448626722815329}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5511968117276585404}
@@ -278,12 +278,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelBounds: {x: 7, y: 7}
-  gridOffset: {x: 0, y: 0.25}
-  levelTilemap: {fileID: 5511968119123735622}
-  highlightTilemap: {fileID: 4608611562798638512}
-  abilityUIPrefab: {fileID: 6997312461207497942, guid: d73aff069600ba84c9b19d672458f664, type: 3}
-  abilityParent: {fileID: 2286655906781208972}
+  gridOffset: {x: 0, y: 0}
   abilityHighlightTile: {fileID: 11400000, guid: dcef32f1a1a4d9cc19b5c2760ee535d4, type: 2}
+  highlightTilemap: {fileID: 4608611562798638512}
+  levelTilemap: {fileID: 5511968119123735622}
 --- !u!1 &5511968119123735643
 GameObject:
   m_ObjectHideFlags: 0
@@ -435,7 +433,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -216.15979}
+  m_AnchoredPosition: {x: 0, y: -216.15979}
   m_SizeDelta: {x: -0.0001, y: -432.3196}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7089586576757482
