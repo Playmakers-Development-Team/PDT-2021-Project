@@ -12,29 +12,28 @@ namespace Commands
         private Vector2Int targetCoords, currentCoords;
         private GridObject gridObject;
         private GridManager gridManager;
-        private IUnit iUnit;
+        
         public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current, GridObject x) : base(unit)
         {
             gridManager = ManagerLocator.Get<GridManager>();
             targetCoords = target;
             currentCoords = current;
             gridObject = x;
-            iUnit = unit;
         }
-        
-        
 
         public override void Queue() {}
 
         public override void Execute()
         {
-            gridManager.MoveUnit(currentCoords, targetCoords, gridObject,iUnit);
+            gridManager.MoveUnit(currentCoords, targetCoords, gridObject, Unit);
         }
 
         public override void Undo() {}
 
         #region UnusedPathfinding
-        private void initialiseGrid()
+        // TODO: Review once fully implemented
+        
+        private void InitialiseGrid()
         {
             int width = 20;
             int height = 20;
@@ -47,12 +46,12 @@ namespace Commands
                 }
             }
 
-            gridArray = getRange(gridArray, 5, new Vector2Int(6, 6));
+            gridArray = GetRange(gridArray, 5, new Vector2Int(6, 6));
 
-            print2DArray(gridArray);
+            Print2DArray(gridArray);
         }
 
-        private int[,] getRange(int[,] gridArray, int moveRange, Vector2Int initialPos)
+        private int[,] GetRange(int[,] gridArray, int moveRange, Vector2Int initialPos)
         {
             Queue<Vector2Int> coordQueue = new Queue<Vector2Int>();
             coordQueue.Enqueue(initialPos);
@@ -101,7 +100,7 @@ namespace Commands
             return gridArray;
         }
 
-        private void print2DArray(int[,] gridArray)
+        private void Print2DArray(int[,] gridArray)
         {
             for (int i = 0; i < gridArray.GetLength(0); i++)
             {
@@ -114,6 +113,7 @@ namespace Commands
                 Console.Write("]");
             }
         }
+        
         #endregion
     }
 }
