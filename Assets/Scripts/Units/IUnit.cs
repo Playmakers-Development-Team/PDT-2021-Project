@@ -17,6 +17,9 @@ namespace Units
         public ValueStat Speed { get; }
         
         public Vector2Int Coordinate { get; }
+        
+        GameObject gameObject { get; }
+        
         IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
 
         Type GetDataType();

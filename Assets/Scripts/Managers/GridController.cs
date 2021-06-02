@@ -1,22 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Units;
-using UI;
-using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
-using Utility;
 
 namespace Managers
 {
     public class GridController : MonoBehaviour
     {
-        [SerializeField] TileBase abilityHighlightTile;
+        [SerializeField] private TileBase abilityHighlightTile;
 
-        [SerializeField] Tilemap highlightTilemap;
-        [SerializeField] Tilemap levelTilemap;
+        [SerializeField] private Tilemap highlightTilemap;
+        [SerializeField] private Tilemap levelTilemap;
 
         private GridManager gridManager;
         private UIManager uiManager;
@@ -40,44 +32,6 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                ClickUnit();
-        }
-
-        #region Unit Selection
-
-        private void ClickUnit()
-        {
-            Vector3 mousePos =
-                Camera.main.ScreenToWorldPoint(Input.mousePosition -
-                                               Camera.main.transform.position);
-            Vector2 mousePos2D = new Vector2(mousePos.x + 0.5f, mousePos.y + 0.5f);
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos2D);
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-
-            foreach (IUnit unit in playerManager.PlayerUnits)
-            {
-                if (unit is PlayerUnit playerUnit)
-                {
-                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
-                        gridPos)
-                    {
-                        playerManager.SelectUnit(playerUnit);
-                        //UpdateAbilityUI(playerUnit);
-                        Debug.Log($"Unit Selected!");
-                        return;
-                    }
-                }
-            }
-
-            playerManager.DeselectUnit();
-            // ClearAbilityUI();
-        }
-
-        #endregion
 
         #region Unit Testing
 
