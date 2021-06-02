@@ -282,6 +282,8 @@ namespace Managers
         public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
+            
+            // TODO: Expose this variable
             int moveRange = 4;
             
             // Check if tile is unoccupied
