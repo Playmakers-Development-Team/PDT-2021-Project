@@ -256,8 +256,8 @@ namespace Managers
             if (actingUnit == null || actingUnit.CurrentlySelectedAbility == null)
                 return;
             
-            Vector2 castVector = Camera.main.ScreenToWorldPoint(Input.mousePosition)
-                                 - actingUnit.transform.position;
+            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingUnit.transform.position);
+            Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
             if (Input.GetKeyDown(KeyCode.A))
             {
