@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Commands;
+using GridObjects;
 using UI;
 using Units;
 using UnityEngine;
@@ -16,10 +17,11 @@ namespace Managers
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
 
-        private TurnManager gridManager;
+        private GridManager gridManager;
         private UIManager uiManager;
         private CommandManager commandManager;
         private UnitManager unitManager;
+        private PlayerManager playerManager;
 
         /// <summary>
         /// Stores the current actingunit.
@@ -46,11 +48,15 @@ namespace Managers
         /// </summary>
         private int abilityIndex;
 
+        private bool nextClickWillMove;
+
         private void Awake()
         {
+            gridManager = ManagerLocator.Get<GridManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
             uiManager = ManagerLocator.Get<UIManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
 
             commandManager.ListenExecuteCommand<TurnQueueCreatedCommand>(cmd =>
             {
@@ -169,6 +175,73 @@ namespace Managers
                 uiManager.ClearAbilityHighlight();
                 abilityIndex = 0;
             }
+            
+            if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
+            {
+                if (actingUnit == null)
+                    return;
+
+                nextClickWillMove = true;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                if (playerManager.SelectedUnit != null)
+                {
+                    MoveUnit();
+                    playerManager.DeselectUnit();
+                    Debug.Log($"Unit Deselected!");
+                }
+                else
+                {
+                    ClickUnit();
+                }
+            }
+        }
+
+        private void ClickUnit()
+        {
+            Vector2Int gridPos = GetCoordinateFromClick();
+
+            foreach (IUnit unit in playerManager.PlayerUnits)
+            {
+                if (unit is PlayerUnit playerUnit)
+                {
+                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
+                        gridPos)
+                    {
+                        playerManager.SelectUnit(playerUnit);
+                        //UpdateAbilityUI(playerUnit);
+                        Debug.Log($"Unit Selected!");
+                        return;
+                    }
+                }
+            }
+            
+            playerManager.DeselectUnit();
+            Debug.Log($"Unit Deselected!");
+            // ClearAbilityUI();
+        }
+
+        private void MoveUnit()
+        {
+            Vector2Int gridPos = GetCoordinateFromClick();
+            
+            IUnit playerUnit = playerManager.SelectedUnit;
+
+            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
+            ManagerLocator.Get<CommandManager>().
+                ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
+                    gridUnit.First()));
+        }
+
+        private Vector2Int GetCoordinateFromClick()
+        {
+            Vector3 mousePosScreenSpace = Input.mousePosition - Camera.main.transform.position;
+            Vector3 mousePosWorldSpace = Camera.main.ScreenToWorldPoint(mousePosScreenSpace);
+            Vector2 mousePos2D = new Vector2(mousePosWorldSpace.x + 0.5f, mousePosWorldSpace.y + 0.5f);
+            return gridManager.ConvertPositionToCoordinate(mousePos2D);
         }
     }
 }

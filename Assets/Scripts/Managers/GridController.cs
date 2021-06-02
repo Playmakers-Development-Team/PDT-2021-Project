@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using GridObjects;
-using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -16,7 +12,6 @@ namespace Managers
 
         private GridManager gridManager;
         private UIManager uiManager;
-        private PlayerManager playerManager;
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
@@ -26,7 +21,6 @@ namespace Managers
             gridManager = ManagerLocator.Get<GridManager>();
             gridManager.levelTilemap = levelTilemap;
             uiManager = ManagerLocator.Get<UIManager>();
-            playerManager = ManagerLocator.Get<PlayerManager>();
 
             uiManager.Initialise(abilityHighlightTile, highlightTilemap);
             gridManager.InitialiseTileDatas();
@@ -38,72 +32,6 @@ namespace Managers
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                if (playerManager.SelectedUnit != null)
-                {
-                    ClickCoordinateGrid();
-                    playerManager.DeselectUnit();
-                    Debug.Log($"Unit Deselected!");
-                }
-                else
-                {
-                    ClickUnit();
-                }
-            }
-        }
-
-        #region Unit Selection
-
-        private void ClickUnit()
-        {
-            Vector2Int gridPos = GetCoordinateFromClick();
-
-            foreach (IUnit unit in playerManager.PlayerUnits)
-            {
-                if (unit is PlayerUnit playerUnit)
-                {
-                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
-                        gridPos)
-                    {
-                        playerManager.SelectUnit(playerUnit);
-                        //UpdateAbilityUI(playerUnit);
-                        Debug.Log($"Unit Selected!");
-                        return;
-                    }
-                }
-            }
-            
-            playerManager.DeselectUnit();
-            Debug.Log($"Unit Deselected!");
-            // ClearAbilityUI();
-        }
-
-        private void ClickCoordinateGrid()
-        {
-            Vector2Int gridPos = GetCoordinateFromClick();
-            
-            IUnit playerUnit = playerManager.SelectedUnit;
-
-            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
-            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.MoveCommand(playerUnit, gridPos, playerUnit.Coordinate,
-                    gridUnit.First()));
-        }
-
-        private Vector2Int GetCoordinateFromClick()
-        {
-            Vector3 mousePosScreenSpace = Input.mousePosition - Camera.main.transform.position;
-            Vector3 mousePosWorldSpace = Camera.main.ScreenToWorldPoint(mousePosScreenSpace);
-            Vector2 mousePos2D = new Vector2(mousePosWorldSpace.x + 0.5f, mousePosWorldSpace.y + 0.5f);
-            return gridManager.ConvertPositionToCoordinate(mousePos2D);
-        }
-
-        #endregion
 
         #region Unit Testing
 
