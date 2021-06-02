@@ -9,14 +9,19 @@ namespace Units
 {
     public interface IUnit
     {
+        public ValueStat HealthPoints { get; }
+        public ValueStat MovementActionPoints { get; }
         public ModifierStat DealDamageModifier { get; }
-        
+        public ModifierStat TakeDamageModifier { get; }
+
         public ValueStat Speed { get; }
         
         public Vector2Int Coordinate { get; }
         
         GameObject gameObject { get; }
         
+        IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
+
         Type GetDataType();
         
         void TakeDamage(int amount);

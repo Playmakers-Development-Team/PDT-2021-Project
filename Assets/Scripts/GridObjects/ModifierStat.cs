@@ -19,5 +19,7 @@ namespace GridObjects
             Multiplier = BaseMultiplier;
             Adder = BaseAdder;
         }
+
+        public float Value => Adder * Multiplier;
     }
 }

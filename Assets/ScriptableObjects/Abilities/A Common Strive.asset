@@ -16,6 +16,7 @@ MonoBehaviour:
     with Humility."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
