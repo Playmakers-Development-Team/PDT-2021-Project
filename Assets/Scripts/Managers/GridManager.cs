@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
+using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
@@ -141,6 +142,57 @@ namespace Managers
             return new List<T>();
         }
         
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position
+        /// within the given range.
+        /// </summary>
+        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
+        /// <param name="range">The range from the starting tile using manhattan distance.</param>
+        /// <returns>A list of the coordinates of reachable tiles.</returns>
+        public List<Vector2Int> AllReachableTiles(Vector2Int startingCoordinate, int range)
+        {
+            List<Vector2Int> reachable = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+            
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+                
+                if (distance > range) { break;}
+                
+                // Add neighbours of node to queue
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                
+                reachable.Add(currentNode);
+                coordinateQueue.Dequeue();
+            }
+
+            return reachable;
+        }
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
+        {
+            // If grid node exists add to queue and mark distance taken to arrive at it
+            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            {
+                if (!visited.ContainsKey(node))
+                {
+                    visited.Add(node, distance + 1);
+                    coordinateQueue.Enqueue(node);
+                }
+            }
+        }
+        
         #endregion
 
         #region CONVERSIONS
@@ -215,24 +267,72 @@ namespace Managers
             return false;
         }
         
-        public void MoveObjectsFromTile(Vector2Int currentPosition, Vector2Int newPosition)
+        public void MoveAllGridObjects(Vector2Int currentCoordinate, Vector2Int newCoordinate)
         {
-            List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentPosition);
+            List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentCoordinate);
 
             foreach (var gridObject in gridObjects)
             {
-                if (AddGridObject(newPosition, gridObject))
-                {
-                    RemoveGridObject(currentPosition, gridObject);
-                }
+                MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
 
-        public void MoveGridObject(Vector2Int currentPosition, Vector2Int newPosition, GridObject gridObject)
+        public void PlaceTiles(Vector2Int currentCoordinate, int range, Dictionary<Vector2Int, TileData> grid)
         {
-            if (AddGridObject(newPosition, gridObject))
+            //todo show range of units
+            //unfinished
+            List <Vector2Int> x = AllReachableTiles(currentCoordinate, range);
+        }
+
+        // TODO: CurrentCoordinate should not be necessary
+        public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        {
+            TileData tileData = GetTileDataByCoordinate(newCoordinate);
+            
+            // TODO: Expose this variable
+            int moveRange = 4;
+            
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
             {
-                RemoveGridObject(currentPosition, gridObject);
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+            
+            // Check if tile is in range
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile out of range.");
+                return;
+            }
+            
+            TeleportUnit(currentCoordinate, newCoordinate, unit);
+        }
+
+        // TODO: CurrentCoordinate should not be necessary
+        /// <summary>
+        /// Moves a unit's GridObject and GameObject directly to a new position.
+        /// </summary>
+        /// <param name="currentCoordinate">The unit's current coordinate.</param>
+        /// <param name="newCoordinate">The coordinate to move the unit to.</param>
+        /// <param name="unit">The unit to teleport.</param>
+        private void TeleportUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        {
+            var gridObject = (GridObject) unit;
+            
+            gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
+            
+            MoveGridObject(currentCoordinate, newCoordinate, gridObject);
+        }
+
+        // TODO: CurrentCoordinate should not be necessary
+        public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate, GridObject gridObject)
+        {
+            if (AddGridObject(newCoordinate, gridObject))
+            {
+                RemoveGridObject(currentCoordinate, gridObject);
             }
         }
         

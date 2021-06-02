@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Units;
-using UI;
-using Abilities;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
-using Utility;
 
 namespace Managers
 {
@@ -15,10 +8,10 @@ namespace Managers
     {
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
-        [SerializeField] TileBase abilityHighlightTile;
+        [SerializeField] private TileBase abilityHighlightTile;
 
-        [SerializeField] Tilemap highlightTilemap;
-        [SerializeField] Tilemap levelTilemap;
+        [SerializeField] private Tilemap highlightTilemap;
+        [SerializeField] private Tilemap levelTilemap;
 
         private GridManager gridManager;
         private UIManager uiManager;
