@@ -5,10 +5,15 @@ using UnityEngine;
 
 namespace ColorDrop
 {
+    public interface IColorDropTextureGenerator
+    {
+        Texture2D GenerateDropOnTex(Texture previewTex);
+    }
+
     /// <summary>
     /// 
     /// </summary>
-    public class ColorDropGenerator : MonoBehaviour
+    public class ColorDropGenerator : MonoBehaviour, IColorDropTextureGenerator
     {
         // Inspector Accessible Fields
         [SerializeField] private Sprite[] sampleSpriteSources;
@@ -45,6 +50,33 @@ namespace ColorDrop
             dstRenderTexture.Release();
             CombineSpriteTextures();
             RenderTexture();
+        }
+
+        public Texture2D GenerateDropOnTex(Texture previewTex)
+        {
+            random = new System.Random();
+
+            dstTexture = new Texture2D(previewTex.width, previewTex.height);
+            Color pixelSample;
+
+            for (int y = 0; y < dstTexture.height; y++)
+            {
+                for (int x = 0; x < dstTexture.width; x++)
+                {
+                    pixelSample = dstTexture.GetPixel(x, y);
+                    pixelSample.a = 0;
+                    dstTexture.SetPixel(x, y, pixelSample);
+                }
+            }
+
+            dstTexture.Apply();
+
+            for (int i = 0; i < sampleSpriteSources.Length; i++)
+            {
+                BlitDrop(sampleSpriteSources[i], dstTexture);
+            }
+
+            return dstTexture;
         }
 
         private void CreateNewTexture()
