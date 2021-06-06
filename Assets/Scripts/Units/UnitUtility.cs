@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Managers;
+using UnityEngine;
 
 namespace Units
 {
@@ -6,16 +7,25 @@ namespace Units
     {
         public static IUnit Spawn(GameObject prefab, Vector2Int coordinate)
         {
-            // TODO: Uncomment once required functionality in GridManager has been implemented!
-            // Vector2 position = GridManager.GridToWorld(coordinate);
-            Vector2 position = coordinate;
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+
+            if (gridManager.GetGridObjectsByCoordinate(coordinate).Count == 0)
+            {
+                Vector2 position = gridManager.ConvertCoordinateToPosition(coordinate);
+                
+                GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
+                IUnit IUnit = instance.GetComponent<IUnit>();
             
-            GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-            IUnit IUnit = instance.GetComponent<IUnit>();
-            
-            // GridManager.Occupy(unit);
-            
-            return IUnit;
+                return IUnit;
+            }
+            else
+            {
+                // Can change this later if we want to allow multiple grid objects on a tile
+                Debug.LogWarning("Failed to spawn " + prefab +
+                                 " at " + coordinate.x + ", " + coordinate.y +
+                                 " due to tile being occupied.");
+                return null;
+            }
         }
 
         public static IUnit Spawn(string unitName, Vector2Int coordinate)

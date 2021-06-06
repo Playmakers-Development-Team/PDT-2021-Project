@@ -4,11 +4,11 @@ namespace Commands
 {
     public abstract class Command
     {
-        protected IUnit unit;
+        public IUnit Unit { get; set; }
 
         protected Command(IUnit unit)
         {
-            this.unit = unit;
+            Unit = unit;
         }
 
         public abstract void Queue();
