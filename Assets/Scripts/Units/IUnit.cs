@@ -11,11 +11,11 @@ namespace Units
     {
         public ValueStat HealthPoints { get; }
         public ValueStat MovementActionPoints { get; }
+        public ValueStat Speed { get; }
         public ModifierStat DealDamageModifier { get; }
         public ModifierStat TakeDamageModifier { get; }
+        public List<Ability> Abilities { get; }
 
-        public ValueStat Speed { get; }
-        
         public Vector2Int Coordinate { get; }
         
         GameObject gameObject { get; }
@@ -31,8 +31,6 @@ namespace Units
         void TakeAttack(int amount);
 
         void Knockback(Vector2Int translation);
-
-        List<Ability> GetAbilities();
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 

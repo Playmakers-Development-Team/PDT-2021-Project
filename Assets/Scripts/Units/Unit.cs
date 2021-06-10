@@ -13,11 +13,16 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        
+        public ValueStat HealthPoints => data.healthPoints;
+        public ValueStat MovementActionPoints => data.movementActionPoints;
+        public ValueStat Speed => data.speed;
+        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public ModifierStat TakeDamageModifier => data.takeDamageModifier;
+        public ModifierStat TakeKnockbackModifier => data.takeKnockbackModifier;
+        public List<Ability> Abilities => data.abilities;
 
         public static Type DataType => typeof(T);
-
-        public ModifierStat DealDamageModifier { get; protected set; }
-        public ValueStat Speed { get; protected set; }
 
         public Type GetDataType() => DataType;
 
@@ -35,39 +40,24 @@ namespace Units
 
         private PlayerManager playerManager;
 
-
-        protected void Awake(){}
-        
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
 
-            HealthPoints = data.healthPoints;
-            MovementActionPoints = data.movementActionPoints;
-            Speed = data.speed;
-            DealDamageModifier = data.dealDamageModifier;
-            TakeDamageModifier = data.takeDamageModifier;
-            TakeKnockbackModifier = data.takeKnockbackModifier;
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
-
-            DealDamageModifier.Reset();
-            TakeDamageModifier.Reset();
-            TakeKnockbackModifier.Reset();
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
-        public void TakeDefence(int amount) => data.dealDamageModifier.Adder -= amount;
+        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
-        public void TakeAttack(int amount) => data.takeDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => TakeDamageModifier.Adder += amount;
 
         public void Knockback(Vector2Int translation) => throw new NotImplementedException();
-
-        public List<Ability> GetAbilities() => data.abilities;
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {

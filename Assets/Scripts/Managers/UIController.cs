@@ -107,7 +107,7 @@ namespace Managers
                 return;
             }
 
-            foreach (var ability in unit.GetAbilities()) // updated formatting to fit convention
+            foreach (var ability in unit.Abilities)
                 AddAbilityField(ability);
         }
 
