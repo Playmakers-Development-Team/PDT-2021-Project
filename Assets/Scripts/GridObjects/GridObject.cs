@@ -46,12 +46,6 @@ namespace GridObjects
             Debug.Log(knockbackTaken + " knockback taken.");
         }
 
-        [Obsolete("Use Coordinate property instead.")]
-        public Vector2Int GetCoordinate()
-        {
-            return Coordinate;
-        }
-
         private void CheckDeath()
         {
             if (HealthPoints.Value <= 0)

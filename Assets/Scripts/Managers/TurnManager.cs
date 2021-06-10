@@ -44,9 +44,6 @@ namespace Managers
         /// </summary>
         public int CurrentTurnIndex { get; private set; }
 
-        [Obsolete("Use CurrentTurnIndex")]
-        public int TurnIndex => CurrentTurnIndex;
-
         /// <summary>
         /// The unit that is currently taking its turn.
         /// </summary>

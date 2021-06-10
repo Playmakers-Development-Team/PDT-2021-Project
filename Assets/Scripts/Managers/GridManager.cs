@@ -197,14 +197,6 @@ namespace Managers
 
         #region CONVERSIONS
 
-        [Obsolete("Use ConvertPositionToCoordinate instead from now on")]
-        public Vector2Int ConvertWorldSpaceToGridSpace(Vector2 worldSpace) =>
-            ConvertPositionToCoordinate(worldSpace);
-
-        [Obsolete("Use ConvertCoordinateToPosition instead from now on")]
-        public Vector2 ConvertGridSpaceToWorldSpace(Vector2Int gridSpace) =>
-            ConvertCoordinateToPosition(gridSpace);
-        
         public Vector2Int ConvertPositionToCoordinate(Vector2 position)
         {
             // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
