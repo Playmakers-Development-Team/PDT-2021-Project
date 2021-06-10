@@ -113,7 +113,7 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new TurnQueueCreatedCommand(null));
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new TurnQueueCreatedCommand());
             
         }
 

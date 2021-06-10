@@ -4,34 +4,29 @@ using UnityEngine;
 
 namespace Commands
 {
-    public class AbilityCommand : Command
+    public class AbilityCommand : HistoricalCommand
     {
         private readonly Ability ability;
-        private readonly Vector2 targetVector;
-        private readonly Vector2Int originCoordinate;
-        private readonly IUnit unit;
-
-
-
-        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
+        public Vector2 TargetVector { get; }
+        public Vector2Int OriginCoordinate { get; }
+        public IUnit Unit { get; }
+        
+        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability)
         {
             this.ability = ability;
-            this.targetVector = targetVector;
-            this.originCoordinate = unit.Coordinate;
-            this.unit = unit;
+            this.TargetVector = targetVector;
+            this.OriginCoordinate = unit.Coordinate;
+            Unit = unit;
         }
-
-        public override void Queue() 
-        {}
 
         public override void Execute()
         {
-            ability.Use(unit, originCoordinate, targetVector);
+            ability.Use(Unit, OriginCoordinate, TargetVector);
         }
 
         public override void Undo()
         {
-            ability.Undo(unit, originCoordinate, targetVector);
+            ability.Undo(Unit, OriginCoordinate, TargetVector);
         }
     }
 }
