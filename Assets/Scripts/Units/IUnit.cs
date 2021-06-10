@@ -7,13 +7,11 @@ using UnityEngine;
 
 namespace Units
 {
-    public interface IUnit
+    public interface IUnit : IDamageable
     {
-        public ValueStat HealthPoints { get; }
         public ValueStat MovementActionPoints { get; }
         public ValueStat Speed { get; }
         public ModifierStat DealDamageModifier { get; }
-        public ModifierStat TakeDamageModifier { get; }
         public List<Ability> Abilities { get; }
 
         public Vector2Int Coordinate { get; }

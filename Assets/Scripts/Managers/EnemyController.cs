@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Commands;
 using GridObjects;
+using Units;
 using UnityEngine;
 
 namespace Managers
@@ -83,8 +84,7 @@ namespace Managers
             {
                 if (enemyManager.Count > 0)
                 {
-                    GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
-                    enemy.TakeDamage(1);
+                    enemyManager.EnemyUnits[0].TakeDamage(1);
                 }
                 debugKillEnemyButton = false;
             }
@@ -99,10 +99,13 @@ namespace Managers
                     GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
                     if (firstAdjacentPlayer != null)
                     {
-                        // TODO: Get proper damage formula here
-                        firstAdjacentPlayer.TakeDamage(5);
-                        debugDamagePlayerButton = false;
-                        return;
+                        if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
+                        {
+                            // TODO: Get proper damage formula here
+                            firstAdjacentPlayerUnit.TakeDamage(5);
+                            debugDamagePlayerButton = false;
+                            return;
+                        }
                     }
                 }
                 
