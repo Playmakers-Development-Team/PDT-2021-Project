@@ -18,7 +18,6 @@ namespace Units
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
-        public ModifierStat TakeKnockbackModifier => data.takeKnockbackModifier;
         public List<Ability> Abilities => data.abilities;
 
         public static Type DataType => typeof(T);
@@ -36,6 +35,7 @@ namespace Units
         private const int maxTenetStatusEffectCount = 2;
 
         public Health Health { get; private set; }
+        public Knockback Knockback { get; private set; }
         
         private float damageTextLifetime = 1.0f;
 
@@ -62,17 +62,15 @@ namespace Units
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
-
-        public void Knockback(Vector2Int translation) => throw new NotImplementedException();
         
         public void TakeDamage(int amount)
         {
-            Debug.Log("Amount: " + amount);
-
             int damageTaken = Health.TakeDamage(amount);
             
             SpawnDamageText(damageTaken);
         }
+
+        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {

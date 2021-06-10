@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Units
 {
-    public interface IUnit : IDamageable
+    public interface IUnit : IDamageable, IKnockbackable
     {
         public ValueStat MovementActionPoints { get; }
         public ValueStat Speed { get; }
@@ -24,11 +24,11 @@ namespace Units
         
         void TakeDamage(int amount);
 
+        void TakeKnockback(int amount);
+
         void TakeDefence(int amount);
         
         void TakeAttack(int amount);
-
-        void Knockback(Vector2Int translation);
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 

@@ -6,8 +6,8 @@ namespace Units
 {
     public class Health
     {
-        public ValueStat HealthPoints { get; protected set; }
-        public ModifierStat TakeDamageModifier { get; protected set; }
+        public ValueStat HealthPoints { get; }
+        public ModifierStat TakeDamageModifier { get; }
 
         private Action OnDeath;
 
@@ -20,8 +20,6 @@ namespace Units
         
         public int TakeDamage(int amount)
         {
-            Debug.Log("Amount: " + amount);
-            // Debug.Log("DamageModifier");
             int damageTaken = (int) TakeDamageModifier.Modify(amount);
             HealthPoints.Value -= damageTaken;
             CheckDeath();
