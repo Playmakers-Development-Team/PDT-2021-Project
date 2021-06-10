@@ -110,8 +110,7 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new TurnQueueCreatedCommand(null));
-            
+            commandManager.ExecuteCommand(new TurnQueueCreatedCommand(null));
         }
 
         /// <summary>
@@ -189,13 +188,9 @@ namespace Managers
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
             timelineNeedsUpdating = true;
-                
-            // reselects the unit if the current unit has died
-            if (CurrentUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
-            else
-                playerManager.DeselectUnit();
             
+            // Reselects the new current unit if the old current unit has died
+            SelectCurrentUnit();
 
             onUnitDeath?.Invoke(this);
         }
@@ -314,28 +309,15 @@ namespace Managers
             TotalTurnCount++;
             
             if (CurrentTurnIndex >= currentTurnQueue.Count)
-            {
                 NextRound();
-                
-            }
             
-
-            // Debug.Log(CurrentUnit.ToString());
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             
-            if (CurrentUnit is PlayerUnit)
-            {
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
-            }
-            else
-            {
-                playerManager.DeselectUnit();
-            }
+            SelectCurrentUnit();
             
             Debug.Log("next turn has started");
             
             onTurnEnd?.Invoke(this);
-            
         }
         
         /// <summary>
@@ -346,7 +328,6 @@ namespace Managers
         {
             // TODO might want to call the next round command or something here
             RoundCount++;
-           
             
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
@@ -392,6 +373,17 @@ namespace Managers
         private bool HasPlayerUnitInQueue()
         {
             return currentTurnQueue.Any(u => u is PlayerUnit);
+        }
+
+        /// <summary>
+        /// Selects the <c>CurrentUnit</c> if it is of type <c>PlayerUnit</c>.
+        /// </summary>
+        private void SelectCurrentUnit()
+        {
+            if (CurrentUnit is PlayerUnit)
+                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+            else
+                playerManager.DeselectUnit();
         }
     }
 }
