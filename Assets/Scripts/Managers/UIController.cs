@@ -58,7 +58,7 @@ namespace Managers
             uiManager = ManagerLocator.Get<UIManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
 
-            commandManager.ListenExecuteCommand<TurnQueueCreatedCommand>(cmd =>
+            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
                 timelineIsReady = true;
 
@@ -72,7 +72,7 @@ namespace Managers
 
         private void Start()
         {
-            commandManager.ListenExecuteCommand<UnitSelectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
             {
                 if (!timelineIsReady)
                     return;
@@ -81,7 +81,7 @@ namespace Managers
                 UpdateAbilityUI((PlayerUnit)actingUnit);
             });
 
-            commandManager.ListenExecuteCommand<StartTurnCommand>(cmd =>
+            commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
                     ClearAbilityUI();

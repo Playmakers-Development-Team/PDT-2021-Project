@@ -55,12 +55,12 @@ namespace Managers
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
             
-            commandManager.ListenExecuteCommand<EnemyUnitsReadyCommand>(cmd =>
+            commandManager.ListenCommand<EnemyUnitsReadyCommand>(cmd =>
             {
                 isEnemyUnitsReady = true;
                 SetupTurnQueue();
             });
-            commandManager.ListenExecuteCommand<PlayerUnitsReadyCommand>(cmd =>
+            commandManager.ListenCommand<PlayerUnitsReadyCommand>(cmd =>
             {
                 isPlayerUnitsReady = true;
                 SetupTurnQueue();
