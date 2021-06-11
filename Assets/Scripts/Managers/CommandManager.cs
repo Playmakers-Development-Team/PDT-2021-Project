@@ -132,7 +132,8 @@ namespace Managers
         }
 
         /// <summary>
-        /// Do something <b>only once</b>, when a command is executed.
+        /// Do something <b>only once</b>, when a command is executed. If multiple commands are
+        /// to be caught, then wait for all of them.
         ///
         /// <example>
         /// How to use.
@@ -144,7 +145,8 @@ namespace Managers
         public void CatchCommand<T>(Action<T> action) where T : Command => RegisterCatchListener(action);
 
         /// <summary>
-        /// Do something <b>only once</b>, when a command is executed.
+        /// Do something <b>only once</b>, when a command is executed. If multiple commands are
+        /// to be caught, then wait for all of them.
         ///
         /// <example>
         /// How to use.
@@ -159,7 +161,8 @@ namespace Managers
             RegisterCatchListener(action);
 
         /// <summary>
-        /// Do something <b>only once</b>, when a command is executed.
+        /// Do something <b>only once</b>, when a command is executed. If multiple commands are
+        /// to be caught, then wait for all of them.
         ///
         /// <example>
         /// How to use.
@@ -175,7 +178,8 @@ namespace Managers
             RegisterCatchListener(action);
 
         /// <summary>
-        /// Do something <b>only once</b>, when a command is executed.
+        /// Do something <b>only once</b>, when a command is executed. If multiple commands are
+        /// to be caught, then wait for all of them.
         ///
         /// <example>
         /// How to use.
@@ -192,7 +196,8 @@ namespace Managers
             RegisterCatchListener(action);
 
         /// <summary>
-        /// Do something <b>only once</b>, when a command is executed.
+        /// Do something <b>only once</b>, when a command is executed. If multiple commands are
+        /// to be caught, then wait for all of them.
         ///
         /// <example>
         /// How to use.
