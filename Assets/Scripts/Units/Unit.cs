@@ -5,6 +5,7 @@ using GridObjects;
 using StatusEffects;
 using Abilities;
 using Managers;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,11 +14,13 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        
+        public ValueStat MovementActionPoints => data.movementActionPoints;
+        public ValueStat Speed => data.speed;
+        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public List<Ability> Abilities => data.abilities;
 
         public static Type DataType => typeof(T);
-
-        public ModifierStat DealDamageModifier { get; protected set; }
-        public ValueStat Speed { get; protected set; }
 
         public Type GetDataType() => DataType;
 
@@ -31,43 +34,43 @@ namespace Units
 
         private const int maxTenetStatusEffectCount = 2;
 
-        private TurnManager turnManager;
-
-        private PlayerManager playerManager;
-
-
-        protected void Awake(){}
+        public Health Health { get; private set; }
+        public Knockback Knockback { get; private set; }
         
+        private float damageTextLifetime = 1.0f;
+
+        private TurnManager turnManager;
+        private PlayerManager playerManager;
+        private GridManager gridManager;
+
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
 
-            HealthPoints = data.healthPoints;
-            MovementActionPoints = data.movementActionPoints;
-            Speed = data.speed;
-            DealDamageModifier = data.dealDamageModifier;
-            TakeDamageModifier = data.takeDamageModifier;
-            TakeKnockbackModifier = data.takeKnockbackModifier;
+            Health = new Health(KillUnit, data.healthPoints, data.takeDamageModifier);
+
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
 
-            DealDamageModifier.Reset();
-            TakeDamageModifier.Reset();
-            TakeKnockbackModifier.Reset();
-
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
+            gridManager = ManagerLocator.Get<GridManager>();
         }
 
-        public void TakeDefence(int amount) => data.dealDamageModifier.Adder -= amount;
+        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
-        public void TakeAttack(int amount) => data.takeDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+        
+        public void TakeDamage(int amount)
+        {
+            int damageTaken = Health.TakeDamage(amount);
+            
+            SpawnDamageText(damageTaken);
+        }
 
-        public void Knockback(Vector2Int translation) => throw new NotImplementedException();
-
-        public List<Ability> GetAbilities() => data.abilities;
+        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
@@ -165,6 +168,45 @@ namespace Units
 
             foundNode = null;
             return false;
+        }
+        
+        private void KillUnit()
+        {
+            Debug.Log($"This unit was cringe and died");
+            
+            gridManager.RemoveGridObject(Coordinate, this);
+
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+
+            if (this is PlayerUnit)
+            {
+                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
+            }
+            else if (this is EnemyUnit)
+            {
+                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
+            }
+            else
+            {
+                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                               " as it is an unidentified unit");
+            }
+            
+            // "Delete" the gridObject (setting it to inactive just in case we still need it)
+            gameObject.SetActive(false);
+        }
+
+        private void SpawnDamageText(int damageAmount)
+        {
+            GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas",
+                typeof(GameObject));
+            GameObject damageAmountGameObject =
+                Instantiate(prefab, transform.position, Quaternion.identity);
+
+            damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
+                damageAmount.ToString();
+
+            Destroy(damageAmountGameObject, damageTextLifetime);
         }
     }
 }

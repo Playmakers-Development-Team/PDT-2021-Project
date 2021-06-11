@@ -50,6 +50,8 @@ namespace Managers
 
         private bool nextClickWillMove;
 
+        private bool isCastingAbility;
+
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -105,7 +107,7 @@ namespace Managers
                 return;
             }
 
-            foreach (var ability in unit.GetAbilities()) // updated formatting to fit convention
+            foreach (var ability in unit.Abilities)
                 AddAbilityField(ability);
         }
 
@@ -197,6 +199,8 @@ namespace Managers
                     SelectUnit();
                 }
             }
+            
+            HandleAbilityCasting();
         }
 
         private void SelectUnit()
@@ -242,10 +246,33 @@ namespace Managers
 
         private Vector2Int GetCoordinateFromClick()
         {
-            Vector3 mousePosScreenSpace = Input.mousePosition - Camera.main.transform.position;
-            Vector3 mousePosWorldSpace = Camera.main.ScreenToWorldPoint(mousePosScreenSpace);
-            Vector2 mousePos2D = new Vector2(mousePosWorldSpace.x + 0.5f, mousePosWorldSpace.y + 0.5f);
-            return gridManager.ConvertPositionToCoordinate(mousePos2D);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // TODO look into this later, put the subtraction somewhere better
+            return gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
+        }
+
+        private void HandleAbilityCasting()
+        {
+            if (actingUnit == null || actingUnit.CurrentlySelectedAbility == null)
+                return;
+            
+            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingUnit.transform.position);
+            Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                isCastingAbility = !isCastingAbility;
+            }
+
+            if (isCastingAbility)
+            {
+                uiManager.HighlightAbility(actingUnit.Coordinate, castVector, actingUnit.CurrentlySelectedAbility);
+            }
+
+            if (isCastingAbility && Input.GetMouseButtonDown(1))
+            {
+                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate, castVector);
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace UI
         // BUG: Units are added to the end of the queue rather than being added based on their speed
         public void SpawnPlayer()
         {
-            GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerTemp", typeof(GameObject));
+            GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerPlaceholder", typeof(GameObject));
 
             playerManager.Spawn(playerPrefab, Vector2Int.left);
         }
@@ -32,7 +32,7 @@ namespace UI
         // BUG: Units are added to the end of the queue rather than being added based on their speed
         public void SpawnEnemy()
         {
-            GameObject enemyPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/EnemyTemp", typeof(GameObject));
+            GameObject enemyPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
 
             enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
