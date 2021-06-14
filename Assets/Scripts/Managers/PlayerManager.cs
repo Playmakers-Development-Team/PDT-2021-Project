@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Commands;
 using Units;
 using UnityEngine;
 
@@ -28,9 +29,8 @@ namespace Managers
                 return null;
             
             playerUnits.Add(unit);
-            
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new UnitSpawnCommand(unit));
             SelectUnit((PlayerUnit)unit);
             
             return unit;

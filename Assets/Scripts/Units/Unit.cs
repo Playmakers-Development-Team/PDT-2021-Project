@@ -4,6 +4,7 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Commands;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -42,6 +43,7 @@ namespace Units
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private GridManager gridManager;
+        private CommandManager commandManager;
 
         protected override void Start()
         {
@@ -57,6 +59,7 @@ namespace Units
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
@@ -174,6 +177,7 @@ namespace Units
         {
             Debug.Log($"This unit was cringe and died");
             
+            commandManager.ExecuteCommand(new UnitKilledCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
