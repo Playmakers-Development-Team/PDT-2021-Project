@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using GridObjects;
 using Managers;
 using Units;
 using UnityEngine;
@@ -9,13 +6,11 @@ namespace Commands
 {
     public class MoveCommand : HistoricalCommand
     {
-        public IUnit Unit { get; }
         private Vector2Int targetCoords, currentCoords;
         private GridManager gridManager;
         
-        public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current)
+        public MoveCommand(IUnit unit, Vector2Int target, Vector2Int current) : base(unit)
         {
-            Unit = unit;
             gridManager = ManagerLocator.Get<GridManager>();
             targetCoords = target;
             currentCoords = current;

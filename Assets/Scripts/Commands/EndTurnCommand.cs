@@ -2,13 +2,8 @@ using Units;
 
 namespace Commands
 {
-    public class EndTurnCommand : Command
+    public class EndTurnCommand : UnitCommand
     {
-        public IUnit Unit { get; }
-        
-        public EndTurnCommand(IUnit unit)
-        {
-            Unit = unit;
-        }
+        public EndTurnCommand(IUnit unit) : base(unit) {}
     }
 }

@@ -1,15 +1,9 @@
-using Managers;
 using Units;
 
 namespace Commands
 {
-    public class UnitSelectedCommand : Command
+    public class UnitSelectedCommand : UnitCommand
     {
-        public IUnit CurrentUnit { get; }
-
-        public UnitSelectedCommand(IUnit unit) 
-        {
-            CurrentUnit = unit;
-        }
+        public UnitSelectedCommand(IUnit unit) : base(unit) {}
     }
 }

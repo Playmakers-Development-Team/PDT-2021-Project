@@ -9,14 +9,12 @@ namespace Commands
         private readonly Ability ability;
         public Vector2 TargetVector { get; }
         public Vector2Int OriginCoordinate { get; }
-        public IUnit Unit { get; }
         
-        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability)
+        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
             this.ability = ability;
             this.TargetVector = targetVector;
             this.OriginCoordinate = unit.Coordinate;
-            Unit = unit;
         }
 
         public override void Execute()

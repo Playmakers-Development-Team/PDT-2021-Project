@@ -1,6 +1,4 @@
-﻿using Units;
-
-namespace Commands
+﻿namespace Commands
 {
     public class TurnQueueCreatedCommand : Command {}
 }
