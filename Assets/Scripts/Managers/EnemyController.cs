@@ -51,7 +51,7 @@ namespace Managers
                 else
                 {
                     isSpawningEnemies = false;
-                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
+                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
                 }
             }
 

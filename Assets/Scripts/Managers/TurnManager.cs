@@ -94,7 +94,7 @@ namespace Managers
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
 
-            commandManager.ListenExecuteCommand<EndTurnCommand>((cmd) => NextTurn());
+            commandManager.ListenCommand<EndTurnCommand>((cmd) => NextTurn());
         }
 
         // TODO Call this function when level is loaded
@@ -110,7 +110,7 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            commandManager.ExecuteCommand(new TurnQueueCreatedCommand(null));
+            commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
 
         /// <summary>
