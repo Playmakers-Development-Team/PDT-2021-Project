@@ -31,15 +31,15 @@ namespace UI
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Joy, 3);
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Apathy, 3);
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenExecuteCommand<UnitSelectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
             {
                 SelectUnit();
             });
-            commandManager.ListenExecuteCommand<AbilityCommand>(cmd =>
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
                 SelectUnit();
             });
-            commandManager.ListenExecuteCommand<UnitDeselectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitDeselectedCommand>(cmd =>
             {
                 DeselectUnit();
             });
