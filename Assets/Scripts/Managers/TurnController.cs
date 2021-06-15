@@ -39,32 +39,17 @@ namespace Managers
         /// A reference to the TurnManager.
         /// </summary>
         private TurnManager turnManager;
-        
-        /// <summary>
-        /// Checks if the player units are ready.
-        /// </summary>
-        private bool isPlayerUnitsReady;
-        
-        /// <summary>
-        /// Checks if the enemy units are ready.
-        /// </summary>
-        private bool isEnemyUnitsReady;
-        
+
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
             
-            commandManager.ListenExecuteCommand<EnemyUnitsReadyCommand>(cmd =>
-            {
-                isEnemyUnitsReady = true;
-                SetupTurnQueue();
-            });
-            commandManager.ListenExecuteCommand<PlayerUnitsReadyCommand>(cmd =>
-            {
-                isPlayerUnitsReady = true;
-                SetupTurnQueue();
-            });
+            commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
+                (cmd1, cmd2) =>
+                {
+                    SetupTurnQueue();
+                });
         }
 
         /// <summary>
@@ -72,9 +57,6 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            if (!isPlayerUnitsReady || !isEnemyUnitsReady)
-                return;
-            
             turnManager.SetupTurnQueue();
             
             if (currentTurnIndicator != null)

@@ -22,7 +22,7 @@ namespace Managers
                 SelectedUnit = unit;
 
                 ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(unit));
+                    ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
             }
         }
 

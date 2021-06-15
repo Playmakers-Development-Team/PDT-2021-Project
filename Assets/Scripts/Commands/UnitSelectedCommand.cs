@@ -1,21 +1,9 @@
-using Managers;
 using Units;
 
 namespace Commands
 {
-    public class UnitSelectedCommand : Command
+    public class UnitSelectedCommand : UnitCommand
     {
-        public IUnit CurrentUnit { get; }
-
-        public UnitSelectedCommand(IUnit unit) : base(unit) 
-        {
-            CurrentUnit = unit;
-        }
-
-        public override void Queue() {}
-
-        public override void Execute() {}
-
-        public override void Undo() {}
+        public UnitSelectedCommand(IUnit unit) : base(unit) {}
     }
 }

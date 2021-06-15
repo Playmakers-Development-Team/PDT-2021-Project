@@ -18,7 +18,8 @@ namespace Managers
             UnitManager unitManager = ManagerLocator.Get<UnitManager>();
             unitManager.Spawn(playerPrefab, Vector2Int.zero);
             unitManager.Spawn(playerPrefab, Vector2Int.up);
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand(null));
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand());
+
         }
     }
 }
