@@ -1,5 +1,4 @@
-﻿using Managers;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Background.Pipeline.Features
 {

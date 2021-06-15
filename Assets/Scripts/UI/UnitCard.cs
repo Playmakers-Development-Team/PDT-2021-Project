@@ -1,5 +1,6 @@
 using TMPro;
-using Units;
+using Unit;
+using Unit.Enemy;
 using UnityEngine;
 using UnityEngine.UI;
 

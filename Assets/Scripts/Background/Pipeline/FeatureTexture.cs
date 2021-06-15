@@ -1,6 +1,5 @@
 ﻿using System;
 using Background.Pipeline.Features;
-using Managers;
 using UnityEngine;
 
 namespace Background.Pipeline

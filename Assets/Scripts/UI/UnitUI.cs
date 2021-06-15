@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
-using Commands;
+using Command;
 using Managers;
-using StatusEffects;
 using TMPro;
-using Units;
+using Unit;
+using Unit.Commands;
+using Unit.Player;
 using UnityEngine;
 using UnityEngine.UI;
 

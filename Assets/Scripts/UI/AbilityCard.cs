@@ -1,5 +1,5 @@
 using TMPro;
-using Abilities;
+using Unit.Abilities;
 using UnityEngine;
 using UnityEngine.UI;
 
