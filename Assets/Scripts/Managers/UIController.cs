@@ -207,7 +207,7 @@ namespace Managers
         {
             Vector2Int gridPos = GetCoordinateFromClick();
 
-            foreach (IUnit unit in playerManager.PlayerUnits)
+            foreach (IUnit unit in unitManager.PlayerUnits)
             {
                 if (unit is PlayerUnit playerUnit)
                 {
