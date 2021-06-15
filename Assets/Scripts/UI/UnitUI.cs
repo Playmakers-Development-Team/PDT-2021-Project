@@ -72,10 +72,10 @@ namespace UI
             
             // TODO: change to the unit's name if any
             //name.text = selectedPlayerUnit.gameObject.name;
-            health.text = "Health: " + selectedPlayerUnit.HealthPoints.Value;
+            health.text = "Health: " + selectedPlayerUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedPlayerUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedPlayerUnit.DealDamageModifier.Value;
-            defence.text = "Defence: " + selectedPlayerUnit.TakeDamageModifier.Value;
+            defence.text = "Defence: " + selectedPlayerUnit.Health.TakeDamageModifier.Value;
             speed.text = "Speed: " + selectedPlayerUnit.Speed.Value;
             
             string tenetText = String.Join("\n",selectedPlayerUnit.TenetStatusEffects.Select(t => t.TenetType+": " + t.StackCount) );
