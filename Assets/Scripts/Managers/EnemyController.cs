@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using Commands;
 using GridObjects;
 using Units;
@@ -55,8 +55,17 @@ namespace Managers
                 }
             }
 
-            DebugKillEnemyFunction();
-            DebugDamagePlayerButton();
+        private void OnValidate()
+        {
+            if (debugKillEnemyButton)
+            {
+                DebugKillEnemyFunction();
+            }
+
+            if (debugDamagePlayerButton)
+            {
+                DebugDamagePlayerButton();
+            }
         }
 
         private void SpawnEnemy()
@@ -80,38 +89,32 @@ namespace Managers
         
         private void DebugKillEnemyFunction()
         {
-            if (debugKillEnemyButton)
+            if (enemyManager.Count > 0)
             {
-                if (enemyManager.Count > 0)
-                {
-                    enemyManager.EnemyUnits[0].TakeDamage(1);
-                }
-                debugKillEnemyButton = false;
+                enemyManager.EnemyUnits[0].TakeDamage(1);
             }
+            debugKillEnemyButton = false;
         }
         
         private void DebugDamagePlayerButton()
         {
-            if (debugDamagePlayerButton)
+            foreach (var enemy in enemyManager.EnemyUnits)
             {
-                foreach (var enemy in enemyManager.EnemyUnits)
+                GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
+                if (firstAdjacentPlayer != null)
                 {
-                    GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
-                    if (firstAdjacentPlayer != null)
+                    if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
                     {
-                        if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
-                        {
-                            // TODO: Get proper damage formula here
-                            firstAdjacentPlayerUnit.TakeDamage(5);
-                            debugDamagePlayerButton = false;
-                            return;
-                        }
+                        // TODO: Get proper damage formula here
+                        firstAdjacentPlayerUnit.TakeDamage(5);
+                        debugDamagePlayerButton = false;
+                        return;
                     }
                 }
-                
-                Debug.Log("No players adjacent to enemies found, no damage dealt");
-                debugDamagePlayerButton = false;
             }
+            
+            Debug.Log("No players adjacent to enemies found, no damage dealt");
+            debugDamagePlayerButton = false;
         }
     }
 }
