@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Commands;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -62,24 +63,83 @@ namespace Managers
                                  " from EnemyManager but it isn't a part of the enemyUnits list");
             }
         }
+
+        public void DecideEnemyIntention(EnemyUnit actingUnit)
+        {
+            if (FindAdjacentPlayer(actingUnit))
+            {
+                Debug.Log("Implement enemy damage command here");
+            }
+            else
+            {
+                MoveUnit(actingUnit);
+            }
+        }
         
         public void MoveUnit(EnemyUnit actingUnit)
         {
-            // TODO: Find position to move to
-            //Vector2Int gridPos;
-            
             IUnit enemyUnit = actingUnit;
             IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
-            Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
-                      " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
+            // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
+            //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
-            // var moveCommand = new MoveCommand(
-            //     enemyUnit,
-            //     gridPos,
-            //     enemyUnit.Coordinate
-            // );
+            var moveCommand = new MoveCommand(
+                enemyUnit,
+                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.Speed.Value),
+                enemyUnit.Coordinate
+            );
             
-            // commandManager.ExecuteCommand(moveCommand);
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+        }
+
+        // This is a super basic movement system. Enemies will not go into occupied tiles
+        // but aren't smart enough to path-find around occupied tiles to get to players
+        // TODO: Find a way to account for obstacles that may be in the way
+        private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, float movementPoints)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            Vector2Int movementDir = Vector2Int.zero;
+            
+            for (int i = 0; i < movementPoints; ++i)
+            {
+                List<GridObject> adjacentGridObjects = GetAdjacentGridObjects(actingUnit.Coordinate + movementDir);
+
+                foreach (var adjacentGridObject in adjacentGridObjects)
+                {
+                    // If a player is adjacent, break out the function
+                    if (adjacentGridObject.CompareTag("PlayerUnit"))
+                    {
+                        Debug.Log("RETURNED ZERO");
+                        return Vector2Int.zero;
+                    }
+                }
+                
+                if (actingUnit.Coordinate.x != targetUnit.Coordinate.x)
+                {
+                    int xDir = (int) Mathf.Sign(targetUnit.Coordinate.x - actingUnit.Coordinate.x + movementDir.x);
+                    
+                    // Check that the tile isn't occupied
+                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
+                        (actingUnit.Coordinate.x + xDir, actingUnit.Coordinate.y)).Count == 0)
+                    {
+                        movementDir = movementDir + Vector2Int.right * xDir;
+                    }
+                }
+                else if (actingUnit.Coordinate.y != targetUnit.Coordinate.y)
+                {
+                    int yDir = (int) Mathf.Sign(targetUnit.Coordinate.y - actingUnit.Coordinate.y + movementDir.y);
+                    
+                    //Check that the tile isn't occupied
+                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
+                        (actingUnit.Coordinate.x, actingUnit.Coordinate.y + yDir)).Count == 0)
+                    {
+                        movementDir = movementDir + Vector2Int.up * yDir;
+                    }
+                }
+            }
+            Debug.Log(actingUnit.Coordinate + " | " + movementDir);
+            return movementDir;
         }
 
         // TODO: Find a way to account for obstacles that may be in the way
@@ -123,17 +183,9 @@ namespace Managers
         
         // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
         // otherwise will return false
-        public GridObject FindAdjacentPlayer(GridObject gridObject)
+        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
-            Vector2Int gridObjectPosition = gridObject.Coordinate;
-            
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-
-            List<GridObject> adjacentGridObjects = new List<GridObject>();
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.up));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.right));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.down));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(gridObjectPosition + Vector2Int.left));
+            List<GridObject> adjacentGridObjects = GetAdjacentGridObjects(enemyUnit.Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -144,6 +196,19 @@ namespace Managers
             }
             
             return null;
+        }
+
+        public List<GridObject> GetAdjacentGridObjects(Vector2Int enemyUnitCoordinate)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.left));
+
+            return adjacentGridObjects;
         }
     }
 }

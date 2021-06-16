@@ -49,13 +49,13 @@ namespace Managers
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.MoveUnit(actingUnit);
+                    enemyManager.DecideEnemyIntention(actingUnit);
             });
             
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.MoveUnit(actingUnit);
+                    enemyManager.DecideEnemyIntention(actingUnit);
             });
         }
 
@@ -115,7 +115,7 @@ namespace Managers
         {
             foreach (var enemy in enemyManager.EnemyUnits)
             {
-                GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
+                GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer(enemy);
                 if (firstAdjacentPlayer != null)
                 {
                     if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
