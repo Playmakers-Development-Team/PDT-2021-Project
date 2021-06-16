@@ -54,6 +54,7 @@ namespace Managers
                     ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
                 }
             }
+        }
 
         private void OnValidate()
         {
