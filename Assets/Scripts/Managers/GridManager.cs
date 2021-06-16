@@ -90,11 +90,6 @@ namespace Managers
             return coordinate;
         }
 
-        public GridObject GetClosestPlayerUnit(GridObject enemyUnit)
-        {
-            return enemyUnit;
-        }
-
         /// <summary>
         /// Similar to ray casting but done on the grid space.
         /// </summary>

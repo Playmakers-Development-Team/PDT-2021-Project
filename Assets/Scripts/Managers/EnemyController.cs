@@ -19,7 +19,15 @@ namespace Managers
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
+        private CommandManager commandManager;
+        private UnitManager unitManager;
         private GameObject enemyPrefab;
+        
+        /// <summary>
+        /// Stores the current actingunit.
+        /// </summary>
+        private EnemyUnit actingUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
+        
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -30,11 +38,25 @@ namespace Managers
 
             gridManager = ManagerLocator.Get<GridManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
 
             enemyPrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             isSpawningEnemies = true;
+            
+            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
+            {
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                    enemyManager.MoveUnit(actingUnit);
+            });
+            
+            commandManager.ListenCommand<StartTurnCommand>(cmd =>
+            {
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                    enemyManager.MoveUnit(actingUnit);
+            });
         }
 
         private void Update()
@@ -71,15 +93,7 @@ namespace Managers
 
         private void SpawnEnemy()
         {
-            //TODO: Remove this later, currently used to test enemy attacks
-            if (enemyManager.Count == 0)
-            {
-                SpawnAdjacentToPlayer();
-            }
-            else
-            {
-                enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            }
+            enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
         
         private void SpawnAdjacentToPlayer()
