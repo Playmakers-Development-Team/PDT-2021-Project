@@ -15,7 +15,7 @@ namespace Managers
             GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerPlaceholder", typeof(GameObject));
             
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            //playerManager.Spawn(playerPrefab, Vector2Int.zero);
+            //playerManager.Spawn(playerPrefab, Vector2Int.zero); //TEST THIS
             //playerManager.Spawn(playerPrefab, Vector2Int.up);
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand());
         }
