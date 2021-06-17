@@ -52,6 +52,8 @@ namespace Managers
 
         private bool isCastingAbility;
 
+        public bool printCoords = false;
+
         private List<Vector2Int> selectedMoveRange;
 
         private void Awake()
@@ -202,7 +204,8 @@ namespace Managers
                 {
                     MoveUnit();
                     nextClickWillMove = false;
-                    updateMoveRange(null);
+                    selectedMoveRange.Clear();
+                    updateMoveRange(selectedMoveRange);
                 }
                 else
                 {
@@ -239,6 +242,13 @@ namespace Managers
         {
             selectedMoveRange = moveRange;
             //Any Grid highlighting updates should go here
+            if (printCoords)
+            {
+                foreach (var coord in moveRange)
+                {
+                    Debug.Log(coord);
+                }
+            }
         }
 
         private void MoveUnit()
