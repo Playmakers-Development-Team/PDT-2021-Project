@@ -74,7 +74,6 @@ namespace Managers
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
-                
                 adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
             }
             else if (playerManager.PlayerUnits.Count > 0)
@@ -121,6 +120,14 @@ namespace Managers
                     // If a player is adjacent, break out the function
                     if (adjacentGridObject.CompareTag("PlayerUnit"))
                     {
+                        // If there are still available movement points, do an attack
+                        if (i + 1 < movementPoints)
+                        {
+                            IUnit playerUnit = (IUnit) adjacentGridObject;
+                            
+                            // TODO: Will later need to be turned into an ability command when enemies have abilities
+                            playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+                        }
                         return movementDir;
                     }
                 }
