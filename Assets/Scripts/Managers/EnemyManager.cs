@@ -76,7 +76,7 @@ namespace Managers
             }
         }
         
-        public void MoveUnit(EnemyUnit actingUnit)
+        private void MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
             IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
@@ -97,6 +97,8 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, float movementPoints)
         {
+            Vector2Int targetUnitCoordinate = FindClosestAdjacentFreeSquare(actingUnit, targetUnit);
+            
             Vector2Int movementDir = Vector2Int.zero;
             
             for (int i = 0; i < movementPoints; ++i)
@@ -115,14 +117,14 @@ namespace Managers
                 int newMovementX = 0;
                 int newMovementY = 0;
                 // Check if x coordinate is not the same as target
-                if (actingUnit.Coordinate.x != targetUnit.Coordinate.x)
+                if (actingUnit.Coordinate.x != targetUnitCoordinate.x)
                 {
-                    newMovementX = (int) Mathf.Sign(targetUnit.Coordinate.x - actingUnit.Coordinate.x - movementDir.x);
+                    newMovementX = (int) Mathf.Sign(targetUnitCoordinate.x - actingUnit.Coordinate.x - movementDir.x);
                 }
                 // Check if y coordinate is not the same as target
-                if (actingUnit.Coordinate.y != targetUnit.Coordinate.y)
+                if (actingUnit.Coordinate.y != targetUnitCoordinate.y)
                 {
-                   newMovementY = (int) Mathf.Sign(targetUnit.Coordinate.y - actingUnit.Coordinate.y - movementDir.y);
+                   newMovementY = (int) Mathf.Sign(targetUnitCoordinate.y - actingUnit.Coordinate.y - movementDir.y);
                 }
 
                 if (newMovementX != 0 && TryMoveX(actingUnit, movementDir, newMovementX))
@@ -171,7 +173,6 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         public IUnit FindClosestPlayer(IUnit enemyUnit)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
             
             IUnit closestPlayerUnit = playerManager.PlayerUnits[0];
@@ -207,8 +208,40 @@ namespace Managers
             return closestPlayerUnit;
         }
         
-        // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
-        // otherwise will return false
+        private Vector2Int FindClosestAdjacentFreeSquare(EnemyUnit actingUnit, IUnit targetUnit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();
+
+            Vector2Int northCoordinate = targetUnit.Coordinate + Vector2Int.up;
+            Vector2Int eastCoordinate = targetUnit.Coordinate + Vector2Int.right;
+            Vector2Int southCoordinate = targetUnit.Coordinate + Vector2Int.down;
+            Vector2Int westCoordinate = targetUnit.Coordinate + Vector2Int.left;
+            
+            coordinateDistances.Add(northCoordinate, Vector2.Distance(northCoordinate, actingUnit.Coordinate));
+            coordinateDistances.Add(eastCoordinate, Vector2.Distance(eastCoordinate, actingUnit.Coordinate));
+            coordinateDistances.Add(southCoordinate, Vector2.Distance(southCoordinate, actingUnit.Coordinate));
+            coordinateDistances.Add(westCoordinate, Vector2.Distance(westCoordinate, actingUnit.Coordinate));
+
+            Vector2Int closestCoordinate = targetUnit.Coordinate;
+            float closestDistance = float.MaxValue; // Placeholder initialisation value
+            
+
+            foreach (var coordinateDistance in coordinateDistances)
+            {
+                // Is the distance close AND is the tile unoccupied
+                if (coordinateDistance.Value < closestDistance &&
+                    gridManager.GetGridObjectsByCoordinate(coordinateDistance.Key).Count == 0)
+                {
+                    closestCoordinate = coordinateDistance.Key;
+                }
+            }
+            
+            // NOTE: If no nearby player squares are free, targetUnit.Coordinate is returned
+            return closestCoordinate;
+        }
+        
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
             List<GridObject> adjacentGridObjects = GetAdjacentGridObjects(enemyUnit.Coordinate);
