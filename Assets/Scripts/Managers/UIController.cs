@@ -185,9 +185,15 @@ namespace Managers
                 if (actingUnit == null)
                     return;
 
-                nextClickWillMove = true;
-                Debug.Log("Next click will move.");
-                updateMoveRange(gridManager.AllReachableTiles(playerManager.SelectedUnit.Coordinate, (int)playerManager.SelectedUnit.MovementActionPoints.Value));
+                if (playerManager.SelectedUnit != null)
+                {
+                    nextClickWillMove = true;
+                    Debug.Log("Next click will move.");
+
+                    updateMoveRange(gridManager.AllReachableTiles(
+                        playerManager.SelectedUnit.Coordinate,
+                        (int) playerManager.SelectedUnit.MovementActionPoints.Value));
+                }
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -232,11 +238,21 @@ namespace Managers
         private void updateMoveRange(List<Vector2Int> moveRange)
         {
             selectedMoveRange = moveRange;
+            //Any Grid highlighting updates should go here
         }
 
         private void MoveUnit()
         {
             Vector2Int gridPos = GetCoordinateFromClick();
+            
+            // Check if tile is unoccupied
+            //This cannot be checked with move range as no occupied tile will be added to it
+            //This only needs to be kept if a different thing happens if the player selects an occupied space
+            if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
+            {
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
 
             if (!selectedMoveRange.Contains(gridPos))
             {

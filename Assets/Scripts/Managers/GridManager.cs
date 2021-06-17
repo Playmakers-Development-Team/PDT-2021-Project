@@ -274,16 +274,7 @@ namespace Managers
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             
-            // TODO: Expose this variable
             int moveRange = (int)unit.MovementActionPoints.Value;
-            
-            // Check if tile is unoccupied
-            if (tileData.GridObjects.Count != 0)
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("Target tile is occupied.");
-                return;
-            }
             
             TeleportUnit(unit.Coordinate, newCoordinate, unit);
         }
