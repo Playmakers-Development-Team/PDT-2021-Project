@@ -85,7 +85,7 @@ namespace Managers
 
             var moveCommand = new MoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.Speed.Value),
+                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.MovementActionPoints.Value),
                 enemyUnit.Coordinate
             );
             
@@ -97,8 +97,6 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, float movementPoints)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
             Vector2Int movementDir = Vector2Int.zero;
             
             for (int i = 0; i < movementPoints; ++i)
@@ -110,36 +108,64 @@ namespace Managers
                     // If a player is adjacent, break out the function
                     if (adjacentGridObject.CompareTag("PlayerUnit"))
                     {
-                        Debug.Log("RETURNED ZERO");
-                        return Vector2Int.zero;
+                        return movementDir;
                     }
                 }
-                
+
+                int newMovementX = 0;
+                int newMovementY = 0;
+                // Check if x coordinate is not the same as target
                 if (actingUnit.Coordinate.x != targetUnit.Coordinate.x)
                 {
-                    int xDir = (int) Mathf.Sign(targetUnit.Coordinate.x - actingUnit.Coordinate.x + movementDir.x);
-                    
-                    // Check that the tile isn't occupied
-                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
-                        (actingUnit.Coordinate.x + xDir, actingUnit.Coordinate.y)).Count == 0)
-                    {
-                        movementDir = movementDir + Vector2Int.right * xDir;
-                    }
+                    newMovementX = (int) Mathf.Sign(targetUnit.Coordinate.x - actingUnit.Coordinate.x - movementDir.x);
                 }
-                else if (actingUnit.Coordinate.y != targetUnit.Coordinate.y)
+                // Check if y coordinate is not the same as target
+                if (actingUnit.Coordinate.y != targetUnit.Coordinate.y)
                 {
-                    int yDir = (int) Mathf.Sign(targetUnit.Coordinate.y - actingUnit.Coordinate.y + movementDir.y);
-                    
-                    //Check that the tile isn't occupied
-                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
-                        (actingUnit.Coordinate.x, actingUnit.Coordinate.y + yDir)).Count == 0)
-                    {
-                        movementDir = movementDir + Vector2Int.up * yDir;
-                    }
+                   newMovementY = (int) Mathf.Sign(targetUnit.Coordinate.y - actingUnit.Coordinate.y - movementDir.y);
+                }
+
+                if (newMovementX != 0 && TryMoveX(actingUnit, movementDir, newMovementX))
+                {
+                    movementDir = movementDir + Vector2Int.right * newMovementX;
+                }
+                else if(newMovementY != 0 && TryMoveY(actingUnit, movementDir, newMovementY)) // If moving on the X fails, try move on the Y
+                {
+                    movementDir = movementDir + Vector2Int.up * newMovementY;
                 }
             }
-            Debug.Log(actingUnit.Coordinate + " | " + movementDir);
+
             return movementDir;
+        }
+
+        private bool TryMoveX(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementX)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            // Check that the tile isn't occupied
+            if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
+                (actingUnit.Coordinate.x + previousMovement.x + newMovementX,
+                actingUnit.Coordinate.y + previousMovement.y)).Count == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryMoveY(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementY)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+                
+            //Check that the tile isn't occupied
+            if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
+                (actingUnit.Coordinate.x + previousMovement.x,
+                actingUnit.Coordinate.y + previousMovement.y + newMovementY)).Count == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         // TODO: Find a way to account for obstacles that may be in the way

@@ -293,7 +293,8 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate)
+            && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
                 Debug.Log("Target tile out of range.");
