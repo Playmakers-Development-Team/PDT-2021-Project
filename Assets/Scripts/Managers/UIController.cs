@@ -187,7 +187,7 @@ namespace Managers
                 if (actingUnit == null)
                     return;
 
-                if (playerManager.SelectedUnit != null)
+                if (playerManager.SelectedUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
                 {
                     nextClickWillMove = true;
                     Debug.Log("Next click will move.");
