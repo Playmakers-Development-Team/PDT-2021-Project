@@ -314,7 +314,7 @@ namespace Managers
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             
             SelectCurrentUnit();
-            
+
             Debug.Log("next turn has started");
             
             onTurnEnd?.Invoke(this);

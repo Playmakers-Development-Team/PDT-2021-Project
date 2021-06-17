@@ -177,7 +177,7 @@ namespace Managers
                 reachable.Add(currentNode);
                 coordinateQueue.Dequeue();
             }
-
+            Debug.Log(reachable);
             return reachable;
         }
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
@@ -282,7 +282,7 @@ namespace Managers
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             
             // TODO: Expose this variable
-            int moveRange = 4;
+            int moveRange = (int)unit.MovementActionPoints.Value;
             
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
