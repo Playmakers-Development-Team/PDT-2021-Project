@@ -232,17 +232,17 @@ namespace Managers
         private void updateMoveRange(List<Vector2Int> moveRange)
         {
             selectedMoveRange = moveRange;
-            //clear move highlights for all tiles
-            //update ui for each tile
-            foreach (Vector2Int coord in moveRange)
-            {
-                //Debug.Log(coord);
-            }
         }
 
         private void MoveUnit()
         {
             Vector2Int gridPos = GetCoordinateFromClick();
+
+            if (!selectedMoveRange.Contains(gridPos))
+            {
+                Debug.Log("Target tile out of range.");
+                return;
+            }
             
             IUnit playerUnit = actingUnit;
 
@@ -252,8 +252,7 @@ namespace Managers
             
             var moveCommand = new MoveCommand(
                 playerUnit,
-                gridPos,
-                playerUnit.Coordinate
+                gridPos
             );
             
             commandManager.ExecuteCommand(moveCommand);

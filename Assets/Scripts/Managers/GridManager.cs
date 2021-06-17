@@ -270,7 +270,7 @@ namespace Managers
         
 
         // TODO: CurrentCoordinate should not be necessary
-        public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             
@@ -285,15 +285,7 @@ namespace Managers
                 return;
             }
             
-            // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("Target tile out of range.");
-                return;
-            }
-            
-            TeleportUnit(currentCoordinate, newCoordinate, unit);
+            TeleportUnit(unit.Coordinate, newCoordinate, unit);
         }
 
         // TODO: CurrentCoordinate should not be necessary
