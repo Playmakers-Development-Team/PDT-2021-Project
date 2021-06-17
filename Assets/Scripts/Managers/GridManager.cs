@@ -177,7 +177,6 @@ namespace Managers
                 reachable.Add(currentNode);
                 coordinateQueue.Dequeue();
             }
-            Debug.Log(reachable);
             return reachable;
         }
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
@@ -268,13 +267,7 @@ namespace Managers
                 MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
-
-        public void PlaceTiles(Vector2Int currentCoordinate, int range, Dictionary<Vector2Int, TileData> grid)
-        {
-            //todo show range of units
-            //unfinished
-            List <Vector2Int> x = AllReachableTiles(currentCoordinate, range);
-        }
+        
 
         // TODO: CurrentCoordinate should not be necessary
         public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)

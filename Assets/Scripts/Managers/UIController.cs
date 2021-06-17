@@ -52,6 +52,8 @@ namespace Managers
 
         private bool isCastingAbility;
 
+        private List<Vector2Int> selectedMoveRange;
+
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -185,6 +187,7 @@ namespace Managers
 
                 nextClickWillMove = true;
                 Debug.Log("Next click will move.");
+                updateMoveRange(gridManager.AllReachableTiles(playerManager.SelectedUnit.Coordinate, (int)playerManager.SelectedUnit.MovementActionPoints.Value));
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -193,6 +196,7 @@ namespace Managers
                 {
                     MoveUnit();
                     nextClickWillMove = false;
+                    updateMoveRange(null);
                 }
                 else
                 {
@@ -223,6 +227,17 @@ namespace Managers
             
             playerManager.DeselectUnit();
             Debug.Log($"Unit Deselected!");
+        }
+        
+        private void updateMoveRange(List<Vector2Int> moveRange)
+        {
+            selectedMoveRange = moveRange;
+            //clear move highlights for all tiles
+            //update ui for each tile
+            foreach (Vector2Int coord in moveRange)
+            {
+                //Debug.Log(coord);
+            }
         }
 
         private void MoveUnit()
