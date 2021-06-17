@@ -32,6 +32,7 @@ namespace Managers
             Register(new UnitManager());
             Register(new BackgroundManager());
             Register(new UIManager());
+            Register(new UI.Refactored.UIManager());
 
             foreach (var manager in Current.managers.Values)
             {
