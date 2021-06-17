@@ -6,6 +6,9 @@ using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using UnityEngine.LowLevel;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -300,7 +303,29 @@ namespace Managers
                 return;
             }
             
-            TeleportUnit(currentCoordinate, newCoordinate, unit);
+            //TeleportUnit(currentCoordinate, newCoordinate, unit);
+            
+            var gridObject = (GridObject) unit;
+            float timer = 1f;
+            Vector3 startPos = ConvertCoordinateToPosition(currentCoordinate);
+            Vector3 endPos = ConvertCoordinateToPosition(newCoordinate);
+            doTween(startPos, endPos,gridObject.gameObject, timer);
+        }
+
+        private async void doTween( Vector3 start, Vector3 end, GameObject unit, float duration)
+        {
+            float flag = 0f;
+            Debug.Log("Start: " + start + "& End: " + end);
+            while (flag < duration)
+            {
+                Debug.Log("loopy");
+                //float seconds = (Time.time - begin / duration);
+                unit.transform.position = Vector3.Lerp(start, end, flag/duration);
+                await UniTask.Yield(PlayerLoopTiming.Update);
+                flag += Time.deltaTime;
+            }
+            
+            //await UniTask.Delay(TimeSpan.FromSeconds(seconds), ignoreTimeScale: true);
         }
 
         // TODO: CurrentCoordinate should not be necessary
@@ -329,5 +354,6 @@ namespace Managers
         }
         
         #endregion
+        
     }
 }
