@@ -49,7 +49,7 @@ namespace Units
 
             data.Initialise();
 
-            Health = new Health(KillUnit, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -59,6 +59,10 @@ namespace Units
             gridManager = ManagerLocator.Get<GridManager>();
         }
 
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        }
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
@@ -169,9 +173,10 @@ namespace Units
             foundNode = null;
             return false;
         }
-        
+
         private void KillUnit()
         {
+            playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
             
             gridManager.RemoveGridObject(Coordinate, this);

@@ -144,6 +144,7 @@ namespace Managers
         {
             if (Input.GetKeyDown(KeyCode.E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             {
+                if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
                 if (actingUnit == null)
                     return;
 
@@ -227,6 +228,7 @@ namespace Managers
 
         private void MoveUnit()
         {
+            if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
             
             IUnit playerUnit = actingUnit;

@@ -12,6 +12,9 @@ namespace Managers
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public int Count => playerUnits.Count;
         
+        public int DeathDelay {get;} = 5000;
+        public bool WaitForDeath;
+
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
             return Spawn(UnitUtility.Spawn(playerPrefab, gridPosition));
@@ -52,6 +55,7 @@ namespace Managers
 
         public void SelectUnit(PlayerUnit unit)
         {
+            if (WaitForDeath) return;
             if (unit is null)
             {
                 Debug.LogWarning("PlayerManager.SelectUnit should not be passed a null value. Use PlayerManager.DeselectUnit instead.");
