@@ -18,7 +18,6 @@ namespace Managers
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
-        private UnitManager unitManager;
         private EnemyManager enemyManager;
         private GameObject enemyPrefab;
 
@@ -30,7 +29,6 @@ namespace Managers
             // For now placeholders will be used
 
             gridManager = ManagerLocator.Get<GridManager>();
-            unitManager = ManagerLocator.Get<UnitManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
 
             enemyPrefab =
@@ -46,7 +44,7 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (unitManager.EnemyUnits.Count < totalEnemies)
+                if (enemyManager.EnemyUnits.Count < totalEnemies)
                     SpawnEnemy();
                 
                 else
@@ -63,29 +61,29 @@ namespace Managers
         private void SpawnEnemy()
         {
             //TODO: Remove this later, currently used to test enemy attacks
-            if (unitManager.EnemyUnits.Count  == 0)
+            if (enemyManager.EnemyUnits.Count  == 0)
             {
                 SpawnAdjacentToPlayer();
             }
             else
             {
-                unitManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
+                enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
             }
         }
         
         private void SpawnAdjacentToPlayer()
         {
-            unitManager.Spawn(enemyPrefab, Vector2Int.left);
-            unitManager.Spawn(enemyPrefab, Vector2Int.right);
+            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
+            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
         }
         
         private void DebugKillEnemyFunction()
         {
             if (debugKillEnemyButton)
             {
-                if (unitManager.EnemyUnits.Count > 0)
+                if (enemyManager.EnemyUnits.Count > 0)
                 {
-                    unitManager.EnemyUnits[0].TakeDamage(1);
+                    enemyManager.EnemyUnits[0].TakeDamage(1);
                 }
                 debugKillEnemyButton = false;
             }
@@ -95,7 +93,7 @@ namespace Managers
         {
             if (debugDamagePlayerButton)
             {
-                foreach (var enemy in unitManager.EnemyUnits)
+                foreach (var enemy in enemyManager.EnemyUnits)
                 {
                     GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
                     if (firstAdjacentPlayer != null)

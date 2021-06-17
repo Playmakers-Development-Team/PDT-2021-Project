@@ -48,10 +48,9 @@ namespace Managers
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             // TODO look into this later, put the subtraction somewhere better
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
-            UnitManager unitManager = ManagerLocator.Get<UnitManager>();
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
 
-            foreach (IUnit unit in unitManager.PlayerUnits)
+            foreach (IUnit unit in playerManager.PlayerUnits)
             {
                 if (unit is PlayerUnit playerUnit)
                 {

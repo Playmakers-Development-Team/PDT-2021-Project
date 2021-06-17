@@ -181,10 +181,10 @@ namespace Units
             switch (this)
             {
                 case PlayerUnit _:
-                    ManagerLocator.Get<UnitManager>().RemoveUnit(this);
+                    ManagerLocator.Get<PlayerManager>().RemoveUnit(this);
                     break;
                 case EnemyUnit _:
-                    ManagerLocator.Get<UnitManager>().RemoveUnit(this);
+                    ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
                     Debug.LogError("ERROR: Failed to kill " + this.gameObject + 

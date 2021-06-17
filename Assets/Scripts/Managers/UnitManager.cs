@@ -1,37 +1,23 @@
 using System;
 using System.Collections.Generic;
+using Commands;
+using JetBrains.Annotations;
 using Units;
 using UnityEngine;
+using UnityEngine.Rendering.Universal.Internal;
 
 namespace Managers
 {
-    public class UnitManager: Manager
+    public class UnitManager : Manager
     {
-        /// <summary>
-        /// Holds all the enemy units currently in the level
-        /// </summary>
-        private readonly List<IUnit> enemyUnits = new List<IUnit>();
-        
-        /// <summary>
-        /// Holds all the player units currently in the level
-        /// </summary>
-        private readonly List<IUnit> playerUnits = new List<IUnit>();
+        private EnemyManager enemyManager;
+        private PlayerManager playerManager;
 
         /// <summary>
         /// Property that returns all the units currently in the level
         /// </summary>
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
-        
-        /// <summary>
-        /// Property that returns all enemy units in the level
-        /// </summary>
-        public IReadOnlyList<IUnit> EnemyUnits => enemyUnits.AsReadOnly();
-        
-        /// <summary>
-        /// Property that returns all player units in the level
-        /// </summary>
-        public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
-        
+
         /// <summary>
         /// Get the current "ACTING" player unit
         /// </summary>
@@ -46,18 +32,25 @@ namespace Managers
         /// Get the current "ACTING" unit
         /// </summary>
         public IUnit GetCurrentActiveUnit => GetActiveUnit();
-        
+
         /// <summary>
         /// Get all the units in the game.
         /// </summary>
+        ///
+        public override void ManagerStart()
+        {
+            playerManager = ManagerLocator.Get<PlayerManager>();
+            enemyManager = ManagerLocator.Get<EnemyManager>();
+        }
+
         private List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-            allUnits.AddRange(enemyUnits);
-            allUnits.AddRange(playerUnits);
+            allUnits.AddRange(enemyManager.EnemyUnits);
+            allUnits.AddRange(playerManager.PlayerUnits);
             return allUnits;
         }
-        
+
         /// <summary>
         /// Get all the current active unit
         /// </summary>
@@ -69,21 +62,21 @@ namespace Managers
                     return unit;
             }
 
-            return null; 
+            return null;
         }
-        
+
         /// <summary>
         /// Get the current player active unit
         /// </summary>
         private PlayerUnit GetActivePlayerUnit()
         {
-            foreach (PlayerUnit unit in playerUnits)
+            foreach (PlayerUnit unit in playerManager.PlayerUnits)
             {
                 if (unit.IsActing())
                     return unit;
-
             }
-            return null; 
+
+            return null;
         }
 
         /// <summary>
@@ -91,94 +84,31 @@ namespace Managers
         /// </summary>
         private EnemyUnit GetActiveEnemyUnit()
         {
-            foreach (EnemyUnit unit in enemyUnits)
+            foreach (EnemyUnit unit in enemyManager.EnemyUnits)
             {
                 if (unit.IsActing())
                     return unit;
+            }
 
-            }
-            return null; 
+            return null;
         }
-        
-        
-        public void RemoveUnit(IUnit targetUnit) 
-        {
-            if (targetUnit is PlayerUnit)
-            {
-                if (playerUnits.Contains(targetUnit))
-                    playerUnits.Remove(targetUnit);
-                else
-                    Debug.LogWarning("WARNING: Tried to remove " + targetUnit +
-                                     " from EnemyManager but it isn't a part of the enemyUnits list");
-            }
-            else
-            {
-                if (enemyUnits.Contains(targetUnit))
-                    enemyUnits.Remove(targetUnit);
-                else
-                    Debug.LogWarning("WARNING: Tried to remove " + targetUnit +
-                                     " from EnemyManager but it isn't a part of the enemyUnits list");
-            }
-        }
-        
-        
-        /// <summary>
-        /// Clears all units of a certain IUnit type
-        /// </summary>
-        /// <typeparam name="T refers to IUnit type"></typeparam>
-        public void ClearUnits<T>() where T : IUnit
-        {
-            T unit = default;
-            
-            if (unit is PlayerUnit)
-                playerUnits.Clear();
-            else
-                enemyUnits.Clear();
 
-        }
-        
         /// <summary>
-        /// Spawns in a unit prefab into the scene, takes in a prefab 
+        /// A function that removes a certain unit from the current timeline
         /// </summary>
-        /// <param name="unitPrefab"></param>
-        /// <param name="gridPosition"></param>
-        /// <returns>The IUnit that was spawned</returns>
-        public IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
-        {
-            return Spawn(UnitUtility.Spawn(unitPrefab, gridPosition));
-        }
-        
+        /// <param name="targetUnit"></param>
+        public virtual void RemoveUnit(IUnit targetUnit) =>
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(targetUnit);
+
         /// <summary>
-        /// Spawns in a unit prefab into the scene, takes in a unit name
+        /// A function that Spawns a target unit
         /// </summary>
-        /// <param name="unitPrefab"></param>
-        /// <param name="gridPosition"></param>
-        /// <returns>The IUnit that was spawned</returns>
-        public IUnit Spawn(string unitName, Vector2Int gridPosition)
+        /// <param name="targetUnit"></param>
+        public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            return Spawn(UnitUtility.Spawn(unitName, gridPosition));
-        }
-        
-        
-        /// <summary>
-        /// Spawns the unit in and adding them to their relevant unit list
-        /// </summary>
-        /// <param name="unit"></param>
-        /// <returns>The unit that was spawned</returns>
-        private IUnit Spawn(IUnit unit)
-        {
-           if (unit is PlayerUnit)
-               playerUnits.Add(unit);
-           else
-               enemyUnits.Add(unit);
-           
+            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
-        } 
-        
+        }
     }
-    
-        
-    
-    
 }

@@ -15,9 +15,9 @@ namespace Managers
             //TODO this should reference a prefab instead of from resources
             GameObject playerPrefab = (GameObject)Resources.Load("Prefabs/GridObjects/PlayerPlaceholder", typeof(GameObject));
             
-            UnitManager unitManager = ManagerLocator.Get<UnitManager>();
-            unitManager.Spawn(playerPrefab, Vector2Int.zero);
-            unitManager.Spawn(playerPrefab, Vector2Int.up);
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            playerManager.Spawn(playerPrefab, Vector2Int.zero);
+            playerManager.Spawn(playerPrefab, Vector2Int.up);
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new PlayerUnitsReadyCommand());
 
         }
