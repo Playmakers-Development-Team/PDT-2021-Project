@@ -177,7 +177,7 @@ namespace Units
         {
             Debug.Log($"This unit was cringe and died");
             
-            commandManager.ExecuteCommand(new UnitKilledCommand(this));
+            commandManager.ExecuteCommand(new KillingUnitCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
@@ -198,6 +198,8 @@ namespace Units
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+            
+            commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
 
         private void SpawnDamageText(int damageAmount)

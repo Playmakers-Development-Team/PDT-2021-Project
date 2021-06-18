@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Commands;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -26,10 +27,10 @@ namespace Managers
         {
             if (!(unit is EnemyUnit))
                 return null;
-            
+
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
             enemyUnits.Add(unit);
-            
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new AddUnitToTurnsCommand(unit));
 
             return unit;
         } 

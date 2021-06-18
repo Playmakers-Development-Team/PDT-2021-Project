@@ -2,13 +2,35 @@ using Units;
 
 namespace Commands
 {
-    public class UnitKilledCommand : UnitCommand
+    /// <summary>
+    /// Executed when unit is to be killed and about to be removed from the game
+    /// </summary>
+    public class KillingUnitCommand : UnitCommand
     {
-        public UnitKilledCommand(IUnit unit) : base(unit) {}
+        public KillingUnitCommand(IUnit unit) : base(unit) {}
     }
     
-    public class UnitSpawnCommand : UnitCommand
+    /// <summary>
+    /// Executed when unit has already been removed completely from the game
+    /// </summary>
+    public class KilledUnitCommand : UnitCommand
     {
-        public UnitSpawnCommand(IUnit unit) : base(unit) {}
+        public KilledUnitCommand(IUnit unit) : base(unit) {}
+    }
+    
+    /// <summary>
+    /// Executed when unit is about to be spawned
+    /// </summary>
+    public class SpawningUnitCommand : UnitCommand
+    {
+        public SpawningUnitCommand(IUnit unit) : base(unit) {}
+    }
+    
+    /// <summary>
+    /// Executed when unit has already been completely spawned
+    /// </summary>
+    public class SpawnedUnitCommand : UnitCommand
+    {
+        public SpawnedUnitCommand(IUnit unit) : base(unit) {}
     }
 }

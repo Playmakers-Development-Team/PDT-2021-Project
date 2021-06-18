@@ -1,4 +1,5 @@
-﻿using Managers;
+﻿using Commands;
+using Managers;
 using UnityEngine;
 
 namespace Units
@@ -14,9 +15,10 @@ namespace Units
                 Vector2 position = gridManager.ConvertCoordinateToPosition(coordinate);
                 
                 GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-                IUnit IUnit = instance.GetComponent<IUnit>();
+                IUnit unit = instance.GetComponent<IUnit>();
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new SpawningUnitCommand(unit));
             
-                return IUnit;
+                return unit;
             }
             else
             {

@@ -27,10 +27,10 @@ namespace Managers
         {
             if (!(unit is PlayerUnit))
                 return null;
-            
+
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
             playerUnits.Add(unit);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new UnitSpawnCommand(unit));
+            commandManager.ExecuteCommand(new AddUnitToTurnsCommand(unit));
             SelectUnit((PlayerUnit)unit);
             
             return unit;
