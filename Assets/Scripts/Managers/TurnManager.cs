@@ -175,13 +175,9 @@ namespace Managers
             // call NextTurn() later. [I have made this redundant as the index not moving inheritenly changes the next turn (However there should be checks for endgameconditions)]
             //or if units interact with next turns
             //Set an additional condition to make sure that there is a previous unit
-            if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
+            if (targetIndex <= CurrentTurnIndex && CurrentTurnIndex > 0)
             {
-                if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
-                    CurrentTurnIndex--;
-                
-                else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
-                    CurrentTurnIndex--;
+                CurrentTurnIndex--;
             }
 
             RecentUnitDeath = currentTurnQueue[targetIndex];
