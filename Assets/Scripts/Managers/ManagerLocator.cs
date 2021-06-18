@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Managers
@@ -21,7 +22,12 @@ namespace Managers
         {
             Current = new ManagerLocator();
 
-            foreach (Type type in TypeCache.GetTypesDerivedFrom(typeof(Manager)))
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            List<Type> types = new List<Type>();
+            foreach (Assembly assembly in assemblies)
+                types.AddRange(assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Manager))));
+            
+            foreach (Type type in types)
             {
                 dynamic manager = Convert.ChangeType(Activator.CreateInstance(type), type);
                 Register(manager);
