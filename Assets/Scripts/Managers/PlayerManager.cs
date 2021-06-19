@@ -14,12 +14,12 @@ namespace Managers
         
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {
-            return Spawn(UnitUtility.Spawn(playerPrefab, gridPosition));
+            return UnitUtility.Spawn(playerPrefab, gridPosition);
         }
         
         public IUnit Spawn(string playerName, Vector2Int gridPosition)
         {
-            return Spawn(UnitUtility.Spawn(playerName, gridPosition));
+            return UnitUtility.Spawn(playerName, gridPosition);
         }
 
         public IUnit Spawn(IUnit unit)
