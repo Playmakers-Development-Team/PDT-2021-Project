@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using GridObjects;
 using Units;
@@ -60,6 +61,64 @@ namespace Managers
                 Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
                                  " from EnemyManager but it isn't a part of the enemyUnits list");
             }
+        }
+        
+        public void MoveUnit(EnemyUnit actingUnit)
+        {
+            // TODO: Find position to move to
+            //Vector2Int gridPos;
+            
+            IUnit enemyUnit = actingUnit;
+            IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
+            Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
+                      " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
+
+            // var moveCommand = new MoveCommand(
+            //     enemyUnit,
+            //     gridPos,
+            //     enemyUnit.Coordinate
+            // );
+            
+            // commandManager.ExecuteCommand(moveCommand);
+        }
+
+        // TODO: Find a way to account for obstacles that may be in the way
+        public IUnit FindClosestPlayer(IUnit enemyUnit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            
+            IUnit closestPlayerUnit = playerManager.PlayerUnits[0];
+            int closestPlayerUnitDistance = Int32.MaxValue;
+
+            foreach (var playerUnit in playerManager.PlayerUnits)
+            {
+                int xDistance = Mathf.Abs(playerUnit.Coordinate.x - enemyUnit.Coordinate.x);
+                int yDistance = Mathf.Abs(playerUnit.Coordinate.y - enemyUnit.Coordinate.y);
+
+                // If a new closest unit is found, assign a new closest unit
+                if (closestPlayerUnitDistance > xDistance + yDistance)
+                {
+                    closestPlayerUnitDistance = xDistance + yDistance;
+                    closestPlayerUnit = playerUnit;
+                }
+                // If the closest distances are the same, find the lower health unit
+                else if (closestPlayerUnitDistance == xDistance + yDistance)
+                {
+                    // If both unit health values are the same then the closestPlayerUnit is kept the same 
+                    // i.e. The earlier player in the list is prioritised
+                    if (closestPlayerUnit.Health.HealthPoints.Value != playerUnit.Health.HealthPoints.Value)
+                    {
+                        float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
+                        if (lowerHealth == playerUnit.Health.HealthPoints.Value)
+                        {
+                            closestPlayerUnit = playerUnit;
+                        }
+                    }
+                }
+            }
+
+            return closestPlayerUnit;
         }
         
         // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
