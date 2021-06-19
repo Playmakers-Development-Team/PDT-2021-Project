@@ -180,6 +180,7 @@ namespace Managers
 
             return reachable;
         }
+        
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
         {
             // If grid node exists add to queue and mark distance taken to arrive at it
@@ -206,9 +207,11 @@ namespace Managers
             }
         }
         
-        //returns a list of the path from one node to another
-        //Assumes target is reachable
-        private List<Vector2Int> getCellPath(Vector2Int startingCoordinate,
+        /// <summary>
+        /// Returns a list of the path from one node to another
+        /// Assumes target is reachable.
+        /// </summary>
+        private List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
                                              Vector2Int targetCoordinate)
         {
             var visited = new Dictionary<Vector2Int, Vector2Int>();
@@ -357,7 +360,7 @@ namespace Managers
             
             // Test function for path
             //Remove after testing
-            List<Vector2Int> x = getCellPath(currentCoordinate, newCoordinate);
+            List<Vector2Int> x = GetCellPath(currentCoordinate, newCoordinate);
             string printout = "Path:";
             foreach (var VARIABLE in x)
             {
