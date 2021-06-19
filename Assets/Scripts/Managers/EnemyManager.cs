@@ -8,26 +8,26 @@ namespace Managers
     public class EnemyManager : UnitManager
     {
         /// <summary>
-        /// Holds all the enemy units currently in the level
+        /// Holds all the enemy units currently in the level.
         /// </summary>
         private readonly List<IUnit> enemyUnits = new List<IUnit>();
 
         /// <summary>
-        /// Property that returns all enemy units in the level
+        /// Returns all enemy units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> EnemyUnits => enemyUnits.AsReadOnly();
 
         /// <summary>
-        /// A function that clears all the enemies from the enemyUnits list
+        /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
 
         /// <summary>
-        /// A function that spawns in an enemy unit and adds it the the enemyUnits list
+        /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
         /// </summary>
         /// <param name="unitPrefab"></param>
         /// <param name="gridPosition"></param>
-        /// <returns>The new IUnit that was added</returns>
+        /// <returns>The new <c>IUnit</c> that was added.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
@@ -35,8 +35,6 @@ namespace Managers
             return newUnit;
         }
 
-        // IsPlayerAdjacent will return true as soon as it finds a player adjacent to the given gridObject
-        // otherwise will return false
         public GridObject FindAdjacentPlayer(GridObject gridObject)
         {
             Vector2Int gridObjectPosition = gridObject.Coordinate;
@@ -56,9 +54,7 @@ namespace Managers
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
                 if (adjacentGridObject.CompareTag("PlayerUnit"))
-                {
                     return adjacentGridObject;
-                }
             }
 
             return null;

@@ -14,35 +14,40 @@ namespace Managers
         private PlayerManager playerManager;
 
         /// <summary>
-        /// Property that returns all the units currently in the level
+        /// All the units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
 
         /// <summary>
-        /// Get the current "ACTING" player unit
+        /// The unit whose turn it currently is. Is null if no
+        /// unit is acting.
         /// </summary>
-        public IUnit GetCurrentActingPlayerUnit => GetActivePlayerUnit();
+        public IUnit ActingUnit => GetActingUnit();
 
         /// <summary>
-        /// Get the current "ACTING" enemy unit
+        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
+        /// <c>PlayerUnit</p> is acting.
         /// </summary>
-        public IUnit GetCurrentActiveEnemyUnit => GetActiveEnemyUnit();
+        public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
 
         /// <summary>
-        /// Get the current "ACTING" unit
+        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
+        /// <c>EnemyUnit</p> is acting.
         /// </summary>
-        public IUnit GetCurrentActiveUnit => GetActiveUnit();
+        public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
 
         /// <summary>
-        /// Get all the units in the game.
+        /// Initialises the <c>UnitManager</c>.
         /// </summary>
-        ///
         public override void ManagerStart()
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
         }
 
+        /// <summary>
+        /// Returns all the units currently in the level.
+        /// </summary>
         private List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
@@ -52,9 +57,10 @@ namespace Managers
         }
 
         /// <summary>
-        /// Get all the current active unit
+        /// Returns the unit whose turn it currently is. Returns null if no
+        /// unit is acting. 
         /// </summary>
-        private IUnit GetActiveUnit()
+        private IUnit GetActingUnit()
         {
             foreach (IUnit unit in AllUnits)
             {
@@ -62,13 +68,15 @@ namespace Managers
                     return unit;
             }
 
+            Debug.LogWarning("No unit is currently acting.");
             return null;
         }
 
         /// <summary>
-        /// Get the current player active unit
+        /// Returns the <c>PlayerUnit</c> whose turn it currently is. Returns null if no
+        /// <c>PlayerUnit</p> is acting. 
         /// </summary>
-        private PlayerUnit GetActivePlayerUnit()
+        private PlayerUnit GetActingPlayerUnit()
         {
             foreach (PlayerUnit unit in playerManager.PlayerUnits)
             {
@@ -80,9 +88,10 @@ namespace Managers
         }
 
         /// <summary>
-        /// Get the current active enemy unit
+        /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
+        /// <c>EnemyUnit</p> is acting. 
         /// </summary>
-        private EnemyUnit GetActiveEnemyUnit()
+        private EnemyUnit GetActingEnemyUnit()
         {
             foreach (EnemyUnit unit in enemyManager.EnemyUnits)
             {
@@ -94,14 +103,14 @@ namespace Managers
         }
 
         /// <summary>
-        /// A function that removes a certain unit from the current timeline
+        /// Removes a unit from the current timeline.
         /// </summary>
         /// <param name="targetUnit"></param>
         public virtual void RemoveUnit(IUnit targetUnit) =>
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(targetUnit);
 
         /// <summary>
-        /// A function that Spawns a target unit
+        /// Spawns a unit.
         /// </summary>
         /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)

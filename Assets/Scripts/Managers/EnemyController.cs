@@ -34,6 +34,7 @@ namespace Managers
             enemyPrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
+            // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
         }
 
@@ -46,7 +47,6 @@ namespace Managers
             {
                 if (enemyManager.EnemyUnits.Count < totalEnemies)
                     SpawnEnemy();
-                
                 else
                 {
                     isSpawningEnemies = false;
@@ -60,15 +60,11 @@ namespace Managers
 
         private void SpawnEnemy()
         {
-            //TODO: Remove this later, currently used to test enemy attacks
+            // TODO: Remove this later, currently used to test enemy attacks
             if (enemyManager.EnemyUnits.Count  == 0)
-            {
                 SpawnAdjacentToPlayer();
-            }
             else
-            {
                 enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            }
         }
         
         private void SpawnAdjacentToPlayer()
@@ -82,9 +78,8 @@ namespace Managers
             if (debugKillEnemyButton)
             {
                 if (enemyManager.EnemyUnits.Count > 0)
-                {
                     enemyManager.EnemyUnits[0].TakeDamage(1);
-                }
+
                 debugKillEnemyButton = false;
             }
         }

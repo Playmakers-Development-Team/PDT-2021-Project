@@ -34,6 +34,5 @@ namespace UI
         }
         
         public void EndTurn() => commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
-        
     }
 }

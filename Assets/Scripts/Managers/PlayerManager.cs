@@ -7,27 +7,27 @@ namespace Managers
     public class PlayerManager : UnitManager
     {
         /// <summary>
-        /// Holds the current SelectedUnit in the scene
+        /// The unit that is currently selected in the scene.
         /// </summary>
-        public IUnit SelectedUnit { get; private set; }
+        public PlayerUnit SelectedUnit { get; private set; }
 
         /// <summary>
-        /// Holds all the player units currently in the level
+        /// All the player units currently in the level.
         /// </summary>
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
         /// <summary>
-        /// Property that returns all player units in the level
+        /// All the player units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
 
         /// <summary>
-        /// A function that removes all the player units in the playerUnits list
+        /// Removes all the player units in the <c>playerUnits</c> list.
         /// </summary>
         public void ClearPlayerUnits() => playerUnits.Clear();
 
         /// <summary>
-        /// A function that removes a target IUnit
+        /// Removes a target <c>IUnit</c> from <c>playerUnits</c>.
         /// </summary>
         /// <param name="targetUnit"></param>
         public override void RemoveUnit(IUnit targetUnit)
@@ -37,11 +37,11 @@ namespace Managers
         }
 
         /// <summary>
-        /// Spawns a player unit and adds them to the playerUnits list
+        /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
         /// </summary>
         /// <param name="unitPrefab"></param>
         /// <param name="gridPosition"></param>
-        /// <returns>The new IUnit</returns>
+        /// <returns>The new <c>IUnit</c>.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
@@ -50,7 +50,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// Selects a unit to determine if it has been clicked or not (for UI purposes)
+        /// Sets a unit as selected.
         /// </summary>
         /// <param name="unit"></param>
         public void SelectUnit(PlayerUnit unit)
@@ -63,7 +63,7 @@ namespace Managers
                 return;
             }
 
-            if ((PlayerUnit) SelectedUnit != unit)
+            if (SelectedUnit != unit)
             {
                 SelectedUnit = unit;
 
@@ -73,7 +73,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// Deselects a unit, making any UI prompts disappear
+        /// Deselects the currently selected unit.
         /// </summary>
         public void DeselectUnit()
         {
