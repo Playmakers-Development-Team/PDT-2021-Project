@@ -54,7 +54,7 @@ namespace Managers
                 return tileData;
             }
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            //Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
             return null;
         }
         
@@ -64,8 +64,8 @@ namespace Managers
 
             if (tileData is null)
             {
-                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
-                return null;
+                //Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
+                return new List<GridObject>();
             }
             
             return tileData.GridObjects;
@@ -293,7 +293,8 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate)
+            && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
                 Debug.Log("Target tile out of range.");
@@ -326,6 +327,19 @@ namespace Managers
             {
                 RemoveGridObject(currentCoordinate, gridObject);
             }
+        }
+        
+        public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
+
+            return adjacentGridObjects;
         }
         
         #endregion
