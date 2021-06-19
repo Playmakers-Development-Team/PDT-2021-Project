@@ -330,39 +330,24 @@ namespace Managers
         public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
             Vector2Int currentCoordinate = unit.Coordinate;
-            TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            
-            int moveRange = (int)unit.MovementActionPoints.Value;
+            // TODO link move path to tweening
+            List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
-            // Test function for path
-            //Remove after testing
-            List<Vector2Int> x = GetCellPath(currentCoordinate, newCoordinate);
-            
-            string printout = "Path:";
-            foreach (var VARIABLE in x)
-            {
-                printout = printout + " -> " + VARIABLE;
-            }
-            Debug.Log(printout);
-
-
-            TeleportUnit(currentCoordinate, newCoordinate, unit);
+            TeleportUnit(newCoordinate, unit);
         }
 
-        // TODO: CurrentCoordinate should not be necessary
         /// <summary>
         /// Moves a unit's GridObject and GameObject directly to a new position.
         /// </summary>
-        /// <param name="currentCoordinate">The unit's current coordinate.</param>
         /// <param name="newCoordinate">The coordinate to move the unit to.</param>
         /// <param name="unit">The unit to teleport.</param>
-        private void TeleportUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
             
-            MoveGridObject(currentCoordinate, newCoordinate, gridObject);
+            MoveGridObject(unit.Coordinate, newCoordinate, gridObject);
         }
 
         // TODO: CurrentCoordinate should not be necessary
