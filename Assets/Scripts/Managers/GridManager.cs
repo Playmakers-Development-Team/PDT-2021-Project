@@ -65,7 +65,7 @@ namespace Managers
             if (tileData is null)
             {
                 Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
-                return null;
+                return new List<GridObject>();
             }
             
             return tileData.GridObjects;
@@ -177,6 +177,7 @@ namespace Managers
                 reachable.Add(currentNode);
                 coordinateQueue.Dequeue();
             }
+
             return reachable;
         }
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
@@ -302,6 +303,19 @@ namespace Managers
             {
                 RemoveGridObject(currentCoordinate, gridObject);
             }
+        }
+        
+        public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
+
+            return adjacentGridObjects;
         }
         
         #endregion

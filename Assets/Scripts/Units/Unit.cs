@@ -15,6 +15,7 @@ namespace Units
     {
         [SerializeField] protected T data;
         
+        public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
@@ -36,8 +37,9 @@ namespace Units
 
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
-        
-        private float damageTextLifetime = 1.0f;
+
+        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        [SerializeField] private float damageTextLifetime = 1.0f;
 
         private TurnManager turnManager;
         private PlayerManager playerManager;
@@ -57,6 +59,8 @@ namespace Units
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
+
+            playerManager.Spawn(this);
         }
 
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
@@ -198,15 +202,17 @@ namespace Units
 
         private void SpawnDamageText(int damageAmount)
         {
-            GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas",
-                typeof(GameObject));
-            GameObject damageAmountGameObject =
-                Instantiate(prefab, transform.position, Quaternion.identity);
+            damageTextCanvas.enabled = true;
 
-            damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
+            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
                 damageAmount.ToString();
 
-            Destroy(damageAmountGameObject, damageTextLifetime);
+            Invoke("HideDamageText", damageTextLifetime);
+        }
+
+        private void HideDamageText()
+        {
+            damageTextCanvas.enabled = false;
         }
     }
 }
