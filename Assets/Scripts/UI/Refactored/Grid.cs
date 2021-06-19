@@ -16,11 +16,7 @@ namespace UI.Refactored
             manager.gridSpacesDeselected.AddListener(OnGridDeselected);
         }
 
-        protected override void Refresh()
-        {
-        }
-
-        private void OnGridSelected(IEnumerable<Vector2Int> selected)
+        private void OnGridSelected(GridSelection selection)
         {
             
         }

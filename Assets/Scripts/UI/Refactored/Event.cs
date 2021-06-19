@@ -7,15 +7,12 @@ namespace UI.Refactored
         private readonly UnityEvent<T> unityEvent;
         
         
-        public Event()
-        {
-            unityEvent = new UnityEvent<T>();
-        }
+        internal Event() => unityEvent = new UnityEvent<T>();
 
         
-        public void AddListener(UnityAction<T> action) => unityEvent.AddListener(action);
+        internal void AddListener(UnityAction<T> action) => unityEvent.AddListener(action);
 
-        public void RemoveListener(UnityAction<T> action) => unityEvent.RemoveListener(action);
+        internal void RemoveListener(UnityAction<T> action) => unityEvent.RemoveListener(action);
 
         
         internal void Invoke(T argument) => unityEvent.Invoke(argument);
@@ -29,15 +26,12 @@ namespace UI.Refactored
         private readonly UnityEvent unityEvent;
 
         
-        public Event()
-        {
-            unityEvent = new UnityEvent();
-        }
+        internal Event() => unityEvent = new UnityEvent();
 
         
-        public void AddListener(UnityAction action) => unityEvent.AddListener(action);
+        internal void AddListener(UnityAction action) => unityEvent.AddListener(action);
 
-        public void RemoveListener(UnityAction action) => unityEvent.RemoveListener(action);
+        internal void RemoveListener(UnityAction action) => unityEvent.RemoveListener(action);
         
         
         internal void Invoke() => unityEvent.Invoke();

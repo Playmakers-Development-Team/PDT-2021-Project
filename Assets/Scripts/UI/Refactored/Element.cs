@@ -15,7 +15,5 @@ namespace UI.Refactored
         }
 
         protected virtual void OnAwake() {}
-
-        protected virtual void Refresh() {}
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace UI.Refactored
 {
-    public class UnitBar : Element
+    public class AbilityCard : Element
     {
         
     }

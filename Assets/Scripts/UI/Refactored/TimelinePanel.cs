@@ -2,7 +2,7 @@
 
 namespace UI.Refactored
 {
-    public class Timeline : Element
+    public class TimelinePanel : Element
     {
         private TurnManager turnManager;
 
@@ -13,11 +13,6 @@ namespace UI.Refactored
             manager.turnChanged.AddListener(OnTurnChanged);
         }
 
-        private void OnTurnChanged()
-        {
-            Refresh();
-        }
-
-        protected override void Refresh() {}
+        private void OnTurnChanged() {}
     }
 }
