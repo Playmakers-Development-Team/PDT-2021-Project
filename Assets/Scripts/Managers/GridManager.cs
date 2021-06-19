@@ -329,6 +329,19 @@ namespace Managers
             }
         }
         
+        public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
+
+            return adjacentGridObjects;
+        }
+        
         #endregion
     }
 }

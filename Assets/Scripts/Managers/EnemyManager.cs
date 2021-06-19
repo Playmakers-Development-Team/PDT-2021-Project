@@ -97,13 +97,14 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, float movementPoints)
         {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
             Vector2Int targetUnitCoordinate = FindClosestAdjacentFreeSquare(actingUnit, targetUnit);
             
             Vector2Int movementDir = Vector2Int.zero;
             
             for (int i = 0; i < movementPoints; ++i)
             {
-                List<GridObject> adjacentGridObjects = GetAdjacentGridObjects(actingUnit.Coordinate + movementDir);
+                List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(actingUnit.Coordinate + movementDir);
 
                 foreach (var adjacentGridObject in adjacentGridObjects)
                 {
@@ -244,7 +245,8 @@ namespace Managers
         
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
-            List<GridObject> adjacentGridObjects = GetAdjacentGridObjects(enemyUnit.Coordinate);
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -255,19 +257,6 @@ namespace Managers
             }
             
             return null;
-        }
-
-        public List<GridObject> GetAdjacentGridObjects(Vector2Int enemyUnitCoordinate)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
-            List<GridObject> adjacentGridObjects = new List<GridObject>();
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.up));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.right));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.down));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(enemyUnitCoordinate + Vector2Int.left));
-
-            return adjacentGridObjects;
         }
     }
 }
