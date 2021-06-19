@@ -26,7 +26,7 @@ namespace Managers
         /// <summary>
         /// Stores the current actingunit.
         /// </summary>
-        private EnemyUnit actingUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
+        private EnemyUnit ActingEnemyUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
         
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
@@ -49,13 +49,13 @@ namespace Managers
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(actingUnit);
+                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             });
             
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(actingUnit);
+                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             });
         }
 
