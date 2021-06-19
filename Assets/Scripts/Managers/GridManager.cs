@@ -54,7 +54,7 @@ namespace Managers
                 return tileData;
             }
 
-            //Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
             return null;
         }
         
@@ -64,7 +64,7 @@ namespace Managers
 
             if (tileData is null)
             {
-                //Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
+                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
                 return new List<GridObject>();
             }
             
@@ -326,67 +326,28 @@ namespace Managers
                 MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
-
-        public void PlaceTiles(Vector2Int currentCoordinate, int range, Dictionary<Vector2Int, TileData> grid)
+        
+        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
-            //todo show range of units
-            //unfinished
-            List <Vector2Int> x = AllReachableTiles(currentCoordinate, range);
+            Vector2Int currentCoordinate = unit.Coordinate;
+            // TODO link move path to tweening
+            List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
+
+            TeleportUnit(newCoordinate, unit);
         }
 
-        // TODO: CurrentCoordinate should not be necessary
-        public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
-        {
-            TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            
-            // TODO: Expose this variable
-            int moveRange = 3;
-            
-            // Check if tile is unoccupied
-            if (tileData.GridObjects.Count != 0)
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("Target tile is occupied.");
-                return;
-            }
-            
-            // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate)
-            && unit.GetType() == typeof(PlayerUnit))
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("Target tile out of range.");
-                return;
-            }
-            
-            // Test function for path
-            //Remove after testing
-            List<Vector2Int> x = GetCellPath(currentCoordinate, newCoordinate);
-            string printout = "Path:";
-            foreach (var VARIABLE in x)
-            {
-                printout = printout + " -> " + VARIABLE;
-            }
-            Debug.Log(printout);
-
-
-            TeleportUnit(currentCoordinate, newCoordinate, unit);
-        }
-
-        // TODO: CurrentCoordinate should not be necessary
         /// <summary>
         /// Moves a unit's GridObject and GameObject directly to a new position.
         /// </summary>
-        /// <param name="currentCoordinate">The unit's current coordinate.</param>
         /// <param name="newCoordinate">The coordinate to move the unit to.</param>
         /// <param name="unit">The unit to teleport.</param>
-        private void TeleportUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
             
-            MoveGridObject(currentCoordinate, newCoordinate, gridObject);
+            MoveGridObject(unit.Coordinate, newCoordinate, gridObject);
         }
 
         // TODO: CurrentCoordinate should not be necessary
