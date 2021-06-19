@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 5473781427429180235}
   - component: {fileID: 6708204597060251326}
   m_Layer: 0
-  m_Name: Whatshisname 2
+  m_Name: Estelle
   m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    tenet: 1
+    tenet: 2
     healthPoints:
       <BaseValue>k__BackingField: 10
     movementActionPoints:
@@ -166,4 +166,6 @@ MonoBehaviour:
     abilities:
     - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
     - {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}
+  damageTextCanvas: {fileID: 0}
+  damageTextLifetime: 1
   CurrentlySelectedAbility: {fileID: 0}

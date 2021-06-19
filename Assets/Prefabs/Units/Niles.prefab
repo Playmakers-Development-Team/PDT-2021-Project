@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 5473781427429180235}
   - component: {fileID: 6708204597060251326}
   m_Layer: 0
-  m_Name: Whatshisname
+  m_Name: Niles
   m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,16 +147,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    tenet: 0
+    tenet: 3
     healthPoints:
-      <BaseValue>k__BackingField: 12
+      <BaseValue>k__BackingField: 10
     movementActionPoints:
       <BaseValue>k__BackingField: 3
     speed:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     takeDamageModifier:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
@@ -164,5 +164,7 @@ MonoBehaviour:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
     abilities:
-    - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
+    - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
+  damageTextCanvas: {fileID: 0}
+  damageTextLifetime: 1
   CurrentlySelectedAbility: {fileID: 0}
