@@ -156,13 +156,13 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     takeDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     takeKnockbackModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     abilities:
     - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
     - {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}

@@ -159,10 +159,10 @@ MonoBehaviour:
       <BaseAdder>k__BackingField: 1
     takeDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     takeKnockbackModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
+      <BaseAdder>k__BackingField: 1
     abilities:
     - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
   damageTextCanvas: {fileID: 0}
