@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Commands;
 using GridObjects;
 using Units;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Managers
@@ -66,16 +67,25 @@ namespace Managers
 
         public void DecideEnemyIntention(EnemyUnit actingUnit)
         {
-            if (FindAdjacentPlayer(actingUnit))
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            
+            IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
+            
+            if (adjacentPlayerUnit != null)
             {
-                Debug.Log("Implement enemy damage command here");
+                // TODO: Will later need to be turned into an ability command when enemies have abilities
+                adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
             }
-            else
+            else if (playerManager.PlayerUnits.Count > 0)
             {
                 MoveUnit(actingUnit);
             }
+            else
+            {
+                Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+            }
         }
-        
+
         private void MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
@@ -111,6 +121,14 @@ namespace Managers
                     // If a player is adjacent, break out the function
                     if (adjacentGridObject.CompareTag("PlayerUnit"))
                     {
+                        // If there are still available movement points, do an attack
+                        if (i + 1 < movementPoints)
+                        {
+                            IUnit playerUnit = (IUnit) adjacentGridObject;
+                            
+                            // TODO: Will later need to be turned into an ability command when enemies have abilities
+                            playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+                        }
                         return movementDir;
                     }
                 }
