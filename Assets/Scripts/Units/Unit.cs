@@ -15,7 +15,7 @@ namespace Units
     {
         [SerializeField] protected T data;
         
-        public TenetType tenet => data.tenet;
+        public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
