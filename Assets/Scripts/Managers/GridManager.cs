@@ -193,6 +193,61 @@ namespace Managers
             }
         }
         
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue)
+        {
+            // If grid node exists add to queue and mark distance taken to arrive at it
+            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            {
+                if (!visited.ContainsKey(node))
+                {
+                    visited.Add(node, coordinateQueue.Peek());
+                    coordinateQueue.Enqueue(node);
+                }
+            }
+        }
+        
+        //returns a list of the path from one node to another
+        //Assumes target is reachable
+        private List<Vector2Int> getCellPath(Vector2Int startingCoordinate,
+                                             Vector2Int targetCoordinate)
+        {
+            var visited = new Dictionary<Vector2Int, Vector2Int>();
+            var coordinateQueue = new Queue<Vector2Int>();
+
+            coordinateQueue.Enqueue(startingCoordinate);
+            while (coordinateQueue.Count > 0)
+            {
+                var currentNode = coordinateQueue.Peek();
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
+                    coordinateQueue);
+
+                if (visited.ContainsKey(targetCoordinate))
+                    coordinateQueue.Clear();
+                else
+                    coordinateQueue.Dequeue();
+            }
+
+            var path = new List<Vector2Int>();
+            var currentNode2 = targetCoordinate;
+            while (true)
+            {
+                path.Add(currentNode2);
+                if (visited.ContainsKey(currentNode2))
+                    currentNode2 = visited[currentNode2];
+                else
+                    break;
+            }
+
+            path.Reverse();
+            return path;
+        }
+        
         #endregion
 
         #region CONVERSIONS
@@ -282,7 +337,7 @@ namespace Managers
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             
             // TODO: Expose this variable
-            int moveRange = 4;
+            int moveRange = 3;
             
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
@@ -300,6 +355,17 @@ namespace Managers
                 return;
             }
             
+            // Test function for path
+            //Remove after testing
+            List<Vector2Int> x = getCellPath(currentCoordinate, newCoordinate);
+            string printout = "Path:";
+            foreach (var VARIABLE in x)
+            {
+                printout = printout + " -> " + VARIABLE;
+            }
+            Debug.Log(printout);
+
+
             TeleportUnit(currentCoordinate, newCoordinate, unit);
         }
 
