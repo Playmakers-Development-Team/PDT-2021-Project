@@ -52,7 +52,7 @@ namespace Managers
 
         private bool isCastingAbility;
 
-        public bool printCoords = false;
+        public bool printMoveRangeCoords = false;
 
         private List<Vector2Int> selectedMoveRange;
 
@@ -192,7 +192,7 @@ namespace Managers
                     nextClickWillMove = true;
                     Debug.Log("Next click will move.");
 
-                    updateMoveRange(gridManager.AllReachableTiles(
+                    UpdateMoveRange(gridManager.AllReachableTiles(
                         playerManager.SelectedUnit.Coordinate,
                         (int) playerManager.SelectedUnit.MovementActionPoints.Value));
                 }
@@ -205,7 +205,7 @@ namespace Managers
                     MoveUnit();
                     nextClickWillMove = false;
                     selectedMoveRange.Clear();
-                    updateMoveRange(selectedMoveRange);
+                    UpdateMoveRange(selectedMoveRange);
                 }
                 else
                 {
@@ -238,11 +238,11 @@ namespace Managers
             Debug.Log($"Unit Deselected!");
         }
         
-        private void updateMoveRange(List<Vector2Int> moveRange)
+        private void UpdateMoveRange(List<Vector2Int> moveRange)
         {
             selectedMoveRange = moveRange;
             //Any Grid highlighting updates should go here
-            if (printCoords)
+            if (printMoveRangeCoords)
             {
                 foreach (var coord in moveRange)
                 {
