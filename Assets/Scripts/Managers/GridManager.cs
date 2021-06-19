@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -329,7 +330,27 @@ namespace Managers
         
         public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
+            TileData tileData = GetTileDataByCoordinate(newCoordinate);
+            int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int currentCoordinate = unit.Coordinate;
+            
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+            
+            // Check if tile is in range
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
+                && unit.GetType() == typeof(PlayerUnit))
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile out of range.");
+                return;
+            }
+            
             // TODO link move path to tweening
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
@@ -343,11 +364,12 @@ namespace Managers
         /// <param name="unit">The unit to teleport.</param>
         private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
+            Vector2Int startCoordinate = unit.Coordinate;
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
             
-            MoveGridObject(unit.Coordinate, newCoordinate, gridObject);
+            MoveGridObject(startCoordinate, newCoordinate, gridObject);
         }
 
         // TODO: CurrentCoordinate should not be necessary
