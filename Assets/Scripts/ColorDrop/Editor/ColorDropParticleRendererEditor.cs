@@ -11,11 +11,24 @@ namespace ColorDrop.Editor
         private Texture2D headerTex;
         private SerializedObject serializedObject;
         private SerializedProperty currentProperty;
+        private ColorDropParticleSystem particleSystem;
 
         private bool isSpawnFoldoutShowing = false;
 
         /* Objects for texture preview */
         private Texture previewTex;
+
+        // GUI Layout Parameter Fields
+        private GUILayoutOption[] globalFoldout;
+        private GUILayoutOption[] listLayout;
+        private GUILayoutOption[] previewTexLayout;
+        private GUILayoutOption[] sectionFoldout;
+        private GUILayoutOption[] headerLabelLayout;
+
+        // GUI Styles
+        private GUIStyle headerLabelStyle;
+        private GUIStyle sectionStyle;
+        private GUIStyle globalStyle;
 
         private void OnEnable()
         {
@@ -26,7 +39,7 @@ namespace ColorDrop.Editor
         {
             base.OnInspectorGUI();
 
-            ColorDropParticleSystem particleSystem = (ColorDropParticleSystem)target;
+            particleSystem = (ColorDropParticleSystem)target;
 
             if (!previewTex)
             {
@@ -41,67 +54,78 @@ namespace ColorDrop.Editor
             serializedObject = new SerializedObject(particleSystem);
             serializedObject.Update();
 
-            GUILayoutOption[] globalFoldout =
-            {
-                GUILayout.ExpandWidth(true),
-                GUILayout.Height(40)
-            };
+            InstantiateLayoutStyles();
 
-            GUILayoutOption[] listLayout =
-            {
-                GUILayout.ExpandWidth(true),
-                GUILayout.Height(25),
-            };
-
-            GUILayoutOption[] previewTexLayout =
-            {
-                GUILayout.Height(256),
-                GUILayout.Width(256),
-            };
-
-
-            /* Editor Styles */
-
-            GUIStyle globalStyle = new GUIStyle("Box")
-            {
-                padding = new RectOffset(8, 8, 8, 8),
-                margin = new RectOffset(0, 0, 0, 0)
-            };
-
-            GUILayoutOption[] sectionFoldout =
-            {
-                GUILayout.ExpandWidth(true),
-                GUILayout.Height(40)
-            };
-
-            GUIStyle sectionStyle = new GUIStyle("GroupBox")
-            {
-                padding = new RectOffset(5, 5, 5, 5),
-                margin = new RectOffset(1, 1, 1, 1)
-            };
-
-
-            GUIStyle headerLabelStyle = new GUIStyle("Box")
-            {
-                padding = new RectOffset(2, 2, 5, 5),
-                margin = new RectOffset(1, 1, 1, 1),
-                richText = true,
-            };
-
-            
 
             headerLabelStyle.fontSize = 14;
             headerLabelStyle.fontStyle = FontStyle.Bold;
             headerLabelStyle.normal.background = headerTex;
             headerLabelStyle.normal.textColor = Color.black;
 
-            GUILayoutOption[] headerLabelLayout =
+            // Inspector Layout Content
+            DrawParticleAttributesSectionGUI();
+            DrawEmitterSectionGUI();
+            DrawRenderSectionGUI();
+            DrawTexturePreviewGUI();
+
+            GUILayout.EndVertical();
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void InstantiateLayoutStyles()
+        {
+            globalFoldout = new GUILayoutOption[]
+            {
+                GUILayout.ExpandWidth(true),
+                GUILayout.Height(40)
+            };
+
+            listLayout = new GUILayoutOption[]
+            {
+                GUILayout.ExpandWidth(true),
+                GUILayout.Height(25),
+            };
+
+            previewTexLayout = new GUILayoutOption[]
+            {
+                GUILayout.Height(256),
+                GUILayout.Width(256),
+            };
+
+            sectionFoldout = new GUILayoutOption[]
+            {
+                GUILayout.ExpandWidth(true),
+                GUILayout.Height(40)
+            };
+
+            headerLabelLayout = new GUILayoutOption[]
             {
                 GUILayout.ExpandWidth(true),
             };
 
-            // Inspector Layout Content
+            sectionStyle = new GUIStyle("GroupBox")
+            {
+                padding = new RectOffset(5, 5, 5, 5),
+                margin = new RectOffset(1, 1, 1, 1)
+            };
 
+            globalStyle = new GUIStyle("Box")
+            {
+                padding = new RectOffset(8, 8, 8, 8),
+                margin = new RectOffset(0, 0, 0, 0)
+            };
+
+            headerLabelStyle = new GUIStyle("Box")
+            {
+                padding = new RectOffset(2, 2, 5, 5),
+                margin = new RectOffset(1, 1, 1, 1),
+                richText = true,
+            };
+        }
+
+        private void DrawParticleAttributesSectionGUI()
+        {
             GUILayout.Space(10);
 
             GUILayout.BeginVertical(globalStyle, globalFoldout);
@@ -125,7 +149,10 @@ namespace ColorDrop.Editor
             CreatePropertyGUI();
 
             GUILayout.EndVertical();
+        }
 
+        private void DrawEmitterSectionGUI()
+        {
             GUILayout.BeginVertical(sectionStyle, sectionFoldout);
             GUILayout.Label("Emitter", headerLabelStyle, headerLabelLayout);
 
@@ -148,11 +175,17 @@ namespace ColorDrop.Editor
             GUILayout.Space(5);
 
             GUILayout.EndVertical();
+        }
 
+        private void DrawRenderSectionGUI()
+        {
             GUILayout.BeginVertical(sectionStyle, sectionFoldout);
             GUILayout.Label("Renderer", headerLabelStyle, headerLabelLayout);
 
             currentProperty = serializedObject.FindProperty("targetCamera");
+            CreatePropertyGUI();
+
+            currentProperty = serializedObject.FindProperty("templateTextureRenderTexture");
             CreatePropertyGUI();
 
             GUILayout.Space(10);
@@ -165,7 +198,8 @@ namespace ColorDrop.Editor
 
             if (GUILayout.Button("Play"))
             {
-                Debug.Log("Collection Triggered");
+                Debug.Log("Play Triggered");
+                particleSystem.GenerateToTestMesh();
             }
 
 
@@ -174,17 +208,26 @@ namespace ColorDrop.Editor
                 Debug.Log("Collection Triggered");
             }
 
-            if(GUILayout.Button("Reset"))
+            if (GUILayout.Button("Reset"))
             {
                 Debug.Log("Collection Triggered");
             }
 
 
             GUILayout.EndVertical();
+        }
 
+        private void CreatePropertyGUI()
+        {
+            GUILayout.Space(2);
+            EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
+        }
+
+        private void DrawTexturePreviewGUI()
+        {
             GUILayout.Space(10);
             GUILayout.BeginVertical(sectionStyle, sectionFoldout);
-            GUILayout.Label("Previewer", headerLabelStyle, headerLabelLayout);
+            GUILayout.Label("Alpha Previewer", headerLabelStyle, headerLabelLayout);
             GUILayout.FlexibleSpace();
 
             currentProperty = serializedObject.FindProperty("previewTexture");
@@ -195,9 +238,9 @@ namespace ColorDrop.Editor
             if (previewTex)
             {
                 Rect r = EditorGUILayout.GetControlRect(previewTexLayout);
-                r.x = (Screen.width / 2) - (previewTex.width/2);
+                r.x = (Screen.width / 2) - (previewTex.width / 2);
 
-                EditorGUI.DrawPreviewTexture(r, previewTex);
+                EditorGUI.DrawTextureAlpha(r, previewTex);
             }
 
             GUILayout.Space(10);
@@ -205,54 +248,10 @@ namespace ColorDrop.Editor
             if (GUILayout.Button("Generate Preview Color Drop"))
             {
                 Debug.Log("Generating preview color drop");
-                previewTex = particleSystem.GeneratePreviewRenderTexture();
+                previewTex = particleSystem.GeneratePreviewTexture();
             }
 
             GUILayout.EndVertical();
-
-            GUILayout.EndVertical();
-
-            DrawTexturePreviewGUI();
-
-            serializedObject.ApplyModifiedProperties();
-        }
-        private void CreatePropertyGUI()
-        {
-            GUILayout.Space(2);
-            EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
-        }
-
-        private void DrawArrayProperties(SerializedProperty prop, bool drawChildren)
-        {
-            string lastPropPath = string.Empty;
-
-            foreach (SerializedProperty p in prop)
-            {
-                if (p.isArray && p.propertyType == SerializedPropertyType.Generic)
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    p.isExpanded = EditorGUILayout.Foldout(p.isExpanded, p.displayName);
-                    EditorGUILayout.EndHorizontal();
-
-                    if (p.isExpanded)
-                    {
-                        EditorGUI.indentLevel++;
-                        DrawArrayProperties(p, drawChildren);
-                        EditorGUI.indentLevel--;
-                    }
-                }
-                else
-                {
-                    if (!string.IsNullOrEmpty(lastPropPath) && p.propertyPath.Contains(lastPropPath)) { continue; }
-                    lastPropPath = p.propertyPath;
-                    EditorGUILayout.PropertyField(p, drawChildren, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
-                }
-            }
-        }
-
-        private void DrawTexturePreviewGUI()
-        {
-
         }
 
     }

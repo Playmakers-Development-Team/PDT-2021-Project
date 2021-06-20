@@ -12,6 +12,10 @@ namespace ColorDrop.Particle
 
     public class ColorDropParticle : MonoBehaviour, IColorDropParticle
     {
+        private MeshRenderer meshRenderer;
+        private MeshFilter meshFilter;
+        private Material meshMaterial;
+
         public void BeginParticle(ColorDropParticleAttributes attributes)
         {
 
@@ -21,6 +25,9 @@ namespace ColorDrop.Particle
     [Serializable]
     public struct ColorDropParticleAttributes
     {
+        public Mesh dropmesh;
+        public RenderTexture renderTexture;
+        public Material dropMaterial;
         public Color defaultColor;
     }
 }

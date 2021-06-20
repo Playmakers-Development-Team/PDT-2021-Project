@@ -19,7 +19,7 @@ namespace ColorDrop
         [SerializeField]
         public SDFSelection[] sdfSelections;
 
-        public Texture2D[] textureShapes;
+        public Sprite[] textureShapes;
         public Texture2D[] textureSelections;
 
         public void CreateNewColorSelection()
@@ -46,30 +46,6 @@ namespace ColorDrop
 
             tempArray[tempArray.Length - 1] = selection;
             sdfSelections = tempArray;
-        }
-
-        public void CreateNewTextureShape()
-        {
-            Texture2D[] tempArray = new Texture2D[textureShapes.Length + 1];
-
-            for (int i = 0; i < textureShapes.Length; i++)
-            {
-                tempArray[i] = textureShapes[i];
-            }
-
-            textureShapes = tempArray;
-        }
-
-        public void CreateNewTextureSelection()
-        {
-            Texture2D[] tempArray = new Texture2D[textureSelections.Length + 1];
-
-            for (int i = 0; i < textureSelections.Length; i++)
-            {
-                tempArray[i] = textureSelections[i];
-            }
-
-            textureSelections = tempArray;
         }
 
         public void DeleteFromColorSelection()

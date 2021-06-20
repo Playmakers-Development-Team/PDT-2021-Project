@@ -14,12 +14,12 @@ namespace ColorDrop.Editor
             base.OnInspectorGUI();
             ColorDropGenerator generator = (ColorDropGenerator)target;
 
-            GUILayout.Space(20);
+            /*GUILayout.Space(20);
             if (GUILayout.Button("Generate Color Drop"))
             {
                 Debug.Log("Button Triggered");
                 generator.GenerateDrop();
-            }
+            }*/
         }
     }
 }

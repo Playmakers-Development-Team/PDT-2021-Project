@@ -282,6 +282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 250517096}
   - component: {fileID: 250517095}
+  - component: {fileID: 250517097}
   m_Layer: 0
   m_Name: Color Drop Particle
   m_TagString: Untagged
@@ -315,6 +316,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &250517097
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250517094}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &328819465
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,12 +447,48 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328819465}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.17, y: 0, z: 0.15}
+  m_LocalPosition: {x: 0.17, y: 0, z: 0}
   m_LocalScale: {x: 4.4278, y: 4.4278, z: 4.4278}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &401678754
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_IsAlphaChannelOptional: 0
+  serializedVersion: 3
+  m_Width: 256
+  m_Height: 256
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 8
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 1
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &453385608
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,7 +507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &453385609
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -501,7 +579,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 453385608}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.17000008, y: 0, z: 1.04}
+  m_LocalPosition: {x: 0, y: 0, z: 0.42}
   m_LocalScale: {x: 12, y: 12, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -759,8 +837,9 @@ GameObject:
   - component: {fileID: 605581215}
   - component: {fileID: 605581216}
   - component: {fileID: 605581217}
+  - component: {fileID: 605581218}
   m_Layer: 0
-  m_Name: Color Drop Generator
+  m_Name: Color Drop Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -792,11 +871,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 607371e617bc74d4f9e6efe1b36a2582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testTex: {fileID: 2800000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
+  testMesh: {fileID: 328819467}
   previewTexture: {fileID: 8400000, guid: 52735f4bd33136749852b3eda93cd299, type: 2}
   particleAttributes:
+    dropmesh: {fileID: 0}
+    renderTexture: {fileID: 0}
+    dropMaterial: {fileID: 0}
     defaultColor: {r: 0, g: 0, b: 0, a: 0}
   targetCamera: {fileID: 577862721}
+  templateTextureRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
   spawnLocation: 0
   canSpawnRandom: 0
   spawnLocations: []
@@ -819,18 +902,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09589cac2ab60cb498ebffd189dfd298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleSpriteSources:
-  - {fileID: 21300000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
-  - {fileID: 21300000, guid: 3da65d3be08a9b94baa252f5e7d73945, type: 3}
-  detailSpritePatterns: []
-  colorSamples:
-  - primaryColor: {r: 0, g: 0, b: 0, a: 0}
-    borderColor: {r: 0, g: 0, b: 0, a: 0}
-    alpha: 0
-  meshRenderer: {fileID: 328819467}
-  dstRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
-  scaleWidth: 256
-  scaleHeight: 256
+  colorDropSettings: {fileID: 11400000, guid: f457773fcef468648a9497690468304d, type: 2}
+  testTex: {fileID: 21300000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
+--- !u!114 &605581218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 605581214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4fde9231ae7a44f80fbf39b9ab528a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &698846669
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,18 +1040,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09589cac2ab60cb498ebffd189dfd298, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleSpriteSources:
-  - {fileID: 21300000, guid: ddec50245e36769459c50d089bc24dfd, type: 3}
-  - {fileID: 21300000, guid: 3da65d3be08a9b94baa252f5e7d73945, type: 3}
-  detailSpritePatterns: []
-  colorSamples:
-  - primaryColor: {r: 0, g: 0, b: 0, a: 0}
-    borderColor: {r: 0, g: 0, b: 0, a: 0}
-    alpha: 0
-  meshRenderer: {fileID: 328819467}
-  dstRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
-  scaleWidth: 256
-  scaleHeight: 256
+  colorDropSettings: {fileID: 0}
+  testTex: {fileID: 0}
 --- !u!4 &965521402
 Transform:
   m_ObjectHideFlags: 0
@@ -1325,7 +1400,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
+        m_Texture: {fileID: 401678754}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:

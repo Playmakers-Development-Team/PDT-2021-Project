@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using ColorDrop.Particle;
 
@@ -13,12 +14,17 @@ namespace ColorDrop
     public class ColorDropParticleSystem : MonoBehaviour, IColorDropParticleRenderer
     {
         private IColorDropTextureGenerator texDropGenerator;
-        public Texture testTex;
+        private IColorDropMeshGenerator meshGenerator;
+
+        //public Texture testTex;
+        //public Texture2D result;
+        public MeshRenderer testMesh;
         [HideInInspector] public RenderTexture previewTexture;
 
         [HideInInspector] public ColorDropParticleAttributes particleAttributes;
 
         [HideInInspector] public Camera targetCamera;
+        [HideInInspector] public RenderTexture templateTextureRenderTexture;
 
         [HideInInspector] public bool spawnLocation;
         [HideInInspector] public bool canSpawnRandom;
@@ -37,41 +43,40 @@ namespace ColorDrop
         private void Awake()
         {
             texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
+            meshGenerator = this.GetComponent<IColorDropMeshGenerator>();
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
         #region Preview Texture
 
-        public Texture GeneratePreviewTexture(Texture previewTex)
+        public Texture GeneratePreviewTexture()
         {
             if (texDropGenerator == null)
             {
                 texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
             }
 
-            Texture2D newRender = texDropGenerator.GenerateDropOnTex(previewTex);
-            Texture preview = previewTex;
-
-            Graphics.Blit(newRender, previewTexture);
-            return previewTexture;
+            return texDropGenerator.GeneratePreviewTex(templateTextureRenderTexture);
         }
 
-        public Texture GeneratePreviewRenderTexture()
+        public void GenerateToTestMesh()
         {
-            Graphics.Blit(testTex, previewTexture);
-            Graphics.Blit(previewTexture, material);
-            return previewTexture;
+            if (texDropGenerator == null)
+            {
+                texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
+            }
+
+            RenderTexture newRender = texDropGenerator.GenerateDropTexture(templateTextureRenderTexture);
+            testMesh.sharedMaterial.SetTexture("_BaseMap", newRender);
+        }
+
+        #endregion
+
+        #region Emitter Functions
+
+        public void CollectSpawnLocations()
+        {
+            
         }
 
         #endregion

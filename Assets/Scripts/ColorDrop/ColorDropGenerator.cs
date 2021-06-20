@@ -7,27 +7,17 @@ namespace ColorDrop
 {
     public interface IColorDropTextureGenerator
     {
-        Texture2D GenerateDropOnTex(Texture previewTex);
+        void InitialiseTextureGenerator(ColorDropSettings settings);
+        RenderTexture GenerateDropTexture(RenderTexture templateBase);
+        Texture2D GeneratePreviewTex(RenderTexture templateBase);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class ColorDropGenerator : MonoBehaviour, IColorDropTextureGenerator
     {
-        // Inspector Accessible Fields
-        [SerializeField] private Sprite[] sampleSpriteSources;
-        [SerializeField] private Sprite[] detailSpritePatterns;
-        [Space]
-        [SerializeField] private ColorSelection[] colorSamples;
-
-        [Header("Renderers")]
-        [SerializeField] private MeshRenderer meshRenderer;
-        [SerializeField] private RenderTexture dstRenderTexture;
+        private RenderTexture dstRenderTexture;
+        public ColorDropSettings colorDropSettings;
 
         [Header("Texture Attributes")]
-        [SerializeField] private int scaleWidth;
-        [SerializeField] private int scaleHeight;
 
         private float minScale = 1;
         private float maxScale = 1;
@@ -38,55 +28,49 @@ namespace ColorDrop
         private System.Random random;
         private Texture2D dstTexture;
 
+        public Sprite testTex;
 
-        void Awake()
+        private int texWidth;
+        private int texHeight;
+
+        public void InitialiseTextureGenerator(ColorDropSettings settings)
         {
-            GenerateDrop();
+            this.colorDropSettings = settings;
         }
 
-        public void GenerateDrop()
+        public RenderTexture GenerateDropTexture(RenderTexture templateBase)
         {
             random = new System.Random();
+            texWidth = templateBase.width;
+            texHeight = templateBase.height;
+
+            dstRenderTexture = new RenderTexture(templateBase);
             dstRenderTexture.Release();
+            CreateNewTexture(templateBase.width, templateBase.height);
             CombineSpriteTextures();
-            RenderTexture();
+            Graphics.Blit(dstTexture, dstRenderTexture);
+            return dstRenderTexture;
         }
 
-        public Texture2D GenerateDropOnTex(Texture previewTex)
+        public Texture2D GeneratePreviewTex(RenderTexture templateBase)
         {
             random = new System.Random();
+            texWidth = templateBase.width;
+            texHeight = templateBase.height;
 
-            dstTexture = new Texture2D(previewTex.width, previewTex.height);
-            Color pixelSample;
-
-            for (int y = 0; y < dstTexture.height; y++)
-            {
-                for (int x = 0; x < dstTexture.width; x++)
-                {
-                    pixelSample = dstTexture.GetPixel(x, y);
-                    pixelSample.a = 0;
-                    dstTexture.SetPixel(x, y, pixelSample);
-                }
-            }
-
-            dstTexture.Apply();
-
-            for (int i = 0; i < sampleSpriteSources.Length; i++)
-            {
-                BlitDrop(sampleSpriteSources[i], dstTexture);
-            }
-
+            CreateNewTexture(templateBase.width, templateBase.height);
+            CombineSpriteTextures();
             return dstTexture;
         }
 
-        private void CreateNewTexture()
+        private void CreateNewTexture(int width, int height)
         {
-            dstTexture = new Texture2D(dstRenderTexture.width, dstRenderTexture.height);
+            dstTexture = new Texture2D(width, height);
             Color pixelSample;
 
-            for (int y = 0; y < dstTexture.height; y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < dstTexture.width; x++)
+                for (int x = 0; x < width; x++)
                 {
                     pixelSample = dstTexture.GetPixel(x, y);
                     pixelSample.a = 0;
@@ -99,12 +83,11 @@ namespace ColorDrop
 
         private void CombineSpriteTextures()
         {
-            CreateNewTexture();
-
-            for (int i = 0; i < sampleSpriteSources.Length; i++)
+            for (int i = 0; i < colorDropSettings.textureShapes.Length; i++)
             {
-                BlitDrop(sampleSpriteSources[i], dstTexture);
+                BlitDrop(colorDropSettings.textureShapes[i], dstTexture);
             }
+            //BlitDrop(testTex, dstTexture);
         }
 
         private void BlitDrop(Sprite src, Texture2D dst)
@@ -115,12 +98,12 @@ namespace ColorDrop
             float scaleY = scaleX * aspectRatio;
 
             // Calculate destination
-            Rect dstRect = CreateTextureRect(dstRenderTexture.width, dstRenderTexture.height, dst.width, dst.height);
+            Rect dstRect = CreateTextureRect(texWidth, texHeight, dst.width, dst.height);
 
-            MergeSourceToDestination(src, dst, dstRect, scaleX, scaleY);
+            MergeSourceToDestination(src, dst, dstRect);
         }
 
-        private void MergeSourceToDestination(Sprite src, Texture2D dst, Rect dstRect, float scaleX, float scaleY)
+        private void MergeSourceToDestination(Sprite src, Texture2D dst, Rect dstRect)
         {
             Color srcColor, dstColor;
             float scaleMultiplier = src.textureRect.width / dst.width;
@@ -158,12 +141,12 @@ namespace ColorDrop
             return dstRect;
         }
 
-        private void RenderTexture()
+        /*private void RenderTexture()
         {
             Graphics.Blit(dstTexture, dstRenderTexture);
             meshMaterial = meshRenderer.sharedMaterial;
             meshMaterial.SetTexture("_BaseMap", dstRenderTexture);
-        }
+        }*/
 
     }
 

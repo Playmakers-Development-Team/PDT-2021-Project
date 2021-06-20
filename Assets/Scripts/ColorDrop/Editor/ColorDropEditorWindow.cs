@@ -68,6 +68,8 @@ namespace ColorDrop.Editor
 
             //GUILayout.EndArea();
             GUILayout.EndScrollView();
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         private void CalculateLayouts()
@@ -189,16 +191,6 @@ namespace ColorDrop.Editor
         {
             string lastPropPath = string.Empty;
 
-            /*GUIStyle foldoutStyle = new GUIStyle("RL Background");
-            foldoutStyle.margin = new RectOffset(10, 10, 5, 5);
-            foldoutStyle.padding = new RectOffset(20, 20, 5, 5);
-            foldoutStyle.normal.background = Texture2D.grayTexture;
-
-            GUIStyle actionButtons = new GUIStyle();
-                actionButtons.margin = new RectOffset(5, 5, 0, 0);
-            
-             */
-
             EditorGUI.indentLevel = 1;
             GUILayout.BeginVertical("GroupBox", mainItemFoldout);
             GUILayout.Label("Color Selection", EditorStyles.boldLabel);
@@ -282,30 +274,9 @@ namespace ColorDrop.Editor
             GUILayout.Label("Texture Shapes List", EditorStyles.boldLabel);
             GUILayout.Space(5);
 
-            showShapeSelections = EditorGUILayout.Foldout(showShapeSelections, "Shapes");
-            if (showShapeSelections)
-            {
-                GUILayout.BeginVertical("GroupBox", mainItemFoldout);
-                DrawSimpleArrayProperties(currentProperty, true);
-                GUILayout.EndVertical();
-
-                GUILayout.Space(5);
-                GUILayout.BeginHorizontal(GUILayout.Width(dimensions.x * 0.8f));
-
-                if (GUILayout.Button("Add New Texture", dualButtonLayout))
-                {
-                    Debug.Log("button Pressed");
-                    colorSettings.CreateNewTextureShape();
-                }
-
-                if (GUILayout.Button("Delete Last Texture", dualButtonLayout))
-                {
-                    Debug.Log("button Pressed");
-                    //colorSettings.CreateNewColorSelection();
-                }
-
-                GUILayout.EndHorizontal();
-            }
+            EditorGUI.indentLevel = 1;
+            EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
+            EditorGUI.indentLevel = 0;
 
             GUILayout.EndVertical();
             EditorGUI.indentLevel = 0;
@@ -321,30 +292,9 @@ namespace ColorDrop.Editor
             GUILayout.Label("Texture List", EditorStyles.boldLabel);
             GUILayout.Space(5);
 
-            showTextureSelections = EditorGUILayout.Foldout(showTextureSelections, "Texutres");
-            if (showTextureSelections)
-            {
-                GUILayout.BeginVertical("GroupBox", mainItemFoldout);
-                DrawSimpleArrayProperties(currentProperty, true);
-                GUILayout.EndVertical();
-
-                GUILayout.Space(5);
-                GUILayout.BeginHorizontal(GUILayout.Width(dimensions.x * 0.8f));
-
-                if (GUILayout.Button("Add New Texture", dualButtonLayout))
-                {
-                    Debug.Log("button Pressed");
-                    colorSettings.CreateNewTextureSelection();
-                }
-
-                if (GUILayout.Button("Delete Last Texture", dualButtonLayout))
-                {
-                    Debug.Log("button Pressed");
-                    //colorSettings.CreateNewColorSelection();
-                }
-
-                GUILayout.EndHorizontal();
-            }
+            EditorGUI.indentLevel = 1;
+            EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
+            EditorGUI.indentLevel = 0;
 
             GUILayout.EndVertical();
             EditorGUI.indentLevel = 0;
