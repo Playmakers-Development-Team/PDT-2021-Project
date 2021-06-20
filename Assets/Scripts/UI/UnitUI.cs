@@ -14,7 +14,7 @@ namespace UI
     {
         private IUnit selectedPlayerUnit;
         [SerializeField] private Image icon;
-        [SerializeField] private TextMeshProUGUI name;
+        [SerializeField] private new TextMeshProUGUI name;
         [SerializeField] private TextMeshProUGUI health;
         [SerializeField] private TextMeshProUGUI movementPointsText;
         [SerializeField] private TextMeshProUGUI attack;
