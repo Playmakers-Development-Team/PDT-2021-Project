@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
@@ -228,14 +228,12 @@ namespace Managers
                         gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
-                        Debug.Log($"Unit Selected!");
                         return;
                     }
                 }
             }
             
             playerManager.DeselectUnit();
-            Debug.Log($"Unit Deselected!");
         }
         
         private void UpdateMoveRange(List<Vector2Int> moveRange)

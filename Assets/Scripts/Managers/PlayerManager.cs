@@ -58,24 +58,29 @@ namespace Managers
                 DeselectUnit();
                 return;
             }
+
+            if ((PlayerUnit) SelectedUnit == unit)
+                return;
             
-            if ((PlayerUnit) SelectedUnit != unit)
-            {
-                SelectedUnit = unit;
+            SelectedUnit = unit;
                 
-                ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(unit));
+            Debug.Log(SelectedUnit + " selected.");
                 
-                Debug.Log(unit + " selected!");
-            }
+            ManagerLocator.Get<CommandManager>().
+                ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
         }
 
         public void DeselectUnit()
         {
-            SelectedUnit = null;
+            if (SelectedUnit is null)
+                return;
+            
+            Debug.Log(SelectedUnit + " deselected.");
+            
             ManagerLocator.Get<CommandManager>().
                 ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
-            // Debug.Log("Units deselected.");
+            
+            SelectedUnit = null;
         }
         
         public void RemovePlayerUnit(IUnit playerUnit)
