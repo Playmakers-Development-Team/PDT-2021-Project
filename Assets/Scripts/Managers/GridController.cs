@@ -1,3 +1,4 @@
+using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -5,6 +6,8 @@ namespace Managers
 {
     public class GridController : MonoBehaviour
     {
+        [SerializeField] private Vector2Int levelBounds;
+        [SerializeField] private Vector2 gridOffset;
         [SerializeField] private TileBase abilityHighlightTile;
 
         [SerializeField] private Tilemap highlightTilemap;
@@ -19,19 +22,54 @@ namespace Managers
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.levelTilemap = levelTilemap;
             uiManager = ManagerLocator.Get<UIManager>();
 
-            uiManager.Initialise(abilityHighlightTile, highlightTilemap);
-            gridManager.InitialiseTileDatas();
+            uiManager.Initialise(abilityHighlightTile, highlightTilemap); ;
+            gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
-            bounds = gridManager.levelTilemap.cellBounds;
-            tilemapOriginPoint = gridManager.levelTilemap.transform.position;
-
+            bounds = gridManager.LevelTilemap.cellBounds;
+            tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
+            
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
+
+        private void Update()
+        {
+            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
+                //ClickUnit();
+        }
+
+        #region Unit Selection
+
+        private void ClickUnit()
+        { 
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            // TODO look into this later, put the subtraction somewhere better
+            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+
+            foreach (IUnit unit in playerManager.PlayerUnits)
+            {
+                if (unit is PlayerUnit playerUnit)
+                {
+                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
+                        gridPos)
+                    {
+                        playerManager.SelectUnit(playerUnit);
+                        //UpdateAbilityUI(playerUnit);
+                        Debug.Log($"Unit Selected!");
+                        return;
+                    }
+                }
+            }
+
+            playerManager.DeselectUnit();
+            // ClearAbilityUI();
+        }
+
+        #endregion
 
         #region Unit Testing
 

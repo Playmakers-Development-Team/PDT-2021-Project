@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f24d8b1fec8da9448152a777db23fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelBounds: {x: 8, y: 6}
   levelTilemap: {fileID: 227329590675988790}
   highlightTilemap: {fileID: 8119076496646500544}
   abilityUIPrefab: {fileID: 6997312461207497942, guid: d73aff069600ba84c9b19d672458f664, type: 3}

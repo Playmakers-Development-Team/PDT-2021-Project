@@ -31,15 +31,15 @@ namespace UI
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Joy, 3);
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Apathy, 3);
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenExecuteCommand<UnitSelectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
             {
                 SelectUnit();
             });
-            commandManager.ListenExecuteCommand<AbilityCommand>(cmd =>
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
                 SelectUnit();
             });
-            commandManager.ListenExecuteCommand<UnitDeselectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitDeselectedCommand>(cmd =>
             {
                 DeselectUnit();
             });
@@ -72,10 +72,10 @@ namespace UI
             
             // TODO: change to the unit's name if any
             //name.text = selectedPlayerUnit.gameObject.name;
-            health.text = "Health: " + selectedPlayerUnit.HealthPoints.Value;
+            health.text = "Health: " + selectedPlayerUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedPlayerUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedPlayerUnit.DealDamageModifier.Value;
-            defence.text = "Defence: " + selectedPlayerUnit.TakeDamageModifier.Value;
+            defence.text = "Defence: " + selectedPlayerUnit.Health.TakeDamageModifier.Value;
             speed.text = "Speed: " + selectedPlayerUnit.Speed.Value;
             
             string tenetText = String.Join("\n",selectedPlayerUnit.TenetStatusEffects.Select(t => t.TenetType+": " + t.StackCount) );

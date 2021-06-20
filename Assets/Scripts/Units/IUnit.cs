@@ -7,15 +7,14 @@ using UnityEngine;
 
 namespace Units
 {
-    public interface IUnit
+    public interface IUnit : IDamageable, IKnockbackable
     {
-        public ValueStat HealthPoints { get; }
+        public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
-        public ModifierStat DealDamageModifier { get; }
-        public ModifierStat TakeDamageModifier { get; }
-
         public ValueStat Speed { get; }
-        
+        public ModifierStat DealDamageModifier { get; }
+        public List<Ability> Abilities { get; }
+
         public Vector2Int Coordinate { get; }
         
         GameObject gameObject { get; }
@@ -26,13 +25,11 @@ namespace Units
         
         void TakeDamage(int amount);
 
+        void TakeKnockback(int amount);
+
         void TakeDefence(int amount);
         
         void TakeAttack(int amount);
-
-        void Knockback(Vector2Int translation);
-
-        List<Ability> GetAbilities();
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 

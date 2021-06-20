@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+using System;
 using Commands;
 using GridObjects;
+using Units;
 using UnityEngine;
 
 namespace Managers
@@ -18,7 +19,15 @@ namespace Managers
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
+        private CommandManager commandManager;
+        private UnitManager unitManager;
         private GameObject enemyPrefab;
+        
+        /// <summary>
+        /// Stores the current actingunit.
+        /// </summary>
+        private EnemyUnit ActingEnemyUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
+        
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -29,11 +38,25 @@ namespace Managers
 
             gridManager = ManagerLocator.Get<GridManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
 
             enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyTemp", typeof(GameObject));
+                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             isSpawningEnemies = true;
+            
+            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
+            {
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
+            });
+            
+            commandManager.ListenCommand<StartTurnCommand>(cmd =>
+            {
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
+            });
         }
 
         private void Update()
@@ -50,25 +73,27 @@ namespace Managers
                 else
                 {
                     isSpawningEnemies = false;
-                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand(null));
+                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
                 }
             }
+        }
 
-            DebugKillEnemyFunction();
-            DebugDamagePlayerButton();
+        private void OnValidate()
+        {
+            if (debugKillEnemyButton)
+            {
+                DebugKillEnemyFunction();
+            }
+
+            if (debugDamagePlayerButton)
+            {
+                DebugDamagePlayerButton();
+            }
         }
 
         private void SpawnEnemy()
         {
-            //TODO: Remove this later, currently used to test enemy attacks
-            if (enemyManager.Count == 0)
-            {
-                SpawnAdjacentToPlayer();
-            }
-            else
-            {
-                enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            }
+            enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
         
         private void SpawnAdjacentToPlayer()
@@ -79,36 +104,32 @@ namespace Managers
         
         private void DebugKillEnemyFunction()
         {
-            if (debugKillEnemyButton)
+            if (enemyManager.Count > 0)
             {
-                if (enemyManager.Count > 0)
-                {
-                    GridObject enemy = (GridObject) enemyManager.EnemyUnits[0];
-                    enemy.TakeDamage(1);
-                }
-                debugKillEnemyButton = false;
+                enemyManager.EnemyUnits[0].TakeDamage(1);
             }
+            debugKillEnemyButton = false;
         }
         
         private void DebugDamagePlayerButton()
         {
-            if (debugDamagePlayerButton)
+            foreach (var enemy in enemyManager.EnemyUnits)
             {
-                foreach (var enemy in enemyManager.EnemyUnits)
+                GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer(enemy);
+                if (firstAdjacentPlayer != null)
                 {
-                    GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer((GridObject) enemy);
-                    if (firstAdjacentPlayer != null)
+                    if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
                     {
                         // TODO: Get proper damage formula here
-                        firstAdjacentPlayer.TakeDamage(5);
+                        firstAdjacentPlayerUnit.TakeDamage(5);
                         debugDamagePlayerButton = false;
                         return;
                     }
                 }
-                
-                Debug.Log("No players adjacent to enemies found, no damage dealt");
-                debugDamagePlayerButton = false;
             }
+            
+            Debug.Log("No players adjacent to enemies found, no damage dealt");
+            debugDamagePlayerButton = false;
         }
     }
 }

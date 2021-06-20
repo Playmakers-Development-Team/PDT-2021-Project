@@ -55,10 +55,9 @@ namespace Abilities
                 {
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
+                    targetUnit.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
+                    targetUnit.TakeKnockback(knockback);
                 }
-                
-                target.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
-                target.TakeKnockback(knockback);
             }
         }
         
@@ -94,10 +93,9 @@ namespace Abilities
                 {
                     targetUnit.TakeAttack(-attack);
                     targetUnit.TakeDefence(-defence);
+                    targetUnit.TakeDamage(-Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
+                    targetUnit.TakeKnockback(-knockback);
                 }
-                
-                target.TakeDamage(-Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
-                target.TakeKnockback(-knockback);
             }
         }
 
