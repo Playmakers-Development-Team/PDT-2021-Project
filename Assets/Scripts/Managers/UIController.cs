@@ -78,15 +78,6 @@ namespace Managers
 
         private void Start()
         {
-            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
-            {
-                if (!timelineIsReady)
-                    return;
-
-                abilityIndex = 0;
-                UpdateAbilityUI((PlayerUnit)actingUnit);
-            });
-
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (unitManager.GetCurrentActiveUnit is EnemyUnit)
