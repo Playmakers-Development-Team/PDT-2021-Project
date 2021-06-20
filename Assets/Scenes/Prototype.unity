@@ -134,10 +134,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Background Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946608, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7694296866473946609, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -186,86 +182,10 @@ PrefabInstance:
       propertyPath: pipeline
       value: 
       objectReference: {fileID: 695003664}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: renderOnAwake
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: canvasColour.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: canvasColour.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: canvasColour.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: canvasColour.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: overrideGlobalPipeline
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
       propertyPath: m_TargetTexture
       value: 
       objectReference: {fileID: 296281701}
-    - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: orthographic size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866874889092, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866874889093, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866874889093, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866874889093, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866911786970, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866911786971, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866911786971, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694296866911786971, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
 --- !u!1 &199029047
