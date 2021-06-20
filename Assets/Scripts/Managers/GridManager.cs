@@ -289,7 +289,7 @@ namespace Managers
                     return false;
                 }
 
-                Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
+                // Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
                 tileData.AddGridObjects(gridObject);
                 return true;
             }
@@ -307,7 +307,7 @@ namespace Managers
 
             if (tileData.GridObjects.Contains(gridObject))
             {
-                Debug.Log("GridObject removed from tile " + coordinate.x + ", " + coordinate.y);
+                // Debug.Log("GridObject removed from tile " + coordinate.x + ", " + coordinate.y);
                 tileData.RemoveGridObjects(gridObject);
                 return true;
             }
@@ -375,10 +375,18 @@ namespace Managers
         // TODO: CurrentCoordinate should not be necessary
         public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate, GridObject gridObject)
         {
-            if (AddGridObject(newCoordinate, gridObject))
-            {
-                RemoveGridObject(currentCoordinate, gridObject);
-            }
+            if (!AddGridObject(newCoordinate, gridObject))
+                return;
+
+            if (!RemoveGridObject(currentCoordinate, gridObject))
+                return;
+            
+            Debug.LogFormat(
+                "Moved {0} from {1} to {2}.",
+                gridObject,
+                currentCoordinate,
+                newCoordinate
+            );
         }
         
         public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
