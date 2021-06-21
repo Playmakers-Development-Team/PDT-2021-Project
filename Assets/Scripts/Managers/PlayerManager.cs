@@ -13,6 +13,8 @@ namespace Managers
         public int Count => playerUnits.Count;
         
         public int DeathDelay {get;} = 5000;
+        
+        
         public bool WaitForDeath;
 
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)

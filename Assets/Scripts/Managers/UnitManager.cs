@@ -26,7 +26,7 @@ namespace Managers
         /// Get the current "ACTING" unit
         /// </summary>
         public IUnit GetCurrentActiveUnit => GetActiveUnit();
-
+        
         public override void ManagerStart()
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
@@ -64,8 +64,6 @@ namespace Managers
             allUnits.AddRange(GetAllEnemyUnits());
             return allUnits;
         }
-
-    
         
         /// <summary>
         /// Get all the current active unit
@@ -95,7 +93,6 @@ namespace Managers
             return null; 
         }
         
-        
         /// <summary>
         /// Get the current active enemy unit
         /// </summary>
@@ -109,9 +106,5 @@ namespace Managers
             }
             return null; 
         }
-        
-        
-        
-        
     }
 }

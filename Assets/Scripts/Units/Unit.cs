@@ -127,10 +127,8 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects()
-        {
-            tenetStatusEffectSlots.Clear();
-        }
+        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
+        
 
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
@@ -187,18 +185,18 @@ namespace Units
 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
-            if (this is PlayerUnit)
+            switch (this)
             {
-                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
-            }
-            else if (this is EnemyUnit)
-            {
-                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
-            }
-            else
-            {
-                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
-                               " as it is an unidentified unit");
+                case PlayerUnit _:
+                    ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
+                    break;
+                case EnemyUnit _:
+                    ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
+                    break;
+                default:
+                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                                   " as it is an unidentified unit");
+                    break;
             }
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
@@ -207,12 +205,12 @@ namespace Units
 
         private void SpawnDamageText(int damageAmount)
         {
-            damageTextCanvas.enabled = true;
-
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-
-            Invoke("HideDamageText", damageTextLifetime);
+            // damageTextCanvas.enabled = true;
+            //
+            // damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
+            //     damageAmount.ToString();
+            //
+            // Invoke("HideDamageText", damageTextLifetime);
         }
 
         private void HideDamageText()

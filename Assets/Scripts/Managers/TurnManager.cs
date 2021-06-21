@@ -149,10 +149,8 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
-        public void RemoveUnitFromQueue(IUnit unit)
-        {
-            RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
-        }
+        public void RemoveUnitFromQueue(IUnit unit) => RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
+        
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
@@ -177,11 +175,7 @@ namespace Managers
             //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
-                if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
-                    CurrentTurnIndex--;
-                
-                else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
-                    CurrentTurnIndex--;
+                CurrentTurnIndex--;
             }
 
             RecentUnitDeath = currentTurnQueue[targetIndex];

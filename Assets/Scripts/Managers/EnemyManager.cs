@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEditor.Timeline.Actions;
@@ -65,7 +66,7 @@ namespace Managers
             }
         }
 
-        public void DecideEnemyIntention(EnemyUnit actingUnit)
+        public async void DecideEnemyIntention(EnemyUnit actingUnit)
         {
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
             
@@ -75,10 +76,17 @@ namespace Managers
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
                 adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+                TurnManager turnManager = ManagerLocator.Get<TurnManager>();
+                CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+                await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
+                commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
-                MoveUnit(actingUnit);
+                await MoveUnit(actingUnit);
+                TurnManager turnManager = ManagerLocator.Get<TurnManager>();
+                CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+                commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
             }
             else
             {
@@ -86,7 +94,7 @@ namespace Managers
             }
         }
 
-        private void MoveUnit(EnemyUnit actingUnit)
+        private UniTask MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
             IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
@@ -99,6 +107,8 @@ namespace Managers
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+            return UniTask.Delay(1000);
+    
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles
