@@ -20,7 +20,7 @@ namespace Managers
         /// All the player units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
-        
+
         public int DeathDelay {get;} = 5000;
         public bool WaitForDeath;
 

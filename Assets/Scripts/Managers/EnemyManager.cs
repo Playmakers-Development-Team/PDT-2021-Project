@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Commands;
 using GridObjects;
 using Units;
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Managers
@@ -240,7 +241,7 @@ namespace Managers
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             
             Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();
-
+            
             Vector2Int northCoordinate = targetUnit.Coordinate + Vector2Int.up;
             Vector2Int eastCoordinate = targetUnit.Coordinate + Vector2Int.right;
             Vector2Int southCoordinate = targetUnit.Coordinate + Vector2Int.down;
