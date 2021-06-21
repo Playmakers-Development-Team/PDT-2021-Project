@@ -18,6 +18,8 @@ namespace Background.Pipeline
         EdgePigment,
         Bump,
         HueShiftFeature,
-        SaturationFeature
+        SaturationFeature,
+        SDFFeature,
+        LineTexture
     }
 }

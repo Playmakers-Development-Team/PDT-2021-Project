@@ -95,6 +95,13 @@ struct saturation_input
     float amount;
 };
 
+struct line_texture_input
+{
+    float4 texture_params;
+    float threshold;
+    float amount;
+};
+
 // Buffers
 StructuredBuffer<displacement_input> displacement_in;
 StructuredBuffer<opacity_extraction_input> opacity_extraction_in;
@@ -107,6 +114,7 @@ StructuredBuffer<edge_pigment_input> edge_pigment_in;
 StructuredBuffer<bump_input> bump_in;
 StructuredBuffer<hue_shift_input> hue_shift_in;
 StructuredBuffer<saturation_input> saturation_in;
+StructuredBuffer<line_texture_input> line_texture_in;
 
 // Functions
 float2 get_output_resolution()

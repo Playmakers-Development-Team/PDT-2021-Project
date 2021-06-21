@@ -272,3 +272,33 @@ void saturation (const uint3 id : SV_DispatchThreadID)
 
     output[id.xy] = float4(to_rgb(hsv), output[id.xy].a);
 }
+
+#pragma kernel sdf
+[numthreads(8, 8, 1)]
+void sdf (const uint3 id : SV_DispatchThreadID)
+{
+    const float2 resolution = get_output_resolution();
+    const float2 uv = pixel_to_uv(id.xy, resolution);
+
+    const bool is_inside = tex2Dlod(_input, float4(uv, 0, 0)).r > 0;
+
+    if (!is_inside)
+        return;
+    
+    output[id.xy] = float4(output[id.xy].rgb, -output[id.xy].a);
+}
+
+#pragma kernel line_texture
+[numthreads(8, 8, 1)]
+void line_texture (const uint3 id : SV_DispatchThreadID)
+{
+    output[id.xy] = float4(1, 0, 0, 1);
+    //
+    // const float2 resolution = get_output_resolution();
+    // const float2 uv = pixel_to_uv(id.xy, resolution);
+    //
+    // const float distance_samp = tex2Dlod(_input, float4(uv, 0, 0)).a;
+    // const float texture_samp = sample_params(_tex1, uv, line_texture_in[0].texture_params).r;
+    //
+    // output[id.xy] = float4(1, 0, 0, 1);//float4(output[id.xy].rgb, output[id.xy].a * texture_samp);
+}
