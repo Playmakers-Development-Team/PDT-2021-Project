@@ -74,28 +74,30 @@ namespace Managers
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
+                Debug.Log("ENEMY-INT: Damage player");
                 adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
+                Debug.Log("ENEMY-INT: Move towards player");
                 MoveUnit(actingUnit);
             }
             else
             {
-                Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                Debug.Log("ENEMY-INT: Do nothing (No players)");
             }
         }
 
         private void MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
-            IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
+            IUnit targetPlayerUnit = GetTargetPlayer(actingUnit);
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
             var moveCommand = new MoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
+                enemyUnit.Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
@@ -189,43 +191,89 @@ namespace Managers
         }
 
         // TODO: Find a way to account for obstacles that may be in the way
-        public IUnit FindClosestPlayer(IUnit enemyUnit)
+        public IUnit GetTargetPlayer(IUnit enemyUnit)
         {
+            IUnit targetPlayerUnit;
             PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            
-            IUnit closestPlayerUnit = playerManager.PlayerUnits[0];
-            int closestPlayerUnitDistance = Int32.MaxValue;
 
-            foreach (var playerUnit in playerManager.PlayerUnits)
+            List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.PlayerUnits);
+            int closestPlayersCount = closestPlayers.Count;
+
+            if (closestPlayersCount == 1)
             {
+                targetPlayerUnit = closestPlayers[0];
+                Debug.Log("ENEMY-TAR: Targeting closest player " + targetPlayerUnit);
+            }
+            else if (closestPlayersCount > 1)
+            {
+                List<IUnit> lowestHealthPlayers = GetLowestHealthPlayers(closestPlayers);
+
+                // If 1 low HP player is returned, it is set as the target player unit
+                // If multiple low HP players are returned, the first instance is set as the target
+                targetPlayerUnit = lowestHealthPlayers[0];
+                
+                Debug.Log("ENEMY-TAR: Targeting lower HP player " + targetPlayerUnit + 
+                          "(Multiple closest players found)");
+            }
+            else
+            {
+                Debug.LogWarning("WARNING: GetTargetPlayer() called but no players remain in" +
+                                 "PlayerManager.PlayerUnits. Please avoid calling this function");
+                return null;
+            }
+
+            return targetPlayerUnit;
+        }
+
+        private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
+        {
+            List<IUnit> closestPlayerUnits = new List<IUnit>();
+            int closestPlayerUnitDistance = Int32.MaxValue;
+            
+            foreach (var playerUnit in playerUnits)
+            {
+                // TODO: This is to be changed to use Lachlan's Breadth-First search
                 int xDistance = Mathf.Abs(playerUnit.Coordinate.x - enemyUnit.Coordinate.x);
                 int yDistance = Mathf.Abs(playerUnit.Coordinate.y - enemyUnit.Coordinate.y);
-
+            
                 // If a new closest unit is found, assign a new closest unit
                 if (closestPlayerUnitDistance > xDistance + yDistance)
                 {
+                    closestPlayerUnits.Clear();
                     closestPlayerUnitDistance = xDistance + yDistance;
-                    closestPlayerUnit = playerUnit;
+                    closestPlayerUnits.Add(playerUnit);
                 }
-                // If the closest distances are the same, find the lower health unit
                 else if (closestPlayerUnitDistance == xDistance + yDistance)
                 {
-                    // If both unit health values are the same then the closestPlayerUnit is kept the same 
-                    // i.e. The earlier player in the list is prioritised
-                    if (closestPlayerUnit.Health.HealthPoints.Value != playerUnit.Health.HealthPoints.Value)
-                    {
-                        float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
-                        if (lowerHealth == playerUnit.Health.HealthPoints.Value)
-                        {
-                            closestPlayerUnit = playerUnit;
-                        }
-                    }
+                    closestPlayerUnits.Add(playerUnit);
                 }
             }
 
-            return closestPlayerUnit;
+            return closestPlayerUnits;
         }
-        
+
+        private List<IUnit> GetLowestHealthPlayers(IReadOnlyList<IUnit> playerUnits)
+        {
+            List<IUnit> lowestHealthPlayerUnits = new List<IUnit>();
+            float lowestHealthValue = Int32.MaxValue;
+            
+            foreach (var playerUnit in playerUnits)
+            {
+                if (lowestHealthValue > playerUnit.Health.HealthPoints.Value)
+                {
+                    lowestHealthPlayerUnits.Clear();
+                    lowestHealthValue = playerUnit.Health.HealthPoints.Value;
+                    lowestHealthPlayerUnits.Add(playerUnit);
+                }
+                else if (lowestHealthValue == playerUnit.Health.HealthPoints.Value)
+                {
+                    lowestHealthPlayerUnits.Add(playerUnit);
+                }
+            }
+
+            return lowestHealthPlayerUnits;
+        }
+
         private Vector2Int FindClosestAdjacentFreeSquare(EnemyUnit actingUnit, IUnit targetUnit)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
