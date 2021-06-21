@@ -17,8 +17,11 @@ namespace UI.Refactored
         [SerializeField] private StatCard secondaryTenetCard;
 
         [SerializeField] private AbilityCard abilityCards;
+
+        [Space]
         
-        
+        [SerializeField] private PlayerUnit testUnit;
+
         private IUnit selectedUnit;
 
         
@@ -35,6 +38,7 @@ namespace UI.Refactored
         {
             manager.selectedUnit.RemoveListener(OnUnitSelected);
             manager.deselectedUnit.RemoveListener(OnUnitDeselected);
+            manager.unitChanged.RemoveListener(OnUnitChanged);
         }
 
         #endregion
@@ -61,8 +65,14 @@ namespace UI.Refactored
         }
 
         #endregion
-        
 
+
+        [ContextMenu("Assign Test Unit")]
+        private void AssignTestUnit()
+        {
+            manager.selectedUnit.Invoke(testUnit);
+        }
+        
         private void Hide()
         {
             
