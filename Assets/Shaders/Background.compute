@@ -34,7 +34,7 @@ void opacity_extraction (const uint3 id : SV_DispatchThreadID)
     const float2 uv = pixel_to_uv(id.xy, resolution);
 
     const float4 samp = tex2Dlod(_input, float4(uv, 0, 0));
-    float opacity = saturate(1.0 - max(samp.r, max(samp.g, samp.b)));
+    float opacity = saturate(1.0 - (samp.r + samp.g + samp.b) / 3.0);
     if (opacity > 0)
         opacity += opacity_extraction_in[0].exposure * samp.a;
     
