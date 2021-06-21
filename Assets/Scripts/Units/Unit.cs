@@ -38,9 +38,6 @@ namespace Units
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
 
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        [SerializeField] private float damageTextLifetime = 1.0f;
-
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private GridManager gridManager;
@@ -72,8 +69,6 @@ namespace Units
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
-            
-            SpawnDamageText(damageTaken);
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
@@ -201,21 +196,6 @@ namespace Units
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
-        }
-
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-
-            Invoke("HideDamageText", damageTextLifetime);
-        }
-
-        private void HideDamageText()
-        {
-            damageTextCanvas.enabled = false;
         }
     }
 }

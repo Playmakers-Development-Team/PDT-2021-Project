@@ -8,13 +8,9 @@ namespace Managers
     {
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
-        [SerializeField] private TileBase abilityHighlightTile;
-
-        [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private Tilemap levelTilemap;
 
         private GridManager gridManager;
-        private UIManager uiManager;
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
@@ -22,9 +18,6 @@ namespace Managers
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            uiManager = ManagerLocator.Get<UIManager>();
-
-            uiManager.Initialise(abilityHighlightTile, highlightTilemap); ;
             gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"

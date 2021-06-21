@@ -44,7 +44,7 @@ namespace Managers
             if (!Current.managers.ContainsKey(key))
                 throw new Exception($"{key} not registered with {Current.GetType()}.Name");
 
-            return (T) Current.managers[key];
+            return Current.managers[key] as T;
         }
 
         public static void Register<T>(T service) where T : Manager

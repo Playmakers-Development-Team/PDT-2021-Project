@@ -6,8 +6,6 @@ namespace Units
 {
     public class PlayerUnit : Unit<PlayerUnitData>
     {
-        public Ability CurrentlySelectedAbility;
-
         protected override void Start()
         {
             base.Start();

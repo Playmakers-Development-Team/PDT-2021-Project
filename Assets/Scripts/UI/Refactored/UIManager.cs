@@ -1,8 +1,10 @@
+using System;
 using Managers;
 using Units;
 
 namespace UI.Refactored
 {
+    [Serializable]
     public class UIManager : Manager
     {
         public readonly Event<IUnit> selectedUnit = new Event<IUnit>();
