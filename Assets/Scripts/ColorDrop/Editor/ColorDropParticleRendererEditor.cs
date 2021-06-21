@@ -9,7 +9,7 @@ namespace ColorDrop.Editor
     public class ColorDropParticleRendererEditor : UnityEditor.Editor
     {
         private Texture2D headerTex;
-        private SerializedObject serializedObject;
+        private new SerializedObject serializedObject;
         private SerializedProperty currentProperty;
         private ColorDropParticleSystem particleSystem;
 
@@ -156,7 +156,13 @@ namespace ColorDrop.Editor
             GUILayout.BeginVertical(sectionStyle, sectionFoldout);
             GUILayout.Label("Emitter", headerLabelStyle, headerLabelLayout);
 
-            currentProperty = serializedObject.FindProperty("spawnLocation");
+            currentProperty = serializedObject.FindProperty("rateOverTime");
+            CreatePropertyGUI();
+
+            currentProperty = serializedObject.FindProperty("maxParticleCountInView");
+            CreatePropertyGUI();
+
+            currentProperty = serializedObject.FindProperty("spawnOnLocation");
             CreatePropertyGUI();
 
             currentProperty = serializedObject.FindProperty("canSpawnRandom");

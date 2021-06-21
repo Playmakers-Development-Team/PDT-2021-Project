@@ -177,8 +177,10 @@ namespace ColorDrop.Editor
         {
             EditorGUI.indentLevel = 1;
             GUILayout.BeginVertical("GroupBox");
-            GUILayout.Label("Texture Attributes", EditorStyles.boldLabel);
+            GUILayout.Label("Color Drop Attributes", EditorStyles.boldLabel);
 
+            currentProperty = serializedObject.FindProperty("particlePrefab");
+            EditorGUILayout.PropertyField(currentProperty, false);
             currentProperty = serializedObject.FindProperty("scaleWidth");
             EditorGUILayout.PropertyField(currentProperty, false);
             currentProperty = serializedObject.FindProperty("scaleHeight");

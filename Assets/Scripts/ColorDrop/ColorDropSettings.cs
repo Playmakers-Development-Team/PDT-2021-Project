@@ -21,6 +21,7 @@ namespace ColorDrop
 
         public Sprite[] textureShapes;
         public Texture2D[] textureSelections;
+        public GameObject particlePrefab;
 
         public void CreateNewColorSelection()
         {
@@ -46,26 +47,6 @@ namespace ColorDrop
 
             tempArray[tempArray.Length - 1] = selection;
             sdfSelections = tempArray;
-        }
-
-        public void DeleteFromColorSelection()
-        {
-
-        }
-
-        public void DeleteFromSDFSelection()
-        {
-
-        }
-
-        public void DeleteFromTextureShapes()
-        {
-
-        }
-
-        public void DeleteFromTextureelection()
-        {
-
         }
     }
 }
