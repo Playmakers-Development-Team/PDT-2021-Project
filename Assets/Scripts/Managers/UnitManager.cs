@@ -26,13 +26,13 @@ namespace Managers
 
         /// <summary>
         /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
-        /// <c>PlayerUnit</p> is acting.
+        /// <c>PlayerUnit</c> is acting.
         /// </summary>
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
 
         /// <summary>
         /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
-        /// <c>EnemyUnit</p> is acting.
+        /// <c>EnemyUnit</c> is acting.
         /// </summary>
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
 
@@ -74,7 +74,7 @@ namespace Managers
 
         /// <summary>
         /// Returns the <c>PlayerUnit</c> whose turn it currently is. Returns null if no
-        /// <c>PlayerUnit</p> is acting. 
+        /// <c>PlayerUnit</c> is acting. 
         /// </summary>
         private PlayerUnit GetActingPlayerUnit()
         {
@@ -89,7 +89,7 @@ namespace Managers
 
         /// <summary>
         /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
-        /// <c>EnemyUnit</p> is acting. 
+        /// <c>EnemyUnit</c> is acting. 
         /// </summary>
         private EnemyUnit GetActingEnemyUnit()
         {
@@ -116,6 +116,17 @@ namespace Managers
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            return unit;
+        }
+
+        /// <summary>
+        /// Spawns a unit.
+        /// </summary>
+        /// <param name="targetUnit"></param>
+        public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
+        {
+            IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
         }

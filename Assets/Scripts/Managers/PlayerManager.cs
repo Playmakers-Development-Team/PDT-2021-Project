@@ -20,6 +20,9 @@ namespace Managers
         /// All the player units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
+        
+        public int DeathDelay {get;} = 5000;
+        public bool WaitForDeath;
 
         /// <summary>
         /// Removes all the player units in the <c>playerUnits</c> list.
@@ -55,6 +58,7 @@ namespace Managers
         /// <param name="unit"></param>
         public void SelectUnit(PlayerUnit unit)
         {
+            if (WaitForDeath) return;
             if (unit is null)
             {
                 Debug.LogWarning(
@@ -80,6 +84,22 @@ namespace Managers
             SelectedUnit = null;
             ManagerLocator.Get<CommandManager>().
                 ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
+        }
+        
+        /// <summary>
+        /// Adds an already existing unit to the <c>playerUnits</c> list. Currently used by units
+        /// that have been added to the scene in the editor.
+        /// </summary>
+        /// <param name="unit">The unit to add.</param>
+        public IUnit Spawn(PlayerUnit unit)
+        {
+            playerUnits.Add(unit);
+            
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            
+            SelectUnit(unit);
+            
+            return unit;
         }
     }
 }
