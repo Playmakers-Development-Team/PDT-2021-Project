@@ -59,8 +59,6 @@ namespace Units
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
-
-            playerManager.Spawn(this);
         }
 
         void Update()
@@ -187,18 +185,18 @@ namespace Units
 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
-            if (this is PlayerUnit)
+            switch (this)
             {
-                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
-            }
-            else if (this is EnemyUnit)
-            {
-                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
-            }
-            else
-            {
-                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
-                               " as it is an unidentified unit");
+                case PlayerUnit _:
+                    ManagerLocator.Get<PlayerManager>().RemoveUnit(this);
+                    break;
+                case EnemyUnit _:
+                    ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
+                    break;
+                default:
+                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                                   " as it is an unidentified unit");
+                    break;
             }
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
