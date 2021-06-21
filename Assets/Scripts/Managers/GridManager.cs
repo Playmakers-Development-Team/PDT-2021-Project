@@ -150,7 +150,7 @@ namespace Managers
         /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
         /// <param name="range">The range from the starting tile using manhattan distance.</param>
         /// <returns>A list of the coordinates of reachable tiles.</returns>
-        public List<Vector2Int> AllReachableTiles(Vector2Int startingCoordinate, int range)
+        public List<Vector2Int> GetAllReachableTiles(Vector2Int startingCoordinate, int range)
         {
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -180,6 +180,34 @@ namespace Managers
             }
 
             return reachable;
+        }
+        
+        public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
+        {
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+            
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                // Add neighbours of node to queue
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                
+                coordinateQueue.Dequeue();
+            }
+
+            return visited;
         }
         
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
@@ -239,13 +267,16 @@ namespace Managers
 
             var path = new List<Vector2Int>();
             var currentNode2 = targetCoordinate;
-            while (true)
+            int count = 0;
+            while (count < 20)
             {
                 path.Add(currentNode2);
                 if (visited.ContainsKey(currentNode2))
                     currentNode2 = visited[currentNode2];
                 else
                     break;
+
+                count++;
             }
 
             path.Reverse();
@@ -343,7 +374,7 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
+            if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
                 && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player

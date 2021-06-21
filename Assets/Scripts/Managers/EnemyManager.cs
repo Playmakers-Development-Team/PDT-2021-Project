@@ -113,7 +113,7 @@ namespace Managers
             float shortestDistance = int.MaxValue;
 
             List<Vector2Int> reachableTiles =
-                gridManager.AllReachableTiles(actingUnit.Coordinate, movementPoints);
+                gridManager.GetAllReachableTiles(actingUnit.Coordinate, movementPoints);
 
             List<Vector2Int> targetTiles = GetAdjacentFreeSquares(targetUnit);
 
