@@ -15,6 +15,7 @@ namespace Units
     {
         [SerializeField] protected T data;
         
+        public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
@@ -36,8 +37,9 @@ namespace Units
 
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
-        
-        private float damageTextLifetime = 1.0f;
+
+        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        [SerializeField] private float damageTextLifetime = 1.0f;
 
         private TurnManager turnManager;
         private PlayerManager playerManager;
@@ -49,7 +51,7 @@ namespace Units
 
             data.Initialise();
 
-            Health = new Health(KillUnit, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -59,6 +61,10 @@ namespace Units
             gridManager = ManagerLocator.Get<GridManager>();
         }
 
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        }
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
@@ -169,27 +175,28 @@ namespace Units
             foundNode = null;
             return false;
         }
-        
+
         private void KillUnit()
         {
+            playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
             
             gridManager.RemoveGridObject(Coordinate, this);
 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
-            if (this is PlayerUnit)
+            switch (this)
             {
-                ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
-            }
-            else if (this is EnemyUnit)
-            {
-                ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
-            }
-            else
-            {
-                Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
-                               " as it is an unidentified unit");
+                case PlayerUnit _:
+                    ManagerLocator.Get<PlayerManager>().RemoveUnit(this);
+                    break;
+                case EnemyUnit _:
+                    ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
+                    break;
+                default:
+                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                                   " as it is an unidentified unit");
+                    break;
             }
             
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
@@ -198,15 +205,17 @@ namespace Units
 
         private void SpawnDamageText(int damageAmount)
         {
-            GameObject prefab = (GameObject) Resources.Load("Prefabs/InGameUI/damageAmountCanvas",
-                typeof(GameObject));
-            GameObject damageAmountGameObject =
-                Instantiate(prefab, transform.position, Quaternion.identity);
+            damageTextCanvas.enabled = true;
 
-            damageAmountGameObject.GetComponentInChildren<TMP_Text>().text =
+            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
                 damageAmount.ToString();
 
-            Destroy(damageAmountGameObject, damageTextLifetime);
+            Invoke("HideDamageText", damageTextLifetime);
+        }
+
+        private void HideDamageText()
+        {
+            damageTextCanvas.enabled = false;
         }
     }
 }

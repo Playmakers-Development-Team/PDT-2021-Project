@@ -8,6 +8,7 @@ namespace Units
 {
     public abstract class UnitData
     {
+        public TenetType tenet;
         public ValueStat healthPoints;
         public ValueStat movementActionPoints;
         public ValueStat speed;

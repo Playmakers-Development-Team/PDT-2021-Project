@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Managers
 {
-    public interface IManager {}
-    
     public class ManagerLocator
     {
         private readonly Dictionary<string, Manager> managers = new Dictionary<string, Manager>();
@@ -21,23 +21,20 @@ namespace Managers
         public static void Initialize()
         {
             Current = new ManagerLocator();
-            
-            // REGISTER SERVICES HERE
-            Register(new CommandManager());
-            Register(new PlayerManager());
-            Register(new EnemyManager());
-            Register(new TurnManager());
-            Register(new GridManager());
-            Register(new AudioManager());
-            Register(new UnitManager());
-            Register(new BackgroundManager());
-            Register(new UIManager());
-            Register(new UI.Refactored.UIManager());
 
-            foreach (var manager in Current.managers.Values)
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            List<Type> types = new List<Type>();
+            foreach (Assembly assembly in assemblies)
+                types.AddRange(assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Manager))));
+            
+            foreach (Type type in types)
             {
-                manager.ManagerStart();
+                dynamic manager = Convert.ChangeType(Activator.CreateInstance(type), type);
+                Register(manager);
             }
+                
+            foreach (var manager in Current.managers.Values)
+                manager.ManagerStart();
         }
         
         public static T Get<T>() where T : Manager

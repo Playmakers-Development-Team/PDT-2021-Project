@@ -1,10 +1,17 @@
 using System;
 using Abilities;
+using Managers;
 
 namespace Units
 {
     public class PlayerUnit : Unit<PlayerUnitData>
     {
         public Ability CurrentlySelectedAbility;
+
+        protected override void Start()
+        {
+            base.Start();
+            ManagerLocator.Get<PlayerManager>().Spawn(this);
+        }
     }
 }
