@@ -3,6 +3,11 @@ using Units;
 namespace Commands
 {
     /// <summary>
+    /// Executed when the turn queue is created and ready.
+    /// </summary>
+    public class TurnQueueCreatedCommand : Command {}
+    
+    /// <summary>
     /// Executed when a turn is about to start.
     /// </summary>
     public class StartTurnCommand : UnitCommand
