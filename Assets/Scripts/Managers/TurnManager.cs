@@ -76,7 +76,6 @@ namespace Managers
             unitManager = ManagerLocator.Get<UnitManager>();
 
             commandManager.ListenCommand<EndTurnCommand>((cmd) => NextTurn());
-            commandManager.ListenCommand<AddUnitToTurnsCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
         }
 
         // TODO Call this function when level is loaded
@@ -253,7 +252,6 @@ namespace Managers
         {
             currentTurnQueue.Add(unit);
             nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
-            commandManager.ExecuteCommand(new UnitTurnsAddedCommand(unit));
             timelineNeedsUpdating = true;
         }
 

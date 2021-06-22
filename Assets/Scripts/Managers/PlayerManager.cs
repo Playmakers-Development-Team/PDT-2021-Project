@@ -50,6 +50,7 @@ namespace Managers
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
             playerUnits.Add(newUnit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
             return newUnit;
         }
 

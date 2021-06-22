@@ -35,6 +35,7 @@ namespace Managers
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
             enemyUnits.Add(newUnit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
             return newUnit;
         }
 

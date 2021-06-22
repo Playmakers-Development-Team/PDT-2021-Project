@@ -10,6 +10,7 @@ namespace Managers
 {
     public class UnitManager : Manager
     {
+        protected CommandManager commandManager;
         private EnemyManager enemyManager;
         private PlayerManager playerManager;
 
@@ -43,6 +44,7 @@ namespace Managers
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         /// <summary>
@@ -117,6 +119,7 @@ namespace Managers
         {
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new SpawningUnitCommand(unit));
             return unit;
         }
 
@@ -128,6 +131,7 @@ namespace Managers
         {
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new SpawningUnitCommand(unit));
             return unit;
         }
     }

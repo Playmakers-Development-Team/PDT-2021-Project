@@ -47,12 +47,12 @@ namespace Managers
             
             commandManager.ListenCommand<StartTurnCommand>(cmd => UpdateTurnUI());
             commandManager.ListenCommand<StartRoundCommand>(cmd => UpdateForNewRound());
-            commandManager.ListenCommand<UnitTurnsAddedCommand>(cmd => AddUnitToTimeline());
+            commandManager.ListenCommand<SpawningUnitCommand>(cmd => AddUnitToTimeline());
+            
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
                 (cmd1, cmd2) =>
                 {
                     SetupTurnQueue();
-                    commandManager.ListenCommand<KilledUnitCommand>((cmd) => RefreshTimelineUI());
                     commandManager.ListenCommand<KilledUnitCommand>((cmd) => RefreshTimelineUI());
                 });
         }
