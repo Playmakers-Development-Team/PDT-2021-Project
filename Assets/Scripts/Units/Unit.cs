@@ -4,6 +4,8 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -50,8 +52,21 @@ namespace Units
             base.Start();
 
             data.Initialise();
+            
+            Health = new Health(new UnitDeathCommand(this), data.healthPoints, data.takeDamageModifier);
+            
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            commandManager.ListenCommand<UnitDeathCommand>(
+                (cmd) =>
+                {
+                    if (cmd.Unit != this)
+                        return;
+                    
+                    playerManager.WaitForDeath = true;
+                    KillUnit();
+                });
+                
 
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -63,10 +78,13 @@ namespace Units
             playerManager.Spawn(this);
         }
 
+        
+
         void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        { 
+            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
+        
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
@@ -176,13 +194,14 @@ namespace Units
             return false;
         }
 
-        private void KillUnit()
+        private async void KillUnit()
         {
+
+            await UniTask.Delay(1000);
+            
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            
             gridManager.RemoveGridObject(Coordinate, this);
-
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
             switch (this)
@@ -198,7 +217,7 @@ namespace Units
                                    " as it is an unidentified unit");
                     break;
             }
-            
+
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
         }

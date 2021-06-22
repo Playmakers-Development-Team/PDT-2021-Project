@@ -214,6 +214,7 @@ namespace Managers
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
         }
 
+        
         // TODO Test
         /// <summary>
         /// Move a unit right after the current unit. The moved unit will take a turn after the
@@ -241,11 +242,8 @@ namespace Managers
         private List<IUnit> CreateTurnQueue()
         {
             List<IUnit> turnQueue = new List<IUnit>();
-            
             turnQueue.AddRange(unitManager.GetAllUnits());
-            
             turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-
             return turnQueue;
         }
 
@@ -357,7 +355,7 @@ namespace Managers
         {
             return currentTurnQueue.Any(u => u is EnemyUnit);
         }
-        
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>
@@ -375,7 +373,7 @@ namespace Managers
         private void SelectCurrentUnit()
         {
             if (CurrentUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+                playerManager.SelectUnit((PlayerUnit)CurrentUnit);
             else
                 playerManager.DeselectUnit();
         }

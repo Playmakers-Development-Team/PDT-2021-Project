@@ -12,10 +12,9 @@ namespace Managers
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public int Count => playerUnits.Count;
         
-        public int DeathDelay {get;} = 5000;
+        public int DeathDelay {get;} = 1000; 
         
-        
-        public bool WaitForDeath;
+        public bool WaitForDeath { get; set; }
 
         public IUnit Spawn(GameObject playerPrefab, Vector2Int gridPosition)
         {

@@ -79,6 +79,10 @@ namespace Managers
                 TurnManager turnManager = ManagerLocator.Get<TurnManager>();
                 CommandManager commandManager = ManagerLocator.Get<CommandManager>();
                 await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
+
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
+                
                 commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
             }
             else if (playerManager.PlayerUnits.Count > 0)
@@ -86,6 +90,10 @@ namespace Managers
                 await MoveUnit(actingUnit);
                 TurnManager turnManager = ManagerLocator.Get<TurnManager>();
                 CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+                
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
+                
                 commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
             }
             else

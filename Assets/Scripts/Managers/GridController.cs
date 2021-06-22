@@ -10,6 +10,7 @@ namespace Managers
         [SerializeField] private Vector2 gridOffset;
         [SerializeField] private TileBase abilityHighlightTile;
 
+        
         [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private Tilemap levelTilemap;
 
