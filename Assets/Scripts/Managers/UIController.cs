@@ -48,7 +48,7 @@ namespace Managers
         /// </summary>
         private int abilityIndex;
 
-        private bool nextClickWillMove;
+        private bool nextClickWillMove = false;
 
         private bool isCastingAbility;
 
@@ -205,8 +205,8 @@ namespace Managers
             {
                 if (nextClickWillMove)
                 {
-                    MoveUnit();
                     nextClickWillMove = false;
+                    MoveUnit();
                     selectedMoveRange.Clear();
                     UpdateMoveRange(selectedMoveRange);
                 }
@@ -253,6 +253,9 @@ namespace Managers
                 }
             }
         }
+        
+        //TODO Move this to its 
+       
 
         private void MoveUnit()
         {
@@ -275,12 +278,19 @@ namespace Managers
             }
             
             IUnit playerUnit = unitManager.ActingPlayerUnit;
-            playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
-
-            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
             
+            //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
+          
+            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
             List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
             ).Coordinate);
+            
+            // playerUnit.MovementActionPoints.Value = Math.Min(0,
+            //     playerUnit.MovementActionPoints.Value -=
+            //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
+            //             gridPos));
+            
+          
             
             var moveCommand = new MoveCommand(
                 playerUnit,
@@ -288,6 +298,10 @@ namespace Managers
             );
             
             commandManager.ExecuteCommand(moveCommand);
+
+           
+
+
         }
 
         private Vector2Int GetCoordinateFromClick()

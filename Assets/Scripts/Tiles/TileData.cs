@@ -23,8 +23,6 @@ namespace Tiles
             {
                 GridObjects.Add(gridObject);
             }
-            
-            Debug.Log("added gridobject");
         }
         
         public void RemoveGridObjects(GridObject gridObject)

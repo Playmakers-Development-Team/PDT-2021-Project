@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -339,7 +340,8 @@ namespace Managers
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
-            Vector2Int currentCoordinate = ((GridObject)unit).Coordinate;
+            Vector2Int startingCoordinate = ((GridObject)unit).Coordinate;
+            Vector2Int currentCoordinate = startingCoordinate;
             
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
@@ -354,6 +356,8 @@ namespace Managers
                 && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" + ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+
                 Debug.Log("Target tile out of range.");
                 return;
             }
@@ -371,8 +375,12 @@ namespace Managers
                 currentCoordinate = movePath[i];
             }
 
-           // ((GridObject)unit).Coordinate = newCoordinate;
+            unit.MovementActionPoints.Value -= Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
+              Debug.Log(Mathf.Max(0,
+                  ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+                    
         }
 
         private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
