@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
+using Cysharp.Threading.Tasks;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -351,10 +350,31 @@ namespace Managers
                 return;
             }
             
-            // TODO link move path to tweening
+            // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
+            
+            MovementTween(
+                unit.gameObject,
+                ConvertCoordinateToPosition(currentCoordinate),
+                ConvertCoordinateToPosition(newCoordinate),
+                1f // TODO: Expose this parameter
+            );
+        }
 
-            TeleportUnit(newCoordinate, unit);
+        private async void MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, float duration)
+        {
+            float flag = 0f;
+            
+            Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
+            
+            while (flag < duration)
+            {
+                unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
+                
+                await UniTask.Yield(PlayerLoopTiming.Update);
+                
+                flag += Time.deltaTime;
+            }
         }
 
         /// <summary>
@@ -395,5 +415,6 @@ namespace Managers
         }
         
         #endregion
+        
     }
 }
