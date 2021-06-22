@@ -31,7 +31,10 @@ namespace Commands.Editor
         private void OnGUI()
         {
             EditorGUILayout.Space();
-            GUILayout.Label("Commands", EditorStyles.largeLabel);
+            GUIStyle titleStyle = EditorStyles.largeLabel;
+            titleStyle.fontStyle = FontStyle.Bold;
+            titleStyle.fontSize = 16;
+            GUILayout.Label("Commands", titleStyle);
             
             EditorGUILayout.Space();
 
@@ -43,6 +46,7 @@ namespace Commands.Editor
 
                 if (mainConstructor != null)
                 {
+                    GUILayout.BeginVertical(EditorStyles.helpBox);
                     GUILayout.Label(commandType.Name, EditorStyles.boldLabel);
                     var parameters = mainConstructor.GetParameters();
                     object[] parameterValues;
@@ -147,6 +151,8 @@ namespace Commands.Editor
                     }
                     
                     GUILayout.EndHorizontal();
+                    GUILayout.EndVertical();
+                    GUILayout.Space(5);
                 }
             }
             
