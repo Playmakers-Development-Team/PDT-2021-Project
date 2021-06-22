@@ -62,19 +62,20 @@ namespace Managers
                         caughtCommands[action].Add(command);
                         
                         var requiredCommandTypes = action.GetType().GetGenericArguments();
+                        var caughtCommandTypes = caughtCommands[action].Select(cmd => cmd.GetType());
                         
-                        // Check if all the command requirements has been met
-                        // Basically compare if 2 different lists are the same
-                        bool isNotReady = caughtCommands[action]
-                            .Select(cmd => cmd.GetType())
-                            .Except(requiredCommandTypes)
-                            .Any();
+                        // Basically take away all the required command types that exist in caught
+                        // commands, if there is anything left after that, it means that
+                        // requirements has not been met.
+                        bool isNotReady = requiredCommandTypes.Except(caughtCommandTypes).Any();
 
                         if (!isNotReady)
                         {
-                            RemoveCatchListener(action);
                             // Need to cast to Array<object> for it to pass in parameters properly
                             action.DynamicInvoke(caughtCommands[action].ToArray<object>());
+                            
+                            // Remove it afterwards
+                            RemoveCatchListener(action);
                         }
                     }
                     // Otherwise just invoke it normally
