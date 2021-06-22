@@ -357,7 +357,7 @@ namespace Managers
                 unit.gameObject,
                 ConvertCoordinateToPosition(currentCoordinate),
                 ConvertCoordinateToPosition(newCoordinate),
-                1f
+                1f // TODO: Expose this parameter
             );
         }
 
