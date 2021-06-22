@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Commands;
+using UnityEngine;
 
 namespace Managers
 {
@@ -29,10 +31,39 @@ namespace Managers
             new Dictionary<Delegate, List<Command>>();
 
         /// <summary>
+        /// Stores every command by name. Useful for <see cref="CommandListener"/>.
+        /// </summary>
+        private readonly Dictionary<string, Type> commandTypes = new Dictionary<string, Type>();
+        
+        /// <summary>
         /// Used for the logging and debugging. Makes it easy to decouple functionality from editor
         /// only scripts.
         /// </summary>
         public event Action<Command> OnCommandExecuteEvent;
+
+        public override void ManagerStart()
+        {
+            var allCommandTypes = AppDomain.CurrentDomain.GetAssemblies().
+                SelectMany(a => a.GetTypes()).Where(t => typeof(Command).IsAssignableFrom(t));
+
+            foreach (Type commandType in allCommandTypes)
+            {
+                commandTypes[commandType.Name] = commandType;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a command of a class name exist.
+        /// </summary>
+        /// <param name="name">Command class name e.g "EndTurnCommand"</param>
+        public bool HasCommandType(string name) => commandTypes.ContainsKey(name);
+        
+        /// <summary>
+        /// Gets a command by class name.
+        /// </summary>
+        /// <param name="name">Command class name e.g "EndTurnCommand"</param>
+        public Type GetCommandType(string name) =>
+            commandTypes.ContainsKey(name) ? commandTypes[name] : null;
 
         /// <summary>
         /// Execute the given command. Anything listening to this type of command would be notified.
@@ -85,10 +116,16 @@ namespace Managers
                             RemoveCatchListener(action);
                         }
                     }
-                    // Otherwise just invoke it normally
-                    else
-                    { 
+                    // Otherwise, try to invoke it with the command parameter
+                    else if (action.GetMethodInfo().GetParameters().Any())
+                    {
                         action.DynamicInvoke(command);
+                    }
+                    // Otherwise just invoke it as if it had no parameters, listeners may simply be an Action
+                    // This might be the case for CommandListener where it only requires a simple Action
+                    else
+                    {
+                        action.DynamicInvoke();
                     }
                 }
             }
@@ -106,6 +143,24 @@ namespace Managers
         public void ListenCommand<T>(Action<T> action) where T : Command
         {
             RegisterListener(typeof(T), action);
+        }
+        
+        /// <summary>
+        /// Listen to when the command is executed. Do something every time the command is executed.
+        /// This version of the function takes in a simple type to do something simple
+        ///
+        /// <example>
+        /// <code>
+        ///     ListenCommand(typeof(EndTurnCommand), () => Debug.Log("Unit turn has ended!"));
+        /// </code>
+        /// </example>
+        /// </summary>
+        public void ListenCommand(Type type, Action action)
+        {
+            if (!typeof(Command).IsAssignableFrom(type))
+                throw new ArgumentException($"Expected {nameof(Command)} type, but got {type}");
+            
+            RegisterListener(type, action);
         }
 
         /// <summary>
@@ -136,6 +191,28 @@ namespace Managers
             // Check if the delegate was actually added in the list in the first place
             if (foundListener != null)
                 RemoveListener(commandType, foundListener);
+        }
+        
+        /// <summary>
+        /// Stop listening to a command execution. We need to remove the Action object when we 
+        /// don't need it to respond to command execution anymore. E.g We need to remove the
+        /// Action object after some GameObject is no longer in use. Also to prevent errors and
+        /// memory leaks.
+        /// <br/>
+        /// This version of the function takes in a type for simple actions.
+        ///
+        /// </summary>
+        public void UnlistenCommand(Type type, Action action)
+        {
+            if (!type.IsAssignableFrom(typeof(Command)))
+                throw new ArgumentException($"Expected {nameof(Command)} type, but got {type}");
+
+            var foundListener = listeners[type]
+                .FirstOrDefault(a => a == (Delegate) action);
+
+            // Check if the delegate was actually added in the list in the first place
+            if (foundListener != null)
+                RemoveListener(type, foundListener);
         }
 
         /// <summary>
