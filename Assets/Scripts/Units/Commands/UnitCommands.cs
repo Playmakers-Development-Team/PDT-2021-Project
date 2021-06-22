@@ -1,8 +1,6 @@
-using Managers;
-using Units;
-using UnityEngine;
+using Commands;
 
-namespace Commands
+namespace Units.Commands
 {
     /// <summary>
     /// Execute this command when unit should killed and removed from the game.

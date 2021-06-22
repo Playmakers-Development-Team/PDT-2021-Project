@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Commands;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -74,7 +75,7 @@ namespace Managers
                 SelectedUnit = unit;
 
                 ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
+                    ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
             }
         }
 
@@ -85,7 +86,7 @@ namespace Managers
         {
             SelectedUnit = null;
             ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
+                ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
         }
         
         /// <summary>

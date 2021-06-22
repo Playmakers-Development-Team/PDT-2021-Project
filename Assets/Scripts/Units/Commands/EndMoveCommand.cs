@@ -1,8 +1,7 @@
-using Managers;
-using Units;
+using Commands;
 using UnityEngine;
 
-namespace Commands
+namespace Units.Commands
 {
     /// <summary>
     /// Executed when the unit has finished moving.

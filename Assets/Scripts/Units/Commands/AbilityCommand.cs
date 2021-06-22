@@ -1,8 +1,8 @@
 using Abilities;
-using Units;
+using Commands;
 using UnityEngine;
 
-namespace Commands
+namespace Units.Commands
 {
     public class AbilityCommand : HistoricalCommand
     {
