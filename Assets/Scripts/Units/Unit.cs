@@ -65,24 +65,20 @@ namespace Units
                     playerManager.WaitForDeath = true;
                     KillUnit();
                 });
-                
-
-
+            
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
-
-            playerManager.Spawn(this);
         }
-
         
 
         void Update()
         { 
-            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+            //TEST CODE, 
+            //if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
         
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
@@ -201,23 +197,23 @@ namespace Units
             
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            gridManager.RemoveGridObject(Coordinate, this);
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+            gridManager.RemoveGridObject(Coordinate, this); 
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this); //THIS DEPENDENCY ISSUE SHOULD BE FIXED IN THE REFACTOR
 
             switch (this)
             {
                 case PlayerUnit _:
-                    ManagerLocator.Get<PlayerManager>().RemovePlayerUnit(this);
+                    ManagerLocator.Get<PlayerManager>().RemoveUnit(this);
                     break;
                 case EnemyUnit _:
-                    ManagerLocator.Get<EnemyManager>().RemoveEnemyUnit(this);
+                    ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
                     Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
                                    " as it is an unidentified unit");
                     break;
             }
-
+            
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
         }

@@ -58,6 +58,7 @@ namespace Managers
                     if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
                         gridPos)
                     {
+                        // TODO: Dependency Violation - Grid system should not depend on Unit system
                         playerManager.SelectUnit(playerUnit);
                         //UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
