@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -65,7 +66,7 @@ namespace Managers
             if (tileData is null)
             {
                 Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
-                return null;
+                return new List<GridObject>();
             }
             
             return tileData.GridObjects;
@@ -180,6 +181,7 @@ namespace Managers
 
             return reachable;
         }
+        
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
         {
             // If grid node exists add to queue and mark distance taken to arrive at it
@@ -191,6 +193,63 @@ namespace Managers
                     coordinateQueue.Enqueue(node);
                 }
             }
+        }
+        
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue)
+        {
+            // If grid node exists add to queue and mark distance taken to arrive at it
+            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            {
+                if (!visited.ContainsKey(node))
+                {
+                    visited.Add(node, coordinateQueue.Peek());
+                    coordinateQueue.Enqueue(node);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Returns a list of the path from one node to another
+        /// Assumes target is reachable.
+        /// </summary>
+        private List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
+                                             Vector2Int targetCoordinate)
+        {
+            var visited = new Dictionary<Vector2Int, Vector2Int>();
+            var coordinateQueue = new Queue<Vector2Int>();
+
+            coordinateQueue.Enqueue(startingCoordinate);
+            while (coordinateQueue.Count > 0)
+            {
+                var currentNode = coordinateQueue.Peek();
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
+                    coordinateQueue);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
+                    coordinateQueue);
+
+                if (visited.ContainsKey(targetCoordinate))
+                    coordinateQueue.Clear();
+                else
+                    coordinateQueue.Dequeue();
+            }
+
+            var path = new List<Vector2Int>();
+            var currentNode2 = targetCoordinate;
+            while (true)
+            {
+                path.Add(currentNode2);
+                if (visited.ContainsKey(currentNode2))
+                    currentNode2 = visited[currentNode2];
+                else
+                    break;
+            }
+
+            path.Reverse();
+            return path;
         }
         
         #endregion
@@ -268,21 +327,12 @@ namespace Managers
                 MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
-
-        public void PlaceTiles(Vector2Int currentCoordinate, int range, Dictionary<Vector2Int, TileData> grid)
-        {
-            //todo show range of units
-            //unfinished
-            List <Vector2Int> x = AllReachableTiles(currentCoordinate, range);
-        }
-
-        // TODO: CurrentCoordinate should not be necessary
-        public void MoveUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        
+        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            
-            // TODO: Expose this variable
-            int moveRange = 4;
+            int moveRange = (int)unit.MovementActionPoints.Value;
+            Vector2Int currentCoordinate = unit.Coordinate;
             
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
@@ -293,30 +343,33 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate))
+            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
+                && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
                 Debug.Log("Target tile out of range.");
                 return;
             }
             
-            TeleportUnit(currentCoordinate, newCoordinate, unit);
+            // TODO link move path to tweening
+            List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
+
+            TeleportUnit(newCoordinate, unit);
         }
 
-        // TODO: CurrentCoordinate should not be necessary
         /// <summary>
         /// Moves a unit's GridObject and GameObject directly to a new position.
         /// </summary>
-        /// <param name="currentCoordinate">The unit's current coordinate.</param>
         /// <param name="newCoordinate">The coordinate to move the unit to.</param>
         /// <param name="unit">The unit to teleport.</param>
-        private void TeleportUnit(Vector2Int currentCoordinate, Vector2Int newCoordinate, IUnit unit)
+        private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
+            Vector2Int startCoordinate = unit.Coordinate;
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
             
-            MoveGridObject(currentCoordinate, newCoordinate, gridObject);
+            MoveGridObject(startCoordinate, newCoordinate, gridObject);
         }
 
         // TODO: CurrentCoordinate should not be necessary
@@ -326,6 +379,19 @@ namespace Managers
             {
                 RemoveGridObject(currentCoordinate, gridObject);
             }
+        }
+        
+        public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<GridObject> adjacentGridObjects = new List<GridObject>();
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
+
+            return adjacentGridObjects;
         }
         
         #endregion

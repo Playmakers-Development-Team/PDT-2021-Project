@@ -131,7 +131,7 @@ namespace Managers
         /// <param name="turnManager"></param>
         private void AddUnitToTimeline()
         {
-            var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
+            var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
             foreach (var unit in allUnits)
             {

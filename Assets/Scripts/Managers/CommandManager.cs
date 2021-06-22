@@ -2,19 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
-using Units;
 
 namespace Managers
 {
     public class CommandManager : Manager
     { 
+        // TODO: The Command system should not depend of the Unit system's HistoricalCommand.
+        // TODO: CommandHistory should be moved to the Unit system.
         /// <summary>
         /// A record of all the historical commands, the first command in the list is the latest command.
         /// </summary>
         private readonly LinkedList<HistoricalCommand> commandHistory = new LinkedList<HistoricalCommand>();
 
         /// <summary>
-        /// Basically keeps tracks of what listeners need to be called when some command is executed.
+        /// Keeps track of which listeners need to be called when a command is executed.
         /// Stores all listeners in a graph data structure for efficiency.
         /// </summary>
         private readonly Dictionary<Type, LinkedList<Delegate>> listeners =
@@ -30,8 +31,8 @@ namespace Managers
         /// <summary>
         /// Execute the given command. Anything listening to this type of command would be notified.
         ///
-        /// <p> If the command is a <c>HistoricalCommand</c>, it will be added to the command history, so
-        /// it will be possible to undo the command. </p>
+        /// <p> If the command is a <c>HistoricalCommand</c>, it will be added to the command
+        /// history, so it will be possible to undo the command.</p>
         /// </summary>
         public void ExecuteCommand(Command command)
         {
@@ -46,7 +47,7 @@ namespace Managers
             
             if (listeners.ContainsKey(commandType))
             {
-                // We to remove listeners as our final step to prevent array modification exceptions
+                // Remove listeners as the final step to prevent array modification exceptions
                 var catchingListenersToRemove = new List<Delegate>();
                 
                 foreach (var action in listeners[commandType])
@@ -91,7 +92,6 @@ namespace Managers
         /// Listen to when the command is executed. Do something every time the command is executed.
         ///
         /// <example>
-        /// How to use.
         /// <code>
         ///     ListenCommand&lt;EndTurnCommand&gt;((cmd) => Debug.Log("Unit turn has ended!"));
         /// </code>
@@ -105,7 +105,8 @@ namespace Managers
         /// <summary>
         /// Stop listening to a command execution. We need to remove the Action object when we 
         /// don't need it to respond to command execution anymore. E.g We need to remove the
-        /// Action object after some GameObject is no longer in use. Also to prevent errors and memory leaks
+        /// Action object after some GameObject is no longer in use. Also to prevent errors and
+        /// memory leaks.
         ///
         /// <example>
         /// Keep the action stored as a variable somewhere, then remove it when done with it.
