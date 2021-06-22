@@ -221,6 +221,13 @@ namespace Managers
                     coordinateQueue.Enqueue(node);
                 }
             }
+            else if(tileDatas.ContainsKey(node) && tileDatas[node].GridObjects[0].tag.Equals("PlayerUnit"))
+            {
+                if (!visited.ContainsKey(node))
+                {
+                    visited.Add(node, distance + 1);
+                }
+            }
         }
         
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue)
