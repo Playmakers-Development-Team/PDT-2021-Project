@@ -104,12 +104,12 @@ namespace Managers
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
-            var moveCommand = new MoveCommand(
+            var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
             );
             
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+            commandManager.ExecuteCommand(moveCommand);
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles

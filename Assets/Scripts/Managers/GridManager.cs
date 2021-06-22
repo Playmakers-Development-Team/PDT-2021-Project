@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Commands;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -328,8 +329,11 @@ namespace Managers
             }
         }
         
-        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
+        public void MoveUnit(StartMoveCommand moveCommand)
         {
+            IUnit unit = moveCommand.Unit;
+            Vector2Int newCoordinate = moveCommand.TargetCoords;
+
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int currentCoordinate = unit.Coordinate;
@@ -355,6 +359,9 @@ namespace Managers
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
             TeleportUnit(newCoordinate, unit);
+            
+            // Should be called when all the movement and tweening has been completed
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }
 
         /// <summary>

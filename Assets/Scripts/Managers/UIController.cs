@@ -278,7 +278,7 @@ namespace Managers
             
             List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
             
-            var moveCommand = new MoveCommand(
+            var moveCommand = new StartMoveCommand(
                 playerUnit,
                 gridPos
             );
