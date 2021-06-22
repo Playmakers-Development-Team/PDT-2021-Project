@@ -17,13 +17,14 @@ namespace Tiles
             tile = tileBase;
         }
 
-        public void AddGridObjects(GridObject gridObject, Vector2Int newCoordinate)
+        public void AddGridObjects(GridObject gridObject)
         {
             if (!GridObjects.Contains(gridObject))
             {
                 GridObjects.Add(gridObject);
-               // gridObject.Coordinate = newCoordinate;
             }
+            
+            Debug.Log("added gridobject");
         }
         
         public void RemoveGridObjects(GridObject gridObject)

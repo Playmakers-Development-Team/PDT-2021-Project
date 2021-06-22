@@ -14,6 +14,7 @@ namespace GridObjects
         {
             gridManager = ManagerLocator.Get<GridManager>();
             gridManager.AddGridObject(Coordinate, this);
+            Debug.Log("chef");
         }
     }
 }

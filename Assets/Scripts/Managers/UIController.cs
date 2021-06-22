@@ -53,6 +53,7 @@ namespace Managers
         private bool isCastingAbility;
 
         public bool printMoveRangeCoords = false;
+        
 
         private List<Vector2Int> selectedMoveRange;
 
@@ -139,7 +140,7 @@ namespace Managers
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
         {
-            uiManager.HighlightAbility(unit.Coordinate,
+            uiManager.HighlightAbility(((GridObject)unit).Coordinate,
                 ((OrdinalDirection) UnityEngine.Random.Range(0,
                     Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
         }
@@ -194,8 +195,9 @@ namespace Managers
                     Debug.Log("Next click will move.");
 
                     UpdateMoveRange(gridManager.AllReachableTiles(
-                        unitManager.ActingUnit.Coordinate,
+                        ((GridObject)unitManager.ActingUnit).Coordinate,
                         (int) unitManager.ActingUnit.MovementActionPoints.Value));
+                    
                 }
             }
             
@@ -273,10 +275,12 @@ namespace Managers
             }
             
             IUnit playerUnit = unitManager.ActingPlayerUnit;
+            playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
 
-            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
             
-            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
+            ).Coordinate);
             
             var moveCommand = new MoveCommand(
                 playerUnit,
