@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using UnityEngine.LowLevel;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -356,28 +352,29 @@ namespace Managers
             
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
-
-            var gridObject = (GridObject) unit;
-            float timer = 1f;
-            Vector3 startPos = ConvertCoordinateToPosition(currentCoordinate);
-            Vector3 endPos = ConvertCoordinateToPosition(newCoordinate);
-            doTween(startPos, endPos,gridObject.gameObject, timer);
+            
+            MovementTween(
+                unit.gameObject,
+                ConvertCoordinateToPosition(currentCoordinate),
+                ConvertCoordinateToPosition(newCoordinate),
+                1f
+            );
         }
 
-        private async void doTween( Vector3 start, Vector3 end, GameObject unit, float duration)
+        private async void MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, float duration)
         {
             float flag = 0f;
-            Debug.Log("Start: " + start + "& End: " + end);
+            
+            Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
+            
             while (flag < duration)
             {
-                Debug.Log("loopy");
-                //float seconds = (Time.time - begin / duration);
-                unit.transform.position = Vector3.Lerp(start, end, flag/duration);
+                unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
+                
                 await UniTask.Yield(PlayerLoopTiming.Update);
+                
                 flag += Time.deltaTime;
             }
-            
-            //await UniTask.Delay(TimeSpan.FromSeconds(seconds), ignoreTimeScale: true);
         }
 
         /// <summary>
