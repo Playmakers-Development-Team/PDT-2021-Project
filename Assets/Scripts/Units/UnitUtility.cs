@@ -16,7 +16,6 @@ namespace Units
                 
                 GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
                 IUnit unit = instance.GetComponent<IUnit>();
-                ManagerLocator.Get<CommandManager>().ExecuteCommand(new SpawningUnitCommand(unit));
             
                 return unit;
             }
