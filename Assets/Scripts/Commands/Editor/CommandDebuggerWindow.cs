@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using Managers;
 using Units;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Commands.Editor
 {
@@ -14,10 +16,20 @@ namespace Commands.Editor
         private List<Type> commandTypes = new List<Type>();
         private Dictionary<Type, object[]> rememberedValues = new Dictionary<Type, object[]>();
         private Vector2 scrollPosition;
+        private bool shouldDebugExecution;
+        private CommandManager currentCommandManager;
+        
+        public static CommandDebuggerWindow Instance { get; set; }
         
         [MenuItem("Window/Commands Debugger")]
         private static void ShowWindow()
         {
+            if (Instance != null)
+            {
+                Debug.LogError("Can only have 1 command debugger open at a time");
+                return;
+            }
+            
             var window = GetWindow<CommandDebuggerWindow>();
             window.titleContent = new GUIContent("Commands Debugger");
             window.Show();
@@ -25,7 +37,40 @@ namespace Commands.Editor
 
         private void OnEnable()
         {
+            Instance = this;
             commandTypes = TypeCache.GetTypesDerivedFrom<Command>().ToList();
+        }
+
+        private void OnDisable()
+        {
+            if (currentCommandManager != null)
+            {
+                currentCommandManager.OnCommandExecuteEvent -= OnCommandExecuted;
+            }
+
+            Instance = null;
+        }
+        
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void RegisterCommandManager()
+        {
+            Instance.currentCommandManager = ManagerLocator.Get<CommandManager>();
+            Instance.currentCommandManager.OnCommandExecuteEvent += OnCommandExecuted;
+        }
+
+        private static void OnCommandExecuted(Command command)
+        {
+            if (Instance.shouldDebugExecution)
+            {
+                if (command is UnitCommand {Unit: Component unit})
+                {
+                    Debug.Log($"Unit Command Executed => {command.GetType()} with unit \"{unit.name}\"");
+                }
+                else
+                {
+                    Debug.Log($"Command Executed => {command.GetType()}");
+                }
+            }
         }
 
         private void OnGUI()
@@ -35,6 +80,12 @@ namespace Commands.Editor
             titleStyle.fontStyle = FontStyle.Bold;
             titleStyle.fontSize = 16;
             GUILayout.Label("Commands", titleStyle);
+            
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            shouldDebugExecution = EditorGUILayout.ToggleLeft("Log/Debug Command Execution", shouldDebugExecution);
+            EditorGUILayout.EndHorizontal();
             
             EditorGUILayout.Space();
 

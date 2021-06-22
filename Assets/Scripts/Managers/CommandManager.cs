@@ -29,6 +29,12 @@ namespace Managers
             new Dictionary<Delegate, List<Command>>();
 
         /// <summary>
+        /// Used for the logging and debugging. Makes it easy to decouple functionality from editor
+        /// only scripts.
+        /// </summary>
+        public event Action<Command> OnCommandExecuteEvent;
+
+        /// <summary>
         /// Execute the given command. Anything listening to this type of command would be notified.
         ///
         /// <p> If the command is a <c>HistoricalCommand</c>, it will be added to the command
@@ -44,6 +50,7 @@ namespace Managers
             }
             
             command.Execute();
+            OnCommandExecuteEvent?.Invoke(command);
             
             if (listeners.ContainsKey(commandType))
             {
