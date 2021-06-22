@@ -135,52 +135,6 @@ namespace Managers
                 }
             }
 
-            // Vector2Int targetUnitCoordinate = FindClosestAdjacentFreeSquare(actingUnit, targetUnit);
-            //
-            // for (int i = 0; i < movementPoints; ++i)
-            // {
-            //     List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(actingUnit.Coordinate + movementDir);
-            //
-            //     foreach (var adjacentGridObject in adjacentGridObjects)
-            //     {
-            //         // If a player is adjacent, break out the function
-            //         if (adjacentGridObject.CompareTag("PlayerUnit"))
-            //         {
-            //             // If there are still available movement points, do an attack
-            //             if (i + 1 < movementPoints)
-            //             {
-            //                 IUnit playerUnit = (IUnit) adjacentGridObject;
-            //                 
-            //                 // TODO: Will later need to be turned into an ability command when enemies have abilities
-            //                 playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
-            //             }
-            //             return movementDir;
-            //         }
-            //     }
-            //
-            //     int newMovementX = 0;
-            //     int newMovementY = 0;
-            //     // Check if x coordinate is not the same as target
-            //     if (actingUnit.Coordinate.x != targetUnitCoordinate.x)
-            //     {
-            //         newMovementX = (int) Mathf.Sign(targetUnitCoordinate.x - actingUnit.Coordinate.x - movementDir.x);
-            //     }
-            //     // Check if y coordinate is not the same as target
-            //     if (actingUnit.Coordinate.y != targetUnitCoordinate.y)
-            //     {
-            //        newMovementY = (int) Mathf.Sign(targetUnitCoordinate.y - actingUnit.Coordinate.y - movementDir.y);
-            //     }
-            //
-            //     if (newMovementX != 0 && TryMoveX(actingUnit, movementDir, newMovementX))
-            //     {
-            //         movementDir = movementDir + Vector2Int.right * newMovementX;
-            //     }
-            //     else if(newMovementY != 0 && TryMoveY(actingUnit, movementDir, newMovementY)) // If moving on the X fails, try move on the Y
-            //     {
-            //         movementDir = movementDir + Vector2Int.up * newMovementY;
-            //     }
-            // }
-
             Debug.Log("ENEMY-TAR: Enemy to move in the direction " + movementDir);
             return movementDir;
         }
@@ -252,23 +206,25 @@ namespace Managers
 
         private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
         {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            Dictionary<Vector2Int, int> distanceToAllCells = gridManager.GetDistanceToAllCells(enemyUnit.Coordinate);
+            
             List<IUnit> closestPlayerUnits = new List<IUnit>();
             int closestPlayerUnitDistance = Int32.MaxValue;
             
             foreach (var playerUnit in playerUnits)
             {
-                // TODO: This is to be changed to use Lachlan's Breadth-First search
-                int xDistance = Mathf.Abs(playerUnit.Coordinate.x - enemyUnit.Coordinate.x);
-                int yDistance = Mathf.Abs(playerUnit.Coordinate.y - enemyUnit.Coordinate.y);
-            
+                int playerDistanceToEnemy = distanceToAllCells[playerUnit.Coordinate];
+
                 // If a new closest unit is found, assign a new closest unit
-                if (closestPlayerUnitDistance > xDistance + yDistance)
+                if (closestPlayerUnitDistance > playerDistanceToEnemy)
                 {
                     closestPlayerUnits.Clear();
-                    closestPlayerUnitDistance = xDistance + yDistance;
+                    closestPlayerUnitDistance = playerDistanceToEnemy;
                     closestPlayerUnits.Add(playerUnit);
                 }
-                else if (closestPlayerUnitDistance == xDistance + yDistance)
+                else if (closestPlayerUnitDistance == playerDistanceToEnemy)
                 {
                     closestPlayerUnits.Add(playerUnit);
                 }
