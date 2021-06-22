@@ -47,7 +47,6 @@ namespace Managers
             
             commandManager.ListenCommand<StartTurnCommand>(cmd => UpdateTurnUI());
             commandManager.ListenCommand<StartRoundCommand>(cmd => UpdateForNewRound());
-            commandManager.ListenCommand<SpawningUnitCommand>(cmd => AddUnitToTimeline());
             
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
                 (cmd1, cmd2) =>
