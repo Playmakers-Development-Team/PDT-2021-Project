@@ -22,6 +22,7 @@ namespace Units
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
+        public Vector2Int Coordinate { get; set; }
 
         public static Type DataType => typeof(T);
 

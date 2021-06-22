@@ -185,17 +185,17 @@ namespace Managers
             
             if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
             {
-                if (actingUnit == null)
+                if (unitManager.ActingUnit == null || unitManager.ActingUnit is EnemyUnit)
                     return;
 
-                if (playerManager.SelectedUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
+                if (unitManager.ActingUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
                 {
                     nextClickWillMove = true;
                     Debug.Log("Next click will move.");
 
                     UpdateMoveRange(gridManager.AllReachableTiles(
-                        playerManager.SelectedUnit.Coordinate,
-                        (int) playerManager.SelectedUnit.MovementActionPoints.Value));
+                        unitManager.ActingUnit.Coordinate,
+                        (int) unitManager.ActingUnit.MovementActionPoints.Value));
                 }
             }
             
@@ -254,7 +254,7 @@ namespace Managers
 
         private void MoveUnit()
         {
-            if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
+            //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
             
             // Check if tile is unoccupied
@@ -272,7 +272,7 @@ namespace Managers
                 return;
             }
             
-            IUnit playerUnit = actingUnit;
+            IUnit playerUnit = unitManager.ActingPlayerUnit;
 
             Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
             

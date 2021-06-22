@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
 using Cysharp.Threading.Tasks;
+using Microsoft.Unity.VisualStudio.Editor;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -199,7 +200,7 @@ namespace Managers
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
             {
-                if (!visited.ContainsKey(node))
+                if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
                 {
                     visited.Add(node, coordinateQueue.Peek());
                     coordinateQueue.Enqueue(node);
@@ -236,6 +237,11 @@ namespace Managers
                     coordinateQueue.Dequeue();
             }
 
+            foreach (KeyValuePair<Vector2Int,Vector2Int> node in visited)
+            {
+                Debug.Log($"NodeStuff {node}");
+            }
+            
             var path = new List<Vector2Int>();
             var currentNode2 = targetCoordinate;
             while (true)
@@ -246,6 +252,8 @@ namespace Managers
                 else
                     break;
             }
+
+         
 
             path.Reverse();
             return path;
@@ -289,7 +297,6 @@ namespace Managers
                 }
 
                 Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
-                tileData.AddGridObjects(gridObject);
                 return true;
             }
             
@@ -327,7 +334,7 @@ namespace Managers
             }
         }
         
-        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
+        public async void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
@@ -352,16 +359,25 @@ namespace Managers
             
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
-            
-            MovementTween(
-                unit.gameObject,
-                ConvertCoordinateToPosition(currentCoordinate),
-                ConvertCoordinateToPosition(newCoordinate),
-                1f // TODO: Expose this parameter
-            );
+
+            for (int i = 1; i < movePath.Count; i++)
+            {
+                Debug.Log(movePath[i]);
+                
+                // await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
+                //     ConvertCoordinateToPosition(movePath[i]), 1f);
+                // unit.gameObject.transform.position = ConvertCoordinateToPosition(movePath[i]);
+                // currentCoordinate = movePath[i];
+            }
+            TeleportUnit(newCoordinate,unit);
+
+           // unit.Coordinate = newCoordinate;
+
         }
 
-        private async void MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, float duration)
+        private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
+        float 
+        duration)
         {
             float flag = 0f;
             
@@ -370,11 +386,12 @@ namespace Managers
             while (flag < duration)
             {
                 unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
-                
-                await UniTask.Yield(PlayerLoopTiming.Update);
-                
                 flag += Time.deltaTime;
+                await UniTask.Yield();
+
             }
+            
+            
         }
 
         /// <summary>

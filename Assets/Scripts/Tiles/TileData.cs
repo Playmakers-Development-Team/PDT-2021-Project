@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using GridObjects;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Tiles
@@ -16,11 +17,12 @@ namespace Tiles
             tile = tileBase;
         }
 
-        public void AddGridObjects(GridObject gridObject)
+        public void AddGridObjects(GridObject gridObject, Vector2Int newCoordinate)
         {
             if (!GridObjects.Contains(gridObject))
             {
                 GridObjects.Add(gridObject);
+               // gridObject.Coordinate = newCoordinate;
             }
         }
         
