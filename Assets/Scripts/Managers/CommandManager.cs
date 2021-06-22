@@ -47,10 +47,10 @@ namespace Managers
             
             if (listeners.ContainsKey(commandType))
             {
-                // Remove listeners as the final step to prevent array modification exceptions
-                var catchingListenersToRemove = new List<Delegate>();
+                // Store as array to prevent array modification exceptions
+                var actions = listeners[commandType].ToArray();
                 
-                foreach (var action in listeners[commandType])
+                foreach (var action in actions)
                 {
                     // Check if the action is a catch listener
                     if (caughtCommands.ContainsKey(action))
@@ -72,7 +72,7 @@ namespace Managers
 
                         if (!isNotReady)
                         {
-                            catchingListenersToRemove.Add(action);
+                            RemoveCatchListener(action);
                             // Need to cast to Array<object> for it to pass in parameters properly
                             action.DynamicInvoke(caughtCommands[action].ToArray<object>());
                         }
@@ -83,8 +83,6 @@ namespace Managers
                         action.DynamicInvoke(command);
                     }
                 }
-                
-                catchingListenersToRemove.ForEach(RemoveCatchListener);
             }
         }
 

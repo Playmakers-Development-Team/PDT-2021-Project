@@ -5,6 +5,7 @@ using GridObjects;
 using StatusEffects;
 using Abilities;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -53,7 +54,7 @@ namespace Units
 
             data.Initialise();
 
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(KillUnitWithDelay, data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -62,9 +63,11 @@ namespace Units
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
         }
 
-        void Update()
+        private void Update()
         {
             if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
@@ -179,9 +182,30 @@ namespace Units
             return false;
         }
 
+        /// <summary>
+        /// Makes it easier to debug with the command debugger window.
+        /// </summary>
+        private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
+        {
+            // We have to explicitly compare types here 
+            if (killUnitCommand.Unit.GetType() == this.GetType())
+            {
+                KillUnitWithDelay();
+                // Since we're about to remove the object, stop listening to the command
+                commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            }
+        }
+
+        private async void KillUnitWithDelay()
+        {
+            playerManager.WaitForDeath = true;
+            await UniTask.Delay(playerManager.DeathDelay);
+            playerManager.WaitForDeath = false;
+            KillUnit();
+        }
+
         private void KillUnit()
         {
-            playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
             
             commandManager.ExecuteCommand(new KillingUnitCommand(this));

@@ -5,6 +5,15 @@ using UnityEngine;
 namespace Commands
 {
     /// <summary>
+    /// Execute this command when unit should killed and removed from the game.
+    /// Specifically, this command is useful for debugging from editor.
+    /// </summary>
+    public class KillUnitCommand : UnitCommand
+    {
+        public KillUnitCommand(IUnit unit) : base(unit) {}
+    }
+    
+    /// <summary>
     /// Executed when unit is to be killed and about to be removed from the game.
     /// </summary>
     public class KillingUnitCommand : UnitCommand
