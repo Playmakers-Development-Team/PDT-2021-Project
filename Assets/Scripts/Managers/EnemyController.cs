@@ -22,12 +22,6 @@ namespace Managers
         private CommandManager commandManager;
         private UnitManager unitManager;
         private GameObject enemyPrefab;
-        
-        /// <summary>
-        /// Stores the current actingunit.
-        /// </summary>
-        private EnemyUnit ActingEnemyUnit => unitManager.ActingEnemyUnit;
-        
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -46,18 +40,6 @@ namespace Managers
             
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
-            
-            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
-            {
-                if (unitManager.ActingUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
-            
-            commandManager.ListenCommand<StartTurnCommand>(cmd =>
-            {
-                if (unitManager.ActingUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
         }
 
         private void Update()

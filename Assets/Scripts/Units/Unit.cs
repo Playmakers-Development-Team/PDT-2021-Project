@@ -51,7 +51,12 @@ namespace Units
 
             data.Initialise();
 
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(delegate
+            {
+                playerManager.WaitForDeath = true;
+                
+                Invoke(nameof(KillUnit),(float) playerManager.DeathDelay / 1000);
+            }, data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -151,8 +156,6 @@ namespace Units
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
-
-        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
 
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 

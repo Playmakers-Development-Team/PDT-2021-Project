@@ -43,8 +43,6 @@ namespace Units
 
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
 
-        bool IsActing();
-
         bool IsSelected();
     }
 }
