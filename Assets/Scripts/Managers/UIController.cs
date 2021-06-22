@@ -26,7 +26,7 @@ namespace Managers
         /// <summary>
         /// Stores the current actingunit.
         /// </summary>
-        private PlayerUnit actingUnit => (PlayerUnit)unitManager.GetCurrentActingPlayerUnit;
+        private PlayerUnit actingUnit => (PlayerUnit)unitManager.ActingPlayerUnit;
 
         /// <summary>
         /// A list of ability cards showing the units current abilities
@@ -52,6 +52,10 @@ namespace Managers
 
         private bool isCastingAbility;
 
+        public bool printMoveRangeCoords = false;
+
+        private List<Vector2Int> selectedMoveRange;
+
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
@@ -60,7 +64,7 @@ namespace Managers
             uiManager = ManagerLocator.Get<UIManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
 
-            commandManager.ListenExecuteCommand<TurnQueueCreatedCommand>(cmd =>
+            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
                 timelineIsReady = true;
 
@@ -74,7 +78,7 @@ namespace Managers
 
         private void Start()
         {
-            commandManager.ListenExecuteCommand<UnitSelectedCommand>(cmd =>
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
             {
                 if (!timelineIsReady)
                     return;
@@ -83,9 +87,9 @@ namespace Managers
                 UpdateAbilityUI((PlayerUnit)actingUnit);
             });
 
-            commandManager.ListenExecuteCommand<StartTurnCommand>(cmd =>
+            commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
-                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                if (unitManager.ActingUnit is EnemyUnit)
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
@@ -144,6 +148,7 @@ namespace Managers
         {
             if (Input.GetKeyDown(KeyCode.E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             {
+                if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
                 if (actingUnit == null)
                     return;
 
@@ -183,8 +188,15 @@ namespace Managers
                 if (actingUnit == null)
                     return;
 
-                nextClickWillMove = true;
-                Debug.Log("Next click will move.");
+                if (playerManager.SelectedUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
+                {
+                    nextClickWillMove = true;
+                    Debug.Log("Next click will move.");
+
+                    UpdateMoveRange(gridManager.AllReachableTiles(
+                        playerManager.SelectedUnit.Coordinate,
+                        (int) playerManager.SelectedUnit.MovementActionPoints.Value));
+                }
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -193,6 +205,8 @@ namespace Managers
                 {
                     MoveUnit();
                     nextClickWillMove = false;
+                    selectedMoveRange.Clear();
+                    UpdateMoveRange(selectedMoveRange);
                 }
                 else
                 {
@@ -224,10 +238,39 @@ namespace Managers
             playerManager.DeselectUnit();
             Debug.Log($"Unit Deselected!");
         }
+        
+        private void UpdateMoveRange(List<Vector2Int> moveRange)
+        {
+            selectedMoveRange = moveRange;
+            //Any Grid highlighting updates should go here
+            if (printMoveRangeCoords)
+            {
+                foreach (var coord in moveRange)
+                {
+                    Debug.Log(coord);
+                }
+            }
+        }
 
         private void MoveUnit()
         {
+            if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
+            
+            // Check if tile is unoccupied
+            //This cannot be checked with move range as no occupied tile will be added to it
+            //This only needs to be kept if a different thing happens if the player selects an occupied space
+            if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
+            {
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+
+            if (!selectedMoveRange.Contains(gridPos))
+            {
+                Debug.Log("Target tile out of range.");
+                return;
+            }
             
             IUnit playerUnit = actingUnit;
 
@@ -237,8 +280,7 @@ namespace Managers
             
             var moveCommand = new MoveCommand(
                 playerUnit,
-                gridPos,
-                playerUnit.Coordinate
+                gridPos
             );
             
             commandManager.ExecuteCommand(moveCommand);

@@ -37,8 +37,8 @@ namespace Managers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
-                ClickUnit();
+            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
+                //ClickUnit();
         }
 
         #region Unit Selection
@@ -57,6 +57,7 @@ namespace Managers
                     if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
                         gridPos)
                     {
+                        // TODO: Dependency Violation - Grid system should not depend on Unit system
                         playerManager.SelectUnit(playerUnit);
                         //UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
