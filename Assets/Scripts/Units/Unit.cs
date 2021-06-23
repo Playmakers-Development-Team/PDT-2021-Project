@@ -194,11 +194,10 @@ namespace Units
         private async void KillUnit()
         {
 
+            gridManager.RemoveGridObject(this.Coordinate, this);
             await UniTask.Delay(1000);
-            
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            gridManager.RemoveGridObject(Coordinate, this); 
             ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this); //THIS DEPENDENCY ISSUE SHOULD BE FIXED IN THE REFACTOR
 
             switch (this)
@@ -214,7 +213,7 @@ namespace Units
                                    " as it is an unidentified unit");
                     break;
             }
-            
+
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
         }

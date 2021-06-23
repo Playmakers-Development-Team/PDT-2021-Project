@@ -72,6 +72,9 @@ namespace Managers
             
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
             
+            foreach(IUnit unit in ManagerLocator.Get<UnitManager>().AllUnits)
+                Debug.Log(unit);
+            
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
