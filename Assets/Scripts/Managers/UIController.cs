@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
@@ -79,15 +79,6 @@ namespace Managers
 
         private void Start()
         {
-            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
-            {
-                if (!timelineIsReady)
-                    return;
-
-                abilityIndex = 0;
-                UpdateAbilityUI((PlayerUnit)actingUnit);
-            });
-
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (unitManager.ActingUnit is EnemyUnit)
@@ -231,14 +222,12 @@ namespace Managers
                         gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
-                        Debug.Log($"Unit Selected!");
                         return;
                     }
                 }
             }
             
             playerManager.DeselectUnit();
-            Debug.Log($"Unit Deselected!");
         }
         
         private void UpdateMoveRange(List<Vector2Int> moveRange)
