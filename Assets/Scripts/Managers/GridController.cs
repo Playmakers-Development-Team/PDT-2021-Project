@@ -1,3 +1,4 @@
+using System;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -33,6 +34,10 @@ namespace Managers
             
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
+        }
+
+        private void Start()
+        {
             AddObstacles();
         }
 
