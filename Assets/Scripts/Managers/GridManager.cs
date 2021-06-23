@@ -151,11 +151,13 @@ namespace Managers
         /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
         /// <param name="range">The range from the starting tile using manhattan distance.</param>
         /// <returns>A list of the coordinates of reachable tiles.</returns>
-        public List<Vector2Int> AllReachableTiles(Vector2Int startingCoordinate, int range)
+        public List<Vector2Int> GetAllReachableTiles(Vector2Int startingCoordinate, int range)
         {
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            String allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
+            
             
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
@@ -171,19 +173,21 @@ namespace Managers
                 if (distance > range) { break;}
                 
                 // Add neighbours of node to queue
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
-                
-                reachable.Add(currentNode);
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                if (GetGridObjectsByCoordinate(currentNode).Count == 0)
+                {
+                    reachable.Add(currentNode);
+                }
                 coordinateQueue.Dequeue();
             }
 
             return reachable;
         }
         
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue)
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue, string allegiance)
         {
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
@@ -193,13 +197,28 @@ namespace Managers
                     visited.Add(node, distance + 1);
                     coordinateQueue.Enqueue(node);
                 }
+            }else if (tileDatas.ContainsKey(node) &&
+                      allegiance.Equals(tileDatas[node].GridObjects[0].tag))
+            {
+                if (!visited.ContainsKey(node) )
+                {
+                    visited.Add(node, distance + 1);
+                    coordinateQueue.Enqueue(node);
+                }
             }
         }
         
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue)
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue, string allegiance)
         {
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            {
+                if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
+                {
+                    visited.Add(node, coordinateQueue.Peek());
+                    coordinateQueue.Enqueue(node);
+                }
+            }else if (tileDatas.ContainsKey(node) && allegiance.Equals(tileDatas[node].GridObjects[0].tag))
             {
                 if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
                 {
@@ -218,19 +237,21 @@ namespace Managers
         {
             var visited = new Dictionary<Vector2Int, Vector2Int>();
             var coordinateQueue = new Queue<Vector2Int>();
+            String allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].
+                gameObject.tag;
 
             coordinateQueue.Enqueue(startingCoordinate);
             while (coordinateQueue.Count > 0)
             {
                 var currentNode = coordinateQueue.Peek();
                 VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
-                    coordinateQueue);
+                    coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
-                    coordinateQueue);
+                    coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
-                    coordinateQueue);
+                    coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
-                    coordinateQueue);
+                    coordinateQueue, allegiance);
 
                 if (visited.ContainsKey(targetCoordinate))
                     coordinateQueue.Clear();
@@ -350,7 +371,7 @@ namespace Managers
             }
             
             // Check if tile is in range
-            if (!AllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
+            if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
                 && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
