@@ -55,7 +55,7 @@ namespace Managers
                 return tileData;
             }
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            //Debug.LogWarning("WARNING: No tile was found for the provided coordinates " + coordinate);
             return null;
         }
         
@@ -65,7 +65,7 @@ namespace Managers
 
             if (tileData is null)
             {
-                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
+                //Debug.LogWarning("WARNING: No tileData was found for the provided coordinates " + coordinate);
                 return new List<GridObject>();
             }
             

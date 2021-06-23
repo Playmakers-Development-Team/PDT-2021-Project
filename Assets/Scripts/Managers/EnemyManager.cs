@@ -73,19 +73,31 @@ namespace Managers
             
             if (adjacentPlayerUnit != null)
             {
-                // TODO: Will later need to be turned into an ability command when enemies have abilities
-                Debug.Log("ENEMY-INT: Damage player");
-                adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+                AttackUnit(actingUnit, adjacentPlayerUnit);
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
                 Debug.Log("ENEMY-INT: Move towards player");
                 MoveUnit(actingUnit);
+                
+                // If a player is now next to the enemy, attack the player
+                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
+                if (adjacentPlayerUnit != null)
+                {
+                    AttackUnit(actingUnit, adjacentPlayerUnit);
+                }
             }
             else
             {
                 Debug.Log("ENEMY-INT: Do nothing (No players)");
             }
+        }
+
+        private void AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
+        {
+            // TODO: Will later need to be turned into an ability command when enemies have abilities
+            Debug.Log("ENEMY-INT: Damage player");
+            playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
         }
 
         private void MoveUnit(EnemyUnit actingUnit)
@@ -240,9 +252,14 @@ namespace Managers
 
             for (int i = adjacentCoordinates.Count - 1; i > -1; i--)
             {
-                if (gridManager.GetGridObjectsByCoordinate(adjacentCoordinates[i]).Count > 0)
+                // Remove target coordinate is out of bounds
+                if (gridManager.GetTileDataByCoordinate(adjacentCoordinates[i]) == null)
                 {
-                    //Debug.Log("Removing coord as it's not free " + adjacentCoordinates[i]);
+                    adjacentCoordinates.RemoveAt(i);
+                }
+                // Remove if target coordinate is occupied
+                else if (gridManager.GetGridObjectsByCoordinate(adjacentCoordinates[i]).Count > 0)
+                {
                     adjacentCoordinates.RemoveAt(i);
                 }
             }
