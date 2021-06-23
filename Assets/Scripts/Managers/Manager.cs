@@ -1,6 +1,6 @@
 namespace Managers
 {
-    public abstract class Manager : IManager
+    public abstract class Manager
     {
         public virtual void ManagerStart() {}
     }

@@ -1,60 +1,30 @@
-using System;
-using System.Collections.Generic;
-using Commands.Shapes;
-using GridObjects;
-using Managers;
+using Abilities;
 using Units;
+using UnityEngine;
 
 namespace Commands
 {
-    public class AbilityCommand : Command
+    public class AbilityCommand : HistoricalCommand
     {
-        private Shape shape;
-        private int damage;
-        private int knockback;
-
-        private GridManager gridManager;
-
-        public AbilityCommand(IUnit unit, Shape shape, int damage, int knockback) : base(unit)
+        private readonly Ability ability;
+        public Vector2 TargetVector { get; }
+        public Vector2Int OriginCoordinate { get; }
+        
+        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
-            this.shape = shape;
-            this.damage = damage;
-            this.knockback = knockback;
-
-            gridManager = ManagerLocator.Get<GridManager>();
+            this.ability = ability;
+            this.TargetVector = targetVector;
+            this.OriginCoordinate = unit.Coordinate;
         }
-
-        public override void Queue() {}
 
         public override void Execute()
         {
-            ForEachTarget(gridObject =>
-            {
-                gridObject.TakeDamage((int) unit.DealDamageModifier.Modify(damage));
-                gridObject.TakeKnockback(knockback);
-            });
+            ability.Use(Unit, OriginCoordinate, TargetVector);
         }
 
         public override void Undo()
         {
-            ForEachTarget(gridObject =>
-            {
-                gridObject.TakeDamage((int) unit.DealDamageModifier.Modify(damage) * -1);
-                gridObject.TakeKnockback(knockback * -1);
-            });
-        }
-
-        private void ForEachTarget(Action<GridObject> action)
-        {
-            foreach (var cell in shape.Cells)
-            {
-                List<GridObject> gridObjects = gridManager.GetGridObjectsByCoordinate(cell);
-
-                foreach (var gridObject in gridObjects)
-                {
-                    action(gridObject);
-                }
-            }
+            ability.Undo(Unit, OriginCoordinate, TargetVector);
         }
     }
 }

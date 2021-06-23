@@ -1,8 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
 using StatusEffects;
+using Abilities;
+using Managers;
+using TMPro;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,38 +15,68 @@ namespace Units
     {
         [SerializeField] protected T data;
         
+        public TenetType Tenet => data.tenet;
+        public ValueStat MovementActionPoints => data.movementActionPoints;
+        public ValueStat Speed => data.speed;
+        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public List<Ability> Abilities => data.abilities;
+
         public static Type DataType => typeof(T);
 
-        public ModifierStat DealDamageModifier { get; protected set; }
-        public ValueStat Speed { get; protected set; }
-        
+        public Type GetDataType() => DataType;
+
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
-        public IEnumerable<TenetStatusEffect> TenetStatusEffects => tenetStatusEffectSlots.AsEnumerable();
-        
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots = new LinkedList<TenetStatusEffect>();
+        public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
+            tenetStatusEffectSlots.AsEnumerable();
+
+        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
+            new LinkedList<TenetStatusEffect>();
+
         private const int maxTenetStatusEffectCount = 2;
-        
+
+        public Health Health { get; private set; }
+        public Knockback Knockback { get; private set; }
+
+        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        [SerializeField] private float damageTextLifetime = 1.0f;
+
+        private TurnManager turnManager;
+        private PlayerManager playerManager;
+        private GridManager gridManager;
+
         protected override void Start()
         {
             base.Start();
-            
+
             data.Initialise();
 
-            HealthPoints = data.healthPoints;
-            MovementActionPoints = data.movementActionPoints;
-            Speed = data.speed;
-            DealDamageModifier = data.dealDamageModifier;
-            TakeDamageModifier = data.takeDamageModifier;
-            TakeKnockbackModifier = data.takeKnockbackModifier;
-            
-            // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10,50);
+            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
 
-            DealDamageModifier.Reset();
-            TakeDamageModifier.Reset();
-            TakeKnockbackModifier.Reset();
+            // TODO Are speeds are random or defined in UnitData?
+            Speed.Value += Random.Range(10, 50);
+
+            turnManager = ManagerLocator.Get<TurnManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
+            gridManager = ManagerLocator.Get<GridManager>();
         }
+
+        void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        }
+        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
+
+        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+        
+        public void TakeDamage(int amount)
+        {
+            int damageTaken = Health.TakeDamage(amount);
+            
+            SpawnDamageText(damageTaken);
+        }
+
+        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
 
         public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
         {
@@ -51,9 +84,10 @@ namespace Units
 
             if (statusEffect.IsEmpty)
                 return;
-            
+
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusEffectNode(statusEffect.TenetType, out LinkedListNode<TenetStatusEffect> foundNode))
+            if (TryGetTenetStatusEffectNode(statusEffect.TenetType,
+                out LinkedListNode<TenetStatusEffect> foundNode))
             {
                 foundNode.Value += statusEffect;
             }
@@ -65,7 +99,7 @@ namespace Units
                     // Remove the oldest status effect to make space for the new status effect
                     tenetStatusEffectSlots.RemoveFirst();
                 }
-                
+
                 tenetStatusEffectSlots.AddLast(statusEffect);
             }
         }
@@ -79,12 +113,12 @@ namespace Units
                 if (node.Value.TenetType == tenetType)
                 {
                     node.Value -= amount;
-                    
+
                     if (node.Value.IsEmpty)
                         tenetStatusEffectSlots.Remove(node);
                     return true;
                 }
-                
+
                 node = node.Next;
             }
 
@@ -96,11 +130,20 @@ namespace Units
             tenetStatusEffectSlots.Clear();
         }
 
-        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect)
+        public bool TryGetTenetStatusEffect(TenetType tenetType,
+                                            out TenetStatusEffect tenetStatusEffect)
         {
-            bool isFound = TryGetTenetStatusEffectNode(tenetType, out LinkedListNode<TenetStatusEffect> foundNode);
+            bool isFound = TryGetTenetStatusEffectNode(tenetType,
+                out LinkedListNode<TenetStatusEffect> foundNode);
             tenetStatusEffect = isFound ? foundNode.Value : default;
             return isFound;
+        }
+
+        public int GetTenetStatusEffectCount(TenetType tenetType)
+        {
+            return HasTenetStatusEffect(tenetType)
+                ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
+                : 0;
         }
 
         public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
@@ -108,6 +151,10 @@ namespace Units
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
+
+        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
+
+        public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
                                                  out LinkedListNode<TenetStatusEffect> foundNode)
@@ -127,6 +174,48 @@ namespace Units
 
             foundNode = null;
             return false;
+        }
+
+        private void KillUnit()
+        {
+            playerManager.WaitForDeath = false;
+            Debug.Log($"This unit was cringe and died");
+            
+            gridManager.RemoveGridObject(Coordinate, this);
+
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+
+            switch (this)
+            {
+                case PlayerUnit _:
+                    ManagerLocator.Get<PlayerManager>().RemoveUnit(this);
+                    break;
+                case EnemyUnit _:
+                    ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
+                    break;
+                default:
+                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                                   " as it is an unidentified unit");
+                    break;
+            }
+            
+            // "Delete" the gridObject (setting it to inactive just in case we still need it)
+            gameObject.SetActive(false);
+        }
+
+        private void SpawnDamageText(int damageAmount)
+        {
+            damageTextCanvas.enabled = true;
+
+            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
+                damageAmount.ToString();
+
+            Invoke("HideDamageText", damageTextLifetime);
+        }
+
+        private void HideDamageText()
+        {
+            damageTextCanvas.enabled = false;
         }
     }
 }

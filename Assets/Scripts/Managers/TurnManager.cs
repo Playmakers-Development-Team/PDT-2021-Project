@@ -10,14 +10,24 @@ namespace Managers
     public class TurnManager : Manager
     {
         /// <summary>
-        /// An event that triggers when a round has ended
+        /// An event that triggers when a round has ended.
         /// </summary>
         public event Action<TurnManager> onTurnEnd;
 
         /// <summary>
-        /// An event that triggers when a round has started
+        /// An event that triggers when a round has started.
         /// </summary>
-        public event Action<TurnManager> onRoundStart; 
+        public event Action<TurnManager> onRoundStart;
+
+        /// <summary>
+        /// An event that triggers when a unit has died.
+        /// </summary>
+        public event Action<TurnManager> onUnitDeath;
+
+        /// <summary>
+        /// An event that triggers when a new unit has spawned.
+        /// </summary>
+        public event Action<TurnManager> newUnitAdded;
         
         /// <summary>
         /// Gives how many turns have passed throughout the entire level.
@@ -34,18 +44,20 @@ namespace Managers
         /// </summary>
         public int CurrentTurnIndex { get; private set; }
 
-        [Obsolete("Use CurrentTurnIndex")]
-        public int TurnIndex => CurrentTurnIndex;
-
         /// <summary>
         /// The unit that is currently taking its turn.
         /// </summary>
         public IUnit CurrentUnit => currentTurnQueue[CurrentTurnIndex];
 
         /// <summary>
-        ///  The unit that took its turn before the current unit.
+        /// The unit that took its turn before the current unit.
         /// </summary>
         public IUnit PreviousUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
+
+        /// <summary>
+        /// The unit that most recently died.
+        /// </summary>
+        public IUnit RecentUnitDeath { get; private set; }
 
         /// <summary>
         /// The order in which units will take their turns for the current round.
@@ -69,14 +81,20 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
-        
+
+        /// <summary>
+        /// Checks if the next turn timeline needs to be updated due to a change in the current
+        /// timeline.
+        /// </summary>
+        private bool timelineNeedsUpdating = false;
+
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
 
-            commandManager.ListenExecuteCommand<EndTurnCommand>((cmd) => NextTurn());
+            commandManager.ListenCommand<EndTurnCommand>((cmd) => NextTurn());
         }
 
         // TODO Call this function when level is loaded
@@ -92,6 +110,7 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
+            commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
 
         /// <summary>
@@ -143,23 +162,37 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void RemoveUnitFromQueue(int targetIndex)
         {
+            // Debug.Log("Target Index: " + targetIndex);
+            
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
-
-            bool removingCurrentUnit = targetIndex == CurrentTurnIndex;
+            
+            //bool removingCurrentUnit = targetIndex == CurrentTurnIndex; redundant
             
             // If we're removing something, the list becomes smaller and therefore we need to 
             // decrement the CurrentTurnIndex to point to the same unit.
             // If the unit removed is the current unit, then we want to decrement it so we can
-            // call NextTurn() later.
-            if (CurrentTurnIndex <= targetIndex)
-                CurrentTurnIndex--;
-            
+            // call NextTurn() later. [I have made this redundant as the index not moving inheritenly changes the next turn (However there should be checks for endgameconditions)]
+            //or if units interact with next turns
+            //Set an additional condition to make sure that there is a previous unit
+            if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
+            {
+                if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
+                    CurrentTurnIndex--;
+                
+                else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
+                    CurrentTurnIndex--;
+            }
+
+            RecentUnitDeath = currentTurnQueue[targetIndex];
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
+            timelineNeedsUpdating = true;
             
-            if (removingCurrentUnit)
-                NextTurn();
+            // Reselects the new current unit if the old current unit has died
+            SelectCurrentUnit();
+
+            onUnitDeath?.Invoke(this);
         }
 
         // TODO Test
@@ -214,8 +247,10 @@ namespace Managers
         private List<IUnit> CreateTurnQueue()
         {
             List<IUnit> turnQueue = new List<IUnit>();
+
+            turnQueue.AddRange(unitManager.AllUnits);
             
-            turnQueue.AddRange(unitManager.GetAllUnits());
+            Debug.Log(turnQueue);
             
             turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
 
@@ -229,6 +264,17 @@ namespace Managers
         {
             nextTurnQueue = CreateTurnQueue();
             // TODO might want to update UI here
+        }
+
+        /// <summary>
+        /// Adds a new unit to the timeline and setting it to the end of the current turn queue
+        /// </summary>
+        public void AddNewUnitToTimeline(IUnit unit)
+        {
+            currentTurnQueue.Add(unit);
+            nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
+            newUnitAdded?.Invoke(this);
+            timelineNeedsUpdating = true;
         }
 
         /// <summary>
@@ -265,21 +311,13 @@ namespace Managers
             TotalTurnCount++;
             
             if (CurrentTurnIndex >= currentTurnQueue.Count)
-            {
                 NextRound();
-            }
             
-            // Debug.Log(CurrentUnit.ToString());
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
             
-            if (CurrentUnit is PlayerUnit)
-            {
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
-            }
-            else
-            {
-                playerManager.DeselectUnit();
-            }
+            SelectCurrentUnit();
+
+            Debug.Log("next turn has started");
             
             onTurnEnd?.Invoke(this);
         }
@@ -292,22 +330,28 @@ namespace Managers
         {
             // TODO might want to call the next round command or something here
             RoundCount++;
-            CurrentTurnIndex = 0;
             
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
+                Debug.Log("YOU WIN!"); // added these debugs for testing timeline
                 // TODO Player wins. End the encounter somehow, probably inform the GameManager
             }
 
             if (!HasPlayerUnitInQueue())
             {
+                Debug.Log("YOU LOSE!");
+
                 // TODO Player loses. End the encounter somehow, probably inform the GameManager
             }
 
             previousTurnQueue = currentTurnQueue;
-            currentTurnQueue = nextTurnQueue;
+
+            // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
+            currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;
+            timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
+            CurrentTurnIndex = 0;
             onRoundStart?.Invoke(this);
         }
 
@@ -331,6 +375,17 @@ namespace Managers
         private bool HasPlayerUnitInQueue()
         {
             return currentTurnQueue.Any(u => u is PlayerUnit);
+        }
+
+        /// <summary>
+        /// Selects the <c>CurrentUnit</c> if it is of type <c>PlayerUnit</c>.
+        /// </summary>
+        private void SelectCurrentUnit()
+        {
+            if (CurrentUnit is PlayerUnit)
+                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+            else
+                playerManager.DeselectUnit();
         }
     }
 }

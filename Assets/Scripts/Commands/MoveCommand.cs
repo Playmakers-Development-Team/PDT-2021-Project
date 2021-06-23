@@ -1,16 +1,28 @@
 using Managers;
 using Units;
+using UnityEngine;
 
 namespace Commands
 {
-    public class MoveCommand : Command
+    public class MoveCommand : HistoricalCommand
     {
-        public MoveCommand(IUnit unit) : base(unit) {}
+        private Vector2Int targetCoords, currentCoords;
+        private GridManager gridManager;
+        
+        public MoveCommand(IUnit unit, Vector2Int target) : base(unit)
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+            targetCoords = target;
+        }
 
-        public override void Queue() {}
+        public override void Execute()
+        {
+            gridManager.MoveUnit(targetCoords, Unit);
+        }
 
-        public override void Execute() {}
-
-        public override void Undo() {}
+        public override void Undo()
+        {
+            // TODO
+        }
     }
 }
