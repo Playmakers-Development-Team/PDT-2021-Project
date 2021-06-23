@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4846675713863118558}
   - component: {fileID: 3845936380729716074}
   m_Layer: 0
-  m_Name: yellow
+  m_Name: Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,19 +95,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c427481c3056d9e45b037e2db2c39cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data:
-    healthPoints:
-      <BaseValue>k__BackingField: 0
-    movementActionPoints:
-      <BaseValue>k__BackingField: 0
-    speed:
-      <BaseValue>k__BackingField: 0
-    dealDamageModifier:
-      <BaseMultiplier>k__BackingField: 0
-      <BaseAdder>k__BackingField: 0
-    takeDamageModifier:
-      <BaseMultiplier>k__BackingField: 0
-      <BaseAdder>k__BackingField: 0
-    takeKnockbackModifier:
-      <BaseMultiplier>k__BackingField: 0
-      <BaseAdder>k__BackingField: 0

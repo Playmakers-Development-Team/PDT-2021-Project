@@ -1,5 +1,8 @@
 using System;
+using Commands;
+using GridObjects;
 using Units;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -32,19 +35,15 @@ namespace Managers
             bounds = gridManager.LevelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
             
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
+                (cmd1, cmd2) =>
+                {
+                    AddObstacles();
+                });
+           
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
-        }
-
-        private void Start()
-        {
-            AddObstacles();
-        }
-
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
-                //ClickUnit();
         }
 
         #region Unit Selection
@@ -73,7 +72,6 @@ namespace Managers
             }
 
             playerManager.DeselectUnit();
-            // ClearAbilityUI();
         }
 
         #endregion
@@ -127,11 +125,11 @@ namespace Managers
         {
             GameObject obstaclePrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/Obstacle", typeof(GameObject));
-            for(int counter = 0; counter < 3; counter++)
+            for(int counter = 0; counter < 5; counter++)
             {
-                //Vector2Int coord = gridManager.GetRandomUnoccupiedCoordinates();
-                //gridManager.AddGridObject(gridManager.GetRandomUnoccupiedCoordinates(),)
-                UnitUtility.Spawn(obstaclePrefab, gridManager.GetRandomUnoccupiedCoordinates());
+                var coord = gridManager.GetRandomUnoccupiedCoordinates();
+                var go = Instantiate(obstaclePrefab, gridManager.ConvertCoordinateToPosition(coord), Quaternion.identity);
+                gridManager.AddGridObject(coord, go.GetComponent<GridObject>());
             }
         }
     }
