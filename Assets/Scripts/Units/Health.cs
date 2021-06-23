@@ -1,4 +1,3 @@
-using System;
 using Commands;
 using GridObjects;
 using Managers;
@@ -37,8 +36,7 @@ namespace Units
         {
             if (HealthPoints.Value <= 0)
             {
-                CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-                commandManager.ExecuteCommand(unitDeathCommand);
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
             }
         }
     }

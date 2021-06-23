@@ -220,15 +220,15 @@ namespace Units
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
         }
-
+        
         private void SpawnDamageText(int damageAmount)
         {
-            // damageTextCanvas.enabled = true;
-            //
-            // damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-            //     damageAmount.ToString();
-            //
-            // Invoke("HideDamageText", damageTextLifetime);
+            damageTextCanvas.enabled = true;
+            
+            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
+                damageAmount.ToString();
+            
+            Invoke("HideDamageText", damageTextLifetime);
         }
 
         private void HideDamageText()
