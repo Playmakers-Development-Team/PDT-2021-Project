@@ -6,7 +6,6 @@ namespace Managers
 {
     public class PlayerManager : UnitManager
     {
-        
         public IUnit SelectedUnit { get; private set; }
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
@@ -16,7 +15,7 @@ namespace Managers
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public bool WaitForDeath { get; set; }
         
-        public int DeathDelay {get;} = 1000; 
+        public int DeathDelay { get; } = 1000;
         public int Count => playerUnits.Count;
 
         /// <summary>
