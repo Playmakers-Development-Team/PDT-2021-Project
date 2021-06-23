@@ -343,6 +343,10 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
+
+            foreach (IUnit unit in unitManager.AllUnits)
+                unit.MovementActionPoints.Reset();
+            
             onRoundStart?.Invoke(this);
         }
 

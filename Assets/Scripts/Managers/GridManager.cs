@@ -322,7 +322,7 @@ namespace Managers
                 return true;
             }
             
-            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
+                Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
                       ". Tile does not contain gridObject");
         
             return false;
@@ -377,6 +377,7 @@ namespace Managers
                 currentCoordinate = movePath[i];
             }
 
+            MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
@@ -398,7 +399,6 @@ namespace Managers
                 unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
                 flag += Time.deltaTime;
                 await UniTask.Yield();
-
             }
         }
 

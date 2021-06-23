@@ -60,10 +60,7 @@ namespace UI
             }
         }
 
-        public void DeselectUnit()
-        {
-            gameObject.SetActive(false);
-        }
+        public void DeselectUnit() => gameObject.SetActive(false);
         
         public void UpdateUnitUI()
         {

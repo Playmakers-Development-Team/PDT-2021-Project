@@ -22,7 +22,7 @@ namespace Units
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
-        public Vector2Int Coordinate { get; set; }
+        //public Vector2Int Coordinate { get => ((GridObject)this).Coordinate; set; }
 
         public static Type DataType => typeof(T);
 
@@ -192,8 +192,8 @@ namespace Units
         }
 
         private async void KillUnit()
-        {
-
+        {   
+            Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
             gridManager.RemoveGridObject(this.Coordinate, this);
             await UniTask.Delay(1000);
             playerManager.WaitForDeath = false;
