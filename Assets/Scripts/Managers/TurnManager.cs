@@ -247,10 +247,8 @@ namespace Managers
         private List<IUnit> CreateTurnQueue()
         {
             List<IUnit> turnQueue = new List<IUnit>();
-
-            turnQueue.AddRange(unitManager.AllUnits);
             
-            Debug.Log(turnQueue);
+            turnQueue.AddRange(unitManager.GetAllUnits());
             
             turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
 

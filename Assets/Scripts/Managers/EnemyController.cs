@@ -26,7 +26,7 @@ namespace Managers
         /// <summary>
         /// Stores the current actingunit.
         /// </summary>
-        private EnemyUnit ActingEnemyUnit => unitManager.ActingEnemyUnit;
+        private EnemyUnit ActingEnemyUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
         
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
@@ -44,18 +44,17 @@ namespace Managers
             enemyPrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
-            // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
             
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
-                if (unitManager.ActingUnit is EnemyUnit)
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
                     enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             });
             
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
-                if (unitManager.ActingUnit is EnemyUnit)
+                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
                     enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             });
         }
@@ -67,8 +66,10 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.EnemyUnits.Count < totalEnemies)
+                if (enemyManager.Count < totalEnemies)
+                {
                     SpawnEnemy();
+                }
                 else
                 {
                     isSpawningEnemies = false;
@@ -93,26 +94,20 @@ namespace Managers
         private void SpawnEnemy()
         {
             enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            
-            // // TODO: Remove this later, currently used to test enemy attacks
-            // if (enemyManager.EnemyUnits.Count  == 0)
-            //     SpawnAdjacentToPlayer();
-            // else
-            //     enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
-        
         
         private void SpawnAdjacentToPlayer()
         {
             enemyManager.Spawn(enemyPrefab, Vector2Int.left);
             enemyManager.Spawn(enemyPrefab, Vector2Int.right);
         }
-
+        
         private void DebugKillEnemyFunction()
         {
-            if (enemyManager.EnemyUnits.Count > 0)
+            if (enemyManager.Count > 0)
+            {
                 enemyManager.EnemyUnits[0].TakeDamage(1);
-            
+            }
             debugKillEnemyButton = false;
         }
         

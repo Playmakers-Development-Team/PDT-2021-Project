@@ -1,134 +1,117 @@
 using System;
 using System.Collections.Generic;
-using Commands;
-using JetBrains.Annotations;
 using Units;
-using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
+using UnityEditorInternal.Profiling.Memory.Experimental;
+using UnityEngine.Assertions.Must;
 
 namespace Managers
 {
     public class UnitManager : Manager
     {
-        private EnemyManager enemyManager;
         private PlayerManager playerManager;
+        private EnemyManager enemyManager;
+        private UnitManager unitManager;
+        
+        /// <summary>
+        /// Get the current "ACTING" player unit
+        /// </summary>
+        public IUnit GetCurrentActingPlayerUnit => GetActivePlayerUnit();
 
         /// <summary>
-        /// All the units currently in the level.
+        /// Get the current "ACTING" enemy unit
         /// </summary>
-        public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
+        public IUnit GetCurrentActiveEnemyUnit => GetActiveEnemyUnit();
 
         /// <summary>
-        /// The unit whose turn it currently is. Is null if no
-        /// unit is acting.
+        /// Get the current "ACTING" unit
         /// </summary>
-        public IUnit ActingUnit => GetActingUnit();
+        public IUnit GetCurrentActiveUnit => GetActiveUnit();
 
-        /// <summary>
-        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
-        /// <c>PlayerUnit</c> is acting.
-        /// </summary>
-        public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
-
-        /// <summary>
-        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
-        /// <c>EnemyUnit</c> is acting.
-        /// </summary>
-        public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
-
-        /// <summary>
-        /// Initialises the <c>UnitManager</c>.
-        /// </summary>
         public override void ManagerStart()
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
         }
 
         /// <summary>
-        /// Returns all the units currently in the level.
+        /// Get all the current player units in the game.
         /// </summary>
-        private List<IUnit> GetAllUnits()
+        public List<IUnit> GetAllPlayerUnits()
+        {
+            List<IUnit> playerUnits = new List<IUnit>();
+            playerUnits.AddRange(playerManager.PlayerUnits);
+            return playerUnits;
+        }
+
+        /// <summary>
+        /// Get all the current enemy units in the game.
+        /// </summary>
+        public List<IUnit> GetAllEnemyUnits()
+        {
+            List<IUnit> enemyUnits = new List<IUnit>();
+            enemyUnits.AddRange(enemyManager.EnemyUnits);
+            return enemyUnits;
+        }
+
+        /// <summary>
+        /// Get all the units in the game.
+        /// </summary>
+        public List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-            allUnits.AddRange(enemyManager.EnemyUnits);
-            allUnits.AddRange(playerManager.PlayerUnits);
+            allUnits.AddRange(GetAllPlayerUnits());
+            allUnits.AddRange(GetAllEnemyUnits());
             return allUnits;
         }
 
+    
+        
         /// <summary>
-        /// Returns the unit whose turn it currently is. Returns null if no
-        /// unit is acting. 
+        /// Get all the current active unit
         /// </summary>
-        private IUnit GetActingUnit()
+        private IUnit GetActiveUnit()
         {
-            foreach (IUnit unit in AllUnits)
+            foreach (IUnit unit in unitManager.GetAllUnits())
             {
                 if (unit.IsActing())
                     return unit;
             }
 
-            Debug.LogWarning("No unit is currently acting.");
-            return null;
+            return null; 
         }
-
+        
         /// <summary>
-        /// Returns the <c>PlayerUnit</c> whose turn it currently is. Returns null if no
-        /// <c>PlayerUnit</c> is acting. 
+        /// Get the current player active unit
         /// </summary>
-        private PlayerUnit GetActingPlayerUnit()
+        private PlayerUnit GetActivePlayerUnit()
         {
-            foreach (PlayerUnit unit in playerManager.PlayerUnits)
+            foreach (PlayerUnit unit in unitManager.GetAllPlayerUnits())
             {
                 if (unit.IsActing())
                     return unit;
+
             }
-
-            return null;
+            return null; 
         }
-
+        
+        
         /// <summary>
-        /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
-        /// <c>EnemyUnit</c> is acting. 
+        /// Get the current active enemy unit
         /// </summary>
-        private EnemyUnit GetActingEnemyUnit()
+        private EnemyUnit GetActiveEnemyUnit()
         {
-            foreach (EnemyUnit unit in enemyManager.EnemyUnits)
+            foreach (EnemyUnit unit in unitManager.GetAllEnemyUnits())
             {
                 if (unit.IsActing())
                     return unit;
+
             }
-
-            return null;
+            return null; 
         }
-
-        /// <summary>
-        /// Removes a unit from the current timeline.
-        /// </summary>
-        /// <param name="targetUnit"></param>
-        public virtual void RemoveUnit(IUnit targetUnit) =>
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(targetUnit);
-
-        /// <summary>
-        /// Spawns a unit.
-        /// </summary>
-        /// <param name="targetUnit"></param>
-        public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
-        {
-            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            return unit;
-        }
-
-        /// <summary>
-        /// Spawns a unit.
-        /// </summary>
-        /// <param name="targetUnit"></param>
-        public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
-        {
-            IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            return unit;
-        }
+        
+        
+        
+        
     }
 }
