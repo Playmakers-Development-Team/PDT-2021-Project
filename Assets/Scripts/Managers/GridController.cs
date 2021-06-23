@@ -121,7 +121,7 @@ namespace Managers
         public void AddObstacles()
         {
             GameObject obstaclePrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/ObstacleTemp", typeof(GameObject));
+                (GameObject) Resources.Load("Prefabs/GridObjects/Obstacle", typeof(GameObject));
             for(int counter = 0; counter < 3; counter++)
             {
                 //Vector2Int coord = gridManager.GetRandomUnoccupiedCoordinates();
