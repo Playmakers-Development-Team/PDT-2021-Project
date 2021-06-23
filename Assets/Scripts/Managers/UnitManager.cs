@@ -19,13 +19,13 @@ namespace Managers
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
         
         /// <summary>
-        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
+        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if none
         /// <c>PlayerUnit</c> is acting.
         /// </summary>
         public IUnit ActingUnit => GetActingUnit();
         
         /// <summary>
-        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
+        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if none
         /// <c>EnemyUnit</c> is acting.
         /// </summary>
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();

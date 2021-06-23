@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -6,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
 using Cysharp.Threading.Tasks;
+using Microsoft.Unity.VisualStudio.Editor;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -238,6 +240,11 @@ namespace Managers
                     coordinateQueue.Dequeue();
             }
 
+            foreach (KeyValuePair<Vector2Int,Vector2Int> node in visited)
+            {
+                Debug.Log($"NodeStuff {node}");
+            }
+            
             var path = new List<Vector2Int>();
             var currentNode2 = targetCoordinate;
             while (true)
@@ -248,6 +255,8 @@ namespace Managers
                 else
                     break;
             }
+
+         
 
             path.Reverse();
             return path;
@@ -289,9 +298,9 @@ namespace Managers
                                      " due to tile being occupied by " + tileData.GridObjects[0]);
                     return false;
                 }
-
-                Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
+                
                 tileData.AddGridObjects(gridObject);
+                Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
                 return true;
             }
             
@@ -313,7 +322,7 @@ namespace Managers
                 return true;
             }
             
-            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
+                Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
                       ". Tile does not contain gridObject");
         
             return false;
@@ -329,11 +338,12 @@ namespace Managers
             }
         }
         
-        public void MoveUnit(Vector2Int newCoordinate, IUnit unit)
+        public async void MoveUnit(Vector2Int newCoordinate, IUnit unit)
         {
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
-            Vector2Int currentCoordinate = unit.Coordinate;
+            Vector2Int startingCoordinate = ((GridObject)unit).Coordinate;
+            Vector2Int currentCoordinate = startingCoordinate;
             
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
@@ -348,22 +358,37 @@ namespace Managers
                 && unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" + ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+
                 Debug.Log("Target tile out of range.");
                 return;
             }
             
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
-            
-            MovementTween(
-                unit.gameObject,
-                ConvertCoordinateToPosition(currentCoordinate),
-                ConvertCoordinateToPosition(newCoordinate),
-                1f // TODO: Expose this parameter
-            );
+
+            for (int i = 1; i < movePath.Count; i++)
+            {
+                Debug.Log(movePath[i]);
+                
+                await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
+                    ConvertCoordinateToPosition(movePath[i]), 1f);
+                unit.gameObject.transform.position = ConvertCoordinateToPosition(movePath[i]);
+                currentCoordinate = movePath[i];
+            }
+
+            MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+            unit.MovementActionPoints.Value -= Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+
+              Debug.Log(Mathf.Max(0,
+                  ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+                    
         }
 
-        private async void MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, float duration)
+        private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
+        float 
+        duration)
         {
             float flag = 0f;
             
@@ -372,10 +397,8 @@ namespace Managers
             while (flag < duration)
             {
                 unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
-                
-                await UniTask.Yield(PlayerLoopTiming.Update);
-                
                 flag += Time.deltaTime;
+                await UniTask.Yield();
             }
         }
 
@@ -386,7 +409,7 @@ namespace Managers
         /// <param name="unit">The unit to teleport.</param>
         private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
-            Vector2Int startCoordinate = unit.Coordinate;
+            Vector2Int startCoordinate = ((GridObject)unit).Coordinate;
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);

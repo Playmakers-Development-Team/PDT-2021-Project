@@ -60,7 +60,9 @@ namespace Managers
 
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(((GridObject)
+                enemyUnit).Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -86,6 +88,9 @@ namespace Managers
         {
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
             
+            foreach(IUnit unit in ManagerLocator.Get<UnitManager>().AllUnits)
+                Debug.Log(unit);
+            
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
@@ -105,6 +110,7 @@ namespace Managers
             else
             {
                 Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                return;
             }
             
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
@@ -119,7 +125,8 @@ namespace Managers
 
             var moveCommand = new MoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
+                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
+                actingUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
@@ -217,8 +224,10 @@ namespace Managers
 
             foreach (var playerUnit in playerManager.PlayerUnits)
             {
-                int xDistance = Mathf.Abs(playerUnit.Coordinate.x - enemyUnit.Coordinate.x);
-                int yDistance = Mathf.Abs(playerUnit.Coordinate.y - enemyUnit.Coordinate.y);
+                int xDistance = Mathf.Abs(((GridObject)playerUnit).Coordinate.x - ((GridObject)
+                enemyUnit).Coordinate.x);
+                int yDistance = Mathf.Abs(((GridObject)playerUnit).Coordinate.y - ((GridObject)
+                enemyUnit).Coordinate.y);
 
                 // If a new closest unit is found, assign a new closest unit
                 if (closestPlayerUnitDistance > xDistance + yDistance)
@@ -249,17 +258,17 @@ namespace Managers
         {
             Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();
             
-            Vector2Int northCoordinate = targetUnit.Coordinate + Vector2Int.up;
-            Vector2Int eastCoordinate = targetUnit.Coordinate + Vector2Int.right;
-            Vector2Int southCoordinate = targetUnit.Coordinate + Vector2Int.down;
-            Vector2Int westCoordinate = targetUnit.Coordinate + Vector2Int.left;
+            Vector2Int northCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.up;
+            Vector2Int eastCoordinate =((GridObject)targetUnit).Coordinate + Vector2Int.right;
+            Vector2Int southCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.down;
+            Vector2Int westCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.left;
             
             coordinateDistances.Add(northCoordinate, Vector2.Distance(northCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(eastCoordinate, Vector2.Distance(eastCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(southCoordinate, Vector2.Distance(southCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(westCoordinate, Vector2.Distance(westCoordinate, actingUnit.Coordinate));
 
-            Vector2Int closestCoordinate = targetUnit.Coordinate;
+            Vector2Int closestCoordinate = ((GridObject)targetUnit).Coordinate;
             float closestDistance = float.MaxValue; // Placeholder initialisation value
             
 

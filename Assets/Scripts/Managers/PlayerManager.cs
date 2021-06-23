@@ -28,7 +28,7 @@ namespace Managers
         /// Removes a target <c>IUnit</c> from <c>playerUnits</c>.
         /// </summary>
         /// <param name="targetUnit"></param>
-        public void RemoveUnit(IUnit targetUnit) =>playerUnits.Remove(targetUnit);
+        public void RemoveUnit(IUnit targetUnit) => playerUnits.Remove(targetUnit);
         
 
         /// <summary>
