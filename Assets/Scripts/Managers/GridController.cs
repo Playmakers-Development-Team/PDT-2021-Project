@@ -35,13 +35,13 @@ namespace Managers
             bounds = gridManager.LevelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
             
-            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
-                (cmd1, cmd2) =>
-                {
-                    AddObstacles();
-                });
-           
+            // CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            // commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
+            //     (cmd1, cmd2) =>
+            //     {
+            //         AddObstacles();
+            //     });
+            
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
