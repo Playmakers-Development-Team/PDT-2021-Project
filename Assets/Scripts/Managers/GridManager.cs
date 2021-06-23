@@ -158,7 +158,6 @@ namespace Managers
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
             String allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
             
-            
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
             int distance = 0;
@@ -167,8 +166,6 @@ namespace Managers
             // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
-                
-               
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
                 
@@ -179,10 +176,10 @@ namespace Managers
                 VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                
                 if (GetGridObjectsByCoordinate(currentNode).Count == 0)
-                {
                     reachable.Add(currentNode);
-                }
+                
                 coordinateQueue.Dequeue();
             }
 
@@ -191,45 +188,45 @@ namespace Managers
         
         private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue, string allegiance)
         {
-            // If grid node exists add to queue and mark distance taken to arrive at it
-            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            // Check grid node exists
+            if (tileDatas.ContainsKey(node))
             {
-                if (!visited.ContainsKey(node) )
+                // Check node is empty or matches allegiance
+                if (tileDatas[node].GridObjects.Count == 0 ||
+                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
                 {
-                    visited.Add(node, distance + 1);
-                    coordinateQueue.Enqueue(node);
-                }
-            }else if (tileDatas.ContainsKey(node) &&
-                      allegiance.Equals(tileDatas[node].GridObjects[0].tag))
-            {
-                if (!visited.ContainsKey(node) )
-                {
-                    visited.Add(node, distance + 1);
-                    coordinateQueue.Enqueue(node);
+                    // Check node has not already been visited
+                    if (!visited.ContainsKey(node))
+                    {
+                        // Add node to queue and store the distance taken to arrive at it
+                        visited.Add(node, distance + 1);
+                        coordinateQueue.Enqueue(node);
+                    }
                 }
             }
         }
-        
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited, Queue<Vector2Int> coordinateQueue, string allegiance)
+
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
+                               Queue<Vector2Int> coordinateQueue, string allegiance)
         {
-            // If grid node exists add to queue and mark distance taken to arrive at it
-            if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
+            // Check grid node exists
+            if (tileDatas.ContainsKey(node))
             {
-                if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
+                // Check node is empty or matches allegiance
+                if (tileDatas[node].GridObjects.Count == 0 ||
+                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
                 {
-                    visited.Add(node, coordinateQueue.Peek());
-                    coordinateQueue.Enqueue(node);
-                }
-            }else if (tileDatas.ContainsKey(node) && allegiance.Equals(tileDatas[node].GridObjects[0].tag))
-            {
-                if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
-                {
-                    visited.Add(node, coordinateQueue.Peek());
-                    coordinateQueue.Enqueue(node);
+                    // Check node has not already been visited
+                    if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
+                    {
+                        // Add node to queue and store the previous node
+                        visited.Add(node, coordinateQueue.Peek());
+                        coordinateQueue.Enqueue(node);
+                    }
                 }
             }
         }
-        
+
         /// <summary>
         /// Returns a list of the path from one node to another
         /// Assumes target is reachable.
@@ -246,6 +243,7 @@ namespace Managers
             while (coordinateQueue.Count > 0)
             {
                 var currentNode = coordinateQueue.Peek();
+                
                 VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
@@ -276,8 +274,6 @@ namespace Managers
                 else
                     break;
             }
-
-         
 
             path.Reverse();
             return path;
@@ -343,8 +339,8 @@ namespace Managers
                 return true;
             }
             
-                Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
-                      ". Tile does not contain gridObject");
+            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
+                  ". Tile does not contain gridObject");
         
             return false;
         }
