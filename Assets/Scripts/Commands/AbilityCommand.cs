@@ -1,4 +1,5 @@
 using Abilities;
+using GridObjects;
 using Units;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Commands
         {
             this.ability = ability;
             this.TargetVector = targetVector;
-            this.OriginCoordinate = unit.Coordinate;
+            this.OriginCoordinate = ((GridObject)unit).Coordinate;
         }
 
         public override void Execute()

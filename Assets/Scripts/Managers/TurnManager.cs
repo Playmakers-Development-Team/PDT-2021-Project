@@ -149,10 +149,8 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
-        public void RemoveUnitFromQueue(IUnit unit)
-        {
-            RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
-        }
+        public void RemoveUnitFromQueue(IUnit unit) => RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
+        
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
@@ -167,23 +165,10 @@ namespace Managers
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
             
-            //bool removingCurrentUnit = targetIndex == CurrentTurnIndex; redundant
-            
-            // If we're removing something, the list becomes smaller and therefore we need to 
-            // decrement the CurrentTurnIndex to point to the same unit.
-            // If the unit removed is the current unit, then we want to decrement it so we can
-            // call NextTurn() later. [I have made this redundant as the index not moving inheritenly changes the next turn (However there should be checks for endgameconditions)]
-            //or if units interact with next turns
-            //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
-
+                // Decrement the CurrentTurnIndex to continue pointing to the same unit
                 CurrentTurnIndex--;
-                // if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
-                //     CurrentTurnIndex--;
-                //
-                // else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
-                //     CurrentTurnIndex--;
             }
 
             RecentUnitDeath = currentTurnQueue[targetIndex];
@@ -249,13 +234,9 @@ namespace Managers
         private List<IUnit> CreateTurnQueue()
         {
             List<IUnit> turnQueue = new List<IUnit>();
-
             turnQueue.AddRange(unitManager.AllUnits);
-            
             Debug.Log(turnQueue);
-            
             turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-
             return turnQueue;
         }
 
@@ -354,6 +335,10 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
+
+            foreach (IUnit unit in unitManager.AllUnits)
+                unit.MovementActionPoints.Reset();
+            
             onRoundStart?.Invoke(this);
         }
 
@@ -367,7 +352,7 @@ namespace Managers
         {
             return currentTurnQueue.Any(u => u is EnemyUnit);
         }
-        
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>
@@ -385,7 +370,7 @@ namespace Managers
         private void SelectCurrentUnit()
         {
             if (CurrentUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+                playerManager.SelectUnit((PlayerUnit)CurrentUnit);
             else
                 playerManager.DeselectUnit();
         }

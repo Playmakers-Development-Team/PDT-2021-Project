@@ -4,6 +4,8 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -20,6 +22,7 @@ namespace Units
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
+        //public Vector2Int Coordinate { get => ((GridObject)this).Coordinate; set; }
 
         public static Type DataType => typeof(T);
 
@@ -50,9 +53,20 @@ namespace Units
             base.Start();
 
             data.Initialise();
-
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
-
+            
+            Health = new Health(new UnitDeathCommand(this), data.healthPoints, data.takeDamageModifier);
+            
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            commandManager.ListenCommand<UnitDeathCommand>(
+                (cmd) =>
+                {
+                    if (cmd.Unit != this)
+                        return;
+                    
+                    playerManager.WaitForDeath = true;
+                    KillUnit();
+                });
+            
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
 
@@ -60,11 +74,13 @@ namespace Units
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
         }
-
+        
         void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        { 
+            //TEST CODE, 
+            //if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
+        
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
@@ -125,11 +141,8 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects()
-        {
-            tenetStatusEffectSlots.Clear();
-        }
-
+        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
+        
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
         {
@@ -176,16 +189,19 @@ namespace Units
             return false;
         }
 
-        private void KillUnit()
-        {
+        private async void KillUnit()
+        {   
+            Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
+            gridManager.RemoveGridObject(this.Coordinate, this);
+            await UniTask.Delay(1000);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
             
-            gridManager.RemoveGridObject(Coordinate, this);
             
             // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
             // TODO: This is fixed by the proto-two/integration/unit-death branch.
             // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this); //THIS DEPENDENCY ISSUE SHOULD BE FIXED IN THE REFACTOR
 
             switch (this)
             {
@@ -200,11 +216,12 @@ namespace Units
                                    " as it is an unidentified unit");
                     break;
             }
-            
+
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
         }
 
+        // TODO: Uncomment once the proto-two/integration/enemy-movement branch has been merged (PR#55)
         private void SpawnDamageText(int damageAmount)
         {
             // damageTextCanvas.enabled = true;

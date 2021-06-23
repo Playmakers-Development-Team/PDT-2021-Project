@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Managers
@@ -24,6 +24,21 @@ namespace Managers
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
+        
+        private TurnManager turnManager;
+        private CommandManager commandManager;
+        private GridManager gridManager;
+        private PlayerManager playerManager;
+
+        public override void ManagerStart()
+        {
+            base.ManagerStart();
+            
+            turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+            gridManager = ManagerLocator.Get<GridManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
+        }
 
         /// <summary>
         /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
@@ -46,7 +61,8 @@ namespace Managers
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(((GridObject)
+                enemyUnit).Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -66,42 +82,41 @@ namespace Managers
             }
         }
         
-        public void RemoveEnemyUnit(IUnit enemyUnit)
-        {
-            if (enemyUnits.Contains(enemyUnit))
-            {
-                enemyUnits.Remove(enemyUnit);
-                Debug.Log(enemyUnits.Count + " enemies remain");
-            }
-            else
-            {
-                Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
-                                 " from EnemyManager but it isn't a part of the enemyUnits list");
-            }
-        }
+        public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
-        public void DecideEnemyIntention(EnemyUnit actingUnit)
+        public async void DecideEnemyIntention(EnemyUnit actingUnit)
         {
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
+            
+            foreach(IUnit unit in ManagerLocator.Get<UnitManager>().AllUnits)
+                Debug.Log(unit);
             
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
                 adjacentPlayerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+                await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
+
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
-                MoveUnit(actingUnit);
+                await MoveUnit(actingUnit);
+                
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
             }
             else
             {
                 Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                return;
             }
+            
+            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
         }
 
-        private void MoveUnit(EnemyUnit actingUnit)
+        private UniTask MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
             IUnit closestPlayerUnit = FindClosestPlayer(actingUnit);
@@ -110,10 +125,13 @@ namespace Managers
 
             var moveCommand = new MoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
+                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
+                actingUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+            return UniTask.Delay(1000);
+    
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles
@@ -121,7 +139,6 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, float movementPoints)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
             Vector2Int targetUnitCoordinate = FindClosestAdjacentFreeSquare(actingUnit, targetUnit);
             
             Vector2Int movementDir = Vector2Int.zero;
@@ -175,8 +192,6 @@ namespace Managers
 
         private bool TryMoveX(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementX)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
             // Check that the tile isn't occupied
             if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
                 (actingUnit.Coordinate.x + previousMovement.x + newMovementX,
@@ -190,8 +205,6 @@ namespace Managers
 
         private bool TryMoveY(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementY)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-                
             //Check that the tile isn't occupied
             if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
                 (actingUnit.Coordinate.x + previousMovement.x,
@@ -206,15 +219,15 @@ namespace Managers
         // TODO: Find a way to account for obstacles that may be in the way
         public IUnit FindClosestPlayer(IUnit enemyUnit)
         {
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            
             IUnit closestPlayerUnit = playerManager.PlayerUnits[0];
             int closestPlayerUnitDistance = Int32.MaxValue;
 
             foreach (var playerUnit in playerManager.PlayerUnits)
             {
-                int xDistance = Mathf.Abs(playerUnit.Coordinate.x - enemyUnit.Coordinate.x);
-                int yDistance = Mathf.Abs(playerUnit.Coordinate.y - enemyUnit.Coordinate.y);
+                int xDistance = Mathf.Abs(((GridObject)playerUnit).Coordinate.x - ((GridObject)
+                enemyUnit).Coordinate.x);
+                int yDistance = Mathf.Abs(((GridObject)playerUnit).Coordinate.y - ((GridObject)
+                enemyUnit).Coordinate.y);
 
                 // If a new closest unit is found, assign a new closest unit
                 if (closestPlayerUnitDistance > xDistance + yDistance)
@@ -243,21 +256,19 @@ namespace Managers
         
         private Vector2Int FindClosestAdjacentFreeSquare(EnemyUnit actingUnit, IUnit targetUnit)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
             Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();
             
-            Vector2Int northCoordinate = targetUnit.Coordinate + Vector2Int.up;
-            Vector2Int eastCoordinate = targetUnit.Coordinate + Vector2Int.right;
-            Vector2Int southCoordinate = targetUnit.Coordinate + Vector2Int.down;
-            Vector2Int westCoordinate = targetUnit.Coordinate + Vector2Int.left;
+            Vector2Int northCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.up;
+            Vector2Int eastCoordinate =((GridObject)targetUnit).Coordinate + Vector2Int.right;
+            Vector2Int southCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.down;
+            Vector2Int westCoordinate = ((GridObject)targetUnit).Coordinate + Vector2Int.left;
             
             coordinateDistances.Add(northCoordinate, Vector2.Distance(northCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(eastCoordinate, Vector2.Distance(eastCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(southCoordinate, Vector2.Distance(southCoordinate, actingUnit.Coordinate));
             coordinateDistances.Add(westCoordinate, Vector2.Distance(westCoordinate, actingUnit.Coordinate));
 
-            Vector2Int closestCoordinate = targetUnit.Coordinate;
+            Vector2Int closestCoordinate = ((GridObject)targetUnit).Coordinate;
             float closestDistance = float.MaxValue; // Placeholder initialisation value
             
 

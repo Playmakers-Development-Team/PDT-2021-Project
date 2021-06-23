@@ -1,5 +1,6 @@
-using System;
+using Commands;
 using GridObjects;
+using Managers;
 using UnityEngine;
 
 namespace Units
@@ -9,11 +10,12 @@ namespace Units
         public ValueStat HealthPoints { get; }
         public ModifierStat TakeDamageModifier { get; }
 
-        private Action OnDeath;
+        private UnitDeathCommand unitDeathCommand;
 
-        public Health(Action onDeath, ValueStat healthPoints, ModifierStat takeDamageModifier)
+        public Health(UnitDeathCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
+        takeDamageModifier)
         {
-            OnDeath = onDeath;
+            this.unitDeathCommand = unitDeathCommand;
             HealthPoints = healthPoints;
             TakeDamageModifier = takeDamageModifier;
         }
@@ -33,7 +35,9 @@ namespace Units
         private void CheckDeath()
         {
             if (HealthPoints.Value <= 0)
-                OnDeath.Invoke();
+            {
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
+            }
         }
     }
 }
