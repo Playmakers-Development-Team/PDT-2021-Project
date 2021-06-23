@@ -165,6 +165,8 @@ namespace Managers
             // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
+                
+               
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
                 
@@ -188,7 +190,7 @@ namespace Managers
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
             {
-                if (!visited.ContainsKey(node))
+                if (!visited.ContainsKey(node) )
                 {
                     visited.Add(node, distance + 1);
                     coordinateQueue.Enqueue(node);
