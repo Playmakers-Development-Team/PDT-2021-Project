@@ -81,9 +81,9 @@ namespace Units
             //if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
         
-        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
+        public void TakeDefence(int amount) => Health.TakeDamageModifier.Adder -= amount;
 
-        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => DealDamageModifier.Adder += amount;
         
         public void TakeDamage(int amount)
         {

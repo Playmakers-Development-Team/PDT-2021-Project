@@ -168,7 +168,7 @@ namespace Managers
                 
                 abilityCards[abilityIndex].HighlightAbility();
                 actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
-                TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
+                //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
 
                 abilityIndex++;
             }
@@ -331,7 +331,7 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate, castVector);
+                commandManager.ExecuteCommand(new AbilityCommand(actingUnit, castVector, actingUnit.CurrentlySelectedAbility));
             }
         }
     }
