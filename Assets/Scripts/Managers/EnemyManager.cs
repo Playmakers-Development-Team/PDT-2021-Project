@@ -48,9 +48,14 @@ namespace Managers
         /// <returns>The new <c>IUnit</c> that was added.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            enemyUnits.Add(newUnit);
-            return newUnit;
+            //BUG THIS WILL BE FIXED ONCE UNIT/TURN DEPENDENCY IS SOLVED
+            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            enemyUnits.Add(unit);
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            
+            //IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
+            
+            return unit;
         }
 
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)

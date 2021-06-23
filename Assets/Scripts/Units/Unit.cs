@@ -197,8 +197,12 @@ namespace Units
             
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            gridManager.RemoveGridObject(Coordinate, this); 
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this); //THIS DEPENDENCY ISSUE SHOULD BE FIXED IN THE REFACTOR
+            
+            gridManager.RemoveGridObject(Coordinate, this);
+            
+            // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
+            // TODO: This is fixed by the proto-two/integration/unit-death branch.
+            // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
             switch (this)
             {
