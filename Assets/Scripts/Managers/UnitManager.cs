@@ -17,19 +17,23 @@ namespace Managers
         /// All the units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
+
+        /// <summary>
+        /// The unit whose turn it currently is. Is null if no unit is acting.
+        /// </summary>
+        public IUnit ActingUnit => GetActingUnit();
         
         /// <summary>
         /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
         /// <c>PlayerUnit</c> is acting.
         /// </summary>
-        public IUnit ActingUnit => GetActingUnit();
-        
+        public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
+
         /// <summary>
         /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
         /// <c>EnemyUnit</c> is acting.
         /// </summary>
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
-        public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
 
         /// <summary>
         /// Initialises the <c>UnitManager</c>.
@@ -104,8 +108,8 @@ namespace Managers
 
         /// <summary>
         /// Spawns a unit.
-        /// <param name="targetUnit"></param>
         /// </summary>
+        /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);

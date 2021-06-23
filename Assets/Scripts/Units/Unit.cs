@@ -222,6 +222,7 @@ namespace Units
             gameObject.SetActive(false);
         }
 
+        // TODO: Uncomment once the proto-two/integration/enemy-movement branch has been merged (PR#55)
         private void SpawnDamageText(int damageAmount)
         {
             // damageTextCanvas.enabled = true;

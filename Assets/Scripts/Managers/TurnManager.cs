@@ -165,16 +165,9 @@ namespace Managers
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
             
-            //bool removingCurrentUnit = targetIndex == CurrentTurnIndex; redundant
-            
-            // If we're removing something, the list becomes smaller and therefore we need to 
-            // decrement the CurrentTurnIndex to point to the same unit.
-            // If the unit removed is the current unit, then we want to decrement it so we can
-            // call NextTurn() later. [I have made this redundant as the index not moving inheritenly changes the next turn (However there should be checks for endgameconditions)]
-            //or if units interact with next turns
-            //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
+                // Decrement the CurrentTurnIndex to continue pointing to the same unit
                 CurrentTurnIndex--;
             }
 
@@ -214,7 +207,6 @@ namespace Managers
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
         }
 
-        
         // TODO Test
         /// <summary>
         /// Move a unit right after the current unit. The moved unit will take a turn after the
