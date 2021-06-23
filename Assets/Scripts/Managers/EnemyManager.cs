@@ -110,6 +110,7 @@ namespace Managers
             else
             {
                 Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                return;
             }
             
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
