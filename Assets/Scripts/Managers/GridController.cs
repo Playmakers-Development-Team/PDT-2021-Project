@@ -35,13 +35,6 @@ namespace Managers
             bounds = gridManager.LevelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
             
-            // CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            // commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
-            //     (cmd1, cmd2) =>
-            //     {
-            //         AddObstacles();
-            //     });
-            
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
@@ -120,17 +113,5 @@ namespace Managers
         }
 
         #endregion
-        
-        public void AddObstacles()
-        {
-            GameObject obstaclePrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/Obstacle", typeof(GameObject));
-            for(int counter = 0; counter < 5; counter++)
-            {
-                var coord = gridManager.GetRandomUnoccupiedCoordinates();
-                var go = Instantiate(obstaclePrefab, gridManager.ConvertCoordinateToPosition(coord), Quaternion.identity);
-                gridManager.AddGridObject(coord, go.GetComponent<GridObject>());
-            }
-        }
     }
 }
