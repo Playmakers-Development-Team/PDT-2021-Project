@@ -26,7 +26,7 @@ namespace Managers
         /// <summary>
         /// Stores the current actingunit.
         /// </summary>
-        private PlayerUnit actingUnit => (PlayerUnit)unitManager.ActingPlayerUnit;
+        private PlayerUnit actingUnit => unitManager.ActingPlayerUnit;
 
         /// <summary>
         /// A list of ability cards showing the units current abilities

@@ -86,10 +86,10 @@ namespace Managers
             {
                 if (turnManager.PreviousUnit != null)
                 {
-                    if (unitCard.Unit == turnManager.PreviousUnit)
+                    if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) < turnManager.CurrentTurnIndex)
                         unitCard.GetComponent<Image>().color = Color.black;
                 }
-
+                
                 if (unitCard.Unit == turnManager.CurrentUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);

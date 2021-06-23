@@ -4,6 +4,8 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -50,9 +52,20 @@ namespace Units
             base.Start();
 
             data.Initialise();
-
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
-
+            
+            Health = new Health(new UnitDeathCommand(this), data.healthPoints, data.takeDamageModifier);
+            
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            commandManager.ListenCommand<UnitDeathCommand>(
+                (cmd) =>
+                {
+                    if (cmd.Unit != this)
+                        return;
+                    
+                    playerManager.WaitForDeath = true;
+                    KillUnit();
+                });
+            
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
 
@@ -60,11 +73,14 @@ namespace Units
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
         }
+        
 
         void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+        { 
+            //TEST CODE, 
+            //if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
         }
+        
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
@@ -125,10 +141,8 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects()
-        {
-            tenetStatusEffectSlots.Clear();
-        }
+        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
+        
 
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
@@ -176,8 +190,11 @@ namespace Units
             return false;
         }
 
-        private void KillUnit()
+        private async void KillUnit()
         {
+
+            await UniTask.Delay(1000);
+            
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
             

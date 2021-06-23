@@ -149,10 +149,8 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
-        public void RemoveUnitFromQueue(IUnit unit)
-        {
-            RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
-        }
+        public void RemoveUnitFromQueue(IUnit unit) => RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
+        
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
@@ -177,13 +175,7 @@ namespace Managers
             //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
-
                 CurrentTurnIndex--;
-                // if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
-                //     CurrentTurnIndex--;
-                //
-                // else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
-                //     CurrentTurnIndex--;
             }
 
             RecentUnitDeath = currentTurnQueue[targetIndex];
@@ -222,6 +214,7 @@ namespace Managers
             commandManager.ExecuteCommand(new StartTurnCommand(CurrentUnit));
         }
 
+        
         // TODO Test
         /// <summary>
         /// Move a unit right after the current unit. The moved unit will take a turn after the
@@ -249,13 +242,9 @@ namespace Managers
         private List<IUnit> CreateTurnQueue()
         {
             List<IUnit> turnQueue = new List<IUnit>();
-
             turnQueue.AddRange(unitManager.AllUnits);
-            
             Debug.Log(turnQueue);
-            
             turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-
             return turnQueue;
         }
 
@@ -367,7 +356,7 @@ namespace Managers
         {
             return currentTurnQueue.Any(u => u is EnemyUnit);
         }
-        
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>
@@ -385,7 +374,7 @@ namespace Managers
         private void SelectCurrentUnit()
         {
             if (CurrentUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) CurrentUnit);
+                playerManager.SelectUnit((PlayerUnit)CurrentUnit);
             else
                 playerManager.DeselectUnit();
         }
