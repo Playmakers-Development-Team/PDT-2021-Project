@@ -194,7 +194,7 @@ namespace Managers
                     nextClickWillMove = true;
                     Debug.Log("Next click will move.");
 
-                    UpdateMoveRange(gridManager.AllReachableTiles(
+                    UpdateMoveRange(gridManager.GetAllReachableTiles(
                         ((GridObject)unitManager.ActingUnit).Coordinate,
                         (int) unitManager.ActingUnit.MovementActionPoints.Value));
                     
