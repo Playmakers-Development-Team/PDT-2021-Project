@@ -48,7 +48,7 @@ namespace Managers
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            playerUnits.Add(newUnit);
+           // playerUnits.Add(newUnit);
             return newUnit;
         }
 

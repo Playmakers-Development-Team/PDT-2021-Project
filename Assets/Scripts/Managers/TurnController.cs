@@ -134,6 +134,8 @@ namespace Managers
         {
             var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
+            var flag = false;
+            
             foreach (var unit in allUnits)
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
@@ -143,6 +145,8 @@ namespace Managers
                     break;
                 }
             }
+            
+            
         }
 
         private void CreateUnitCard(IUnit unit)

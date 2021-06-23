@@ -182,8 +182,10 @@ namespace Units
             Debug.Log($"This unit was cringe and died");
             
             gridManager.RemoveGridObject(Coordinate, this);
-
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+            
+            // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
+            // TODO: This is fixed by the proto-two/integration/unit-death branch.
+            // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
             switch (this)
             {
@@ -205,12 +207,12 @@ namespace Units
 
         private void SpawnDamageText(int damageAmount)
         {
-            damageTextCanvas.enabled = true;
-
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-
-            Invoke("HideDamageText", damageTextLifetime);
+            // damageTextCanvas.enabled = true;
+            //
+            // damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
+            //     damageAmount.ToString();
+            //
+            // Invoke("HideDamageText", damageTextLifetime);
         }
 
         private void HideDamageText()
