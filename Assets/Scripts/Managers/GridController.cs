@@ -1,4 +1,8 @@
+using System;
+using Commands;
+using GridObjects;
 using Units;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -35,12 +39,6 @@ namespace Managers
             TestingGetGridObjectsByCoordinate(0);
         }
 
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
-                //ClickUnit();
-        }
-
         #region Unit Selection
 
         private void ClickUnit()
@@ -67,7 +65,6 @@ namespace Managers
             }
 
             playerManager.DeselectUnit();
-            // ClearAbilityUI();
         }
 
         #endregion
