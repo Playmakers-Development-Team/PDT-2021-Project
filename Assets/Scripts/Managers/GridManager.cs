@@ -165,8 +165,6 @@ namespace Managers
             // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
-                
-               
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
                 
@@ -256,8 +254,6 @@ namespace Managers
                     break;
             }
 
-         
-
             path.Reverse();
             return path;
         }
@@ -322,8 +318,8 @@ namespace Managers
                 return true;
             }
             
-                Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
-                      ". Tile does not contain gridObject");
+            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
+                             ". Tile does not contain gridObject");
         
             return false;
         }
@@ -381,14 +377,13 @@ namespace Managers
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
-              Debug.Log(Mathf.Max(0,
-                  ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+            Debug.Log(Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
                     
         }
 
         private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
-        float 
-        duration)
+                                            float duration)
         {
             float flag = 0f;
             
@@ -440,6 +435,5 @@ namespace Managers
         }
         
         #endregion
-        
     }
 }
