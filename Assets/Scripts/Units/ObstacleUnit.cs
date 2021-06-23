@@ -1,4 +1,4 @@
-namespace Units
+namespace GridObjects
 {
-    public class ObstacleUnit : Unit<ObstacleUnitData> {}
+    public class ObstacleUnit : GridObject{}
 }
