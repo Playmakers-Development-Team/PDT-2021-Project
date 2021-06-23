@@ -177,11 +177,13 @@ namespace Managers
             //Set an additional condition to make sure that there is a previous unit
             if (targetIndex <= CurrentTurnIndex && PreviousUnit != null)
             {
-                if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
-                    CurrentTurnIndex--;
-                
-                else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
-                    CurrentTurnIndex--;
+
+                CurrentTurnIndex--;
+                // if (PreviousUnit != currentTurnQueue[CurrentTurnIndex - 1] )
+                //     CurrentTurnIndex--;
+                //
+                // else if (targetIndex <= CurrentTurnIndex && PreviousUnit == currentTurnQueue[targetIndex])
+                //     CurrentTurnIndex--;
             }
 
             RecentUnitDeath = currentTurnQueue[targetIndex];
@@ -272,7 +274,7 @@ namespace Managers
         public void AddNewUnitToTimeline(IUnit unit)
         {
             currentTurnQueue.Add(unit);
-            nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
+            //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
             newUnitAdded?.Invoke(this);
             timelineNeedsUpdating = true;
         }
