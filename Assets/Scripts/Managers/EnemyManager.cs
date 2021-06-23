@@ -103,14 +103,13 @@ namespace Managers
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
         }
         
-        // TODO: Find a way to account for obstacles that may be in the way
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, int movementPoints)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
 
             Vector2Int movementDir = Vector2Int.zero;
 
-            float shortestDistance = int.MaxValue;
+            int shortestDistance = int.MaxValue;
 
             List<Vector2Int> reachableTiles =
                 gridManager.GetAllReachableTiles(actingUnit.Coordinate, movementPoints);
@@ -122,15 +121,18 @@ namespace Managers
                 Debug.LogWarning("ENEMY-TAR: Enemy is stationary until a new tile is available adjacent to the target player " + targetUnit);
                 return Vector2Int.zero;
             }
-
+            
             foreach (var reachableTile in reachableTiles)
             {
+                Dictionary<Vector2Int, int> distanceToAllCells =
+                    gridManager.GetDistanceToAllCells(reachableTile);
+                
                 foreach (var targetTile in targetTiles)
                 {
-                    if (Vector2.Distance(reachableTile, targetTile) < shortestDistance)
+                    if (distanceToAllCells[targetTile] < shortestDistance)
                     {
-                        shortestDistance = Vector2.Distance(reachableTile, targetTile);
-                        movementDir = targetTile - actingUnit.Coordinate;
+                        shortestDistance = distanceToAllCells[targetTile];
+                        movementDir = reachableTile - actingUnit.Coordinate;
                     }
                 }
             }
@@ -139,37 +141,6 @@ namespace Managers
             return movementDir;
         }
 
-        private bool TryMoveX(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementX)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
-            // Check that the tile isn't occupied
-            if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
-                (actingUnit.Coordinate.x + previousMovement.x + newMovementX,
-                actingUnit.Coordinate.y + previousMovement.y)).Count == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool TryMoveY(EnemyUnit actingUnit, Vector2Int previousMovement, int newMovementY)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-                
-            //Check that the tile isn't occupied
-            if (gridManager.GetGridObjectsByCoordinate(new Vector2Int
-                (actingUnit.Coordinate.x + previousMovement.x,
-                actingUnit.Coordinate.y + previousMovement.y + newMovementY)).Count == 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        // TODO: Find a way to account for obstacles that may be in the way
         public IUnit GetTargetPlayer(IUnit enemyUnit)
         {
             IUnit targetPlayerUnit;
