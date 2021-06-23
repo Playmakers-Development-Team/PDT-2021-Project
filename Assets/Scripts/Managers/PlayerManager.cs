@@ -6,23 +6,17 @@ namespace Managers
 {
     public class PlayerManager : UnitManager
     {
-        /// <summary>
-        /// The unit that is currently selected in the scene.
-        /// </summary>
-        public PlayerUnit SelectedUnit { get; private set; }
-
-        /// <summary>
-        /// All the player units currently in the level.
-        /// </summary>
+        public IUnit SelectedUnit { get; private set; }
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
         /// <summary>
         /// All the player units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
-
-        public int DeathDelay {get;} = 5000;
-        public bool WaitForDeath;
+        public bool WaitForDeath { get; set; }
+        
+        public int DeathDelay { get; } = 1000;
+        public int Count => playerUnits.Count;
 
         /// <summary>
         /// Removes all the player units in the <c>playerUnits</c> list.
@@ -33,11 +27,8 @@ namespace Managers
         /// Removes a target <c>IUnit</c> from <c>playerUnits</c>.
         /// </summary>
         /// <param name="targetUnit"></param>
-        public override void RemoveUnit(IUnit targetUnit)
-        {
-            playerUnits.Remove(targetUnit);
-            base.RemoveUnit(targetUnit);
-        }
+        public void RemoveUnit(IUnit targetUnit) => playerUnits.Remove(targetUnit);
+        
 
         /// <summary>
         /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
@@ -48,7 +39,7 @@ namespace Managers
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            playerUnits.Add(newUnit);
+           // playerUnits.Add(newUnit);
             return newUnit;
         }
 
@@ -67,13 +58,13 @@ namespace Managers
                 return;
             }
 
-            if (SelectedUnit != unit)
-            {
-                SelectedUnit = unit;
+            if (SelectedUnit == unit)
+                return;
+            
+            SelectedUnit = unit;
 
-                ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
-            }
+            ManagerLocator.Get<CommandManager>().
+                ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
         }
 
         /// <summary>
@@ -81,9 +72,15 @@ namespace Managers
         /// </summary>
         public void DeselectUnit()
         {
-            SelectedUnit = null;
+            if (SelectedUnit is null)
+                return;
+            
+            Debug.Log(SelectedUnit + " deselected.");
+            
             ManagerLocator.Get<CommandManager>().
                 ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
+            
+            SelectedUnit = null;
         }
         
         /// <summary>

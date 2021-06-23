@@ -19,19 +19,18 @@ namespace Managers
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
 
         /// <summary>
-        /// The unit whose turn it currently is. Is null if no
-        /// unit is acting.
+        /// The unit whose turn it currently is. Is null if no unit is acting.
         /// </summary>
         public IUnit ActingUnit => GetActingUnit();
-
+        
         /// <summary>
-        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if no
+        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if none
         /// <c>PlayerUnit</c> is acting.
         /// </summary>
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
 
         /// <summary>
-        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if no
+        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if none
         /// <c>EnemyUnit</c> is acting.
         /// </summary>
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
@@ -106,8 +105,6 @@ namespace Managers
         /// Removes a unit from the current timeline.
         /// </summary>
         /// <param name="targetUnit"></param>
-        public virtual void RemoveUnit(IUnit targetUnit) =>
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(targetUnit);
 
         /// <summary>
         /// Spawns a unit.

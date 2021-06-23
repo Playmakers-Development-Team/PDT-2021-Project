@@ -14,7 +14,7 @@ namespace UI
     {
         private IUnit selectedPlayerUnit;
         [SerializeField] private Image icon;
-        [SerializeField] private TextMeshProUGUI name;
+        [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private TextMeshProUGUI health;
         [SerializeField] private TextMeshProUGUI movementPointsText;
         [SerializeField] private TextMeshProUGUI attack;
@@ -60,10 +60,7 @@ namespace UI
             }
         }
 
-        public void DeselectUnit()
-        {
-            gameObject.SetActive(false);
-        }
+        public void DeselectUnit() => gameObject.SetActive(false);
         
         public void UpdateUnitUI()
         {
@@ -71,7 +68,7 @@ namespace UI
             //icon.sprite = selectedPlayerUnit.sprite;
             
             // TODO: change to the unit's name if any
-            //name.text = selectedPlayerUnit.gameObject.name;
+            nameText.text = selectedPlayerUnit.gameObject.name;
             health.text = "Health: " + selectedPlayerUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedPlayerUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedPlayerUnit.DealDamageModifier.Value;
