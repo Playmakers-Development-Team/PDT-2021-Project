@@ -75,7 +75,6 @@ namespace Units
             gridManager = ManagerLocator.Get<GridManager>();
         }
         
-
         void Update()
         { 
             //TEST CODE, 
@@ -144,7 +143,6 @@ namespace Units
 
         public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
         
-
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
         {

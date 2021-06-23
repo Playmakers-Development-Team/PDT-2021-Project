@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using GridObjects;
-using UnityEngine;
 using UnityEngine.Tilemaps;
 
 namespace Tiles
