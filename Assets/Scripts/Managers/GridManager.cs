@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
+using Cysharp.Threading.Tasks;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -164,6 +163,8 @@ namespace Managers
             // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
+                
+               
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
                 
@@ -187,7 +188,7 @@ namespace Managers
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
             {
-                if (!visited.ContainsKey(node))
+                if (!visited.ContainsKey(node) )
                 {
                     visited.Add(node, distance + 1);
                     coordinateQueue.Enqueue(node);
@@ -200,7 +201,7 @@ namespace Managers
             // If grid node exists add to queue and mark distance taken to arrive at it
             if (tileDatas.ContainsKey(node) && tileDatas[node].GridObjects.Count == 0)
             {
-                if (!visited.ContainsKey(node))
+                if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
                 {
                     visited.Add(node, coordinateQueue.Peek());
                     coordinateQueue.Enqueue(node);
@@ -351,10 +352,31 @@ namespace Managers
                 return;
             }
             
-            // TODO link move path to tweening
+            // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
+            
+            MovementTween(
+                unit.gameObject,
+                ConvertCoordinateToPosition(currentCoordinate),
+                ConvertCoordinateToPosition(newCoordinate),
+                1f // TODO: Expose this parameter
+            );
+        }
 
-            TeleportUnit(newCoordinate, unit);
+        private async void MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, float duration)
+        {
+            float flag = 0f;
+            
+            Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
+            
+            while (flag < duration)
+            {
+                unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
+                
+                await UniTask.Yield(PlayerLoopTiming.Update);
+                
+                flag += Time.deltaTime;
+            }
         }
 
         /// <summary>
@@ -403,5 +425,6 @@ namespace Managers
         }
         
         #endregion
+        
     }
 }

@@ -132,8 +132,10 @@ namespace Managers
         /// <param name="turnManager"></param>
         private void AddUnitToTimeline(TurnManager turnManager)
         {
-            var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
+            var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
+            var flag = false;
+            
             foreach (var unit in allUnits)
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
@@ -143,6 +145,8 @@ namespace Managers
                     break;
                 }
             }
+            
+            
         }
 
         private void CreateUnitCard(IUnit unit)

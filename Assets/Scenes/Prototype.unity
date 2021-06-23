@@ -182,6 +182,38 @@ PrefabInstance:
       propertyPath: pipeline
       value: 
       objectReference: {fileID: 695003664}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: resolution.x
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: resolution.y
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: renderOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: canvasColour.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: canvasColour.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: canvasColour.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: canvasColour.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+      propertyPath: overrideGlobalPipeline
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7694296866473946615, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
       propertyPath: m_TargetTexture
       value: 
