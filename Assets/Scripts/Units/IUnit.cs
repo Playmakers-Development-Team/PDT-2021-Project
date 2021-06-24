@@ -15,7 +15,7 @@ namespace Units
         public ModifierStat DealDamageModifier { get; }
         public List<Ability> Abilities { get; }
 
-        //public Vector2Int Coordinate { get; set; }
+        public Vector2Int Coordinate { get; }
 
         GameObject gameObject { get; }
         
@@ -42,8 +42,6 @@ namespace Units
         bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
 
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
-
-        bool IsActing();
 
         bool IsSelected();
     }

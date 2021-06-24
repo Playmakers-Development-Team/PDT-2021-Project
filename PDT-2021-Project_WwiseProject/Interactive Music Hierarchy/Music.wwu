@@ -21,7 +21,7 @@
 					<ChildrenList>
 						<MusicSegment Name="Mountain-Trail_70bpm6-8_L96M" ID="{5E8EDABB-3FA6-44CF-9232-F4DAEFD651FD}" ShortID="972066372">
 							<PropertyList>
-								<Property Name="EndPosition" Type="Real64" Value="249585.963718821"/>
+								<Property Name="EndPosition" Type="Real64" Value="260355.584591262"/>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -32,23 +32,23 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<MusicTrack Name="Mountain-Trail_70bpm6-8_L96M" ID="{05BF8CAC-F2DE-452F-8791-195E7902AAE7}" ShortID="804146434">
+								<MusicTrack Name="MountainTrail_70bpm_6_8_L96M" ID="{CBFB3AB1-9EA0-4E2A-BBCE-2F1CF06FAC83}" ShortID="837783935">
 									<ReferenceList>
 										<Reference Name="OutputBus">
 											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
 										</Reference>
 									</ReferenceList>
 									<ChildrenList>
-										<AudioFileSource Name="Mountain-Trail_70bpm6-8_L96M" ID="{4358AE87-B45B-477A-9057-F4DFCE57B03A}">
+										<AudioFileSource Name="MountainTrail_70bpm_6_8_L96M_V2" ID="{9AB999D2-B778-4739-B003-9E2D30D742BF}">
 											<Language>SFX</Language>
-											<AudioFile>Mountain-Trail_70bpm6-8_L96M.wav</AudioFile>
+											<AudioFile>MountainTrail_70bpm_6_8_L96M_V2.wav</AudioFile>
 											<MediaIDList>
-												<MediaID ID="702098740"/>
+												<MediaID ID="588934760"/>
 											</MediaIDList>
 										</AudioFileSource>
 									</ChildrenList>
 									<TransitionList>
-										<MusicTransition Name="Root" ID="{54E56575-56AD-4023-A91B-F72489CBF23E}">
+										<MusicTransition Name="Root" ID="{221E5A5E-176A-4B86-B53C-54A778DB48BE}">
 											<PropertyList>
 												<Property Name="IsFolder" Type="bool" Value="True"/>
 											</PropertyList>
@@ -59,18 +59,77 @@
 										<ObjectList Name="Sequences">
 											<Reference>
 												<Local>
-													<MusicTrackSequence Name="" ID="{E7921191-274E-4E71-A633-F3C6091E9BC7}">
+													<MusicTrackSequence Name="" ID="{C5EFB81B-C6C6-405D-B446-6DD7EC20AFE3}">
 														<ObjectLists>
 															<ObjectList Name="Clips">
 																<Reference>
 																	<Local>
-																		<MusicClip Name="Mountain-Trail_70bpm6-8_L96M" ID="{F19D7B03-7D50-4D14-9149-736D9A0A5B6C}">
+																		<MusicClip Name="MountainTrail_70bpm_6_8_L96M_V2" ID="{7D3E225E-D927-4A7E-A620-17231681E836}">
 																			<PropertyList>
 																				<Property Name="EndTrimOffset" Type="Real64" Value="249585.963718821"/>
 																				<Property Name="FadeInMode" Type="int16" Value="0"/>
 																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
 																			</PropertyList>
-																			<AudioSourceRef Name="Mountain-Trail_70bpm6-8_L96M" ID="{4358AE87-B45B-477A-9057-F4DFCE57B03A}"/>
+																			<AudioSourceRef Name="MountainTrail_70bpm_6_8_L96M_V2" ID="{9AB999D2-B778-4739-B003-9E2D30D742BF}"/>
+																			<PropertyCurveList>
+																				<PropertyCurve PropertyName="Highpass">
+																					<Curve Name="" ID="{1C1AC37B-9513-40F2-ADE1-AE407F936121}">
+																						<PropertyList>
+																							<Property Name="Flags" Type="int32" Value="1"/>
+																						</PropertyList>
+																						<PointList>
+																							<Point>
+																								<XPos>0</XPos>
+																								<YPos>0</YPos>
+																								<Flags>5</Flags>
+																							</Point>
+																							<Point>
+																								<XPos>249.585963718821</XPos>
+																								<YPos>0</YPos>
+																								<Flags>37</Flags>
+																							</Point>
+																						</PointList>
+																					</Curve>
+																				</PropertyCurve>
+																				<PropertyCurve PropertyName="Lowpass">
+																					<Curve Name="" ID="{83E29E07-C591-4B2A-AADC-33A6FB9B68E5}">
+																						<PropertyList>
+																							<Property Name="Flags" Type="int32" Value="1"/>
+																						</PropertyList>
+																						<PointList>
+																							<Point>
+																								<XPos>0</XPos>
+																								<YPos>0</YPos>
+																								<Flags>5</Flags>
+																							</Point>
+																							<Point>
+																								<XPos>249.585963718821</XPos>
+																								<YPos>0</YPos>
+																								<Flags>37</Flags>
+																							</Point>
+																						</PointList>
+																					</Curve>
+																				</PropertyCurve>
+																				<PropertyCurve PropertyName="Volume">
+																					<Curve Name="" ID="{CE1D0415-E154-4DF2-AE33-5E89AFD403F9}">
+																						<PropertyList>
+																							<Property Name="Flags" Type="int32" Value="3"/>
+																						</PropertyList>
+																						<PointList>
+																							<Point>
+																								<XPos>0</XPos>
+																								<YPos>0</YPos>
+																								<Flags>5</Flags>
+																							</Point>
+																							<Point>
+																								<XPos>249.585963718821</XPos>
+																								<YPos>0</YPos>
+																								<Flags>37</Flags>
+																							</Point>
+																						</PointList>
+																					</Curve>
+																				</PropertyCurve>
+																			</PropertyCurveList>
 																		</MusicClip>
 																	</Local>
 																</Reference>
@@ -95,7 +154,7 @@
 											<MusicCue Name="Exit Cue" ID="{4660D0FA-C334-4F1A-8067-E17F87E1DCA2}">
 												<PropertyList>
 													<Property Name="CueType" Type="int16" Value="1"/>
-													<Property Name="TimeMs" Type="Real64" Value="249585.963718821"/>
+													<Property Name="TimeMs" Type="Real64" Value="246857.142857143"/>
 												</PropertyList>
 											</MusicCue>
 										</Local>

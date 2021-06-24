@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
 {
     public class PlayerManager : UnitManager
     {
-        
         public IUnit SelectedUnit { get; private set; }
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
@@ -16,7 +16,7 @@ namespace Managers
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
         public bool WaitForDeath { get; set; }
         
-        public int DeathDelay {get;} = 1000; 
+        public int DeathDelay { get; } = 1000;
         public int Count => playerUnits.Count;
 
         /// <summary>
@@ -40,7 +40,6 @@ namespace Managers
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-           // playerUnits.Add(newUnit);
             return newUnit;
         }
 
@@ -59,13 +58,11 @@ namespace Managers
                 return;
             }
 
-            if (SelectedUnit != unit)
-            {
-                SelectedUnit = unit;
-
-                ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
-            }
+            if (SelectedUnit == unit)
+                return;
+            
+            SelectedUnit = unit;
+            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
         }
 
         /// <summary>
@@ -73,9 +70,12 @@ namespace Managers
         /// </summary>
         public void DeselectUnit()
         {
+            if (SelectedUnit is null)
+                return;
+            
+            Debug.Log(SelectedUnit + " deselected.");
+            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
             SelectedUnit = null;
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
         }
         
         /// <summary>
@@ -87,7 +87,7 @@ namespace Managers
         {
             playerUnits.Add(unit);
             
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             
             SelectUnit(unit);
             

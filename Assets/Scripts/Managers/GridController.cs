@@ -1,4 +1,8 @@
+using System;
+using Commands;
+using GridObjects;
 using Units;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,7 +14,6 @@ namespace Managers
         [SerializeField] private Vector2 gridOffset;
         [SerializeField] private TileBase abilityHighlightTile;
 
-        
         [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private Tilemap levelTilemap;
 
@@ -34,12 +37,6 @@ namespace Managers
             
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
-        }
-
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
-                //ClickUnit();
         }
 
         #region Unit Selection
@@ -68,7 +65,6 @@ namespace Managers
             }
 
             playerManager.DeselectUnit();
-            // ClearAbilityUI();
         }
 
         #endregion
