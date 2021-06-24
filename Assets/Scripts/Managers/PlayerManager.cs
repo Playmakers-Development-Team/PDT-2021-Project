@@ -40,8 +40,6 @@ namespace Managers
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-           // playerUnits.Add(newUnit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
             return newUnit;
         }
 
@@ -89,7 +87,7 @@ namespace Managers
         {
             playerUnits.Add(unit);
             
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             
             SelectUnit(unit);
             

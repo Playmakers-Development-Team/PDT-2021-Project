@@ -17,23 +17,6 @@ namespace Managers
         public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
 
         /// <summary>
-        /// The unit whose turn it currently is. Is null if no unit is acting.
-        /// </summary>
-        public IUnit ActingUnit => GetActingUnit();
-        
-        /// <summary>
-        /// The <c>PlayerUnit</c> whose turn it currently is. Is null if none
-        /// <c>PlayerUnit</c> is acting.
-        /// </summary>
-        public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
-
-        /// <summary>
-        /// The <c>EnemyUnit</c> whose turn it currently is. Is null if none
-        /// <c>EnemyUnit</c> is acting.
-        /// </summary>
-        public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
-
-        /// <summary>
         /// Initialises the <c>UnitManager</c>.
         /// </summary>
         public override void ManagerStart()
@@ -55,52 +38,6 @@ namespace Managers
         }
 
         /// <summary>
-        /// Returns the unit whose turn it currently is. Returns null if no
-        /// unit is acting. 
-        /// </summary>
-        private IUnit GetActingUnit()
-        {
-            foreach (IUnit unit in AllUnits)
-            {
-                if (unit.IsActing())
-                    return unit;
-            }
-
-            Debug.LogWarning("No unit is currently acting.");
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the <c>PlayerUnit</c> whose turn it currently is. Returns null if no
-        /// <c>PlayerUnit</c> is acting. 
-        /// </summary>
-        private PlayerUnit GetActingPlayerUnit()
-        {
-            foreach (PlayerUnit unit in playerManager.PlayerUnits)
-            {
-                if (unit.IsActing())
-                    return unit;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
-        /// <c>EnemyUnit</c> is acting. 
-        /// </summary>
-        private EnemyUnit GetActingEnemyUnit()
-        {
-            foreach (EnemyUnit unit in enemyManager.EnemyUnits)
-            {
-                if (unit.IsActing())
-                    return unit;
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Removes a unit from the current timeline.
         /// </summary>
         /// <param name="targetUnit"></param>
@@ -113,7 +50,6 @@ namespace Managers
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
         }
 
@@ -125,7 +61,6 @@ namespace Managers
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
         }
     }
