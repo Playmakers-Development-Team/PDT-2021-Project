@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Giving Serious Motivation
+  m_EditorClassIdentifier: 
+  description: "Targets gain 2 Attack\n User and targets gains 1 Defense and 1 Passion
+    Kindled\n Square 3x3\n"
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
+  targetEffects:
+  - name: Default, 3 Attack and Provide 1 Passion
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 3
+    providingTenet:
+      tenetType: 2
+      stackCount: 1
+    costs: []
+  - name: 4 Attack with Pride
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 4
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    costs:
+    - name: Target With Pride
+      affectType: 1
+      costType: 0
+      tenetType: 0
+  - name: 2 Defence with Apathy
+    damageValue: 0
+    defenceValue: 2
+    attackValue: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    costs:
+    - name: Target With Apathy
+      affectType: 1
+      costType: 0
+      tenetType: 3
+  userEffects: []

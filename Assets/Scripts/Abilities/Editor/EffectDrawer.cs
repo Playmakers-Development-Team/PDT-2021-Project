@@ -70,8 +70,9 @@ namespace Abilities.Editor
                             nameProperty.stringValue += ", ";
                         
                         SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
-                        string costName = "";
-                        
+                        string affectString = ((AffectType) costProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
+                        string costName = $"{affectString} ";
+
                         // Cost type
                         switch (costProperty.FindPropertyRelative("costType").enumValueIndex)
                         {

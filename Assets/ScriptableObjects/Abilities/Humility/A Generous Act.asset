@@ -10,45 +10,41 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Unleashing Magnificence
+  m_Name: A Generous Act
   m_EditorClassIdentifier: 
-  description: 'Does 1 base Damage.
-
-    6 Damage spend Pride.
-
-    2 Damage spend
-    Passion.'
+  description: "Target gains 4 Defense\n \u21AF When user has Affinity, gain 1 Humility\n
+    \u21AF When target has Affinity, gain 1 Humility\n \u21AF Target may Spend Joy
+    to gain 4 Attack"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
-  - name: Default, 1 Damage
-    damageValue: 1
-    defenceValue: 0
+  - name: Default, 4 Defence and Provide 1 Humility
+    damageValue: 0
+    defenceValue: 4
     attackValue: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 1
+      stackCount: 1
     costs: []
-  - name: 6 Damage spend Pride
-    damageValue: 6
+  - name: 4 Attack spend Joy
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 4
+    providingTenet:
+      tenetType: 1
+      stackCount: 0
+    costs:
+    - name: User Spend Joy
+      affectType: 0
+      costType: 2
+      tenetType: 4
+  userEffects:
+  - name: Default, Provide 1 Humility
+    damageValue: 0
     defenceValue: 0
     attackValue: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: Spend Pride
-      costType: 2
-      tenetType: 0
-  - name: 2 Damage spend Passion
-    damageValue: 2
-    defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: Spend Passion
-      costType: 2
-      tenetType: 2
-  userEffects: []
+      tenetType: 1
+      stackCount: 1
+    costs: []
