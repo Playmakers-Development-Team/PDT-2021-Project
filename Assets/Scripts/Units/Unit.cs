@@ -56,22 +56,7 @@ namespace Units
             base.Start();
 
             data.Initialise();
-
-            // Health = new Health(KillUnitWithDelay, data.healthPoints, data.takeDamageModifier);
-
-            
-            Health = new Health(new UnitDeathCommand(this), data.healthPoints, data.takeDamageModifier);
-            
-            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenCommand<UnitDeathCommand>(
-                (cmd) =>
-                {
-                    if (cmd.Unit != this)
-                        return;
-                    
-                    playerManager.WaitForDeath = true;
-                    KillUnit();
-                });
+            Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
             
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -207,25 +192,18 @@ namespace Units
             // We have to explicitly compare types here 
             if (killUnitCommand.Unit.GetType() == GetType())
             {
-                KillUnitWithDelay();
                 // Since we're about to remove the object, stop listening to the command
                 commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+                KillUnit();
             }
-        }
-
-        private async void KillUnitWithDelay()
-        {
-            playerManager.WaitForDeath = true;
-            await UniTask.Delay(playerManager.DeathDelay);
-            playerManager.WaitForDeath = false;
-            KillUnit();
         }
 
         private async void KillUnit()
         {
+            playerManager.WaitForDeath = true;
             Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
             gridManager.RemoveGridObject(this.Coordinate, this);
-            await UniTask.Delay(1000);
+            await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
 
