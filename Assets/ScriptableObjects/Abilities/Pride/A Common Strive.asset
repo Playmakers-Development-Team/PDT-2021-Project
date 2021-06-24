@@ -12,15 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: A Common Strive
   m_EditorClassIdentifier: 
-  description: "Does 1 Attack and 1 Defense. \n2 Attack spend Passion.\n2 Defense
-    with Humility."
+  description: "Targets Does 1 Attack and 1 Defense. \n\u21AF Targets may Spend Passion,
+    gain 2 Attack.\n\u21AF Targets may Spend Humility, gain 2 Defense."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
     defenceValue: 1
     attackValue: 1
-    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 1
@@ -29,7 +30,6 @@ MonoBehaviour:
     damageValue: 0
     defenceValue: 0
     attackValue: 2
-    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -42,7 +42,6 @@ MonoBehaviour:
     damageValue: 0
     defenceValue: 2
     attackValue: 0
-    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0

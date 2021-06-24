@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Standup
   m_EditorClassIdentifier: 
-  description: 'Does base 1 Damage.
-
-    3 Damage with Pride
-
-    2 Damage spend
-    Passion'
+  description: "Deals 1 Damage.\n\u21AF Deal 3 extra Damage with Pride\n\u21AF Targets
+    may Spend Passion to deal 2 extra Damage"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -38,6 +35,7 @@ MonoBehaviour:
       stackCount: 0
     costs:
     - name: With Pride
+      affectType: 0
       costType: 0
       tenetType: 0
   - name: 2 Damage spend Passion
@@ -49,6 +47,7 @@ MonoBehaviour:
       stackCount: 0
     costs:
     - name: Spend Passion
+      affectType: 0
       costType: 2
       tenetType: 2
   userEffects: []
