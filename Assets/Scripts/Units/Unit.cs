@@ -189,8 +189,7 @@ namespace Units
         /// </summary>
         private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
-            // We have to explicitly compare types here 
-            if (killUnitCommand.Unit.GetType() == GetType())
+            if (killUnitCommand.Unit == this)
             {
                 // Since we're about to remove the object, stop listening to the command
                 commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
