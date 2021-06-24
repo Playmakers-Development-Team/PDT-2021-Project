@@ -14,21 +14,15 @@ namespace ColorDrop
 
     public class ColorDropGenerator : MonoBehaviour, IColorDropTextureGenerator
     {
-        private RenderTexture dstRenderTexture;
-        public ColorDropSettings colorDropSettings;
-
-        [Header("Texture Attributes")]
+        // Private Fields
+        //private RenderTexture dstRenderTexture;
+        private ColorDropSettings colorDropSettings;
+        private System.Random random;
+        //private Texture2D dstTexture;
 
         private float minScale = 1;
         private float maxScale = 1;
         private float minAspectRatio = 1;
-
-        // Fields
-        private Material meshMaterial;
-        private System.Random random;
-        private Texture2D dstTexture;
-
-        public Sprite testTex;
 
         private int texWidth;
         private int texHeight;
@@ -44,10 +38,11 @@ namespace ColorDrop
             texWidth = templateBase.width;
             texHeight = templateBase.height;
 
-            dstRenderTexture = new RenderTexture(templateBase);
+            Texture2D dstTexture = new Texture2D(texWidth, texHeight);
+            RenderTexture dstRenderTexture = new RenderTexture(templateBase);
             dstRenderTexture.Release();
-            CreateNewTexture(templateBase.width, templateBase.height);
-            CombineSpriteTextures();
+            CreateNewTexture(templateBase.width, templateBase.height, dstTexture);
+            CombineSpriteTextures(dstTexture);
             Graphics.Blit(dstTexture, dstRenderTexture);
             return dstRenderTexture;
         }
@@ -58,14 +53,15 @@ namespace ColorDrop
             texWidth = templateBase.width;
             texHeight = templateBase.height;
 
-            CreateNewTexture(templateBase.width, templateBase.height);
-            CombineSpriteTextures();
+            Texture2D dstTexture = new Texture2D(texWidth, texHeight);
+            CreateNewTexture(templateBase.width, templateBase.height, dstTexture);
+            CombineSpriteTextures(dstTexture);
             return dstTexture;
         }
 
-        private void CreateNewTexture(int width, int height)
+        private void CreateNewTexture(int width, int height, Texture2D dstTexture)
         {
-            dstTexture = new Texture2D(width, height);
+            //dstTexture = new Texture2D(width, height);
             Color pixelSample;
 
             for (int y = 0; y < height; y++)
@@ -81,13 +77,26 @@ namespace ColorDrop
             dstTexture.Apply();
         }
 
-        private void CombineSpriteTextures()
+        private void CombineSpriteTextures(Texture2D dstTexture)
         {
-            for (int i = 0; i < colorDropSettings.textureShapes.Length; i++)
+            Sprite[] texShapes = RandomiseSpriteCombination();
+
+            for (int i = 0; i < texShapes.Length; i++)
             {
-                BlitDrop(colorDropSettings.textureShapes[i], dstTexture);
+                BlitDrop(texShapes[i], dstTexture);
             }
-            //BlitDrop(testTex, dstTexture);
+        }
+
+        private Sprite[] RandomiseSpriteCombination()
+        {
+            Sprite[] selections = new Sprite[UnityEngine.Random.Range(1, colorDropSettings.textureShapes.Length)];
+
+            for(int i = 0; i < selections.Length; i++)
+            {
+                selections[i] = colorDropSettings.textureShapes[UnityEngine.Random.Range(0, colorDropSettings.textureShapes.Length)];
+            }
+
+            return selections;
         }
 
         private void BlitDrop(Sprite src, Texture2D dst)
@@ -120,11 +129,11 @@ namespace ColorDrop
                     // Write the new pixel value to tex using the max between src and dst alpha values
                     dstColor = new Color(0, 0, 0, Math.Max(srcColor.a, dstColor.a));
 
-                    dstTexture.SetPixel((int)dstRect.x + x, (int)dstRect.y + y, dstColor);
+                    dst.SetPixel((int)dstRect.x + x, (int)dstRect.y + y, dstColor);
                 }
             }
 
-            dstTexture.Apply();
+            dst.Apply();
         }
 
         private Rect CreateTextureRect(float srcWidth, float srcHeight, int dstWidth, int dstHeight)
@@ -140,14 +149,6 @@ namespace ColorDrop
 
             return dstRect;
         }
-
-        /*private void RenderTexture()
-        {
-            Graphics.Blit(dstTexture, dstRenderTexture);
-            meshMaterial = meshRenderer.sharedMaterial;
-            meshMaterial.SetTexture("_BaseMap", dstRenderTexture);
-        }*/
-
     }
 
     [Serializable]

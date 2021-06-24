@@ -8,12 +8,11 @@ namespace ColorDrop
 {
     public interface IColorDropParticleRenderer
     {
-
+        void OnParticleRemoval();
     }
 
     public class ColorDropParticleSystem : MonoBehaviour, IColorDropParticleRenderer
     {
-        public GameObject particlePrefab;
         [HideInInspector] public ColorDropParticleAttributes particleAttributes;
 
         // Particle Attributes
@@ -39,22 +38,44 @@ namespace ColorDrop
         // Previewer
         [HideInInspector] public RenderTexture previewTexture;
 
+        private GameObject[] particleObjects;
+        private IColorDropParticle[] particleInstances;
         private IColorDropTextureGenerator texDropGenerator;
         private ColorDropSettings settings;
         private int particleViewCount = 0;
         private SimpleTimer particleTimer;
         private Vector2 viewPlaneDimension = Vector2.one;
 
+        private float rightBound;
+        private float leftBound;
+        private float upBound;
+        private float downBound;
+
+        private bool isVertOut = false;
+        private bool isHorOut = false;
+
         private void Awake()
         {
             settings = Resources.Load("Settings/Effects/ColorDropSetting") as ColorDropSettings;
             texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
+            texDropGenerator.InitialiseTextureGenerator(settings);
+
             particleTimer = new SimpleTimer(rateOverTime, Time.deltaTime);
+            particleObjects = new GameObject[maxParticleCountInView];
+            particleInstances = new IColorDropParticle[maxParticleCountInView];
         }
 
         private void Update()
         {
-            if (particleViewCount > maxParticleCountInView) return;
+            IterateThroughParticles();
+            RunParticleSpawn();
+        }
+
+        #region Particle Creation
+
+        public void RunParticleSpawn()
+        {
+            if (particleViewCount >= maxParticleCountInView) return;
 
             particleTimer.TickTimer();
 
@@ -64,8 +85,6 @@ namespace ColorDrop
                 particleTimer.ResetTimer();
             }
         }
-
-        #region Particle Creation
 
         public void CreateParticle()
         {
@@ -79,8 +98,23 @@ namespace ColorDrop
             };
 
             IColorDropParticle particle = Instantiate(settings.particlePrefab, NewLocationWithinViewBounds(), Quaternion.identity).GetComponent<IColorDropParticle>();
-            particle.BeginParticle(attributes);
+            particle.BeginParticle(attributes, this);
             particleViewCount++;
+
+            AddToArray(particle);
+        }
+
+        private void AddToArray(IColorDropParticle particle)
+        {
+            for (int i = 0; i < particleInstances.Length; i++)
+            {
+                if (particleInstances[i] == null)
+                {
+                    particleInstances[i] = particle;
+                    particleObjects[i] = particle.GetParticleGameObject();
+                    return;
+                }
+            }
         }
 
         public Vector3 NewLocationWithinViewBounds()
@@ -94,10 +128,46 @@ namespace ColorDrop
             return newPosition;
         }
 
+        private void IterateThroughParticles()
+        {
+            for (int i = 0; i < particleObjects.Length; i++)
+            {
+                if (particleObjects[i] != null)
+                {
+                    if (CheckParticlePositionIsVisible(particleInstances[i].GetParticlePosition()))
+                    {
+                        particleInstances[i].EndParticle();
+                        Destroy(particleObjects[i]);
+                        particleInstances[i] = null;
+                        particleObjects[i] = null;
+                    }
+                }
+            }
+        }
+
+        private bool CheckParticlePositionIsVisible(Vector3 pos)
+        {
+            rightBound = (viewPlaneDimension.x) + targetCamera.transform.position.x;
+            leftBound = targetCamera.transform.position.x - (viewPlaneDimension.x);
+            upBound = (viewPlaneDimension.y) + targetCamera.transform.position.y;
+            downBound = targetCamera.transform.position.y - (viewPlaneDimension.y);
+
+            isVertOut = pos.y < downBound || pos.y > upBound;
+            isHorOut = pos.x < leftBound || pos.x > rightBound;
+
+            return isVertOut && isHorOut;
+        }
+
+        public void OnParticleRemoval()
+        {
+            particleViewCount--;
+            particleViewCount = particleViewCount <= 0 ? 0 : particleViewCount;
+        }
+
         private void DetermineCameraPlaneBoundaries()
         {
             viewPlaneDimension.x = targetCamera.orthographicSize * targetCamera.aspect;
-            viewPlaneDimension.y = viewPlaneDimension.x * (float)(Screen.height / Screen.width);
+            viewPlaneDimension.y = viewPlaneDimension.x * (float)Screen.height / (float)Screen.width;
         }
 
         #endregion
@@ -107,9 +177,11 @@ namespace ColorDrop
 
         public Texture GeneratePreviewTexture()
         {
-            if (texDropGenerator == null)
+            if (texDropGenerator == null || settings == null)
             {
+                settings = Resources.Load("Settings/Effects/ColorDropSetting") as ColorDropSettings;
                 texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
+                texDropGenerator.InitialiseTextureGenerator(settings);
             }
 
             return texDropGenerator.GeneratePreviewTex(templateTextureRenderTexture);
@@ -126,46 +198,18 @@ namespace ColorDrop
 
         public void CollectSpawnLocations()
         {
-            
+            GameObject[] objects = FindObjectsOfType<GameObject>();
+            //spawnLocations = objects.Where(x => x.GetComponent<ISpawn)
         }
 
         #endregion
-    }
 
-    public class SimpleTimer
-    {
-        // Fields
-        private float intervalLength;
-        private float timeLeft;
-        private float deltaTime;
-
-        public SimpleTimer(float intervalLength, float deltaTime)
+        private void OnDrawGizmos()
         {
-            this.intervalLength = intervalLength;
-            this.timeLeft = intervalLength;
-            this.deltaTime = deltaTime;
-        }
-
-        public void UpdateTimerAttributes(float intervalLength, float deltaTime)
-        {
-            this.intervalLength = intervalLength;
-            this.deltaTime = deltaTime;
-        }
-
-        public void TickTimer()
-        {
-            timeLeft -= deltaTime;
-        }
-
-        public bool CheckTimeIsUp()
-        {
-            return timeLeft <= 0;
-        }
-
-        public void ResetTimer()
-        {
-            timeLeft = intervalLength;
+            Gizmos.DrawCube(new Vector3(viewPlaneDimension.x, 0, 0) + targetCamera.transform.position, Vector3.one);
+            Gizmos.DrawCube(new Vector3(-viewPlaneDimension.x, 0, 0) + targetCamera.transform.position, Vector3.one);
+            Gizmos.DrawCube(new Vector3(0, viewPlaneDimension.y, 0) + targetCamera.transform.position, Vector3.one);
+            Gizmos.DrawCube(new Vector3(0, -viewPlaneDimension.y, 0) + targetCamera.transform.position, Vector3.one);
         }
     }
-
 }
