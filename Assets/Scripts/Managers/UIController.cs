@@ -18,6 +18,7 @@ namespace Managers
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
         [SerializeField] private GameObject audioPanel;
+        [SerializeField] private LineRenderer abilityLineRenderer;
 
         private GridManager gridManager;
         private UIManager uiManager;
@@ -81,6 +82,8 @@ namespace Managers
                 abilityIndex = 0;
                 UpdateAbilityUI(actingPlayerUnit);
             });
+
+            uiManager.abilityLineRenderer = abilityLineRenderer;
         }
 
         private void Start()
