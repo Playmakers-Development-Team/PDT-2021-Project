@@ -50,6 +50,8 @@ namespace Background.Pipeline
         /// </summary>
         public void Render()
         {
+            Debug.Log("Rendering background...");
+            
             Initialize();
             
             RenderLine();
