@@ -27,6 +27,14 @@ MonoBehaviour:
       stackCount: 0
     costs: []
   userEffects:
+  - name: Default, 3 Damage
+    damageValue: 3
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs: []
   - name: 3 Defence spend Humility
     damageValue: 0
     defenceValue: 3
