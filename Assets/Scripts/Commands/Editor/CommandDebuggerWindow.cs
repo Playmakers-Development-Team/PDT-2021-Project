@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Abilities;
+using GridObjects;
 using Managers;
 using Units;
 using UnityEditor;
@@ -156,7 +157,7 @@ namespace Commands.Editor
                         }
                         else if (typeof(IUnit).IsAssignableFrom(parameterType))
                         {
-                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(GameObject), true);
+                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(GridObject), true);
                             GameObject go = parameterValues[i] as GameObject;
 
                             if (go != null && go.TryGetComponent(out IUnit unit))
