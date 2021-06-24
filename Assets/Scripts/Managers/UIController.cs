@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Abilities;
 using Commands;
 using GridObjects;
+using Tiles;
 using UI;
 using Units;
 using Units.Commands;
@@ -53,6 +54,8 @@ namespace Managers
         private bool isCastingAbility;
 
         public bool printMoveRangeCoords = false;
+
+        private bool canCastAbility = true;
         
 
         private List<Vector2Int> selectedMoveRange;
@@ -86,6 +89,7 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+                canCastAbility = true;
             });
         }
 
@@ -132,7 +136,7 @@ namespace Managers
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
         {
-            uiManager.HighlightAbility(((GridObject)unit).Coordinate,
+            uiManager.HighlightAbility(unit.Coordinate,
                 ((OrdinalDirection) UnityEngine.Random.Range(0,
                     Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
         }
@@ -159,8 +163,8 @@ namespace Managers
                 
                 
                 abilityCards[abilityIndex].HighlightAbility();
-                actingPlayerUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
-                TestAbilityHighlight(actingPlayerUnit, actingPlayerUnit.CurrentlySelectedAbility);
+                actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
+                //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
 
                 abilityIndex++;
             }
@@ -184,9 +188,15 @@ namespace Managers
                 nextClickWillMove = true;
                 Debug.Log("Next click will move.");
 
-                UpdateMoveRange(gridManager.GetAllReachableTiles(
-                    ((GridObject)turnManager.ActingUnit).Coordinate,
-                    (int) turnManager.ActingUnit.MovementActionPoints.Value));
+                if (unitManager.ActingUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
+                {
+                    nextClickWillMove = true;
+                    Debug.Log("Next click will move.");
+
+                    UpdateMoveRange(gridManager.GetAllReachableTiles(
+                        unitManager.ActingUnit.Coordinate,
+                        (int) unitManager.ActingUnit.MovementActionPoints.Value));
+                }
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -240,24 +250,31 @@ namespace Managers
             }
         }
         
-        //TODO Move this to its 
         private void MoveUnit()
         {
             //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
-            
+
+            TileData tileData = gridManager.GetTileDataByCoordinate(gridPos);
+
+            if (tileData is null)
+            {
+                Debug.Log("No tile data at this location. Unit was not moved.");
+                return;
+            }
+
             // Check if tile is unoccupied
             // This cannot be checked with move range as no occupied tile will be added to it
             // This only needs to be kept if a different thing happens if the player selects an occupied space
-            if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
+            if (tileData.GridObjects.Count != 0)
             {
-                Debug.Log("Target tile is occupied.");
+                Debug.Log("Target tile is occupied. Unit was not moved.");
                 return;
             }
 
             if (!selectedMoveRange.Contains(gridPos))
             {
-                Debug.Log("Target tile out of range.");
+                Debug.Log("Target tile out of range. Unit was not moved.");
                 return;
             }
             
@@ -265,14 +282,12 @@ namespace Managers
             
             //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
           
-            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
-            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
-            ).Coordinate);
+            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
             
             // playerUnit.MovementActionPoints.Value = Math.Min(0,
             //     playerUnit.MovementActionPoints.Value -=
-            //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
-            //             gridPos));
+            //         ManhattanDistance.GetManhattanDistance(playerUnit.Coordinate, gridPos));
             
             var moveCommand = new StartMoveCommand(playerUnit, gridPos);
             commandManager.ExecuteCommand(moveCommand);
@@ -293,7 +308,7 @@ namespace Managers
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingPlayerUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) && canCastAbility)
             {
                 isCastingAbility = !isCastingAbility;
             }
@@ -305,7 +320,10 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                actingPlayerUnit.CurrentlySelectedAbility.Use(actingPlayerUnit, actingPlayerUnit.Coordinate, castVector);
+                commandManager.ExecuteCommand(new AbilityCommand(actingUnit, castVector, actingUnit.CurrentlySelectedAbility));
+                uiManager.ClearAbilityHighlight();
+                isCastingAbility = false;
+                canCastAbility = false;
             }
         }
     }
