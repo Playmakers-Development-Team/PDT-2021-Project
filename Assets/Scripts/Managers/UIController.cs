@@ -345,10 +345,11 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                commandManager.ExecuteCommand(new AbilityCommand(actingPlayerUnit, castVector, actingPlayerUnit.CurrentlySelectedAbility));
-                uiManager.ClearAbilityHighlight();
                 isCastingAbility = false;
                 canCastAbility = false;
+                commandManager.ExecuteCommand(new AbilityCommand(actingPlayerUnit, castVector, actingPlayerUnit.CurrentlySelectedAbility));
+                uiManager.ClearAbilityHighlight();
+                ClearAbilityUI();
                 
                 actingPlayerUnit.CurrentlySelectedAbility.Use(actingPlayerUnit, actingPlayerUnit.Coordinate,
                     castVector);
