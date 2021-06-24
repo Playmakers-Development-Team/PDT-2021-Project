@@ -127,6 +127,10 @@ namespace Managers
             
             commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
             {
+
+                if (unitManager.SelectedUnit is EnemyUnit)
+                    return;
+                
                 RemoveAbilitiesPreview();
                 
                 foreach (var ability in unitManager.SelectedUnit.Abilities)

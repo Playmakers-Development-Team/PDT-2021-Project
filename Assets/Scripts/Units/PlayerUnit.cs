@@ -25,8 +25,8 @@ namespace Units
         protected override void Start()
         {
             base.Start();
-            ManagerLocator.Get<PlayerManager>().Spawn(this);
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            ManagerLocator.Get<PlayerManager>().Spawn(this);
         }
 
         public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
@@ -58,7 +58,7 @@ namespace Units
                     break;
                 case AnimationStates.Right:
                     animator.SetInteger("Movement", 1);
-                    spriteRenderer.flipX = false;
+                     spriteRenderer.flipX = false;
                     animator.SetBool("isCasting", false);
                     break;
                 case AnimationStates.Casting:
