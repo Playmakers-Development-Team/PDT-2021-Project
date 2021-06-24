@@ -47,6 +47,7 @@ namespace Units
         public Knockback Knockback { get; private set; }
 
         [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text healthText;
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
 
@@ -74,14 +75,19 @@ namespace Units
             
             if (nameText)
                 nameText.text = Name;
+            
+               
+            if (healthText)
+                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
         }
 
         // TODO: Used for testing, can eventually be removed
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1)
-                TakeDamage(10);
+
         }
+        
+        
         
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
@@ -92,6 +98,10 @@ namespace Units
             int damageTaken = Health.TakeDamage(amount);
             
             SpawnDamageText(damageTaken);
+            
+            if (healthText)
+                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
