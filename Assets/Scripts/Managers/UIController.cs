@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using UI;
 using Units;
@@ -16,6 +17,7 @@ namespace Managers
     {
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
+        [SerializeField] private GameObject audioPanel;
 
         private GridManager gridManager;
         private UIManager uiManager;
@@ -53,7 +55,6 @@ namespace Managers
         private bool isCastingAbility;
 
         public bool printMoveRangeCoords = false;
-        
 
         private List<Vector2Int> selectedMoveRange;
 
@@ -73,7 +74,7 @@ namespace Managers
                     return;
 
                 abilityIndex = 0;
-                UpdateAbilityUI((PlayerUnit)actingUnit);
+                UpdateAbilityUI((PlayerUnit) actingUnit);
             });
         }
 
@@ -85,6 +86,26 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+
+                if (unitManager.ActingUnit is PlayerUnit)
+                {
+                    abilityIndex = 0;
+                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                }
+            });
+
+            commandManager.ListenCommand<EndTurnCommand>(cmd =>
+            {
+                if (unitManager.ActingUnit is EnemyUnit)
+                    ClearAbilityUI();
+
+                uiManager.ClearAbilityHighlight();
+
+                if (unitManager.ActingUnit is PlayerUnit)
+                {
+                    abilityIndex = 0;
+                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                }
             });
         }
 
@@ -131,32 +152,34 @@ namespace Managers
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
         {
-            uiManager.HighlightAbility(((GridObject)unit).Coordinate,
+            uiManager.HighlightAbility(((GridObject) unit).Coordinate,
                 ((OrdinalDirection) UnityEngine.Random.Range(0,
                     Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
+            if (
+                Input.GetKeyDown(KeyCode.
+                    E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             {
-                if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
+                if (ManagerLocator.Get<PlayerManager>().WaitForDeath)
+                    return; //can be more efficient
                 if (actingUnit == null)
                     return;
 
                 if (isUnselected)
                 {
                     isUnselected = false;
-                    UpdateAbilityUI((PlayerUnit)actingUnit);
+                    UpdateAbilityUI((PlayerUnit) actingUnit);
                 }
 
                 if (abilityIndex >= abilityCards.Count)
                     abilityIndex = 0;
-                
+
                 if (abilityIndex != 0)
                     abilityCards[abilityIndex - 1].UnHighlightAbility();
-                
-                
+
                 abilityCards[abilityIndex].HighlightAbility();
                 actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
                 TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
@@ -174,7 +197,7 @@ namespace Managers
                 uiManager.ClearAbilityHighlight();
                 abilityIndex = 0;
             }
-            
+
             if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
             {
                 if (unitManager.ActingUnit == null || unitManager.ActingUnit is EnemyUnit)
@@ -186,12 +209,14 @@ namespace Managers
                     Debug.Log("Next click will move.");
 
                     UpdateMoveRange(gridManager.GetAllReachableTiles(
-                        ((GridObject)unitManager.ActingUnit).Coordinate,
+                        ((GridObject) unitManager.ActingUnit).Coordinate,
                         (int) unitManager.ActingUnit.MovementActionPoints.Value));
-                    
                 }
             }
-            
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                audioPanel.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (nextClickWillMove)
@@ -206,7 +231,7 @@ namespace Managers
                     SelectUnit();
                 }
             }
-            
+
             HandleAbilityCasting();
         }
 
@@ -226,10 +251,10 @@ namespace Managers
                     }
                 }
             }
-            
+
             playerManager.DeselectUnit();
         }
-        
+
         private void UpdateMoveRange(List<Vector2Int> moveRange)
         {
             selectedMoveRange = moveRange;
@@ -242,15 +267,14 @@ namespace Managers
                 }
             }
         }
-        
+
         //TODO Move this to its 
-       
 
         private void MoveUnit()
         {
             //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
-            
+
             // Check if tile is unoccupied
             //This cannot be checked with move range as no occupied tile will be added to it
             //This only needs to be kept if a different thing happens if the player selects an occupied space
@@ -265,32 +289,23 @@ namespace Managers
                 Debug.Log("Target tile out of range.");
                 return;
             }
-            
+
             IUnit playerUnit = unitManager.ActingPlayerUnit;
-            
+
             //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
-          
-            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
-            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
-            ).Coordinate);
-            
+
+            Debug.Log(((GridObject) playerUnit).Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit =
+                gridManager.GetGridObjectsByCoordinate(((GridObject) playerUnit).Coordinate);
+
             // playerUnit.MovementActionPoints.Value = Math.Min(0,
             //     playerUnit.MovementActionPoints.Value -=
             //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
             //             gridPos));
-            
-          
-            
-            var moveCommand = new MoveCommand(
-                playerUnit,
-                gridPos
-            );
-            
+
+            var moveCommand = new MoveCommand(playerUnit, gridPos);
+
             commandManager.ExecuteCommand(moveCommand);
-
-           
-
-
         }
 
         private Vector2Int GetCoordinateFromClick()
@@ -300,12 +315,13 @@ namespace Managers
             return gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
         }
 
-        private void HandleAbilityCasting()
+        private async void HandleAbilityCasting()
         {
             if (actingUnit == null || actingUnit.CurrentlySelectedAbility == null)
                 return;
-            
-            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingUnit.transform.position);
+
+            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) -
+                                   actingUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
             if (Input.GetKeyDown(KeyCode.A))
@@ -315,12 +331,25 @@ namespace Managers
 
             if (isCastingAbility)
             {
-                uiManager.HighlightAbility(actingUnit.Coordinate, castVector, actingUnit.CurrentlySelectedAbility);
+                uiManager.HighlightAbility(actingUnit.Coordinate, castVector,
+                    actingUnit.CurrentlySelectedAbility);
             }
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate, castVector);
+                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate,
+                    castVector);
+
+                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
+
+                float flag = 0;
+                while (flag < actingUnit.animator.GetCurrentAnimatorStateInfo(0).length)
+                {
+                    flag += Time.deltaTime;
+                    await UniTask.Yield();
+                }
+
+                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Commands.Shapes;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -48,7 +49,9 @@ namespace Abilities
             int defence = CalculateValue(user, effects, EffectValueType.Defence);
             int attack = CalculateValue(user, effects, EffectValueType.Attack);
             ProcessTenets(user, effects);
-
+            
+            
+            
             foreach (GridObject target in targets)
             {
                 if (target is IUnit targetUnit)
@@ -56,9 +59,17 @@ namespace Abilities
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
                     targetUnit.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
-                    targetUnit.TakeKnockback(knockback);
+                    //targetUnit.TakeKnockback(knockback); uncessessary
+                    
                 }
+
             }
+
+         
+            
+           
+            
+            
         }
         
         public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
