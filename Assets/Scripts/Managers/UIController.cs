@@ -248,8 +248,13 @@ namespace Managers
             
             if (gridObjects.Count > 0)
             {
-                unitManager.SelectUnit((IUnit) gridObjects[0]);
-                return;
+                if (gridObjects[0] is IUnit unit)
+                {
+                    unitManager.SelectUnit(unit);
+                    return;
+                }
+
+                Debug.Log("Cannot select non-unit GridObjects.");
             }
 
             playerManager.DeselectUnit();

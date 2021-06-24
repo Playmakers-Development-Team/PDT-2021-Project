@@ -64,8 +64,7 @@ namespace Managers
 
             if (tileData is null)
             {
-                Debug.LogError("ERROR: No tileData was found for the provided coordinates " +
-                               coordinate);
+                Debug.Log("No tile found at coordinates " + coordinate);
                 return new List<GridObject>();
             }
 
