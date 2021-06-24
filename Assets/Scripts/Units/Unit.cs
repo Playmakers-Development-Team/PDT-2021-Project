@@ -46,6 +46,7 @@ namespace Units
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
 
+        [SerializeField] private TMP_Text nameText;
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
 
@@ -70,6 +71,9 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            
+            if (nameText)
+                nameText.text = Name;
         }
 
         // TODO: Used for testing, can eventually be removed
