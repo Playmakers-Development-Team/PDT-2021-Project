@@ -1,15 +1,13 @@
-using System;
 using System.Collections.Generic;
-using Commands;
-using JetBrains.Annotations;
 using Units;
+using Units.Commands;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
 
 namespace Managers
 {
     public class UnitManager : Manager
     {
+        protected CommandManager commandManager;
         private EnemyManager enemyManager;
         private PlayerManager playerManager;
 
@@ -42,6 +40,7 @@ namespace Managers
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         /// <summary>
@@ -112,6 +111,7 @@ namespace Managers
         /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
@@ -123,6 +123,7 @@ namespace Managers
         /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
         {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;

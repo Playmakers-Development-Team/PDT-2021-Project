@@ -4,6 +4,7 @@ using Commands;
 using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -54,7 +55,7 @@ namespace Managers
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             
             //IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }
 
@@ -123,15 +124,15 @@ namespace Managers
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
-            var moveCommand = new MoveCommand(
+            var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
                 actingUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+            commandManager.ExecuteCommand(moveCommand);
             return UniTask.Delay(1000);
-    
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles

@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Abilities;
 using Commands;
 using GridObjects;
 using UI;
 using Units;
+using Units.Commands;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using Utility;
 
 namespace Managers
@@ -73,7 +72,7 @@ namespace Managers
                     return;
 
                 abilityIndex = 0;
-                UpdateAbilityUI((PlayerUnit)actingUnit);
+                UpdateAbilityUI(actingUnit);
             });
         }
 
@@ -91,7 +90,7 @@ namespace Managers
         /// <summary>
         /// Updated the ability ui cards for the new active unit
         /// </summary>
-        /// <param name="the current active unit"></param>
+        /// <param name="unit">The current acting unit.</param>
         private void UpdateAbilityUI(PlayerUnit unit)
         {
             ClearAbilityUI();
@@ -147,7 +146,7 @@ namespace Managers
                 if (isUnselected)
                 {
                     isUnselected = false;
-                    UpdateAbilityUI((PlayerUnit)actingUnit);
+                    UpdateAbilityUI(actingUnit);
                 }
 
                 if (abilityIndex >= abilityCards.Count)
@@ -188,7 +187,6 @@ namespace Managers
                     UpdateMoveRange(gridManager.GetAllReachableTiles(
                         ((GridObject)unitManager.ActingUnit).Coordinate,
                         (int) unitManager.ActingUnit.MovementActionPoints.Value));
-                    
                 }
             }
             
@@ -244,16 +242,14 @@ namespace Managers
         }
         
         //TODO Move this to its 
-       
-
         private void MoveUnit()
         {
             //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
             
             // Check if tile is unoccupied
-            //This cannot be checked with move range as no occupied tile will be added to it
-            //This only needs to be kept if a different thing happens if the player selects an occupied space
+            // This cannot be checked with move range as no occupied tile will be added to it
+            // This only needs to be kept if a different thing happens if the player selects an occupied space
             if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
             {
                 Debug.Log("Target tile is occupied.");
@@ -279,18 +275,8 @@ namespace Managers
             //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
             //             gridPos));
             
-          
-            
-            var moveCommand = new MoveCommand(
-                playerUnit,
-                gridPos
-            );
-            
+            var moveCommand = new StartMoveCommand(playerUnit, gridPos);
             commandManager.ExecuteCommand(moveCommand);
-
-           
-
-
         }
 
         private Vector2Int GetCoordinateFromClick()

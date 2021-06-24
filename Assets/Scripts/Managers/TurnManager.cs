@@ -10,26 +10,6 @@ namespace Managers
     public class TurnManager : Manager
     {
         /// <summary>
-        /// An event that triggers when a round has ended.
-        /// </summary>
-        public event Action<TurnManager> onTurnEnd;
-
-        /// <summary>
-        /// An event that triggers when a round has started.
-        /// </summary>
-        public event Action<TurnManager> onRoundStart;
-
-        /// <summary>
-        /// An event that triggers when a unit has died.
-        /// </summary>
-        public event Action<TurnManager> onUnitDeath;
-
-        /// <summary>
-        /// An event that triggers when a new unit has spawned.
-        /// </summary>
-        public event Action<TurnManager> newUnitAdded;
-        
-        /// <summary>
         /// Gives how many turns have passed throughout the entire level.
         /// </summary>
         public int TotalTurnCount { get; private set; }
@@ -178,8 +158,6 @@ namespace Managers
             
             // Reselects the new current unit if the old current unit has died
             SelectCurrentUnit();
-
-            onUnitDeath?.Invoke(this);
         }
 
         // TODO Test
@@ -256,7 +234,6 @@ namespace Managers
         {
             currentTurnQueue.Add(unit);
             //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
-            newUnitAdded?.Invoke(this);
             timelineNeedsUpdating = true;
         }
 
@@ -301,8 +278,6 @@ namespace Managers
             SelectCurrentUnit();
 
             Debug.Log("next turn has started");
-            
-            onTurnEnd?.Invoke(this);
         }
         
         /// <summary>
@@ -313,6 +288,7 @@ namespace Managers
         {
             // TODO might want to call the next round command or something here
             RoundCount++;
+            commandManager.ExecuteCommand(new PrepareRoundCommand());
             
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
@@ -335,11 +311,11 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
-
+            
             foreach (IUnit unit in unitManager.AllUnits)
                 unit.MovementActionPoints.Reset();
             
-            onRoundStart?.Invoke(this);
+            commandManager.ExecuteCommand(new StartRoundCommand());
         }
 
         /// <summary>

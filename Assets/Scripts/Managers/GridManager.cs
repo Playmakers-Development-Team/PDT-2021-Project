@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
 using Units;
+using Units.Commands;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
@@ -156,7 +156,7 @@ namespace Managers
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
-            String allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
+            string allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
             
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
@@ -236,7 +236,7 @@ namespace Managers
         {
             var visited = new Dictionary<Vector2Int, Vector2Int>();
             var coordinateQueue = new Queue<Vector2Int>();
-            String allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].
+            string allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].
                 gameObject.tag;
 
             coordinateQueue.Enqueue(startingCoordinate);
@@ -355,8 +355,11 @@ namespace Managers
             }
         }
         
-        public async void MoveUnit(Vector2Int newCoordinate, IUnit unit)
+        public async void MoveUnit(StartMoveCommand moveCommand)
         {
+            IUnit unit = moveCommand.Unit;
+            Vector2Int newCoordinate = moveCommand.TargetCoords;
+
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = ((GridObject)unit).Coordinate;
@@ -400,7 +403,9 @@ namespace Managers
 
             Debug.Log(Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
-                    
+            
+            // Should be called when all the movement and tweening has been completed
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }
 
         private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
