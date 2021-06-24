@@ -351,8 +351,8 @@ namespace Managers
                 uiManager.ClearAbilityHighlight();
                 ClearAbilityUI();
                 
-                actingPlayerUnit.CurrentlySelectedAbility.Use(actingPlayerUnit, actingPlayerUnit.Coordinate,
-                    castVector);
+                // actingPlayerUnit.CurrentlySelectedAbility.Use(actingPlayerUnit, actingPlayerUnit.Coordinate,
+                //     castVector);
 
                 actingPlayerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
 
