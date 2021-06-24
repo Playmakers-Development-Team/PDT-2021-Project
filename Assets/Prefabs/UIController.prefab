@@ -252,6 +252,8 @@ MonoBehaviour:
   abilityParent: {fileID: 7130972915437726554}
   audioPanel: {fileID: 0}
   abilityLineRenderer: {fileID: 2640976353222480873}
+  showGridLines: 1
+  gridLinePrefab: {fileID: 8213003586257864087, guid: 248a29e1721607d5cadd152b468624ed, type: 3}
   printMoveRangeCoords: 0
 --- !u!1 &7130972915437726555
 GameObject:

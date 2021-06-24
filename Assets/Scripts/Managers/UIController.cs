@@ -19,6 +19,8 @@ namespace Managers
         [SerializeField] private Transform abilityParent;
         [SerializeField] private GameObject audioPanel;
         [SerializeField] private LineRenderer abilityLineRenderer;
+        [SerializeField] private bool showGridLines = true;
+        [SerializeField] private LineRenderer gridLinePrefab;
 
         private GridManager gridManager;
         private UIManager uiManager;
@@ -117,6 +119,46 @@ namespace Managers
                     UpdateAbilityUI(actingPlayerUnit);
                 }
             });
+            
+            GenerateGridLines();
+        }
+
+        private void GenerateGridLines()
+        {
+            if (!showGridLines)
+                return;
+            
+            gridManager = ManagerLocator.Get<GridManager>();
+            Vector2Int levelBounds = gridManager.LevelBounds;
+            int startX = -levelBounds.x / 2 - 1;
+            int endX = levelBounds.x / 2;
+            int startY = -levelBounds.y / 2 - 1;
+            int endY = levelBounds.y / 2;
+            
+            for (int x = startX; x <= endX; x++)
+            {
+                Vector2Int startCoor = new Vector2Int(x, startY);
+                Vector2Int endCoor = new Vector2Int(x, endY);
+                
+                CreateGridLine(gridManager.ConvertCoordinateToPosition(startCoor),
+                    gridManager.ConvertCoordinateToPosition(endCoor));
+            }
+
+            for (int y = startY; y <= endY; y++)
+            {
+                Vector2Int startCoor = new Vector2Int(startX, y);
+                Vector2Int endCoor = new Vector2Int(endX, y);
+
+                CreateGridLine(gridManager.ConvertCoordinateToPosition(startCoor),
+                    gridManager.ConvertCoordinateToPosition(endCoor));
+            }
+        }
+
+        private void CreateGridLine(Vector2 startPos, Vector2 endPos)
+        {
+            LineRenderer gridLine = Instantiate(gridLinePrefab, transform);
+            gridLine.positionCount = 2;
+            gridLine.SetPositions(new Vector3[] { startPos, endPos });
         }
 
         /// <summary>
