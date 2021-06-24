@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
 using Cysharp.Threading.Tasks;
-using Microsoft.Unity.VisualStudio.Editor;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -190,7 +189,7 @@ namespace Managers
         {
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
-            
+
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
             int distance = 0;
@@ -203,10 +202,11 @@ namespace Managers
                 distance = visited[currentNode];
 
                 // Add neighbours of node to queue
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue);
+                // NOTE: Allegiance does not matter in this context, ergo string.Empty
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
                 
                 coordinateQueue.Dequeue();
             }
