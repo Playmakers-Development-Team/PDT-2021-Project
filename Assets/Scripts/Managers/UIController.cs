@@ -92,10 +92,10 @@ namespace Managers
 
                 uiManager.ClearAbilityHighlight();
 
-                if (unitManager.ActingUnit is PlayerUnit)
+                if (turnManager.ActingUnit is PlayerUnit)
                 {
                     abilityIndex = 0;
-                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                    UpdateAbilityUI(actingPlayerUnit);
                 }
                 
                 canCastAbility = true;
@@ -103,15 +103,15 @@ namespace Managers
 
             commandManager.ListenCommand<EndTurnCommand>(cmd =>
             {
-                if (unitManager.ActingUnit is EnemyUnit)
+                if (turnManager.ActingUnit is EnemyUnit)
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
 
-                if (unitManager.ActingUnit is PlayerUnit)
+                if (turnManager.ActingUnit is PlayerUnit)
                 {
                     abilityIndex = 0;
-                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                    UpdateAbilityUI(actingPlayerUnit);
                 }
             });
         }
@@ -330,9 +330,8 @@ namespace Managers
                 return;
 
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) -
-                                   actingUnit.transform.position);
+                                   actingPlayerUnit.transform.position);
             
-            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingPlayerUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
             if (Input.GetKeyDown(KeyCode.A) && canCastAbility)
@@ -352,19 +351,19 @@ namespace Managers
                 isCastingAbility = false;
                 canCastAbility = false;
                 
-                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate,
+                actingPlayerUnit.CurrentlySelectedAbility.Use(actingPlayerUnit, actingPlayerUnit.Coordinate,
                     castVector);
 
-                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
+                actingPlayerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
 
                 float flag = 0;
-                while (flag < actingUnit.animator.GetCurrentAnimatorStateInfo(0).length)
+                while (flag < actingPlayerUnit.animator.GetCurrentAnimatorStateInfo(0).length)
                 {
                     flag += Time.deltaTime;
                     await UniTask.Yield();
                 }
 
-                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+                actingPlayerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
             }
         }
     }
