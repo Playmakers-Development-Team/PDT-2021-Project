@@ -26,7 +26,7 @@ namespace Managers
         /// <summary>
         /// Stores the current actingunit.
         /// </summary>
-        private PlayerUnit actingUnit => (PlayerUnit)unitManager.GetCurrentActingPlayerUnit;
+        private PlayerUnit actingUnit => (PlayerUnit)unitManager.ActingPlayerUnit;
 
         /// <summary>
         /// A list of ability cards showing the units current abilities
@@ -89,7 +89,7 @@ namespace Managers
 
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
-                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
+                if (unitManager.ActingUnit is EnemyUnit)
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();

@@ -8,40 +8,50 @@ using UnityEngine;
 
 namespace Managers
 {
-    public class EnemyManager : Manager
+    public class EnemyManager : UnitManager
     {
+        /// <summary>
+        /// Holds all the enemy units currently in the level.
+        /// </summary>
         private readonly List<IUnit> enemyUnits = new List<IUnit>();
 
+        /// <summary>
+        /// Returns all enemy units currently in the level.
+        /// </summary>
         public IReadOnlyList<IUnit> EnemyUnits => enemyUnits.AsReadOnly();
-        public int Count => enemyUnits.Count;
-        
-        public IUnit Spawn(GameObject enemyPrefab, Vector2Int gridPosition)
-        {
-            return Spawn(UnitUtility.Spawn(enemyPrefab, gridPosition));
-        }
-        
-        public IUnit Spawn(string enemyName, Vector2Int gridPosition)
-        {
-            return Spawn(UnitUtility.Spawn(enemyName, gridPosition));
-        }
 
-        private IUnit Spawn(IUnit unit)
-        {
-            if (!(unit is EnemyUnit))
-                return null;
-            
-            enemyUnits.Add(unit);
-            
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+        /// <summary>
+        /// Clears all the enemies from the <c>enemyUnits</c> list.
+        /// </summary>
+        public void ClearEnemyUnits() => enemyUnits.Clear();
 
-            return unit;
-        } 
-        
-        public void Clear()
+        /// <summary>
+        /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
+        /// </summary>
+        /// <param name="unitPrefab"></param>
+        /// <param name="gridPosition"></param>
+        /// <returns>The new <c>IUnit</c> that was added.</returns>
+        public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            enemyUnits.Clear();
+            IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
+            enemyUnits.Add(newUnit);
+            return newUnit;
         }
 
+        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
+
+            foreach (var adjacentGridObject in adjacentGridObjects)
+            {
+                if (adjacentGridObject.CompareTag("PlayerUnit"))
+                    return adjacentGridObject;
+            }
+
+            return null;
+        }
+        
         public void ClearUnits()
         {
             for (int i = enemyUnits.Count; i >= 0; i--)
@@ -186,7 +196,7 @@ namespace Managers
 
             return targetPlayerUnit;
         }
-
+        
         private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
@@ -266,22 +276,6 @@ namespace Managers
 
             // NOTE: If no nearby player squares are free, an empty list is returned
             return adjacentCoordinates;
-        }
-        
-        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
-
-            foreach (var adjacentGridObject in adjacentGridObjects)
-            {
-                if (adjacentGridObject.CompareTag("PlayerUnit"))
-                {
-                    return adjacentGridObject;
-                }
-            }
-            
-            return null;
         }
     }
 }
