@@ -49,12 +49,8 @@ namespace Managers
         /// <returns>The new <c>IUnit</c> that was added.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            //BUG THIS WILL BE FIXED ONCE UNIT/TURN DEPENDENCY IS SOLVED
-            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            IUnit unit = base.Spawn(unitPrefab, gridPosition);
             enemyUnits.Add(unit);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            
-            //IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Commands;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -76,7 +77,8 @@ namespace Managers
             unitManager = ManagerLocator.Get<UnitManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
 
-            commandManager.ListenCommand<EndTurnCommand>((cmd) => NextTurn());
+            commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
+            commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
         }
 
         // TODO Call this function when level is loaded

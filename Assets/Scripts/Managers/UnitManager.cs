@@ -50,7 +50,6 @@ namespace Managers
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
         }
 
@@ -62,7 +61,6 @@ namespace Managers
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
             return unit;
         }
     }
