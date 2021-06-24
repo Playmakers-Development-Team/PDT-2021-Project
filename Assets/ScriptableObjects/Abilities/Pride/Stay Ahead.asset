@@ -12,11 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Stay Ahead
   m_EditorClassIdentifier: 
-  description: 'Deal 2 damage
-
-    Gain 2 Defence and 1 Pride
-
-'
+  description: "Deal 2 damage\nGain 2 Defence and 1 Pride\n\u21AF User may Spend
+    Passion to gain 2 Attack"
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   knockback: 0
   onlyHitUnits: 1
@@ -29,6 +26,18 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs: []
+  - name: 2 Damage spend Passion
+    damageValue: 2
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    costs:
+    - name: User Spend Passion
+      affectType: 0
+      costType: 2
+      tenetType: 2
   userEffects:
   - name: Default, 2 Defence and Provide 1 Pride
     damageValue: 0
