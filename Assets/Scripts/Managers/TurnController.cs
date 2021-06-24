@@ -83,13 +83,13 @@ namespace Managers
 
             foreach (UnitCard unitCard in allUnitCards)
             {
-                if (turnManager.PreviousUnit != null)
+                if (turnManager.PreviousActingUnit != null)
                 {
                     if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) < turnManager.CurrentTurnIndex)
                         unitCard.GetComponent<Image>().color = Color.black;
                 }
                 
-                if (unitCard.Unit == turnManager.CurrentUnit)
+                if (unitCard.Unit == turnManager.ActingUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                     unitCard.GetComponent<Image>().color = Color.red;
@@ -117,7 +117,7 @@ namespace Managers
             
             foreach (UnitCard unitCard in allUnitCards)
             {
-                if (unitCard.Unit == turnManager.CurrentUnit)
+                if (unitCard.Unit == turnManager.ActingUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                 }
@@ -154,7 +154,7 @@ namespace Managers
 
             allUnitCards.Add(unitCard);
             
-            if (unit == turnManager.CurrentUnit)
+            if (unit == turnManager.ActingUnit)
             {
                 currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
             }

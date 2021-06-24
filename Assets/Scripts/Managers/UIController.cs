@@ -24,11 +24,12 @@ namespace Managers
         private CommandManager commandManager;
         private UnitManager unitManager;
         private PlayerManager playerManager;
+        private TurnManager turnManager;
 
         /// <summary>
-        /// Stores the current actingunit.
+        /// The player unit whose turn it currently is.
         /// </summary>
-        private PlayerUnit actingUnit => unitManager.ActingPlayerUnit;
+        private PlayerUnit actingPlayerUnit => turnManager.ActingPlayerUnit;
 
         /// <summary>
         /// A list of ability cards showing the units current abilities
@@ -68,16 +69,17 @@ namespace Managers
             unitManager = ManagerLocator.Get<UnitManager>();
             uiManager = ManagerLocator.Get<UIManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
+            turnManager = ManagerLocator.Get<TurnManager>();
 
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
             {
                 timelineIsReady = true;
 
-                if (actingUnit == null)
+                if (actingPlayerUnit == null)
                     return;
 
                 abilityIndex = 0;
-                UpdateAbilityUI(actingUnit);
+                UpdateAbilityUI(actingPlayerUnit);
             });
         }
 
@@ -85,7 +87,7 @@ namespace Managers
         {
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
-                if (unitManager.ActingUnit is EnemyUnit)
+                if (turnManager.ActingUnit is EnemyUnit)
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
@@ -168,15 +170,14 @@ namespace Managers
                 Input.GetKeyDown(KeyCode.
                     E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             {
-                if (ManagerLocator.Get<PlayerManager>().WaitForDeath)
-                    return; //can be more efficient
-                if (actingUnit == null)
+                if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
+                if (actingPlayerUnit == null)
                     return;
 
                 if (isUnselected)
                 {
                     isUnselected = false;
-                    UpdateAbilityUI(actingUnit);
+                    UpdateAbilityUI(actingPlayerUnit);
                 }
 
                 if (abilityIndex >= abilityCards.Count)
@@ -186,7 +187,7 @@ namespace Managers
                     abilityCards[abilityIndex - 1].UnHighlightAbility();
 
                 abilityCards[abilityIndex].HighlightAbility();
-                actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
+                actingPlayerUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
                 //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
 
                 abilityIndex++;
@@ -194,29 +195,29 @@ namespace Managers
 
             if (Input.GetKeyDown(KeyCode.Q)) //DESELECTS ABILITIES
             {
-                if (actingUnit == null)
+                if (actingPlayerUnit == null)
                     return;
 
                 isUnselected = false;
-                actingUnit.CurrentlySelectedAbility = null;
+                actingPlayerUnit.CurrentlySelectedAbility = null;
                 uiManager.ClearAbilityHighlight();
                 abilityIndex = 0;
             }
 
             if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
             {
-                if (unitManager.ActingUnit == null || unitManager.ActingUnit is EnemyUnit)
+                if (turnManager.ActingUnit == null || turnManager.ActingUnit is EnemyUnit)
                     return;
+                
+                nextClickWillMove = true;
+                Debug.Log("Next click will move.");
+                
+                nextClickWillMove = true;
+                Debug.Log("Next click will move.");
 
-                if (unitManager.ActingUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
-                {
-                    nextClickWillMove = true;
-                    Debug.Log("Next click will move.");
-
-                    UpdateMoveRange(gridManager.GetAllReachableTiles(
-                        unitManager.ActingUnit.Coordinate,
-                        (int) unitManager.ActingUnit.MovementActionPoints.Value));
-                }
+                UpdateMoveRange(gridManager.GetAllReachableTiles(
+                    turnManager.ActingUnit.Coordinate,
+                    (int) turnManager.ActingUnit.MovementActionPoints.Value));
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -300,9 +301,9 @@ namespace Managers
                 Debug.Log("Target tile out of range. Unit was not moved.");
                 return;
             }
-
-            IUnit playerUnit = unitManager.ActingPlayerUnit;
-
+            
+            IUnit playerUnit = turnManager.ActingPlayerUnit;
+            
             //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
           
             Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
@@ -325,11 +326,13 @@ namespace Managers
 
         private async void HandleAbilityCasting()
         {
-            if (actingUnit == null || actingUnit.CurrentlySelectedAbility == null)
+            if (actingPlayerUnit == null || actingPlayerUnit.CurrentlySelectedAbility == null)
                 return;
 
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) -
                                    actingUnit.transform.position);
+            
+            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingPlayerUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
             if (Input.GetKeyDown(KeyCode.A) && canCastAbility)
@@ -339,13 +342,12 @@ namespace Managers
 
             if (isCastingAbility)
             {
-                uiManager.HighlightAbility(actingUnit.Coordinate, castVector,
-                    actingUnit.CurrentlySelectedAbility);
+                uiManager.HighlightAbility(actingPlayerUnit.Coordinate, castVector, actingPlayerUnit.CurrentlySelectedAbility);
             }
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                commandManager.ExecuteCommand(new AbilityCommand(actingUnit, castVector, actingUnit.CurrentlySelectedAbility));
+                commandManager.ExecuteCommand(new AbilityCommand(actingPlayerUnit, castVector, actingPlayerUnit.CurrentlySelectedAbility));
                 uiManager.ClearAbilityHighlight();
                 isCastingAbility = false;
                 canCastAbility = false;

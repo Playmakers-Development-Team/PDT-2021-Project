@@ -157,8 +157,6 @@ namespace Units
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
 
-        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
-
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
@@ -206,11 +204,6 @@ namespace Units
             commandManager.ExecuteCommand(new KillingUnitCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
 
-            // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
-            // TODO: This is fixed by the proto-two/integration/unit-death branch.
-            // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
-
             switch (this)
             {
                 case PlayerUnit _:
@@ -227,6 +220,7 @@ namespace Units
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+            
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
 
