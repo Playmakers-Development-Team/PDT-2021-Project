@@ -53,6 +53,8 @@ namespace Managers
         private bool isCastingAbility;
 
         public bool printMoveRangeCoords = false;
+
+        private bool canCastAbility = true;
         
 
         private List<Vector2Int> selectedMoveRange;
@@ -85,6 +87,7 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+                canCastAbility = true;
             });
         }
 
@@ -159,7 +162,7 @@ namespace Managers
                 
                 abilityCards[abilityIndex].HighlightAbility();
                 actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
-                TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
+                //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
 
                 abilityIndex++;
             }
@@ -300,7 +303,7 @@ namespace Managers
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
-            if (Input.GetKeyDown(KeyCode.A))
+            if (Input.GetKeyDown(KeyCode.A) && canCastAbility)
             {
                 isCastingAbility = !isCastingAbility;
             }
@@ -312,7 +315,10 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate, castVector);
+                commandManager.ExecuteCommand(new AbilityCommand(actingUnit, castVector, actingUnit.CurrentlySelectedAbility));
+                uiManager.ClearAbilityHighlight();
+                isCastingAbility = false;
+                canCastAbility = false;
             }
         }
     }

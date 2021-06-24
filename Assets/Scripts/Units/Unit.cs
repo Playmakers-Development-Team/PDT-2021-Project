@@ -73,9 +73,9 @@ namespace Units
                 TakeDamage(10);
         }
         
-        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
+        public void TakeDefence(int amount) => Health.TakeDamageModifier.Adder -= amount;
 
-        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => DealDamageModifier.Adder += amount;
         
         public void TakeDamage(int amount)
         {
