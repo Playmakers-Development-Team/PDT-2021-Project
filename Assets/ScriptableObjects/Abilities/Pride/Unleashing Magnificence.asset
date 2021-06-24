@@ -20,6 +20,7 @@ MonoBehaviour:
     Passion.'
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -37,7 +38,8 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Pride
+    - name: User Spend Pride
+      affectType: 0
       costType: 2
       tenetType: 0
   - name: 2 Damage spend Passion
@@ -48,7 +50,8 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Passion
+    - name: User Spend Passion
+      affectType: 0
       costType: 2
       tenetType: 2
   userEffects: []

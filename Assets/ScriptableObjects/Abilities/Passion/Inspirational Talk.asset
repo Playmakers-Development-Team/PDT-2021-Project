@@ -26,16 +26,12 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs: []
-  - name: 1 Defence and Provide 1 Passion per Passion
+  - name: Default, 1 Defence and Provide 1 Passion
     damageValue: 0
     defenceValue: 1
     attackValue: 0
     providingTenet:
       tenetType: 2
       stackCount: 1
-    costs:
-    - name: User Per Passion
-      affectType: 0
-      costType: 1
-      tenetType: 2
+    costs: []
   userEffects: []
