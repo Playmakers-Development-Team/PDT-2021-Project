@@ -28,7 +28,7 @@ namespace Managers
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
-            
+
             for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
             {
                 for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
@@ -36,7 +36,7 @@ namespace Managers
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
                     tileDatas.Add(new Vector2Int(x, y), new TileData(tile));
-                    
+
                     // Debug.Log($"Register tiledata at {x}, {y}");
                     //
                     // if (tile != null)
@@ -46,9 +46,9 @@ namespace Managers
                 }
             }
         }
-        
+
         #region GETTERS
-        
+
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
             if (tileDatas.TryGetValue(coordinate, out TileData tileData))
@@ -57,36 +57,36 @@ namespace Managers
             Debug.Log("No tile found at coordinates " + coordinate);
             return null;
         }
-        
+
         public List<GridObject> GetGridObjectsByCoordinate(Vector2Int coordinate)
         {
             TileData tileData = GetTileDataByCoordinate(coordinate);
 
             if (tileData is null)
             {
-                Debug.LogError("ERROR: No tileData was found for the provided coordinates " + coordinate);
+                Debug.LogError("ERROR: No tileData was found for the provided coordinates " +
+                               coordinate);
                 return new List<GridObject>();
             }
-            
+
             return tileData.GridObjects;
         }
 
         public Vector2Int GetRandomCoordinates()
         {
-            return new Vector2Int(
-                Random.Range(-(LevelBounds.x / 2), (LevelBounds.x / 2)), 
+            return new Vector2Int(Random.Range(-(LevelBounds.x / 2), (LevelBounds.x / 2)),
                 Random.Range(-(LevelBounds.y / 2), (LevelBounds.y / 2)));
         }
-        
+
         public Vector2Int GetRandomUnoccupiedCoordinates()
         {
             Vector2Int coordinate = GetRandomCoordinates();
-            
+
             while (GetGridObjectsByCoordinate(coordinate).Count > 0)
             {
                 coordinate = GetRandomCoordinates();
             }
-            
+
             return coordinate;
         }
 
@@ -104,7 +104,8 @@ namespace Managers
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<T> GridLineCast<T>(Vector2Int originCoordinate, Vector2 targetVector,
                                        int limit = GridLineCastDefaultLimit) where T : GridObject =>
-            GridLineCast<T>(originCoordinate, OrdinalDirectionUtility.From(Vector2.up, targetVector), limit);
+            GridLineCast<T>(originCoordinate,
+                OrdinalDirectionUtility.From(Vector2.up, targetVector), limit);
 
         /// <summary>
         /// Similar to ray casting but done on the grid space.
@@ -141,7 +142,7 @@ namespace Managers
 
             return new List<T>();
         }
-        
+
         /// <summary>
         /// Returns a list of all coordinates that are reachable from a given starting position
         /// within the given range.
@@ -160,31 +161,39 @@ namespace Managers
             coordinateQueue.Enqueue(startingCoordinate);
             int distance = 0;
             visited.Add(startingCoordinate, distance);
-            
+
             // Loop until all nodes are processed
             while (coordinateQueue.Count > 0)
             {
                 Vector2Int currentNode = coordinateQueue.Peek();
                 distance = visited[currentNode];
-                
-                if (distance > range) { break;}
-                
+
+                if (distance > range)
+                {
+                    break;
+                }
+
                 // Add neighbours of node to queue
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+
                 if (GetGridObjectsByCoordinate(currentNode).Count == 0)
                     reachable.Add(currentNode);
-                
+
                 coordinateQueue.Dequeue();
             }
 
             return reachable;
         }
-        
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance, Queue<Vector2Int> coordinateQueue, string allegiance)
+
+        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
+                               Queue<Vector2Int> coordinateQueue, string allegiance)
         {
             // Check grid node exists
             if (tileDatas.ContainsKey(node))
@@ -241,7 +250,7 @@ namespace Managers
             while (coordinateQueue.Count > 0)
             {
                 var currentNode = coordinateQueue.Peek();
-                
+
                 VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
                 VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
@@ -257,11 +266,11 @@ namespace Managers
                     coordinateQueue.Dequeue();
             }
 
-            foreach (KeyValuePair<Vector2Int,Vector2Int> node in visited)
+            foreach (KeyValuePair<Vector2Int, Vector2Int> node in visited)
             {
                 Debug.Log($"NodeStuff {node}");
             }
-            
+
             var path = new List<Vector2Int>();
             var currentNode2 = targetCoordinate;
             while (true)
@@ -276,7 +285,7 @@ namespace Managers
             path.Reverse();
             return path;
         }
-        
+
         #endregion
 
         #region CONVERSIONS
@@ -287,45 +296,45 @@ namespace Managers
             //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
             return (Vector2Int) LevelTilemap.layoutGrid.WorldToCell(position);
         }
-        
+
         public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate)
         {
             // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
             //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) + GridOffset;
+            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) +
+                   GridOffset;
         }
-        
+
         #endregion
-        
+
         #region GRID OBJECT FUNCTIONS
 
         public bool AddGridObject(Vector2Int coordinate, GridObject gridObject)
         {
             TileData tileData = GetTileDataByCoordinate(coordinate);
-            
+
             if (tileData != null)
             {
                 if (tileData.GridObjects.Count > 0)
                 {
                     // Can change this later if we want to allow multiple grid objects on a tile
-                    Debug.LogWarning("Failed to add " + gridObject +
-                                     " at " + coordinate.x + ", " + coordinate.y +
-                                     " due to tile being occupied by " + tileData.GridObjects[0]);
+                    Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
+                                     coordinate.y + " due to tile being occupied by " +
+                                     tileData.GridObjects[0]);
                     return false;
                 }
-                
+
                 tileData.AddGridObjects(gridObject);
                 Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
                 return true;
             }
-            
-            Debug.LogWarning("Failed to add " + gridObject + 
-                             " at " + coordinate.x + ", " + coordinate.y +
-                             " due to null tileData");
-            
+
+            Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
+                             coordinate.y + " due to null tileData");
+
             return false;
         }
-        
+
         public bool RemoveGridObject(Vector2Int coordinate, GridObject gridObject)
         {
             TileData tileData = GetTileDataByCoordinate(coordinate);
@@ -336,13 +345,13 @@ namespace Managers
                 tileData.RemoveGridObjects(gridObject);
                 return true;
             }
-            
-            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " + coordinate.y + 
-                  ". Tile does not contain gridObject");
-        
+
+            Debug.LogWarning("Failed to remove gridObject at " + coordinate.x + ", " +
+                             coordinate.y + ". Tile does not contain gridObject");
+
             return false;
         }
-        
+
         public void MoveAllGridObjects(Vector2Int currentCoordinate, Vector2Int newCoordinate)
         {
             List<GridObject> gridObjects = GetGridObjectsByCoordinate(currentCoordinate);
@@ -362,7 +371,15 @@ namespace Managers
             int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
-            
+            PlayerUnit playerUnit = null;
+
+            if (unit is PlayerUnit)
+            {
+                playerUnit = (PlayerUnit) unit;
+                if (playerUnit.animator != null)
+                    playerUnit.animator.SetInteger("Movement", 1);
+            }
+
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
             {
@@ -370,25 +387,38 @@ namespace Managers
                 Debug.Log("Target tile is occupied.");
                 return;
             }
-            
+
             // Check if tile is in range
-            if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) 
-                && unit.GetType() == typeof(PlayerUnit))
+            if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) &&
+                unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
-                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" + ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
+                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
+                              newCoordinate));
 
                 Debug.Log("Target tile out of range.");
                 return;
             }
-            
+
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                Debug.Log(movePath[i]);
-                
+                if (playerUnit !=
+                    null) // this stuff is temporary, should probably be done in a better way
+                {
+                    if (movePath[i].x > currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
+                    else if (movePath[i].y > currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                    else if (movePath[i].x < currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
+                    else if (movePath[i].y < currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                }
+
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
                     ConvertCoordinateToPosition(movePath[i]), 1f);
                 unit.gameObject.transform.position = ConvertCoordinateToPosition(movePath[i]);
@@ -399,6 +429,9 @@ namespace Managers
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
+            if (playerUnit != null)
+                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+
             Debug.Log(Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
             
@@ -406,13 +439,11 @@ namespace Managers
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }
 
-        private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos, 
+        private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos,
                                             float duration)
         {
             float flag = 0f;
-            
             Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
-            
             while (flag < duration)
             {
                 unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);
@@ -430,42 +461,43 @@ namespace Managers
         {
             Vector2Int startCoordinate = unit.Coordinate;
             var gridObject = (GridObject) unit;
-            
+
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
-            
+
             MoveGridObject(startCoordinate, newCoordinate, gridObject);
         }
 
         // TODO: CurrentCoordinate should not be necessary
-        public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate, GridObject gridObject)
+        public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate,
+                                   GridObject gridObject)
         {
             if (!AddGridObject(newCoordinate, gridObject))
                 return;
 
             if (!RemoveGridObject(currentCoordinate, gridObject))
                 return;
-            
-            Debug.LogFormat(
-                "Moved {0} from {1} to {2}.",
-                gridObject,
-                currentCoordinate,
-                newCoordinate
-            );
+
+            Debug.LogFormat("Moved {0} from {1} to {2}.", gridObject, currentCoordinate,
+                newCoordinate);
         }
-        
+
         public List<GridObject> GetAdjacentGridObjects(Vector2Int coordinate)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
+
             List<GridObject> adjacentGridObjects = new List<GridObject>();
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
-            adjacentGridObjects.AddRange(gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
+            adjacentGridObjects.AddRange(
+                gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.up));
+            adjacentGridObjects.AddRange(
+                gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.right));
+            adjacentGridObjects.AddRange(
+                gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.down));
+            adjacentGridObjects.AddRange(
+                gridManager.GetGridObjectsByCoordinate(coordinate + Vector2Int.left));
 
             return adjacentGridObjects;
         }
-        
+
         #endregion
     }
 }

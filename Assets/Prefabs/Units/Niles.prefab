@@ -157,10 +157,10 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeKnockbackModifier:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 1
@@ -168,6 +168,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
   damageTextCanvas: {fileID: 4866517585531869872}
   damageTextLifetime: 1
+  animationStates: 0
+  animator: {fileID: 8212759452209677179}
   CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &7470980273423229657
 PrefabInstance:

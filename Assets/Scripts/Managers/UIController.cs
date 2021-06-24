@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Abilities;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Tiles;
 using UI;
@@ -16,6 +17,7 @@ namespace Managers
     {
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
+        [SerializeField] private GameObject audioPanel;
 
         private GridManager gridManager;
         private UIManager uiManager;
@@ -89,7 +91,28 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+
+                if (unitManager.ActingUnit is PlayerUnit)
+                {
+                    abilityIndex = 0;
+                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                }
+                
                 canCastAbility = true;
+            });
+
+            commandManager.ListenCommand<EndTurnCommand>(cmd =>
+            {
+                if (unitManager.ActingUnit is EnemyUnit)
+                    ClearAbilityUI();
+
+                uiManager.ClearAbilityHighlight();
+
+                if (unitManager.ActingUnit is PlayerUnit)
+                {
+                    abilityIndex = 0;
+                    UpdateAbilityUI((PlayerUnit) actingUnit);
+                }
             });
         }
 
@@ -143,7 +166,9 @@ namespace Managers
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
+            if (
+                Input.GetKeyDown(KeyCode.
+                    E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             {
                 if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
                 if (actingPlayerUnit == null)
@@ -157,11 +182,10 @@ namespace Managers
 
                 if (abilityIndex >= abilityCards.Count)
                     abilityIndex = 0;
-                
+
                 if (abilityIndex != 0)
                     abilityCards[abilityIndex - 1].UnHighlightAbility();
-                
-                
+
                 abilityCards[abilityIndex].HighlightAbility();
                 actingPlayerUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
                 //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
@@ -179,7 +203,7 @@ namespace Managers
                 uiManager.ClearAbilityHighlight();
                 abilityIndex = 0;
             }
-            
+
             if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
             {
                 if (turnManager.ActingUnit == null || turnManager.ActingUnit is EnemyUnit)
@@ -195,7 +219,10 @@ namespace Managers
                     turnManager.ActingUnit.Coordinate,
                     (int) turnManager.ActingUnit.MovementActionPoints.Value));
             }
-            
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                audioPanel.SetActive(true);
+
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (nextClickWillMove)
@@ -210,7 +237,7 @@ namespace Managers
                     SelectUnit();
                 }
             }
-            
+
             HandleAbilityCasting();
         }
 
@@ -230,10 +257,10 @@ namespace Managers
                     }
                 }
             }
-            
+
             playerManager.DeselectUnit();
         }
-        
+
         private void UpdateMoveRange(List<Vector2Int> moveRange)
         {
             selectedMoveRange = moveRange;
@@ -297,10 +324,13 @@ namespace Managers
             return gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
         }
 
-        private void HandleAbilityCasting()
+        private async void HandleAbilityCasting()
         {
             if (actingPlayerUnit == null || actingPlayerUnit.CurrentlySelectedAbility == null)
                 return;
+
+            Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) -
+                                   actingUnit.transform.position);
             
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - actingPlayerUnit.transform.position);
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
@@ -321,6 +351,20 @@ namespace Managers
                 uiManager.ClearAbilityHighlight();
                 isCastingAbility = false;
                 canCastAbility = false;
+                
+                actingUnit.CurrentlySelectedAbility.Use(actingUnit, actingUnit.Coordinate,
+                    castVector);
+
+                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
+
+                float flag = 0;
+                while (flag < actingUnit.animator.GetCurrentAnimatorStateInfo(0).length)
+                {
+                    flag += Time.deltaTime;
+                    await UniTask.Yield();
+                }
+
+                actingUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
             }
         }
     }

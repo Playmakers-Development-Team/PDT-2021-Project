@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7484277704127657535}
   - component: {fileID: 4481483165682075219}
-  - component: {fileID: 8212759452209677179}
+  - component: {fileID: 5117213522043847431}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_SortingLayerID: 688705043
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3957392175462956367, guid: 59f7b2c02c669bc4bada398f8b704ac6, type: 3}
+  m_Sprite: {fileID: -4956321453074165602, guid: 576c432028e851b4b864d34fb4e08644, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &8212759452209677179
+--- !u!95 &5117213522043847431
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -93,7 +93,7 @@ Animator:
   m_GameObject: {fileID: 2134756009844042213}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 31f1395752c11c343bd0642ff467fa62, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6ab5658570efa0645b16bb9ca3327c79, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -157,10 +157,10 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeDamageModifier:
       <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 1
+      <BaseAdder>k__BackingField: 0
     takeKnockbackModifier:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 1
@@ -169,6 +169,8 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}
   damageTextCanvas: {fileID: 6691395943555653704}
   damageTextLifetime: 1
+  animationStates: 0
+  animator: {fileID: 5117213522043847431}
   CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &8717713392952530977
 PrefabInstance:
