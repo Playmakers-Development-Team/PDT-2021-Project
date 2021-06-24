@@ -130,7 +130,7 @@ namespace Managers
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
         {
-            uiManager.HighlightAbility(((GridObject)unit).Coordinate,
+            uiManager.HighlightAbility(unit.Coordinate,
                 ((OrdinalDirection) UnityEngine.Random.Range(0,
                     Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
         }
@@ -185,7 +185,7 @@ namespace Managers
                     Debug.Log("Next click will move.");
 
                     UpdateMoveRange(gridManager.GetAllReachableTiles(
-                        ((GridObject)unitManager.ActingUnit).Coordinate,
+                        unitManager.ActingUnit.Coordinate,
                         (int) unitManager.ActingUnit.MovementActionPoints.Value));
                 }
             }
@@ -266,14 +266,12 @@ namespace Managers
             
             //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
           
-            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
-            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
-            ).Coordinate);
+            Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
             
             // playerUnit.MovementActionPoints.Value = Math.Min(0,
             //     playerUnit.MovementActionPoints.Value -=
-            //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
-            //             gridPos));
+            //         ManhattanDistance.GetManhattanDistance(playerUnit.Coordinate, gridPos));
             
             var moveCommand = new StartMoveCommand(playerUnit, gridPos);
             commandManager.ExecuteCommand(moveCommand);
