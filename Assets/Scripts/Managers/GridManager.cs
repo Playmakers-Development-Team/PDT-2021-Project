@@ -360,7 +360,7 @@ namespace Managers
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
             int moveRange = (int)unit.MovementActionPoints.Value;
-            Vector2Int startingCoordinate = ((GridObject)unit).Coordinate;
+            Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             
             // Check if tile is unoccupied
@@ -428,7 +428,7 @@ namespace Managers
         /// <param name="unit">The unit to teleport.</param>
         private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
-            Vector2Int startCoordinate = ((GridObject)unit).Coordinate;
+            Vector2Int startCoordinate = unit.Coordinate;
             var gridObject = (GridObject) unit;
             
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);

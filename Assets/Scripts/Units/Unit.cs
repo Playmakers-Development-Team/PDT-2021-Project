@@ -5,8 +5,6 @@ using GridObjects;
 using StatusEffects;
 using Abilities;
 using Cysharp.Threading.Tasks;
-using Commands;
-using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Units.Commands;
@@ -24,7 +22,6 @@ namespace Units
         public ValueStat Speed => data.speed;
         public ModifierStat DealDamageModifier => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
-        //public Vector2Int Coordinate { get => ((GridObject)this).Coordinate; set; }
 
         public static Type DataType => typeof(T);
 
@@ -200,8 +197,8 @@ namespace Units
         private async void KillUnit()
         {
             playerManager.WaitForDeath = true;
-            Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
-            gridManager.RemoveGridObject(this.Coordinate, this);
+            Debug.Log($"Unit Killed: {name} : {Coordinate}");
+            gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
@@ -223,7 +220,7 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
                                    " as it is an unidentified unit");
                     break;
             }
