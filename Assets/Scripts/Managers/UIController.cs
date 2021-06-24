@@ -136,6 +136,8 @@ namespace Managers
 
             foreach (var ability in unit.Abilities)
                 AddAbilityField(ability);
+            
+            
         }
 
         /// <summary>
@@ -158,6 +160,8 @@ namespace Managers
             var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
             abilityCard.SetAbility(ability);
             abilityCards.Add(abilityCard);
+            
+            
         }
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
@@ -185,13 +189,20 @@ namespace Managers
                 if (abilityIndex >= abilityCards.Count)
                     abilityIndex = 0;
 
-                if (abilityIndex != 0)
-                    abilityCards[abilityIndex - 1].UnHighlightAbility();
 
-                abilityCards[abilityIndex].HighlightAbility();
+                for (int i = 0; i < abilityCards.Count; i++)
+                {
+                    if (i != abilityIndex)
+                    {
+                        abilityCards[i].UnHighlightAbility();
+                    }
+                    else
+                    {
+                        abilityCards[i].HighlightAbility();
+                    }
+                }
+
                 actingPlayerUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
-                //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
-
                 abilityIndex++;
             }
 
@@ -199,6 +210,10 @@ namespace Managers
             {
                 if (actingPlayerUnit == null)
                     return;
+                
+                for (int i = 0; i < abilityCards.Count; i++)
+                    abilityCards[i].UnHighlightAbility();
+                
 
                 isUnselected = false;
                 actingPlayerUnit.CurrentlySelectedAbility = null;
