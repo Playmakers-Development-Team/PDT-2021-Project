@@ -533,7 +533,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6483598079572310661, guid: 39f8734ec11a00d418c725e65d68a6ec, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 287.5804
+      value: 251.1
       objectReference: {fileID: 0}
     - target: {fileID: 6483598079572310661, guid: 39f8734ec11a00d418c725e65d68a6ec, type: 3}
       propertyPath: m_LocalPosition.x
@@ -569,7 +569,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6483598079572310661, guid: 39f8734ec11a00d418c725e65d68a6ec, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -55.9
+      value: 29.38
       objectReference: {fileID: 0}
     - target: {fileID: 6483598079572310661, guid: 39f8734ec11a00d418c725e65d68a6ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -5454,6 +5454,44 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 485415166, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 39.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 485415166, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 494.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 485415166, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 261.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 530137961, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_text
+      value: E
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735875398, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_text
+      value: 'P
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941543692, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 39.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941543692, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 345.39996
+      objectReference: {fileID: 0}
+    - target: {fileID: 1941543692, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 264.19998
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753839980142852171, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 226.6
+      objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922166, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: m_Name
       value: TurnController
