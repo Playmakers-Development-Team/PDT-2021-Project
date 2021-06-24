@@ -27,7 +27,6 @@ namespace Managers
         public void ClearEnemyUnits() => enemyUnits.Clear();
         
         private TurnManager turnManager;
-        private CommandManager commandManager;
         private GridManager gridManager;
         private PlayerManager playerManager;
 
@@ -36,7 +35,6 @@ namespace Managers
             base.ManagerStart();
             
             turnManager = ManagerLocator.Get<TurnManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
         }
@@ -118,8 +116,8 @@ namespace Managers
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
-                actingUnit.MovementActionPoints.Value)
+                enemyUnit.Coordinate + FindClosestPath(unit, closestPlayerUnit, (int) 
+                unit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);

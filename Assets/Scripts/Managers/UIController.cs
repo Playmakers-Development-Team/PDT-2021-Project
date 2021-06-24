@@ -163,7 +163,7 @@ namespace Managers
                 
                 
                 abilityCards[abilityIndex].HighlightAbility();
-                actingUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
+                actingPlayerUnit.CurrentlySelectedAbility = abilityCards[abilityIndex].Ability;
                 //TestAbilityHighlight(actingUnit, actingUnit.CurrentlySelectedAbility);
 
                 abilityIndex++;
@@ -187,16 +187,13 @@ namespace Managers
                 
                 nextClickWillMove = true;
                 Debug.Log("Next click will move.");
+                
+                nextClickWillMove = true;
+                Debug.Log("Next click will move.");
 
-                if (unitManager.ActingUnit == ManagerLocator.Get<TurnManager>().CurrentUnit)
-                {
-                    nextClickWillMove = true;
-                    Debug.Log("Next click will move.");
-
-                    UpdateMoveRange(gridManager.GetAllReachableTiles(
-                        unitManager.ActingUnit.Coordinate,
-                        (int) unitManager.ActingUnit.MovementActionPoints.Value));
-                }
+                UpdateMoveRange(gridManager.GetAllReachableTiles(
+                    turnManager.ActingUnit.Coordinate,
+                    (int) turnManager.ActingUnit.MovementActionPoints.Value));
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -320,7 +317,7 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
-                commandManager.ExecuteCommand(new AbilityCommand(actingUnit, castVector, actingUnit.CurrentlySelectedAbility));
+                commandManager.ExecuteCommand(new AbilityCommand(actingPlayerUnit, castVector, actingPlayerUnit.CurrentlySelectedAbility));
                 uiManager.ClearAbilityHighlight();
                 isCastingAbility = false;
                 canCastAbility = false;
