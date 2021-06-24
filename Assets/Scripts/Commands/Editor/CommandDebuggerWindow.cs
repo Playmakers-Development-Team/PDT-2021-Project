@@ -145,7 +145,11 @@ namespace Commands.Editor
                             parameterValues[i] ??= new Vector3();
                             parameterValues[i] = EditorGUILayout.Vector3Field(parameterName, (Vector3) parameterValues[i]);
                         }
-                        else if (parameterType.IsAssignableFrom(typeof(IUnit)))
+                        else if (typeof(UnityEngine.Object).IsAssignableFrom(parameterType))
+                        {
+                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(ScriptableObject));
+                        }
+                        else if (typeof(IUnit).IsAssignableFrom(parameterType))
                         {
                             parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(GameObject), true);
                             GameObject go = parameterValues[i] as GameObject;
