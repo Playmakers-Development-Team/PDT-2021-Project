@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Abilities;
 using Commands;
 using GridObjects;
+using Tiles;
 using UI;
 using Units;
 using Units.Commands;
@@ -241,24 +242,31 @@ namespace Managers
             }
         }
         
-        //TODO Move this to its 
         private void MoveUnit()
         {
             //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
-            
+
+            TileData tileData = gridManager.GetTileDataByCoordinate(gridPos);
+
+            if (tileData is null)
+            {
+                Debug.Log("No tile data at this location. Unit was not moved.");
+                return;
+            }
+
             // Check if tile is unoccupied
             // This cannot be checked with move range as no occupied tile will be added to it
             // This only needs to be kept if a different thing happens if the player selects an occupied space
-            if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
+            if (tileData.GridObjects.Count != 0)
             {
-                Debug.Log("Target tile is occupied.");
+                Debug.Log("Target tile is occupied. Unit was not moved.");
                 return;
             }
 
             if (!selectedMoveRange.Contains(gridPos))
             {
-                Debug.Log("Target tile out of range.");
+                Debug.Log("Target tile out of range. Unit was not moved.");
                 return;
             }
             
