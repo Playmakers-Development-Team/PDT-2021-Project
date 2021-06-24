@@ -101,6 +101,8 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+                uiManager.movementHighlightTilemap.ClearAllTiles();
+
 
                 if (turnManager.ActingUnit is PlayerUnit)
                 {
@@ -117,6 +119,7 @@ namespace Managers
                     ClearAbilityUI();
 
                 uiManager.ClearAbilityHighlight();
+                uiManager.movementHighlightTilemap.ClearAllTiles();
 
                 if (turnManager.ActingUnit is PlayerUnit)
                 {
@@ -315,8 +318,13 @@ namespace Managers
                 nextClickWillMove = true;
                 Debug.Log("Next click will move.");
                 
-                nextClickWillMove = true;
-                Debug.Log("Next click will move.");
+               
+                foreach (Vector2Int highlightedCoordinate in gridManager.GetAllReachableTiles(turnManager.ActingUnit.Coordinate,(int) turnManager.ActingUnit.MovementActionPoints.Value))
+                { 
+                    uiManager.movementHighlightTilemap.SetTile((Vector3Int) highlightedCoordinate, 
+                        uiManager.movementHighlightTile);
+                }
+                
 
                 UpdateMoveRange(gridManager.GetAllReachableTiles(
                     turnManager.ActingUnit.Coordinate,
@@ -334,6 +342,8 @@ namespace Managers
                     MoveUnit();
                     selectedMoveRange.Clear();
                     UpdateMoveRange(selectedMoveRange);
+                   uiManager.movementHighlightTilemap.ClearAllTiles();
+
                 }
                 else
                 {

@@ -13,8 +13,13 @@ namespace Managers
 {
     public class UIManager : Manager
     {
+        public TileBase movementHighlightTile { get; set; }
         public TileBase abilityHighlightTile { get; set; }
         public Tilemap highlightTilemap { get; set; }
+        
+        public Tilemap movementHighlightTilemap { get; set; }
+
+        
         public LineRenderer abilityLineRenderer { get; set; }
 
         public override void ManagerStart() {}
@@ -22,10 +27,14 @@ namespace Managers
         /// <summary>
         /// Initialising the UIManagers to have access to the highlighted tiles
         /// </summary>
-        public void Initialise(TileBase tileBase, Tilemap tilemap)
+        public void Initialise(TileBase abilityBase, TileBase moveBase,Tilemap abilityMap,Tilemap
+         moveMap)
         {
-            abilityHighlightTile = tileBase;
-            highlightTilemap = tilemap;
+            abilityHighlightTile = abilityBase;
+            highlightTilemap = abilityMap;
+            movementHighlightTile = moveBase;
+            movementHighlightTilemap = moveMap;
+
         }
 
         /// <summary>

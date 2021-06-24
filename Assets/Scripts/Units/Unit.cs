@@ -337,7 +337,7 @@ namespace Units
                     newname="Clickup Bot";
                     break;
                 case 24:
-                    newname = "Githut-Bot";
+                    newname = "Github-Bot";
                     break;
             }
             return newname;
