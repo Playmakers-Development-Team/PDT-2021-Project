@@ -63,7 +63,7 @@ namespace Units
             Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
             
             // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10, 50);
+            Speed.Value += Random.Range(0, 101);
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
