@@ -85,7 +85,7 @@ namespace Managers
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
-                adjacentPlayerUnit.TakeDamage((int) enemyUnit.Attack.Value);
+                adjacentPlayerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
                 await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
 
                 while (playerManager.WaitForDeath)

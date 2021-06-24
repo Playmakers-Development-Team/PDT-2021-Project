@@ -23,14 +23,16 @@ namespace Units
         
         public int TakeDamage(int amount)
         {
-            int damageTaken = (int) Defence.Modify(amount);
-            HealthPoints.Value -= damageTaken;
+            int initialDamageTaken = (int) Defence.Modify(amount);
+            int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
+            
+            HealthPoints.Value -= calculatedDamageTaken;
             CheckDeath();
 
-            Debug.Log(damageTaken + " damage taken.");
-            Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
+            Debug.Log(calculatedDamageTaken + " damage taken.");
+            Debug.Log($"Health Before: {HealthPoints.Value + calculatedDamageTaken}  |  Health After: {HealthPoints.Value}");
 
-            return damageTaken;
+            return calculatedDamageTaken;
         }
         
         private void CheckDeath()

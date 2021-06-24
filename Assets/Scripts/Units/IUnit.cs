@@ -9,6 +9,7 @@ namespace Units
 {
     public interface IUnit : IDamageable, IKnockbackable
     {
+        public string Name { get; }
         public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
         public ValueStat Speed { get; }

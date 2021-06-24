@@ -7,6 +7,8 @@ namespace Managers
 {
     public class UnitManager : Manager
     {
+        public IUnit SelectedUnit { get; private set; }
+        
         protected CommandManager commandManager;
         private EnemyManager enemyManager;
         private PlayerManager playerManager;
@@ -62,6 +64,42 @@ namespace Managers
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             return unit;
+        }
+        
+        /// <summary>
+        /// Sets a unit as selected.
+        /// </summary>
+        /// <param name="unit"></param>
+        public void SelectUnit(IUnit unit)
+        {
+            if (unit is null)
+            {
+                Debug.LogWarning($"{nameof(UnitManager)}.{nameof(SelectUnit)} should not be " + 
+                    $"passed a null value. Use {nameof(UnitManager)}.{nameof(DeselectUnit)} instead.");
+                
+                DeselectUnit();
+                
+                return;
+            }
+
+            if (SelectedUnit == unit)
+                return;
+
+            SelectedUnit = unit;
+            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
+        }
+
+        /// <summary>
+        /// Deselects the currently selected unit.
+        /// </summary>
+        public void DeselectUnit()
+        {
+            if (SelectedUnit is null)
+                return;
+            
+            Debug.Log(SelectedUnit + " deselected.");
+            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
+            SelectedUnit = null;
         }
     }
 }
