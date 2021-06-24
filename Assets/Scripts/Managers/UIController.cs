@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using Abilities;
 using Commands;
 using GridObjects;
 using UI;
 using Units;
+using Units.Commands;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 using Utility;
 
 namespace Managers
@@ -49,11 +48,12 @@ namespace Managers
         /// </summary>
         private int abilityIndex;
 
-        private bool nextClickWillMove;
+        private bool nextClickWillMove = false;
 
         private bool isCastingAbility;
 
         public bool printMoveRangeCoords = false;
+        
 
         private List<Vector2Int> selectedMoveRange;
 
@@ -80,15 +80,6 @@ namespace Managers
 
         private void Start()
         {
-            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
-            {
-                if (!timelineIsReady)
-                    return;
-
-                abilityIndex = 0;
-                UpdateAbilityUI(actingPlayerUnit);
-            });
-
             commandManager.ListenCommand<StartTurnCommand>(cmd =>
             {
                 if (turnManager.ActingUnit is EnemyUnit)
@@ -101,7 +92,7 @@ namespace Managers
         /// <summary>
         /// Updated the ability ui cards for the new active unit
         /// </summary>
-        /// <param name="the current active unit"></param>
+        /// <param name="unit">The current acting unit.</param>
         private void UpdateAbilityUI(PlayerUnit unit)
         {
             ClearAbilityUI();
@@ -141,7 +132,7 @@ namespace Managers
 
         private void TestAbilityHighlight(IUnit unit, Ability ability)
         {
-            uiManager.HighlightAbility(unit.Coordinate,
+            uiManager.HighlightAbility(((GridObject)unit).Coordinate,
                 ((OrdinalDirection) UnityEngine.Random.Range(0,
                     Enum.GetValues(typeof(OrdinalDirection)).Length)).ToVector2(), ability);
         }
@@ -187,26 +178,23 @@ namespace Managers
             
             if (Input.GetKeyDown(KeyCode.M)) // SELECTS MOVEMENT
             {
-                if (actingPlayerUnit == null)
+                if (turnManager.ActingUnit == null || turnManager.ActingUnit is EnemyUnit)
                     return;
+                
+                nextClickWillMove = true;
+                Debug.Log("Next click will move.");
 
-                if (playerManager.SelectedUnit == ManagerLocator.Get<TurnManager>().ActingUnit)
-                {
-                    nextClickWillMove = true;
-                    Debug.Log("Next click will move.");
-
-                    UpdateMoveRange(gridManager.AllReachableTiles(
-                        playerManager.SelectedUnit.Coordinate,
-                        (int) playerManager.SelectedUnit.MovementActionPoints.Value));
-                }
+                UpdateMoveRange(gridManager.GetAllReachableTiles(
+                    ((GridObject)turnManager.ActingUnit).Coordinate,
+                    (int) turnManager.ActingUnit.MovementActionPoints.Value));
             }
             
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 if (nextClickWillMove)
                 {
-                    MoveUnit();
                     nextClickWillMove = false;
+                    MoveUnit();
                     selectedMoveRange.Clear();
                     UpdateMoveRange(selectedMoveRange);
                 }
@@ -231,14 +219,12 @@ namespace Managers
                         gridPos)
                     {
                         playerManager.SelectUnit(playerUnit);
-                        Debug.Log($"Unit Selected!");
                         return;
                     }
                 }
             }
             
             playerManager.DeselectUnit();
-            Debug.Log($"Unit Deselected!");
         }
         
         private void UpdateMoveRange(List<Vector2Int> moveRange)
@@ -253,15 +239,16 @@ namespace Managers
                 }
             }
         }
-
+        
+        //TODO Move this to its 
         private void MoveUnit()
         {
-            if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
+            //if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
             Vector2Int gridPos = GetCoordinateFromClick();
             
             // Check if tile is unoccupied
-            //This cannot be checked with move range as no occupied tile will be added to it
-            //This only needs to be kept if a different thing happens if the player selects an occupied space
+            // This cannot be checked with move range as no occupied tile will be added to it
+            // This only needs to be kept if a different thing happens if the player selects an occupied space
             if (gridManager.GetTileDataByCoordinate(gridPos).GridObjects.Count != 0)
             {
                 Debug.Log("Target tile is occupied.");
@@ -274,13 +261,20 @@ namespace Managers
                 return;
             }
             
-            Debug.Log(actingPlayerUnit.Coordinate + " to " + gridPos + " selected");
+            IUnit playerUnit = turnManager.ActingPlayerUnit;
             
-            var moveCommand = new MoveCommand(
-                actingPlayerUnit,
-                gridPos
-            );
+            //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
+          
+            Debug.Log(((GridObject)playerUnit).Coordinate + " to " + gridPos + " selected");
+            List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(((GridObject)playerUnit
+            ).Coordinate);
             
+            // playerUnit.MovementActionPoints.Value = Math.Min(0,
+            //     playerUnit.MovementActionPoints.Value -=
+            //         ManhattanDistance.GetManhattanDistance(((GridObject) playerUnit).Coordinate,
+            //             gridPos));
+            
+            var moveCommand = new StartMoveCommand(playerUnit, gridPos);
             commandManager.ExecuteCommand(moveCommand);
         }
 

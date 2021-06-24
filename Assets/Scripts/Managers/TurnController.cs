@@ -3,6 +3,7 @@ using System.Linq;
 using Commands;
 using UI;
 using Units;
+using Units.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,11 +45,15 @@ namespace Managers
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            
+
+            commandManager.ListenCommand<StartTurnCommand>(cmd => UpdateTurnUI());
+            commandManager.ListenCommand<StartRoundCommand>(cmd => UpdateForNewRound());
+
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
                 (cmd1, cmd2) =>
                 {
                     SetupTurnQueue();
+                    commandManager.ListenCommand<KilledUnitCommand>(cmd => RefreshTimelineUI());
                 });
         }
 
@@ -66,18 +71,12 @@ namespace Managers
             {
                 CreateUnitCard(unit);
             }
-
-            turnManager.onTurnEnd += UpdateTurnUI;
-            turnManager.onRoundStart += UpdateForNewRound;
-            turnManager.onUnitDeath += RefreshTimelineUI;
-            turnManager.newUnitAdded += AddUnitToTimeline;
         }
         
         /// <summary>
         /// Updates the timeline UI when a new turn has started, leaving the previous unit greyed out.
         /// </summary>
-        /// <param name="turnManager"></param>
-        private void UpdateTurnUI(TurnManager turnManager)
+        private void UpdateTurnUI()
         {
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
@@ -86,10 +85,10 @@ namespace Managers
             {
                 if (turnManager.PreviousActingUnit != null)
                 {
-                    if (unitCard.Unit == turnManager.PreviousActingUnit)
+                    if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) < turnManager.CurrentTurnIndex)
                         unitCard.GetComponent<Image>().color = Color.black;
                 }
-
+                
                 if (unitCard.Unit == turnManager.ActingUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
@@ -101,8 +100,7 @@ namespace Managers
         /// <summary>
         /// Completely refreshes the timeline UI.
         /// </summary>
-        /// <param name="turnManager"></param>
-        private void RefreshTimelineUI(TurnManager turnManager)
+        private void RefreshTimelineUI()
         {
             foreach (UnitCard unitCard in allUnitCards)
             {
@@ -129,11 +127,12 @@ namespace Managers
         /// <summary>
         /// Updates the timeline with the new unit.
         /// </summary>
-        /// <param name="turnManager"></param>
-        private void AddUnitToTimeline(TurnManager turnManager)
+        private void AddUnitToTimeline()
         {
             var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
+            var flag = false;
+            
             foreach (var unit in allUnits)
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
@@ -143,6 +142,8 @@ namespace Managers
                     break;
                 }
             }
+            
+            
         }
 
         private void CreateUnitCard(IUnit unit)
@@ -162,8 +163,7 @@ namespace Managers
         /// <summary>
         /// Updates the timeline UI for the new round.
         /// </summary>
-        /// <param name="turnManager"></param>
-        private void UpdateForNewRound(TurnManager turnManager)
+        private void UpdateForNewRound()
         {
             allUnitCards.ForEach(unitCard =>
             {
