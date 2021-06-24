@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Commands;
-using UnityEngine;
 
 namespace Managers
 {
@@ -53,7 +52,7 @@ namespace Managers
         }
 
         /// <summary>
-        /// Checks if a command of a class name exist.
+        /// Checks if a command with a given class name exists.
         /// </summary>
         /// <param name="name">Command class name e.g "EndTurnCommand"</param>
         public bool HasCommandType(string name) => commandTypes.ContainsKey(name);
@@ -85,7 +84,7 @@ namespace Managers
             
             if (listeners.ContainsKey(commandType))
             {
-                // Store as array to prevent array modification exceptions
+                // Store actions as an array to prevent array modification exceptions
                 var actions = listeners[commandType].ToArray();
                 
                 foreach (var action in actions)
@@ -102,9 +101,8 @@ namespace Managers
                         var requiredCommandTypes = action.GetType().GetGenericArguments();
                         var caughtCommandTypes = caughtCommands[action].Select(cmd => cmd.GetType());
                         
-                        // Basically take away all the required command types that exist in caught
-                        // commands, if there is anything left after that, it means that
-                        // requirements has not been met.
+                        // If any required commands are not in the caught commands, the
+                        // requirements have not been met
                         bool isNotReady = requiredCommandTypes.Except(caughtCommandTypes).Any();
 
                         if (!isNotReady)

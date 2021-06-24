@@ -45,15 +45,15 @@ namespace Managers
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            
+
             commandManager.ListenCommand<StartTurnCommand>(cmd => UpdateTurnUI());
             commandManager.ListenCommand<StartRoundCommand>(cmd => UpdateForNewRound());
-            
+
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
                 (cmd1, cmd2) =>
                 {
                     SetupTurnQueue();
-                    commandManager.ListenCommand<KilledUnitCommand>((cmd) => RefreshTimelineUI());
+                    commandManager.ListenCommand<KilledUnitCommand>(cmd => RefreshTimelineUI());
                 });
         }
 
@@ -76,7 +76,6 @@ namespace Managers
         /// <summary>
         /// Updates the timeline UI when a new turn has started, leaving the previous unit greyed out.
         /// </summary>
-        /// <param name="turnManager"></param>
         private void UpdateTurnUI()
         {
             if (currentTurnIndicator != null)
@@ -128,7 +127,6 @@ namespace Managers
         /// <summary>
         /// Updates the timeline with the new unit.
         /// </summary>
-        /// <param name="turnManager"></param>
         private void AddUnitToTimeline()
         {
             var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
@@ -161,7 +159,6 @@ namespace Managers
         /// <summary>
         /// Updates the timeline UI for the new round.
         /// </summary>
-        /// <param name="turnManager"></param>
         private void UpdateForNewRound()
         {
             allUnitCards.ForEach(unitCard =>

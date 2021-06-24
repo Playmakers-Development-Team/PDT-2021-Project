@@ -1,4 +1,3 @@
-using System;
 using Commands;
 using GridObjects;
 using Units;
@@ -14,8 +13,7 @@ namespace Managers
         [SerializeField] private bool debugDamagePlayerButton = false;
         
         private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; //Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
-        
+        private int totalEnemies = 3; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
@@ -28,7 +26,6 @@ namespace Managers
         /// Stores the current actingunit.
         /// </summary>
         private EnemyUnit ActingEnemyUnit => unitManager.ActingEnemyUnit;
-        
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -81,34 +78,17 @@ namespace Managers
         private void OnValidate()
         {
             if (debugKillEnemyButton)
-            {
                 DebugKillEnemyFunction();
-            }
 
             if (debugDamagePlayerButton)
-            {
                 DebugDamagePlayerButton();
-            }
         }
 
         private void SpawnEnemy()
         {
             enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            
-            // // TODO: Remove this later, currently used to test enemy attacks
-            // if (enemyManager.EnemyUnits.Count  == 0)
-            //     SpawnAdjacentToPlayer();
-            // else
-            //     enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
         
-        
-        private void SpawnAdjacentToPlayer()
-        {
-            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
-            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
-        }
-
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)

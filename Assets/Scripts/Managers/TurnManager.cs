@@ -9,7 +9,6 @@ namespace Managers
 {
     public class TurnManager : Manager
     {
-        
         /// <summary>
         /// Gives how many turns have passed throughout the entire level.
         /// </summary>

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Commands;
 using Units;
 using Units.Commands;
 using UnityEngine;
@@ -23,8 +22,10 @@ namespace Managers
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
 
-        public int DeathDelay {get;} = 5000;
-        public bool WaitForDeath;
+        public int DeathDelay { get; } = 5000;
+        
+        // TODO: This should be replaced with commands
+        public bool WaitForDeath { get; set; }
 
         /// <summary>
         /// Removes all the player units in the <c>playerUnits</c> list.
@@ -73,9 +74,7 @@ namespace Managers
             if (SelectedUnit != unit)
             {
                 SelectedUnit = unit;
-
-                ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
+                commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
             }
         }
 
@@ -85,8 +84,7 @@ namespace Managers
         public void DeselectUnit()
         {
             SelectedUnit = null;
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
+            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
         }
         
         /// <summary>

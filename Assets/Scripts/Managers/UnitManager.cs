@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
-using Commands;
-using JetBrains.Annotations;
 using Units;
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
 
 namespace Managers
 {
@@ -118,9 +114,9 @@ namespace Managers
         /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            commandManager.ExecuteCommand(new SpawningUnitCommand(unit));
             return unit;
         }
 
@@ -130,9 +126,9 @@ namespace Managers
         /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
         {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            commandManager.ExecuteCommand(new SpawningUnitCommand(unit));
             return unit;
         }
     }

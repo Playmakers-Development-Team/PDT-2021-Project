@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Cysharp.Threading.Tasks;
 using Managers;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,12 +10,11 @@ namespace Commands
         [SerializeField, HideInInspector]
         private string commandTypeName;
         public UnityEvent OnCommandExecute;
+        
+        public Type CommandType { get; private set; }
 
         private CommandManager commandManager;
         
-        public Type CommandType { get; private set; }
-        
-
         private void OnEnable()
         {
             commandManager = ManagerLocator.Get<CommandManager>();

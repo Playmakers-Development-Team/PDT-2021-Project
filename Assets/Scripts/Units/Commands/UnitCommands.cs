@@ -3,7 +3,7 @@ using Commands;
 namespace Units.Commands
 {
     /// <summary>
-    /// Execute this command when unit should killed and removed from the game.
+    /// Executed when a unit should be killed and removed from the game.
     /// Specifically, this command is useful for debugging from editor.
     /// </summary>
     public class KillUnitCommand : UnitCommand
@@ -12,7 +12,7 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when unit is to be killed and about to be removed from the game.
+    /// Executed when a unit is about to be removed from the game.
     /// </summary>
     public class KillingUnitCommand : UnitCommand
     {
@@ -20,7 +20,7 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when unit has already been removed completely from the game.
+    /// Executed when a unit has been removed from the game.
     /// </summary>
     public class KilledUnitCommand : UnitCommand
     {
@@ -28,15 +28,12 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when unit is about to be spawned.
+    /// Executed when a unit is about to be spawned.
     /// </summary>
-    public class SpawningUnitCommand : UnitCommand
-    {
-        public SpawningUnitCommand(IUnit unit) : base(unit) {}
-    }
+    public class SpawningUnitCommand : Command {}
     
     /// <summary>
-    /// Executed when unit has already been completely spawned.
+    /// Executed when a unit has been spawned.
     /// </summary>
     public class SpawnedUnitCommand : UnitCommand
     {

@@ -4,7 +4,6 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
-using Commands;
 using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
@@ -68,9 +67,11 @@ namespace Units
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
         }
 
+        // TODO: Used for testing, can eventually be removed
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1)
+                TakeDamage(10);
         }
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
@@ -189,7 +190,7 @@ namespace Units
         private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
             // We have to explicitly compare types here 
-            if (killUnitCommand.Unit.GetType() == this.GetType())
+            if (killUnitCommand.Unit.GetType() == GetType())
             {
                 KillUnitWithDelay();
                 // Since we're about to remove the object, stop listening to the command
@@ -234,14 +235,15 @@ namespace Units
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
 
+        // TODO: Uncomment when merged to dev
         private void SpawnDamageText(int damageAmount)
         {
-            damageTextCanvas.enabled = true;
-
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-
-            Invoke("HideDamageText", damageTextLifetime);
+            // damageTextCanvas.enabled = true;
+            //
+            // damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
+            //     damageAmount.ToString();
+            //
+            // Invoke(nameof(HideDamageText), damageTextLifetime);
         }
 
         private void HideDamageText()

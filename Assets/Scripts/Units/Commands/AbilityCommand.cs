@@ -13,8 +13,8 @@ namespace Units.Commands
         public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
             this.ability = ability;
-            this.TargetVector = targetVector;
-            this.OriginCoordinate = unit.Coordinate;
+            TargetVector = targetVector;
+            OriginCoordinate = unit.Coordinate;
         }
 
         public override void Execute()

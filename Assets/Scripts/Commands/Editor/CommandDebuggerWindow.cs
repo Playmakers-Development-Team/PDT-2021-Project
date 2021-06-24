@@ -2,12 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Cysharp.Threading.Tasks;
 using Managers;
 using Units;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Commands.Editor
 {
@@ -26,7 +24,7 @@ namespace Commands.Editor
         {
             if (Instance != null)
             {
-                Debug.LogError("Can only have 1 command debugger open at a time");
+                Debug.LogError("Can only have one command debugger open at a time/");
                 return;
             }
             
@@ -44,9 +42,7 @@ namespace Commands.Editor
         private void OnDisable()
         {
             if (currentCommandManager != null)
-            {
                 currentCommandManager.OnCommandExecuteEvent -= OnCommandExecuted;
-            }
 
             Instance = null;
         }
@@ -60,16 +56,16 @@ namespace Commands.Editor
 
         private static void OnCommandExecuted(Command command)
         {
-            if (Instance.shouldDebugExecution)
+            if (!Instance.shouldDebugExecution)
+                return;
+            
+            if (command is UnitCommand {Unit: Component unit})
             {
-                if (command is UnitCommand {Unit: Component unit})
-                {
-                    Debug.Log($"Unit Command Executed => {command.GetType()} with unit \"{unit.name}\"");
-                }
-                else
-                {
-                    Debug.Log($"Command Executed => {command.GetType()}");
-                }
+                Debug.Log($"Unit Command Executed => {command.GetType()} with unit \"{unit.name}\"");
+            }
+            else
+            {
+                Debug.Log($"Command Executed => {command.GetType()}");
             }
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Units.Commands
 {
     /// <summary>
-    /// Executed when the unit is about to start moving to some target.
+    /// Executed before a unit starts moving.
     /// </summary>
     public class StartMoveCommand : HistoricalCommand
     {

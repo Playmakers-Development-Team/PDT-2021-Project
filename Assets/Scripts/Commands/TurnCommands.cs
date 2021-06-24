@@ -16,7 +16,7 @@ namespace Commands
     }
     
     /// <summary>
-    /// Should execute this command when the turn of unit should end.
+    /// Executed when a turn ends.
     /// </summary>
     public class EndTurnCommand : UnitCommand
     {
@@ -24,12 +24,12 @@ namespace Commands
     }
 
     /// <summary>
-    /// Executed when the turn system is about to go the the next round.
+    /// Executed before a new round starts.
     /// </summary>
     public class PrepareRoundCommand : Command {}
     
     /// <summary>
-    /// Executed when the a new round has started.
+    /// Executed after a new round starts.
     /// </summary>
     public class StartRoundCommand : Command {}
 }

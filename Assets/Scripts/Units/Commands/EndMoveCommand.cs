@@ -23,7 +23,7 @@ namespace Units.Commands
 
         public override void Undo()
         {
-            startMoveCommand.Undo();
+            // TODO
         }
     }
 }
