@@ -15,7 +15,7 @@ namespace Units
         public ModifierStat DealDamageModifier { get; }
         public List<Ability> Abilities { get; }
 
-        //public Vector2Int Coordinate { get; set; }
+        public Vector2Int Coordinate { get; }
 
         GameObject gameObject { get; }
         
