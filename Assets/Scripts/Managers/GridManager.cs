@@ -51,12 +51,10 @@ namespace Managers
         
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
-            if(tileDatas.TryGetValue(coordinate, out TileData tileData))
-            {
+            if (tileDatas.TryGetValue(coordinate, out TileData tileData))
                 return tileData;
-            }
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            Debug.Log("No tile found at coordinates " + coordinate);
             return null;
         }
         
