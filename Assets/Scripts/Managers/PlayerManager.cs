@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -40,6 +41,7 @@ namespace Managers
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
            // playerUnits.Add(newUnit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
             return newUnit;
         }
 
@@ -62,9 +64,7 @@ namespace Managers
                 return;
             
             SelectedUnit = unit;
-
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
+            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
         }
 
         /// <summary>
@@ -76,10 +76,7 @@ namespace Managers
                 return;
             
             Debug.Log(SelectedUnit + " deselected.");
-            
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
-            
+            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
             SelectedUnit = null;
         }
         

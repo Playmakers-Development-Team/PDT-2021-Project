@@ -5,6 +5,7 @@ using Managers;
 using StatusEffects;
 using TMPro;
 using Units;
+using Units.Commands;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,34 +31,23 @@ namespace UI
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Humility, 3);
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Joy, 3);
             // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Apathy, 3);
+            
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
-            {
-                SelectUnit();
-            });
-            commandManager.ListenCommand<AbilityCommand>(cmd =>
-            {
-                SelectUnit();
-            });
-            commandManager.ListenCommand<UnitDeselectedCommand>(cmd =>
-            {
-                DeselectUnit();
-            });
+            
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd => SelectUnit());
+            commandManager.ListenCommand<AbilityCommand>(cmd => SelectUnit());
+            commandManager.ListenCommand<UnitDeselectedCommand>(cmd => DeselectUnit());
         }
 
         // TODO: Hook up with the real selected unit
         public void SelectUnit()
         {
             selectedPlayerUnit = ManagerLocator.Get<PlayerManager>().SelectedUnit;
+            
             if (selectedPlayerUnit != null)
-            {
-                gameObject.SetActive(true);
                 UpdateUnitUI();
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            
+            gameObject.SetActive(selectedPlayerUnit != null);
         }
 
         public void DeselectUnit() => gameObject.SetActive(false);

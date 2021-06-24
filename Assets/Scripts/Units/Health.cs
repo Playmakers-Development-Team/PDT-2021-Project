@@ -1,6 +1,7 @@
 using Commands;
 using GridObjects;
 using Managers;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -10,9 +11,9 @@ namespace Units
         public ValueStat HealthPoints { get; }
         public ModifierStat TakeDamageModifier { get; }
 
-        private UnitDeathCommand unitDeathCommand;
+        private KillUnitCommand unitDeathCommand;
 
-        public Health(UnitDeathCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
+        public Health(KillUnitCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
         takeDamageModifier)
         {
             this.unitDeathCommand = unitDeathCommand;

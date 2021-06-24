@@ -4,10 +4,12 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Cysharp.Threading.Tasks;
 using Commands;
 using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
+using Units.Commands;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -47,25 +49,14 @@ namespace Units
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private GridManager gridManager;
+        private CommandManager commandManager;
 
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
-            
-            Health = new Health(new UnitDeathCommand(this), data.healthPoints, data.takeDamageModifier);
-            
-            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenCommand<UnitDeathCommand>(
-                (cmd) =>
-                {
-                    if (cmd.Unit != this)
-                        return;
-                    
-                    playerManager.WaitForDeath = true;
-                    KillUnit();
-                });
+            Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
             
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
@@ -73,12 +64,16 @@ namespace Units
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
         }
-        
-        void Update()
-        { 
-            //TEST CODE, 
-            //if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+
+        // TODO: Used for testing, can eventually be removed
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1)
+                TakeDamage(10);
         }
         
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
@@ -189,19 +184,35 @@ namespace Units
             return false;
         }
 
+        /// <summary>
+        /// Makes it easier to debug with the command debugger window.
+        /// </summary>
+        private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
+        {
+            if (killUnitCommand.Unit == this)
+            {
+                // Since we're about to remove the object, stop listening to the command
+                commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+                KillUnit();
+            }
+        }
+
         private async void KillUnit()
-        {   
+        {
+            playerManager.WaitForDeath = true;
             Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
             gridManager.RemoveGridObject(this.Coordinate, this);
-            await UniTask.Delay(1000);
+            await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            
-            
+
+            commandManager.ExecuteCommand(new KillingUnitCommand(this));
+            gridManager.RemoveGridObject(Coordinate, this);
+
             // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
             // TODO: This is fixed by the proto-two/integration/unit-death branch.
             // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this); //THIS DEPENDENCY ISSUE SHOULD BE FIXED IN THE REFACTOR
+            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
             switch (this)
             {
@@ -219,8 +230,9 @@ namespace Units
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+            commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
-        
+
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;

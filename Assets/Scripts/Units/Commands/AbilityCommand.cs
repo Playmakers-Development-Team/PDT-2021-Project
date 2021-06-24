@@ -1,9 +1,10 @@
 using Abilities;
 using GridObjects;
 using Units;
+using Commands;
 using UnityEngine;
 
-namespace Commands
+namespace Units.Commands
 {
     public class AbilityCommand : HistoricalCommand
     {
@@ -14,8 +15,8 @@ namespace Commands
         public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
         {
             this.ability = ability;
-            this.TargetVector = targetVector;
-            this.OriginCoordinate = ((GridObject)unit).Coordinate;
+            TargetVector = targetVector;
+            OriginCoordinate = ((GridObject)unit).Coordinate;
         }
 
         public override void Execute()
