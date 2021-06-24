@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Abilities;
 using Managers;
 using Units;
 using UnityEditor;
@@ -144,6 +145,10 @@ namespace Commands.Editor
                         {
                             parameterValues[i] ??= new Vector3();
                             parameterValues[i] = EditorGUILayout.Vector3Field(parameterName, (Vector3) parameterValues[i]);
+                        }
+                        else if (typeof(Ability).IsAssignableFrom(parameterType))
+                        {
+                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(Ability));
                         }
                         else if (typeof(UnityEngine.Object).IsAssignableFrom(parameterType))
                         {
