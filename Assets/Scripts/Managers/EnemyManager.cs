@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
-using UnityEditor.Timeline.Actions;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -24,6 +25,21 @@ namespace Managers
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
+        
+        private TurnManager turnManager;
+        private CommandManager commandManager;
+        private GridManager gridManager;
+        private PlayerManager playerManager;
+
+        public override void ManagerStart()
+        {
+            base.ManagerStart();
+            
+            turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+            gridManager = ManagerLocator.Get<GridManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
+        }
 
         /// <summary>
         /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
@@ -33,15 +49,21 @@ namespace Managers
         /// <returns>The new <c>IUnit</c> that was added.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            enemyUnits.Add(newUnit);
-            return newUnit;
+            //BUG THIS WILL BE FIXED ONCE UNIT/TURN DEPENDENCY IS SOLVED
+            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            enemyUnits.Add(unit);
+            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            
+            //IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
         }
 
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(((GridObject)
+                enemyUnit).Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -61,25 +83,14 @@ namespace Managers
             }
         }
         
-        public void RemoveEnemyUnit(IUnit enemyUnit)
-        {
-            if (enemyUnits.Contains(enemyUnit))
-            {
-                enemyUnits.Remove(enemyUnit);
-                Debug.Log(enemyUnits.Count + " enemies remain");
-            }
-            else
-            {
-                Debug.LogWarning("WARNING: Tried to remove " + enemyUnit +
-                                 " from EnemyManager but it isn't a part of the enemyUnits list");
-            }
-        }
+        public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
-        public void DecideEnemyIntention(EnemyUnit actingUnit)
+        public async void DecideEnemyIntention(EnemyUnit actingUnit)
         {
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-            
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
+            
+            foreach(IUnit unit in ManagerLocator.Get<UnitManager>().AllUnits)
+                Debug.Log(unit);
             
             if (adjacentPlayerUnit != null)
             {
@@ -88,7 +99,10 @@ namespace Managers
             else if (playerManager.PlayerUnits.Count > 0)
             {
                 Debug.Log("ENEMY-INT: Move towards player");
-                MoveUnit(actingUnit);
+                await MoveUnit(actingUnit);
+                
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
                 
                 // If a player is now next to the enemy, attack the player
                 adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
@@ -99,8 +113,11 @@ namespace Managers
             }
             else
             {
-                Debug.Log("ENEMY-INT: Do nothing (No players)");
+                Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                return;
             }
+            
+            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
         }
 
         private void AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
@@ -108,21 +125,29 @@ namespace Managers
             // TODO: Will later need to be turned into an ability command when enemies have abilities
             Debug.Log("ENEMY-INT: Damage player");
             playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+            
+            await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
+
+            while (playerManager.WaitForDeath)
+                await UniTask.Yield();
         }
 
-        private void MoveUnit(EnemyUnit actingUnit)
+        private UniTask MoveUnit(EnemyUnit actingUnit)
         {
             IUnit enemyUnit = actingUnit;
             IUnit targetPlayerUnit = GetTargetPlayer(actingUnit);
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
-            var moveCommand = new MoveCommand(
+            var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) actingUnit.MovementActionPoints.Value)
+                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
+                actingUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
+            commandManager.ExecuteCommand(moveCommand);
+            return UniTask.Delay(1000);
         }
         
         private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, int movementPoints)
