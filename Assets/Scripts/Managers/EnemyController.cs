@@ -1,4 +1,5 @@
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
 using Units.Commands;
@@ -69,7 +70,14 @@ namespace Managers
 
         private void SpawnEnemy()
         {
-            enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
+           IUnit enemyunit = enemyManager.Spawn(enemyPrefab, gridManager
+           .GetRandomUnoccupiedCoordinates());
+
+           enemyunit.Name = enemyunit.RandomizeName();
+           
+           Debug.Log(enemyunit.RandomizeName() + "RANDOMZIED");
+           Debug.Log(enemyunit.Name);
+           
         }
         
         private void DebugKillEnemyFunction()

@@ -56,7 +56,7 @@ namespace UI
             // TODO: Icon setup for realsies
             //icon.sprite = selectedPlayerUnit.sprite;
             
-            nameText.text = selectedUnit.gameObject.name;
+            nameText.text = selectedUnit.Name;
             health.text = "Health: " + selectedUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedUnit.Attack.Value;

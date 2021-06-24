@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Units
 {
@@ -7,6 +9,11 @@ namespace Units
     {
 
         public string name;
+
+       
+        
         // Put enemy-specific stats here
+        
+        
     }
 }

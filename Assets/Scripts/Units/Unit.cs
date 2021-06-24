@@ -17,7 +17,12 @@ namespace Units
     {
         [SerializeField] protected T data;
 
-        public string Name => data.name;
+        public string Name
+        {
+            get => data.name;
+            set => data.name = value;
+        }
+
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
@@ -239,5 +244,93 @@ namespace Units
         {
             damageTextCanvas.enabled = false;
         }
+        
+          #region RandomizeNames
+        public string RandomizeName()
+        {
+            string newname = "";
+            int random = UnityEngine.Random.Range(1,25);
+
+            switch (random)
+            {
+                case 1:
+                    newname="Agid";
+                    break;
+                case 2:
+                    newname="Jack";
+                    break;
+                case 3 :
+                    newname="Francisco";
+                    break;
+                case 4:
+                    newname="Kyle";
+                    break;
+                case 5:
+                    newname="Jordan";
+                    break;
+                case 6:
+                    newname="Sam";
+                    break;
+                case 7:
+                    newname="Jake";
+                    break;
+                case 8:
+                    newname="William";
+                    break;
+                case 9:
+                    newname="Beatrice";
+                    break;
+                case 10:
+                    newname="Lachlan";
+                    break;
+                case 11:
+                    newname="Hugo";
+                    break;
+                case 12:
+                    newname="Habib";
+                    break;
+                case 13:
+                    newname="Christa";
+                    break;
+                case 14:
+                    newname="Roy";
+                    break;
+                case 15:
+                    newname="Nick";
+                    break;
+                case 16:
+                    newname="Eddie";
+                    break;
+                case 17:
+                    newname="Vivian";
+                    break;
+                case 18:
+                    newname="Ethan";
+                    break;
+                case 19:
+                    newname="Jaiden";
+                    break;
+                case 20:
+                    newname="Jaime";
+                    break;
+                case 21:
+                    newname="Leon";
+                    break;
+                case 22:
+                    newname="Groovy Bot";
+                    break;
+                case 23:
+                    newname="Clickup Bot";
+                    break;
+                case 24:
+                    newname = "Githut-Bot";
+                    break;
+            }
+            return newname;
+        }
+        
+        #endregion
+        
+        
     }
 }
