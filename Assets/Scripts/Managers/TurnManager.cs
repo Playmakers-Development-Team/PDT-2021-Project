@@ -332,10 +332,15 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
-            
+
             foreach (IUnit unit in unitManager.AllUnits)
+            {
                 unit.MovementActionPoints.Reset();
+                unit.Attack.Reset();
+                unit.Health.Defence.Reset();
+            }
             
+          
             commandManager.ExecuteCommand(new StartRoundCommand());
         }
 
