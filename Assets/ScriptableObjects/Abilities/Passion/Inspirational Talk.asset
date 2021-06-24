@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Inspirational Talk
+  m_EditorClassIdentifier: 
+  description: "Targets gain 2 Attack\n User and targets gains 1 Defense and 1 Passion
+    Kindled\n Square 3x3\n"
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
+  targetEffects:
+  - name: Default, 2 Attack
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 2
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs: []
+  - name: 1 Defence and Provide 1 Passion per Passion
+    damageValue: 0
+    defenceValue: 1
+    attackValue: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 1
+    costs:
+    - name: User Per Passion
+      affectType: 0
+      costType: 1
+      tenetType: 2
+  userEffects: []

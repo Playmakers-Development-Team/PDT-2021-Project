@@ -151,7 +151,7 @@ MonoBehaviour:
     healthPoints:
       <BaseValue>k__BackingField: 10
     movementActionPoints:
-      <BaseValue>k__BackingField: 3
+      <BaseValue>k__BackingField: 2
     speed:
       <BaseValue>k__BackingField: 1
     dealDamageModifier:
@@ -164,7 +164,9 @@ MonoBehaviour:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 1
     abilities:
-    - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
+    - {fileID: 11400000, guid: 8d3d437d1fea409dba9214ab462e5a34, type: 2}
+    - {fileID: 11400000, guid: 3778aeebe7b611cea8b3fc68fe223982, type: 2}
+    - {fileID: 11400000, guid: 252affe1214807dea819b5be4fb9bc8d, type: 2}
   damageTextCanvas: {fileID: 0}
   damageTextLifetime: 1
   CurrentlySelectedAbility: {fileID: 0}
