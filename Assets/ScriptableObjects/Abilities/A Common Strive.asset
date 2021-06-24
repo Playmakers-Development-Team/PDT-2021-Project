@@ -15,13 +15,12 @@ MonoBehaviour:
   description: "Does 1 Attack and 1 Defense. \n2 Attack spend Passion.\n2 Defense
     with Humility."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
     defenceValue: 1
     attackValue: 1
+    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 1
@@ -30,22 +29,26 @@ MonoBehaviour:
     damageValue: 0
     defenceValue: 0
     attackValue: 2
+    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs:
     - name: Spend Passion
+      affectType: 0
       costType: 2
       tenetType: 2
   - name: 2 Defence spend Humility
     damageValue: 0
     defenceValue: 2
     attackValue: 0
+    knockbackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs:
     - name: Spend Humility
+      affectType: 0
       costType: 2
       tenetType: 1
   userEffects: []

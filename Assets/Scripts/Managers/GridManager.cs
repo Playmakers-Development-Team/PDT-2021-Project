@@ -52,11 +52,9 @@ namespace Managers
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
             if (tileDatas.TryGetValue(coordinate, out TileData tileData))
-            {
                 return tileData;
-            }
 
-            Debug.LogError("ERROR: No tile was found for the provided coordinates " + coordinate);
+            Debug.Log("No tile found at coordinates " + coordinate);
             return null;
         }
 
@@ -370,8 +368,8 @@ namespace Managers
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            int moveRange = (int) unit.MovementActionPoints.Value;
-            Vector2Int startingCoordinate = ((GridObject) unit).Coordinate;
+            int moveRange = (int)unit.MovementActionPoints.Value;
+            Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
 
@@ -461,7 +459,7 @@ namespace Managers
         /// <param name="unit">The unit to teleport.</param>
         private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
         {
-            Vector2Int startCoordinate = ((GridObject) unit).Coordinate;
+            Vector2Int startCoordinate = unit.Coordinate;
             var gridObject = (GridObject) unit;
 
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
