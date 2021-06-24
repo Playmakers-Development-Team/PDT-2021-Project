@@ -21,18 +21,18 @@ MonoBehaviour:
   knockback: 0
   onlyHitUnits: 1
   targetEffects:
-  - name: Default, 2 Damage and 2 Defence
+  - name: Default, 2 Damage
     damageValue: 2
-    defenceValue: 2
+    defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs: []
   userEffects:
-  - name: Default, Provide 1 Pride
+  - name: Default, 2 Defence and Provide 1 Pride
     damageValue: 0
-    defenceValue: 0
+    defenceValue: 2
     attackValue: 0
     providingTenet:
       tenetType: 0
