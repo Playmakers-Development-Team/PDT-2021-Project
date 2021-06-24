@@ -85,7 +85,7 @@ namespace Managers
             if (adjacentPlayerUnit != null)
             {
                 // TODO: Will later need to be turned into an ability command when enemies have abilities
-                adjacentPlayerUnit.TakeDamage((int) enemyUnit.DealDamageModifier.Value);
+                adjacentPlayerUnit.TakeDamage((int) enemyUnit.Attack.Value);
                 await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
 
                 while (playerManager.WaitForDeath)
@@ -149,7 +149,7 @@ namespace Managers
                             IUnit playerUnit = (IUnit) adjacentGridObject;
                             
                             // TODO: Will later need to be turned into an ability command when enemies have abilities
-                            playerUnit.TakeDamage((int) unit.DealDamageModifier.Value);
+                            playerUnit.TakeDamage((int) unit.Attack.Value);
                         }
                         return movementDir;
                     }

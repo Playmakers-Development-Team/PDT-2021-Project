@@ -20,7 +20,7 @@ namespace Units
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
-        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public ModifierStat Attack => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
 
         public static Type DataType => typeof(T);
@@ -73,9 +73,9 @@ namespace Units
                 TakeDamage(10);
         }
         
-        public void TakeDefence(int amount) => Health.TakeDamageModifier.Adder -= amount;
+        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
-        public void TakeAttack(int amount) => DealDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => Attack.Adder += amount;
         
         public void TakeDamage(int amount)
         {

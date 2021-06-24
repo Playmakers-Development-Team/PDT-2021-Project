@@ -12,7 +12,7 @@ namespace Units
         public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
         public ValueStat Speed { get; }
-        public ModifierStat DealDamageModifier { get; }
+        public ModifierStat Attack { get; }
         public List<Ability> Abilities { get; }
 
         public Vector2Int Coordinate { get; }
