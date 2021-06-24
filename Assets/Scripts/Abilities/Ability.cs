@@ -57,8 +57,7 @@ namespace Abilities
                     targetUnit.TakeDefence(defence);
                     // Attack modifiers should only work when the effect actually intends to do damage
                     if (damage > 0)
-                        targetUnit.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify
-                        (damage)));
+                        targetUnit.TakeDamage(Mathf.RoundToInt(user.Attack.Modify(damage)));
                 
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     if (targetUnit.Knockback != null)

@@ -9,21 +9,21 @@ namespace Units
     public class Health
     {
         public ValueStat HealthPoints { get; }
-        public ModifierStat TakeDamageModifier { get; }
+        public ModifierStat Defence { get; }
 
         private KillUnitCommand unitDeathCommand;
 
         public Health(KillUnitCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
-        takeDamageModifier)
+        defence)
         {
             this.unitDeathCommand = unitDeathCommand;
             HealthPoints = healthPoints;
-            TakeDamageModifier = takeDamageModifier;
+            Defence = defence;
         }
         
         public int TakeDamage(int amount)
         {
-            int initialDamageTaken = (int) TakeDamageModifier.Modify(amount);
+            int initialDamageTaken = (int) Defence.Modify(amount);
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             
             HealthPoints.Value -= calculatedDamageTaken;
