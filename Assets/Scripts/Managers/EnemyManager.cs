@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Commands;
 using Cysharp.Threading.Tasks;
 using GridObjects;
@@ -94,7 +95,7 @@ namespace Managers
             
             if (adjacentPlayerUnit != null)
             {
-                AttackUnit(actingUnit, adjacentPlayerUnit);
+                await AttackUnit(actingUnit, adjacentPlayerUnit);
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
@@ -108,7 +109,7 @@ namespace Managers
                 adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
                 if (adjacentPlayerUnit != null)
                 {
-                    AttackUnit(actingUnit, adjacentPlayerUnit);
+                    await AttackUnit(actingUnit, adjacentPlayerUnit);
                 }
             }
             else
@@ -120,7 +121,7 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
         }
 
-        private void AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
+        private async Task AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
         {
             // TODO: Will later need to be turned into an ability command when enemies have abilities
             Debug.Log("ENEMY-INT: Damage player");
@@ -141,7 +142,7 @@ namespace Managers
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, closestPlayerUnit, (int) 
+                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) 
                 actingUnit.MovementActionPoints.Value)
             );
             
