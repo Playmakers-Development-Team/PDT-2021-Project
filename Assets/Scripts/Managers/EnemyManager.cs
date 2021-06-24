@@ -114,7 +114,7 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
-        private void MoveUnit(EnemyUnit unit)
+        private UniTask MoveUnit(EnemyUnit unit)
         {
             IUnit enemyUnit = unit;
             IUnit closestPlayerUnit = FindClosestPlayer(unit);
@@ -129,7 +129,7 @@ namespace Managers
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
             commandManager.ExecuteCommand(moveCommand);
-            UniTask.Delay(1000);
+            return UniTask.Delay(1000);
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles
