@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
+    name: Estelle
     tenet: 2
     healthPoints:
       <BaseValue>k__BackingField: 10
@@ -170,7 +171,7 @@ MonoBehaviour:
   damageTextCanvas: {fileID: 6691395943555653704}
   damageTextLifetime: 1
   animationStates: 0
-  animator: {fileID: 5117213522043847431}
+  animator: {fileID: 0}
   CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &8717713392952530977
 PrefabInstance:

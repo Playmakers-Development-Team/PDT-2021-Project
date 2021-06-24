@@ -57,7 +57,7 @@ namespace UI
             //icon.sprite = selectedPlayerUnit.sprite;
             
             // TODO: change to the unit's name if any
-            nameText.text = selectedUnit.gameObject.name;
+            nameText.text = selectedUnit.Name;
             health.text = "Health: " + selectedUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedUnit.DealDamageModifier.Value;
