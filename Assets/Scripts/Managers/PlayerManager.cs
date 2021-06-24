@@ -7,7 +7,6 @@ namespace Managers
 {
     public class PlayerManager : UnitManager
     {
-        public IUnit SelectedUnit { get; private set; }
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
         /// <summary>
@@ -43,41 +42,6 @@ namespace Managers
             return newUnit;
         }
 
-        /// <summary>
-        /// Sets a unit as selected.
-        /// </summary>
-        /// <param name="unit"></param>
-        public void SelectUnit(PlayerUnit unit)
-        {
-            if (WaitForDeath) return;
-            if (unit is null)
-            {
-                Debug.LogWarning(
-                    "PlayerManager.SelectUnit should not be passed a null value. Use PlayerManager.DeselectUnit instead.");
-                DeselectUnit();
-                return;
-            }
-
-            if (SelectedUnit == unit)
-                return;
-            
-            SelectedUnit = unit;
-            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
-        }
-
-        /// <summary>
-        /// Deselects the currently selected unit.
-        /// </summary>
-        public void DeselectUnit()
-        {
-            if (SelectedUnit is null)
-                return;
-            
-            Debug.Log(SelectedUnit + " deselected.");
-            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
-            SelectedUnit = null;
-        }
-        
         /// <summary>
         /// Adds an already existing unit to the <c>playerUnits</c> list. Currently used by units
         /// that have been added to the scene in the editor.

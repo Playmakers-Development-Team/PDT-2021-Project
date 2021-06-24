@@ -166,9 +166,8 @@ namespace Managers
 
         private void Update()
         {
-            if (
-                Input.GetKeyDown(KeyCode.
-                    E)) // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
+            // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
+            if (Input.GetKeyDown(KeyCode.E)) 
             {
                 if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
                 if (actingPlayerUnit == null)
@@ -243,19 +242,14 @@ namespace Managers
 
         private void SelectUnit()
         {
-            Vector2Int gridPos = GetCoordinateFromClick();
+            Vector2Int coord = GetCoordinateFromClick();
 
-            foreach (IUnit unit in playerManager.PlayerUnits)
+            var gridObjects = gridManager.GetGridObjectsByCoordinate(coord);
+            
+            if (gridObjects.Count > 0)
             {
-                if (unit is PlayerUnit playerUnit)
-                {
-                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
-                        gridPos)
-                    {
-                        playerManager.SelectUnit(playerUnit);
-                        return;
-                    }
-                }
+                unitManager.SelectUnit((IUnit) gridObjects[0]);
+                return;
             }
 
             playerManager.DeselectUnit();
