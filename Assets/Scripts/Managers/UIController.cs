@@ -17,6 +17,9 @@ namespace Managers
     {
         [SerializeField] private GameObject abilityUIPrefab;
         [SerializeField] private Transform abilityParent;
+        [SerializeField] private GameObject abilityUIPreviewPrefab;
+        [SerializeField] private Transform abilityPreviewParent;
+
         [SerializeField] private GameObject audioPanel;
         [SerializeField] private LineRenderer abilityLineRenderer;
         [SerializeField] private bool showGridLines = true;
@@ -33,6 +36,8 @@ namespace Managers
         /// The player unit whose turn it currently is.
         /// </summary>
         private PlayerUnit actingPlayerUnit => turnManager.ActingPlayerUnit;
+
+        private List<AbilityCard> abilityCardsPreviews = new List<AbilityCard>();
 
         /// <summary>
         /// A list of ability cards showing the units current abilities
@@ -120,6 +125,20 @@ namespace Managers
                 }
             });
             
+            commandManager.ListenCommand<UnitSelectedCommand>(cmd =>
+            {
+                RemoveAbilitiesPreview();
+                
+                foreach (var ability in unitManager.SelectedUnit.Abilities)
+                    AddAbilitiesPreview(ability);
+                
+            });
+            
+            commandManager.ListenCommand<UnitDeselectedCommand>(cmd =>
+            {
+                RemoveAbilitiesPreview();
+            });
+            
             GenerateGridLines();
         }
 
@@ -159,6 +178,22 @@ namespace Managers
             LineRenderer gridLine = Instantiate(gridLinePrefab, transform);
             gridLine.positionCount = 2;
             gridLine.SetPositions(new Vector3[] { startPos, endPos });
+        }
+
+        private void AddAbilitiesPreview(Ability ability)
+        {
+            var abilityCardObject = Instantiate(abilityUIPreviewPrefab, abilityPreviewParent);
+            var abilityCard = abilityCardObject.GetComponent<AbilityCard>();
+            abilityCard.SetAbility(ability);
+            abilityCardsPreviews.Add(abilityCard);
+        }
+
+        private void RemoveAbilitiesPreview()
+        {
+            foreach (var abilityCard in abilityCardsPreviews) // updated formatting to fit convention
+                Destroy(abilityCard.gameObject);
+
+            abilityCardsPreviews.Clear();
         }
 
         /// <summary>
@@ -215,6 +250,11 @@ namespace Managers
 
         private void Update()
         {
+
+            if (Input.GetKeyDown(KeyCode.Mouse2))
+            {
+                unitManager.DeselectUnit();
+            }
             // SELECTS THE ABILITY PRESSING E MULTIPLE TIMES WILL GO THROUGH THE ABILITY LIST
             if (Input.GetKeyDown(KeyCode.E)) 
             {
