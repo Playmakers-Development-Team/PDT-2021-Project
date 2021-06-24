@@ -57,12 +57,12 @@ namespace UI
             // TODO: Icon setup for realsies
             //icon.sprite = selectedPlayerUnit.sprite;
             
-            // TODO: change to the unit's name if any
             nameText.text = selectedPlayerUnit.gameObject.name;
             health.text = "Health: " + selectedPlayerUnit.Health.HealthPoints.Value;
             movementPointsText.text = "MP: " + selectedPlayerUnit.MovementActionPoints.Value;
             attack.text = "Attack: " + selectedPlayerUnit.Attack.Value;
-            defence.text = "Defence: " + selectedPlayerUnit.Health.Defence.Value;
+            // TODO: Consider changing the way this works in the game logic rather than just in the UI
+            defence.text = "Defence: " + selectedPlayerUnit.Health.Defence.Value * -1;
             speed.text = "Speed: " + selectedPlayerUnit.Speed.Value;
             
             string tenetText = String.Join("\n",selectedPlayerUnit.TenetStatusEffects.Select(t => t.TenetType+": " + t.StackCount) );
