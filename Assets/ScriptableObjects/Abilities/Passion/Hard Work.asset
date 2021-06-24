@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Hard Work
   m_EditorClassIdentifier: 
-  description: "Deal 2 damage\nDeal 1 Damage that is Kindled\n\u21AF User may deal
-    3 extra damage with Pride\n"
+  description: "Deal 2 damage\nDeal 1 Damage per Passion\n\u21AF User may deal 3
+    extra damage with Pride\n"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   knockback: 0
   onlyHitUnits: 1
@@ -38,4 +38,16 @@ MonoBehaviour:
       affectType: 0
       costType: 1
       tenetType: 2
+  - name: 3 Damage with Pride
+    damageValue: 3
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: User With Pride
+      affectType: 0
+      costType: 0
+      tenetType: 0
   userEffects: []

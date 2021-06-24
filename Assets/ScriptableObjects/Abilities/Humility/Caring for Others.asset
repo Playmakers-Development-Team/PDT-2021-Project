@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Caring for Others
   m_EditorClassIdentifier: 
-  description: "Targets gain 2 Defense\n    \u21AF Targets that has Affinity may
-    Spend Humility to gain 3 Defense\n    \u21AF Targets may Spend Joy to gain 2
-    Attack\n"
+  description: "Targets gain 2 Defense\n \u21AF Targets Spend Humility to gain 3
+    Defense\n \u21AF Targets may Spend Joy to gain 2 Attack\n"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   knockback: 0
   onlyHitUnits: 1
