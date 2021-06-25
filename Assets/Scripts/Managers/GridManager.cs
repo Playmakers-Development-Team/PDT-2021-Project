@@ -153,7 +153,12 @@ namespace Managers
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
-            string allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
+            string allegiance = "";
+
+            if (tileDatas[startingCoordinate].GridObjects.Count > 0)
+            {
+                allegiance= tileDatas[startingCoordinate].GridObjects[0].tag;
+            }
             
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
@@ -194,6 +199,13 @@ namespace Managers
         {
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            string allegiance = "";
+
+            if (tileDatas[startingCoordinate].GridObjects.Count > 0)
+            {
+                allegiance= tileDatas[startingCoordinate].GridObjects[0].tag;
+            }
+             
 
             // Add the starting coordinate to the queue
             coordinateQueue.Enqueue(startingCoordinate);
@@ -208,10 +220,10 @@ namespace Managers
 
                 // Add neighbours of node to queue
                 // NOTE: Allegiance does not matter in this context, ergo string.Empty
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, string.Empty);
+                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
                 
                 coordinateQueue.Dequeue();
             }
@@ -247,7 +259,7 @@ namespace Managers
             }
         }
 
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
+        private void VisitPathNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
                                Queue<Vector2Int> coordinateQueue, string allegiance)
         {
             // Check grid node exists
@@ -285,13 +297,13 @@ namespace Managers
             {
                 var currentNode = coordinateQueue.Peek();
 
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
+                VisitPathNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
+                VisitPathNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
+                VisitPathNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
+                VisitPathNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
                     coordinateQueue, allegiance);
 
                 if (visited.ContainsKey(targetCoordinate))
