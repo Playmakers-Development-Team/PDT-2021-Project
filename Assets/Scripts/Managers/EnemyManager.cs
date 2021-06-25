@@ -85,21 +85,21 @@ namespace Managers
 
             if (adjacentPlayerUnit != null)
             {
-                await AttackUnit(actingUnit, adjacentPlayerUnit);
+                await AttackUnit(enemyUnit, adjacentPlayerUnit);
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
                 Debug.Log("ENEMY-INT: Move towards player");
-                await MoveUnit(actingUnit);
+                await MoveUnit(enemyUnit);
                 
                 while (playerManager.WaitForDeath)
                     await UniTask.Yield();
                 
                 // If a player is now next to the enemy, attack the player
-                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
+                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
                 if (adjacentPlayerUnit != null)
                 {
-                    await AttackUnit(actingUnit, adjacentPlayerUnit);
+                    await AttackUnit(enemyUnit, adjacentPlayerUnit);
                 }
             }
             else
@@ -111,11 +111,11 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
-        private async Task AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
+        private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
             // TODO: Will later need to be turned into an ability command when enemies have abilities
             Debug.Log("ENEMY-INT: Damage player");
-            playerUnit.TakeDamage((int) actingUnit.DealDamageModifier.Value);
+            playerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
             
             await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
 
