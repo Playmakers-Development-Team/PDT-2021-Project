@@ -10,45 +10,44 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Unleashing Magnificence
+  m_Name: Caring for Others
   m_EditorClassIdentifier: 
-  description: 'Does 1 base Damage.
-
-    6 Damage spend Pride.
-
-    2 Damage spend
-    Passion.'
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  description: "Targets gain 2 Defense\n \u21AF Targets Spend Humility to gain 3
+    Defense\n \u21AF Targets may Spend Joy to gain 2 Attack\n"
+  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
-  - name: Default, 1 Damage
-    damageValue: 1
-    defenceValue: 0
+  - name: Default, 2 Defence
+    damageValue: 0
+    defenceValue: 2
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs: []
-  - name: 6 Damage spend Pride
-    damageValue: 6
-    defenceValue: 0
+  - name: 3 Defence spend Humility
+    damageValue: 0
+    defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Pride
+    - name: Target Spend Humility
+      affectType: 1
       costType: 2
-      tenetType: 0
-  - name: 2 Damage spend Passion
-    damageValue: 2
+      tenetType: 1
+  - name: 2 Attack spend Joy
+    damageValue: 0
     defenceValue: 0
-    attackValue: 0
+    attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Passion
+    - name: Target Spend Joy
+      affectType: 1
       costType: 2
-      tenetType: 2
+      tenetType: 4
   userEffects: []

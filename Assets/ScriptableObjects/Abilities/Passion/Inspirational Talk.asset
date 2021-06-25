@@ -10,42 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: A Common Strive
+  m_Name: Inspirational Talk
   m_EditorClassIdentifier: 
-  description: "Does 1 Attack and 1 Defense. \n2 Attack spend Passion.\n2 Defense
-    with Humility."
+  description: 'Targets gain 2 Attack
+
+    User and targets gains 1 Defense and 1
+    Passion
+
+'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   knockback: 0
   onlyHitUnits: 1
   targetEffects:
-  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
-    damageValue: 0
-    defenceValue: 1
-    attackValue: 1
-    providingTenet:
-      tenetType: 0
-      stackCount: 1
-    costs: []
-  - name: 2 Attack spend Passion
+  - name: Default, 2 Attack
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: Spend Passion
-      costType: 2
-      tenetType: 2
-  - name: 2 Defence spend Humility
+    costs: []
+  - name: Default, 1 Defence and Provide 1 Passion
     damageValue: 0
-    defenceValue: 2
+    defenceValue: 1
     attackValue: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: Spend Humility
-      costType: 2
-      tenetType: 1
+      tenetType: 2
+      stackCount: 1
+    costs: []
   userEffects: []

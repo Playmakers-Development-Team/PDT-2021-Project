@@ -5,8 +5,6 @@ using GridObjects;
 using StatusEffects;
 using Abilities;
 using Cysharp.Threading.Tasks;
-using Commands;
-using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Units.Commands;
@@ -18,13 +16,18 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
+
+        public string Name
+        {
+            get => data.name;
+            set => data.name = value;
+        }
+
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
-        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public ModifierStat Attack => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
-        //public Vector2Int Coordinate { get => ((GridObject)this).Coordinate; set; }
 
         public static Type DataType => typeof(T);
 
@@ -43,6 +46,8 @@ namespace Units
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
 
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text healthText;
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
 
@@ -59,7 +64,7 @@ namespace Units
             Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
             
             // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10, 50);
+            Speed.Value += Random.Range(0, 101);
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
@@ -67,24 +72,36 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            
+            if (nameText)
+                nameText.text = Name;
+            
+               
+            if (healthText)
+                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
         }
 
         // TODO: Used for testing, can eventually be removed
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1)
-                TakeDamage(10);
+
         }
         
-        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
+        
+        
+        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
-        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+        public void TakeAttack(int amount) => Attack.Adder += amount;
         
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
             
             SpawnDamageText(damageTaken);
+            
+            if (healthText)
+                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
@@ -160,8 +177,6 @@ namespace Units
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
 
-        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
-
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
@@ -200,19 +215,14 @@ namespace Units
         private async void KillUnit()
         {
             playerManager.WaitForDeath = true;
-            Debug.Log($"Unit Killed: {this.name} : {Coordinate}");
-            gridManager.RemoveGridObject(this.Coordinate, this);
+            Debug.Log($"Unit Killed: {name} : {Coordinate}");
+            gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
 
             commandManager.ExecuteCommand(new KillingUnitCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
-
-            // TODO: This is currently being called twice (see UnitManager.RemoveUnit:110).
-            // TODO: This is fixed by the proto-two/integration/unit-death branch.
-            // ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
 
             switch (this)
             {
@@ -223,13 +233,14 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
                                    " as it is an unidentified unit");
                     break;
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+            
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
 
@@ -247,5 +258,93 @@ namespace Units
         {
             damageTextCanvas.enabled = false;
         }
+        
+          #region RandomizeNames
+        public string RandomizeName()
+        {
+            string newname = "";
+            int random = UnityEngine.Random.Range(1,25);
+
+            switch (random)
+            {
+                case 1:
+                    newname="Agid";
+                    break;
+                case 2:
+                    newname="Jack";
+                    break;
+                case 3 :
+                    newname="Francisco";
+                    break;
+                case 4:
+                    newname="Kyle";
+                    break;
+                case 5:
+                    newname="Jordan";
+                    break;
+                case 6:
+                    newname="Sam";
+                    break;
+                case 7:
+                    newname="Jake";
+                    break;
+                case 8:
+                    newname="William";
+                    break;
+                case 9:
+                    newname="Beatrice";
+                    break;
+                case 10:
+                    newname="Lachlan";
+                    break;
+                case 11:
+                    newname="Hugo";
+                    break;
+                case 12:
+                    newname="Habib";
+                    break;
+                case 13:
+                    newname="Christa";
+                    break;
+                case 14:
+                    newname="Roy";
+                    break;
+                case 15:
+                    newname="Nick";
+                    break;
+                case 16:
+                    newname="Eddie";
+                    break;
+                case 17:
+                    newname="Vivian";
+                    break;
+                case 18:
+                    newname="Ethan";
+                    break;
+                case 19:
+                    newname="Jaiden";
+                    break;
+                case 20:
+                    newname="Jaime";
+                    break;
+                case 21:
+                    newname="Leon";
+                    break;
+                case 22:
+                    newname="Groovy Bot";
+                    break;
+                case 23:
+                    newname="Clickup Bot";
+                    break;
+                case 24:
+                    newname = "Github-Bot";
+                    break;
+            }
+            return newname;
+        }
+        
+        #endregion
+        
+        
     }
 }

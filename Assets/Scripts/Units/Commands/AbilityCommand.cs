@@ -16,7 +16,7 @@ namespace Units.Commands
         {
             this.ability = ability;
             TargetVector = targetVector;
-            OriginCoordinate = ((GridObject)unit).Coordinate;
+            OriginCoordinate = unit.Coordinate;
         }
 
         public override void Execute()

@@ -20,7 +20,7 @@ namespace Units.Commands
         {
             gridManager = ManagerLocator.Get<GridManager>();
             TargetCoords = target;
-            StartCoords = ((GridObject)unit).Coordinate;
+            StartCoords = unit.Coordinate;
         }
 
         public override void Execute()

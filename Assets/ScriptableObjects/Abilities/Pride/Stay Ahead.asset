@@ -10,45 +10,40 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Standup
+  m_Name: Stay Ahead
   m_EditorClassIdentifier: 
-  description: 'Does base 1 Damage.
-
-    3 Damage with Pride
-
-    2 Damage spend
-    Passion'
-  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
+  description: "Deal 2 damage\nGain 2 Defence and 1 Pride\n\u21AF User may Spend
+    Passion to deal 2 extra damage"
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   knockback: 0
+  onlyHitUnits: 1
   targetEffects:
-  - name: Default, 1 Damage
-    damageValue: 1
-    defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs: []
-  - name: 3 Damage with Pride
-    damageValue: 3
-    defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: With Pride
-      costType: 0
-      tenetType: 0
-  - name: 2 Damage spend Passion
+  - name: Default, 2 Damage
     damageValue: 2
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    costs: []
+  - name: 3 Damage spend Passion
+    damageValue: 3
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
     costs:
-    - name: Spend Passion
+    - name: User Spend Passion
+      affectType: 0
       costType: 2
       tenetType: 2
-  userEffects: []
+  userEffects:
+  - name: Default, 2 Defence and Provide 1 Pride
+    damageValue: 0
+    defenceValue: 2
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 1
+    costs: []

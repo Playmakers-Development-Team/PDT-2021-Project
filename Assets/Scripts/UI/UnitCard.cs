@@ -17,7 +17,7 @@ namespace UI
             Unit = unit;
             
             SetCardImageAs(unit);
-            SetUnitText(unit.ToString());
+            SetUnitText(unit.Name);
         }
 
         private void SetCardImageAs(IUnit unit)

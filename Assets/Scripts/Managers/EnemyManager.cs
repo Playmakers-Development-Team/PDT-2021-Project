@@ -28,7 +28,6 @@ namespace Managers
         public void ClearEnemyUnits() => enemyUnits.Clear();
         
         private TurnManager turnManager;
-        private CommandManager commandManager;
         private GridManager gridManager;
         private PlayerManager playerManager;
 
@@ -37,7 +36,6 @@ namespace Managers
             base.ManagerStart();
             
             turnManager = ManagerLocator.Get<TurnManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
         }
@@ -50,12 +48,8 @@ namespace Managers
         /// <returns>The new <c>IUnit</c> that was added.</returns>
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
-            //BUG THIS WILL BE FIXED ONCE UNIT/TURN DEPENDENCY IS SOLVED
-            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            IUnit unit = base.Spawn(unitPrefab, gridPosition);
             enemyUnits.Add(unit);
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
-            
-            //IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }
@@ -63,8 +57,7 @@ namespace Managers
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(((GridObject)
-                enemyUnit).Coordinate);
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
             {
@@ -86,13 +79,10 @@ namespace Managers
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
-        public async void DecideEnemyIntention(EnemyUnit actingUnit)
+        public async void DecideEnemyIntention(EnemyUnit enemyUnit)
         {
-            IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(actingUnit);
-            
-            foreach(IUnit unit in ManagerLocator.Get<UnitManager>().AllUnits)
-                Debug.Log(unit);
-            
+            IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
+
             if (adjacentPlayerUnit != null)
             {
                 await AttackUnit(actingUnit, adjacentPlayerUnit);
@@ -118,7 +108,7 @@ namespace Managers
                 return;
             }
             
-            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
+            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
         private async Task AttackUnit(EnemyUnit actingUnit, IUnit playerUnit)
@@ -137,12 +127,13 @@ namespace Managers
         {
             IUnit enemyUnit = actingUnit;
             IUnit targetPlayerUnit = GetTargetPlayer(actingUnit);
+			
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                ((GridObject)enemyUnit).Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) 
+                enemyUnit.Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) 
                 actingUnit.MovementActionPoints.Value)
             );
             
@@ -205,7 +196,7 @@ namespace Managers
             else if (closestPlayersCount > 1)
             {
                 List<IUnit> lowestHealthPlayers = GetLowestHealthPlayers(closestPlayers);
-
+				
                 // If 1 low HP player is returned, it is set as the target player unit
                 // If multiple low HP players are returned, the first instance is set as the target
                 targetPlayerUnit = lowestHealthPlayers[0];
