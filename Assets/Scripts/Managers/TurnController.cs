@@ -30,6 +30,8 @@ namespace Managers
         /// A list of all the unit cards shown in the timeline.
         /// </summary>
         [SerializeField] private List<UnitCard> allUnitCards;
+        
+        [SerializeField]
           
         /// <summary>
         /// The GameObject for the current turn indicator.

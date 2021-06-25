@@ -136,8 +136,6 @@ namespace Managers
                 
                 RemoveAbilitiesPreview();
                 
-                foreach (var ability in unitManager.SelectedUnit.Abilities)
-                    AddAbilitiesPreview(ability);
                 
             });
             

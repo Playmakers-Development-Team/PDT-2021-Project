@@ -49,9 +49,7 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.EnemyUnits.Count < totalEnemies)
-                    SpawnEnemy();
-                else
+                if (enemyManager.EnemyUnits.Count >= totalEnemies)
                 {
                     isSpawningEnemies = false;
                     ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
