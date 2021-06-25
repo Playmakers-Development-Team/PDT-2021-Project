@@ -219,11 +219,10 @@ namespace Managers
                 distance = visited[currentNode];
 
                 // Add neighbours of node to queue
-                // NOTE: Allegiance does not matter in this context, ergo string.Empty
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitDistanceToAllNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitDistanceToAllNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitDistanceToAllNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                VisitDistanceToAllNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
                 
                 coordinateQueue.Dequeue();
             }
@@ -250,13 +249,34 @@ namespace Managers
                     }
                 }
             }
-            else if(tileDatas.ContainsKey(node) && tileDatas[node].GridObjects[0].tag.Equals("PlayerUnit"))
+        }
+        
+        private void VisitDistanceToAllNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
+                               Queue<Vector2Int> coordinateQueue, string allegiance)
+        {
+            // Check grid node exists
+            if (tileDatas.ContainsKey(node))
             {
-                if (!visited.ContainsKey(node))
+                // Check node is empty or matches allegiance
+                if (tileDatas[node].GridObjects.Count == 0 ||
+                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
                 {
-                    visited.Add(node, distance + 1);
+                    // Check node has not already been visited
+                    if (!visited.ContainsKey(node))
+                    {
+                        // Add node to queue and store the distance taken to arrive at it
+                        visited.Add(node, distance + 1);
+                        coordinateQueue.Enqueue(node);
+                    }
+                }else if(tileDatas[node].GridObjects[0].tag.Equals("PlayerUnit"))
+                {
+                    if (!visited.ContainsKey(node))
+                    {
+                        visited.Add(node, distance + 1);
+                    }
                 }
             }
+            
         }
 
         private void VisitPathNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
