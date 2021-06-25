@@ -362,7 +362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328819465}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.58, y: 0, z: 0}
+  m_LocalPosition: {x: 6.77, y: -3.23, z: 0}
   m_LocalScale: {x: 4.4278, y: 4.4278, z: 4.4278}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1460,20 +1460,29 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Alpha: 1
-    - _BorderSize: 0.03
-    - _BorderSmoothing: 0.132
+    - _BeginTime: 0
+    - _BorderSize: 0.156
+    - _BorderSmoothing: 0.334
     - _BumpScale: 1
+    - _CircleRadius: 1.83
+    - _ControlVal: 0.382
     - _Cutoff: 0
+    - _CutoffHeight: 0.8
+    - _DecalEdgeWidth: 0.073
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _EdgeDarkness: 0.21
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LerpDuration: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NoiseScale: 30
+    - _NoiseStrength: 1
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Smoothing: 0.235
+    - _Smoothing: 0.375
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -1482,6 +1491,8 @@ Material:
     m_Colors:
     - _BorderColor: {r: 0.52313733, g: 0.028034877, b: 0.6603774, a: 1}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeDarkness: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!1 &2003776062

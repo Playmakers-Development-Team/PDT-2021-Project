@@ -3,9 +3,17 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
     Properties
     {
         [MainColor] _Color("Color", Color) = (1,1,1,1)
-        _Alpha("Alpha", Range(0, 1)) = 1
         [PerRendererData] _BaseMap("Base Map", 2D) = "white" {}
+        [PerRendererData] _BeginTime("BeginTime", Float) = 0
+        _LerpDuration("Fade Lerp Duration", Float) = 1
         _Smoothing("Smoothing", Range(0, 0.5)) = 0
+        _NoiseStrength("Noise Strength", Float) = 0
+        _NoiseScale("Noise Scale", Float) = 30
+        _CircleRadius("Circle Radius", Float) = 1
+        _DecalEdgeWidth("Decal Edge Witdh", Range(0.0, 1.0)) = 0
+        _CutoffHeight("Cutoff height", Float) = 0
+        _EdgeDarkness("Edge Darkness", Color) = (1,1,1,1)
+            _ControlVal("Control Value", Range(0.0, 1.0)) = 1
 
         // Border Attributes
         _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
@@ -75,11 +83,19 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
 
             // Variables 
             uniform float4 _Color;
-            uniform float _Alpha;
+            uniform float _BeginTime;
+            uniform float _LerpDuration;
+            uniform float _NoiseStrength;
+            uniform float _NoiseScale;
             uniform float4 _BorderColor;
+            uniform float4 _EdgeDarkness;
             uniform float _BorderSize;
             uniform float _BorderSmoothing;
             uniform float _Smoothing;
+            uniform float _CircleRadius;
+            uniform float _DecalEdgeWidth;
+            uniform float _CutoffHeight;
+            uniform float _ControlVal;
 
             // Textures
             TEXTURE2D(_DetailDiffuse);
@@ -94,10 +110,125 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 float4 _DetailDiffuse_ST;
             CBUFFER_END
 
+            // --------------------------------------------
+            //                  MATH
+            // --------------------------------------------
+
             float3 GetViewDirectionFromPosition(float positionWS)
             {
                 return normalize(GetCameraPositionWS() - positionWS);
             }
+
+            // --------------------------------------------
+           //                  GRADIENT NOISE 
+           // --------------------------------------------
+
+            float2 unity_gradientNoise_dir(float2 p)
+            {
+                p = p % 289;
+                float x = (34 * p.x + 1) * p.x % 289 + p.y;
+                x = (34 * x + 1) * x % 289;
+                x = frac(x / 41) * 2 - 1;
+                return normalize(float2(x - floor(x + 0.5), abs(x) - 0.5));
+            }
+
+            float unity_gradientNoise(float2 p)
+            {
+                float2 ip = floor(p);
+                float2 fp = frac(p);
+                float d00 = dot(unity_gradientNoise_dir(ip), fp);
+                float d01 = dot(unity_gradientNoise_dir(ip + float2(0, 1)), fp - float2(0, 1));
+                float d10 = dot(unity_gradientNoise_dir(ip + float2(1, 0)), fp - float2(1, 0));
+                float d11 = dot(unity_gradientNoise_dir(ip + float2(1, 1)), fp - float2(1, 1));
+                fp = fp * fp * fp * (fp * (fp * 6 - 15) + 10);
+                return lerp(lerp(d00, d01, fp.y), lerp(d10, d11, fp.y), fp.x);
+            }
+
+            void Unity_GradientNoise_float(float2 UV, float Scale, out float Out)
+            {
+                Out = unity_gradientNoise(UV * Scale) + 0.5;
+            }
+
+            // --------------------------------------------
+           //                  SIMPLE NOISE 
+           // --------------------------------------------
+
+            inline float unity_noise_randomValue(float2 uv)
+            {
+                return frac(sin(dot(uv, float2(12.9898, 78.233))) * 43758.5453);
+            }
+
+            inline float unity_noise_interpolate(float a, float b, float t)
+            {
+                return (1.0 - t) * a + (t * b);
+            }
+
+            inline float unity_valueNoise(float2 uv)
+            {
+                float2 i = floor(uv);
+                float2 f = frac(uv);
+                f = f * f * (3.0 - 2.0 * f);
+
+                uv = abs(frac(uv) - 0.5);
+                float2 c0 = i + float2(0.0, 0.0);
+                float2 c1 = i + float2(1.0, 0.0);
+                float2 c2 = i + float2(0.0, 1.0);
+                float2 c3 = i + float2(1.0, 1.0);
+                float r0 = unity_noise_randomValue(c0);
+                float r1 = unity_noise_randomValue(c1);
+                float r2 = unity_noise_randomValue(c2);
+                float r3 = unity_noise_randomValue(c3);
+
+                float bottomOfGrid = unity_noise_interpolate(r0, r1, f.x);
+                float topOfGrid = unity_noise_interpolate(r2, r3, f.x);
+                float t = unity_noise_interpolate(bottomOfGrid, topOfGrid, f.y);
+                return t;
+            }
+
+            void Unity_SimpleNoise_float(float2 UV, float Scale, out float Out)
+            {
+                float t = 0.0;
+
+                float freq = pow(2.0, float(0));
+                float amp = pow(0.5, float(3 - 0));
+                t += unity_valueNoise(float2(UV.x * Scale / freq, UV.y * Scale / freq)) * amp;
+
+                freq = pow(2.0, float(1));
+                amp = pow(0.5, float(3 - 1));
+                t += unity_valueNoise(float2(UV.x * Scale / freq, UV.y * Scale / freq)) * amp;
+
+                freq = pow(2.0, float(2));
+                amp = pow(0.5, float(3 - 2));
+                t += unity_valueNoise(float2(UV.x * Scale / freq, UV.y * Scale / freq)) * amp;
+
+                Out = t;
+            }
+
+            // --------------------------------------------
+            //                  FADE IN
+            // --------------------------------------------
+
+            void Unity_Step_float4(float4 Edge, float4 In, out float4 Out)
+            {
+                Out = step(Edge, In);
+            }
+
+            void Unity_Remap_float4(float4 In, float2 InMinMax, float2 OutMinMax, out float4 Out)
+            {
+                Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
+            }
+
+            void Unity_Remap_float2(float2 In, float2 InMinMax, float2 OutMinMax, out float2 Out)
+            {
+                Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
+            }
+
+            float FadeInNoise(float time, float4 decalColorm, float2 uv) {
+                float result = 0;
+                //Unity_SimpleNoise_float(uv, 7, result);
+                return result;
+            }
+
 
             // Vert node processor
             VertexOutput vert(Attributes input)
@@ -129,10 +260,31 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 float borderCenter = 0.5 + _BorderSize;
                 float border = 1 - smoothstep(borderCenter - _BorderSmoothing, borderCenter + _BorderSmoothing, distance);
 
-                float4 c;
-                c.rgb = detail.rgb;
+                float4 c = float4(1, 1, 1, 0);
                 c.rgb = lerp(c.rgb, _BorderColor, border);
-                c.a = alpha * _Alpha;
+                c.a = alpha;
+
+                float controlVal = _ControlVal;
+                controlVal *= -1;
+
+                // Noise Generation
+                float result = 0;
+                Unity_SimpleNoise_float(input.uv, 30, result);
+
+                float4 stepA = float4(1, 1, 1, 1);
+                Unity_Step_float4(result, 1 + controlVal, stepA);
+                float darkness = _EdgeDarkness * stepA;
+                float4 pattern = stepA * detail.rgba;
+
+                float4 stepB = float4(1, 1, 1, 1);
+                Unity_Step_float4(result, (1 - _DecalEdgeWidth) + controlVal, stepB);
+                stepB = abs(float4(1, 1, 1, 1) - stepB);
+
+                float4 edge = darkness * stepB;
+                float4 color = pattern - float4(edge.r, edge.g, edge.b, 0);
+                c *= color;
+
+
                 return c;
             }
             ENDHLSL

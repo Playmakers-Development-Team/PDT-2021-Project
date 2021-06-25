@@ -15,20 +15,21 @@ namespace ColorDrop.Particle
     {
         // Private Fields
         private MeshRenderer meshRenderer;
-        private MaterialPropertyBlock shapePropertyBlock;
+        private MaterialPropertyBlock shaderPropertyBlock;
         private IColorDropParticleRenderer particleRenderer;
 
         public void BeginParticle(ColorDropParticleAttributes attributes, IColorDropParticleRenderer particleRend)
         {
             meshRenderer = this.GetComponent<MeshRenderer>();
             meshRenderer.sharedMaterial = attributes.dropMaterial;
-            shapePropertyBlock = new MaterialPropertyBlock();
+            shaderPropertyBlock = new MaterialPropertyBlock();
             particleRenderer = particleRend;
 
             // Modifies texture property block preventing shape overriding of the material
-            meshRenderer.GetPropertyBlock(shapePropertyBlock);
-            shapePropertyBlock.SetTexture("_BaseMap", attributes.renderTexture);
-            meshRenderer.SetPropertyBlock(shapePropertyBlock);
+            meshRenderer.GetPropertyBlock(shaderPropertyBlock);
+            shaderPropertyBlock.SetTexture("_BaseMap", attributes.renderTexture);
+            shaderPropertyBlock.SetFloat("_BeginTime", Time.time);
+            meshRenderer.SetPropertyBlock(shaderPropertyBlock);
 
             transform.localScale *= attributes.particleScale;
             meshRenderer.sharedMaterial.SetTexture("_BaseMap", attributes.renderTexture);
