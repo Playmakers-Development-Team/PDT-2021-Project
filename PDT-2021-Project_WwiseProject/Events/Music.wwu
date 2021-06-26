@@ -8,7 +8,35 @@
 						<Action Name="" ID="{D965A225-0FE2-4EC9-9427-D53D58C0F248}" ShortID="876382249">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Mountain_Trail" ID="{85DB2B7D-6B2C-408C-9D6C-67C297F22364}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+									<ObjectRef Name="Mountain Trail" ID="{31C9AA65-5E18-4394-811D-9F3F14EDB9D8}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="In_Combat" ID="{43A14AEE-4F7B-467F-895D-1630731482C6}">
+					<ChildrenList>
+						<Action Name="" ID="{78A047D5-9988-41B7-860A-965C1C17453E}" ShortID="11789861">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="22"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="In_Combat" ID="{8943B03A-666A-4FF3-8A8F-A38460E4CCB3}" WorkUnitID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Out_Of_Combat" ID="{CC1AAC98-15A2-4DB5-A60C-FA1E5B0769E7}">
+					<ChildrenList>
+						<Action Name="" ID="{15EB2A79-1B74-4D1E-B12C-4B1182EB6BF5}" ShortID="538263801">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="22"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Out_Of_Combat" ID="{CE5A1A55-B175-42C4-BCB0-392FD06D90D2}" WorkUnitID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
