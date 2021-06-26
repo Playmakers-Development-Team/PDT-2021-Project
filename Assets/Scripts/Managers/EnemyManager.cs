@@ -25,6 +25,8 @@ namespace Managers
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
+
+        public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
         
         private TurnManager turnManager;
         private GridManager gridManager;

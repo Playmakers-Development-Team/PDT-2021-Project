@@ -15,29 +15,37 @@ namespace Managers
         /// The Transform for the timeline, used as the parent to instantiate the unit cards.
         /// </summary>
         [SerializeField] private Transform timeline;
-        
+
         /// <summary>
         /// The prefab for the unit card.
         /// </summary>
         [SerializeField] private GameObject unitCardPrefab;
-        
+
         /// <summary>
         /// The prefab for the current turn indicator.
         /// </summary>
         [SerializeField] private GameObject currentTurnIndicatorPrefab;
-        
+
         /// <summary>
         /// A list of all the unit cards shown in the timeline.
         /// </summary>
         [SerializeField] private List<UnitCard> allUnitCards;
-        
-        [SerializeField]
-          
+
+        /// <summary>
+        /// A list of all the units in a predetermined turn order 
+        /// </summary>
+        [SerializeField] private List<GameObject> turnOrder;
+
+        /// <summary>
+        /// A list of all the units in a predetermined turn order 
+        /// </summary>
+        [SerializeField] private bool randomizeTurnOrder;
+
         /// <summary>
         /// The GameObject for the current turn indicator.
         /// </summary>
         private GameObject currentTurnIndicator;
-        
+
         /// <summary>
         /// A reference to the TurnManager.
         /// </summary>
@@ -64,17 +72,20 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            turnManager.SetupTurnQueue();
-            
+            if (randomizeTurnOrder)
+                turnManager.SetupTurnQueue();
+            else
+                turnManager.SetupTurnQueue(turnOrder);
+
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
-            
+
             foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
                 CreateUnitCard(unit);
             }
         }
-        
+
         /// <summary>
         /// Updates the timeline UI when a new turn has started, leaving the previous unit greyed out.
         /// </summary>
@@ -87,18 +98,20 @@ namespace Managers
             {
                 if (turnManager.PreviousActingUnit != null)
                 {
-                    if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) < turnManager.CurrentTurnIndex)
+                    if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) <
+                        turnManager.CurrentTurnIndex)
                         unitCard.GetComponent<Image>().color = Color.black;
                 }
-                
+
                 if (unitCard.Unit == turnManager.ActingUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+                    currentTurnIndicator =
+                        Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                     unitCard.GetComponent<Image>().color = Color.red;
                 }
             }
         }
-        
+
         /// <summary>
         /// Completely refreshes the timeline UI.
         /// </summary>
@@ -113,19 +126,20 @@ namespace Managers
                     break;
                 }
             }
-            
+
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
-            
+
             foreach (UnitCard unitCard in allUnitCards)
             {
                 if (unitCard.Unit == turnManager.ActingUnit)
                 {
-                    currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
+                    currentTurnIndicator =
+                        Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
                 }
             }
         }
-    
+
         /// <summary>
         /// Updates the timeline with the new unit.
         /// </summary>
@@ -134,18 +148,16 @@ namespace Managers
             var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
             var flag = false;
-            
+
             foreach (var unit in allUnits)
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
                 {
                     CreateUnitCard(unit);
-                    
+
                     break;
                 }
             }
-            
-            
         }
 
         private void CreateUnitCard(IUnit unit)
@@ -155,13 +167,12 @@ namespace Managers
             unitCard.SetUnit(unit);
 
             allUnitCards.Add(unitCard);
-            
             if (unit == turnManager.ActingUnit)
             {
                 currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
             }
         }
-        
+
         /// <summary>
         /// Updates the timeline UI for the new round.
         /// </summary>
@@ -171,12 +182,12 @@ namespace Managers
             {
                 Destroy(unitCard.gameObject);
             });
-            
+
             allUnitCards.Clear();
-            
+
             if (currentTurnIndicator != null)
                 Destroy(currentTurnIndicator);
-            
+
             foreach (IUnit unit in turnManager.CurrentTurnQueue)
             {
                 CreateUnitCard(unit);

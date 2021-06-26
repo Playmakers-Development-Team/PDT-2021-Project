@@ -28,7 +28,7 @@ namespace Managers
         /// </summary>
         /// <param name="targetUnit"></param>
         public void RemoveUnit(IUnit targetUnit) => playerUnits.Remove(targetUnit);
-        
+        public void AddUnit(IUnit targetUnit) => playerUnits.Add(targetUnit);
 
         /// <summary>
         /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
