@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d5751a2c961df945a34295ccf5e576d, type: 3}
-  m_Name: EnemyUnitBrush
+  m_Name: ObstacleBrush
   m_EditorClassIdentifier: 
   m_Cells:
   - m_Tile: {fileID: 0}
@@ -38,4 +38,4 @@ MonoBehaviour:
   m_FloodFillContiguousOnly: 1
   m_Anchor: {x: 1, y: 1, z: 0}
   m_prefabs:
-  - {fileID: 2640585567817604240, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
+  - {fileID: 4358930801080464946, guid: 15c811bfe2aa87748954fe02f0f6b562, type: 3}
