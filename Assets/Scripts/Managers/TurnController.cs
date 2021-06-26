@@ -39,32 +39,17 @@ namespace Managers
         /// A reference to the TurnManager.
         /// </summary>
         private TurnManager turnManager;
-        
-        /// <summary>
-        /// Checks if the player units are ready.
-        /// </summary>
-        private bool isPlayerUnitsReady;
-        
-        /// <summary>
-        /// Checks if the enemy units are ready.
-        /// </summary>
-        private bool isEnemyUnitsReady;
-        
+
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
             
-            commandManager.ListenExecuteCommand<EnemyUnitsReadyCommand>(cmd =>
-            {
-                isEnemyUnitsReady = true;
-                SetupTurnQueue();
-            });
-            commandManager.ListenExecuteCommand<PlayerUnitsReadyCommand>(cmd =>
-            {
-                isPlayerUnitsReady = true;
-                SetupTurnQueue();
-            });
+            commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
+                (cmd1, cmd2) =>
+                {
+                    SetupTurnQueue();
+                });
         }
 
         /// <summary>
@@ -72,9 +57,6 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            if (!isPlayerUnitsReady || !isEnemyUnitsReady)
-                return;
-            
             turnManager.SetupTurnQueue();
             
             if (currentTurnIndicator != null)
@@ -104,10 +86,10 @@ namespace Managers
             {
                 if (turnManager.PreviousUnit != null)
                 {
-                    if (unitCard.Unit == turnManager.PreviousUnit)
+                    if (turnManager.FindTurnIndexFromCurrentQueue(unitCard.Unit) < turnManager.CurrentTurnIndex)
                         unitCard.GetComponent<Image>().color = Color.black;
                 }
-
+                
                 if (unitCard.Unit == turnManager.CurrentUnit)
                 {
                     currentTurnIndicator = Instantiate(currentTurnIndicatorPrefab, unitCard.transform);
@@ -150,8 +132,10 @@ namespace Managers
         /// <param name="turnManager"></param>
         private void AddUnitToTimeline(TurnManager turnManager)
         {
-            var allUnits = ManagerLocator.Get<UnitManager>().GetAllUnits();
+            var allUnits = ManagerLocator.Get<UnitManager>().AllUnits;
 
+            var flag = false;
+            
             foreach (var unit in allUnits)
             {
                 if (allUnitCards.All(unitCard => unitCard.Unit != unit))
@@ -161,6 +145,8 @@ namespace Managers
                     break;
                 }
             }
+            
+            
         }
 
         private void CreateUnitCard(IUnit unit)

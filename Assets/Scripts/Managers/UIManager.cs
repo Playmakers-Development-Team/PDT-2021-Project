@@ -29,10 +29,8 @@ namespace Managers
         /// <summary>
         /// Clears the current ability highlighted cells
         /// </summary>
-        public void ClearAbilityHighlight()
-        {
-            highlightTilemap.ClearAllTiles();
-        }
+        public void ClearAbilityHighlight() => highlightTilemap.ClearAllTiles();
+        
 
         /// <summary>
         /// Highlights the current selected ability
