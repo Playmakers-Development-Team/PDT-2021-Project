@@ -304,13 +304,17 @@ namespace Managers
         /// Returns a list of the path from one node to another
         /// Assumes target is reachable.
         /// </summary>
-        private List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
+        public List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
                                              Vector2Int targetCoordinate)
         {
             var visited = new Dictionary<Vector2Int, Vector2Int>();
             var coordinateQueue = new Queue<Vector2Int>();
-            string allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].
-                gameObject.tag;
+            string allegiance = string.Empty;
+
+            if (GetGridObjectsByCoordinate(startingCoordinate).Count > 0)
+            {
+                allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].gameObject.tag;
+            }
 
             coordinateQueue.Enqueue(startingCoordinate);
             while (coordinateQueue.Count > 0)
@@ -353,6 +357,31 @@ namespace Managers
 
             path.Reverse();
             return path;
+        }
+
+        /// <summary>
+        /// Returns the coordinate that is closest to the destination
+        /// from a list of coordinates
+        /// </summary>
+        public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> startingCoordinates,
+                                            Vector2Int targetCoordinate)
+        {
+            // PLACEHOLDER INITIALISATION
+            Vector2Int closestTile = startingCoordinates[0];
+            int shortestDistance = int.MaxValue;
+            
+            foreach (var startingCoordinate in startingCoordinates)
+            {
+                List<Vector2Int> pathToTargetTile = GetCellPath(startingCoordinate, targetCoordinate);
+                
+                if (pathToTargetTile.Count < shortestDistance)
+                {
+                    shortestDistance = pathToTargetTile.Count;
+                    closestTile = startingCoordinate;
+                }
+            }
+
+            return closestTile;
         }
 
         #endregion

@@ -148,12 +148,11 @@ namespace Managers
 
             Vector2Int movementDir = Vector2Int.zero;
 
-            int shortestDistance = int.MaxValue;
-
+            List<Vector2Int> targetTiles = GetAdjacentFreeSquares(targetUnit);
+            Vector2Int chosenTargetTile = Vector2Int.zero; // PLACEHOLDER INITIALISATION VALUE
+            
             List<Vector2Int> reachableTiles =
                 gridManager.GetAllReachableTiles(actingUnit.Coordinate, movementPoints);
-
-            List<Vector2Int> targetTiles = GetAdjacentFreeSquares(targetUnit);
 
             if (targetTiles.Count == 0)
             {
@@ -161,20 +160,8 @@ namespace Managers
                 return Vector2Int.zero;
             }
             
-            foreach (var reachableTile in reachableTiles)
-            {
-                Dictionary<Vector2Int, int> distanceToAllCells =
-                    gridManager.GetDistanceToAllCells(reachableTile);
-                
-                foreach (var targetTile in targetTiles)
-                {
-                    if (distanceToAllCells[targetTile] < shortestDistance)
-                    {
-                        shortestDistance = distanceToAllCells[targetTile];
-                        movementDir = reachableTile - actingUnit.Coordinate;
-                    }
-                }
-            }
+            chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, actingUnit.Coordinate);
+            movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - actingUnit.Coordinate;
 
             Debug.Log("ENEMY-TAR: Enemy to move in the direction " + movementDir);
             return movementDir;
