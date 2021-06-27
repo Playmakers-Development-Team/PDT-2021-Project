@@ -1,6 +1,9 @@
-﻿using TMPro;
+﻿using System.Globalization;
+using StatusEffects;
+using TMPro;
 using Units;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Refactored
 {
@@ -9,18 +12,19 @@ namespace UI.Refactored
         [SerializeField] private Canvas canvas;
         
         [SerializeField] private TextMeshProUGUI nameText;
-        
-        [SerializeField] private StatCard healthCard;
-        [SerializeField] private StatCard defenceCard;
-        
-        [SerializeField] private StatCard primaryTenetCard;
-        [SerializeField] private StatCard secondaryTenetCard;
+        [SerializeField] private Image renderImage;
 
-        [SerializeField] private AbilityCard abilityCards;
-
-        [Space]
+        [SerializeField] private Slider healthSlider;
+        [SerializeField] private TextMeshProUGUI healthText;
         
-        [SerializeField] private PlayerUnit testUnit;
+        [SerializeField] private ValueStatCard attackCard;
+        [SerializeField] private ValueStatCard defenceCard;
+        
+        [SerializeField] private TenetStatCard primaryTenetCard;
+        [SerializeField] private TenetStatCard secondaryTenetCard;
+
+        [SerializeField] private AbilityList abilityCards;
+
 
         private IUnit selectedUnit;
 
@@ -70,33 +74,6 @@ namespace UI.Refactored
         }
 
         #endregion
-
-
-        [ContextMenu("Select Test Unit")]
-        private void SelectTestUnit()
-        {
-            if (testUnit == null)
-                return;
-            
-            manager.selectedUnit.Invoke(testUnit);
-        }
-
-        [ContextMenu("Deselect Test Unit")]
-        private void DeselectTestUnit()
-        {
-            manager.deselectedUnit.Invoke();
-        }
-
-        [ContextMenu("Change Test Unit")]
-        private void ChangeTestUnit()
-        {
-            if (selectedUnit == null)
-                return;
-            
-            selectedUnit.gameObject.name = "New Name";
-
-            manager.unitChanged.Invoke(selectedUnit);
-        }
         
         private void Hide()
         {
@@ -118,6 +95,27 @@ namespace UI.Refactored
 
             // Unit name text
             nameText.text = selectedUnit.gameObject.name;
+            
+            // Render image
+            renderImage.sprite = selectedUnit.Render;
+            
+            // Health bar
+            healthSlider.minValue = 0;
+            healthSlider.maxValue = selectedUnit.Health.HealthPoints.BaseValue;
+            healthSlider.value = selectedUnit.Health.HealthPoints.Value;
+            healthText.text = healthSlider.value.ToString(CultureInfo.InvariantCulture);
+            
+            // Stat cards
+            // TODO: What hte fuck even si this
+            attackCard.Apply("ATT", (int) selectedUnit.DealDamageModifier.Value);
+            defenceCard.Apply("DEF", (int) selectedUnit.Health.TakeDamageModifier.Value);
+            
+            primaryTenetCard.Apply(selectedUnit.Tenet, selectedUnit.GetTenetStatusEffectCount(selectedUnit.Tenet));
+            // TODO: Is there even secondary tenets in the game??
+            secondaryTenetCard.Apply((TenetType) (-1), -1);
+            
+            // Ability cards
+            abilityCards.Redraw(selectedUnit);
         }
     }
 }

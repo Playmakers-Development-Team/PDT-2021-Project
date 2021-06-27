@@ -7,6 +7,7 @@ using Abilities;
 using Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -14,7 +15,8 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
+        [SerializeField] private Sprite render;
+
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
@@ -29,6 +31,8 @@ namespace Units
 
         public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
             tenetStatusEffectSlots.AsEnumerable();
+        
+        public Sprite Render => render;
 
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
             new LinkedList<TenetStatusEffect>();
@@ -60,7 +64,8 @@ namespace Units
 
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
+            if (Keyboard.current.tKey.wasPressedThisFrame)
+                TakeDamage(5);
         }
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 

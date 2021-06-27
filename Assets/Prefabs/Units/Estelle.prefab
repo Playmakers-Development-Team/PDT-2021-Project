@@ -166,6 +166,4 @@ MonoBehaviour:
     abilities:
     - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
     - {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}
-  damageTextCanvas: {fileID: 0}
-  damageTextLifetime: 1
-  CurrentlySelectedAbility: {fileID: 0}
+  render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}

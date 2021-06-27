@@ -17,6 +17,8 @@ namespace UI.Refactored
 
         public readonly Event<IUnit> unitChanged = new Event<IUnit>();
 
+        public readonly Event<IUnit> unitSpawned = new Event<IUnit>();
+
         
         public UIManager() {}
     }

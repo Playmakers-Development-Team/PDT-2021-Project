@@ -20,6 +20,8 @@ namespace Units
         GameObject gameObject { get; }
         
         IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
+        
+        Sprite Render { get; }
 
         Type GetDataType();
         
@@ -46,5 +48,6 @@ namespace Units
         bool IsActing();
 
         bool IsSelected();
+
     }
 }
