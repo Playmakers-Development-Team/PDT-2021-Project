@@ -1,5 +1,4 @@
-﻿using GridObjects;
-using Managers;
+﻿using Managers;
 using UnityEngine;
 
 namespace Units
@@ -17,7 +16,6 @@ namespace Units
                 GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
                 IUnit unit = instance.GetComponent<IUnit>();
                 unit.gameObject.transform.position = gridManager.ConvertCoordinateToPosition(coordinate);
-                //gridManager.AddGridObject(coordinate,(GridObject)unit);
                 return unit;
             }
             else

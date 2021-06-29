@@ -33,6 +33,6 @@ namespace UI
             enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
         }
         
-        public void EndTurn() => commandManager.ExecuteCommand(new EndTurnCommand(turnManager.CurrentUnit));
+        public void EndTurn() => commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
     }
 }

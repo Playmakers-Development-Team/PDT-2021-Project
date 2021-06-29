@@ -38,6 +38,10 @@ namespace Background.Pipeline
             // though we usually want to render as the level is loaded which is before the scene is actually loaded.
             if (renderOnAwake)
                 Render();
+
+            ManagerLocator.Get<BackgroundManager>().BackgroundCamera = this;
+            
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new BackgroundCameraReadyCommand());
         }
 
         /// <summary>
@@ -46,6 +50,8 @@ namespace Background.Pipeline
         /// </summary>
         public void Render()
         {
+            Debug.Log("Rendering background...");
+            
             Initialize();
             
             RenderLine();

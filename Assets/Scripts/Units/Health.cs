@@ -1,6 +1,7 @@
 using Commands;
 using GridObjects;
 using Managers;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -8,28 +9,30 @@ namespace Units
     public class Health
     {
         public ValueStat HealthPoints { get; }
-        public ModifierStat TakeDamageModifier { get; }
+        public ModifierStat Defence { get; }
 
-        private UnitDeathCommand unitDeathCommand;
+        private KillUnitCommand unitDeathCommand;
 
-        public Health(UnitDeathCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
-        takeDamageModifier)
+        public Health(KillUnitCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
+        defence)
         {
             this.unitDeathCommand = unitDeathCommand;
             HealthPoints = healthPoints;
-            TakeDamageModifier = takeDamageModifier;
+            Defence = defence;
         }
         
         public int TakeDamage(int amount)
         {
-            int damageTaken = (int) TakeDamageModifier.Modify(amount);
-            HealthPoints.Value -= damageTaken;
+            int initialDamageTaken = (int) Defence.Modify(amount);
+            int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
+            
+            HealthPoints.Value -= calculatedDamageTaken;
             CheckDeath();
 
-            Debug.Log(damageTaken + " damage taken.");
-            Debug.Log($"Health Before: {HealthPoints.Value + damageTaken}  |  Health After: {HealthPoints.Value}");
+            Debug.Log(calculatedDamageTaken + " damage taken.");
+            Debug.Log($"Health Before: {HealthPoints.Value + calculatedDamageTaken}  |  Health After: {HealthPoints.Value}");
 
-            return damageTaken;
+            return calculatedDamageTaken;
         }
         
         private void CheckDeath()
