@@ -1,4 +1,8 @@
+using System;
+using Commands;
+using GridObjects;
 using Units;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -9,7 +13,9 @@ namespace Managers
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
         [SerializeField] private TileBase abilityHighlightTile;
+        [SerializeField] private TileBase movementHighlightTile;
 
+        [SerializeField] private Tilemap movementHighlightTilemap;
         [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private Tilemap levelTilemap;
 
@@ -24,7 +30,8 @@ namespace Managers
             gridManager = ManagerLocator.Get<GridManager>();
             uiManager = ManagerLocator.Get<UIManager>();
 
-            uiManager.Initialise(abilityHighlightTile, highlightTilemap); ;
+            uiManager.Initialise(abilityHighlightTile, movementHighlightTile,highlightTilemap,
+            movementHighlightTilemap); ;
             gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
@@ -33,12 +40,6 @@ namespace Managers
             
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
-        }
-
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
-                //ClickUnit();
         }
 
         #region Unit Selection
@@ -57,6 +58,7 @@ namespace Managers
                     if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
                         gridPos)
                     {
+                        // TODO: Dependency Violation - Grid system should not depend on Unit system
                         playerManager.SelectUnit(playerUnit);
                         //UpdateAbilityUI(playerUnit);
                         Debug.Log($"Unit Selected!");
@@ -66,7 +68,6 @@ namespace Managers
             }
 
             playerManager.DeselectUnit();
-            // ClearAbilityUI();
         }
 
         #endregion

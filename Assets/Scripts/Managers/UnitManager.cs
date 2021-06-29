@@ -1,117 +1,105 @@
-using System;
 using System.Collections.Generic;
 using Units;
-using UnityEditorInternal.Profiling.Memory.Experimental;
-using UnityEngine.Assertions.Must;
+using Units.Commands;
+using UnityEngine;
 
 namespace Managers
 {
     public class UnitManager : Manager
     {
-        private PlayerManager playerManager;
-        private EnemyManager enemyManager;
-        private UnitManager unitManager;
+        public IUnit SelectedUnit { get; private set; }
         
-        /// <summary>
-        /// Get the current "ACTING" player unit
-        /// </summary>
-        public IUnit GetCurrentActingPlayerUnit => GetActivePlayerUnit();
+        protected CommandManager commandManager;
+        private EnemyManager enemyManager;
+        private PlayerManager playerManager;
 
         /// <summary>
-        /// Get the current "ACTING" enemy unit
+        /// All the units currently in the level.
         /// </summary>
-        public IUnit GetCurrentActiveEnemyUnit => GetActiveEnemyUnit();
+        public IReadOnlyList<IUnit> AllUnits => GetAllUnits();
 
         /// <summary>
-        /// Get the current "ACTING" unit
+        /// Initialises the <c>UnitManager</c>.
         /// </summary>
-        public IUnit GetCurrentActiveUnit => GetActiveUnit();
-
         public override void ManagerStart()
         {
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
-            unitManager = ManagerLocator.Get<UnitManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         /// <summary>
-        /// Get all the current player units in the game.
+        /// Returns all the units currently in the level.
         /// </summary>
-        public List<IUnit> GetAllPlayerUnits()
-        {
-            List<IUnit> playerUnits = new List<IUnit>();
-            playerUnits.AddRange(playerManager.PlayerUnits);
-            return playerUnits;
-        }
-
-        /// <summary>
-        /// Get all the current enemy units in the game.
-        /// </summary>
-        public List<IUnit> GetAllEnemyUnits()
-        {
-            List<IUnit> enemyUnits = new List<IUnit>();
-            enemyUnits.AddRange(enemyManager.EnemyUnits);
-            return enemyUnits;
-        }
-
-        /// <summary>
-        /// Get all the units in the game.
-        /// </summary>
-        public List<IUnit> GetAllUnits()
+        private List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-            allUnits.AddRange(GetAllPlayerUnits());
-            allUnits.AddRange(GetAllEnemyUnits());
+            allUnits.AddRange(enemyManager.EnemyUnits);
+            allUnits.AddRange(playerManager.PlayerUnits);
             return allUnits;
         }
 
-    
-        
         /// <summary>
-        /// Get all the current active unit
+        /// Removes a unit from the current timeline.
         /// </summary>
-        private IUnit GetActiveUnit()
-        {
-            foreach (IUnit unit in unitManager.GetAllUnits())
-            {
-                if (unit.IsActing())
-                    return unit;
-            }
+        /// <param name="targetUnit"></param>
 
-            return null; 
+        /// <summary>
+        /// Spawns a unit.
+        /// </summary>
+        /// <param name="targetUnit"></param>
+        public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
+        {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
+            IUnit unit = UnitUtility.Spawn(unitPrefab, gridPosition);
+            return unit;
+        }
+
+        /// <summary>
+        /// Spawns a unit.
+        /// </summary>
+        /// <param name="targetUnit"></param>
+        public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
+        {
+            commandManager.ExecuteCommand(new SpawningUnitCommand());
+            IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
+            return unit;
         }
         
         /// <summary>
-        /// Get the current player active unit
+        /// Sets a unit as selected.
         /// </summary>
-        private PlayerUnit GetActivePlayerUnit()
+        /// <param name="unit"></param>
+        public void SelectUnit(IUnit unit)
         {
-            foreach (PlayerUnit unit in unitManager.GetAllPlayerUnits())
+            if (unit is null)
             {
-                if (unit.IsActing())
-                    return unit;
-
+                Debug.LogWarning($"{nameof(UnitManager)}.{nameof(SelectUnit)} should not be " + 
+                    $"passed a null value. Use {nameof(UnitManager)}.{nameof(DeselectUnit)} instead.");
+                
+                DeselectUnit();
+                
+                return;
             }
-            return null; 
+
+            if (SelectedUnit == unit)
+                return;
+
+            SelectedUnit = unit;
+            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
         }
-        
-        
+
         /// <summary>
-        /// Get the current active enemy unit
+        /// Deselects the currently selected unit.
         /// </summary>
-        private EnemyUnit GetActiveEnemyUnit()
+        public void DeselectUnit()
         {
-            foreach (EnemyUnit unit in unitManager.GetAllEnemyUnits())
-            {
-                if (unit.IsActing())
-                    return unit;
-
-            }
-            return null; 
+            if (SelectedUnit is null)
+                return;
+            
+            Debug.Log(SelectedUnit + " deselected.");
+            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
+            SelectedUnit = null;
         }
-        
-        
-        
-        
     }
 }

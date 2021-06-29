@@ -148,6 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
+    name: 
+    tenet: 0
     healthPoints:
       <BaseValue>k__BackingField: 10
     movementActionPoints:
@@ -165,8 +167,11 @@ MonoBehaviour:
       <BaseAdder>k__BackingField: 0
     abilities:
     - {fileID: 11400000, guid: f9cd7bac2470874a4af56219bd5b143a, type: 2}
+  nameText: {fileID: 0}
   damageTextCanvas: {fileID: 5792150501377223}
   damageTextLifetime: 1
+  animationStates: 0
+  animator: {fileID: 0}
   CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &2608574715955575982
 PrefabInstance:

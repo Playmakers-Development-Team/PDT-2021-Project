@@ -1,7 +1,8 @@
-using System;
 using Commands;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -13,8 +14,7 @@ namespace Managers
         [SerializeField] private bool debugDamagePlayerButton = false;
         
         private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; //Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
-        
+        private int totalEnemies = 3; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
@@ -22,12 +22,6 @@ namespace Managers
         private CommandManager commandManager;
         private UnitManager unitManager;
         private GameObject enemyPrefab;
-        
-        /// <summary>
-        /// Stores the current actingunit.
-        /// </summary>
-        private EnemyUnit ActingEnemyUnit => (EnemyUnit)unitManager.GetCurrentActiveEnemyUnit;
-        
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -44,19 +38,8 @@ namespace Managers
             enemyPrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
+            // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
-            
-            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
-            {
-                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
-            
-            commandManager.ListenCommand<StartTurnCommand>(cmd =>
-            {
-                if (unitManager.GetCurrentActiveUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
         }
 
         private void Update()
@@ -66,10 +49,8 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.Count < totalEnemies)
-                {
+                if (enemyManager.EnemyUnits.Count < totalEnemies)
                     SpawnEnemy();
-                }
                 else
                 {
                     isSpawningEnemies = false;
@@ -81,33 +62,29 @@ namespace Managers
         private void OnValidate()
         {
             if (debugKillEnemyButton)
-            {
                 DebugKillEnemyFunction();
-            }
 
             if (debugDamagePlayerButton)
-            {
                 DebugDamagePlayerButton();
-            }
         }
 
         private void SpawnEnemy()
         {
-            enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-        }
-        
-        private void SpawnAdjacentToPlayer()
-        {
-            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
-            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
+           IUnit enemyunit = enemyManager.Spawn(enemyPrefab, gridManager
+           .GetRandomUnoccupiedCoordinates());
+
+           enemyunit.Name = enemyunit.RandomizeName();
+           
+           Debug.Log(enemyunit.RandomizeName() + "RANDOMZIED");
+           Debug.Log(enemyunit.Name);
+           
         }
         
         private void DebugKillEnemyFunction()
         {
-            if (enemyManager.Count > 0)
-            {
+            if (enemyManager.EnemyUnits.Count > 0)
                 enemyManager.EnemyUnits[0].TakeDamage(1);
-            }
+            
             debugKillEnemyButton = false;
         }
         

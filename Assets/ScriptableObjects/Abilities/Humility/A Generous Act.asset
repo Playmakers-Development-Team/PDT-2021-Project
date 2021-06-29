@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: A Generous Act
+  m_EditorClassIdentifier: 
+  description: "Target gains 4 Defense\n Give target and user 1 Humility\n \u21AF
+    Target may Spend Joy to gain 4 Attack"
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
+  targetEffects:
+  - name: Default, 4 Defence and Provide 1 Humility
+    damageValue: 0
+    defenceValue: 4
+    attackValue: 0
+    providingTenet:
+      tenetType: 1
+      stackCount: 1
+    costs: []
+  - name: 4 Attack spend Joy
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 4
+    providingTenet:
+      tenetType: 1
+      stackCount: 0
+    costs:
+    - name: User Spend Joy
+      affectType: 0
+      costType: 2
+      tenetType: 4
+  userEffects:
+  - name: Default, Provide 1 Humility
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 1
+      stackCount: 1
+    costs: []
