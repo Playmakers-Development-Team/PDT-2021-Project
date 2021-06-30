@@ -6,13 +6,13 @@ using UnityEditor;
 
 namespace ColorDrop.Editor
 {
-    [CustomEditor(typeof(ColorDropGenerator))]
+    [CustomEditor(typeof(ColorDropDecalShapeGenerator))]
     public class ColorDropEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            ColorDropGenerator generator = (ColorDropGenerator)target;
+            ColorDropDecalShapeGenerator generator = (ColorDropDecalShapeGenerator)target;
 
             /*GUILayout.Space(20);
             if (GUILayout.Button("Generate Color Drop"))

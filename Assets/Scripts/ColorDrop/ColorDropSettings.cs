@@ -20,7 +20,8 @@ namespace ColorDrop
         public SDFSelection[] sdfSelections;
 
         public Sprite[] textureShapes;
-        public Texture2D[] textureSelections;
+        public Texture2D[] textureDetails;
+        public Texture2D[] texturePatterns;
         public GameObject particlePrefab;
 
         public void CreateNewColorSelection()

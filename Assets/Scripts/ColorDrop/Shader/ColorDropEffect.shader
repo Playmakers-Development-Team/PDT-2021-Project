@@ -3,6 +3,10 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
     Properties
     {
         [MainColor] _Color("Color", Color) = (1,1,1,1)
+        _ColorSampleB("Color Sample B", Color) = (1,1,1,1)
+        _ColorSampleC ("Color Sample C", Color) = (1,1,1,1)
+        _SubLayerColor ("Sub Layer Color", Color) = (1,1,1,1)
+
         [PerRendererData] _BaseMap("Base Map", 2D) = "white" {}
         [PerRendererData] _BeginTime("BeginTime", Float) = 0
         _LerpDuration("Fade Lerp Duration", Float) = 1
@@ -15,12 +19,13 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
         _ControlVal("Control Value", Range(0.0, 1.0)) = 1 // TEST
 
         // Border Attributes
-        _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
+        _BorderColor("Border Color", Color) = (1,1,1,1)
         _BorderSize("Border Size", Range(0, 0.25)) = 0.5
         _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
 
         // Texture Detail
         _DetailDiffuse("Detail Diffuse", 2D) = "white" {}
+        _PaperTexture("Paper Texture", 2D) = "white" {}
     }
     SubShader
     {
@@ -95,9 +100,14 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
             uniform float _DecalEdgeWidth;
             uniform float _ControlVal;
 
+            uniform float4 _SubLayerColor;
+
             // Textures
             TEXTURE2D(_DetailDiffuse);
             SAMPLER(sampler_DetailDiffuse);
+
+            TEXTURE2D(_PaperTexture);
+            SAMPLER(sampler_PaperTexture);
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
@@ -106,6 +116,7 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 float4 _DetailDiffuse_ST;
+                float4 _PaperTexture_ST;
             CBUFFER_END
 
             // --------------------------------------------
@@ -221,8 +232,22 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 Out = OutMinMax.x + (In - InMinMax.x) * (OutMinMax.y - OutMinMax.x) / (InMinMax.y - InMinMax.x);
             }
 
-            float4 DarkNoiseEdgeProcess(float4 steppedNoiseA, float4 steppedNoiseB) {
+            void Unity_Blend_Dodge_float4(float4 Base, float4 Blend, float Opacity, out float4 Out)
+            {
+                Out = Base / (1.0 - Blend);
+                Out = lerp(Base, Out, Opacity);
+            }
+
+            void Unity_Blend_Subtract_float4(float4 Base, float4 Blend, float Opacity, out float4 Out)
+            {
+                Out = Base - Blend;
+                Out = lerp(Base, Out, Opacity);
+            }
+
+            float4 DarkNoiseEdgeProcess(float4 steppedNoiseA, float4 steppedNoiseB, float edgeSerrator) {
+                
                 float4 edge = (_EdgeDarkness * steppedNoiseA) * steppedNoiseB;
+                edge *= pow(edgeSerrator, 0.56);
                 edge.a = 0;
                 return edge;
             }
@@ -252,6 +277,7 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 UNITY_SETUP_INSTANCE_ID(input);
                 float4 tex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv);
                 float4 detail = SAMPLE_TEXTURE2D(_DetailDiffuse, sampler_DetailDiffuse, input.uv);
+                float4 paper = SAMPLE_TEXTURE2D(_PaperTexture, sampler_PaperTexture, input.uv);
                 float distance = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv).a;
                 float alpha = smoothstep(0.5 - _Smoothing, 0.5 + _Smoothing, distance);
 
@@ -259,20 +285,37 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 float border = 1 - smoothstep(borderCenter - _BorderSmoothing, borderCenter + _BorderSmoothing, distance);
 
                 float4 c = float4(1, 1, 1, 0);
-                c.rgb = lerp(c.rgb, _BorderColor, border);
+                c.rgba = lerp(c.rgba, _BorderColor, border);
                 c.a = alpha;
 
                 float controlVal = lerp(1, 0, saturate((_Time.y - _BeginTime) / _LerpDuration));
                 controlVal *= -1;
 
+                float4 combinedTex;
+                Unity_Blend_Dodge_float4(detail, paper, 1.0, combinedTex);
+                combinedTex *= _Color;
+
                 // Noise Generation
                 float noise = 0;
                 Unity_SimpleNoise_float(input.uv, 30, noise);
 
+                // Edge Noise
+                float edgeNoise;
+                Unity_SimpleNoise_float(input.uv, 242, edgeNoise);
+
+                // Sub-Noise layer
+                float subNoise;
+                Unity_SimpleNoise_float(input.uv, 2, subNoise);
+                float4 subColor = _SubLayerColor;
+                subColor.rgb *= subNoise;
+
+                float4 compositeColor;
+                Unity_Blend_Subtract_float4(combinedTex, subColor, 0.8, compositeColor);
+
                 // Processes the visible of the noise
                 float4 stepA = float4(1, 1, 1, 1);
                 Unity_Step_float4(noise, 1 + controlVal, stepA);
-                float4 pattern = stepA * detail.rgba;
+                float4 baseColor = stepA * compositeColor;
 
                 // Processes the secondary stepped noise before extracting the edge
                 float4 stepB = float4(1, 1, 1, 1);
@@ -280,8 +323,9 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
                 stepB = abs(float4(1, 1, 1, 1) - stepB);
 
                 // Subtracted the edge from the patterned noise result for the final color
-                float4 color = pattern - DarkNoiseEdgeProcess(stepA, stepB);
+                float4 color = baseColor - DarkNoiseEdgeProcess(stepA, stepB, edgeNoise);
                 c *= color;
+                c.a = stepA.a * alpha;
 
                 return c;
             }

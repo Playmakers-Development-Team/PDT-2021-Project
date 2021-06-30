@@ -12,7 +12,7 @@ namespace ColorDrop
         Texture2D GeneratePreviewTex(RenderTexture templateBase);
     }
 
-    public class ColorDropGenerator : MonoBehaviour, IColorDropTextureGenerator
+    public class ColorDropDecalShapeGenerator : MonoBehaviour, IColorDropTextureGenerator
     {
         // Private Fields
         //private RenderTexture dstRenderTexture;

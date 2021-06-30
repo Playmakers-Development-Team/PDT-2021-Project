@@ -63,7 +63,6 @@ namespace ColorDrop.Editor
             currentProperty = serializedObject.FindProperty("textureShapes");
             DisplayTextureShapeSection();
 
-            currentProperty = serializedObject.FindProperty("textureSelections");
             DrawTextureSelectionSection();
 
             //GUILayout.EndArea();
@@ -295,6 +294,12 @@ namespace ColorDrop.Editor
             GUILayout.Space(5);
 
             EditorGUI.indentLevel = 1;
+            currentProperty = serializedObject.FindProperty("texturePatterns");
+            EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
+            EditorGUI.indentLevel = 0;
+
+            EditorGUI.indentLevel = 1;
+            currentProperty = serializedObject.FindProperty("textureDetails");
             EditorGUILayout.PropertyField(currentProperty, false, GUILayout.MaxWidth(Screen.width), GUILayout.MinWidth(Screen.width / 3));
             EditorGUI.indentLevel = 0;
 

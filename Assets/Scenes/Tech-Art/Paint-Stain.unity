@@ -741,82 +741,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 601205966}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &605581214
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 605581215}
-  - component: {fileID: 605581216}
-  - component: {fileID: 605581217}
-  m_Layer: 0
-  m_Name: Color Drop Particle System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &605581215
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605581214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &605581216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605581214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 607371e617bc74d4f9e6efe1b36a2582, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleAttributes:
-    particleScale: 0
-    renderTexture: {fileID: 0}
-    dropMaterial: {fileID: 0}
-    defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  startDelay: 0
-  startRotation: 0
-  defaultColor: {r: 0, g: 0, b: 0, a: 0}
-  initialAlpha: 0
-  dropScale: {x: 1, y: 10}
-  rateOverTime: 10
-  maxParticleCountInView: 3
-  spawnOnLocation: 0
-  canSpawnRandom: 0
-  spawnLocations: []
-  targetCamera: {fileID: 1523627914}
-  templateTextureRenderTexture: {fileID: 8400000, guid: 3517580e30ed85c4f918ae342b9987ea, type: 2}
-  material: {fileID: 2100000, guid: 5e797af470caee941a051dfc0fe70554, type: 2}
-  sortLayer: 0
-  previewTexture: {fileID: 8400000, guid: 52735f4bd33136749852b3eda93cd299, type: 2}
---- !u!114 &605581217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 605581214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09589cac2ab60cb498ebffd189dfd298, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &698846669
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,6 +1378,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _PaperTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -1491,6 +1419,8 @@ Material:
     m_Colors:
     - _BorderColor: {r: 0.52313733, g: 0.028034877, b: 0.6603774, a: 1}
     - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _ColorSampleB: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorSampleC: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeDarkness: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
@@ -6455,3 +6385,64 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24c6c7fdae8e5ed44b95ff680e921f43, type: 3}
+--- !u!1001 &9096531302866128344
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 9096531303470654022, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_Name
+      value: Color Drop Particle System
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654023, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9096531303470654072, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 1523627914}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8c3ea9125835561419394d6f746421c1, type: 3}
