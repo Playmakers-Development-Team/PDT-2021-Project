@@ -9,6 +9,10 @@ namespace UI.Refactored
         [SerializeField] private Vector2Int[] spaces;
         [SerializeField] private GridSelectionType type;
 
+        
+        public Vector2Int[] Spaces => spaces;
+        public GridSelectionType Type => type;
+
 
         public GridSelection(Vector2Int[] spaces, GridSelectionType type)
         {

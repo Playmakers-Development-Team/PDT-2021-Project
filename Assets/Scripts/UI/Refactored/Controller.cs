@@ -37,30 +37,29 @@ namespace UI.Refactored
 
             manager.unitChanged.Invoke(testUnit);
         }
-        
-        #endregion
 
-        
-        #region MonoBehaviour Functions
-
-        protected override void OnAwake()
+        [ContextMenu("Select Grid")]
+        private void SelectGrid()
         {
-            manager.unitSpawned.AddListener(OnUnitSpawned);
+            GridSelection selection = new GridSelection(
+                new Vector2Int[]
+                {
+                    new Vector2Int(0, 0),
+                    new Vector2Int(1, 0),
+                    new Vector2Int(-1, 0),
+                    new Vector2Int(0, 1),
+                    new Vector2Int(0, -1)
+                },
+                GridSelectionType.Valid
+                );
+
+            manager.gridSpacesSelected.Invoke(selection);
         }
 
-        protected void OnDisable()
+        [ContextMenu("Deselect Grid")]
+        private void DeselectGrid()
         {
-            manager.unitSpawned.RemoveListener(OnUnitSpawned);
-        }
-        
-        #endregion
-        
-        
-        #region Listener Methods
-
-        private void OnUnitSpawned(IUnit unit)
-        {
-            // TODO: Instantiate a collider for the unit on spawn.
+            manager.gridSpacesDeselected.Invoke();
         }
         
         #endregion

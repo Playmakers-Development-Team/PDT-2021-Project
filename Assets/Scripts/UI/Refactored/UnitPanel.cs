@@ -7,63 +7,41 @@ using UnityEngine.UI;
 
 namespace UI.Refactored
 {
-    public class UnitPanel : Element
+    public abstract class UnitPanel : Element
     {
-        [SerializeField] private Canvas canvas;
+        [SerializeField] protected Canvas canvas;
         
-        [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private Image renderImage;
+        [SerializeField] protected TextMeshProUGUI nameText;
+        [SerializeField] protected Image renderImage;
 
-        [SerializeField] private Slider healthSlider;
-        [SerializeField] private TextMeshProUGUI healthText;
+        [SerializeField] protected Slider healthSlider;
+        [SerializeField] protected TextMeshProUGUI healthText;
         
-        [SerializeField] private ValueStatCard attackCard;
-        [SerializeField] private ValueStatCard defenceCard;
+        [SerializeField] protected ValueStatCard attackCard;
+        [SerializeField] protected ValueStatCard defenceCard;
         
-        [SerializeField] private TenetStatCard primaryTenetCard;
-        [SerializeField] private TenetStatCard secondaryTenetCard;
+        [SerializeField] protected TenetStatCard primaryTenetCard;
+        [SerializeField] protected TenetStatCard secondaryTenetCard;
 
-        [SerializeField] private AbilityList abilityCards;
+        [SerializeField] protected AbilityList abilityCards;
 
 
-        private IUnit selectedUnit;
+        protected IUnit selectedUnit;
 
-        
-        #region MonoBehaviour functions
 
         protected override void OnAwake()
         {
-            manager.selectedUnit.AddListener(OnUnitSelected);
-            manager.deselectedUnit.AddListener(OnUnitDeselected);
             manager.unitChanged.AddListener(OnUnitChanged);
-
-            Hide();
         }
 
         private void OnDisable()
         {
-            manager.selectedUnit.RemoveListener(OnUnitSelected);
-            manager.deselectedUnit.RemoveListener(OnUnitDeselected);
             manager.unitChanged.RemoveListener(OnUnitChanged);
+            Disabled();
         }
+        
+        protected virtual void Disabled() {}
 
-        #endregion
-        
-        
-        #region Event functions
-        
-        private void OnUnitSelected(IUnit unit)
-        {
-            selectedUnit = unit;
-            Show();
-            Redraw();
-        }
-
-        private void OnUnitDeselected()
-        {
-            selectedUnit = null;
-            Hide();
-        }
 
         private void OnUnitChanged(IUnit unit)
         {
@@ -72,20 +50,9 @@ namespace UI.Refactored
             
             Redraw();
         }
-
-        #endregion
         
-        private void Hide()
-        {
-            canvas.enabled = false;
-        }
 
-        private void Show()
-        {
-            canvas.enabled = true;
-        }
-
-        private void Redraw()
+        protected void Redraw()
         {
             if (selectedUnit == null)
             {
