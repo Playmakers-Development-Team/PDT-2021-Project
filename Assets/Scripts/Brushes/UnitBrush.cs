@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Units;
 using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-namespace UnityEditor.Tilemaps
+namespace Brushes
 {
-
-    [CreateAssetMenu] [CustomGridBrush(false, true, false, "Unit Brush")]
+    [CreateAssetMenu]
+    [CustomGridBrush(false, true, false, "Unit Brush")]
     public class UnitBrush : PrefabBrush
     {
-
         [SerializeField] private GameObject[] m_Prefabs;
         [SerializeField] private int curIndex = 0;
 
@@ -22,7 +19,6 @@ namespace UnityEditor.Tilemaps
             Helena,
             Niles,
             Enemy
-
         }
 
         [SerializeField] private Units units;
@@ -30,7 +26,10 @@ namespace UnityEditor.Tilemaps
         public override void Rotate(RotationDirection direction, GridLayout.CellLayout layout)
         {
             var angle = layout == GridLayout.CellLayout.Hexagon ? 60f : 90f;
-            m_Rotation = Quaternion.Euler(0f, 0f, direction == RotationDirection.Clockwise ? m_Rotation.eulerAngles.z + angle : m_Rotation.eulerAngles.z - angle);
+            m_Rotation = Quaternion.Euler(0f, 0f,
+                direction == RotationDirection.Clockwise
+                    ? m_Rotation.eulerAngles.z + angle
+                    : m_Rotation.eulerAngles.z - angle);
         }
 
         public int GetIndexFromUnits()
@@ -42,9 +41,6 @@ namespace UnityEditor.Tilemaps
             }
 
             return 0;
-
-          
-
         }
 
         /// <summary>
@@ -56,7 +52,14 @@ namespace UnityEditor.Tilemaps
         /// <param name="position">The coordinates of the cell to paint data to.</param>
         public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position)
         {
+            if (!brushTarget.CompareTag("LevelTilemap") && !brushTarget.CompareTag("UnitPalette"))
+            {
+                Debug.LogWarning($"Do not use this tilemap, use the 'Level Tilemap' tile instead");
+                return;
+            }
+
             curIndex = GetIndexFromUnits();
+
             var objectsInCell = GetObjectsInCell(grid, brushTarget.transform, position);
             var existPrefabObjectInCell = objectsInCell.Any(objectInCell =>
                 PrefabUtility.GetCorrespondingObjectFromSource(objectInCell) ==
@@ -97,13 +100,13 @@ namespace UnityEditor.Tilemaps
         /// <param name="position">The coordinates of the cell to erase data from.</param>
         public override void Erase(GridLayout grid, GameObject brushTarget, Vector3Int position)
         {
-
             curIndex = GetIndexFromUnits();
 
             foreach (var objectInCell in GetObjectsInCell(grid, brushTarget.transform, position))
             {
-                if (m_EraseAnyObjects || PrefabUtility.GetCorrespondingObjectFromSource
-                    (objectInCell) == m_Prefabs[curIndex])
+                if (m_EraseAnyObjects ||
+                    PrefabUtility.GetCorrespondingObjectFromSource(objectInCell) ==
+                    m_Prefabs[curIndex])
                 {
                     Undo.DestroyObjectImmediate(objectInCell);
                 }
@@ -133,9 +136,8 @@ namespace UnityEditor.Tilemaps
                 }
             }
         }
-
     }
-    
+
     [CustomEditor(typeof(UnitBrush))]
     public class UnitBrushEditor : BasePrefabBrushEditor
     {
@@ -174,12 +176,4 @@ namespace UnityEditor.Tilemaps
             m_SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
-
 }
-    
-    
-    
-    
-    
-   
-
