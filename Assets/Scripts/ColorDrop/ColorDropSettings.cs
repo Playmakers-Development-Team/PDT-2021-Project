@@ -20,8 +20,8 @@ namespace ColorDrop
         public SDFSelection[] sdfSelections;
 
         public Sprite[] textureShapes;
-        public Texture2D[] textureDetails;
-        public Texture2D[] texturePatterns;
+        public Texture[] textureDetails;
+        public Texture[] texturePatterns;
         public GameObject particlePrefab;
 
         public void CreateNewColorSelection()
@@ -48,6 +48,20 @@ namespace ColorDrop
 
             tempArray[tempArray.Length - 1] = selection;
             sdfSelections = tempArray;
+        }
+
+        public Texture SelectRandomisedTextureDetail()
+        {
+            if (textureDetails == null || textureDetails.Length == 0) return new Texture2D(256, 256);
+
+            return textureDetails[Random.Range(0, textureDetails.Length - 1)];
+        }
+
+        public Texture SelectRandomisedTexturePattern()
+        {
+            if (texturePatterns == null || texturePatterns.Length == 0) return new Texture2D(256, 256);
+
+            return texturePatterns[Random.Range(0, texturePatterns.Length - 1)];
         }
     }
 }

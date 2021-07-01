@@ -41,6 +41,7 @@ namespace ColorDrop
         private GameObject[] particleObjects;
         private IColorDropParticle[] particleInstances;
         private IColorDropTextureGenerator texDropGenerator;
+        private IColorSampler colorSampler;
         private ColorDropSettings settings;
         private int particleViewCount = 0;
         private SimpleTimer particleTimer;
@@ -59,6 +60,7 @@ namespace ColorDrop
             settings = Resources.Load("Settings/Effects/ColorDropSetting") as ColorDropSettings;
             texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
             texDropGenerator.InitialiseTextureGenerator(settings);
+            colorSampler = this.GetComponent<IColorSampler>();
 
             particleTimer = new SimpleTimer(rateOverTime, Time.deltaTime);
             particleObjects = new GameObject[maxParticleCountInView];
@@ -94,7 +96,9 @@ namespace ColorDrop
             {
                 particleScale = UnityEngine.Random.Range(dropScale.x, dropScale.y),
                 renderTexture = newTex,
-                dropMaterial = material
+                dropMaterial = material,
+                textureDetail = settings.SelectRandomisedTextureDetail(),
+                texturePattern = settings.SelectRandomisedTexturePattern()
             };
 
             IColorDropParticle particle = Instantiate(settings.particlePrefab, NewLocationWithinViewBounds(), Quaternion.identity).GetComponent<IColorDropParticle>();

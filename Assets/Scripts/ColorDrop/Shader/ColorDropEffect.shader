@@ -18,14 +18,22 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
         _EdgeDarkness("Edge Darkness", Color) = (1,1,1,1)
         _ControlVal("Control Value", Range(0.0, 1.0)) = 1 // TEST
 
+            /*  COLORS
+            * 
+            * _PrimaryColor
+            * _SubColorDarkness
+            * _EdgeColor
+            * _BorderColor
+            */
+
         // Border Attributes
         _BorderColor("Border Color", Color) = (1,1,1,1)
         _BorderSize("Border Size", Range(0, 0.25)) = 0.5
         _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
 
         // Texture Detail
-        _DetailDiffuse("Detail Diffuse", 2D) = "white" {}
-        _PaperTexture("Paper Texture", 2D) = "white" {}
+        [PerRendererData] _DetailDiffuse("Detail Diffuse", 2D) = "white" {}
+        [PerRendererData] _PaperTexture("Paper Texture", 2D) = "white" {}
     }
     SubShader
     {

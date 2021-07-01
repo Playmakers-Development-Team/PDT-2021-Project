@@ -28,6 +28,8 @@ namespace ColorDrop.Particle
             // Modifies texture property block preventing shape overriding of the material
             meshRenderer.GetPropertyBlock(shaderPropertyBlock);
             shaderPropertyBlock.SetTexture("_BaseMap", attributes.renderTexture);
+            shaderPropertyBlock.SetTexture("_DetailDiffuse", attributes.textureDetail);
+            shaderPropertyBlock.SetTexture("_PaperTexture", attributes.texturePattern);
             shaderPropertyBlock.SetFloat("_BeginTime", Time.time);
             meshRenderer.SetPropertyBlock(shaderPropertyBlock);
 
@@ -59,5 +61,8 @@ namespace ColorDrop.Particle
         public RenderTexture renderTexture;
         public Material dropMaterial;
         public Color defaultColor;
+        public Color primaryColorSample;
+        public Texture textureDetail;
+        public Texture texturePattern;
     }
 }
