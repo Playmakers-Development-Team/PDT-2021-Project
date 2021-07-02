@@ -98,7 +98,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
-  m_WarningMessage:
+  m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de6d9cd98d7e421aa2f514b8aa59e9b0, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   data:
     name: Niles
     tenet: 3
@@ -168,6 +168,9 @@ MonoBehaviour:
     abilities:
     - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
   render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
+  animationStates: 0
+  animator: {fileID: 0}
+  CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &2286334432616638506
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,7 +180,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: unitGridObject
-      value:
+      value: 
       objectReference: {fileID: 6708204597060251326}
     - target: {fileID: 5704961542752533424, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_Name
