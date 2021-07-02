@@ -27,7 +27,7 @@ namespace UI.Refactored
                 if (unit.Abilities.Contains(cards[i].Ability))
                     continue;
 
-                Destroy(cards[i].gameObject);
+                cards[i].Destroy();
                 cards.RemoveAt(i);
             }
             

@@ -1,5 +1,8 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -51,9 +54,15 @@ namespace UI.Refactored
         private void OnGridSelected(GridSelection selection)
         {
             TileBase tileBase = GetTile(selection.Type);
-            
+
             foreach (Vector2Int coordinate in selection.Spaces)
+            {
+                Vector2Int bounds = gridManager.LevelBounds;
+                if (coordinate.x < -bounds.x / 2 - 1 || coordinate.x > bounds.x / 2 || coordinate.y < -bounds.y / 2 - 1 ||
+                    coordinate.y > bounds.y / 2)
+                    continue;
                 tilemap.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), tileBase);
+            }
         }
 
         private TileBase GetTile(GridSelectionType type)
@@ -75,7 +84,10 @@ namespace UI.Refactored
 
         public void OnGridButtonPressed()
         {
-            manager.deselectedUnit.Invoke();
+            if (!Camera.main)
+                return;
+            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+            manager.gridClicked.Invoke(new Vector2Int((int) worldPosition.x, (int) worldPosition.y));
         }
     }
 }

@@ -7,6 +7,7 @@ namespace UI.Refactored
 {
     public class AbilityCard : Element
     {
+        [SerializeField] private bool interactable;
         [SerializeField] private Button button;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI titleText;
@@ -20,11 +21,26 @@ namespace UI.Refactored
         {
             Ability = ability;
             
-            // TODO: Add button functionality.
-            // TODO: Add image functionality once abilities have icons.
-            
             titleText.text = ability.name;
             descriptionText.text = ability.Description;
+        }
+
+        public void OnCardClicked()
+        {
+            if (!interactable)
+                return;
+            
+            OnClick();
+        }
+
+        private void OnClick()
+        {
+            manager.selectedAbility.Invoke(Ability);
+        }
+
+        internal void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

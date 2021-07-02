@@ -1,6 +1,7 @@
 ﻿using System;
 using Units;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI.Refactored
 {
@@ -9,59 +10,25 @@ namespace UI.Refactored
     {
         // TODO: Remove when no longer required for testing.
         #region TESTING - REMOVE WHEN COMPLETE
-        
-        [SerializeField] private PlayerUnit testUnit;
 
-        [ContextMenu("Select Test Unit")]
-        private void SelectTestUnit()
+        [ContextMenu("Next Turn")]
+        private void NextTurn()
         {
-            if (testUnit == null)
-                return;
-            
-            manager.selectedUnit.Invoke(testUnit);
-        }
-
-        [ContextMenu("Deselect Test Unit")]
-        private void DeselectTestUnit()
-        {
-            manager.deselectedUnit.Invoke();
-        }
-
-        [ContextMenu("Change Test Unit")]
-        private void ChangeTestUnit()
-        {
-            testUnit.gameObject.name = "New Name";
-            testUnit.TakeDamage(5);
-            testUnit.TakeAttack(2);
-            testUnit.TakeDefence(1);
-
-            manager.unitChanged.Invoke(testUnit);
-        }
-
-        [ContextMenu("Select Grid")]
-        private void SelectGrid()
-        {
-            GridSelection selection = new GridSelection(
-                new Vector2Int[]
-                {
-                    new Vector2Int(0, 0),
-                    new Vector2Int(1, 0),
-                    new Vector2Int(-1, 0),
-                    new Vector2Int(0, 1),
-                    new Vector2Int(0, -1)
-                },
-                GridSelectionType.Valid
-                );
-
-            manager.gridSpacesSelected.Invoke(selection);
-        }
-
-        [ContextMenu("Deselect Grid")]
-        private void DeselectGrid()
-        {
-            manager.gridSpacesDeselected.Invoke();
+            manager.turnChanged.Invoke();
         }
         
         #endregion
+
+        private void Update()
+        {
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+                manager.rotatedAbility.Invoke();
+
+            if (Keyboard.current.enterKey.wasPressedThisFrame)
+                manager.confirmedAbility.Invoke();
+
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+                manager.deselectedUnit.Invoke();
+        }
     }
 }

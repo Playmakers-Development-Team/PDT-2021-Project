@@ -1,7 +1,7 @@
-﻿using System;
-using GridObjects;
+﻿using GridObjects;
 using Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.Refactored
 {
@@ -21,10 +21,6 @@ namespace UI.Refactored
         }
 
         
-        public void OnClick()
-        {
-            print($"Clicked on {unitGridObject.name}");
-            manager.selectedUnit.Invoke(unit);
-        }
+        public void OnClick() => manager.selectedUnit.Invoke(unit);
     }
 }
