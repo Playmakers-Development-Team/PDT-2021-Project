@@ -11,21 +11,6 @@ namespace Managers
     public class TurnController : MonoBehaviour
     {
         /// <summary>
-        /// The Transform for the timeline, used as the parent to instantiate the unit cards.
-        /// </summary>
-        [SerializeField] private Transform timeline;
-        
-        /// <summary>
-        /// The prefab for the unit card.
-        /// </summary>
-        [SerializeField] private GameObject unitCardPrefab;
-        
-        /// <summary>
-        /// The prefab for the current turn indicator.
-        /// </summary>
-        [SerializeField] private GameObject currentTurnIndicatorPrefab;
-        
-        /// <summary>
         /// A reference to the TurnManager.
         /// </summary>
         private TurnManager turnManager;

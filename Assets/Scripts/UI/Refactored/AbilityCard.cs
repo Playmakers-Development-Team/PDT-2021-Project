@@ -7,7 +7,6 @@ namespace UI.Refactored
 {
     public class AbilityCard : Element
     {
-        [SerializeField] private bool interactable;
         [SerializeField] private Button button;
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI titleText;
@@ -27,7 +26,7 @@ namespace UI.Refactored
 
         public void OnCardClicked()
         {
-            if (!interactable)
+            if (!button.interactable)
                 return;
             
             OnClick();

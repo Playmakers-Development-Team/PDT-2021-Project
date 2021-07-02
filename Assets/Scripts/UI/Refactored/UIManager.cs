@@ -38,6 +38,13 @@ namespace UI.Refactored
         private IUnit currentUnit;
 
         private Vector2 abilityDirection = Vector2.up;
+
+
+        private bool IsPlayerTurn => currentUnit != null &&
+                                     currentUnit == turnManager.CurrentUnit &&
+                                     currentUnit is PlayerUnit;
+
+        private bool IsAbilitySelected => currentAbility != null;
         
         
         public UIManager() {}
@@ -61,9 +68,7 @@ namespace UI.Refactored
 
             gridClicked.AddListener(OnGridClicked);
 
-            // commandManager.ListenCommand((Action<StartTurnCommand>) TurnChangedListener);
-            // commandManager.ListenCommand((Action<TurnQueueCreatedCommand>) TurnChangedListener);
-            // void TurnChangedListener(Command command) => turnChanged.Invoke();
+            commandManager.ListenCommand((StartTurnCommand a) => turnChanged.Invoke());
         }
 
         
@@ -71,7 +76,7 @@ namespace UI.Refactored
 
         private void OnSelectedAbility(Ability ability)
         {
-            if (turnManager.CurrentUnit != currentUnit)
+            if (IsPlayerTurn)
                 return;
             
             currentAbility = ability;
@@ -80,7 +85,7 @@ namespace UI.Refactored
 
         private void OnRotatedAbility()
         {
-            if (currentAbility == null)
+            if (IsPlayerTurn && IsAbilitySelected)
                 return;
 
             abilityDirection = Quaternion.AngleAxis(90f, Vector3.back) * abilityDirection;
@@ -142,11 +147,12 @@ namespace UI.Refactored
 
         private void TryMove(Vector2Int destination)
         {
-            if (currentUnit == null || currentUnit != turnManager.CurrentUnit || currentAbility != null)
+            if (IsPlayerTurn && !IsAbilitySelected)
                 return;
             
             // TODO: Move unit...
             Debug.Log($"Moving unit to {destination}!");
+            // commandManager.ExecuteCommand(new MoveCommand(currentUnit, destination));
         }
         
         #endregion
