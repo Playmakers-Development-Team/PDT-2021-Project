@@ -131,7 +131,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7484277704127657535}
-  - {fileID: 5807014868474958822}
+  - {fileID: 3836238065548808286}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -166,12 +166,14 @@ MonoBehaviour:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 1
     abilities:
-    - {fileID: 11400000, guid: b36881adb3802454b82746ab0dfa7391, type: 2}
+    - {fileID: 11400000, guid: 8d3d437d1fea409dba9214ab462e5a34, type: 2}
+    - {fileID: 11400000, guid: 3778aeebe7b611cea8b3fc68fe223982, type: 2}
+    - {fileID: 11400000, guid: 2d536796daea3e4aca17b47b0f614615, type: 2}
   render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
   animationStates: 0
-  animator: {fileID: 0}
+  animator: {fileID: 8212759452209677179}
   CurrentlySelectedAbility: {fileID: 0}
---- !u!1001 &2286334432616638506
+--- !u!1001 &8795836277784652690
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -185,10 +187,6 @@ PrefabInstance:
     - target: {fileID: 5704961542752533424, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_Name
       value: Unit UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 5704961542752533426, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_Pivot.x
@@ -276,8 +274,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
---- !u!224 &5807014868474958822 stripped
+--- !u!224 &3836238065548808286 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
-  m_PrefabInstance: {fileID: 2286334432616638506}
+  m_PrefabInstance: {fileID: 8795836277784652690}
   m_PrefabAsset: {fileID: 0}

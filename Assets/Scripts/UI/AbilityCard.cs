@@ -12,7 +12,9 @@ namespace UI
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI descriptionText;
         
+        
         internal Ability Ability { get; private set; }
+        
         
         internal void Disable() => button.interactable = false;
 
@@ -25,14 +27,6 @@ namespace UI
         }
 
         public void OnCardClicked()
-        {
-            if (!button.interactable)
-                return;
-            
-            OnClick();
-        }
-
-        private void OnClick()
         {
             manager.selectedAbility.Invoke(Ability);
         }

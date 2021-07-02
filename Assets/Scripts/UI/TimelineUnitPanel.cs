@@ -23,7 +23,7 @@ namespace UI
 
         private void OnTurnChanged()
         {
-            selectedUnit = turnManager.ActingPlayerUnit;
+            selectedUnit = turnManager.ActingUnit;
             Redraw();
         }
     }

@@ -4,6 +4,7 @@ using Abilities;
 using Commands;
 using Managers;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace UI
@@ -16,13 +17,12 @@ namespace UI
 
         public readonly Event<GridSelection> gridSpacesSelected = new Event<GridSelection>();
         public readonly Event gridSpacesDeselected = new Event();
+        
         public readonly Event<Vector2Int> gridClicked = new Event<Vector2Int>();
         
         public readonly Event turnChanged = new Event();
 
         public readonly Event<IUnit> unitChanged = new Event<IUnit>();
-
-        public readonly Event<IUnit> unitSpawned = new Event<IUnit>();
 
         public readonly Event<Ability> selectedAbility = new Event<Ability>();
         public readonly Event deselectedAbility = new Event();
@@ -39,7 +39,7 @@ namespace UI
         private Vector2 abilityDirection = Vector2.up;
 
 
-        private bool IsPlayerTurn => turnManager.ActingUnit != null && turnManager.ActingPlayerUnit == (PlayerUnit) currentUnit;
+        private bool IsPlayerTurn => currentUnit != null && turnManager.ActingPlayerUnit == (PlayerUnit) currentUnit;
 
         private bool IsAbilitySelected => currentAbility != null;
 
@@ -62,15 +62,8 @@ namespace UI
 
             gridClicked.AddListener(OnGridClicked);
 
-            commandManager.ListenCommand((StartTurnCommand a) =>
-            {
-                turnChanged.Invoke();
-            });
-            
-            commandManager.ListenCommand((TurnQueueCreatedCommand c) =>
-            {
-                turnChanged.Invoke();
-            });
+            commandManager.ListenCommand((EndTurnCommand a) => turnChanged.Invoke());
+            commandManager.ListenCommand((TurnQueueCreatedCommand c) => turnChanged.Invoke());
         }
 
         
@@ -78,7 +71,7 @@ namespace UI
 
         private void OnSelectedAbility(Ability ability)
         {
-            if (IsPlayerTurn)
+            if (!IsPlayerTurn)
                 return;
             
             currentAbility = ability;
@@ -87,7 +80,7 @@ namespace UI
 
         private void OnRotatedAbility()
         {
-            if (IsPlayerTurn && IsAbilitySelected)
+            if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
 
             abilityDirection = Quaternion.AngleAxis(90f, Vector3.back) * abilityDirection;
@@ -102,11 +95,12 @@ namespace UI
 
         private void OnConfirmedAbility()
         {
-            if (currentAbility == null)
+            if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
             
-            // TODO: Execute ability here...
-            Debug.Log($"{currentAbility.name} confirmed!");
+            Debug.Log($"Executing ability command: {currentAbility.name}");
+            commandManager.ExecuteCommand(new AbilityCommand(currentUnit, abilityDirection, currentAbility));
+            commandManager.ExecuteCommand(new EndTurnCommand(currentUnit));
         }
         
         #endregion
@@ -120,14 +114,14 @@ namespace UI
             gridSpacesDeselected.Invoke();
             
             // Highlight ability squares
-            if (currentAbility != null && currentUnit != null)
+            if (IsPlayerTurn && IsAbilitySelected)
             {
                 Vector2Int[] coordinates = currentAbility.Shape.GetHighlightedCoordinates(currentUnit.Coordinate, abilityDirection).ToArray();
                 gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Valid));
             }
             
             // Highlight movement squares
-            if (currentAbility == null && currentUnit != null)
+            if (IsPlayerTurn && !IsAbilitySelected)
             {
                 Vector2Int[] coordinates = gridManager.GetAllReachableTiles(currentUnit.Coordinate, (int) currentUnit.MovementActionPoints.Value).
                     ToArray();
@@ -135,7 +129,7 @@ namespace UI
             }
 
             // Highlight square under active IUnit
-            if (currentUnit != null)
+            if (IsPlayerTurn)
             {
                 Vector2Int[] coordinates = {currentUnit.Coordinate};
                 gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Selected));
@@ -149,7 +143,7 @@ namespace UI
 
         private void TryMove(Vector2Int destination)
         {
-            if (IsPlayerTurn && !IsAbilitySelected)
+            if (!IsPlayerTurn || IsAbilitySelected)
                 return;
             
             // TODO: Move unit...
