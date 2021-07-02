@@ -87,8 +87,11 @@ namespace UI
             if (Camera.main == null)
                 return;
             
+            // BUG: coordinate is always (0, 0)...
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            manager.gridClicked.Invoke(new Vector2Int((int) worldPosition.x, (int) worldPosition.y));
+            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
+            
+            manager.gridClicked.Invoke(coordinate);
         }
     }
 }

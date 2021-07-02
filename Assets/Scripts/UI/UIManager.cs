@@ -105,7 +105,6 @@ namespace UI
             if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
             
-            Debug.Log($"Executing ability command: {currentAbility.name}");
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
             commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
         }
@@ -153,8 +152,8 @@ namespace UI
             if (!IsPlayerTurn || IsAbilitySelected)
                 return;
             
-            // TODO: Move unit...
-            Debug.Log($"Moving unit to {destination}!");
+            Debug.Log($"Trying to move to coordinate: {destination}");
+            commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
         }
         
         #endregion
