@@ -8,16 +8,16 @@ namespace UI
         {
             base.OnAwake();
             
-            manager.selectedUnit.AddListener(OnUnitSelected);
-            manager.deselectedUnit.AddListener(OnUnitDeselected);
+            manager.unitSelected.AddListener(OnUnitSelected);
+            manager.unitDeselected.AddListener(OnUnitDeselected);
 
             Hide();
         }
 
         protected override void Disabled()
         {
-            manager.selectedUnit.RemoveListener(OnUnitSelected);
-            manager.deselectedUnit.RemoveListener(OnUnitDeselected);
+            manager.unitSelected.RemoveListener(OnUnitSelected);
+            manager.unitDeselected.RemoveListener(OnUnitDeselected);
         }
 
         

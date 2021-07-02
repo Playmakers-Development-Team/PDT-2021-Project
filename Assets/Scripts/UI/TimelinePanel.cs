@@ -38,7 +38,11 @@ namespace UI
         {
             ClearPortraits();
 
-            CreatePortraits(turnManager.CurrentTurnQueue);
+            List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
+            int startIndex = turnManager.CurrentTurnIndex;
+            currentTurnQueue.RemoveRange(0, startIndex);
+            
+            CreatePortraits(currentTurnQueue);
             CreateDivider();
             CreatePortraits(turnManager.NextTurnQueue);
         }

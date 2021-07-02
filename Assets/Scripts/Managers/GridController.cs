@@ -32,36 +32,6 @@ namespace Managers
             TestingGetGridObjectsByCoordinate(0);
         }
 
-        #region Unit Selection
-
-        private void ClickUnit()
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            // TODO look into this later, put the subtraction somewhere better
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-
-            foreach (IUnit unit in playerManager.PlayerUnits)
-            {
-                if (unit is PlayerUnit playerUnit)
-                {
-                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
-                        gridPos)
-                    {
-                        // TODO: Dependency Violation - Grid system should not depend on Unit system
-                        playerManager.SelectUnit(playerUnit);
-                        //UpdateAbilityUI(playerUnit);
-                        Debug.Log($"Unit Selected!");
-                        return;
-                    }
-                }
-            }
-
-            playerManager.DeselectUnit();
-        }
-
-        #endregion
-
         #region Unit Testing
 
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds

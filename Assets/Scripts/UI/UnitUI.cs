@@ -20,6 +20,6 @@ namespace UI
         }
 
         
-        public void OnClick() => manager.selectedUnit.Invoke(unit);
+        public void OnClick() => manager.unitSelected.Invoke(unit);
     }
 }

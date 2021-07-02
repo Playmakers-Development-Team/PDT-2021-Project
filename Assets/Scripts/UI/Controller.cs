@@ -15,7 +15,7 @@ namespace UI
                 manager.confirmedAbility.Invoke();
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
-                manager.deselectedUnit.Invoke();
+                manager.unitDeselected.Invoke();
         }
     }
 }

@@ -2,11 +2,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 namespace UI
 {
-    public class Grid : Element
+    public class GridUI : Element
     {
         [Header("Tile types")]
         
@@ -18,7 +17,6 @@ namespace UI
         [Header("Required Components")]
         
         [SerializeField] private Tilemap tilemap;
-        [SerializeField] private Button gridButton;
         
         private GridManager gridManager;
         
@@ -38,10 +36,10 @@ namespace UI
 
         private void FillAll()
         {
-            Vector2Int bounds = gridManager.LevelBounds;
-            for (int x = -bounds.x / 2 - 1; x <= bounds.x / 2; x++)
+            Vector2Int levelBounds = gridManager.LevelBounds;
+            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
             {
-                for (int y = -bounds.y / 2 - 1; y <= bounds.y / 2; y++)
+                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
                 {
                     Vector3Int position = new Vector3Int(x, y, 0);
                     tilemap.SetTile(position, defaultTile);
@@ -53,13 +51,17 @@ namespace UI
         {
             TileBase tileBase = GetTile(selection.Type);
 
-            foreach (Vector2Int coordinate in selection.Spaces)
+            foreach (Vector2Int correctCoordinate in selection.Spaces)
             {
+                // TODO: Once grid system offset bug is fixed, use correctCoordinate instead (and rename it)...
+                Vector2Int scuffedCoordinate = correctCoordinate - Vector2Int.one;
+                
                 Vector2Int bounds = gridManager.LevelBounds;
-                if (coordinate.x < -bounds.x / 2 - 1 || coordinate.x > bounds.x / 2 || coordinate.y < -bounds.y / 2 - 1 ||
-                    coordinate.y > bounds.y / 2)
+                if (scuffedCoordinate.x < -bounds.x / 2 - 1 || scuffedCoordinate.x > bounds.x / 2 || scuffedCoordinate.y < -bounds.y / 2 - 1 ||
+                    scuffedCoordinate.y > bounds.y / 2)
                     continue;
-                tilemap.SetTile(new Vector3Int(coordinate.x, coordinate.y, 0), tileBase);
+                
+                tilemap.SetTile(new Vector3Int(scuffedCoordinate.x, scuffedCoordinate.y, 0), tileBase);
             }
         }
 
@@ -82,8 +84,9 @@ namespace UI
 
         public void OnGridButtonPressed()
         {
-            if (!Camera.main)
+            if (Camera.main == null)
                 return;
+            
             Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             manager.gridClicked.Invoke(new Vector2Int((int) worldPosition.x, (int) worldPosition.y));
         }
