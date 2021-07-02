@@ -17,34 +17,33 @@ namespace Abilities
         [SerializeField] private TenetStatusEffect providingTenet;
         [SerializeField] private List<Cost> costs;
 
-        public void Use(IUnit user)
+        public bool ProcessTenet(IUnit user, IUnit target)
         {
-            if (CanBeUsedBy(user))
+            if (CanBeUsedBy(user, target))
             {
-                Provide(user);
-                Expend(user);
+                Provide(target);
+                Expend(user, target);
+                return true;
             }
+
+            return false;
         }
         
-        public bool CanBeUsedBy(IUnit user)
+        public bool CanBeUsedBy(IUnit user, IUnit target)
         {
-            return costs.All(cost => cost.MeetsRequirements(user));
+            return costs.All(cost => cost.MeetsRequirements(user, target));
         }
 
-        private void Provide(IUnit user) => 
-            user.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
+        private void Provide(IUnit unit) => 
+            unit.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
 
-        private void Expend(IUnit user)
+        private void Expend(IUnit user, IUnit target)
         {
-            if (!CanBeUsedBy(user))
-                return;
-
             foreach (Cost cost in costs)
-                cost.Expend(user);
+                cost.Expend(user, target);
         }
 
-        // TODO: Test
-        public int CalculateValue(IUnit user, EffectValueType valueType)
+        public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
         {
             int value = valueType switch
             {
@@ -54,7 +53,7 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user));
+            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user, target));
 
             return bonusMultiplierSum == 0 ? value : bonusMultiplierSum * value;
         }

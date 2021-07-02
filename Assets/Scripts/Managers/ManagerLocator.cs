@@ -12,10 +12,7 @@ namespace Managers
         
         public static ManagerLocator Current { get; private set; }
         
-        private ManagerLocator()
-        {
-            Debug.Log($"Initialized ManagerLocator.");
-        }
+        private ManagerLocator() {}
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
@@ -56,8 +53,6 @@ namespace Managers
                 Debug.Log($"Attempted to register service of type {key} which is already registered with the {Current.GetType().Name}.");
                 return;
             }
-
-            Debug.Log($"Registered {key}!");
             
             Current.managers.Add(key, service);
         }

@@ -1,7 +1,6 @@
-using System;
-using Commands;
 using GridObjects;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
@@ -9,25 +8,23 @@ namespace Managers
     public class EnemyController : MonoBehaviour
     {
         // Temporary debug buttons, likely to be removed later
-        [SerializeField] private bool debugKillEnemyButton = false;
-        [SerializeField] private bool debugDamagePlayerButton = false;
+        [SerializeField] private bool debugKillEnemyButton;
+        [SerializeField] private bool debugDamagePlayerButton;
         
-        private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; //Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
-        
+        private bool isSpawningEnemies;
+        private const int totalEnemies = 3; // BUG: Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
-        private CommandManager commandManager;
-        private UnitManager unitManager;
         private GameObject enemyPrefab;
-        
-        /// <summary>
-        /// Stores the current actingunit.
-        /// </summary>
-        private EnemyUnit ActingEnemyUnit => unitManager.ActingEnemyUnit;
-        
+
+
+        private void Awake()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+            enemyManager = ManagerLocator.Get<EnemyManager>();
+        }
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -36,28 +33,11 @@ namespace Managers
             // Maybe do this through a level dictionary that contains these details?
             // For now placeholders will be used
 
-            gridManager = ManagerLocator.Get<GridManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
-            unitManager = ManagerLocator.Get<UnitManager>();
-
             enemyPrefab =
                 (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
-            
-            commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd =>
-            {
-                if (unitManager.ActingUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
-            
-            commandManager.ListenCommand<StartTurnCommand>(cmd =>
-            {
-                if (unitManager.ActingUnit is EnemyUnit)
-                    enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            });
         }
 
         private void Update()
@@ -80,34 +60,23 @@ namespace Managers
         private void OnValidate()
         {
             if (debugKillEnemyButton)
-            {
                 DebugKillEnemyFunction();
-            }
 
             if (debugDamagePlayerButton)
-            {
                 DebugDamagePlayerButton();
-            }
         }
 
         private void SpawnEnemy()
         {
-            enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-            
-            // // TODO: Remove this later, currently used to test enemy attacks
-            // if (enemyManager.EnemyUnits.Count  == 0)
-            //     SpawnAdjacentToPlayer();
-            // else
-            //     enemyManager.Spawn(enemyPrefab, gridManager.GetRandomUnoccupiedCoordinates());
-        }
-        
-        
-        private void SpawnAdjacentToPlayer()
-        {
-            enemyManager.Spawn(enemyPrefab, Vector2Int.left);
-            enemyManager.Spawn(enemyPrefab, Vector2Int.right);
-        }
+           IUnit enemyUnit = enemyManager.Spawn(enemyPrefab, gridManager
+           .GetRandomUnoccupiedCoordinates());
 
+           enemyUnit.Name = enemyUnit.RandomizeName();
+           
+           // Debug.Log(enemyUnit.RandomizeName() + "RANDOMIZED");
+           // Debug.Log(enemyUnit.Name);
+        }
+        
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)

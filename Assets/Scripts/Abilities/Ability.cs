@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Commands.Shapes;
+using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
 using UnityEngine;
@@ -15,7 +16,6 @@ namespace Abilities
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         [SerializeField] private int knockback;
-        [SerializeField] private bool onlyHitUnits = true;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
@@ -44,21 +44,37 @@ namespace Abilities
 
         private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            int damage = CalculateValue(user, effects, EffectValueType.Damage);
-            int defence = CalculateValue(user, effects, EffectValueType.Defence);
-            int attack = CalculateValue(user, effects, EffectValueType.Attack);
-            ProcessTenets(user, effects);
-
             foreach (GridObject target in targets)
             {
                 if (target is IUnit targetUnit)
                 {
+                    int attack = CalculateValue(user, targetUnit, effects, EffectValueType.Attack);
+                    int defence = CalculateValue(user, targetUnit,effects, EffectValueType.Defence);
+                    int damage = CalculateValue(user, targetUnit, effects, EffectValueType.Damage);
+                
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
-                    targetUnit.TakeDamage(Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
-                    targetUnit.TakeKnockback(knockback);
+                    // Attack modifiers should only work when the effect actually intends to do damage
+                    if (damage > 0)
+                        targetUnit.TakeDamage(Mathf.RoundToInt(user.Attack.Modify(damage)));
+                
+                    // Check if knockback is supported first, because currently it sometimes doesn't
+                    if (targetUnit.Knockback != null)
+                        targetUnit.TakeKnockback(knockback);
+                    
+                    foreach (Effect effect in effects)
+                    {
+                        effect.ProcessTenet(user, targetUnit);
+                    }
                 }
+
             }
+
+         
+            
+           
+            
+            
         }
         
         public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
@@ -82,45 +98,22 @@ namespace Abilities
 
         private void Undo(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            int damage = CalculateValue(user, effects, EffectValueType.Damage);
-            int defence = CalculateValue(user, effects, EffectValueType.Defence);
-            int attack = CalculateValue(user, effects, EffectValueType.Attack);
-            ProcessTenets(user, effects);
-
-            foreach (GridObject target in targets)
-            {
-                if (target is IUnit targetUnit)
-                {
-                    targetUnit.TakeAttack(-attack);
-                    targetUnit.TakeDefence(-defence);
-                    targetUnit.TakeDamage(-Mathf.RoundToInt(user.DealDamageModifier.Modify(damage)));
-                    targetUnit.TakeKnockback(-knockback);
-                }
-            }
+            // TODO
         }
 
-        // TODO: Test
-        private int CalculateValue(IUnit user, Effect[] effects, EffectValueType valueType)
+        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType)
         {
             int bonus = 0;
             
             foreach (Effect effect in effects)
             {
-                if (effect.CanBeUsedBy(user))
+                if (effect.CanBeUsedBy(user, target))
                 {
-                    bonus += effect.CalculateValue(user, valueType);
+                    bonus += effect.CalculateValue(user, target, valueType);
                 }
             }
 
             return bonus;
-        }
-
-        private void ProcessTenets(IUnit user, Effect[] effects)
-        {
-            foreach (Effect effect in effects)
-            {
-                effect.Use(user);
-            }
         }
     }
 }

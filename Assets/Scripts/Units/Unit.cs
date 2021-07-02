@@ -4,8 +4,10 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
+using Units.Commands;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -15,12 +17,19 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+
         [SerializeField] private Sprite render;
+
+        public string Name
+        {
+            get => data.name;
+            set => data.name = value;
+        }
 
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
-        public ModifierStat DealDamageModifier => data.dealDamageModifier;
+        public ModifierStat Attack => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
 
         public static Type DataType => typeof(T);
@@ -31,7 +40,7 @@ namespace Units
 
         public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
             tenetStatusEffectSlots.AsEnumerable();
-        
+
         public Sprite Render => render;
 
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
@@ -44,33 +53,38 @@ namespace Units
 
         private TurnManager turnManager;
         private PlayerManager playerManager;
-        private GridManager gridManager;
+        private CommandManager commandManager;
 
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
-
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10, 50);
+            Speed.Value += Random.Range(0, 101);
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
         }
 
-        void Update()
+        // TODO: Used for testing, can eventually be removed
+        private void Update()
         {
-            if (Keyboard.current.tKey.wasPressedThisFrame)
-                TakeDamage(5);
-        }
-        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
-        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
-        
+        }
+
+
+
+        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
+
+        public void TakeAttack(int amount) => Attack.Adder += amount;
+
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
@@ -125,10 +139,7 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects()
-        {
-            tenetStatusEffectSlots.Clear();
-        }
+        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
 
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
@@ -152,9 +163,22 @@ namespace Units
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
 
-        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
-
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
+
+        public string RandomizeName()
+        {
+            string[] names =
+            {
+                "Nadroj",
+                "Agida",
+                "Samuel",
+                "Francisco",
+                "Kyle"
+            };
+            
+            int index = Random.Range(0, names.Length);
+            return names[index];
+        }
 
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
                                                  out LinkedListNode<TenetStatusEffect> foundNode)
@@ -176,14 +200,30 @@ namespace Units
             return false;
         }
 
-        private void KillUnit()
+        /// <summary>
+        /// Makes it easier to debug with the command debugger window.
+        /// </summary>
+        private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
+            if ((Unit<T>) killUnitCommand.Unit == this)
+            {
+                // Since we're about to remove the object, stop listening to the command
+                commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+                KillUnit();
+            }
+        }
+
+        private async void KillUnit()
+        {
+            playerManager.WaitForDeath = true;
+            Debug.Log($"Unit Killed: {name} : {Coordinate}");
+            gridManager.RemoveGridObject(Coordinate, this);
+            await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
-            
-            gridManager.RemoveGridObject(Coordinate, this);
 
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+            commandManager.ExecuteCommand(new KillingUnitCommand(this));
+            gridManager.RemoveGridObject(Coordinate, this);
 
             switch (this)
             {
@@ -194,13 +234,15 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject +
                                    " as it is an unidentified unit");
                     break;
             }
-            
+
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+
+            commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
     }
 }

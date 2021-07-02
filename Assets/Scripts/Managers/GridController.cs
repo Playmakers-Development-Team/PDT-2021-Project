@@ -1,4 +1,8 @@
+using System;
+using Commands;
+using GridObjects;
 using Units;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -23,21 +27,15 @@ namespace Managers
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
             bounds = gridManager.LevelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
-            
+
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
-        }
-
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Mouse0)){}
-                //ClickUnit();
         }
 
         #region Unit Selection
 
         private void ClickUnit()
-        { 
+        {
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             // TODO look into this later, put the subtraction somewhere better
             Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
@@ -60,7 +58,6 @@ namespace Managers
             }
 
             playerManager.DeselectUnit();
-            // ClearAbilityUI();
         }
 
         #endregion

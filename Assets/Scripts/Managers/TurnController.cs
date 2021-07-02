@@ -1,10 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
-using Commands;
-using UI;
-using Units;
+using Units.Commands;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Managers
 {
@@ -19,7 +14,7 @@ namespace Managers
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-            
+
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
                 (cmd1, cmd2) =>
                 {

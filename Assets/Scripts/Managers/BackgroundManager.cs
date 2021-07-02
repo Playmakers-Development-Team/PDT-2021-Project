@@ -11,8 +11,9 @@ namespace Managers
         private static readonly List<ComputeBuffer> buffers = new List<ComputeBuffer>();
         private static readonly Dictionary<string, RenderTexture> featureTextures =
             new Dictionary<string, RenderTexture>();
-        
-        
+
+        public BackgroundCamera BackgroundCamera { get; set; }
+
         public static Pipeline ActivePipeline { get; private set; }
 
 
@@ -95,5 +96,18 @@ namespace Managers
         public static bool ContainsTexture(string key) => featureTextures.ContainsKey(key);
 
         public static bool IsMarked(RenderTexture texture) => textures.Contains(texture);
+
+        public void Render()
+        {
+            if (BackgroundCamera is null)
+            {
+                Debug.Log($"Cannot call function " + 
+                    $"{nameof(BackgroundManager)}.{nameof(Render)} before " +
+                    $"{nameof(BackgroundCamera)} is initialised.");
+                return;
+            }
+            
+            BackgroundCamera.Render();
+        }
     }
 }
