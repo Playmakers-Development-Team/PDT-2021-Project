@@ -24,8 +24,11 @@ namespace Brushes
         [SerializeField] private GameObject[] m_Prefabs;
         [SerializeField] private int curIndex = 0;
         [SerializeField] private Quaternion prefabRotation;
-
+        
         [SerializeField] private Units units;
+
+        public bool EraseAnyObject { get; set; }
+
         
         public override void Rotate(RotationDirection direction, GridLayout.CellLayout layout)
         {
@@ -61,11 +64,8 @@ namespace Brushes
         public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position)
         {
             if (!brushTarget.CompareTag("LevelTilemap") && !brushTarget.CompareTag("UnitPalette"))
-            {
-                Debug.LogWarning($"Do not use this tilemap, use the 'Level Tilemap' tile instead");
-                return;
-            }
-
+                Debug.LogWarning("Do not use this tilemap. Use 'Level Tilemap' instead");
+         
             curIndex = GetIndexFromUnits();
 
             var objectsInCell = GetObjectsInCell(grid, brushTarget.transform, position);
@@ -74,10 +74,9 @@ namespace Brushes
                 m_Prefabs[curIndex]);
 
             if (!existPrefabObjectInCell)
-            {
                 base.InstantiatePrefabInCell(grid, brushTarget, position, m_Prefabs[curIndex],
                     prefabRotation);
-            }
+           
         }
 
         /// <summary>
@@ -112,7 +111,7 @@ namespace Brushes
 
             foreach (var objectInCell in GetObjectsInCell(grid, brushTarget.transform, position))
             {
-                if (m_EraseAnyObjects ||
+                if (EraseAnyObject ||
                     PrefabUtility.GetCorrespondingObjectFromSource(objectInCell) ==
                     m_Prefabs[curIndex])
                 {
@@ -148,11 +147,11 @@ namespace Brushes
     [CustomEditor(typeof(UnitBrush))]
     public class UnitBrushEditor : BasePrefabBrushEditor
     {
-        private PrefabBrush prefabBrush => target as PrefabBrush;
+        private UnitBrush unitBrush => target as UnitBrush;
         private SerializedProperty m_Prefab;
     
         /// <summary>
-        /// OnEnable for the PrefabBrushEditor
+        /// OnEnable for the UnitPrefabBrusheditor
         /// </summary>
         protected override void OnEnable()
         {
@@ -176,9 +175,9 @@ namespace Brushes
     
             m_SerializedObject.UpdateIfRequiredOrScript();
             EditorGUILayout.PropertyField(m_Prefab, true);
-            prefabBrush.m_EraseAnyObjects = EditorGUILayout.Toggle(
+            unitBrush.EraseAnyObject = EditorGUILayout.Toggle(
                 new GUIContent("Erase Any Objects", eraseAnyObjectsTooltip),
-                prefabBrush.m_EraseAnyObjects);
+                unitBrush.EraseAnyObject);
     
             m_SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
