@@ -152,8 +152,8 @@ namespace UI
             if (!IsPlayerTurn || IsAbilitySelected)
                 return;
             
-            Debug.Log($"Trying to move to coordinate: {destination}");
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
+            unitDeselected.Invoke();
         }
         
         #endregion

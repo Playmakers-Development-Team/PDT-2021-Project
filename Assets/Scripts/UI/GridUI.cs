@@ -53,6 +53,7 @@ namespace UI
 
             foreach (Vector2Int correctCoordinate in selection.Spaces)
             {
+                // BUG: Grid coordinates seem to be off by (1, 1)...
                 // TODO: Once grid system offset bug is fixed, use correctCoordinate instead (and rename it)...
                 Vector2Int scuffedCoordinate = correctCoordinate - Vector2Int.one;
                 
@@ -87,10 +88,16 @@ namespace UI
             if (Camera.main == null)
                 return;
             
-            // BUG: coordinate is always (0, 0)...
-            Vector2 worldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
+            Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Plane plane = new Plane(-Camera.main.transform.forward, transform.position);
             
+            if (!plane.Raycast(worldRay, out float distance))
+                return;
+            
+            Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
+            // TODO: Remove 'Vector2Int.one' once grid offset bug has been resolved...
+            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition) + Vector2Int.one;
+
             manager.gridClicked.Invoke(coordinate);
         }
     }
