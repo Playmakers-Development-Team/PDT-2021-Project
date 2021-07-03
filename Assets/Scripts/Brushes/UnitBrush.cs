@@ -1,4 +1,5 @@
 using System.Linq;
+using GridObjects;
 using Units;
 using UnityEditor;
 using UnityEditor.Tilemaps;
@@ -10,33 +11,40 @@ namespace Brushes
     [CustomGridBrush(false, true, false, "Unit Brush")]
     public class UnitBrush : PrefabBrush
     {
-        [SerializeField] private GameObject[] m_Prefabs;
-        [SerializeField] private int curIndex = 0;
-
-        public enum Units
+        private enum Units
         {
             Estelle,
             Helena,
             Niles,
-            Enemy
-        }
+            Enemy,
+            Obstacle
+        };
+        
+        [Tooltip("List of all units/obstacles that can be placed in the scene")]
+        [SerializeField] private GameObject[] m_Prefabs;
+        [SerializeField] private int curIndex = 0;
+        [SerializeField] private Quaternion prefabRotation;
 
         [SerializeField] private Units units;
-
+        
         public override void Rotate(RotationDirection direction, GridLayout.CellLayout layout)
         {
             var angle = layout == GridLayout.CellLayout.Hexagon ? 60f : 90f;
-            m_Rotation = Quaternion.Euler(0f, 0f,
+            prefabRotation = Quaternion.Euler(0f, 0f,
                 direction == RotationDirection.Clockwise
-                    ? m_Rotation.eulerAngles.z + angle
-                    : m_Rotation.eulerAngles.z - angle);
+                    ? prefabRotation.eulerAngles.z + angle
+                    : prefabRotation.eulerAngles.z - angle);
         }
-
-        public int GetIndexFromUnits()
+        
+        /// <summary>
+        /// Gets the correct index from the currently selected unit from the enum
+        /// </summary>
+        /// <returns>The index of the selected unit in the m_prefabs array</returns>
+        private int GetIndexFromUnits()
         {
             for (int i = 0; i < m_Prefabs.Length; i++)
             {
-                if (m_Prefabs[i].GetComponent<IUnit>().Name == units.ToString())
+                if (m_Prefabs[i].name == units.ToString())
                     return i;
             }
 
@@ -68,7 +76,7 @@ namespace Brushes
             if (!existPrefabObjectInCell)
             {
                 base.InstantiatePrefabInCell(grid, brushTarget, position, m_Prefabs[curIndex],
-                    m_Rotation);
+                    prefabRotation);
             }
         }
 
@@ -122,9 +130,8 @@ namespace Brushes
             curIndex = GetIndexFromUnits();
 
             if (brushTarget == null)
-            {
                 return;
-            }
+            
 
             foreach (var objectInCell in GetObjectsInCell(gridLayout, brushTarget.transform,
                 position.position))
@@ -143,7 +150,7 @@ namespace Brushes
     {
         private PrefabBrush prefabBrush => target as PrefabBrush;
         private SerializedProperty m_Prefab;
-
+    
         /// <summary>
         /// OnEnable for the PrefabBrushEditor
         /// </summary>
@@ -152,7 +159,7 @@ namespace Brushes
             base.OnEnable();
             m_Prefab = m_SerializedObject.FindProperty(nameof(m_Prefab));
         }
-
+    
         /// <summary>
         /// Callback for painting the inspector GUI for the PrefabBrush in the Tile Palette.
         /// The PrefabBrush Editor overrides this to have a custom inspector for this Brush.
@@ -164,15 +171,15 @@ namespace Brushes
                 "within the selected layers with Erasing. " +
                 "Otherwise, erases only GameObjects that are created " +
                 "from owned Prefab in a given position within the selected layers with Erasing.";
-
+    
             base.OnPaintInspectorGUI();
-
+    
             m_SerializedObject.UpdateIfRequiredOrScript();
             EditorGUILayout.PropertyField(m_Prefab, true);
             prefabBrush.m_EraseAnyObjects = EditorGUILayout.Toggle(
                 new GUIContent("Erase Any Objects", eraseAnyObjectsTooltip),
                 prefabBrush.m_EraseAnyObjects);
-
+    
             m_SerializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
