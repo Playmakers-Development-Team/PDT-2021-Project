@@ -133,11 +133,14 @@ namespace ColorDrop.Editor
             GUILayout.BeginVertical(sectionStyle, sectionFoldout);
             GUILayout.Label("Particle Attributes", headerLabelStyle, headerLabelLayout);
 
-            currentProperty = serializedObject.FindProperty("startDelay");
+            GUILayout.BeginHorizontal();
+            currentProperty = serializedObject.FindProperty("minStartRotation");
             CreatePropertyGUI();
 
-            currentProperty = serializedObject.FindProperty("startRotation");
+            currentProperty = serializedObject.FindProperty("maxStartRotation");
             CreatePropertyGUI();
+
+            GUILayout.EndHorizontal();
 
             currentProperty = serializedObject.FindProperty("defaultColor");
             CreatePropertyGUI();
@@ -162,9 +165,6 @@ namespace ColorDrop.Editor
             currentProperty = serializedObject.FindProperty("maxParticleCountInView");
             CreatePropertyGUI();
 
-            currentProperty = serializedObject.FindProperty("spawnOnLocation");
-            CreatePropertyGUI();
-
             currentProperty = serializedObject.FindProperty("canSpawnRandom");
             CreatePropertyGUI();
 
@@ -175,7 +175,7 @@ namespace ColorDrop.Editor
 
             if (GUILayout.Button("Collect all Spawn Locations"))
             {
-                Debug.Log("Collection Triggered");
+                particleSystem.CollectSpawnLocations();
             }
 
             GUILayout.Space(5);
@@ -197,9 +197,6 @@ namespace ColorDrop.Editor
             GUILayout.Space(10);
 
             currentProperty = serializedObject.FindProperty("material");
-            CreatePropertyGUI();
-
-            currentProperty = serializedObject.FindProperty("sortLayer");
             CreatePropertyGUI();
 
             if (GUILayout.Button("Play"))

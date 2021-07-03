@@ -30,6 +30,7 @@ namespace ColorDrop.Particle
             shaderPropertyBlock.SetTexture("_BaseMap", attributes.renderTexture);
             shaderPropertyBlock.SetTexture("_DetailDiffuse", attributes.textureDetail);
             shaderPropertyBlock.SetTexture("_PaperTexture", attributes.texturePattern);
+            shaderPropertyBlock.SetColor("_Color", attributes.primaryColorSample);
             shaderPropertyBlock.SetFloat("_BeginTime", Time.time);
             meshRenderer.SetPropertyBlock(shaderPropertyBlock);
 
@@ -48,6 +49,12 @@ namespace ColorDrop.Particle
         }
 
         public void EndParticle()
+        {
+            particleRenderer.OnParticleRemoval();
+            Destroy(gameObject);
+        }
+
+        private void OnBecameInvisible()
         {
             particleRenderer.OnParticleRemoval();
             Destroy(gameObject);

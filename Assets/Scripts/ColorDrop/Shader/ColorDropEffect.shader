@@ -2,11 +2,6 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
 {
     Properties
     {
-        [MainColor] _Color("Color", Color) = (1,1,1,1)
-        _ColorSampleB("Color Sample B", Color) = (1,1,1,1)
-        _ColorSampleC ("Color Sample C", Color) = (1,1,1,1)
-        _SubLayerColor ("Sub Layer Color", Color) = (1,1,1,1)
-
         [PerRendererData] _BaseMap("Base Map", 2D) = "white" {}
         [PerRendererData] _BeginTime("BeginTime", Float) = 0
         _LerpDuration("Fade Lerp Duration", Float) = 1
@@ -15,19 +10,25 @@ Shader "Custom/Universal_Render_Pipeline/ColorDropEffect"
         _NoiseScale("Noise Scale", Float) = 30
         _CircleRadius("Circle Radius", Float) = 1
         _DecalEdgeWidth("Decal Edge Witdh", Range(0.0, 1.0)) = 0
-        _EdgeDarkness("Edge Darkness", Color) = (1,1,1,1)
         _ControlVal("Control Value", Range(0.0, 1.0)) = 1 // TEST
 
             /*  COLORS
-            * 
+            *
             * _PrimaryColor
             * _SubColorDarkness
             * _EdgeColor
             * _BorderColor
+            * _BorderOverrideValue
             */
 
-        // Border Attributes
+        // Colors
+        [PerRendererData] _Color("Color", Color) = (1,1,1,1)
         _BorderColor("Border Color", Color) = (1,1,1,1)
+        _BorderOverrideValue("Border Override Value", Color) = (0,0,0,1)
+        _SubLayerColor("Sub Layer Color", Color) = (1,1,1,1)
+        _EdgeDarkness("Edge Darkness", Color) = (1,1,1,1)
+
+        // Border Attributes
         _BorderSize("Border Size", Range(0, 0.25)) = 0.5
         _BorderSmoothing("Border Smoothing", Range(0, 0.5)) = 0
 

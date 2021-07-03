@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using UnityEngine;
 using ColorDrop.Particle;
 
@@ -16,16 +17,16 @@ namespace ColorDrop
         [HideInInspector] public ColorDropParticleAttributes particleAttributes;
 
         // Particle Attributes
-        [HideInInspector] public float startDelay;
-        [HideInInspector] public float startRotation;
+        [HideInInspector] public float minStartRotation;
+        [HideInInspector] public float maxStartRotation;
         [HideInInspector] public Color defaultColor;
         [HideInInspector] public float initialAlpha;
         [HideInInspector] public Vector2 dropScale;
+        [HideInInspector] public bool useSceneColor;
 
         // Emitter Properties
         [HideInInspector] public int rateOverTime;
         [HideInInspector] public int maxParticleCountInView;
-        [HideInInspector] public bool spawnOnLocation;
         [HideInInspector] public bool canSpawnRandom;
         [HideInInspector] public Transform[] spawnLocations;
 
@@ -33,7 +34,6 @@ namespace ColorDrop
         [HideInInspector] public Camera targetCamera;
         [HideInInspector] public RenderTexture templateTextureRenderTexture;
         [HideInInspector] public Material material;
-        [HideInInspector] public int sortLayer;
 
         // Previewer
         [HideInInspector] public RenderTexture previewTexture;
@@ -42,11 +42,12 @@ namespace ColorDrop
         private IColorDropParticle[] particleInstances;
         private IColorDropTextureGenerator texDropGenerator;
         private IColorSampler colorSampler;
+
         private ColorDropSettings settings;
-        private int particleViewCount = 0;
         private SimpleTimer particleTimer;
         private Vector2 viewPlaneDimension = Vector2.one;
 
+        private int particleViewCount = 0;
         private float rightBound;
         private float leftBound;
         private float upBound;
@@ -61,6 +62,7 @@ namespace ColorDrop
             texDropGenerator = this.GetComponent<IColorDropTextureGenerator>();
             texDropGenerator.InitialiseTextureGenerator(settings);
             colorSampler = this.GetComponent<IColorSampler>();
+            colorSampler.InitialiseColorSampler();
 
             particleTimer = new SimpleTimer(rateOverTime, Time.deltaTime);
             particleObjects = new GameObject[maxParticleCountInView];
@@ -91,17 +93,21 @@ namespace ColorDrop
         public void CreateParticle()
         {
             RenderTexture newTex = texDropGenerator.GenerateDropTexture(templateTextureRenderTexture);
+            Vector3 spawnPosition = canSpawnRandom ? NewLocationWithinViewBounds() : SpawnInSpawnLocation();
+            float spawnRotation = UnityEngine.Random.Range(minStartRotation, maxStartRotation);
 
             ColorDropParticleAttributes attributes = new ColorDropParticleAttributes
             {
                 particleScale = UnityEngine.Random.Range(dropScale.x, dropScale.y),
                 renderTexture = newTex,
                 dropMaterial = material,
+                defaultColor = this.defaultColor,
+                primaryColorSample = colorSampler.SampleColorFromScreenSpace(Camera.main.WorldToScreenPoint(spawnPosition), 6),
                 textureDetail = settings.SelectRandomisedTextureDetail(),
                 texturePattern = settings.SelectRandomisedTexturePattern()
             };
 
-            IColorDropParticle particle = Instantiate(settings.particlePrefab, NewLocationWithinViewBounds(), Quaternion.identity).GetComponent<IColorDropParticle>();
+            IColorDropParticle particle = Instantiate(settings.particlePrefab, spawnPosition, Quaternion.Euler(0, 0, spawnRotation)).GetComponent<IColorDropParticle>();
             particle.BeginParticle(attributes, this);
             particleViewCount++;
 
@@ -125,11 +131,17 @@ namespace ColorDrop
         {
             DetermineCameraPlaneBoundaries();
             Vector3 newPosition = Vector3.zero;
-            float xDimension = viewPlaneDimension.x / 2;
-            float yDimension = viewPlaneDimension.y / 2;
-            newPosition.x = (UnityEngine.Random.Range(1, 10) >= 5 ? 1 : -1) * (UnityEngine.Random.Range(0, xDimension) + xDimension) + targetCamera.transform.position.x;
-            newPosition.y = (UnityEngine.Random.Range(1, 10) >= 5 ? 1 : -1) * (UnityEngine.Random.Range(0, yDimension) + yDimension) + targetCamera.transform.position.y;
+            float xDimension = viewPlaneDimension.x * 0.8f / 2;
+            float yDimension = viewPlaneDimension.y * 0.8f / 2;
+            newPosition.x = (UnityEngine.Random.Range(1, 10) >= 5 ? 1 : -1) * (UnityEngine.Random.Range(0, xDimension)) + targetCamera.transform.position.x;
+            newPosition.y = (UnityEngine.Random.Range(1, 10) >= 5 ? 1 : -1) * (UnityEngine.Random.Range(0, yDimension)) + targetCamera.transform.position.y;
             return newPosition;
+        }
+
+        private Vector3 SpawnInSpawnLocation()
+        {
+            // Gets random location within index
+            return spawnLocations[UnityEngine.Random.Range(0, spawnLocations.Length)].position;
         }
 
         private void IterateThroughParticles()
@@ -202,8 +214,14 @@ namespace ColorDrop
 
         public void CollectSpawnLocations()
         {
-            GameObject[] objects = FindObjectsOfType<GameObject>();
-            //spawnLocations = objects.Where(x => x.GetComponent<ISpawn)
+            Transform[] objects = FindObjectsOfType<Transform>();
+            List<Transform> collectedPositions = objects.Where(x => x.CompareTag("DecalSpawnPosition")).ToList();
+            spawnLocations = collectedPositions.ToArray();
+
+            if (spawnLocations.Length == 0)
+            {
+                Debug.LogWarning("There are no transform positions with tag: 'DecalSpawnPosition'");
+            }
         }
 
         #endregion
