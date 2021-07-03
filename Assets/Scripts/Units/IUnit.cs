@@ -9,14 +9,15 @@ namespace Units
 {
     public interface IUnit : IDamageable, IKnockbackable
     {
+        public string Name { get; set; }
         public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
         public ValueStat Speed { get; }
-        public ModifierStat DealDamageModifier { get; }
+        public ModifierStat Attack { get; }
         public List<Ability> Abilities { get; }
 
         public Vector2Int Coordinate { get; }
-        
+
         GameObject gameObject { get; }
         
         IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
@@ -43,8 +44,8 @@ namespace Units
 
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
 
-        bool IsActing();
-
         bool IsSelected();
+
+        string RandomizeName();
     }
 }

@@ -1,28 +1,22 @@
 using System.Collections.Generic;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace Managers
 {
     public class PlayerManager : UnitManager
     {
-        /// <summary>
-        /// The unit that is currently selected in the scene.
-        /// </summary>
-        public PlayerUnit SelectedUnit { get; private set; }
-
-        /// <summary>
-        /// All the player units currently in the level.
-        /// </summary>
         private readonly List<IUnit> playerUnits = new List<IUnit>();
 
         /// <summary>
         /// All the player units currently in the level.
         /// </summary>
         public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
-
-        public int DeathDelay {get;} = 5000;
-        public bool WaitForDeath;
+        public bool WaitForDeath { get; set; }
+        
+        public int DeathDelay { get; } = 1000;
+        public int Count => playerUnits.Count;
 
         /// <summary>
         /// Removes all the player units in the <c>playerUnits</c> list.
@@ -33,11 +27,8 @@ namespace Managers
         /// Removes a target <c>IUnit</c> from <c>playerUnits</c>.
         /// </summary>
         /// <param name="targetUnit"></param>
-        public override void RemoveUnit(IUnit targetUnit)
-        {
-            playerUnits.Remove(targetUnit);
-            base.RemoveUnit(targetUnit);
-        }
+        public void RemoveUnit(IUnit targetUnit) => playerUnits.Remove(targetUnit);
+        
 
         /// <summary>
         /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
@@ -48,44 +39,9 @@ namespace Managers
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
-            playerUnits.Add(newUnit);
             return newUnit;
         }
 
-        /// <summary>
-        /// Sets a unit as selected.
-        /// </summary>
-        /// <param name="unit"></param>
-        public void SelectUnit(PlayerUnit unit)
-        {
-            if (WaitForDeath) return;
-            if (unit is null)
-            {
-                Debug.LogWarning(
-                    "PlayerManager.SelectUnit should not be passed a null value. Use PlayerManager.DeselectUnit instead.");
-                DeselectUnit();
-                return;
-            }
-
-            if (SelectedUnit != unit)
-            {
-                SelectedUnit = unit;
-
-                ManagerLocator.Get<CommandManager>().
-                    ExecuteCommand(new Commands.UnitSelectedCommand(SelectedUnit));
-            }
-        }
-
-        /// <summary>
-        /// Deselects the currently selected unit.
-        /// </summary>
-        public void DeselectUnit()
-        {
-            SelectedUnit = null;
-            ManagerLocator.Get<CommandManager>().
-                ExecuteCommand(new Commands.UnitDeselectedCommand(SelectedUnit));
-        }
-        
         /// <summary>
         /// Adds an already existing unit to the <c>playerUnits</c> list. Currently used by units
         /// that have been added to the scene in the editor.
@@ -95,7 +51,7 @@ namespace Managers
         {
             playerUnits.Add(unit);
             
-            ManagerLocator.Get<TurnManager>().AddNewUnitToTimeline(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             
             SelectUnit(unit);
             

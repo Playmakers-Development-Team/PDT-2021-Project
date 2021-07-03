@@ -36,6 +36,8 @@ namespace Commands.Shapes
 
         public bool IsLineOfSight => shapeParts.All(p => p.isLineOfSight);
 
+        public bool ShouldShowLine => IsLineOfSight;
+
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, Vector2 targetVector) =>
             GetAffectedCoordinates(originCoordinate, targetVector);
 
