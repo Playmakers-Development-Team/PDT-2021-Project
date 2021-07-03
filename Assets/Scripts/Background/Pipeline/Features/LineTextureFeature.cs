@@ -6,9 +6,11 @@ namespace Background.Pipeline.Features
     {
         [SerializeField] private FeatureTexture input;
         [SerializeField] private FeatureTexture flood;
+        [SerializeField] private TextureParameters texture;
+        
         [SerializeField] private float threshold;
         [SerializeField] private float amount;
-        [SerializeField] private TextureParameters texture;
+
         
         public override void Execute()
         {
@@ -20,10 +22,7 @@ namespace Background.Pipeline.Features
             SetTexture("output", input);
 
             SetInput(new Input(texture.Parameters, threshold, amount));
-            Dispatch(Threads.x, Threads.y, Threads.z);
-            
-            flood.Push();
-            input.Push();
+            Dispatch(input.Width, input.Height);
         }
 
         protected override int GetKernelIndex() => (int) KernelIndex.LineTexture;

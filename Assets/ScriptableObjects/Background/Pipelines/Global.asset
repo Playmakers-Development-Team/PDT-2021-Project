@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d0c983a7104f6087cc593a80edf5be, type: 3}
   m_Name: Edge Pigment
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -62,12 +62,12 @@ MonoBehaviour:
     name: line
   flood:
     name: lineTextureFlood
-  threshold: 1
-  amount: 1
   texture:
     texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
     tiling: {x: 1, y: 1}
     offset: {x: 0, y: 0}
+  threshold: 1
+  amount: 1
 --- !u!114 &-6978812129472206762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d053e68797544c35af01e8ab4861f69e, type: 3}
   m_Name: Hue Shift
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4603026ca11e45b1b938e4791607da07, type: 3}
   m_Name: Bump
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f0b5b906ff42ca9b76c96a6a5cde5a, type: 3}
   m_Name: Displacement
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c430da5f1d4582a5e781f13c1dc0fc, type: 3}
   m_Name: Edge Pigment Edge Detection
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b49b57b12bb54f6da0e3fe5c9b6573b1, type: 3}
   m_Name: Kuwahara
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -225,6 +225,7 @@ MonoBehaviour:
   - {fileID: -3776437265804883619}
   - {fileID: -6978812129472206762}
   - {fileID: -5455511764358233566}
+  - {fileID: 7982176954454162747}
   - {fileID: 4880302109807297705}
 --- !u!114 &1638095332396277366
 MonoBehaviour:
@@ -238,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dce8182fc32474aa2cc53aae03d64d6, type: 3}
   m_Name: Colour Separation Jump Flood
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   edge:
     name: colourSeparationEdge
@@ -272,7 +273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b869167c45f44d07b755a1d34ce75ace, type: 3}
   m_Name: Opacity Shift
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -294,7 +295,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c430da5f1d4582a5e781f13c1dc0fc, type: 3}
   m_Name: Colour Separation Edge Detection
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
@@ -312,14 +313,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0276811e1f674b1ca8e093c66a52dc05, type: 3}
-  m_Name: New CopyFeature
+  m_Name: DEBUG Line Copy
   m_EditorClassIdentifier: 
   active: 0
   featureName: 
   source:
-    name: line
+    name: lineTextureFlood
   destination:
-    name: wash
+    name: line
 --- !u!114 &6340137832065436935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,7 +349,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dce8182fc32474aa2cc53aae03d64d6, type: 3}
   m_Name: Edge Pigment Jump Flood
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   edge:
     name: edgePigmentEdge
@@ -366,11 +367,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6806a545dc204bd9912e14dc9cef613e, type: 3}
   m_Name: Opacity Extraction
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash
   exposure: 0.3
+--- !u!114 &7982176954454162747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24af442e79b64760b68f557267b6a730, type: 3}
+  m_Name: Wash Clear
+  m_EditorClassIdentifier: 
+  active: 1
+  featureName: 
+  input:
+    name: wash
 --- !u!114 &8946917220206638204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -383,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd86d9d0f54846dbad1e9463d5801a02, type: 3}
   m_Name: Colour Separation
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   featureName: 
   input:
     name: wash

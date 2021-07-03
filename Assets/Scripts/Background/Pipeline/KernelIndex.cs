@@ -19,7 +19,6 @@ namespace Background.Pipeline
         Bump,
         HueShiftFeature,
         SaturationFeature,
-        SDFFeature,
         LineTexture
     }
 }
