@@ -5,6 +5,8 @@ namespace Units
 {
     public class EnemyUnit : Unit<EnemyUnitData>
     {
+        public PlayerUnit Target;
+
         private List<Command> commandQueue = new List<Command>();
 
         public void QueueCommand(Command command)

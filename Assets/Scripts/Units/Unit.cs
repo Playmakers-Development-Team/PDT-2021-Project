@@ -60,11 +60,11 @@ namespace Units
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
         }
-
+        /* TESTING
         void Update()
         {
             if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
-        }
+        }*/
         public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
 
         public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
