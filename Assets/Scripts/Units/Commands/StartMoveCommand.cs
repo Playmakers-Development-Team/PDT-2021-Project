@@ -25,7 +25,7 @@ namespace Units.Commands
 
         public override void Execute()
         {
-             gridManager.MoveUnit(this);
+            gridManager.MoveUnit(this);
         }
 
         public override void Undo()
