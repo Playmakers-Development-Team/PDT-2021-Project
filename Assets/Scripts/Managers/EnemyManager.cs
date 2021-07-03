@@ -30,6 +30,8 @@ namespace Managers
         private GridManager gridManager;
         private PlayerManager playerManager;
 
+        private bool MoveEnded;
+
         public override void ManagerStart()
         {
             base.ManagerStart();
@@ -37,6 +39,14 @@ namespace Managers
             turnManager = ManagerLocator.Get<TurnManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
+            
+            ManagerLocator.Get<CommandManager>().ListenCommand<EndMoveCommand>(cmd =>
+            {
+                if(!(turnManager.ActingEnemyUnit is null))
+                    MoveEnded = true;
+            });
+           
+            
         }
 
         /// <summary>
@@ -80,6 +90,7 @@ namespace Managers
 
         public async void DecideEnemyIntention(EnemyUnit enemyUnit)
         {
+            MoveEnded = false;
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
 
             if (adjacentPlayerUnit != null)
@@ -107,7 +118,7 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
-        private UniTask MoveUnit(EnemyUnit unit)
+        private async UniTask MoveUnit(EnemyUnit unit)
         {
             IUnit enemyUnit = unit;
             IUnit closestPlayerUnit = FindClosestPlayer(unit);
@@ -122,7 +133,12 @@ namespace Managers
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
             commandManager.ExecuteCommand(moveCommand);
-            return UniTask.Delay(1000);
+
+        
+            
+            while (!MoveEnded)
+                await UniTask.Yield();
+
         }
 
         // This is a super basic movement system. Enemies will not go into occupied tiles
@@ -149,7 +165,7 @@ namespace Managers
                             IUnit playerUnit = (IUnit) adjacentGridObject;
                             
                             // TODO: Will later need to be turned into an ability command when enemies have abilities
-                            playerUnit.TakeDamage((int) unit.Attack.Value);
+                            //playerUnit.TakeDamage((int) unit.Attack.Value);
                         }
                         return movementDir;
                     }

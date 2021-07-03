@@ -380,10 +380,11 @@ namespace Managers
             }
 
             // Check if tile is unoccupied
-            if (tileData.GridObjects.Count != 0)
+            if (tileData.GridObjects.Count != 0 )
             {
                 // TODO: Provide feedback to the player
-                Debug.Log("Target tile is occupied.");
+                Debug.Log("Target tile is occupied or does not exist.");
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand)); // if unable to move, end their movement
                 return;
             }
 
