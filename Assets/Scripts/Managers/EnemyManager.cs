@@ -149,13 +149,20 @@ namespace Managers
 
             List<Vector2Int> targetTiles = GetAdjacentFreeSquares(targetUnit);
             Vector2Int chosenTargetTile = Vector2Int.zero; // PLACEHOLDER INITIALISATION VALUE
+
+            //TODO: Find out why negative movement points are being passed in
+            if (movementPoints < 0)
+            {
+                Debug.LogError("ERROR: Movement points are negative for some reason so enemy cannot move. Pls fix this");
+                return Vector2Int.zero;
+            }
             
             List<Vector2Int> reachableTiles =
                 gridManager.GetAllReachableTiles(enemyUnit.Coordinate, movementPoints);
 
-            if (targetTiles.Count == 0)
+            if (targetTiles.Count == 0 || movementPoints == 0)
             {
-                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy is stationary until a new tile is available adjacent to the target player " + targetUnit);
+                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy is stationary");
                 return Vector2Int.zero;
             }
             
