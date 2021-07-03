@@ -340,12 +340,14 @@ namespace Managers
             foreach (IUnit unit in unitManager.AllUnits)
             {
                 unit.MovementActionPoints.Reset();
-        
-        #endregion
-            }
-        
-        }
                 unit.Attack.Reset();
                 unit.Health.Defence.Reset();
+        
+          
+            }
+        }
+        
+        #endregion
+                
     }
 }
