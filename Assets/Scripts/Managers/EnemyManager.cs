@@ -143,33 +143,36 @@ namespace Managers
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
+            //TODO: Find out why negative movement points are being passed in
+            if (movementPoints <= 0)
+            {
+                Debug.Log(enemyUnit.Name +
+                          " ENEMY-TAR: Enemy is stationary as it has no movement points");
+                return Vector2Int.zero;
+            }
+            
             GridManager gridManager = ManagerLocator.Get<GridManager>();
 
             Vector2Int movementDir = Vector2Int.zero;
 
-            List<Vector2Int> targetTiles = GetAdjacentFreeSquares(targetUnit);
+            // Can uncomment if we want enemies to flank to free adjacent squares
+            // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
             Vector2Int chosenTargetTile = Vector2Int.zero; // PLACEHOLDER INITIALISATION VALUE
 
-            //TODO: Find out why negative movement points are being passed in
-            if (movementPoints < 0)
-            {
-                Debug.LogError("ERROR: Movement points are negative for some reason so enemy cannot move. Pls fix this");
-                return Vector2Int.zero;
-            }
-            
             List<Vector2Int> reachableTiles =
                 gridManager.GetAllReachableTiles(enemyUnit.Coordinate, movementPoints);
-
-            if (targetTiles.Count == 0 || movementPoints == 0)
-            {
-                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy is stationary");
-                return Vector2Int.zero;
-            }
             
-            chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
-            movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
-
-            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move in the direction " + movementDir + " towards target tile " + chosenTargetTile + ". Player is at " + targetUnit.Coordinate);
+            // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
+            // chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
+            // movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
+            // return movementDir;
+            
+            chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate);
+            // If the enemy's current co-ordinate is closer that the chosenTargetTile
+            // then keep the enemy stationary
+            movementDir = chosenTargetTile - enemyUnit.Coordinate;
+            
+            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move in the direction " + movementDir + " towards "+targetUnit+" at " + targetUnit.Coordinate);
             return movementDir;
         }
 
@@ -184,7 +187,8 @@ namespace Managers
             if (closestPlayersCount == 1)
             {
                 targetPlayerUnit = closestPlayers[0];
-                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Targeting closest player " + targetPlayerUnit);
+                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Targeting closest player " +
+                          targetPlayerUnit);
             }
             else if (closestPlayersCount > 1)
             {
@@ -258,34 +262,6 @@ namespace Managers
             return lowestHealthPlayerUnits;
         }
 
-        // Repurposed this function from "FindClosestAdjacentFreeSquare" to "GetAdjacentFreeSquares"
-        private List<Vector2Int> GetAdjacentFreeSquares(IUnit targetUnit)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
-            List<Vector2Int> adjacentCoordinates = new List<Vector2Int>();
-
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.up);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.right);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.down);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.left);
-
-            for (int i = adjacentCoordinates.Count - 1; i > -1; i--)
-            {
-                // Remove target coordinate is out of bounds
-                if (gridManager.GetTileDataByCoordinate(adjacentCoordinates[i]) == null)
-                {
-                    adjacentCoordinates.RemoveAt(i);
-                }
-                // Remove if target coordinate is occupied
-                else if (gridManager.GetGridObjectsByCoordinate(adjacentCoordinates[i]).Count > 0)
-                {
-                    adjacentCoordinates.RemoveAt(i);
-                }
-            }
-
-            // NOTE: If no nearby player squares are free, an empty list is returned
-            return adjacentCoordinates;
-        }
+        
     }
 }

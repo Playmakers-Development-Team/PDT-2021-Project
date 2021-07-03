@@ -597,6 +597,36 @@ namespace Managers
 
             return adjacentGridObjects;
         }
+        
+        // TODO: Use for when we want enemies to perform flanking maneuvers
+        public List<Vector2Int> GetAdjacentFreeSquares(IUnit targetUnit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            
+            List<Vector2Int> adjacentCoordinates = new List<Vector2Int>();
+
+            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.up);
+            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.right);
+            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.down);
+            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.left);
+
+            for (int i = adjacentCoordinates.Count - 1; i > -1; i--)
+            {
+                // Remove target coordinate is out of bounds
+                if (gridManager.GetTileDataByCoordinate(adjacentCoordinates[i]) == null)
+                {
+                    adjacentCoordinates.RemoveAt(i);
+                }
+                // Remove if target coordinate is occupied
+                else if (gridManager.GetGridObjectsByCoordinate(adjacentCoordinates[i]).Count > 0)
+                {
+                    adjacentCoordinates.RemoveAt(i);
+                }
+            }
+
+            // NOTE: If no nearby player squares are free, an empty list is returned
+            return adjacentCoordinates;
+        }
 
         #endregion
     }
