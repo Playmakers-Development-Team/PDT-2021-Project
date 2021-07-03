@@ -338,7 +338,7 @@ namespace Managers
 
             foreach (KeyValuePair<Vector2Int, Vector2Int> node in visited)
             {
-                Debug.Log($"NodeStuff {node}");
+                //Debug.Log($"NodeStuff {node}");
             }
 
             var path = new List<Vector2Int>();
@@ -372,7 +372,9 @@ namespace Managers
             
             foreach (var startingCoordinate in startingCoordinates)
             {
-                List<Vector2Int> pathToTargetTile = GetCellPath(startingCoordinate, targetCoordinate);
+                List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate);
+                
+                //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
                 
                 if (pathToTargetTile.Count < shortestDistance)
                 {
@@ -380,7 +382,7 @@ namespace Managers
                     closestTile = startingCoordinate;
                 }
             }
-
+            //Debug.Log("Chosen Tile Coordinate: "+closestTile);
             return closestTile;
         }
 
@@ -541,7 +543,7 @@ namespace Managers
                                             float duration)
         {
             float flag = 0f;
-            Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
+            //Debug.Log("Tween unit from " + startPos + " to " + endPos + ".");
             while (flag < duration)
             {
                 unit.transform.position = Vector3.Lerp(startPos, endPos, flag / duration);

@@ -89,7 +89,7 @@ namespace Managers
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
-                Debug.Log("ENEMY-INT: Move towards player");
+                Debug.Log(enemyUnit.Name + " ENEMY-INT: Move towards player");
                 await MoveUnit(enemyUnit);
                 
                 while (playerManager.WaitForDeath)
@@ -114,7 +114,7 @@ namespace Managers
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
             // TODO: Will later need to be turned into an ability command when enemies have abilities
-            Debug.Log("ENEMY-INT: Damage player");
+            Debug.Log(enemyUnit.Name + " ENEMY-INT: Damage player");
             playerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
             
             await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
@@ -123,18 +123,17 @@ namespace Managers
                 await UniTask.Yield();
         }
 
-        private UniTask MoveUnit(EnemyUnit actingUnit)
+        private UniTask MoveUnit(EnemyUnit enemyUnit)
         {
-            IUnit enemyUnit = actingUnit;
-            IUnit targetPlayerUnit = GetTargetPlayer(actingUnit);
+            IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
 			
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(actingUnit, targetPlayerUnit, (int) 
-                actingUnit.MovementActionPoints.Value)
+                enemyUnit.Coordinate + FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
+                enemyUnit.MovementActionPoints.Value)
             );
             
             ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
@@ -142,7 +141,7 @@ namespace Managers
             return UniTask.Delay(1000);
         }
         
-        private Vector2Int FindClosestPath(EnemyUnit actingUnit, IUnit targetUnit, int movementPoints)
+        private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
 
@@ -152,18 +151,18 @@ namespace Managers
             Vector2Int chosenTargetTile = Vector2Int.zero; // PLACEHOLDER INITIALISATION VALUE
             
             List<Vector2Int> reachableTiles =
-                gridManager.GetAllReachableTiles(actingUnit.Coordinate, movementPoints);
+                gridManager.GetAllReachableTiles(enemyUnit.Coordinate, movementPoints);
 
             if (targetTiles.Count == 0)
             {
-                Debug.LogWarning("ENEMY-TAR: Enemy is stationary until a new tile is available adjacent to the target player " + targetUnit);
+                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy is stationary until a new tile is available adjacent to the target player " + targetUnit);
                 return Vector2Int.zero;
             }
             
-            chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, actingUnit.Coordinate);
-            movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - actingUnit.Coordinate;
+            chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
+            movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
 
-            Debug.Log("ENEMY-TAR: Enemy to move in the direction " + movementDir);
+            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move in the direction " + movementDir + " towards target tile " + chosenTargetTile + ". Player is at " + targetUnit.Coordinate);
             return movementDir;
         }
 
@@ -178,7 +177,7 @@ namespace Managers
             if (closestPlayersCount == 1)
             {
                 targetPlayerUnit = closestPlayers[0];
-                Debug.Log("ENEMY-TAR: Targeting closest player " + targetPlayerUnit);
+                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Targeting closest player " + targetPlayerUnit);
             }
             else if (closestPlayersCount > 1)
             {
@@ -188,7 +187,7 @@ namespace Managers
                 // If multiple low HP players are returned, the first instance is set as the target
                 targetPlayerUnit = lowestHealthPlayers[0];
                 
-                Debug.Log("ENEMY-TAR: Targeting lower HP player " + targetPlayerUnit + 
+                Debug.Log(enemyUnit.Name + " ENEMY-TAR: Targeting lower HP player " + targetPlayerUnit + 
                           "(Multiple closest players found)");
             }
             else
