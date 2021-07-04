@@ -136,9 +136,8 @@ namespace Managers
                 enemyUnit.MovementActionPoints.Value)
             );
             
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
             commandManager.ExecuteCommand(moveCommand);
-            return UniTask.Delay(3000);
+            return UniTask.Delay(3500);
         }
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
