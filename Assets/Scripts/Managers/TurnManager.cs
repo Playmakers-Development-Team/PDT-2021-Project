@@ -175,7 +175,7 @@ namespace Managers
                 // Debug.Log("YOU WIN!");
                 // TODO Player wins. End the encounter somehow, probably inform the GameManager
                 // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-                AkSoundEngine.SetState("CombatState", "OutOfCombat");
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
             }
 
             if (!HasPlayerUnitInQueue())
@@ -183,7 +183,7 @@ namespace Managers
                // Debug.Log("YOU LOSE!");
                // TODO Player wins. End the encounter somehow, probably inform the GameManager
                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-               AkSoundEngine.SetState("CombatState", "OutOfCombat");
+               AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
             }
 
             previousTurnQueue = currentTurnQueue;
