@@ -35,11 +35,11 @@ namespace Units
 
         public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
 
-        public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
+        public IEnumerable<TenetStatus> TenetStatusEffects =>
             tenetStatusEffectSlots.AsEnumerable();
 
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
-            new LinkedList<TenetStatusEffect>();
+        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
+            new LinkedList<TenetStatus>();
 
         private const int maxTenetStatusEffectCount = 2;
 
@@ -61,9 +61,10 @@ namespace Units
             base.Start();
 
             data.Initialise();
-            Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
-            
-            // TODO Are speeds are random or defined in UnitData?
+            Health = new Health(new KillUnitCommand(this), data.healthPoints,
+                data.takeDamageModifier);
+
+            // TODO Speed temporarily random for now until proper turn manipulation is done.
             Speed.Value += Random.Range(0, 101);
 
             turnManager = ManagerLocator.Get<TurnManager>();
@@ -72,23 +73,17 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
+
             if (nameText)
                 nameText.text = Name;
             
-               
             if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+                healthText.text =
+                    (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
         }
 
-        // TODO: Used for testing, can eventually be removed
-        private void Update()
-        {
+        protected virtual void Update() {}
 
-        }
-        
-        
-        
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
         public void TakeAttack(int amount) => Attack.Adder += amount;
@@ -106,18 +101,20 @@ namespace Units
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
 
-        public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
-        {
-            TenetStatusEffect statusEffect = new TenetStatusEffect(tenetType, stackCount);
+        #region TenetStatusEffect
 
-            if (statusEffect.IsEmpty)
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
+        {
+            TenetStatus status = new TenetStatus(tenetType, stackCount);
+
+            if (status.IsEmpty)
                 return;
 
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusEffectNode(statusEffect.TenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode))
+            if (TryGetTenetStatusNode(status.TenetType,
+                out LinkedListNode<TenetStatus> foundNode))
             {
-                foundNode.Value += statusEffect;
+                foundNode.Value += status;
             }
             else
             {
@@ -128,13 +125,13 @@ namespace Units
                     tenetStatusEffectSlots.RemoveFirst();
                 }
 
-                tenetStatusEffectSlots.AddLast(statusEffect);
+                tenetStatusEffectSlots.AddLast(status);
             }
         }
 
-        public bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue)
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue)
         {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
+            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
@@ -153,25 +150,37 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
-        
+        public void ClearAllTenetStatus() => tenetStatusEffectSlots.Clear();
+
+        [Obsolete("Use TryGetTenetStatus instead")]
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TryGetTenetStatusEffect(tenetType, out tenetStatus);
+
         public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatusEffect tenetStatusEffect)
+                                            out TenetStatus tenetStatus)
         {
-            bool isFound = TryGetTenetStatusEffectNode(tenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode);
-            tenetStatusEffect = isFound ? foundNode.Value : default;
+            bool isFound = TryGetTenetStatusNode(tenetType,
+                out LinkedListNode<TenetStatus> foundNode);
+            tenetStatus = isFound ? foundNode.Value : default;
             return isFound;
         }
 
-        public int GetTenetStatusEffectCount(TenetType tenetType)
+        [Obsolete("Use GetTenetStatus instead")]
+        public int GetTenetStatusEffectCount(TenetType tenetType) =>
+            GetTenetStatusCount(tenetType);
+
+        public int GetTenetStatusCount(TenetType tenetType)
         {
-            return HasTenetStatusEffect(tenetType)
+            return HasTenetStatus(tenetType)
                 ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
                 : 0;
         }
 
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
+        [Obsolete("Use HasTenetStatus instead")]
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
+            HasTenetStatus(tenetType, minimumStackCount);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1)
         {
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
@@ -179,10 +188,10 @@ namespace Units
 
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
-        private bool TryGetTenetStatusEffectNode(TenetType tenetType,
-                                                 out LinkedListNode<TenetStatusEffect> foundNode)
+        private bool TryGetTenetStatusNode(TenetType tenetType,
+                                                 out LinkedListNode<TenetStatus> foundNode)
         {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
+            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
@@ -198,6 +207,8 @@ namespace Units
             foundNode = null;
             return false;
         }
+        
+        #endregion
 
         /// <summary>
         /// Makes it easier to debug with the command debugger window.
@@ -259,7 +270,8 @@ namespace Units
             damageTextCanvas.enabled = false;
         }
         
-          #region RandomizeNames
+        #region RandomizeNames
+        
         public string RandomizeName()
         {
             string newname = "";
@@ -344,7 +356,5 @@ namespace Units
         }
         
         #endregion
-        
-        
     }
 }

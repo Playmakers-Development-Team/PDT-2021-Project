@@ -68,14 +68,7 @@ namespace Abilities
                         effect.ProcessTenet(user, targetUnit);
                     }
                 }
-
             }
-
-         
-            
-           
-            
-            
         }
         
         public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
