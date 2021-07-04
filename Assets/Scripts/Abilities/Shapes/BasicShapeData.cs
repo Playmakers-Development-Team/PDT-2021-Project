@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
 using Managers;
-using Units;
 using UnityEngine;
 using Utility;
 
-namespace Commands.Shapes
+namespace Abilities.Shapes
 {
     [CreateAssetMenu(fileName = "BasicShapeData", menuName = "ScriptableObjects/BasicShapeData", order = 0)]
     public class BasicShapeData : ScriptableObject, IShape

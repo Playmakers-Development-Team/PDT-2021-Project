@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using GridObjects;
-using Units;
 using UnityEngine;
-using Utility;
 
-namespace Commands.Shapes
+namespace Abilities.Shapes
 {
     public interface IShape
     {
