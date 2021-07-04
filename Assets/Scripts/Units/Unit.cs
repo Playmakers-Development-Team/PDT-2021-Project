@@ -30,9 +30,9 @@ namespace Units
         public Knockback Knockback { get; private set; }
         public TenetType Tenet => data.Tenet;
         //public ValueStat MovementActionPoints => data.movementActionPoints;
-        public ValueStat Speed => data.Speed;
         public ValueStat MovementActionPoints => data.MovementActionPoints;
-        public ModifierStat DealDamageModifier => data.DealDamageModifier;
+        public ValueStat Speed => data.Speed;
+        public ModifierStat Attack => data.DealDamageModifier;
         public List<Ability> Abilities => data.Abilities;
 
         [Obsolete("Use TenetStatuses instead")]
