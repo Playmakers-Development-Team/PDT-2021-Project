@@ -18,8 +18,7 @@ namespace Units
         public ModifierStat takeDamageModifier;
         public ModifierStat takeKnockbackModifier;
         public List<Ability> abilities;
-       
-      
+        
         public void Initialise()
         {
             healthPoints.Reset();
