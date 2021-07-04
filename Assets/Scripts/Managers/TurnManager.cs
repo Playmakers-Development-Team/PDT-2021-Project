@@ -11,6 +11,7 @@ namespace Managers
     public class TurnManager : Manager
     {
         #region Properties and Fields
+        
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
@@ -35,7 +36,8 @@ namespace Managers
 
         #endregion
 
-        #region Manager Override
+        #region Manager Overrides
+        
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -45,8 +47,9 @@ namespace Managers
 
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
-            commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(cmd.Unit)));
+            commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
         }
+        
         #endregion
 
         #region Turn Queue Manipulation
@@ -63,8 +66,8 @@ namespace Managers
             previousTurnQueue = new List<IUnit>();
             UpdateNextTurnQueue();
             currentTurnQueue = new List<IUnit>(nextTurnQueue);
-            if (!(ActingEnemyUnit is null))
             
+            if (!(ActingEnemyUnit is null))
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
@@ -72,7 +75,7 @@ namespace Managers
         
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
-        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// <c>EnemyManager</c>. Calculate the turn order based on speed.
         /// </summary>
         private List<IUnit> CreateTurnQueue()
         {
@@ -86,7 +89,23 @@ namespace Managers
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
         /// </summary>
-        /// <param name="targetIndex">The index of the unit.</param>
+        /// <param name="targetUnit">The unit to remove.</param>
+        /// <exception cref="ArgumentException">If the unit does not exist in the queue.</exception>
+        private void RemoveUnitFromQueue(IUnit targetUnit)
+        {
+            var targetIndex = FindTurnIndexFromCurrentQueue(targetUnit);
+
+            if (targetIndex == -1)
+                throw new ArgumentException($"The unit {targetUnit} does not exist in the queue and could not be removed.");
+            
+            RemoveUnitFromQueue(targetIndex);
+        }
+        
+        /// <summary>
+        /// Remove a unit completely from the current turn queue and future turn queues.
+        /// For situations such as when a unit is killed.
+        /// </summary>
+        /// <param name="targetIndex">The index of the unit to remove.</param>
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         private void RemoveUnitFromQueue(int targetIndex)
         {
@@ -94,8 +113,8 @@ namespace Managers
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
             
             if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
-            
                 CurrentTurnIndex--;
+            
             RecentUnitDeath = currentTurnQueue[targetIndex];
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
@@ -109,7 +128,7 @@ namespace Managers
         private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
         
         /// <summary>
-        /// Adds a new unit to the timeline and setting it to the end of the current turn queue
+        /// Adds a new unit to the timeline and setting it to the end of the current turn queue.
         /// </summary>
         private void AddNewUnitToTimeline(IUnit unit)
         {
@@ -117,7 +136,7 @@ namespace Managers
             timelineNeedsUpdating = true;
         }
         
-         /// <summary>
+        /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
         public void NextTurn()
@@ -147,14 +166,13 @@ namespace Managers
         /// </summary>
         private void NextRound()
         {
-            // TODO might want to call the next round command or something here
             RoundCount++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
             
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
-              //  Debug.Log("YOU WIN!"); // added these debugs for testing timeline
+                // Debug.Log("YOU WIN!");
                 // TODO Player wins. End the encounter somehow, probably inform the GameManager
             }
 
@@ -182,7 +200,7 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <returns>The turn index of the unit or -1 if not found.</returns>
-        public int FindTurnIndexFromCurrentQueue(IUnit unit)  => currentTurnQueue.FindIndex(u => u == unit);
+        public int FindTurnIndexFromCurrentQueue(IUnit unit) => currentTurnQueue.FindIndex(u => u == unit);
         
         /// <summary>
         /// Find the turn index of a unit of the previous turn queue.
@@ -301,6 +319,7 @@ namespace Managers
         #endregion
 
         #region Boolean Functions
+        
         /// <summary>
         /// Check if there are any enemy units in the queue.
         /// </summary>
@@ -333,7 +352,7 @@ namespace Managers
         }
         
         /// <summary>
-        /// Resets the necessary stats of a unit after a round has over
+        /// Resets the necessary stats of all units at the end of a round.
         /// </summary>
         private void ResetUnitStatsAfterRound()
         {
@@ -342,12 +361,9 @@ namespace Managers
                 unit.MovementActionPoints.Reset();
                 unit.Attack.Reset();
                 unit.Health.Defence.Reset();
-        
-          
             }
         }
         
         #endregion
-                
     }
 }

@@ -244,7 +244,6 @@ namespace Units
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
 
-
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;
