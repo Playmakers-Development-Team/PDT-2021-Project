@@ -9,6 +9,9 @@ namespace Units
 {
     public interface IUnit : IDamageable, IKnockbackable
     {
+        GameObject gameObject { get; }
+        Transform transform { get; }
+        
         public string Name { get; set; }
         public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
@@ -17,13 +20,13 @@ namespace Units
         public List<Ability> Abilities { get; }
 
         public Vector2Int Coordinate { get; }
-
-        GameObject gameObject { get; }
         
-        IEnumerable<TenetStatus> TenetStatusEffects { get; }
-
-        Type GetDataType();
+        [Obsolete("Use TenetStatuses instead")]
+        ICollection<TenetStatus> TenetStatusEffect { get; }
+        ICollection<TenetStatus> TenetStatuses { get; }
         
+        bool IsSelected { get; }
+
         void TakeDamage(int amount);
 
         void TakeKnockback(int amount);
@@ -52,8 +55,6 @@ namespace Units
         bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus);
         
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus);
-
-        bool IsSelected();
 
         string RandomizeName();
     }

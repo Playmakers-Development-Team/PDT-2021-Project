@@ -16,41 +16,37 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text healthText;
+        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        [SerializeField] private float damageTextLifetime = 1.0f;
 
         public string Name
         {
             get => data.name;
             set => data.name = value;
         }
-
+        
+        public Health Health { get; private set; }
+        public Knockback Knockback { get; private set; }
         public TenetType Tenet => data.tenet;
         public ValueStat MovementActionPoints => data.movementActionPoints;
         public ValueStat Speed => data.speed;
         public ModifierStat Attack => data.dealDamageModifier;
         public List<Ability> Abilities => data.abilities;
 
+        [Obsolete("Use TenetStatuses instead")]
+        public ICollection<TenetStatus> TenetStatusEffect => TenetStatuses;
+        public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
+        
         public static Type DataType => typeof(T);
 
-        public Type GetDataType() => DataType;
-
-        public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
-
-        public IEnumerable<TenetStatus> TenetStatusEffects =>
-            tenetStatusEffectSlots.AsEnumerable();
-
-        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
-            new LinkedList<TenetStatus>();
+        public bool IsSelected => playerManager.SelectedUnit == this;
 
         private const int maxTenetStatusEffectCount = 2;
-
-        public Health Health { get; private set; }
-        public Knockback Knockback { get; private set; }
-
-        [SerializeField] private TMP_Text nameText;
-        [SerializeField] private TMP_Text healthText;
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        [SerializeField] private float damageTextLifetime = 1.0f;
-
+        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
+            new LinkedList<TenetStatus>();
+        
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private GridManager gridManager;
@@ -67,23 +63,35 @@ namespace Units
             // TODO Speed temporarily random for now until proper turn manipulation is done.
             Speed.Value += Random.Range(0, 101);
 
+            #region GetManagers
+
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
 
+            #endregion
+
+            #region ListenCommands
+
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+
+            #endregion
 
             if (nameText)
                 nameText.text = Name;
             
             if (healthText)
+            {
                 healthText.text =
                     (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            }
         }
 
         protected virtual void Update() {}
 
+        #region ValueChanging
+        
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
         public void TakeAttack(int amount) => Attack.Adder += amount;
@@ -100,6 +108,8 @@ namespace Units
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
+        
+        #endregion
 
         #region TenetStatusEffect
 
@@ -119,7 +129,7 @@ namespace Units
             else
             {
                 // When we are already utilizing all the slots
-                if (TenetStatusEffectCount == maxTenetStatusEffectCount)
+                if (TenetStatuses.Count == maxTenetStatusEffectCount)
                 {
                     // Remove the oldest status effect to make space for the new status effect
                     tenetStatusEffectSlots.RemoveFirst();
@@ -186,10 +196,8 @@ namespace Units
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
 
-        public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
-
         private bool TryGetTenetStatusNode(TenetType tenetType,
-                                                 out LinkedListNode<TenetStatus> foundNode)
+                                           out LinkedListNode<TenetStatus> foundNode)
         {
             LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
 
@@ -209,6 +217,8 @@ namespace Units
         }
         
         #endregion
+
+        #region UnitDeath
 
         /// <summary>
         /// Makes it easier to debug with the command debugger window.
@@ -230,7 +240,6 @@ namespace Units
             gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
-            Debug.Log($"This unit was cringe and died");
 
             commandManager.ExecuteCommand(new KillingUnitCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
@@ -254,7 +263,11 @@ namespace Units
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
+        
+        #endregion
 
+        #region Scene
+        
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;
@@ -265,94 +278,24 @@ namespace Units
             Invoke("HideDamageText", damageTextLifetime);
         }
 
-        private void HideDamageText()
-        {
-            damageTextCanvas.enabled = false;
-        }
+        private void HideDamageText() => damageTextCanvas.enabled = false;
+
+        #endregion
         
         #region RandomizeNames
         
         public string RandomizeName()
         {
-            string newname = "";
-            int random = UnityEngine.Random.Range(1,25);
-
-            switch (random)
+            string[] names =
             {
-                case 1:
-                    newname="Agid";
-                    break;
-                case 2:
-                    newname="Jack";
-                    break;
-                case 3 :
-                    newname="Francisco";
-                    break;
-                case 4:
-                    newname="Kyle";
-                    break;
-                case 5:
-                    newname="Jordan";
-                    break;
-                case 6:
-                    newname="Sam";
-                    break;
-                case 7:
-                    newname="Jake";
-                    break;
-                case 8:
-                    newname="William";
-                    break;
-                case 9:
-                    newname="Beatrice";
-                    break;
-                case 10:
-                    newname="Lachlan";
-                    break;
-                case 11:
-                    newname="Hugo";
-                    break;
-                case 12:
-                    newname="Habib";
-                    break;
-                case 13:
-                    newname="Christa";
-                    break;
-                case 14:
-                    newname="Roy";
-                    break;
-                case 15:
-                    newname="Nick";
-                    break;
-                case 16:
-                    newname="Eddie";
-                    break;
-                case 17:
-                    newname="Vivian";
-                    break;
-                case 18:
-                    newname="Ethan";
-                    break;
-                case 19:
-                    newname="Jaiden";
-                    break;
-                case 20:
-                    newname="Jaime";
-                    break;
-                case 21:
-                    newname="Leon";
-                    break;
-                case 22:
-                    newname="Groovy Bot";
-                    break;
-                case 23:
-                    newname="Clickup Bot";
-                    break;
-                case 24:
-                    newname = "Github-Bot";
-                    break;
-            }
-            return newname;
+                "Agid", "Jack", "Francisco", "Kyle", "Jordan", "Sam", "Jake", "William",
+                "Beatrice", "Lachlan", "Hugo", "Habib", "Christa", "Roy", "Nick", "Eddie",
+                "Vivian", "Ethan", "Jaiden", "Jamie", "Leon", "Groovy Bot", "Clickup Bot",
+                "Github-Bot"
+            };
+            
+            int randomIndex = UnityEngine.Random.Range(0, names.Length - 1);
+            return names[randomIndex];
         }
         
         #endregion

@@ -64,7 +64,7 @@ namespace UI
             defence.text = "Defence: " + selectedUnit.Health.Defence.Value * -1;
             speed.text = "Speed: " + selectedUnit.Speed.Value;
             
-            string tenetText = String.Join("\n",selectedUnit.TenetStatusEffects.Select(t => t.TenetType+": " + t.StackCount) );
+            string tenetText = String.Join("\n",selectedUnit.TenetStatuses.Select(t => t.TenetType+": " + t.StackCount) );
             tenetUI.text = tenetText;
         }
     }
