@@ -4,9 +4,5 @@ using UnityEngine;
 namespace Units
 {
     [Serializable]
-    public class PlayerUnitData : UnitData
-    {
-
-        
-    }
+    public class PlayerUnitData : UnitData {}
 }

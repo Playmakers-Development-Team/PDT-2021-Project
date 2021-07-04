@@ -19,8 +19,8 @@ namespace Units
 
         public string Name
         {
-            get => data.name;
-            set => data.name = value;
+            get => data.unitName;
+            set => data.unitName = value;
         }
 
         public TenetType Tenet => data.tenet;
@@ -51,9 +51,7 @@ namespace Units
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
 
-        private TurnManager turnManager;
         private PlayerManager playerManager;
-        private GridManager gridManager;
         private CommandManager commandManager;
 
         protected override void Start()
@@ -66,7 +64,6 @@ namespace Units
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(0, 101);
 
-            turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -80,14 +77,6 @@ namespace Units
             if (healthText)
                 healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
         }
-
-        // TODO: Used for testing, can eventually be removed
-        private void Update()
-        {
-
-        }
-        
-        
         
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
@@ -259,7 +248,8 @@ namespace Units
             damageTextCanvas.enabled = false;
         }
         
-          #region RandomizeNames
+        #region RandomizeNames
+        
         public string RandomizeName()
         {
             string newname = "";
@@ -344,7 +334,5 @@ namespace Units
         }
         
         #endregion
-        
-        
     }
 }
