@@ -49,7 +49,6 @@ namespace Units
         
         private TurnManager turnManager;
         private PlayerManager playerManager;
-        private GridManager gridManager;
         private CommandManager commandManager;
 
         protected override void Start()
