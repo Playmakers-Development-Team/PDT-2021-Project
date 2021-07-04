@@ -4,8 +4,10 @@ using System.Linq;
 using GridObjects;
 using StatusEffects;
 using Abilities;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
+using Units.Commands;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,99 +16,133 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
-        public TenetType Tenet => data.Tenet;
-        //public ValueStat MovementActionPoints => data.movementActionPoints;
-        public ValueStat Speed => data.Speed;
-        public ModifierStat DealDamageModifier => data.DealDamageModifier;
-        public List<Ability> Abilities => data.Abilities;
-
-        public static Type DataType => typeof(T);
-
-        public Type GetDataType() => DataType;
-
-        public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
-
-        public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
-            tenetStatusEffectSlots.AsEnumerable();
-
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
-            new LinkedList<TenetStatusEffect>();
-
-        private const int maxTenetStatusEffectCount = 2;
-
-        public Health Health { get; private set; }
-        public Knockback Knockback { get; private set; }
-
+        [SerializeField] private TMP_Text nameText;
+        [SerializeField] private TMP_Text healthText;
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
 
+        public string Name
+        {
+            get => data.name;
+            set => data.name = value;
+        }
+        public Health Health { get; private set; }
+        public Knockback Knockback { get; private set; }
+        public TenetType Tenet => data.Tenet;
+        //public ValueStat MovementActionPoints => data.movementActionPoints;
+        public ValueStat Speed => data.Speed;
+        public ValueStat MovementActionPoints => data.MovementActionPoints;
+        public ModifierStat DealDamageModifier => data.DealDamageModifier;
+        public List<Ability> Abilities => data.Abilities;
+
+        [Obsolete("Use TenetStatuses instead")]
+        public ICollection<TenetStatus> TenetStatusEffect => TenetStatuses;
+        public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
+        
+        public static Type DataType => typeof(T);
+
+        public bool IsSelected => playerManager.SelectedUnit == this;
+
+        private const int maxTenetStatusEffectCount = 2;
+        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
+            new LinkedList<TenetStatus>();
+        
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private GridManager gridManager;
+        private CommandManager commandManager;
 
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
+            Health = new Health(new KillUnitCommand(this), data.HealthPoints,
+                data.TakeDamageModifier);
 
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.HealthPoints, data.TakeDamageModifier);
+            // TODO Speed temporarily random for now until proper turn manipulation is done.
+            Speed.Value += Random.Range(0, 101);
 
-            // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(10, 50);
+            #region GetManagers
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             gridManager = ManagerLocator.Get<GridManager>();
-        }
-        /* TESTING
-        void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.T) && Random.Range(0,2) == 1) TakeDamage(10);
-        }*/
-        public void TakeDefence(int amount) => DealDamageModifier.Adder -= amount;
+        
+            commandManager = ManagerLocator.Get<CommandManager>();
 
-        public void TakeAttack(int amount) => Health.TakeDamageModifier.Adder += amount;
+            #endregion
+
+            #region ListenCommands
+
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+
+            #endregion
+
+            if (nameText)
+                nameText.text = Name;
+            
+            if (healthText)
+            {
+                healthText.text =
+                    (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            }
+        }
+
+        protected virtual void Update() {}
+
+        #region ValueChanging
+        
+        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
+
+        public void TakeAttack(int amount) => Attack.Adder += amount;
         
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
             
             SpawnDamageText(damageTaken);
+            
+            if (healthText)
+                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
+        
+        #endregion
 
-        public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
+        #region TenetStatusEffect
+
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {
-            TenetStatusEffect statusEffect = new TenetStatusEffect(tenetType, stackCount);
+            TenetStatus status = new TenetStatus(tenetType, stackCount);
 
-            if (statusEffect.IsEmpty)
+            if (status.IsEmpty)
                 return;
 
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusEffectNode(statusEffect.TenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode))
+            if (TryGetTenetStatusNode(status.TenetType,
+                out LinkedListNode<TenetStatus> foundNode))
             {
-                foundNode.Value += statusEffect;
+                foundNode.Value += status;
             }
             else
             {
                 // When we are already utilizing all the slots
-                if (TenetStatusEffectCount == maxTenetStatusEffectCount)
+                if (TenetStatuses.Count == maxTenetStatusEffectCount)
                 {
                     // Remove the oldest status effect to make space for the new status effect
                     tenetStatusEffectSlots.RemoveFirst();
                 }
 
-                tenetStatusEffectSlots.AddLast(statusEffect);
+                tenetStatusEffectSlots.AddLast(status);
             }
         }
 
-        public bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue)
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue)
         {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
+            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
@@ -125,41 +161,46 @@ namespace Units
             return false;
         }
 
-        public void ClearAllTenetStatusEffects()
-        {
-            tenetStatusEffectSlots.Clear();
-        }
+        public void ClearAllTenetStatus() => tenetStatusEffectSlots.Clear();
+
+        [Obsolete("Use TryGetTenetStatus instead")]
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TryGetTenetStatusEffect(tenetType, out tenetStatus);
 
         public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatusEffect tenetStatusEffect)
+                                            out TenetStatus tenetStatus)
         {
-            bool isFound = TryGetTenetStatusEffectNode(tenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode);
-            tenetStatusEffect = isFound ? foundNode.Value : default;
+            bool isFound = TryGetTenetStatusNode(tenetType,
+                out LinkedListNode<TenetStatus> foundNode);
+            tenetStatus = isFound ? foundNode.Value : default;
             return isFound;
         }
 
-        public int GetTenetStatusEffectCount(TenetType tenetType)
+        [Obsolete("Use GetTenetStatus instead")]
+        public int GetTenetStatusEffectCount(TenetType tenetType) =>
+            GetTenetStatusCount(tenetType);
+
+        public int GetTenetStatusCount(TenetType tenetType)
         {
-            return HasTenetStatusEffect(tenetType)
+            return HasTenetStatus(tenetType)
                 ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
                 : 0;
         }
 
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
+        [Obsolete("Use HasTenetStatus instead")]
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
+            HasTenetStatus(tenetType, minimumStackCount);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1)
         {
             return tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
         }
 
-        public bool IsActing() => turnManager.CurrentUnit == (IUnit) this;
-
-        public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
-
-        private bool TryGetTenetStatusEffectNode(TenetType tenetType,
-                                                 out LinkedListNode<TenetStatusEffect> foundNode)
+        private bool TryGetTenetStatusNode(TenetType tenetType,
+                                           out LinkedListNode<TenetStatus> foundNode)
         {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
+            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
 
             while (node != null)
             {
@@ -175,15 +216,34 @@ namespace Units
             foundNode = null;
             return false;
         }
+        
+        #endregion
 
-        private void KillUnit()
+        #region UnitDeath
+
+        /// <summary>
+        /// Makes it easier to debug with the command debugger window.
+        /// </summary>
+        private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
-            playerManager.WaitForDeath = false;
-            Debug.Log($"This unit was cringe and died");
+            if (!ReferenceEquals(killUnitCommand.Unit, this))
+                return;
             
-            gridManager.RemoveGridObject(Coordinate, this);
+            // Since we're about to remove the object, stop listening to the command
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            KillUnit();
+        }
 
-            ManagerLocator.Get<TurnManager>().RemoveUnitFromQueue(this);
+        private async void KillUnit()
+        {
+            playerManager.WaitForDeath = true;
+            Debug.Log($"Unit Killed: {name} : {Coordinate}");
+            gridManager.RemoveGridObject(Coordinate, this);
+            await UniTask.Delay(playerManager.DeathDelay);
+            playerManager.WaitForDeath = false;
+
+            commandManager.ExecuteCommand(new KillingUnitCommand(this));
+            gridManager.RemoveGridObject(Coordinate, this);
 
             switch (this)
             {
@@ -194,28 +254,51 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + this.gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
                                    " as it is an unidentified unit");
                     break;
             }
-            
+
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
+            
+            commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
+        
+        #endregion
 
+        #region Scene
+        
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;
-
+            
             damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
                 damageAmount.ToString();
-
+            
             Invoke("HideDamageText", damageTextLifetime);
         }
 
-        private void HideDamageText()
+        private void HideDamageText() => damageTextCanvas.enabled = false;
+
+        #endregion
+        
+        #region RandomizeNames
+        
+        public string RandomizeName()
         {
-            damageTextCanvas.enabled = false;
+            string[] names =
+            {
+                "Agid", "Jack", "Francisco", "Kyle", "Jordan", "Sam", "Jake", "William",
+                "Beatrice", "Lachlan", "Hugo", "Habib", "Christa", "Roy", "Nick", "Eddie",
+                "Vivian", "Ethan", "Jaiden", "Jamie", "Leon", "Groovy Bot", "Clickup Bot",
+                "Github-Bot"
+            };
+            
+            int randomIndex = UnityEngine.Random.Range(0, names.Length - 1);
+            return names[randomIndex];
         }
+        
+        #endregion
     }
 }

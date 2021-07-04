@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
 using GridObjects;
@@ -8,6 +9,7 @@ namespace Units
 {
     public abstract class UnitData
     {
+        public string name;
         private TenetType tenet;
         private ValueStat healthPoints;
         private ValueStat movementActionPoints;

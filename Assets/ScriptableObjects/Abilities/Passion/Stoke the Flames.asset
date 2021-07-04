@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Stoke the Flames
+  m_EditorClassIdentifier: 
+  description: "Targets gains 2 Attack\n\u21AF Targets may Spend Passion to gain
+    4 Attack\n\u21AF Targets with Pride may gain 2 Attack"
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
+  targetEffects:
+  - name: Default, 2 Attack
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 2
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs: []
+  - name: 4 Attack spend Passion
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 4
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: Target Spend Passion
+      affectType: 1
+      costType: 2
+      tenetType: 2
+  - name: 2 Attack with Pride
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 2
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: Target With Pride
+      affectType: 1
+      costType: 0
+      tenetType: 0
+  userEffects: []

@@ -9,7 +9,8 @@ namespace UI
     {
         [SerializeField] private Image abilityImg;
         [SerializeField] private TextMeshProUGUI abilityName;
-        
+        [SerializeField] private TextMeshProUGUI abilityDescription;
+
         public Ability Ability { get; private set; }
 
         public void SetAbility(Ability ability)
@@ -17,6 +18,7 @@ namespace UI
             Ability = ability;
             gameObject.SetActive(ability != null);
             SetAbilityText(ability.name);
+            abilityDescription.text = ability.Description;
         }
 
         private void SetAbilityText(string abilityName)
