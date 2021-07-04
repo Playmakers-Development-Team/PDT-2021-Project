@@ -15,11 +15,11 @@ namespace Units
     {
         [SerializeField] protected T data;
         
-        public TenetType Tenet => data.tenet;
+        public TenetType Tenet => data.Tenet;
         //public ValueStat MovementActionPoints => data.movementActionPoints;
-        public ValueStat Speed => data.speed;
-        public ModifierStat DealDamageModifier => data.dealDamageModifier;
-        public List<Ability> Abilities => data.abilities;
+        public ValueStat Speed => data.Speed;
+        public ModifierStat DealDamageModifier => data.DealDamageModifier;
+        public List<Ability> Abilities => data.Abilities;
 
         public static Type DataType => typeof(T);
 
@@ -51,7 +51,7 @@ namespace Units
 
             data.Initialise();
 
-            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.healthPoints, data.takeDamageModifier);
+            Health = new Health(delegate{playerManager.WaitForDeath = true; Invoke("KillUnit",((float)playerManager.DeathDelay)/1000);}, data.HealthPoints, data.TakeDamageModifier);
 
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(10, 50);
