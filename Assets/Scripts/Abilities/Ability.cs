@@ -15,8 +15,7 @@ namespace Abilities
     {
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
-        [SerializeField] private int knockback;
-        [SerializeField] private bool onlyHitUnits = true;
+        // [SerializeField] private int knockback;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
@@ -60,8 +59,8 @@ namespace Abilities
                         targetUnit.TakeDamage(Mathf.RoundToInt(user.Attack.Modify(damage)));
                 
                     // Check if knockback is supported first, because currently it sometimes doesn't
-                    if (targetUnit.Knockback != null)
-                        targetUnit.TakeKnockback(knockback);
+                    //if (targetUnit.Knockback != null)
+                        //targetUnit.TakeKnockback(knockback);
                     
                     foreach (Effect effect in effects)
                     {
