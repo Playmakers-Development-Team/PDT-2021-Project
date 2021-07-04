@@ -152,23 +152,24 @@ namespace Managers
             
             GridManager gridManager = ManagerLocator.Get<GridManager>();
 
-            Vector2Int movementDir = Vector2Int.zero;
-
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
-            Vector2Int chosenTargetTile = Vector2Int.zero; // PLACEHOLDER INITIALISATION VALUE
 
             List<Vector2Int> reachableTiles =
                 gridManager.GetAllReachableTiles(enemyUnit.Coordinate, movementPoints);
             
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
-            // chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
-            // movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
+            // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
+            // Vector2Int movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
             // return movementDir;
             
-            chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate);
+            Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate);
+            
             // If the enemy's current co-ordinate is closer that the chosenTargetTile
             // then keep the enemy stationary
+            Vector2Int movementDir = Vector2Int.zero;
+            //TODO: THIS COMING TUESDAY ADD FUNCTIONALITY FROM ABOVE COMMENTS
+            
             movementDir = chosenTargetTile - enemyUnit.Coordinate;
             
             Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move in the direction " + movementDir + " towards "+targetUnit+" at " + targetUnit.Coordinate);
