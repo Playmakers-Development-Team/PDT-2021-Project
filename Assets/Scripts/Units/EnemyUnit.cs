@@ -12,8 +12,10 @@ namespace Units
             commandQueue.Add(command);
         }
         
-        public void ExecuteQueue () {
-            foreach (var command in commandQueue) {
+        public void ExecuteQueue() 
+        {
+            foreach (var command in commandQueue) 
+            {
                 command.Execute();
             }
 

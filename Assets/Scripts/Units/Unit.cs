@@ -225,12 +225,12 @@ namespace Units
         /// </summary>
         private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
-            if (killUnitCommand.Unit == this)
-            {
-                // Since we're about to remove the object, stop listening to the command
-                commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
-                KillUnit();
-            }
+            if (!ReferenceEquals(killUnitCommand.Unit, this))
+                return;
+            
+            // Since we're about to remove the object, stop listening to the command
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            KillUnit();
         }
 
         private async void KillUnit()
