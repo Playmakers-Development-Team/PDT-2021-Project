@@ -32,8 +32,13 @@ namespace Game.Map
 
                 encounterButton.GetComponentInChildren<Text>().text = encounterNode.ToString();
 
-                // TODO: Add listener to encounterButton to change scene
+                encounterButton.GetComponent<Button>().onClick.AddListener(() => LoadEncounter(encounterNode));
             }
+        }
+
+        private void LoadEncounter(EncounterNode encounterNode)
+        {
+            gameManager.ToEncounter(encounterNode.EncounterData);
         }
     }
 }

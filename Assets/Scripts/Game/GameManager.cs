@@ -1,5 +1,7 @@
 using Background;
+using Game.Map;
 using Managers;
+using UnityEngine.SceneManagement;
 
 namespace Game
 {
@@ -7,6 +9,8 @@ namespace Game
     {
         private CommandManager commandManager;
         private BackgroundManager backgroundManager;
+
+        public EncounterData CurrentEncounterData { get; set; }
         
         public override void ManagerStart()
         {
@@ -14,6 +18,26 @@ namespace Game
             backgroundManager = ManagerLocator.Get<BackgroundManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
+        }
+
+        // TODO: Replace with a scene transition manager
+        private void ChangeScene(int buildIndex)
+        {
+            SceneManager.LoadScene(buildIndex);
+        }
+
+        public void ToEncounter(EncounterData encounterData)
+        {
+            CurrentEncounterData = encounterData;
+            
+            // TODO: Magic number
+            ChangeScene(1);
+        }
+
+        public void ToMap()
+        {
+            // TODO: Magic number
+            ChangeScene(0);
         }
     }
 }

@@ -9,7 +9,9 @@ namespace Game.Map
     {
         [SerializeField] private EncounterData encounterData;
         [SerializeField] private List<EncounterData> connectedEncounters;
-        
+
+        public EncounterData EncounterData => encounterData;
+
         private EncounterNodeState state = EncounterNodeState.Locked;
         [NonSerialized] private List<EncounterNode> connectedNodes = new List<EncounterNode>();
 

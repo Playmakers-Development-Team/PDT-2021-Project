@@ -12,8 +12,9 @@ public class EncounterController : MonoBehaviour
     private void Start()
     {
         gameManager = ManagerLocator.Get<GameManager>();
-        
-        // TODO: Get EncounterData from the GameManager
+
+        if (gameManager.CurrentEncounterData != null)
+            encounterData = gameManager.CurrentEncounterData;
 
         Instantiate(encounterData.encounterPrefab);
     }
