@@ -357,6 +357,7 @@ namespace Managers
             
             return null;
         }
+        
 
         /// <summary>
         /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
@@ -381,6 +382,25 @@ namespace Managers
         /// True if there is at least one <c>EnemyUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
         private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
+
+        /// <summary>
+        /// Checks if the current player unit can do the turn phase
+        /// </summary>
+        /// <returns></returns>
+        public bool IsTurnPhase() => TurnManipulationPhaseIndex >= PhaseIndex;
+        
+        /// <summary>
+        /// Checks if the current player unit can do the movement phase
+        /// </summary>
+        /// <returns></returns>
+        public bool IsMovementPhase()  => MovementPhaseIndex >= PhaseIndex;
+        
+        /// <summary>
+        /// Checks if the current player unit can do the ability phase
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAbilityPhase()  => AbilityPhaseIndex >= PhaseIndex;
+        
         
         /// <summary>
         /// Check if there are any player units in the queue.
