@@ -62,7 +62,7 @@ namespace UI
             }
 
             // Unit name text
-            nameText.text = selectedUnit.gameObject.name;
+            nameText.text = selectedUnit.Name;
             
             // Render image
             renderImage.sprite = selectedUnit.Render;

@@ -62,7 +62,7 @@ namespace UI
                 GameObject obj = Instantiate(portraitPrefab, scrollRect.content);
                 TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
                 
-                portrait.Assign(unit.Render);
+                portrait.Assign(unit);
                 portraits.Add(portrait);
             }
         }

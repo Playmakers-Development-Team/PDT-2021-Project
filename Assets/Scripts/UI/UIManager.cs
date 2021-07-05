@@ -22,7 +22,7 @@ namespace UI
         public readonly Event<Ability> selectedAbility = new Event<Ability>();
         public readonly Event deselectedAbility = new Event();
         
-        public readonly Event rotatedAbility = new Event();
+        public readonly Event<Vector2> rotatedAbility = new Event<Vector2>();
         
         public readonly Event confirmedAbility = new Event();
 
@@ -85,12 +85,13 @@ namespace UI
             UpdateGrid();
         }
 
-        private void OnRotatedAbility()
+        private void OnRotatedAbility(Vector2 mouseWorld)
         {
             if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
 
-            abilityDirection = Quaternion.AngleAxis(90f, Vector3.back) * abilityDirection;
+            abilityDirection = (mouseWorld - gridManager.ConvertCoordinateToPosition(selectedUnit.Coordinate + Vector2Int.one)).normalized;
+            gridSpacesSelected.Invoke(new GridSelection(new[] {selectedUnit.Coordinate}, GridSelectionType.Invalid));
             UpdateGrid();
         }
 
