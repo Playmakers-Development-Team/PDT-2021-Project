@@ -110,7 +110,7 @@ namespace Managers
                     UpdateAbilityUI(actingPlayerUnit);
                 }
                 
-                canCastAbility = true;
+               
             });
 
             commandManager.ListenCommand<EndTurnCommand>(cmd =>
@@ -268,6 +268,13 @@ namespace Managers
                 if (ManagerLocator.Get<PlayerManager>().WaitForDeath) return; //can be more efficient
                 if (actingPlayerUnit == null)
                     return;
+                
+                if (turnManager.AbilityPhaseIndex < turnManager.PhaseIndex )
+                {
+                    //TODO DELETE DEBUG
+                    Debug.Log("Unable to do ability, this phase has been completed");
+                    return;
+                }
 
                 if (isUnselected)
                 {
@@ -315,6 +322,14 @@ namespace Managers
                 if (turnManager.ActingUnit == null || turnManager.ActingUnit is EnemyUnit)
                     return;
                 
+                if (turnManager.MovementPhaseIndex < turnManager.PhaseIndex )
+                {
+                    //TODO DELETE DEBUG
+                    Debug.Log("Unable to do Movement phase, it has been completed");
+                    return;
+                }
+               
+                
                 nextClickWillMove = true;
                 Debug.Log("Next click will move.");
                 
@@ -330,6 +345,7 @@ namespace Managers
                     turnManager.ActingUnit.Coordinate,
                     (int) turnManager.ActingUnit.MovementActionPoints.Value));
             }
+            
 
             if (Input.GetKeyDown(KeyCode.Escape))
                 audioPanel.SetActive(true);
@@ -339,6 +355,12 @@ namespace Managers
                 if (nextClickWillMove)
                 {
                     nextClickWillMove = false;
+                    
+                    if (turnManager.MovementPhaseIndex > turnManager.PhaseIndex)
+                        turnManager.PhaseIndex = turnManager.MovementPhaseIndex + 1;
+                    else
+                        turnManager.PhaseIndex++;
+                    
                     MoveUnit();
                     selectedMoveRange.Clear();
                     UpdateMoveRange(selectedMoveRange);
@@ -414,19 +436,15 @@ namespace Managers
                 Debug.Log("Target tile out of range. Unit was not moved.");
                 return;
             }
+
+          
             
             IUnit playerUnit = turnManager.ActingPlayerUnit;
             
-            //playerUnit.MovementActionPoints.Value -= selectedMoveRange.Count;
-          
             Debug.Log(playerUnit.Coordinate + " to " + gridPos + " selected");
             List<GridObject> gridUnit = gridManager.GetGridObjectsByCoordinate(playerUnit.Coordinate);
             
-            // playerUnit.MovementActionPoints.Value = Math.Min(0,
-            //     playerUnit.MovementActionPoints.Value -=
-            //         ManhattanDistance.GetManhattanDistance(playerUnit.Coordinate, gridPos));
-            
-            var moveCommand = new StartMoveCommand(playerUnit, gridPos);
+                var moveCommand = new StartMoveCommand(playerUnit, gridPos);
             commandManager.ExecuteCommand(moveCommand);
         }
 
@@ -441,13 +459,15 @@ namespace Managers
         {
             if (actingPlayerUnit == null || actingPlayerUnit.CurrentlySelectedAbility == null)
                 return;
+            
+           
 
             Vector2 mouseVector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) -
                                    actingPlayerUnit.transform.position);
             
             Vector2 castVector = Quaternion.AngleAxis(-45f, Vector3.forward) * mouseVector;
 
-            if (Input.GetKeyDown(KeyCode.A) && canCastAbility)
+            if (Input.GetKeyDown(KeyCode.A))
             {
                 isCastingAbility = !isCastingAbility;
             }
@@ -459,8 +479,16 @@ namespace Managers
 
             if (isCastingAbility && Input.GetMouseButtonDown(1))
             {
+                
                 isCastingAbility = false;
                 canCastAbility = false;
+                
+                
+                if (turnManager.AbilityPhaseIndex > turnManager.PhaseIndex)
+                    turnManager.PhaseIndex = turnManager.AbilityPhaseIndex + 1;
+                else
+                    turnManager.PhaseIndex++;
+                
                 commandManager.ExecuteCommand(new AbilityCommand(actingPlayerUnit, castVector, actingPlayerUnit.CurrentlySelectedAbility));
                 uiManager.ClearAbilityHighlight();
                 ClearAbilityUI();

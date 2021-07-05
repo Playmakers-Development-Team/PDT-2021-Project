@@ -12,9 +12,19 @@ namespace Managers
     {
         #region Properties and Fields
         
+        public enum TurnPhases
+        {
+            TurnManipulation, 
+            Movement, 
+            Ability
+        };
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
+        public int TurnManipulationPhaseIndex { get; private set; }
+        public int MovementPhaseIndex { get; private set; }
+        public int AbilityPhaseIndex { get; private set; }
+        public int PhaseIndex { get; set; }
         public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
@@ -48,6 +58,7 @@ namespace Managers
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
+          
         }
         
         #endregion
@@ -58,8 +69,26 @@ namespace Managers
         /// Create a turn queue based on existing player and enemy units.
         /// Should be called after the level is loaded and all the units are ready.
         /// </summary>
-        public void SetupTurnQueue()
+        public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
+
+            for (int i = 0; i < 3; i++)
+            {
+                switch (newTurnPhases[i].ToString())
+                {
+                    case "TurnManipulation":
+                        TurnManipulationPhaseIndex = i;
+                        break;
+                    case "Movement":
+                        MovementPhaseIndex = i;
+                        break;
+                    case "Ability":
+                        AbilityPhaseIndex = i;
+                        break;
+                }
+            }
+
+            PhaseIndex = 0;
             RoundCount = 0;
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
@@ -72,6 +101,9 @@ namespace Managers
             
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
+        
+        
+    
         
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
@@ -153,9 +185,11 @@ namespace Managers
         private void StartTurn()
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
-            
+
             if (!(ActingEnemyUnit is null))
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
+            else
+                PhaseIndex = 0;
             
             SelectCurrentUnit();
         }
@@ -274,10 +308,26 @@ namespace Managers
         /// <param name="startIndex">Shift everything starting from <c>startIndex</c>.
         /// The Unit in startIndex will not be shifted.</param>
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
-        private void ShiftTurnQueue(int startIndex, int endIndex)
+        public void ShiftTurnQueue(int startIndex, int endIndex)
         {
             if (startIndex == endIndex)
                 return;
+            
+            if (TurnManipulationPhaseIndex < PhaseIndex )
+            {
+                //TODO DELETE DEBUG
+                Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
+                return;
+            }
+
+            if (TurnManipulationPhaseIndex > PhaseIndex)
+                PhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                PhaseIndex++;
+            
+            //TODO DELETE DEBUG AND RETURN STATEMENT (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
+            Debug.Log("Turn Manipulation started");
+            return;
             
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
