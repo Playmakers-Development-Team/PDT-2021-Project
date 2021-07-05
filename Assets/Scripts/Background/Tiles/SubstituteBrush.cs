@@ -33,7 +33,17 @@ namespace Background.Tiles
             if (!current)
                 return;
 
-            TileReference tileReference = references.Find(reference => reference.HasTile(current as Tile));
+            TileReference tileReference = references.Find(reference => reference.HasTile((Tile) current));
+
+            if (tileReference == null)
+            {
+                Debug.LogError(
+                    "Attempting to substitute a tile which is not part of a tile reference." +
+                    "Make sure the tile palette contains the tile processed by the tile creator."
+                    );
+                return;
+            }
+            
             Tile replacement = tileReference.GetTile(type);
             
             if (replacement)
