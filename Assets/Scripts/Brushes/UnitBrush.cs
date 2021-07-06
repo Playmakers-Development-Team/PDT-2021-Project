@@ -110,14 +110,8 @@ namespace Brushes
             curIndex = GetIndexFromUnits();
 
             foreach (var objectInCell in GetObjectsInCell(grid, brushTarget.transform, position))
-            {
-                if (EraseAnyObject ||
-                    PrefabUtility.GetCorrespondingObjectFromSource(objectInCell) ==
-                    m_Prefabs[curIndex])
-                {
-                    Undo.DestroyObjectImmediate(objectInCell);
-                }
-            }
+                Undo.DestroyObjectImmediate(objectInCell);
+            
         }
 
         /// <summary>

@@ -469,7 +469,7 @@ namespace Managers
                 actingPlayerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Casting);
 
                 float flag = 0;
-                while (flag < actingPlayerUnit.animator.GetCurrentAnimatorStateInfo(0).length)
+                while (flag < actingPlayerUnit.UnitAnimator.GetCurrentAnimatorStateInfo(0).length)
                 {
                     flag += Time.deltaTime;
                     await UniTask.Yield();
