@@ -62,7 +62,7 @@ namespace Abilities.Editor
                 
                 if (costsProperty.arraySize != 0)
                 {
-                    nameProperty.stringValue += " ";
+                    nameProperty.stringValue += " if ";
                     
                     for (int i = 0; i < costsProperty.arraySize; i++)
                     {
@@ -70,32 +70,9 @@ namespace Abilities.Editor
                             nameProperty.stringValue += ", ";
                         
                         SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
-                        string affectString = ((AffectType) costProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
-                        string costName = $"{affectString} ";
-
-                        // Cost type
-                        switch (costProperty.FindPropertyRelative("costType").enumValueIndex)
-                        {
-                            case 0:
-                                nameProperty.stringValue += "with ";
-                                costName += "With ";
-                                break;
-                            case 1:
-                                nameProperty.stringValue += "per ";
-                                costName += "Per ";
-                                break;
-                            case 2:
-                                nameProperty.stringValue += "spend ";
-                                costName += "Spend ";
-                                break;
-                        }
-
-                        // Tenet
-                        string tenet = ((TenetType) costProperty.FindPropertyRelative("tenetType").enumValueIndex).ToString();
-                        nameProperty.stringValue += tenet;
-                        costName += tenet;
-
+                        string costName = GetCostDisplayName(costProperty);
                         costProperty.FindPropertyRelative("name").stringValue = costName;
+                        nameProperty.stringValue += costName;
                         costProperty.serializedObject.ApplyModifiedProperties();
                     }
                 }
@@ -104,9 +81,48 @@ namespace Abilities.Editor
             }
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        private string GetCostDisplayName(SerializedProperty costProperty)
         {
-            return EditorGUI.GetPropertyHeight(property);
+            string affectString = ((AffectType) costProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
+            string costName = $"{affectString} ";
+            SerializedProperty tenetCosts = costProperty.FindPropertyRelative("tenetCosts");
+
+            for (int i = 0; i < tenetCosts.arraySize; i++)
+            {
+                string tenetCostName = string.Empty;
+                SerializedProperty tenetCost = tenetCosts.GetArrayElementAtIndex(i);
+                SerializedProperty tenetCostNameProperty = tenetCost.FindPropertyRelative("name");
+
+                // Cost type name
+                switch (tenetCost.FindPropertyRelative("tenetCostType").enumValueIndex)
+                {
+                    case 0:
+                        tenetCostName += "With ";
+                        break;
+                    case 1:
+                        tenetCostName += "Per ";
+                        break;
+                    case 2:
+                        tenetCostName += "Spend ";
+                        break;
+                }
+
+                // Tenet name
+                string tenet = ((TenetType) tenetCost.FindPropertyRelative("tenetType").enumValueIndex).ToString();
+                tenetCostName += tenet;
+
+                tenetCostNameProperty.stringValue = tenetCostName;
+                costName += tenetCostName;
+                
+                // If we have more than one tenet cost, add a comma
+                if (i < tenetCost.arraySize - 1)
+                    costName += ", ";
+            }
+
+            return costName;
         }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => 
+            EditorGUI.GetPropertyHeight(property);
     }
 }

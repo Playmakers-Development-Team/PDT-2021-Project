@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Targets Does 1 Attack and 1 Defense. \n\u21AF Targets may Spend Passion,
     gain 2 Attack.\n\u21AF Targets may Spend Humility, gain 2 Defense."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
@@ -26,7 +24,7 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 1
     costs: []
-  - name: 2 Attack spend Passion
+  - name: 2 Attack if User Spend Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 2
@@ -34,11 +32,13 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Passion
+    - name: User Spend Passion
       affectType: 0
-      costType: 2
-      tenetType: 2
-  - name: 2 Defence spend Humility
+      tenetCosts:
+      - name: Spend Passion
+        tenetCostType: 2
+        tenetType: 2
+  - name: 2 Defence if User Spend Humility
     damageValue: 0
     defenceValue: 2
     attackValue: 0
@@ -46,8 +46,10 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs:
-    - name: Spend Humility
+    - name: User Spend Humility
       affectType: 0
-      costType: 2
-      tenetType: 1
+      tenetCosts:
+      - name: Spend Humility
+        tenetCostType: 2
+        tenetType: 1
   userEffects: []

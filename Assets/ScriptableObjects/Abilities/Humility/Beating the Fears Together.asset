@@ -16,8 +16,6 @@ MonoBehaviour:
     user is with Joy, deal 3 extra damage\n\u21AF Target with Pride take 2 extra
     damage\n"
   shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -27,7 +25,7 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs: []
-  - name: 4 Damage with Humility
+  - name: 4 Damage User With Humility
     damageValue: 4
     defenceValue: 0
     attackValue: 0
@@ -37,9 +35,11 @@ MonoBehaviour:
     costs:
     - name: User With Humility
       affectType: 0
-      costType: 0
-      tenetType: 1
-  - name: 3 Damage with Joy
+      tenetCosts:
+      - name: With Humility
+        tenetCostType: 0
+        tenetType: 1
+  - name: 3 Damage if User With Joy
     damageValue: 3
     defenceValue: 0
     attackValue: 0
@@ -49,9 +49,11 @@ MonoBehaviour:
     costs:
     - name: User With Joy
       affectType: 0
-      costType: 0
-      tenetType: 4
-  - name: 2 Damage with Pride
+      tenetCosts:
+      - name: With Joy
+        tenetCostType: 0
+        tenetType: 4
+  - name: 2 Damage if Target With Pride
     damageValue: 2
     defenceValue: 0
     attackValue: 0
@@ -61,6 +63,8 @@ MonoBehaviour:
     costs:
     - name: Target With Pride
       affectType: 1
-      costType: 0
-      tenetType: 0
+      tenetCosts:
+      - name: With Pride
+        tenetCostType: 0
+        tenetType: 0
   userEffects: []

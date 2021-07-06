@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Targets gains 2 Attack\n\u21AF Targets may Spend Passion to gain
     4 Attack\n\u21AF Targets with Pride may gain 2 Attack"
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 2 Attack
     damageValue: 0
@@ -26,7 +24,7 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     costs: []
-  - name: 4 Attack spend Passion
+  - name: 4 Attack if Target Spend Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 4
@@ -36,9 +34,11 @@ MonoBehaviour:
     costs:
     - name: Target Spend Passion
       affectType: 1
-      costType: 2
-      tenetType: 2
-  - name: 2 Attack with Pride
+      tenetCosts:
+      - name: Spend Passion
+        tenetCostType: 2
+        tenetType: 2
+  - name: 2 Attack if Target With Pride
     damageValue: 0
     defenceValue: 0
     attackValue: 2
@@ -48,6 +48,8 @@ MonoBehaviour:
     costs:
     - name: Target With Pride
       affectType: 1
-      costType: 0
-      tenetType: 0
+      tenetCosts:
+      - name: With Pride
+        tenetCostType: 0
+        tenetType: 0
   userEffects: []

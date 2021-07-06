@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Costs;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -40,7 +41,7 @@ namespace Abilities
         private void Expend(IUnit user, IUnit target)
         {
             foreach (Cost cost in costs)
-                cost.Expend(user, target);
+                cost.ApplyCost(user, target);
         }
 
         public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
