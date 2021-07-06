@@ -199,24 +199,6 @@ namespace ColorDrop.Editor
             currentProperty = serializedObject.FindProperty("material");
             CreatePropertyGUI();
 
-            if (GUILayout.Button("Play"))
-            {
-                Debug.Log("Play Triggered");
-                particleSystem.GenerateToTestMesh();
-            }
-
-
-            if (GUILayout.Button("Pause"))
-            {
-                Debug.Log("Collection Triggered");
-            }
-
-            if (GUILayout.Button("Reset"))
-            {
-                Debug.Log("Collection Triggered");
-            }
-
-
             GUILayout.EndVertical();
         }
 
