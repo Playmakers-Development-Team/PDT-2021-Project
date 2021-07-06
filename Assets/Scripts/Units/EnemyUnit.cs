@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Commands;
+using Managers;
 
 namespace Units
 {
@@ -19,5 +20,12 @@ namespace Units
 
             commandQueue.Clear();
         }   
+        
+        protected override void Start()
+        {
+            base.Start();
+            ManagerLocator.Get<EnemyManager>().Spawn(this);
+            Name = RandomizeName();
+        }
     }
 }

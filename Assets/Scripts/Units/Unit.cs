@@ -63,6 +63,7 @@ namespace Units
             data.Initialise();
             Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
             
+            
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(0, 101);
 
@@ -257,6 +258,11 @@ namespace Units
         private void HideDamageText()
         {
             damageTextCanvas.enabled = false;
+        }
+
+        public void SetName()
+        {
+            nameText.text = Name;
         }
         
           #region RandomizeNames
