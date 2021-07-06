@@ -280,6 +280,8 @@ namespace Units
 
         private void HideDamageText() => damageTextCanvas.enabled = false;
 
+        public void SetName() => nameText.text = Name;
+
         #endregion
         
         #region RandomizeNames
