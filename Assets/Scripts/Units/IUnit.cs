@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GridObjects;
 using Abilities;
 using StatusEffects;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -31,6 +32,10 @@ namespace Units
         void TakeDefence(int amount);
         
         void TakeAttack(int amount);
+
+        List<Vector2Int> GetAllReachableTiles(int range);
+        
+        void MoveUnit(StartMoveCommand startMoveCommand);
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
 

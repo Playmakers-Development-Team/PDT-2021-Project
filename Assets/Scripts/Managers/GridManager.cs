@@ -14,8 +14,8 @@ namespace Managers
 {
     public class GridManager : Manager
     {
-        private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
-
+        public Dictionary<Vector2Int, TileData> tileDatas { get; private set; }
+        
         private const int GridLineCastDefaultLimit = 10;
 
         public Tilemap LevelTilemap { get; private set; }
@@ -24,6 +24,8 @@ namespace Managers
 
         public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
         {
+            tileDatas = new Dictionary<Vector2Int, TileData>();
+            
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
@@ -141,60 +143,6 @@ namespace Managers
             return new List<T>();
         }
 
-        /// <summary>
-        /// Returns a list of all coordinates that are reachable from a given starting position
-        /// within the given range.
-        /// </summary>
-        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
-        /// <param name="range">The range from the starting tile using manhattan distance.</param>
-        /// <returns>A list of the coordinates of reachable tiles.</returns>
-        public List<Vector2Int> GetAllReachableTiles(Vector2Int startingCoordinate, int range)
-        {
-            List<Vector2Int> reachable = new List<Vector2Int>();
-            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
-            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
-            string allegiance = "";
-
-            if (tileDatas[startingCoordinate].GridObjects.Count > 0)
-            {
-                allegiance= tileDatas[startingCoordinate].GridObjects[0].tag;
-            }
-            
-            // Add the starting coordinate to the queue
-            coordinateQueue.Enqueue(startingCoordinate);
-            int distance = 0;
-            visited.Add(startingCoordinate, distance);
-
-            // Loop until all nodes are processed
-            while (coordinateQueue.Count > 0)
-            {
-                Vector2Int currentNode = coordinateQueue.Peek();
-                distance = visited[currentNode];
-
-                if (distance > range)
-                {
-                    break;
-                }
-
-                // Add neighbours of node to queue
-                VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
-                    coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
-                    coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
-                    coordinateQueue, allegiance);
-                VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
-                    coordinateQueue, allegiance);
-
-                if (GetGridObjectsByCoordinate(currentNode).Count == 0)
-                    reachable.Add(currentNode);
-
-                coordinateQueue.Dequeue();
-            }
-
-            return reachable;
-        }
-        
         public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
         {
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -230,7 +178,7 @@ namespace Managers
             return visited;
         }
 
-        private void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
+        public void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
                                Queue<Vector2Int> coordinateQueue, string allegiance)
         {
             // Check grid node exists
@@ -462,84 +410,7 @@ namespace Managers
             }
         }
         
-        public async void MoveUnit(StartMoveCommand moveCommand)
-        {
-            IUnit unit = moveCommand.Unit;
-            Vector2Int newCoordinate = moveCommand.TargetCoords;
-
-            TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            int moveRange = (int)unit.MovementActionPoints.Value;
-            Vector2Int startingCoordinate = unit.Coordinate;
-            Vector2Int currentCoordinate = startingCoordinate;
-            PlayerUnit playerUnit = null;
-
-            if (unit is PlayerUnit)
-            {
-                playerUnit = (PlayerUnit) unit;
-                if (playerUnit.animator != null)
-                    playerUnit.animator.SetInteger("Movement", 1);
-            }
-
-            // Check if tile is unoccupied
-            if (tileData.GridObjects.Count != 0)
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("Target tile is occupied.");
-                return;
-            }
-
-            // Check if tile is in range
-            if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) &&
-                unit.GetType() == typeof(PlayerUnit))
-            {
-                // TODO: Provide feedback to the player
-                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
-                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
-                              newCoordinate));
-
-                Debug.Log("Target tile out of range.");
-                return;
-            }
-
-            // TODO: Tween based on cell path
-            List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
-
-            for (int i = 1; i < movePath.Count; i++)
-            {
-                if (playerUnit !=
-                    null) // this stuff is temporary, should probably be done in a better way
-                {
-                    if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
-                    else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
-                    else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
-                    else if (movePath[i].y < currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
-                }
-
-                await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
-                    ConvertCoordinateToPosition(movePath[i]), 1f);
-                unit.gameObject.transform.position = ConvertCoordinateToPosition(movePath[i]);
-                currentCoordinate = movePath[i];
-            }
-
-            MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.MovementActionPoints.Value -= Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
-
-            if (playerUnit != null)
-                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
-
-            Debug.Log(Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
-            
-            // Should be called when all the movement and tweening has been completed
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
-        }
-
-        private async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos,
+        public async UniTask MovementTween(GameObject unit, Vector3 startPos, Vector3 endPos,
                                             float duration)
         {
             float flag = 0f;

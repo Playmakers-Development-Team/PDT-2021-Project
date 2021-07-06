@@ -6,9 +6,11 @@ using StatusEffects;
 using Abilities;
 using Cysharp.Threading.Tasks;
 using Managers;
+using Tiles;
 using TMPro;
 using Units.Commands;
 using UnityEngine;
+using Utility;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -259,7 +261,139 @@ namespace Units
             damageTextCanvas.enabled = false;
         }
         
-          #region RandomizeNames
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position
+        /// within the given range.
+        /// </summary>
+        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
+        /// <param name="range">The range from the starting tile using manhattan distance.</param>
+        /// <returns>A list of the coordinates of reachable tiles.</returns>
+        public List<Vector2Int> GetAllReachableTiles(int range)
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            List<Vector2Int> reachable = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            string allegiance = "";
+
+            if (gridManager.tileDatas[startingCoordinate].GridObjects.Count > 0)
+            {
+                allegiance= gridManager.tileDatas[startingCoordinate].GridObjects[0].tag;
+            }
+            
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                if (distance > range)
+                {
+                    break;
+                }
+
+                // Add neighbours of node to queue
+                gridManager.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                gridManager.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                gridManager.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                gridManager.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+
+                if (gridManager.GetGridObjectsByCoordinate(currentNode).Count == 0)
+                    reachable.Add(currentNode);
+
+                coordinateQueue.Dequeue();
+            }
+
+            return reachable;
+        }
+
+        public async void MoveUnit(StartMoveCommand moveCommand)
+        {
+            IUnit unit = this;
+            Vector2Int newCoordinate = moveCommand.TargetCoords;
+
+            TileData tileData = gridManager.GetTileDataByCoordinate(newCoordinate);
+            int moveRange = (int)unit.MovementActionPoints.Value;
+            Vector2Int startingCoordinate = unit.Coordinate;
+            Vector2Int currentCoordinate = startingCoordinate;
+            PlayerUnit playerUnit = null;
+
+            if (unit is PlayerUnit)
+            {
+                playerUnit = (PlayerUnit) unit;
+                if (playerUnit.animator != null)
+                    playerUnit.animator.SetInteger("Movement", 1);
+            }
+
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+
+            // Check if tile is in range
+            if (!GetAllReachableTiles(moveRange).Contains(newCoordinate) &&
+                unit.GetType() == typeof(PlayerUnit))
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
+                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
+                              newCoordinate));
+
+                Debug.Log("Target tile out of range.");
+                return;
+            }
+
+            // TODO: Tween based on cell path
+            List<Vector2Int> movePath = gridManager.GetCellPath(currentCoordinate, newCoordinate);
+
+            for (int i = 1; i < movePath.Count; i++)
+            {
+                if (playerUnit !=
+                    null) // this stuff is temporary, should probably be done in a better way
+                {
+                    if (movePath[i].x > currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
+                    else if (movePath[i].y > currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                    else if (movePath[i].x < currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
+                    else if (movePath[i].y < currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                }
+
+                await gridManager.MovementTween(unit.gameObject, gridManager.ConvertCoordinateToPosition(currentCoordinate),
+                    gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
+                unit.gameObject.transform.position = gridManager.ConvertCoordinateToPosition(movePath[i]);
+                currentCoordinate = movePath[i];
+            }
+
+            gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+            unit.MovementActionPoints.Value -= Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+
+            if (playerUnit != null)
+                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+
+            Debug.Log(Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+            
+            // Should be called when all the movement and tweening has been completed
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
+        }
+
+        #region RandomizeNames
         public string RandomizeName()
         {
             string newname = "";

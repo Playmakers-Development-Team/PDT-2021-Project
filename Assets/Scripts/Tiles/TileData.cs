@@ -16,22 +16,10 @@ namespace Tiles
             tile = tileBase;
         }
 
-        public void AddGridObjects(GridObject gridObject)
-        {
-            if (!GridObjects.Contains(gridObject))
-            {
-                GridObjects.Add(gridObject);
-            }
-        }
-        
-        public void RemoveGridObjects(GridObject gridObject)
-        {
-            GridObjects.Remove(gridObject);
-        }
-        
-        public void ClearGridObjects()
-        {
-            GridObjects.Clear();
-        }
+        public void AddGridObjects(GridObject gridObject) => GridObjects.Add(gridObject);
+
+        public void RemoveGridObjects(GridObject gridObject) => GridObjects.Remove(gridObject);
+
+        public void ClearGridObjects() => GridObjects.Clear();
     }
 }

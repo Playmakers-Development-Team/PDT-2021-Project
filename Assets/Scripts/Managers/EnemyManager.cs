@@ -156,7 +156,7 @@ namespace Managers
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
             List<Vector2Int> reachableTiles =
-                gridManager.GetAllReachableTiles(enemyUnit.Coordinate, movementPoints);
+                enemyUnit.GetAllReachableTiles(movementPoints);
             
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
