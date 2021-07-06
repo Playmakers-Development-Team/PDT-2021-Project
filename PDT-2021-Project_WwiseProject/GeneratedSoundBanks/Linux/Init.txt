@@ -1,3 +1,15 @@
+State Group	ID	Name			Wwise Object Path	Notes
+	444815956	PlayerLife			\Default Work Unit\PlayerLife	
+	1071758680	CombatState			\Default Work Unit\CombatState	
+
+State	ID	Name	State Group			Notes
+	655265632	Alive	PlayerLife			
+	748895195	None	PlayerLife			
+	2044049779	Dead	PlayerLife			
+	748895195	None	CombatState			
+	2116791127	In_Combat	CombatState			
+	3162566204	Out_Of_Combat	CombatState			
+
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	988953028	SFXVolume			\In-game Settings\Volume\SFXVolume	
 	2346531308	MusicVolume			\In-game Settings\Volume\MusicVolume	

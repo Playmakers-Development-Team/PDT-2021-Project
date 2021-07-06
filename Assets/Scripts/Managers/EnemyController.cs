@@ -35,8 +35,8 @@ namespace Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
 
-            enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
+            // enemyPrefab =
+            //     (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
