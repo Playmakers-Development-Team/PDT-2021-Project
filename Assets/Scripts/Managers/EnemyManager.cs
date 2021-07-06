@@ -132,7 +132,7 @@ namespace Managers
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
+                FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
                 enemyUnit.MovementActionPoints.Value)
             );
             
@@ -156,24 +156,15 @@ namespace Managers
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
             List<Vector2Int> reachableTiles =
-                enemyUnit.GetAllReachableTiles(movementPoints);
+                enemyUnit.GetAllReachableTiles();
             
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
-            // Vector2Int movementDir = gridManager.GetClosestCoordinateFromList(reachableTiles, chosenTargetTile) - enemyUnit.Coordinate;
-            // return movementDir;
-            
+
             Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate);
-            
-            // If the enemy's current co-ordinate is closer that the chosenTargetTile
-            // then keep the enemy stationary
-            Vector2Int movementDir = Vector2Int.zero;
-            //TODO: THIS COMING TUESDAY ADD FUNCTIONALITY FROM ABOVE COMMENTS
-            
-            movementDir = chosenTargetTile - enemyUnit.Coordinate;
-            
-            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move in the direction " + movementDir + " towards "+targetUnit+" at " + targetUnit.Coordinate);
-            return movementDir;
+
+            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " + chosenTargetTile + " towards " + targetUnit + " at " + targetUnit.Coordinate);
+            return chosenTargetTile;
         }
 
         public IUnit GetTargetPlayer(IUnit enemyUnit)

@@ -320,6 +320,9 @@ namespace Managers
             
             foreach (var startingCoordinate in startingCoordinates)
             {
+                //****************
+                //TODO: Fix this so enemies don't overlap
+                //****************
                 List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate);
                 
                 //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);

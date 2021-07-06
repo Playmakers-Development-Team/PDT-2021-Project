@@ -319,14 +319,14 @@ namespace Managers
                 Debug.Log("Next click will move.");
                 
                
-                foreach (Vector2Int highlightedCoordinate in turnManager.ActingUnit.GetAllReachableTiles((int) turnManager.ActingUnit.MovementActionPoints.Value))
+                foreach (Vector2Int highlightedCoordinate in turnManager.ActingUnit.GetAllReachableTiles())
                 { 
                     uiManager.movementHighlightTilemap.SetTile((Vector3Int) highlightedCoordinate, 
                         uiManager.movementHighlightTile);
                 }
                 
 
-                UpdateMoveRange(turnManager.ActingUnit.GetAllReachableTiles((int) turnManager.ActingUnit.MovementActionPoints.Value));
+                UpdateMoveRange(turnManager.ActingUnit.GetAllReachableTiles());
             }
 
             if (Input.GetKeyDown(KeyCode.Escape))

@@ -218,7 +218,6 @@ namespace Units
         {
             playerManager.WaitForDeath = true;
             Debug.Log($"Unit Killed: {name} : {Coordinate}");
-            gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
             Debug.Log($"This unit was cringe and died");
@@ -268,9 +267,11 @@ namespace Units
         /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
         /// <param name="range">The range from the starting tile using manhattan distance.</param>
         /// <returns>A list of the coordinates of reachable tiles.</returns>
-        public List<Vector2Int> GetAllReachableTiles(int range)
+        public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
+            int range = (int) MovementActionPoints.Value;
+            
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
@@ -343,7 +344,7 @@ namespace Units
             }
 
             // Check if tile is in range
-            if (!GetAllReachableTiles(moveRange).Contains(newCoordinate) &&
+            if (!GetAllReachableTiles().Contains(newCoordinate) &&
                 unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player

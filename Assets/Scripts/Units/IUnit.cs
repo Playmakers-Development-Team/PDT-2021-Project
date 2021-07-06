@@ -33,7 +33,7 @@ namespace Units
         
         void TakeAttack(int amount);
 
-        List<Vector2Int> GetAllReachableTiles(int range);
+        List<Vector2Int> GetAllReachableTiles();
         
         void MoveUnit(StartMoveCommand startMoveCommand);
 
