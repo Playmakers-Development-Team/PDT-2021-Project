@@ -34,6 +34,7 @@ namespace ColorDrop
         [HideInInspector] public Camera targetCamera;
         [HideInInspector] public RenderTexture templateTextureRenderTexture;
         [HideInInspector] public Material material;
+        [HideInInspector] public bool canRun;
 
         // Previewer
         [HideInInspector] public RenderTexture previewTexture;
@@ -71,6 +72,8 @@ namespace ColorDrop
 
         private void Update()
         {
+            if (!canRun) return;
+
             IterateThroughParticles();
             RunParticleSpawn();
         }
@@ -228,6 +231,7 @@ namespace ColorDrop
 
         private void OnDrawGizmos()
         {
+            Gizmos.color = Color.cyan;
             Gizmos.DrawCube(new Vector3(viewPlaneDimension.x, 0, 0) + targetCamera.transform.position, Vector3.one);
             Gizmos.DrawCube(new Vector3(-viewPlaneDimension.x, 0, 0) + targetCamera.transform.position, Vector3.one);
             Gizmos.DrawCube(new Vector3(0, viewPlaneDimension.y, 0) + targetCamera.transform.position, Vector3.one);
