@@ -25,24 +25,24 @@ namespace Abilities
 
         public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
-            Use(user, shape.GetTargets(originCoordinate, targetVector));
+            UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void Use(IUnit user, params GridObject[] targets) => Use(user, targets.AsEnumerable());
+        public void UseForTargets(IUnit user, params GridObject[] targets) => UseForTargets(user, targets.AsEnumerable());
         
-        public void Use(IUnit user, IEnumerable<GridObject> targets)
+        public void UseForTargets(IUnit user, IEnumerable<GridObject> targets)
         {
-            Use(user, targetEffects, targets);
+            UseEffectsForTargets(user, targetEffects, targets);
             
             // It can be assumed that IUnit can be converted to GridObject.
             if (user is GridObject userGridObject)
-                Use(user, userEffects, userGridObject);
+                UseEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void Use(IUnit user, Effect[] effects, params GridObject[] targets) =>
-            Use(user, effects, targets.AsEnumerable());
+        private void UseEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+            UseEffectsForTargets(user, effects, targets.AsEnumerable());
 
-        private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UseEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
             foreach (GridObject target in targets)
             {
@@ -72,24 +72,24 @@ namespace Abilities
         
         public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
-            Undo(user, shape.GetTargets(originCoordinate, targetVector));
+            UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void Undo(IUnit user, params GridObject[] targets) => Undo(user, targets.AsEnumerable());
+        public void UndoForTargets(IUnit user, params GridObject[] targets) => UndoForTargets(user, targets.AsEnumerable());
         
-        public void Undo(IUnit user, IEnumerable<GridObject> targets)
+        public void UndoForTargets(IUnit user, IEnumerable<GridObject> targets)
         {
-            Undo(user, targetEffects, targets);
+            UndoEffectsForTargets(user, targetEffects, targets);
             
             // It can be assumed that IUnit can be converted to GridObject.
             if (user is GridObject userGridObject)
-                Undo(user, userEffects, userGridObject);
+                UndoEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void Undo(IUnit user, Effect[] effects, params GridObject[] targets) =>
-            Undo(user, effects, targets.AsEnumerable());
+        private void UndoEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+            UndoEffectsForTargets(user, effects, targets.AsEnumerable());
 
-        private void Undo(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UndoEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
             // TODO
         }
