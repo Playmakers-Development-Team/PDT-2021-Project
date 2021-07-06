@@ -379,7 +379,7 @@ namespace Units
                 currentCoordinate = movePath[i];
             }
 
-            gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+            gridManager.MoveGridObject(newCoordinate, (GridObject) unit);
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 

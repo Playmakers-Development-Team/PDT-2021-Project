@@ -406,7 +406,7 @@ namespace Managers
 
             foreach (var gridObject in gridObjects)
             {
-                MoveGridObject(currentCoordinate, newCoordinate, gridObject);
+                MoveGridObject(newCoordinate, gridObject);
             }
         }
         
@@ -427,28 +427,20 @@ namespace Managers
         /// Moves a unit's GridObject and GameObject directly to a new position.
         /// </summary>
         /// <param name="newCoordinate">The coordinate to move the unit to.</param>
-        /// <param name="unit">The unit to teleport.</param>
-        private void TeleportUnit(Vector2Int newCoordinate, IUnit unit)
+        /// <param name="gridObject">The gridObject to teleport.</param>
+        public void MoveGridObject(Vector2Int newCoordinate, GridObject gridObject)
         {
-            Vector2Int startCoordinate = unit.Coordinate;
-            var gridObject = (GridObject) unit;
-
+            Vector2Int startCoordinate = gridObject.Coordinate;
+            
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
-
-            MoveGridObject(startCoordinate, newCoordinate, gridObject);
-        }
-
-        // TODO: CurrentCoordinate should not be necessary
-        public void MoveGridObject(Vector2Int currentCoordinate, Vector2Int newCoordinate,
-                                   GridObject gridObject)
-        {
+            
             if (!AddGridObject(newCoordinate, gridObject))
                 return;
-
-            if (!RemoveGridObject(currentCoordinate, gridObject))
+            
+            if (!RemoveGridObject(startCoordinate, gridObject))
                 return;
-
-            Debug.LogFormat("Moved {0} from {1} to {2}.", gridObject, currentCoordinate,
+            
+            Debug.LogFormat("Moved {0} from {1} to {2}.", gridObject, startCoordinate,
                 newCoordinate);
         }
 
