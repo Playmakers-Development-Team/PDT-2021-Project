@@ -23,16 +23,15 @@ namespace Units
 
         public string Name
         {
-            get => data.name;
-            set => data.name = value;
+            get => data.Name;
+            set => data.Name = value;
         }
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
         public TenetType Tenet => data.Tenet;
-        //public ValueStat MovementActionPoints => data.movementActionPoints;
-        public ValueStat MovementActionPoints => data.MovementActionPoints;
+        public ValueStat MovementActionPoints => data.MovementPoints;
         public ValueStat Speed => data.Speed;
-        public ModifierStat Attack => data.DealDamageModifier;
+        public ModifierStat Attack => data.Attack;
         public List<Ability> Abilities => data.Abilities;
 
         [Obsolete("Use TenetStatuses instead")]
@@ -41,7 +40,7 @@ namespace Units
         
         public static Type DataType => typeof(T);
 
-        public bool IsSelected => playerManager.SelectedUnit == this;
+        public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
         private const int maxTenetStatusEffectCount = 2;
         private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
@@ -56,8 +55,8 @@ namespace Units
             base.Start();
 
             data.Initialise();
-            Health = new Health(new KillUnitCommand(this), data.HealthPoints,
-                data.TakeDamageModifier);
+            Health = new Health(new KillUnitCommand(this), data.HealthPoints, data.Defence);
+            Knockback = new Knockback(data.TakeKnockbackModifier);
 
             // TODO Speed temporarily random for now until proper turn manipulation is done.
             Speed.Value += Random.Range(0, 101);
@@ -66,8 +65,6 @@ namespace Units
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
-            gridManager = ManagerLocator.Get<GridManager>();
-        
             commandManager = ManagerLocator.Get<CommandManager>();
 
             #endregion
