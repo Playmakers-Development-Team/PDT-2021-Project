@@ -27,6 +27,7 @@ namespace Abilities.Editor
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
                 SerializedProperty costsProperty = property.FindPropertyRelative("costs");
                 SerializedProperty bonusesProperty = property.FindPropertyRelative("bonuses");
+                SerializedProperty keywordsProperty = property.FindPropertyRelative("keywords");
 
                 List<string> valueNameList = new List<string>();
                 nameProperty.stringValue = string.Empty;
@@ -36,7 +37,7 @@ namespace Abilities.Editor
                                     || attackProperty.intValue != 0 
                                     || provideCountProperty.intValue != 0;
                 
-                if (costsProperty.arraySize == 0)
+                if (costsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
                 {
                     nameProperty.stringValue += "Default, ";
                 }
@@ -64,19 +65,41 @@ namespace Abilities.Editor
 
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
 
+                
                 if (bonusesProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessBonusesDisplayName(bonusesProperty);
                 
                 if (costsProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessCostsDisplayName(costsProperty);
 
+                if (keywordsProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessKeywordsDisplayName(keywordsProperty);
+
                 property.serializedObject.ApplyModifiedProperties();
             }
         }
 
+        private string ProcessKeywordsDisplayName(SerializedProperty keywordsProperty)
+        {
+            if (keywordsProperty.arraySize > 0)
+            {
+                List<string> keywordNameList = new List<string>();
+
+                for (int i = 0; i < keywordsProperty.arraySize; i++)
+                {
+                    SerializedProperty keywordProperty = keywordsProperty.GetArrayElementAtIndex(i);
+                    keywordNameList.Add(keywordProperty.objectReferenceValue.name);
+                }
+
+                return $"WITH {string.Join(" and ", keywordNameList)}";
+            }
+            
+            return string.Empty;
+        }
+
         private string ProcessBonusesDisplayName(SerializedProperty bonusesProperty)
         {
-            if (bonusesProperty.arraySize != 0)
+            if (bonusesProperty.arraySize > 0)
             {
                 List<string> bonusesNameList = new List<string>();
 
@@ -85,6 +108,7 @@ namespace Abilities.Editor
                     SerializedProperty bonusProperty = bonusesProperty.GetArrayElementAtIndex(i);
                     string bonusName = GetBonusDisplayName(bonusProperty);
                     bonusProperty.FindPropertyRelative("name").stringValue = bonusName;
+                    bonusesProperty.serializedObject.ApplyModifiedProperties();
                     bonusesNameList.Add(bonusName);
                 }
                 
@@ -112,26 +136,23 @@ namespace Abilities.Editor
 
         private string ProcessCostsDisplayName(SerializedProperty costsProperty)
         {
-            string costsName = string.Empty;
-            
-            if (costsProperty.arraySize != 0)
+            if (costsProperty.arraySize > 0)
             {
-                costsName += "IF ";
+                List<string> costNameList = new List<string>();
                     
                 for (int i = 0; i < costsProperty.arraySize; i++)
                 {
-                    if (i > 0)
-                        costsName += ", ";
-                        
                     SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
                     string costName = GetCostDisplayName(costProperty);
                     costProperty.FindPropertyRelative("name").stringValue = costName;
-                    costsName += costName;
+                    costNameList.Add(costName);
                     costProperty.serializedObject.ApplyModifiedProperties();
                 }
+
+                return $"IF {string.Join(" and ", costNameList)}";
             }
 
-            return costsName;
+            return string.Empty;
         }
 
         private string GetCostDisplayName(SerializedProperty costProperty)
@@ -159,7 +180,7 @@ namespace Abilities.Editor
                 costName += tenetCostName;
                 
                 // If we have more than one tenet cost, add a comma
-                if (i < tenetCost.arraySize - 1)
+                if (i < tenetCosts.arraySize - 1)
                     costName += ", ";
             }
 

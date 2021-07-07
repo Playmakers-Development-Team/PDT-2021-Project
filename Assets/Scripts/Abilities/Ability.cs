@@ -13,6 +13,7 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject
     {
+        [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         // [SerializeField] private int knockback;
@@ -20,8 +21,26 @@ namespace Abilities
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
 
+        /// <summary>
+        /// A complete description of the ability.
+        /// </summary>
         public string Description => description;
+        /// <summary>
+        /// Describes what and how the ability can hit units.
+        /// </summary>
         public IShape Shape => shape;
+        /// <summary>
+        /// All keywords used by this ability regardless whether they should be shown to
+        /// the player or not.
+        /// </summary>
+        public IEnumerable<Keyword> AllKeywords => TargetKeywords.Concat(UserKeywords);
+        /// <summary>
+        /// All keywords that should be shown in game which is used by this ability.
+        /// </summary>
+        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
+
+        private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
+        private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
         public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
