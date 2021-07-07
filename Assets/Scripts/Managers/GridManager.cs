@@ -251,7 +251,7 @@ namespace Managers
 
         /// <summary>
         /// Returns a list of the path from one node to another
-        /// Assumes target is reachable.
+        /// Returns an empty list if it cannot find a path
         /// </summary>
         public List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
                                              Vector2Int targetCoordinate)
@@ -259,6 +259,7 @@ namespace Managers
             var visited = new Dictionary<Vector2Int, Vector2Int>();
             var coordinateQueue = new Queue<Vector2Int>();
             string allegiance = string.Empty;
+            bool targetWasFound = false;
 
             if (GetGridObjectsByCoordinate(startingCoordinate).Count > 0)
             {
@@ -280,7 +281,10 @@ namespace Managers
                     coordinateQueue, allegiance);
 
                 if (visited.ContainsKey(targetCoordinate))
+                {
+                    targetWasFound = true;
                     coordinateQueue.Clear();
+                }
                 else
                     coordinateQueue.Dequeue();
             }
@@ -290,6 +294,11 @@ namespace Managers
                 //Debug.Log($"NodeStuff {node}");
             }
 
+            if (!targetWasFound)
+            {
+                return new List<Vector2Int>();
+            }
+            
             var path = new List<Vector2Int>();
             var currentNode2 = targetCoordinate;
             int count = 0;
@@ -310,7 +319,8 @@ namespace Managers
 
         /// <summary>
         /// Returns the coordinate that is closest to the destination
-        /// from a list of coordinates
+        /// from a list of coordinates. Will find the closest tile even
+        /// if targetCoordinate is not in range
         /// </summary>
         public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> reachableCoordinates,
                                             Vector2Int targetCoordinate)
@@ -321,22 +331,27 @@ namespace Managers
             
             foreach (var startingCoordinate in reachableCoordinates)
             {
-                //****************
-                //TODO: Fix this so enemies don't overlap
-                //****************
                 List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate);
                 
                 //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
                 
-                if (pathToTargetTile.Count < shortestDistance)
+                if (pathToTargetTile.Count != 0 && pathToTargetTile.Count < shortestDistance)
                 {
                     shortestDistance = pathToTargetTile.Count;
                     closestTile = startingCoordinate;
                 }
             }
             
+            if (shortestDistance != int.MaxValue)
+            {
+                return closestTile;
+            }
+            else
+            {
+                Debug.LogWarning($"Could not find tile to move to, returning {reachableCoordinates[0]}");
+                return reachableCoordinates[0];
+            }
             //Debug.Log("Chosen Tile Coordinate: "+closestTile);
-            return closestTile;
         }
 
         #endregion

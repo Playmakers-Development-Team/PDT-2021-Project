@@ -157,6 +157,9 @@ namespace Managers
 
             List<Vector2Int> reachableTiles =
                 enemyUnit.GetAllReachableTiles();
+            // Add in the tile the enemy is on to reachableTiles so that GetClosestCoordinateFromList
+            // can check if it's the closest tile to the target
+            reachableTiles.Add(enemyUnit.Coordinate);
             
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
