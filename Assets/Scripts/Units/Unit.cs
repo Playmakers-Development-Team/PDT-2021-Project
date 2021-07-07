@@ -379,8 +379,8 @@ namespace Units
                 unit.gameObject.transform.position = gridManager.ConvertCoordinateToPosition(movePath[i]);
                 currentCoordinate = movePath[i];
             }
-
-            gridManager.MoveGridObject(newCoordinate, (GridObject) unit);
+            
+            gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 

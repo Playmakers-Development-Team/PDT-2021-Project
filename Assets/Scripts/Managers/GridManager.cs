@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -409,7 +410,7 @@ namespace Managers
 
             foreach (var gridObject in gridObjects)
             {
-                MoveGridObject(newCoordinate, gridObject);
+                MoveGridObject(currentCoordinate, newCoordinate, gridObject);
             }
         }
         
@@ -425,16 +426,17 @@ namespace Managers
                 await UniTask.Yield();
             }
         }
-
+        
         /// <summary>
         /// Moves a unit's GridObject and GameObject directly to a new position.
+        /// We need startCoordinate as it cannot be derived from gridObject.Coordinate.
+        /// This makes it more reliable (e.g. the function is used after tween movement)
         /// </summary>
+        /// <param name="startCoordinate">The coordinate the unit starts on</param>
         /// <param name="newCoordinate">The coordinate to move the unit to.</param>
         /// <param name="gridObject">The gridObject to teleport.</param>
-        public void MoveGridObject(Vector2Int newCoordinate, GridObject gridObject)
+        public void MoveGridObject(Vector2Int startCoordinate, Vector2Int newCoordinate, GridObject gridObject)
         {
-            Vector2Int startCoordinate = gridObject.Coordinate;
-            
             gridObject.gameObject.transform.position = ConvertCoordinateToPosition(newCoordinate);
             
             if (!AddGridObject(newCoordinate, gridObject))
