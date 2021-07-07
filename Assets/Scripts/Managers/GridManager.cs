@@ -227,16 +227,18 @@ namespace Managers
             }
             
         }
+        public bool HasPlayerUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is PlayerUnit);
+        public bool HasEnemyUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is EnemyUnit);
 
         private void VisitPathNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
-                               Queue<Vector2Int> coordinateQueue, string allegiance)
+                               Queue<Vector2Int> coordinateQueue, IUnit iunit)
         {
             // Check grid node exists
             if (tileDatas.ContainsKey(node))
             {
                 // Check node is empty or matches allegiance
-                if (tileDatas[node].GridObjects.Count == 0 ||
-                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
+                if (tileDatas[node].GridObjects.Count == 0 || 
+                    iunit.GetType() == tileDatas[node].GridObjects[0].GetType())
                 {
                     // Check node has not already been visited
                     if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
@@ -254,17 +256,12 @@ namespace Managers
         /// Returns an empty list if it cannot find a path
         /// </summary>
         public List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
-                                             Vector2Int targetCoordinate)
+                                             Vector2Int targetCoordinate, IUnit iunit)
         {
             var visited = new Dictionary<Vector2Int, Vector2Int>();
             var coordinateQueue = new Queue<Vector2Int>();
-            string allegiance = string.Empty;
             bool targetWasFound = false;
-
-            if (GetGridObjectsByCoordinate(startingCoordinate).Count > 0)
-            {
-                allegiance = GetTileDataByCoordinate(startingCoordinate).GridObjects[0].gameObject.tag;
-            }
+            
 
             coordinateQueue.Enqueue(startingCoordinate);
             while (coordinateQueue.Count > 0)
@@ -272,13 +269,13 @@ namespace Managers
                 var currentNode = coordinateQueue.Peek();
 
                 VisitPathNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
-                    coordinateQueue, allegiance);
+                    coordinateQueue, iunit);
                 VisitPathNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
-                    coordinateQueue, allegiance);
+                    coordinateQueue, iunit);
                 VisitPathNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
-                    coordinateQueue, allegiance);
+                    coordinateQueue, iunit);
                 VisitPathNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
-                    coordinateQueue, allegiance);
+                    coordinateQueue, iunit);
 
                 if (visited.ContainsKey(targetCoordinate))
                 {
@@ -323,7 +320,7 @@ namespace Managers
         /// if targetCoordinate is not in range
         /// </summary>
         public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> reachableCoordinates,
-                                            Vector2Int targetCoordinate)
+                                            Vector2Int targetCoordinate, IUnit iunit)
         {
             // PLACEHOLDER INITIALISATION
             Vector2Int closestTile = reachableCoordinates[0];
@@ -331,7 +328,7 @@ namespace Managers
             
             foreach (var startingCoordinate in reachableCoordinates)
             {
-                List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate);
+                List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate, iunit);
                 
                 //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
                 

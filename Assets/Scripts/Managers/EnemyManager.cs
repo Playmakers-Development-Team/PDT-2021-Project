@@ -164,7 +164,7 @@ namespace Managers
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
 
-            Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate);
+            Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
 
             Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " + chosenTargetTile + " towards " + targetUnit + " at " + targetUnit.Coordinate);
             return chosenTargetTile;

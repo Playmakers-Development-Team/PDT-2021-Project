@@ -357,7 +357,7 @@ namespace Units
             }
 
             // TODO: Tween based on cell path
-            List<Vector2Int> movePath = gridManager.GetCellPath(currentCoordinate, newCoordinate);
+            List<Vector2Int> movePath = gridManager.GetCellPath(currentCoordinate, newCoordinate, unit);
 
             for (int i = 1; i < movePath.Count; i++)
             {
