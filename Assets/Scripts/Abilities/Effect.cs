@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abilities.Conditionals;
+using Abilities.Bonuses;
+using Abilities.Costs;
 using StatusEffects;
 using Units;
 using UnityEngine;

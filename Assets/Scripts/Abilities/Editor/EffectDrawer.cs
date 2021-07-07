@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abilities.Conditionals;
+using Abilities.Costs;
 using StatusEffects;
 using UnityEditor;
 using UnityEngine;

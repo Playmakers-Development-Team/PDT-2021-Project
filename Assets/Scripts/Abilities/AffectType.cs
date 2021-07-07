@@ -1,4 +1,4 @@
-namespace Abilities.Conditionals
+namespace Abilities
 {
     public enum AffectType
     {

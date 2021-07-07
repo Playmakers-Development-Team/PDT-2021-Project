@@ -4,7 +4,7 @@ using System.Linq;
 using Units;
 using UnityEngine;
 
-namespace Abilities.Conditionals
+namespace Abilities.Costs
 {
     /// <summary>
     /// A convenient class that stores all the different type of costs into one class.

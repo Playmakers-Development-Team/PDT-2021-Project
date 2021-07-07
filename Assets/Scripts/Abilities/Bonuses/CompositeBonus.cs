@@ -4,7 +4,7 @@ using System.Linq;
 using Units;
 using UnityEngine;
 
-namespace Abilities.Conditionals
+namespace Abilities.Bonuses
 {
     /// <summary>
     /// <p> Bonuses act like an additional value on top of existing values based on some condition </p>

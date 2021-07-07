@@ -1,6 +1,6 @@
 using Units;
 
-namespace Abilities.Conditionals
+namespace Abilities.Bonuses
 {
     /// <summary>
     /// A handy interface for better structuring. Please see <see cref="CompositeBonus"/>

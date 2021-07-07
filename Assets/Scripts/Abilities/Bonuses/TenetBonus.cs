@@ -3,7 +3,7 @@ using StatusEffects;
 using Units;
 using UnityEngine;
 
-namespace Abilities.Conditionals
+namespace Abilities.Bonuses
 {
     [Serializable]
     public class TenetBonus : Conditional

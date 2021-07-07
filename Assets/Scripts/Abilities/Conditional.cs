@@ -2,7 +2,7 @@ using System;
 using Units;
 using UnityEngine;
 
-namespace Abilities.Conditionals
+namespace Abilities
 {
     [Serializable]
     public abstract class Conditional
