@@ -25,7 +25,8 @@ MonoBehaviour:
       stackCount: 0
     cost:
       tenetCosts: []
-    bonuses: []
+    bonus:
+      tenetBonuses: []
     keywords: []
   - name: 3 Damage IF User Spend Passion
     damageValue: 3
@@ -40,7 +41,8 @@ MonoBehaviour:
         affectType: 0
         tenetCostType: 2
         tenetType: 2
-    bonuses: []
+    bonus:
+      tenetBonuses: []
     keywords: []
   userEffects:
   - name: Default, 2 Defence and Provide 1 Pride
@@ -52,5 +54,6 @@ MonoBehaviour:
       stackCount: 1
     cost:
       tenetCosts: []
-    bonuses: []
+    bonus:
+      tenetBonuses: []
     keywords: []

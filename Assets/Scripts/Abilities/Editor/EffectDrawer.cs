@@ -25,7 +25,8 @@ namespace Abilities.Editor
                 SerializedProperty provideCountProperty = provideProperty.FindPropertyRelative("stackCount");
                 
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
-                SerializedProperty bonusesProperty = property.FindPropertyRelative("bonuses");
+                SerializedProperty bonusProperty = property.FindPropertyRelative("bonus");
+                SerializedProperty tenetBonusesProperty = bonusProperty.FindPropertyRelative("tenetBonuses");
                 SerializedProperty keywordsProperty = property.FindPropertyRelative("keywords");
                 SerializedProperty costProperty = property.FindPropertyRelative("cost");
                 SerializedProperty tenetCostsProperty =
@@ -68,8 +69,8 @@ namespace Abilities.Editor
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
 
                 
-                if (bonusesProperty.arraySize != 0)
-                    nameProperty.stringValue += " " + ProcessBonusesDisplayName(bonusesProperty);
+                if (tenetBonusesProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessTenetBonusesDisplayName(tenetBonusesProperty);
                 
                 if (tenetCostsProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessTenetCostsDisplayName(tenetCostsProperty);
@@ -99,48 +100,36 @@ namespace Abilities.Editor
             return string.Empty;
         }
 
-        private string ProcessBonusesDisplayName(SerializedProperty bonusesProperty)
+        private string ProcessTenetBonusesDisplayName(SerializedProperty tenetBonusesProperty)
         {
-            if (bonusesProperty.arraySize > 0)
-            {
-                List<string> bonusesNameList = new List<string>();
+            List<string> tenetBonusStringList = new List<string>();
 
-                for (int i = 0; i < bonusesProperty.arraySize; i++)
-                {
-                    SerializedProperty bonusProperty = bonusesProperty.GetArrayElementAtIndex(i);
-                    string bonusName = GetBonusDisplayName(bonusProperty);
-                    bonusProperty.FindPropertyRelative("name").stringValue = bonusName;
-                    bonusesProperty.serializedObject.ApplyModifiedProperties();
-                    bonusesNameList.Add(bonusName);
-                }
+            for (int i = 0; i < tenetBonusesProperty.arraySize; i++)
+            {
+                SerializedProperty tenetBonusProperty = tenetBonusesProperty.GetArrayElementAtIndex(i);
                 
-                return $"BONUSED BY {string.Join(" and ", bonusesNameList)}";
-            }
+                SerializedProperty affectTypeProperty = tenetBonusProperty
+                    .FindPropertyRelative("affectType");
+                SerializedProperty tenetTypeProperty = tenetBonusProperty
+                    .FindPropertyRelative("tenetType");
+                
+                string affectString = ((AffectType) affectTypeProperty.enumValueIndex)
+                    .ToString();
+                string tenetTypeString = ((TenetType) tenetTypeProperty.enumValueIndex).ToString();
 
-            return string.Empty;
-        }
-
-        private string GetBonusDisplayName(SerializedProperty bonusProperty)
-        {
-            string affectString = ((AffectType) bonusProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
-            SerializedProperty perTenetProperty = bonusProperty.FindPropertyRelative("perTenet");
-            List<string> tenetNameList = new List<string>();
-
-            for (int i = 0; i < perTenetProperty.arraySize; i++)
-            {
-                SerializedProperty tenetProperty = perTenetProperty.GetArrayElementAtIndex(i);
-                string tenetName = ((TenetType) tenetProperty.enumValueIndex).ToString();
-                tenetNameList.Add(tenetName);
+                string tenetBonusString = $"{affectString} {tenetTypeString}";
+                tenetBonusProperty.FindPropertyRelative("name").stringValue = tenetBonusString;
+                tenetBonusStringList.Add(tenetBonusString);
             }
             
-            return $"{affectString} {string.Join(", ", tenetNameList)}";
+            return $"BONUSED BY {string.Join(" and ", tenetBonusStringList)}";
         }
 
         private string ProcessTenetCostsDisplayName(SerializedProperty tenetCostsProperty)
         {
             if (tenetCostsProperty.arraySize > 0)
             {
-                List<string> tenetCostNameList = new List<string>();
+                List<string> tenetCostStringList = new List<string>();
                     
                 for (int i = 0; i < tenetCostsProperty.arraySize; i++)
                 {
@@ -162,11 +151,11 @@ namespace Abilities.Editor
                     
                     string costName = $"{affectString} {tenetCostTypeString} {tenetString}";
                     tenetCostProperty.FindPropertyRelative("name").stringValue = costName;
-                    tenetCostNameList.Add(costName);
+                    tenetCostStringList.Add(costName);
                     tenetCostProperty.serializedObject.ApplyModifiedProperties();
                 }
 
-                return $"IF {string.Join(" and ", tenetCostNameList)}";
+                return $"IF {string.Join(" and ", tenetCostStringList)}";
             }
 
             return string.Empty;

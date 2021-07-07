@@ -17,7 +17,7 @@ namespace Abilities
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
         [SerializeField] private CompositeCost cost;
-        [SerializeField] private List<Bonus> bonuses;
+        [SerializeField] private CompositeBonus bonus;
         [SerializeField] private List<Keyword> keywords;
 
         private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
@@ -28,9 +28,9 @@ namespace Abilities
         private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
             .Select(e => e.cost)
             .Prepend(cost);
-        private IEnumerable<Bonus> AllBonuses => AllKeywordEffects
-            .SelectMany(e => e.bonuses)
-            .Concat(bonuses);
+        private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
+            .Select(e => e.bonus)
+            .Prepend(bonus);
 
         public IReadOnlyList<Keyword> Keywords => keywords.AsReadOnly();
 
@@ -48,7 +48,7 @@ namespace Abilities
         
         public bool CanBeUsedBy(IUnit user, IUnit target)
         {
-            return AllCosts.All(cost => cost.MeetsRequirements(user, target));
+            return AllCosts.All(c => c.MeetsRequirements(user, target));
         }
 
         private void ProvideTenet(IUnit unit)
@@ -64,8 +64,8 @@ namespace Abilities
 
         private void ApplyCosts(IUnit user, IUnit target)
         {
-            foreach (CompositeCost cost in AllCosts)
-                cost.ApplyCost(user, target);
+            foreach (CompositeCost compositeCost in AllCosts)
+                compositeCost.ApplyCost(user, target);
         }
 
         public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
@@ -78,10 +78,10 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusSum = AllBonuses
-                .Sum(bonus => bonus.CalculateBonusMultiplier(user, target));
+            int valueWithBonus = value * AllBonuses
+                .Sum(b => b.CalculateBonusMultiplier(user, target));
 
-            return value + bonusSum;
+            return valueWithBonus;
         }
     }
 }
