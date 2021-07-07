@@ -24,27 +24,21 @@ namespace Abilities
         public string Description => description;
         public IShape Shape => shape;
 
-        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
-        {
-            Use(user, shape.GetTargets(originCoordinate, targetVector));
-        }
-
-        public void Use(IUnit user, params GridObject[] targets) => Use(user, targets.AsEnumerable());
+        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector, bool undo = false) =>
+            Use(user, shape.GetTargets(originCoordinate, targetVector), undo);
         
-        public void Use(IUnit user, IEnumerable<GridObject> targets)
+        public void Use(IUnit user, IEnumerable<GridObject> targets, bool undo = false)
         {
-            Use(user, targetEffects, targets);
+            Use(user, targetEffects, targets, undo);
             
             // It can be assumed that IUnit can be converted to GridObject.
             if (user is GridObject userGridObject)
-                Use(user, userEffects, userGridObject);
+                Use(user, userEffects, new List<GridObject> {userGridObject}, undo);
         }
 
-        private void Use(IUnit user, Effect[] effects, params GridObject[] targets) =>
-            Use(user, effects, targets.AsEnumerable());
-
-        private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets, bool undo = false)
         {
+            // TODO: Use the undo parameter to invert values
             foreach (GridObject target in targets)
             {
                 if (target is IUnit targetUnit)
@@ -55,11 +49,12 @@ namespace Abilities
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
+                    
                     // Attack modifiers should only work when the effect actually intends to do damage
                     if (damage > 0)
                         targetUnit.TakeDamage(Mathf.RoundToInt(user.Attack.Modify(damage)));
                 
-                    // Check if knockback is supported first, because currently it sometimes doesn't
+                    // Check if knockback is supported first, because currently it sometimes isn't
                     if (targetUnit.Knockback != null)
                         targetUnit.TakeKnockback(knockback);
                     
@@ -68,39 +63,15 @@ namespace Abilities
                         effect.ProcessTenet(user, targetUnit);
                     }
                 }
-
             }
-
-         
-            
-           
-            
-            
         }
         
-        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
-        {
-            Undo(user, shape.GetTargets(originCoordinate, targetVector));
-        }
+        // TODO: Test undo functions once undo has been implemented
+        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector) =>
+            Use(user, originCoordinate, targetVector, true);
 
-        public void Undo(IUnit user, params GridObject[] targets) => Undo(user, targets.AsEnumerable());
-        
-        public void Undo(IUnit user, IEnumerable<GridObject> targets)
-        {
-            Undo(user, targetEffects, targets);
-            
-            // It can be assumed that IUnit can be converted to GridObject.
-            if (user is GridObject userGridObject)
-                Undo(user, userEffects, userGridObject);
-        }
-
-        private void Undo(IUnit user, Effect[] effects, params GridObject[] targets) =>
-            Undo(user, effects, targets.AsEnumerable());
-
-        private void Undo(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
-        {
-            // TODO
-        }
+        public void Undo(IUnit user, IEnumerable<GridObject> targets) =>
+            Use(user, targets, true);
 
         private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType)
         {
