@@ -231,17 +231,7 @@ namespace Managers
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
             
-            // BUG Cannot move target to first position
-            if (CurrentTurnIndex < 2 || CurrentTurnIndex == targetIndex || CurrentTurnIndex == targetIndex - 1)
-                return;
-
-            int aboveIndex = CurrentTurnIndex - 1;
-
-            ShiftTurnQueue(aboveIndex, targetIndex);
-            
-            // Set the current turn to be the unit before first, later coming back to the current unit
-            CurrentTurnIndex = aboveIndex;
-
+            ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
         }
         
@@ -253,20 +243,12 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-            
-            // BUG Cannot move target to last position
-            if (CurrentTurnIndex >= currentTurnQueue.Count - 1 || CurrentTurnIndex == targetIndex || CurrentTurnIndex == targetIndex + 1)
-                return;
 
-            int belowIndex = CurrentTurnIndex + 1;
-            ShiftTurnQueue(belowIndex, targetIndex);
+            ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
-        
-        
-        
+
         /// <summary>
         /// Shift everything towards the <c>targetIndex</c> in the <c>currentTurnQueue</c>.
         /// This means every element in the list will be moved up or down by 1.
