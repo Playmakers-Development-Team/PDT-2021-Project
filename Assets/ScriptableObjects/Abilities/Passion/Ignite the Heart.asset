@@ -23,45 +23,41 @@ MonoBehaviour:
     providingTenet:
       tenetType: 2
       stackCount: 0
+    cost:
+      tenetCosts: []
     bonuses:
     - name: User Passion
       affectType: 0
       perTenet: 02000000
-    costs:
-    - name: User Consume Passion
-      affectType: 0
-      tenetCosts:
-      - name: Consume Passion
-        tenetCostType: 1
-        tenetType: 2
-  - name: 3 Attack IF User With Pride
+    keywords: []
+  - name: 3 Attack IF Target Spend Joy
     damageValue: 0
     defenceValue: 0
     attackValue: 3
     providingTenet:
       tenetType: 2
       stackCount: 0
-    bonuses: []
-    costs:
-    - name: User With Pride
-      affectType: 0
+    cost:
       tenetCosts:
-      - name: With Pride
-        tenetCostType: 0
-        tenetType: 0
-  - name: 3 Defence IF User With Sorrow
+      - name: Target Spend Joy
+        affectType: 1
+        tenetCostType: 2
+        tenetType: 4
+    bonuses: []
+    keywords: []
+  - name: 3 Defence IF Target With Sorrow
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 2
       stackCount: 0
-    bonuses: []
-    costs:
-    - name: User With Sorrow
-      affectType: 0
+    cost:
       tenetCosts:
-      - name: With Sorrow
+      - name: Target With Sorrow
+        affectType: 1
         tenetCostType: 0
         tenetType: 5
+    bonuses: []
+    keywords: []
   userEffects: []

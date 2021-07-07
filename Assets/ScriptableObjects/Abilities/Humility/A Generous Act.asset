@@ -23,8 +23,10 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
+    cost:
+      tenetCosts: []
     bonuses: []
-    costs: []
+    keywords: []
   - name: 4 Attack IF Target Spend Joy
     damageValue: 0
     defenceValue: 0
@@ -32,14 +34,10 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 0
+    cost:
+      tenetCosts: []
     bonuses: []
-    costs:
-    - name: Target Spend Joy
-      affectType: 1
-      tenetCosts:
-      - name: Spend Joy
-        tenetCostType: 2
-        tenetType: 4
+    keywords: []
   userEffects:
   - name: Default, Provide 1 Humility
     damageValue: 0
@@ -48,5 +46,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
+    cost:
+      tenetCosts: []
     bonuses: []
-    costs: []
+    keywords: []

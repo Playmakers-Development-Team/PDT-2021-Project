@@ -23,36 +23,38 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    cost:
+      tenetCosts: []
     bonuses: []
-    costs: []
-  - name: 2 Attack IF User Spend Passion
+    keywords: []
+  - name: 2 Attack IF Target Spend Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
-    costs:
-    - name: User Spend Passion
-      affectType: 0
+    cost:
       tenetCosts:
-      - name: Spend Passion
+      - name: Target Spend Passion
+        affectType: 1
         tenetCostType: 2
         tenetType: 2
-  - name: 2 Defence IF User Spend Humility
+    bonuses: []
+    keywords: []
+  - name: 2 Defence IF Target Spend Humility
     damageValue: 0
     defenceValue: 2
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
-    costs:
-    - name: User Spend Humility
-      affectType: 0
+    cost:
       tenetCosts:
-      - name: Spend Humility
+      - name: Target Spend Humility
+        affectType: 1
         tenetCostType: 2
         tenetType: 1
+    bonuses: []
+    keywords: []
   userEffects: []

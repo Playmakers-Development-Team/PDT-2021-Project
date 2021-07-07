@@ -25,9 +25,11 @@ namespace Abilities.Editor
                 SerializedProperty provideCountProperty = provideProperty.FindPropertyRelative("stackCount");
                 
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
-                SerializedProperty costsProperty = property.FindPropertyRelative("costs");
                 SerializedProperty bonusesProperty = property.FindPropertyRelative("bonuses");
                 SerializedProperty keywordsProperty = property.FindPropertyRelative("keywords");
+                SerializedProperty costProperty = property.FindPropertyRelative("cost");
+                SerializedProperty tenetCostsProperty =
+                    costProperty.FindPropertyRelative("tenetCosts");
 
                 List<string> valueNameList = new List<string>();
                 nameProperty.stringValue = string.Empty;
@@ -37,7 +39,7 @@ namespace Abilities.Editor
                                     || attackProperty.intValue != 0 
                                     || provideCountProperty.intValue != 0;
                 
-                if (costsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
+                if (tenetCostsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
                 {
                     nameProperty.stringValue += "Default, ";
                 }
@@ -69,8 +71,8 @@ namespace Abilities.Editor
                 if (bonusesProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessBonusesDisplayName(bonusesProperty);
                 
-                if (costsProperty.arraySize != 0)
-                    nameProperty.stringValue += " " + ProcessCostsDisplayName(costsProperty);
+                if (tenetCostsProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessTenetCostsDisplayName(tenetCostsProperty);
 
                 if (keywordsProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessKeywordsDisplayName(keywordsProperty);
@@ -134,57 +136,40 @@ namespace Abilities.Editor
             return $"{affectString} {string.Join(", ", tenetNameList)}";
         }
 
-        private string ProcessCostsDisplayName(SerializedProperty costsProperty)
+        private string ProcessTenetCostsDisplayName(SerializedProperty tenetCostsProperty)
         {
-            if (costsProperty.arraySize > 0)
+            if (tenetCostsProperty.arraySize > 0)
             {
-                List<string> costNameList = new List<string>();
+                List<string> tenetCostNameList = new List<string>();
                     
-                for (int i = 0; i < costsProperty.arraySize; i++)
+                for (int i = 0; i < tenetCostsProperty.arraySize; i++)
                 {
-                    SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
-                    string costName = GetCostDisplayName(costProperty);
-                    costProperty.FindPropertyRelative("name").stringValue = costName;
-                    costNameList.Add(costName);
-                    costProperty.serializedObject.ApplyModifiedProperties();
+                    SerializedProperty tenetCostProperty = tenetCostsProperty.GetArrayElementAtIndex(i);
+                    
+                    SerializedProperty affectTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("affectType");
+                    SerializedProperty tenetCostTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("tenetCostType");
+                    SerializedProperty tenetTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("tenetType");
+
+                    string affectString = ((AffectType) affectTypeProperty.enumValueIndex)
+                        .ToString();
+                    string tenetCostTypeString = ((TenetCostType) tenetCostTypeProperty.enumValueIndex)
+                        .ToString();
+                    string tenetString = ((TenetType) tenetTypeProperty.enumValueIndex)
+                        .ToString();
+                    
+                    string costName = $"{affectString} {tenetCostTypeString} {tenetString}";
+                    tenetCostProperty.FindPropertyRelative("name").stringValue = costName;
+                    tenetCostNameList.Add(costName);
+                    tenetCostProperty.serializedObject.ApplyModifiedProperties();
                 }
 
-                return $"IF {string.Join(" and ", costNameList)}";
+                return $"IF {string.Join(" and ", tenetCostNameList)}";
             }
 
             return string.Empty;
-        }
-
-        private string GetCostDisplayName(SerializedProperty costProperty)
-        {
-            string affectString = ((AffectType) costProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
-            string costName = $"{affectString} ";
-            SerializedProperty tenetCosts = costProperty.FindPropertyRelative("tenetCosts");
-
-            for (int i = 0; i < tenetCosts.arraySize; i++)
-            {
-                string tenetCostName = string.Empty;
-                SerializedProperty tenetCost = tenetCosts.GetArrayElementAtIndex(i);
-                SerializedProperty tenetCostNameProperty = tenetCost.FindPropertyRelative("name");
-                SerializedProperty tenetCostTypeProperty =
-                    tenetCost.FindPropertyRelative("tenetCostType");
-                SerializedProperty tenetTypeProperty = tenetCost.FindPropertyRelative("tenetType");
-                
-                string tenetCostTypeName = ((TenetCostType) tenetCostTypeProperty.enumValueIndex)
-                    .ToString();
-                string tenetName = ((TenetType) tenetTypeProperty.enumValueIndex).ToString();
-                
-                tenetCostName += $"{tenetCostTypeName} {tenetName}";
-
-                tenetCostNameProperty.stringValue = tenetCostName;
-                costName += tenetCostName;
-                
-                // If we have more than one tenet cost, add a comma
-                if (i < tenetCosts.arraySize - 1)
-                    costName += ", ";
-            }
-
-            return costName;
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => 

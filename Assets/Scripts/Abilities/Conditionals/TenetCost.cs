@@ -12,17 +12,18 @@ namespace Abilities.Conditionals
     }
     
     [Serializable]
-    public class TenetCost
+    public class TenetCost : Conditional, ICost
     {
-        [SerializeField, HideInInspector] private string name;
         [SerializeField] private TenetCostType tenetCostType;
         [SerializeField] private TenetType tenetType;
         
         public TenetCostType TenetCostType => tenetCostType;
         public TenetType TenetType => tenetType;
-
-        public void ExpendTenet(IUnit unit)
+        
+        public void ApplyCost(IUnit user, IUnit target)
         {
+            IUnit unit = GetAffectedUnit(user, target);
+
             switch (TenetCostType)
             {
                 case TenetCostType.Consume:
@@ -33,5 +34,8 @@ namespace Abilities.Conditionals
                     break;
             }
         }
+        
+        public bool MeetsRequirements(IUnit user, IUnit target) => 
+            GetAffectedUnit(user, target).GetTenetStatusCount(tenetType) > 0;
     }
 }

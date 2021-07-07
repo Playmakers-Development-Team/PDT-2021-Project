@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: TestKeyword
   m_EditorClassIdentifier: 
   displayName: TEEEEST
-  shouldDisplayInGame: 1
+  isVisibleInGame: 1
   description: Just another test keyword
   effect:
-    name: Nothing IF User With Pride, With Humility
+    name: Nothing IF User With Pride and User With Humility
     damageValue: 0
     defenceValue: 0
     attackValue: 0
@@ -24,14 +24,14 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User With Pride, With Humility
-      affectType: 0
+    cost:
       tenetCosts:
-      - name: With Pride
+      - name: User With Pride
+        affectType: 0
         tenetCostType: 0
         tenetType: 0
-      - name: With Humility
+      - name: User With Humility
+        affectType: 0
         tenetCostType: 0
         tenetType: 1
     keywords: []
