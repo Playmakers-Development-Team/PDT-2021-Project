@@ -145,6 +145,12 @@ namespace Managers
             });
             
             GenerateGridLines();
+            
+            //Note: I recommend adding this condition at first just to be safe. As soon as you have a solution to prevent automation from being active on the production environment, remove this and implement that.
+            if (Application.isEditor || Debug.isDebugBuild)
+            {
+                TrilleonAutomation.AutomationMaster.Initialize();
+            }
         }
 
         private void GenerateGridLines()
@@ -340,7 +346,7 @@ namespace Managers
                     MoveUnit();
                     selectedMoveRange.Clear();
                     UpdateMoveRange(selectedMoveRange);
-                   uiManager.movementHighlightTilemap.ClearAllTiles();
+                    uiManager.movementHighlightTilemap.ClearAllTiles();
 
                 }
                 else
