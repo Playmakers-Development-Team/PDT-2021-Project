@@ -10,10 +10,10 @@ namespace Managers
         // Temporary debug buttons, likely to be removed later
         [SerializeField] private bool debugKillEnemyButton;
         [SerializeField] private bool debugDamagePlayerButton;
-        
-        private bool isSpawningEnemies;
-        private const int totalEnemies = 3; // BUG: Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
-        
+
+        private bool isSpawningEnemies = false;
+        private int totalEnemies = 0; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203
+
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
@@ -33,9 +33,14 @@ namespace Managers
             // Maybe do this through a level dictionary that contains these details?
             // For now placeholders will be used
 
-            enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
-            
+            gridManager = ManagerLocator.Get<GridManager>();
+            enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
+
+            // enemyPrefab =
+            //     (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
+
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
         }
@@ -47,9 +52,7 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.EnemyUnits.Count < totalEnemies)
-                    SpawnEnemy();
-                else
+                if (enemyManager.EnemyUnits.Count >= totalEnemies)
                 {
                     isSpawningEnemies = false;
                     ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
@@ -72,19 +75,19 @@ namespace Managers
            .GetRandomUnoccupiedCoordinates());
 
            enemyUnit.Name = enemyUnit.RandomizeName();
-           
+
            // Debug.Log(enemyUnit.RandomizeName() + "RANDOMIZED");
            // Debug.Log(enemyUnit.Name);
         }
-        
+
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)
                 enemyManager.EnemyUnits[0].TakeDamage(1);
-            
+
             debugKillEnemyButton = false;
         }
-        
+
         private void DebugDamagePlayerButton()
         {
             foreach (var enemy in enemyManager.EnemyUnits)
@@ -101,7 +104,7 @@ namespace Managers
                     }
                 }
             }
-            
+
             Debug.Log("No players adjacent to enemies found, no damage dealt");
             debugDamagePlayerButton = false;
         }
