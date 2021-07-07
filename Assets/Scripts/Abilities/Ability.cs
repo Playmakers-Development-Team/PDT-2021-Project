@@ -16,7 +16,6 @@ namespace Abilities
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         [SerializeField] private int knockback;
-        [SerializeField] private bool onlyHitUnits = true;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
