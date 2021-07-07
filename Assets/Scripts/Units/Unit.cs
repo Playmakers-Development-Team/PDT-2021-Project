@@ -166,21 +166,6 @@ namespace Units
 
         public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
 
-        public string RandomizeName()
-        {
-            string[] names =
-            {
-                "Nadroj",
-                "Agida",
-                "Samuel",
-                "Francisco",
-                "Kyle"
-            };
-
-            int index = Random.Range(0, names.Length);
-            return names[index];
-        }
-
         private bool TryGetTenetStatusEffectNode(TenetType tenetType,
                                                  out LinkedListNode<TenetStatusEffect> foundNode)
         {
@@ -242,28 +227,8 @@ namespace Units
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
-
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-
-            Invoke("HideDamageText", damageTextLifetime);
         }
-
-        private void HideDamageText()
-        {
-            damageTextCanvas.enabled = false;
-        }
-
-        public void SetName()
-        {
-            nameText.text = Name;
-        }
-
-          #region RandomizeNames
+        
         public string RandomizeName()
         {
             string newname = "";
