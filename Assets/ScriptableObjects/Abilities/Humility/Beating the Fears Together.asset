@@ -24,14 +24,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 4 Damage User With Humility
+  - name: 4 Damage IF User With Humility
     damageValue: 4
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Humility
       affectType: 0
@@ -39,13 +41,14 @@ MonoBehaviour:
       - name: With Humility
         tenetCostType: 0
         tenetType: 1
-  - name: 3 Damage if User With Joy
+  - name: 3 Damage IF User With Joy
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Joy
       affectType: 0
@@ -53,13 +56,14 @@ MonoBehaviour:
       - name: With Joy
         tenetCostType: 0
         tenetType: 4
-  - name: 2 Damage if Target With Pride
+  - name: 2 Damage IF Target With Pride
     damageValue: 2
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target With Pride
       affectType: 1

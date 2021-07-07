@@ -3,12 +3,12 @@ using StatusEffects;
 using Units;
 using UnityEngine;
 
-namespace Abilities.Costs
+namespace Abilities.Conditionals
 {
     [Serializable]
     public enum TenetCostType
     {
-        With, Per, Spend
+        With, Consume, Spend
     }
     
     [Serializable]
@@ -25,7 +25,7 @@ namespace Abilities.Costs
         {
             switch (TenetCostType)
             {
-                case TenetCostType.Per:
+                case TenetCostType.Consume:
                     unit.RemoveTenetStatus(TenetType);
                     break;
                 case TenetCostType.Spend:

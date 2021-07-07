@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Abilities.Conditionals;
 using StatusEffects;
 using UnityEditor;
 using UnityEngine;
@@ -23,6 +26,7 @@ namespace Abilities.Editor
                 
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
                 SerializedProperty costsProperty = property.FindPropertyRelative("costs");
+                SerializedProperty bonusesProperty = property.FindPropertyRelative("bonuses");
 
                 List<string> valueNameList = new List<string>();
                 nameProperty.stringValue = string.Empty;
@@ -59,26 +63,75 @@ namespace Abilities.Editor
                 }
 
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
+
+                if (bonusesProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessBonusesDisplayName(bonusesProperty);
                 
                 if (costsProperty.arraySize != 0)
-                {
-                    nameProperty.stringValue += " if ";
-                    
-                    for (int i = 0; i < costsProperty.arraySize; i++)
-                    {
-                        if (i > 0)
-                            nameProperty.stringValue += ", ";
-                        
-                        SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
-                        string costName = GetCostDisplayName(costProperty);
-                        costProperty.FindPropertyRelative("name").stringValue = costName;
-                        nameProperty.stringValue += costName;
-                        costProperty.serializedObject.ApplyModifiedProperties();
-                    }
-                }
+                    nameProperty.stringValue += " " + ProcessCostsDisplayName(costsProperty);
 
                 property.serializedObject.ApplyModifiedProperties();
             }
+        }
+
+        private string ProcessBonusesDisplayName(SerializedProperty bonusesProperty)
+        {
+            if (bonusesProperty.arraySize != 0)
+            {
+                List<string> bonusesNameList = new List<string>();
+
+                for (int i = 0; i < bonusesProperty.arraySize; i++)
+                {
+                    SerializedProperty bonusProperty = bonusesProperty.GetArrayElementAtIndex(i);
+                    string bonusName = GetBonusDisplayName(bonusProperty);
+                    bonusProperty.FindPropertyRelative("name").stringValue = bonusName;
+                    bonusesNameList.Add(bonusName);
+                }
+                
+                return $"BONUSED BY {string.Join(" and ", bonusesNameList)}";
+            }
+
+            return string.Empty;
+        }
+
+        private string GetBonusDisplayName(SerializedProperty bonusProperty)
+        {
+            string affectString = ((AffectType) bonusProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
+            SerializedProperty perTenetProperty = bonusProperty.FindPropertyRelative("perTenet");
+            List<string> tenetNameList = new List<string>();
+
+            for (int i = 0; i < perTenetProperty.arraySize; i++)
+            {
+                SerializedProperty tenetProperty = perTenetProperty.GetArrayElementAtIndex(i);
+                string tenetName = ((TenetType) tenetProperty.enumValueIndex).ToString();
+                tenetNameList.Add(tenetName);
+            }
+            
+            return $"{affectString} {string.Join(", ", tenetNameList)}";
+        }
+
+        private string ProcessCostsDisplayName(SerializedProperty costsProperty)
+        {
+            string costsName = string.Empty;
+            
+            if (costsProperty.arraySize != 0)
+            {
+                costsName += "IF ";
+                    
+                for (int i = 0; i < costsProperty.arraySize; i++)
+                {
+                    if (i > 0)
+                        costsName += ", ";
+                        
+                    SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
+                    string costName = GetCostDisplayName(costProperty);
+                    costProperty.FindPropertyRelative("name").stringValue = costName;
+                    costsName += costName;
+                    costProperty.serializedObject.ApplyModifiedProperties();
+                }
+            }
+
+            return costsName;
         }
 
         private string GetCostDisplayName(SerializedProperty costProperty)
@@ -92,24 +145,15 @@ namespace Abilities.Editor
                 string tenetCostName = string.Empty;
                 SerializedProperty tenetCost = tenetCosts.GetArrayElementAtIndex(i);
                 SerializedProperty tenetCostNameProperty = tenetCost.FindPropertyRelative("name");
-
-                // Cost type name
-                switch (tenetCost.FindPropertyRelative("tenetCostType").enumValueIndex)
-                {
-                    case 0:
-                        tenetCostName += "With ";
-                        break;
-                    case 1:
-                        tenetCostName += "Per ";
-                        break;
-                    case 2:
-                        tenetCostName += "Spend ";
-                        break;
-                }
-
-                // Tenet name
-                string tenet = ((TenetType) tenetCost.FindPropertyRelative("tenetType").enumValueIndex).ToString();
-                tenetCostName += tenet;
+                SerializedProperty tenetCostTypeProperty =
+                    tenetCost.FindPropertyRelative("tenetCostType");
+                SerializedProperty tenetTypeProperty = tenetCost.FindPropertyRelative("tenetType");
+                
+                string tenetCostTypeName = ((TenetCostType) tenetCostTypeProperty.enumValueIndex)
+                    .ToString();
+                string tenetName = ((TenetType) tenetTypeProperty.enumValueIndex).ToString();
+                
+                tenetCostName += $"{tenetCostTypeName} {tenetName}";
 
                 tenetCostNameProperty.stringValue = tenetCostName;
                 costName += tenetCostName;

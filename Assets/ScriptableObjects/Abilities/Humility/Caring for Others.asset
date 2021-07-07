@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 3 Defence Target Spend Humility
+  - name: 3 Defence IF Target Spend Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target Spend Humility
       affectType: 1
@@ -38,13 +40,14 @@ MonoBehaviour:
       - name: Spend Humility
         tenetCostType: 2
         tenetType: 1
-  - name: 2 Attack if Target Spend Joy
+  - name: 2 Attack IF Target Spend Joy
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target Spend Joy
       affectType: 1

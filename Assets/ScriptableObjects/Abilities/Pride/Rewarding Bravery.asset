@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    bonuses: []
     costs: []
-  - name: 3 Defence if Target With Humility
+  - name: 3 Defence IF Target With Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target With Humility
       affectType: 1

@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 4 Defence Target Spend Humility
+  - name: 4 Defence IF Target Spend Humility
     damageValue: 0
     defenceValue: 4
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target Spend Humility
       affectType: 1
@@ -38,13 +40,14 @@ MonoBehaviour:
       - name: Spend Humility
         tenetCostType: 2
         tenetType: 1
-  - name: 2 Attack if Target With Passion
+  - name: 2 Attack IF Target With Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target With Passion
       affectType: 1

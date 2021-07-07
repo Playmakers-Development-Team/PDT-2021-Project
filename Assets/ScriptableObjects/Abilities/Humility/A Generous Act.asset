@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
+    bonuses: []
     costs: []
-  - name: 4 Attack if Target Spend Joy
+  - name: 4 Attack IF Target Spend Joy
     damageValue: 0
     defenceValue: 0
     attackValue: 4
     providingTenet:
       tenetType: 1
       stackCount: 0
+    bonuses: []
     costs:
     - name: Target Spend Joy
       affectType: 1
@@ -46,4 +48,5 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
+    bonuses: []
     costs: []

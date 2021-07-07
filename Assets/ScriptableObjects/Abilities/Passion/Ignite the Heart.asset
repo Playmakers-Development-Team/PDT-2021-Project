@@ -16,24 +16,32 @@ MonoBehaviour:
     gain 3 Attack\n \u21AF Target may gain 3 Defense with Sorrow"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   targetEffects:
-  - name: 1 Attack per Passion
+  - name: 1 Attack BONUSED BY User Passion IF User Consume Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 1
     providingTenet:
       tenetType: 2
       stackCount: 0
-    costs:
-    - name: User Per Passion
+    bonuses:
+    - name: User Passion
       affectType: 0
-      tenetCosts: []
-  - name: 3 Attack if User With Pride
+      perTenet: 02000000
+    costs:
+    - name: User Consume Passion
+      affectType: 0
+      tenetCosts:
+      - name: Consume Passion
+        tenetCostType: 1
+        tenetType: 2
+  - name: 3 Attack IF User With Pride
     damageValue: 0
     defenceValue: 0
     attackValue: 3
     providingTenet:
       tenetType: 2
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Pride
       affectType: 0
@@ -41,13 +49,14 @@ MonoBehaviour:
       - name: With Pride
         tenetCostType: 0
         tenetType: 0
-  - name: 3 Defence if User With Sorrow
+  - name: 3 Defence IF User With Sorrow
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 2
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Sorrow
       affectType: 0

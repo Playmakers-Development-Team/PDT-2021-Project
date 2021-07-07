@@ -23,6 +23,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
   userEffects:
   - name: Default, 3 Damage
@@ -32,14 +33,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 3 Defence if User Spend Humility
+  - name: 3 Defence IF User Spend Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User Spend Humility
       affectType: 0

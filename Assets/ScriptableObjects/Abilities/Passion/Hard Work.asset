@@ -23,28 +23,34 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 1 Damage if User Per Passion
+  - name: 1 Damage BONUSED BY User Passion IF User Consume Passion
     damageValue: 1
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses:
+    - name: 
+      affectType: 0
+      perTenet: 02000000
     costs:
-    - name: User Per Passion
+    - name: User Consume Passion
       affectType: 0
       tenetCosts:
-      - name: Per Passion
+      - name: Consume Passion
         tenetCostType: 1
         tenetType: 2
-  - name: 3 Damage if User With Pride
+  - name: 3 Damage IF User With Pride
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Pride
       affectType: 0

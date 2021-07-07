@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 3 Damage if User Spend Passion
+  - name: 3 Damage IF User Spend Passion
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 2
       stackCount: 0
+    bonuses: []
     costs:
     - name: User Spend Passion
       affectType: 0
@@ -46,4 +48,5 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    bonuses: []
     costs: []

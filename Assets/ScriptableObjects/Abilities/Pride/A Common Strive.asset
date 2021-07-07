@@ -23,14 +23,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    bonuses: []
     costs: []
-  - name: 2 Attack if User Spend Passion
+  - name: 2 Attack IF User Spend Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User Spend Passion
       affectType: 0
@@ -38,13 +40,14 @@ MonoBehaviour:
       - name: Spend Passion
         tenetCostType: 2
         tenetType: 2
-  - name: 2 Defence if User Spend Humility
+  - name: 2 Defence IF User Spend Humility
     damageValue: 0
     defenceValue: 2
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User Spend Humility
       affectType: 0
