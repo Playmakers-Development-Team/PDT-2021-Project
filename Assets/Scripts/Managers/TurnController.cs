@@ -57,6 +57,13 @@ namespace Managers
                     SetupTurnQueue();
                     commandManager.ListenCommand<KilledUnitCommand>(cmd => RefreshTimelineUI());
                 });
+            
+            commandManager.ListenCommand<RefreshTimelineCommand>(cmd =>
+            {
+                UpdateForNewRound();
+            });
+            
+            
         }
 
         /// <summary>

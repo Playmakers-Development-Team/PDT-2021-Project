@@ -242,7 +242,6 @@ namespace Managers
             // Set the current turn to be the unit before first, later coming back to the current unit
             CurrentTurnIndex = aboveIndex;
 
-            // TODO: Test
             StartTurn();
         }
         
@@ -254,7 +253,6 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            //TODO: Test
             
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
@@ -267,6 +265,8 @@ namespace Managers
             ShiftTurnQueue(belowIndex, targetIndex);
         }
         
+        
+        
         /// <summary>
         /// Shift everything towards the <c>targetIndex</c> in the <c>currentTurnQueue</c>.
         /// This means every element in the list will be moved up or down by 1.
@@ -274,22 +274,26 @@ namespace Managers
         /// <param name="startIndex">Shift everything starting from <c>startIndex</c>.
         /// The Unit in startIndex will not be shifted.</param>
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
-        private void ShiftTurnQueue(int startIndex, int endIndex)
+        public void ShiftTurnQueue(int startIndex, int endIndex)
         {
             if (startIndex == endIndex)
                 return;
             
-            int difference = endIndex - startIndex;
+            int difference = startIndex - endIndex;
             int increment = difference / Mathf.Abs(difference);
-            int currentIndex = startIndex + increment;
+            int currentIndex = endIndex;
+            IUnit tempUnit = currentTurnQueue[endIndex];
             
-            while (currentIndex != endIndex)
+            while (currentIndex != startIndex)
             {
+                Debug.Log(currentIndex);
+                Debug.Log("INCREMENT NUMBER: " + increment);
+                currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex + increment];
                 currentIndex += increment;
-                currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex - increment];
             }
-            
-            currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
+        
+            currentTurnQueue[startIndex] = tempUnit;
+            commandManager.ExecuteCommand(new RefreshTimelineCommand());
         }
         
         #endregion
