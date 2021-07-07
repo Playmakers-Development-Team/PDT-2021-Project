@@ -14,7 +14,7 @@ namespace Managers
         [SerializeField] private bool debugDamagePlayerButton = false;
         
         private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
+        private int totalEnemies = 0; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
         
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
@@ -35,8 +35,8 @@ namespace Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
 
-            enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
+            // enemyPrefab =
+            //     (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
             
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
@@ -49,9 +49,7 @@ namespace Managers
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.EnemyUnits.Count < totalEnemies)
-                    SpawnEnemy();
-                else
+                if (enemyManager.EnemyUnits.Count >= totalEnemies)
                 {
                     isSpawningEnemies = false;
                     ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
