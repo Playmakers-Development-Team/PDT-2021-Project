@@ -18,7 +18,13 @@ namespace Abilities.Bonuses
         [SerializeField] private List<TenetBonus> tenetBonuses;
         // Add more types of bonuses here
 
+        /// <summary>
+        /// Calculates the multiplier based on all bonuses.
+        /// If there aren't any just return a multiplier of 1.
+        /// </summary>
         public int CalculateBonusMultiplier(IUnit user, IUnit target) =>
-            tenetBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            tenetBonuses.Count > 0
+                ? tenetBonuses.Sum(b => b.CalculateBonusMultiplier(user, target))
+                : 1;
     }
 }

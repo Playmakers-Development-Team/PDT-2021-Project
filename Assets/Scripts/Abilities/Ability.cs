@@ -113,19 +113,11 @@ namespace Abilities
             // TODO
         }
 
-        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType)
-        {
-            int bonus = 0;
-            
-            foreach (Effect effect in effects)
-            {
-                if (effect.CanBeUsedBy(user, target))
-                {
-                    bonus += effect.CalculateValue(user, target, valueType);
-                }
-            }
-
-            return bonus;
-        }
+        /// <summary>
+        /// Sum up all the values from each effect. Only count the effect if such effect can be used.
+        /// </summary>
+        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType) =>
+            effects.Where(e => e.CanBeUsedBy(user, target))
+                .Sum(e => e.CalculateValue(user, target, valueType));
     }
 }

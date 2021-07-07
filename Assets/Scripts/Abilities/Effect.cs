@@ -79,10 +79,9 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int valueWithBonus = value * AllBonuses
-                .Sum(b => b.CalculateBonusMultiplier(user, target));
+            value *= AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
 
-            return valueWithBonus;
+            return value;
         }
     }
 }
