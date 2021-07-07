@@ -312,14 +312,14 @@ namespace Managers
         /// Returns the coordinate that is closest to the destination
         /// from a list of coordinates
         /// </summary>
-        public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> startingCoordinates,
+        public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> reachableCoordinates,
                                             Vector2Int targetCoordinate)
         {
             // PLACEHOLDER INITIALISATION
-            Vector2Int closestTile = startingCoordinates[0];
+            Vector2Int closestTile = reachableCoordinates[0];
             int shortestDistance = int.MaxValue;
             
-            foreach (var startingCoordinate in startingCoordinates)
+            foreach (var startingCoordinate in reachableCoordinates)
             {
                 //****************
                 //TODO: Fix this so enemies don't overlap
@@ -334,6 +334,7 @@ namespace Managers
                     closestTile = startingCoordinate;
                 }
             }
+            
             //Debug.Log("Chosen Tile Coordinate: "+closestTile);
             return closestTile;
         }
