@@ -64,7 +64,10 @@ namespace Brushes
         public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position)
         {
             if (!brushTarget.CompareTag("LevelTilemap") && !brushTarget.CompareTag("UnitPalette"))
+            {
                 Debug.LogWarning("Do not use this tilemap. Use 'Level Tilemap' instead");
+                return;
+            }
          
             curIndex = GetIndexFromUnits();
 
