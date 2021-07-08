@@ -41,16 +41,17 @@ namespace Managers
             
             Vector2[] gridCorners =
             {
-                gridManager.ConvertCoordinateToPosition(levelBounds / 2),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBounds.x / 2, -levelBounds.y / 2)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(-levelBounds.x / 2, -levelBounds.y / 2)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(-levelBounds.x / 2, levelBounds.y / 2)),
-                gridManager.ConvertCoordinateToPosition(levelBounds / 2)
+                gridManager.ConvertCoordinateToPosition(levelBounds),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBounds.x, 0)),
+                gridManager.ConvertCoordinateToPosition(Vector2Int.zero),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(0, levelBounds.y)),
+                gridManager.ConvertCoordinateToPosition(levelBounds)
             };
             
             for (int i = 0; i < gridCorners.Length; i++)
             {
-                lineRenderer.SetPosition(i, gridCorners[i]);
+                // NOTE: Need to shift positions down (on the y-axis) to line up with the grid 
+                lineRenderer.SetPosition(i, gridCorners[i] - levelTilemap.cellSize * Vector2.up);
             }
             
             Debug.Log("Draw Grid Outline is on. To turn it off go to the grid in inspector" +

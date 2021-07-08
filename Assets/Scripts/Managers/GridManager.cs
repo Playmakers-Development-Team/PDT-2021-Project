@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -29,9 +30,9 @@ namespace Managers
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
 
-            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
+            for (int x = 0; x < levelBounds.x; x++)
             {
-                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
+                for (int y = 0; y < levelBounds.y; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
@@ -45,6 +46,8 @@ namespace Managers
                     // }
                 }
             }
+            
+            Debug.LogWarning($"{tileDatas.Count}");
         }
 
         #region GETTERS
@@ -367,6 +370,12 @@ namespace Managers
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
+            if (tileData is null)
+            {
+                throw new Exception($"No tile data at coordinate {newCoordinate}. " +
+                                    "Failed to move unit");
+            }
+            
             int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
