@@ -37,9 +37,9 @@ namespace UI
         private void FillAll()
         {
             Vector2Int levelBounds = gridManager.LevelBounds;
-            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
+            for (int x = -levelBounds.x / 2; x <= levelBounds.x / 2; x++)
             {
-                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
+                for (int y = -levelBounds.y / 2; y <= levelBounds.y / 2; y++)
                 {
                     Vector3Int position = new Vector3Int(x, y, 0);
                     tilemap.SetTile(position, defaultTile);
@@ -58,7 +58,7 @@ namespace UI
                 Vector2Int scuffedCoordinate = correctCoordinate - Vector2Int.one;
                 
                 Vector2Int bounds = gridManager.LevelBounds;
-                if (scuffedCoordinate.x < -bounds.x / 2 - 1 || scuffedCoordinate.x > bounds.x / 2 || scuffedCoordinate.y < -bounds.y / 2 - 1 ||
+                if (scuffedCoordinate.x < -bounds.x / 2 || scuffedCoordinate.x > bounds.x / 2 || scuffedCoordinate.y < -bounds.y / 2 ||
                     scuffedCoordinate.y > bounds.y / 2)
                     continue;
                 
