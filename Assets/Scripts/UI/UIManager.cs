@@ -78,7 +78,7 @@ namespace UI
 
         private void OnSelectedAbility(Ability ability)
         {
-            if (!IsPlayerTurn)
+            if (!IsPlayerTurn || !turnManager.IsAbilityPhase())
                 return;
             
             currentAbility = ability;
@@ -107,6 +107,7 @@ namespace UI
                 return;
             
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
+            turnManager.UpdateAbilityPhase();
             commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
         }
         
@@ -150,10 +151,11 @@ namespace UI
 
         private void TryMove(Vector2Int destination)
         {
-            if (!IsPlayerTurn || IsAbilitySelected)
+            if ((!IsPlayerTurn || IsAbilitySelected) && !turnManager.IsMovementPhase())
                 return;
             
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
+            turnManager.UpdateMovementPhase();
             unitDeselected.Invoke();
         }
         

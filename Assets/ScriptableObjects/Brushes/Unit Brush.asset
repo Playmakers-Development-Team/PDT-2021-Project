@@ -38,12 +38,14 @@ MonoBehaviour:
   m_FloodFillContiguousOnly: 1
   m_Anchor: {x: 1, y: 1, z: 0}
   m_Prefab: {fileID: 0}
+  m_Rotation: {x: 0, y: 0, z: 0, w: 0}
+  m_EraseAnyObjects: 0
   m_Prefabs:
   - {fileID: 2640585567817604240, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
   - {fileID: 2383202020650920776, guid: fc02b43f33718f84bacac15ee448733e, type: 3}
   - {fileID: 2640585567817604240, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
-  - {fileID: 2640585567817604240, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
+  - {fileID: 2383202020650920776, guid: ea752bc8ea0aea241af38aadd3fc9387, type: 3}
   - {fileID: 4358930801080464946, guid: 15c811bfe2aa87748954fe02f0f6b562, type: 3}
-  curIndex: 0
+  curIndex: 3
   prefabRotation: {x: 0, y: 0, z: 0, w: 0}
   units: 2

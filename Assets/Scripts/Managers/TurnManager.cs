@@ -437,6 +437,24 @@ namespace Managers
                 unit.Health.Defence.Reset();
             }
         }
+
+        public void UpdateMovementPhase()
+        {
+            if (MovementPhaseIndex > PhaseIndex)
+                PhaseIndex = MovementPhaseIndex + 1;
+            else
+                PhaseIndex++;
+        }
+        
+        public void UpdateAbilityPhase()
+        {
+            if (AbilityPhaseIndex > PhaseIndex)
+                AbilityPhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                PhaseIndex++;
+        }
+        
+        
         
         #endregion
     }
