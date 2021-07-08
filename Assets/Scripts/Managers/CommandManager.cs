@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Commands;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Managers
@@ -298,6 +300,158 @@ namespace Managers
             where T5 : Command =>
             RegisterCatchListener(action);
 
+        /// <summary>
+        /// <p>Wait for a command to be executed using async/await.</p>
+        /// <p>Commands can be filtered so that we can wait for a command that we exactly want.
+        /// If multiple commands are to be caught, then wait for all of them.</p>
+        ///
+        /// <example>
+        /// How to use. E.g wait for all players to be ready.
+        /// <code>
+        ///     PlayerUnitsReadyCommand cmd = await WaitAsyncForCommand&lt;PlayerUnitsReadyCommand&gt;();
+        /// </code>
+        /// How to use. E.g wait for a player unit to start moving and finish moving.
+        /// <code>
+        ///     var (startMoveCmd, endMoveCmd) = await WaitAsyncForCommand&lt;StartMoveCommand, EndMoveCommand&gt;();
+        /// </code>
+        /// How to use but check if the command returns the expected parameters.
+        /// E.g wait for a player unit to start moving.
+        /// <code>
+        ///     StartMoveCommand cmd = await WaitAsyncForCommand&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="filter">
+        /// A lambda function which should return true if this is the command that we are expecting
+        /// and hence we should stop waiting. Can be left empty if we accept any command.
+        /// </param>
+        public async Task<T> WaitAsyncForCommand<T>(Predicate<T> filter = null) where T : Command
+        {
+            T caughtCmd1 = null;
+            
+            bool hasCaught = false;
+            CatchCommand((T cmd1) =>
+            {
+                caughtCmd1 = cmd1;
+                
+                if (filter != null && filter(cmd1))
+                    hasCaught = true;
+            });
+            await UniTask.WaitUntil(() => hasCaught);
+            return caughtCmd1;
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed.</p>
+        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public async Task<(T1, T2)> WaitAsyncForCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+        {
+            T1 caughtCmd1 = null;
+            T2 caughtCmd2 = null;
+            
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2) =>
+            {
+                caughtCmd1 = cmd1;
+                caughtCmd2 = cmd2;
+                
+                if (filter != null && filter(cmd1, cmd2))
+                    hasCaught = true;
+            });
+            await UniTask.WaitUntil(() => hasCaught);
+            return (caughtCmd1, caughtCmd2);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed.</p>
+        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public async Task<(T1, T2, T3)> WaitAsyncForCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+        {
+            T1 caughtCmd1 = null;
+            T2 caughtCmd2 = null;
+            T3 caughtCmd3 = null;
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3) =>
+            {
+                caughtCmd1 = cmd1;
+                caughtCmd2 = cmd2;
+                caughtCmd3 = cmd3;
+                
+                if (filter != null && filter(cmd1, cmd2, cmd3))
+                    hasCaught = true;
+            });
+            await UniTask.WaitUntil(() => hasCaught);
+            return (caughtCmd1, caughtCmd2, caughtCmd3);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed.</p>
+        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public async Task<(T1, T2, T3, T4)> WaitAsyncForCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+            where T4 : Command
+        {
+            T1 caughtCmd1 = null;
+            T2 caughtCmd2 = null;
+            T3 caughtCmd3 = null;
+            T4 caughtCmd4 = null;
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
+            {
+                caughtCmd1 = cmd1;
+                caughtCmd2 = cmd2;
+                caughtCmd3 = cmd3;
+                caughtCmd4 = cmd4;
+                
+                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4))
+                    hasCaught = true;
+            });
+            await UniTask.WaitUntil(() => hasCaught);
+            return (caughtCmd1, caughtCmd2, caughtCmd3, caughtCmd4);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed.</p>
+        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public async Task<(T1, T2, T3, T4, T5)> WaitAsyncForCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+            where T4 : Command
+            where T5 : Command
+        {
+            T1 caughtCmd1 = null;
+            T2 caughtCmd2 = null;
+            T3 caughtCmd3 = null;
+            T4 caughtCmd4 = null;
+            T5 caughtCmd5 = null;
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
+            {
+                caughtCmd1 = cmd1;
+                caughtCmd2 = cmd2;
+                caughtCmd3 = cmd3;
+                caughtCmd4 = cmd4;
+                caughtCmd5 = cmd5;
+                
+                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4, cmd5))
+                    hasCaught = true;
+            });
+            await UniTask.WaitUntil(() => hasCaught);
+            return (caughtCmd1, caughtCmd2, caughtCmd3, caughtCmd4, caughtCmd5);
+        }
+        
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
         /// <p>Commands can be filtered so that we can wait for a command that we exactly want.
