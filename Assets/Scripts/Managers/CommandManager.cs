@@ -308,16 +308,16 @@ namespace Managers
         /// <example>
         /// How to use. E.g wait for all players to be ready.
         /// <code>
-        ///     PlayerUnitsReadyCommand cmd = await WaitAsyncForCommand&lt;PlayerUnitsReadyCommand&gt;();
+        ///     PlayerUnitsReadyCommand cmd = await WaitForCommand&lt;PlayerUnitsReadyCommand&gt;();
         /// </code>
         /// How to use. E.g wait for a player unit to start moving and finish moving.
         /// <code>
-        ///     var (startMoveCmd, endMoveCmd) = await WaitAsyncForCommand&lt;StartMoveCommand, EndMoveCommand&gt;();
+        ///     var (startMoveCmd, endMoveCmd) = await WaitForCommand&lt;StartMoveCommand, EndMoveCommand&gt;();
         /// </code>
         /// How to use but check if the command returns the expected parameters.
         /// E.g wait for a player unit to start moving.
         /// <code>
-        ///     StartMoveCommand cmd = await WaitAsyncForCommand&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
+        ///     StartMoveCommand cmd = await WaitForCommand&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
         /// </code>
         /// </example>
         /// </summary>
@@ -325,7 +325,7 @@ namespace Managers
         /// A lambda function which should return true if this is the command that we are expecting
         /// and hence we should stop waiting. Can be left empty if we accept any command.
         /// </param>
-        public async Task<T> WaitAsyncForCommand<T>(Predicate<T> filter = null) where T : Command
+        public async Task<T> WaitForCommand<T>(Predicate<T> filter = null) where T : Command
         {
             T caughtCmd1 = null;
             
@@ -343,9 +343,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed.</p>
-        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2)> WaitAsyncForCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
+        public async Task<(T1, T2)> WaitForCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
             where T1 : Command
             where T2 : Command
         {
@@ -367,9 +367,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed.</p>
-        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3)> WaitAsyncForCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
+        public async Task<(T1, T2, T3)> WaitForCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -393,9 +393,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed.</p>
-        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3, T4)> WaitAsyncForCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
+        public async Task<(T1, T2, T3, T4)> WaitForCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -422,9 +422,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed.</p>
-        /// Please see <see cref="WaitAsyncForCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3, T4, T5)> WaitAsyncForCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
+        public async Task<(T1, T2, T3, T4, T5)> WaitForCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -460,12 +460,12 @@ namespace Managers
         /// <example>
         /// How to use. E.g wait for all players to be ready.
         /// <code>
-        ///     yield return WaitForCaughtCommand&lt;PlayerUnitsReadyCommand&gt;();
+        ///     yield return WaitForCommandYield&lt;PlayerUnitsReadyCommand&gt;();
         /// </code>
         /// How to use but check if the command returns the expected parameters.
         /// E.g wait for a player unit to start moving.
         /// <code>
-        ///     yield return WaitForCaughtCommand&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
+        ///     yield return WaitForCommandYield&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
         /// </code>
         /// </example>
         /// </summary>
@@ -473,7 +473,7 @@ namespace Managers
         /// A lambda function which should return true if this is the command that we are expecting
         /// and hence we should stop waiting. Can be left empty if we accept any command.
         /// </param>
-        public IEnumerator WaitForCaughtCommand<T>(Predicate<T> filter = null) where T : Command
+        public IEnumerator WaitForCommandYield<T>(Predicate<T> filter = null) where T : Command
         {
             bool hasCaught = false;
             CatchCommand((T cmd1) =>
@@ -486,9 +486,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
-        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommandYieldYield{T}"/> for detailed information and examples.
         /// </summary>
-        public IEnumerator WaitForCaughtCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
+        public IEnumerator WaitForCommandYield<T1, T2>(Func<T1, T2, bool> filter = null) 
             where T1 : Command
             where T2 : Command
         {
@@ -503,9 +503,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
-        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommandYieldYield{T}"/> for detailed information and examples.
         /// </summary>
-        public IEnumerator WaitForCaughtCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
+        public IEnumerator WaitForCommandYield<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -521,9 +521,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
-        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommandYieldYield{T}"/> for detailed information and examples.
         /// </summary>
-        public IEnumerator WaitForCaughtCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
+        public IEnumerator WaitForCommandYield<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -540,9 +540,9 @@ namespace Managers
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
-        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// Please see <see cref="WaitForCommandYieldYield{T}"/> for detailed information and examples.
         /// </summary>
-        public IEnumerator WaitForCaughtCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
+        public IEnumerator WaitForCommandYield<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
