@@ -43,8 +43,11 @@ namespace Background.Tiles
             }
         }
         
+        [ContextMenu("Generate")]
         public void Generate()
         {
+            Debug.Log("Generating...");
+            
             Initialise();
 
             Clear();
@@ -75,6 +78,7 @@ namespace Background.Tiles
             ReplaceTiles(washMap, TileType.Colour);
         }
 
+        [ContextMenu("Finalise")]
         public void Finalise()
         {
             Initialise();

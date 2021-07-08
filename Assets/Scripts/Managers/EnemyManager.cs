@@ -274,5 +274,15 @@ namespace Managers
             // NOTE: If no nearby player squares are free, targetUnit.Coordinate is returned
             return closestCoordinate;
         }
+        
+        
+        public IUnit Spawn(EnemyUnit unit)
+        {
+            enemyUnits.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
+        
+        
     }
 }

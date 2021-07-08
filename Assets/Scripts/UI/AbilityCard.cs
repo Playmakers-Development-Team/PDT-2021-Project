@@ -1,42 +1,39 @@
+﻿using Abilities;
 using TMPro;
-using Abilities;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class AbilityCard : MonoBehaviour
+    public class AbilityCard : Element
     {
-        [SerializeField] private Image abilityImg;
-        [SerializeField] private TextMeshProUGUI abilityName;
-        [SerializeField] private TextMeshProUGUI abilityDescription;
+        [SerializeField] private Button button;
+        [SerializeField] private Image image;
+        [SerializeField] private TextMeshProUGUI titleText;
+        [SerializeField] private TextMeshProUGUI descriptionText;
+        
+        
+        internal Ability Ability { get; private set; }
+        
+        
+        internal void Disable() => button.interactable = false;
 
-        public Ability Ability { get; private set; }
-
-        public void SetAbility(Ability ability)
+        internal void Assign(Ability ability)
         {
             Ability = ability;
-            gameObject.SetActive(ability != null);
-            SetAbilityText(ability.name);
-            abilityDescription.text = ability.Description;
+            
+            titleText.text = ability.name;
+            descriptionText.text = ability.Description;
         }
 
-        private void SetAbilityText(string abilityName)
+        public void OnCardClicked()
         {
-            this.abilityName.text = abilityName;
+            manager.selectedAbility.Invoke(Ability);
         }
 
-        public void HighlightAbility()
+        internal void Destroy()
         {
-            abilityImg.color = Color.red;
+            Destroy(gameObject);
         }
-
-        public void UnHighlightAbility()
-        {
-            abilityImg.color = Color.black;
-
-        }
-        
-        
     }
 }

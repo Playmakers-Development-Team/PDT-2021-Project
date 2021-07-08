@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}" SchemaVersion="103">
 	<States>
-		<WorkUnit Name="Default Work Unit" ID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}" PersistMode="Standalone">
+			<ChildrenList>
+				<StateGroup Name="PlayerLife" ID="{AD60207E-F214-4110-9B14-49A6F195DCC2}">
+					<ChildrenList>
+						<State Name="None" ID="{0B536BDD-D4B4-432E-8420-2E4E8A05F9B6}"/>
+						<State Name="Alive" ID="{7C58DF15-3CAF-4143-A08C-DFE6541FF691}"/>
+						<State Name="Dead" ID="{579817A7-984B-43A0-901A-A9ABA9B93BB0}"/>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="CombatState" ID="{9364E130-AD5B-4174-AA72-4C38717505AC}">
+					<ChildrenList>
+						<State Name="None" ID="{D6603252-6CB3-4125-BB14-F49BF3F01D7F}"/>
+						<State Name="In_Combat" ID="{8943B03A-666A-4FF3-8A8F-A38460E4CCB3}"/>
+						<State Name="Out_Of_Combat" ID="{CE5A1A55-B175-42C4-BCB0-392FD06D90D2}"/>
+					</ChildrenList>
+				</StateGroup>
+			</ChildrenList>
+		</WorkUnit>
 	</States>
 </WwiseDocument>
