@@ -334,7 +334,7 @@ namespace Managers
             {
                 caughtCmd1 = cmd1;
                 
-                if (filter != null && filter(cmd1))
+                if (filter == null || filter(cmd1))
                     hasCaught = true;
             });
             await UniTask.WaitUntil(() => hasCaught);
@@ -358,7 +358,7 @@ namespace Managers
                 caughtCmd1 = cmd1;
                 caughtCmd2 = cmd2;
                 
-                if (filter != null && filter(cmd1, cmd2))
+                if (filter == null || filter(cmd1, cmd2))
                     hasCaught = true;
             });
             await UniTask.WaitUntil(() => hasCaught);
@@ -384,7 +384,7 @@ namespace Managers
                 caughtCmd2 = cmd2;
                 caughtCmd3 = cmd3;
                 
-                if (filter != null && filter(cmd1, cmd2, cmd3))
+                if (filter == null || filter(cmd1, cmd2, cmd3))
                     hasCaught = true;
             });
             await UniTask.WaitUntil(() => hasCaught);
@@ -413,7 +413,7 @@ namespace Managers
                 caughtCmd3 = cmd3;
                 caughtCmd4 = cmd4;
                 
-                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4))
+                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4))
                     hasCaught = true;
             });
             await UniTask.WaitUntil(() => hasCaught);
@@ -445,7 +445,7 @@ namespace Managers
                 caughtCmd4 = cmd4;
                 caughtCmd5 = cmd5;
                 
-                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4, cmd5))
+                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4, cmd5))
                     hasCaught = true;
             });
             await UniTask.WaitUntil(() => hasCaught);
@@ -478,7 +478,7 @@ namespace Managers
             bool hasCaught = false;
             CatchCommand((T cmd1) =>
             {
-                if (filter != null && filter(cmd1))
+                if (filter == null || filter(cmd1))
                     hasCaught = true;
             });
             yield return new WaitUntil(() => hasCaught);
@@ -495,7 +495,7 @@ namespace Managers
             bool hasCaught = false;
             CatchCommand((T1 cmd1, T2 cmd2) =>
             {
-                if (filter != null && filter(cmd1, cmd2))
+                if (filter == null || filter(cmd1, cmd2))
                     hasCaught = true;
             });
             yield return new WaitUntil(() => hasCaught);
@@ -513,7 +513,7 @@ namespace Managers
             bool hasCaught = false;
             CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3) =>
             {
-                if (filter != null && filter(cmd1, cmd2, cmd3))
+                if (filter == null || filter(cmd1, cmd2, cmd3))
                     hasCaught = true;
             });
             yield return new WaitUntil(() => hasCaught);
@@ -532,7 +532,7 @@ namespace Managers
             bool hasCaught = false;
             CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
             {
-                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4))
+                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4))
                     hasCaught = true;
             });
             yield return new WaitUntil(() => hasCaught);
@@ -552,7 +552,7 @@ namespace Managers
             bool hasCaught = false;
             CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
             {
-                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4, cmd5))
+                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4, cmd5))
                     hasCaught = true;
             });
             yield return new WaitUntil(() => hasCaught);
