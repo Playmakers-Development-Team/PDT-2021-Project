@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Commands;
+using UnityEngine;
 
 namespace Managers
 {
@@ -295,6 +297,112 @@ namespace Managers
             where T4 : Command
             where T5 : Command =>
             RegisterCatchListener(action);
+
+        /// <summary>
+        /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
+        /// <p>Commands can be filtered so that we can wait for a command that we exactly want.
+        /// If multiple commands are to be caught, then wait for all of them.</p>
+        ///
+        /// <example>
+        /// How to use. E.g wait for all players to be ready.
+        /// <code>
+        ///     yield return WaitForCaughtCommand&lt;PlayerUnitsReadyCommand&gt;();
+        /// </code>
+        /// How to use but check if the command returns the expected parameters.
+        /// E.g wait for a player unit to start moving.
+        /// <code>
+        ///     yield return WaitForCaughtCommand&lt;StartMoveCommand&gt;((unit) => unit is PlayerUnit);
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="filter">
+        /// A lambda function which should return true if this is the command that we are expecting
+        /// and hence we should stop waiting. Can be left empty if we accept any command.
+        /// </param>
+        public IEnumerator WaitForCaughtCommand<T>(Predicate<T> filter = null) where T : Command
+        {
+            bool hasCaught = false;
+            CatchCommand((T cmd1) =>
+            {
+                if (filter != null && filter(cmd1))
+                    hasCaught = true;
+            });
+            yield return new WaitUntil(() => hasCaught);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
+        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public IEnumerator WaitForCaughtCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+        {
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2) =>
+            {
+                if (filter != null && filter(cmd1, cmd2))
+                    hasCaught = true;
+            });
+            yield return new WaitUntil(() => hasCaught);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
+        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public IEnumerator WaitForCaughtCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+        {
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3) =>
+            {
+                if (filter != null && filter(cmd1, cmd2, cmd3))
+                    hasCaught = true;
+            });
+            yield return new WaitUntil(() => hasCaught);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
+        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public IEnumerator WaitForCaughtCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+            where T4 : Command
+        {
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
+            {
+                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4))
+                    hasCaught = true;
+            });
+            yield return new WaitUntil(() => hasCaught);
+        }
+        
+        /// <summary>
+        /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
+        /// Please see <see cref="WaitForCaughtCommand{T}"/> for detailed information and examples.
+        /// </summary>
+        public IEnumerator WaitForCaughtCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
+            where T1 : Command
+            where T2 : Command
+            where T3 : Command
+            where T4 : Command
+            where T5 : Command
+        {
+            bool hasCaught = false;
+            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
+            {
+                if (filter != null && filter(cmd1, cmd2, cmd3, cmd4, cmd5))
+                    hasCaught = true;
+            });
+            yield return new WaitUntil(() => hasCaught);
+        }
 
         private void RegisterCatchListener(Delegate action)
         {
