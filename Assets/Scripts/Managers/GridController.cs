@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Commands;
 using GridObjects;
 using Units;
@@ -13,22 +14,20 @@ namespace Managers
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
         [SerializeField] private Tilemap levelTilemap;
+        [SerializeField] private bool drawGridOutline = false;
 
         private GridManager gridManager;
-
-        private BoundsInt bounds;
+        
         private Vector3 tilemapOriginPoint;
 
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
             gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
-
-            // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
-            bounds = gridManager.LevelTilemap.cellBounds;
-            tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
-
-            //DrawGridOutline();
+            
+            tilemapOriginPoint = levelTilemap.transform.position;
+            
+            if(drawGridOutline) DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
 
@@ -37,29 +36,25 @@ namespace Managers
         // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
         private void DrawGridOutline()
         {
-            Vector3[] gridCorners =
+            LineRenderer lineRenderer = GetComponent<LineRenderer>();
+            lineRenderer.enabled = true;
+            
+            Vector2[] gridCorners =
             {
-                new Vector3(bounds.xMin + tilemapOriginPoint.x,
-                    bounds.yMin + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMax + tilemapOriginPoint.x,
-                    bounds.yMin + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMax + tilemapOriginPoint.x,
-                    bounds.yMax + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMin + tilemapOriginPoint.x,
-                    bounds.yMax + tilemapOriginPoint.y, 0)
+                gridManager.ConvertCoordinateToPosition(levelBounds / 2),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBounds.x / 2, -levelBounds.y / 2)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(-levelBounds.x / 2, -levelBounds.y / 2)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(-levelBounds.x / 2, levelBounds.y / 2)),
+                gridManager.ConvertCoordinateToPosition(levelBounds / 2)
             };
-
+            
             for (int i = 0; i < gridCorners.Length; i++)
             {
-                if (i == gridCorners.Length - 1)
-                {
-                    Debug.DrawLine(gridCorners[i], gridCorners[0], Color.green, float.MaxValue);
-                }
-                else
-                {
-                    Debug.DrawLine(gridCorners[i], gridCorners[i + 1], Color.green, float.MaxValue);
-                }
+                lineRenderer.SetPosition(i, gridCorners[i]);
             }
+            
+            Debug.Log("Draw Grid Outline is on. To turn it off go to the grid in inspector" +
+                      "and uncheck the option");
         }
 
         private void TestingGetGridObjectsByCoordinate(int testCases)
