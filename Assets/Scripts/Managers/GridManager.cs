@@ -375,8 +375,8 @@ namespace Managers
             if (unit is PlayerUnit)
             {
                 playerUnit = (PlayerUnit) unit;
-                if (playerUnit.animator != null)
-                    playerUnit.animator.SetInteger("Movement", 1);
+                if (playerUnit.UnitAnimator != null)
+                    playerUnit.UnitAnimator.SetInteger("Movement", 1);
             }
 
             // Check if tile is unoccupied

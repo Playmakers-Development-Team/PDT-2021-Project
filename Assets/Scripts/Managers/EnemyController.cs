@@ -1,5 +1,3 @@
-using Commands;
-using Cysharp.Threading.Tasks;
 using GridObjects;
 using Units;
 using Units.Commands;
@@ -10,18 +8,23 @@ namespace Managers
     public class EnemyController : MonoBehaviour
     {
         // Temporary debug buttons, likely to be removed later
-        [SerializeField] private bool debugKillEnemyButton = false;
-        [SerializeField] private bool debugDamagePlayerButton = false;
-        
+        [SerializeField] private bool debugKillEnemyButton;
+        [SerializeField] private bool debugDamagePlayerButton;
+
         private bool isSpawningEnemies = false;
-        private int totalEnemies = 3; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203 
-        
+        private int totalEnemies = 0; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203
+
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
-        private CommandManager commandManager;
-        private UnitManager unitManager;
         private GameObject enemyPrefab;
+
+
+        private void Awake()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+            enemyManager = ManagerLocator.Get<EnemyManager>();
+        }
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
         private void Start()
@@ -32,12 +35,7 @@ namespace Managers
 
             gridManager = ManagerLocator.Get<GridManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
-            unitManager = ManagerLocator.Get<UnitManager>();
 
-            enemyPrefab =
-                (GameObject) Resources.Load("Prefabs/GridObjects/EnemyPlaceholder", typeof(GameObject));
-            
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
         }
@@ -68,24 +66,23 @@ namespace Managers
 
         private void SpawnEnemy()
         {
-           IUnit enemyunit = enemyManager.Spawn(enemyPrefab, gridManager
+           IUnit enemyUnit = enemyManager.Spawn(enemyPrefab, gridManager
            .GetRandomUnoccupiedCoordinates());
 
-           enemyunit.Name = enemyunit.RandomizeName();
-           
-           Debug.Log(enemyunit.RandomizeName() + "RANDOMZIED");
-           Debug.Log(enemyunit.Name);
-           
+           enemyUnit.Name = enemyUnit.RandomizeName();
+
+           // Debug.Log(enemyUnit.RandomizeName() + "RANDOMIZED");
+           // Debug.Log(enemyUnit.Name);
         }
-        
+
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)
                 enemyManager.EnemyUnits[0].TakeDamage(1);
-            
+
             debugKillEnemyButton = false;
         }
-        
+
         private void DebugDamagePlayerButton()
         {
             foreach (var enemy in enemyManager.EnemyUnits)
@@ -102,7 +99,7 @@ namespace Managers
                     }
                 }
             }
-            
+
             Debug.Log("No players adjacent to enemies found, no damage dealt");
             debugDamagePlayerButton = false;
         }

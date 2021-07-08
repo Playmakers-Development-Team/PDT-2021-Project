@@ -9,6 +9,7 @@ using Managers;
 using TMPro;
 using Units.Commands;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -16,6 +17,8 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+
+        [SerializeField] private Sprite render;
 
         public string Name
         {
@@ -38,6 +41,8 @@ namespace Units
         public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
             tenetStatusEffectSlots.AsEnumerable();
 
+        public Sprite Render => render;
+
         private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
             new LinkedList<TenetStatusEffect>();
 
@@ -46,14 +51,8 @@ namespace Units
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
 
-        [SerializeField] private TMP_Text nameText;
-        [SerializeField] private TMP_Text healthText;
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        [SerializeField] private float damageTextLifetime = 1.0f;
-
         private TurnManager turnManager;
         private PlayerManager playerManager;
-        private GridManager gridManager;
         private CommandManager commandManager;
 
         protected override void Start()
@@ -62,8 +61,8 @@ namespace Units
 
             data.Initialise();
             Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
-            
-            
+
+
             // TODO Are speeds are random or defined in UnitData?
             Speed.Value += Random.Range(0, 101);
 
@@ -73,13 +72,6 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
-            if (nameText)
-                nameText.text = Name;
-            
-               
-            if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
         }
 
         // TODO: Used for testing, can eventually be removed
@@ -87,22 +79,16 @@ namespace Units
         {
 
         }
-        
-        
-        
+
+
+
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
         public void TakeAttack(int amount) => Attack.Adder += amount;
-        
+
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
-            
-            SpawnDamageText(damageTaken);
-            
-            if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
-            
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
@@ -155,7 +141,7 @@ namespace Units
         }
 
         public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
-        
+
         public bool TryGetTenetStatusEffect(TenetType tenetType,
                                             out TenetStatusEffect tenetStatusEffect)
         {
@@ -205,7 +191,7 @@ namespace Units
         /// </summary>
         private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
-            if (killUnitCommand.Unit == this)
+            if ((Unit<T>) killUnitCommand.Unit == this)
             {
                 // Since we're about to remove the object, stop listening to the command
                 commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
@@ -234,38 +220,15 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject +
                                    " as it is an unidentified unit");
                     break;
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
             gameObject.SetActive(false);
-            
-            commandManager.ExecuteCommand(new KilledUnitCommand(this));
-        }
-
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-            
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-            
-            Invoke("HideDamageText", damageTextLifetime);
-        }
-
-        private void HideDamageText()
-        {
-            damageTextCanvas.enabled = false;
-        }
-
-        public void SetName()
-        {
-            nameText.text = Name;
         }
         
-          #region RandomizeNames
         public string RandomizeName()
         {
             string newname = "";
@@ -348,9 +311,5 @@ namespace Units
             }
             return newname;
         }
-        
-        #endregion
-        
-        
     }
 }

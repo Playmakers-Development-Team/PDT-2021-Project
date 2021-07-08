@@ -19,17 +19,19 @@ namespace Units
         public Vector2Int Coordinate { get; }
 
         GameObject gameObject { get; }
-        
+
         IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
 
+        Sprite Render { get; }
+
         Type GetDataType();
-        
+
         void TakeDamage(int amount);
 
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
         void TakeAttack(int amount);
 
         void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);

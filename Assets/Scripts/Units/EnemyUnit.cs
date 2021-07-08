@@ -26,8 +26,6 @@ namespace Units
             base.Start();
             ManagerLocator.Get<EnemyManager>().Spawn(this);
             Name = RandomizeName();
-            SetName();
-
         }
     }
 }

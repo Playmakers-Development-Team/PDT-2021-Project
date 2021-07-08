@@ -12,15 +12,9 @@ namespace Managers
     {
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
-        [SerializeField] private TileBase abilityHighlightTile;
-        [SerializeField] private TileBase movementHighlightTile;
-
-        [SerializeField] private Tilemap movementHighlightTilemap;
-        [SerializeField] private Tilemap highlightTilemap;
         [SerializeField] private Tilemap levelTilemap;
 
         private GridManager gridManager;
-        private UIManager uiManager;
 
         private BoundsInt bounds;
         private Vector3 tilemapOriginPoint;
@@ -28,49 +22,15 @@ namespace Managers
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            uiManager = ManagerLocator.Get<UIManager>();
-
-            uiManager.Initialise(abilityHighlightTile, movementHighlightTile,highlightTilemap,
-            movementHighlightTilemap); ;
             gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
 
             // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
             bounds = gridManager.LevelTilemap.cellBounds;
             tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
-            
+
             //DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
-
-        #region Unit Selection
-
-        private void ClickUnit()
-        { 
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            // TODO look into this later, put the subtraction somewhere better
-            Vector2Int gridPos = gridManager.ConvertPositionToCoordinate(mousePos) + new Vector2Int(1, 1);
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
-
-            foreach (IUnit unit in playerManager.PlayerUnits)
-            {
-                if (unit is PlayerUnit playerUnit)
-                {
-                    if (gridManager.ConvertPositionToCoordinate(playerUnit.transform.position) ==
-                        gridPos)
-                    {
-                        // TODO: Dependency Violation - Grid system should not depend on Unit system
-                        playerManager.SelectUnit(playerUnit);
-                        //UpdateAbilityUI(playerUnit);
-                        Debug.Log($"Unit Selected!");
-                        return;
-                    }
-                }
-            }
-
-            playerManager.DeselectUnit();
-        }
-
-        #endregion
 
         #region Unit Testing
 
