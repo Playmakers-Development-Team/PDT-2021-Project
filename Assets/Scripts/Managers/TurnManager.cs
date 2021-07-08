@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
@@ -32,11 +33,13 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
+        
+        private bool randomizedSpeed;
         private bool timelineNeedsUpdating;
 
         #endregion
-        private List<IUnit> preMadeTurnQueue = new List<IUnit>();
-        private bool randomizedSpeed;
+    
 
         #region Manager Overrides
         
@@ -76,18 +79,27 @@ namespace Managers
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
         
-        /// <summary>
-        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
-        /// <c>EnemyManager</c>. Calculate the turn order based on speed.
-        /// </summary>
-        private List<IUnit> CreateTurnQueue()
+        public void SetupTurnQueue(GameObject[] premadeTimeline)
         {
-            List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-            return turnQueue;
-        }
+            randomizedSpeed = false;
+            RoundCount = 0;
+            TotalTurnCount = 0;
+            CurrentTurnIndex = 0;
+            previousTurnQueue = new List<IUnit>();
+            
+            foreach(GameObject prefab in premadeTimeline)
+                preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
+            
+            UpdateNextTurnQueue();
+            currentTurnQueue = nextTurnQueue;
 
+            if (!(ActingEnemyUnit is null))
+                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
+            
+            commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
+        }
+        
+        
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
@@ -118,19 +130,6 @@ namespace Managers
             SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
         
-        /// <summary>
-        /// Should be called whenever the number of units in the turn queue has been changed.
-        /// </summary>
-        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
-        
-        /// <summary>
-        /// Adds a new unit to the timeline and setting it to the end of the current turn queue.
-        /// </summary>
-        private void AddNewUnitToTimeline(IUnit unit)
-        {
-            currentTurnQueue.Add(unit);
-            timelineNeedsUpdating = true;
-        }
         
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
@@ -286,11 +285,8 @@ namespace Managers
         /// <summary>
         /// Should be called whenever the number of units in the turn queue has been changed.
         /// </summary>
-        private void UpdateNextTurnQueue()
-        {
-            nextTurnQueue = CreateTurnQueue();
-            // TODO might want to update UI here
-        }
+        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
+        
 
         /// <summary>
         /// Adds a new unit to the timeline and setting it to the end of the current turn queue
@@ -349,9 +345,10 @@ namespace Managers
         /// </summary>
         private EnemyUnit GetActingEnemyUnit()
         {
-            return null;
-            
+            if (ActingUnit is EnemyUnit currentEnemyUnit)
                 return currentEnemyUnit;
+            
+            return null;
         }
         
         #endregion

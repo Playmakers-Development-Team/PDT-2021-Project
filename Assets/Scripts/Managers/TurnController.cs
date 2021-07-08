@@ -5,10 +5,16 @@ namespace Managers
 {
     public class TurnController : MonoBehaviour
     {
+        
+        [SerializeField]private GameObject[] premadeTimeline;
+        [SerializeField] private bool isTimelineRandomised;
+        
         /// <summary>
         /// A reference to the TurnManager.
         /// </summary>
         private TurnManager turnManager;
+
+        
 
         private void Awake()
         {
@@ -27,7 +33,11 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            turnManager.SetupTurnQueue();
+            if(isTimelineRandomised)
+             turnManager.SetupTurnQueue();
+            else 
+                turnManager.SetupTurnQueue(premadeTimeline);
+            
         }
     }
 }
