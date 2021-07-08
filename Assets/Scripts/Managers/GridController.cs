@@ -6,6 +6,7 @@ using Units;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Tilemaps;
 
 namespace Managers
@@ -37,9 +38,11 @@ namespace Managers
         private void OnDrawGizmos()
         {
             Handles.color = Color.green;
-            BoundsInt b = new BoundsInt(new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
-                new Vector3Int(levelBounds.x, levelBounds.y, 0));
-
+            BoundsInt b = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x, levelBounds.y, 0)
+                );
+            
             for (int x = b.xMin; x <= b.xMax; x++)
             {
                 Vector3 start = levelTilemap.CellToWorld(new Vector3Int(x, b.yMin, 0));
@@ -60,6 +63,31 @@ namespace Managers
                     Handles.DrawLine(start, end, 5.0f);
                 else
                     Handles.DrawDottedLine(start, end, 5.0f);
+            }
+
+            if (!levelTilemap)
+                return;
+
+            Handles.color = Color.red;
+            Handles.zTest = CompareFunction.Less;
+            foreach (Transform child in levelTilemap.transform)
+            {
+                if (!child.GetComponent<Obstacle>())
+                    continue;
+                
+                Vector3Int cellPosition = levelTilemap.WorldToCell(child.position);
+                
+                Vector3[] positions =
+                {
+                    levelTilemap.CellToWorld(cellPosition),
+                    levelTilemap.CellToWorld(cellPosition + new Vector3Int(0, 1, 0)),
+                    levelTilemap.CellToWorld(cellPosition + new Vector3Int(1, 1, 0)),
+                    levelTilemap.CellToWorld(cellPosition + new Vector3Int(1, 0, 0))
+                };
+                int[] indices = {0, 1, 1, 2, 2, 3, 3, 0, 0, 2, 1, 3};
+
+                for (int i = 0; i < indices.Length; i += 2)
+                    Handles.DrawLine(positions[indices[i]], positions[indices[i + 1]], 5.0f);
             }
         }
         
