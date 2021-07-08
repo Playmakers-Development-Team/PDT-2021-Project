@@ -19,11 +19,6 @@ namespace Background.Editor
             Initialise();
         }
 
-        private void OnEnable()
-        {
-            Initialise();
-        }
-
         private void Initialise()
         {
             features = serializedObject.FindProperty("features");
@@ -31,7 +26,7 @@ namespace Background.Editor
 
         public override void OnInspectorGUI()
         {
-            if (features is null || features.arraySize != editors.Count)
+            if (features == null || features.arraySize != editors.Count)
                 UpdateEditors();
             
             DrawFeatures();
