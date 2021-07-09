@@ -50,11 +50,8 @@ namespace Managers
         public IUnit Spawn(PlayerUnit unit)
         {
             playerUnits.Add(unit);
-            
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            
             SelectUnit(unit);
-            
             return unit;
         }
     }
