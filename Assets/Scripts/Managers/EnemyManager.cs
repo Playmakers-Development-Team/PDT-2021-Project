@@ -231,18 +231,22 @@ namespace Managers
                     // i.e. The earlier player in the list is prioritised
                     if (closestPlayerUnit.Health.HealthPoints.Value != playerUnit.Health.HealthPoints.Value)
                     {
-                        float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
-                        if (lowerHealth == playerUnit.Health.HealthPoints.Value)
-                        {
-                            closestPlayerUnit = playerUnit;
-                        }
+                        closestPlayerUnit = LowestHealth(closestPlayerUnit, playerUnit);
                     }
                 }
             }
 
             return closestPlayerUnit;
         }
-        
+        private IUnit LowestHealth(IUnit closestPlayerUnit, IUnit playerUnit)
+        {
+            float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
+            if (lowerHealth == playerUnit.Health.HealthPoints.Value)
+            {
+                return playerUnit;
+            }
+            return closestPlayerUnit;
+        }
         private Vector2Int FindClosestAdjacentFreeSquare(EnemyUnit unit, IUnit targetUnit)
         {
             Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();

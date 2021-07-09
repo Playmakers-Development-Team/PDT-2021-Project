@@ -42,11 +42,6 @@ namespace Managers
         }
 
         /// <summary>
-        /// Removes a unit from the current timeline.
-        /// </summary>
-        /// <param name="targetUnit"></param>
-
-        /// <summary>
         /// Spawns a unit.
         /// </summary>
         /// <param name="targetUnit"></param>
