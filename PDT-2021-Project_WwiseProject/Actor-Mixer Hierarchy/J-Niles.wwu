@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{C28E0166-1ABF-430A-B74C-D2418AFCE797}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="J-Niles" ID="{C28E0166-1ABF-430A-B74C-D2418AFCE797}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Niles_Attack-01v2" ID="{F8F72D1E-31BD-4CBD-AC94-BAEF1A857609}" ShortID="959551176">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="SFX Bus" ID="{E6F7F0E0-29D3-4FA4-94B8-BFCB461DF33C}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Niles_Attack-01v2" ID="{28B952C0-E92B-4D64-BF9F-D73AE0E140D2}">
+							<Language>SFX</Language>
+							<AudioFile>Niles_Attack-01v2.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="460477972"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Niles_Attack-01v2" ID="{28B952C0-E92B-4D64-BF9F-D73AE0E140D2}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

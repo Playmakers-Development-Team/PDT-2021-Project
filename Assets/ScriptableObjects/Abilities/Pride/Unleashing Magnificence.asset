@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Unleashing Magnificence
+  m_EditorClassIdentifier: 
+  description: 'Does 1 base Damage.
+
+    6 Damage spend Pride.
+
+    2 Damage spend
+    Passion.'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  knockback: 0
+  onlyHitUnits: 1
+  targetEffects:
+  - name: Default, 1 Damage
+    damageValue: 1
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs: []
+  - name: 6 Damage spend Pride
+    damageValue: 6
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: User Spend Pride
+      affectType: 0
+      costType: 2
+      tenetType: 0
+  - name: 2 Damage with Passion
+    damageValue: 2
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: User With Passion
+      affectType: 0
+      costType: 0
+      tenetType: 2
+  userEffects: []

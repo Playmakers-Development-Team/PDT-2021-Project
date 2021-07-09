@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PlayerUnit
+  - EnemyUnit
   layers:
   - Default
   - TransparentFX
@@ -11,12 +13,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Wash Input
+  - Line Input
+  - Wash
+  - Line
+  - Paper
+  - Preview
   - 
   - 
   - 
@@ -40,4 +42,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Highlight
+    uniqueID: 600231323
+    locked: 0
+  - name: Unit
+    uniqueID: 688705043
+    locked: 0
+  - name: Text
+    uniqueID: 3215308255
     locked: 0
