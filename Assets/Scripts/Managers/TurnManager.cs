@@ -303,10 +303,20 @@ namespace Managers
             ShiftTurnQueue(belowIndex, targetIndex);
         }
 
-        public void Meditate()
+        public bool Meditate()
         {
-            meditatedUnit.Add(ActingUnit);
-            PhaseIndex++;
+            if (TurnManipulationPhaseIndex < PhaseIndex)
+            {
+                Debug.Log("not in Manupulation Phase");
+                return false;
+            }
+            else
+            {
+
+                meditatedUnit.Add(ActingUnit);
+                PhaseIndex++;
+                return true;
+            }
         }
 
         /// <summary>

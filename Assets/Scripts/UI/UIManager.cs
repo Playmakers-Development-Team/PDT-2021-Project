@@ -151,7 +151,7 @@ namespace UI
 
         private void TryMove(Vector2Int destination)
         {
-            if ((!IsPlayerTurn || IsAbilitySelected) && !turnManager.IsMovementPhase())
+            if ((!IsPlayerTurn || IsAbilitySelected) || !turnManager.IsMovementPhase())
                 return;
             
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));

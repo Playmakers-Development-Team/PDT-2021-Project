@@ -1,5 +1,6 @@
 using Units.Commands;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Managers
 {
@@ -12,6 +13,7 @@ namespace Managers
         
         [Tooltip("The global turn phase for every player unit")]
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
+        
         
         private TurnManager turnManager;
 
@@ -33,8 +35,11 @@ namespace Managers
 
         public void Meditate()
         {
-            unitManager.IncrementInsight(1);
-            turnManager.Meditate();
+            Debug.Log("meditated c:");
+            if (turnManager.Meditate())
+            {
+                unitManager.IncrementInsight(1);
+            }
         }
 
         //TODO DELETE THIS FUNCTION BEFORE MERGE
