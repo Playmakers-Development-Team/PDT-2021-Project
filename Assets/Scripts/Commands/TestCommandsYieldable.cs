@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace Commands
 {
+    /// <summary>
+    /// An example script used to use commands with await and coroutines. This script outputs
+    /// spawn command in debug log.
+    /// </summary>
+    
     // TODO Delete this file and the CommandYieldTest Scene after merge to dev.
     public class TestCommandsYieldable : MonoBehaviour
     {
