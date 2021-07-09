@@ -11,11 +11,12 @@ namespace Units
         public enum AnimationStates
         {
             Idle,
-            Forward,
-            Backward,
+            Up,
+            Down,
             Left,
             Right,
-            Casting, }
+            Casting
+        }
         
         public Animator UnitAnimator { get; private set; }
         public Ability CurrentlySelectedAbility { get; set; }
@@ -34,40 +35,50 @@ namespace Units
 
         public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
         {
-            this.UnitAnimationStates = animationStates;
-            Debug.Log("AnimationStates" + animationStates);
+            UnitAnimationStates = animationStates;
 
-            switch (this.UnitAnimationStates)
+            switch (UnitAnimationStates)
             {
                 case AnimationStates.Idle:
-                    UnitAnimator.SetInteger("Movement", 0);
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = false;
-                    UnitAnimator.SetBool("isCasting", false);
                     break;
-                case AnimationStates.Backward:
-                    UnitAnimator.SetInteger("Movement", 2);
+                
+                case AnimationStates.Down:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = false;
-                    UnitAnimator.SetBool("isCasting", false);
                     break;
-                case AnimationStates.Forward:
-                    UnitAnimator.SetInteger("Movement", 1);
+                
+                case AnimationStates.Up:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    
                     spriteRenderer.flipX = true;
-                    UnitAnimator.SetBool("isCasting", false);
                     break;
+                
                 case AnimationStates.Left:
-                    UnitAnimator.SetInteger("Movement", 1);
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = true;
-                    UnitAnimator.SetBool("isCasting", false);
                     break;
+                
                 case AnimationStates.Right:
-                    UnitAnimator.SetInteger("Movement", 1);
-                     spriteRenderer.flipX = false;
-                    UnitAnimator.SetBool("isCasting", false);
-                    break;
-                case AnimationStates.Casting:
-                    UnitAnimator.SetInteger("Movement", 0);
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    
                     spriteRenderer.flipX = false;
-                    UnitAnimator.SetBool("isCasting", true);
+                    break;
+                
+                case AnimationStates.Casting:
+                    UnitAnimator.SetBool("moving", false);
+                    // UnitAnimator.SetBool("front", true);
+                    
+                    UnitAnimator.SetTrigger("attack");
                     break;
             }
         }
