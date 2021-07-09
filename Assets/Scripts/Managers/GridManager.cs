@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -22,16 +23,22 @@ namespace Managers
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }
         public Vector2 GridOffset { get; private set; }
+        public BoundsInt LevelBoundsInt { get; private set; }
 
         public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
         {
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
+            
+            LevelBoundsInt = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x, levelBounds.y, 0)
+            );
 
-            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
+            for (int x = LevelBoundsInt.xMin; x < LevelBoundsInt.xMax; x++)
             {
-                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
+                for (int y = LevelBoundsInt.xMin; y < LevelBoundsInt.yMax; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
@@ -367,6 +374,12 @@ namespace Managers
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
+            if (tileData is null)
+            {
+                throw new Exception($"No tile data at coordinate {newCoordinate}. " +
+                                    "Failed to move unit");
+            }
+            
             int moveRange = (int)unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
