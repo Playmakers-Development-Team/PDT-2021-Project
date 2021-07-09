@@ -100,14 +100,16 @@ namespace Managers
         {
             LineRenderer lineRenderer = GetComponent<LineRenderer>();
             lineRenderer.enabled = true;
+
+            BoundsInt levelBoundsInt = gridManager.LevelBoundsInt;
             
             Vector2[] gridCorners =
             {
-                gridManager.ConvertCoordinateToPosition(levelBounds),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBounds.x, 0)),
-                gridManager.ConvertCoordinateToPosition(Vector2Int.zero),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(0, levelBounds.y)),
-                gridManager.ConvertCoordinateToPosition(levelBounds)
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMax)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMin)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMin, levelBoundsInt.yMin)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMin, levelBoundsInt.yMax)),
+                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMax))
             };
             
             for (int i = 0; i < gridCorners.Length; i++)

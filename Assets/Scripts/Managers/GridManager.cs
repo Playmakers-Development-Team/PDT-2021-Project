@@ -23,6 +23,7 @@ namespace Managers
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }
         public Vector2 GridOffset { get; private set; }
+        public BoundsInt LevelBoundsInt { get; private set; }
 
         public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
         {
@@ -30,14 +31,14 @@ namespace Managers
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
             
-            BoundsInt b = new BoundsInt(
+            LevelBoundsInt = new BoundsInt(
                 new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
                 new Vector3Int(levelBounds.x, levelBounds.y, 0)
             );
 
-            for (int x = b.xMin; x < b.xMax; x++)
+            for (int x = LevelBoundsInt.xMin; x < LevelBoundsInt.xMax; x++)
             {
-                for (int y = b.xMin; y < b.yMax; y++)
+                for (int y = LevelBoundsInt.xMin; y < LevelBoundsInt.yMax; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
