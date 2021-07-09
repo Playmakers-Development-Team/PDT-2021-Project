@@ -53,9 +53,7 @@ namespace UI
 
             foreach (Vector2Int correctCoordinate in selection.Spaces)
             {
-                // BUG: Grid coordinates seem to be off by (1, 1)...
-                // TODO: Once grid system offset bug is fixed, use correctCoordinate instead (and rename it)...
-                Vector2Int scuffedCoordinate = correctCoordinate - Vector2Int.one;
+                Vector2Int scuffedCoordinate = correctCoordinate;
                 
                 Vector2Int bounds = gridManager.LevelBounds;
                 if (scuffedCoordinate.x < -bounds.x / 2 || scuffedCoordinate.x > bounds.x / 2 || scuffedCoordinate.y < -bounds.y / 2 ||
@@ -95,8 +93,7 @@ namespace UI
                 return;
             
             Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
-            // TODO: Remove 'Vector2Int.one' once grid offset bug has been resolved...
-            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition) + Vector2Int.one;
+            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
 
             manager.gridClicked.Invoke(coordinate);
         }
