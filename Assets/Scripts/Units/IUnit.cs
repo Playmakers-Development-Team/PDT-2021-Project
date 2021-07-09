@@ -22,8 +22,10 @@ namespace Units
         public Vector2Int Coordinate { get; }
         
         [Obsolete("Use TenetStatuses instead")]
-        ICollection<TenetStatus> TenetStatusEffect { get; }
+        ICollection<TenetStatus> TenetStatusEffects { get; }
         ICollection<TenetStatus> TenetStatuses { get; }
+        
+        Sprite Render { get; }
         
         bool IsSelected { get; }
 
@@ -32,7 +34,7 @@ namespace Units
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
         void TakeAttack(int amount);
 
         void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1);
