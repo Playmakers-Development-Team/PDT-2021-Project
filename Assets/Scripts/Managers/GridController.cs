@@ -16,7 +16,6 @@ namespace Managers
         [SerializeField] private Vector2Int levelBounds;
         [SerializeField] private Vector2 gridOffset;
         [SerializeField] private Tilemap levelTilemap;
-        [SerializeField] private bool drawGridOutline;
 
         private GridManager gridManager;
         
@@ -29,7 +28,6 @@ namespace Managers
             
             tilemapOriginPoint = levelTilemap.transform.position;
             
-            if(drawGridOutline) DrawGridOutline();
             TestingGetGridObjectsByCoordinate(0);
         }
 
@@ -94,34 +92,7 @@ namespace Managers
 #endif
 
         #region Unit Testing
-
-        // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
-        private void DrawGridOutline()
-        {
-            LineRenderer lineRenderer = GetComponent<LineRenderer>();
-            lineRenderer.enabled = true;
-
-            BoundsInt levelBoundsInt = gridManager.LevelBoundsInt;
-            
-            Vector2[] gridCorners =
-            {
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMax)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMin)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMin, levelBoundsInt.yMin)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMin, levelBoundsInt.yMax)),
-                gridManager.ConvertCoordinateToPosition(new Vector2Int(levelBoundsInt.xMax, levelBoundsInt.yMax))
-            };
-            
-            for (int i = 0; i < gridCorners.Length; i++)
-            {
-                // NOTE: Need to shift positions down (on the y-axis) to line up with the grid 
-                lineRenderer.SetPosition(i, gridCorners[i] - levelTilemap.cellSize * Vector2.up);
-            }
-            
-            Debug.Log("Draw Grid Outline is on. To turn it off go to the grid in inspector" +
-                      "and uncheck the option");
-        }
-
+        
         private void TestingGetGridObjectsByCoordinate(int testCases)
         {
             for (int i = 0; i < testCases; i++)
