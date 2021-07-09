@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7484277704127657535}
   - component: {fileID: 4481483165682075219}
-  - component: {fileID: 5117213522043847431}
+  - component: {fileID: 8212759452209677179}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -26,9 +26,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134756009844042213}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3836238065548808286}
   m_Father: {fileID: 5473781427429180235}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -72,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: 688705043
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4956321453074165602, guid: 576c432028e851b4b864d34fb4e08644, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -3957392175462956367, guid: 59f7b2c02c669bc4bada398f8b704ac6, type: 3}
+  m_Color: {r: 0.26190662, g: 0, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -83,7 +84,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &5117213522043847431
+--- !u!95 &8212759452209677179
 Animator:
   serializedVersion: 3
   m_ObjectHideFlags: 0
@@ -93,7 +94,7 @@ Animator:
   m_GameObject: {fileID: 2134756009844042213}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6ab5658570efa0645b16bb9ca3327c79, type: 2}
+  m_Controller: {fileID: 9100000, guid: 31f1395752c11c343bd0642ff467fa62, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -113,7 +114,7 @@ GameObject:
   - component: {fileID: 5473781427429180235}
   - component: {fileID: 6708204597060251326}
   m_Layer: 0
-  m_Name: Estelle
+  m_Name: Niles
   m_TagString: PlayerUnit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +132,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7484277704127657535}
-  - {fileID: 2627352599699852418}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    name: Estelle
-    tenet: 2
+    name: Niles
+    tenet: 3
     healthPoints:
       <BaseValue>k__BackingField: 10
     movementActionPoints:
@@ -166,16 +166,16 @@ MonoBehaviour:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 1
     abilities:
-    - {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}
-    - {fileID: 11400000, guid: bbd0048fbaad8609aacb5e6935acdf62, type: 2}
-    - {fileID: 11400000, guid: eefb6b0098202b7d3a278d7bc196b4d6, type: 2}
-  render: {fileID: -4956321453074165602, guid: 576c432028e851b4b864d34fb4e08644, type: 3}
---- !u!1001 &7735533831016970062
+    - {fileID: 11400000, guid: 8d3d437d1fea409dba9214ab462e5a34, type: 2}
+    - {fileID: 11400000, guid: 3778aeebe7b611cea8b3fc68fe223982, type: 2}
+    - {fileID: 11400000, guid: 2d536796daea3e4aca17b47b0f614615, type: 2}
+  render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
+--- !u!1001 &8795836277784652690
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 5473781427429180235}
+    m_TransformParent: {fileID: 7484277704127657535}
     m_Modifications:
     - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: unitGridObject
@@ -195,7 +195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_AnchorMax.x
@@ -239,15 +239,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -271,8 +271,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
---- !u!224 &2627352599699852418 stripped
+--- !u!224 &3836238065548808286 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
-  m_PrefabInstance: {fileID: 7735533831016970062}
+  m_PrefabInstance: {fileID: 8795836277784652690}
   m_PrefabAsset: {fileID: 0}

@@ -300,7 +300,7 @@ namespace Managers
         {
             // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
             //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) +
+            return (Vector2) LevelTilemap.GetCellCenterWorld((Vector3Int) coordinate) +
                    GridOffset;
         }
 
@@ -376,7 +376,7 @@ namespace Managers
             {
                 playerUnit = (PlayerUnit) unit;
                 if (playerUnit.UnitAnimator != null)
-                    playerUnit.UnitAnimator.SetInteger("Movement", 1);
+                    playerUnit.UnitAnimator.SetBool("moving", true);
             }
 
             // Check if tile is unoccupied
@@ -409,13 +409,13 @@ namespace Managers
                     null) // this stuff is temporary, should probably be done in a better way
                 {
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
-                    else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
-                    else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
-                    else if (movePath[i].y < currentCoordinate.y)
                         playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                    else if (movePath[i].y > currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
+                    else if (movePath[i].x < currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                    else if (movePath[i].y < currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
                 }
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
