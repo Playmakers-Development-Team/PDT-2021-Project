@@ -38,11 +38,14 @@ namespace Managers
         private PlayerManager playerManager;
         private UnitManager unitManager;
         private EnemyManager enemyManager;
-        
+
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
         private List<IUnit> meditatedUnit = new List<IUnit>();
+        private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
+        
+        private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
 
         #endregion
@@ -94,9 +97,10 @@ namespace Managers
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
-            UpdateNextTurnQueue();
-            currentTurnQueue = new List<IUnit>(nextTurnQueue);
             
+            UpdateNextTurnQueue();
+            currentTurnQueue = nextTurnQueue;
+
             if (!(ActingEnemyUnit is null))
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             
@@ -111,29 +115,25 @@ namespace Managers
         /// <c>EnemyManager</c>. Calculate the turn order based on speed.
         /// </summary>
         private List<IUnit> CreateTurnQueue()
+        public void SetupTurnQueue(GameObject[] premadeTimeline)
         {
-            List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-            return turnQueue;
+            randomizedSpeed = false;
+
+            foreach(GameObject prefab in premadeTimeline)
+                preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
+            
+            SetupTurnQueue();
         }
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
         /// </summary>
-        /// <param name="targetUnit">The unit to remove.</param>
-        /// <exception cref="ArgumentException">If the unit does not exist in the queue.</exception>
-        private void RemoveUnitFromQueue(IUnit targetUnit)
-        {
-            var targetIndex = FindTurnIndexFromCurrentQueue(targetUnit);
+        /// <param name="unit">Target unit</param>
+        /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
+        public void RemoveUnitFromQueue(IUnit unit) =>
+            RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
 
-            if (targetIndex == -1)
-                throw new ArgumentException($"The unit {targetUnit} does not exist in the queue and could not be removed.");
-            
-            RemoveUnitFromQueue(targetIndex);
-        }
-        
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
@@ -144,7 +144,7 @@ namespace Managers
         {
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
-            
+
             if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
                 CurrentTurnIndex--;
             
@@ -155,19 +155,6 @@ namespace Managers
             SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
         
-        /// <summary>
-        /// Should be called whenever the number of units in the turn queue has been changed.
-        /// </summary>
-        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
-        
-        /// <summary>
-        /// Adds a new unit to the timeline and setting it to the end of the current turn queue.
-        /// </summary>
-        private void AddNewUnitToTimeline(IUnit unit)
-        {
-            currentTurnQueue.Add(unit);
-            timelineNeedsUpdating = true;
-        }
         
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
@@ -266,15 +253,16 @@ namespace Managers
         {
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-            
+
             // BUG Cannot move target to first position
-            if (CurrentTurnIndex < 2 || CurrentTurnIndex == targetIndex || CurrentTurnIndex == targetIndex - 1)
+            if (CurrentTurnIndex < 2 || CurrentTurnIndex == targetIndex ||
+                CurrentTurnIndex == targetIndex - 1)
                 return;
 
             int aboveIndex = CurrentTurnIndex - 1;
 
             ShiftTurnQueue(aboveIndex, targetIndex);
-            
+
             // Set the current turn to be the unit before first, later coming back to the current unit
             CurrentTurnIndex = aboveIndex;
 
@@ -290,13 +278,14 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            //TODO: Test
+            // TODO: Test
             
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-            
+
             // BUG Cannot move target to last position
-            if (CurrentTurnIndex >= currentTurnQueue.Count - 1 || CurrentTurnIndex == targetIndex || CurrentTurnIndex == targetIndex + 1)
+            if (CurrentTurnIndex >= currentTurnQueue.Count - 1 || CurrentTurnIndex == targetIndex ||
+                CurrentTurnIndex == targetIndex + 1)
                 return;
 
             int belowIndex = CurrentTurnIndex + 1;
@@ -317,6 +306,37 @@ namespace Managers
                 PhaseIndex++;
                 return true;
             }
+        }
+
+
+        /// <summary>
+        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
+        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// </summary>
+        private List<IUnit> CreateTurnQueue()
+        {
+            if (!randomizedSpeed)
+                return preMadeTurnQueue;
+            
+            List<IUnit> turnQueue = new List<IUnit>();
+            turnQueue.AddRange(unitManager.AllUnits);
+            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
+            return turnQueue;
+        }
+
+        /// <summary>
+        /// Should be called whenever the number of units in the turn queue has been changed.
+        /// </summary>
+        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
+
+        /// <summary>
+        /// Adds a new unit to the timeline and setting it to the end of the current turn queue
+        /// </summary>
+        public void AddNewUnitToTimeline(IUnit unit)
+        {
+            currentTurnQueue.Add(unit);
+            //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
+            timelineNeedsUpdating = true;
         }
 
         /// <summary>
@@ -347,6 +367,7 @@ namespace Managers
             Debug.Log("Turn Manipulation started");
             return;
             
+
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
             int currentIndex = startIndex + increment;
@@ -356,7 +377,7 @@ namespace Managers
                 currentIndex += increment;
                 currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex - increment];
             }
-            
+
             currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
         }
         
