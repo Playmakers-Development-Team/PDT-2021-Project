@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Commands;
@@ -151,6 +152,10 @@ namespace UI
         private void TryMove(Vector2Int destination)
         {
             if (!IsPlayerTurn || IsAbilitySelected)
+                return;
+
+            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value);
+            if (!inRange.Contains(destination))
                 return;
             
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
