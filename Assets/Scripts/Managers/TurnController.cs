@@ -1,15 +1,19 @@
 using Units.Commands;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
     public class TurnController : MonoBehaviour
     {
+        [SerializeField] private GameObject[] preMadeTimeline;
+        [SerializeField] private bool isTimelineRandomised;
+        
         /// <summary>
         /// A reference to the TurnManager.
         /// </summary>
         private TurnManager turnManager;
-
+        
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
@@ -27,7 +31,10 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            turnManager.SetupTurnQueue();
+            if (isTimelineRandomised)
+                turnManager.SetupTurnQueue();
+            else 
+                turnManager.SetupTurnQueue(preMadeTimeline);
         }
     }
 }
