@@ -26,10 +26,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134756009844042213}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.33, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5622421658860834602}
+  m_Children: []
   m_Father: {fileID: 5473781427429180235}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -132,6 +131,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7484277704127657535}
+  - {fileID: 5622421658860834602}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,12 +170,15 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a44a1c36f93163f1e8cc9267db8fc017, type: 2}
     - {fileID: 11400000, guid: 81dbbde15d5646c138b079576dae00c9, type: 2}
   render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
+  animationStates: 0
+  animator: {fileID: 8212759452209677179}
+  CurrentlySelectedAbility: {fileID: 0}
 --- !u!1001 &84093920930936038
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 7484277704127657535}
+    m_TransformParent: {fileID: 5473781427429180235}
     m_Modifications:
     - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: unitGridObject
@@ -195,7 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_AnchorMax.x
@@ -239,15 +242,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533452, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_AnchoredPosition.x
