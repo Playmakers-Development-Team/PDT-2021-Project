@@ -29,10 +29,15 @@ namespace Managers
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
+            
+            BoundsInt b = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x, levelBounds.y, 0)
+            );
 
-            for (int x =  Mathf.FloorToInt(levelBounds.x/-2) + 1 - levelBounds.x % 2; x <= levelBounds.x / 2; x++)
+            for (int x = b.xMin; x < b.xMax; x++)
             {
-                for (int y = Mathf.FloorToInt(levelBounds.x/-2) + 1 - levelBounds.y % 2; y <= levelBounds.y / 2; y++)
+                for (int y = b.xMin; y < b.yMax; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
