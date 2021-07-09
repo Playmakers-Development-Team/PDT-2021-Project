@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
 using Cysharp.Threading.Tasks;
-using Microsoft.Unity.VisualStudio.Editor;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -51,8 +50,20 @@ namespace Managers
                 }
             }
         }
-
+        
         #region GETTERS
+
+        public bool IsInBounds(Vector2Int coordinate)
+        {
+            return coordinate.x >= LevelBoundsInt.xMin && coordinate.x <= LevelBoundsInt.xMax &&
+                   coordinate.y >= LevelBoundsInt.yMin && coordinate.y <= LevelBoundsInt.yMax;
+        }
+
+        public bool IsInBounds(Vector3 worldPosition, bool clamp = false)
+        {
+            Vector2Int coordinate = ConvertPositionToCoordinate(worldPosition, clamp);
+            return IsInBounds(coordinate);
+        }
 
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
@@ -294,11 +305,17 @@ namespace Managers
 
         #region CONVERSIONS
 
-        public Vector2Int ConvertPositionToCoordinate(Vector2 position)
+        public Vector2Int ConvertPositionToCoordinate(Vector2 position, bool clamp = false)
         {
-            // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
-            //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return (Vector2Int) LevelTilemap.layoutGrid.WorldToCell(position);
+            Vector3Int unbounded = LevelTilemap.layoutGrid.WorldToCell(position);
+
+            if (!clamp)
+                return (Vector2Int) unbounded;
+            
+            return new Vector2Int(
+                Mathf.Clamp(unbounded.x, LevelBoundsInt.xMin, LevelBoundsInt.xMax),
+                Mathf.Clamp(unbounded.y, LevelBoundsInt.xMin, LevelBoundsInt.xMax)
+                );
         }
 
         public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate) => LevelTilemap.GetCellCenterWorld((Vector3Int) coordinate);

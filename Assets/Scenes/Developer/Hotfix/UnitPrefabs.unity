@@ -7813,6 +7813,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5511968117276585405, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
+      propertyPath: testTransform
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5511968117276585406, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
       propertyPath: m_Name
       value: Grid
@@ -7836,11 +7840,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.0791621
+      value: 3.3291621
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.31564116
+      value: 2.0656412
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: d60bd48a38936d24b8d5fcd9aa67743a, type: 3}
       propertyPath: m_LocalPosition.z
