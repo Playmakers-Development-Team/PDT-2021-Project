@@ -21,7 +21,7 @@ namespace Abilities
             IUnit unit = GetAffectedUnit(user, target);
             
             if (costType == CostType.Per)
-                return unit.GetTenetStatusEffectCount(tenetType);
+                return unit.GetTenetStatusCount(tenetType);
             
             return 0;
         }
@@ -33,18 +33,18 @@ namespace Abilities
             switch (costType)
             {
                 case CostType.Per:
-                    unit.RemoveTenetStatusEffect(tenetType);
+                    unit.RemoveTenetStatus(tenetType);
                     break;
                 case CostType.Spend:
-                    unit.RemoveTenetStatusEffect(tenetType, 1);
+                    unit.RemoveTenetStatus(tenetType, 1);
                     break;
             }
         }
 
         public bool MeetsRequirements(IUnit user, IUnit target) =>
             affectType == AffectType.Target
-                ? target.GetTenetStatusEffectCount(tenetType) > 0
-                : user.GetTenetStatusEffectCount(tenetType) > 0;
+                ? target.GetTenetStatusCount(tenetType) > 0
+                : user.GetTenetStatusCount(tenetType) > 0;
 
         private IUnit GetAffectedUnit(IUnit user, IUnit target) => 
             affectType == AffectType.Target ? target : user;
