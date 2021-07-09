@@ -17,10 +17,8 @@ namespace Units
         
         public void ExecuteQueue() 
         {
-            foreach (var command in commandQueue) 
-            {
+            foreach (var command in commandQueue)
                 command.Execute();
-            }
 
             commandQueue.Clear();
         }   
