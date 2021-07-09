@@ -10,17 +10,18 @@ namespace Managers
         [Tooltip("Debug Tool to check if you can turn manipulate")] 
         [SerializeField] private bool maniplulateTurn;
         
-        /// <summary>
+        [Tooltip("The global turn phase for every player unit")]
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
-        [Tooltip("The global turn phase for every player unit")] 
-        /// A reference to the TurnManager.
-        /// </summary>
+        
         private TurnManager turnManager;
+
+        private UnitManager unitManager;
         
 
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
@@ -30,6 +31,11 @@ namespace Managers
                 });
         }
 
+        public void Meditate()
+        {
+            unitManager.IncrementInsight(1);
+            turnManager.Meditate();
+        }
 
         //TODO DELETE THIS FUNCTION BEFORE MERGE
         private void OnValidate()

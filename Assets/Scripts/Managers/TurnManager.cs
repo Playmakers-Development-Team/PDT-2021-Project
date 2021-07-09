@@ -42,6 +42,7 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private List<IUnit> meditatedUnit = new List<IUnit>();
         private bool timelineNeedsUpdating;
 
         #endregion
@@ -190,6 +191,7 @@ namespace Managers
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             else
                 PhaseIndex = 0;
+                //enable button
             
             SelectCurrentUnit();
         }
@@ -300,7 +302,13 @@ namespace Managers
             int belowIndex = CurrentTurnIndex + 1;
             ShiftTurnQueue(belowIndex, targetIndex);
         }
-        
+
+        public void Meditate()
+        {
+            meditatedUnit.Add(ActingUnit);
+            PhaseIndex++;
+        }
+
         /// <summary>
         /// Shift everything towards the <c>targetIndex</c> in the <c>currentTurnQueue</c>.
         /// This means every element in the list will be moved up or down by 1.

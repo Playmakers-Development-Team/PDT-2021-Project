@@ -86,6 +86,11 @@ namespace Managers
             commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
         }
 
+        public void IncrementInsight(int i)
+        {
+            Insight += i;
+        }
+
         /// <summary>
         /// Deselects the currently selected unit.
         /// </summary>
