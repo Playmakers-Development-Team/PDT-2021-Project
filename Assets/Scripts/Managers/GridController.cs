@@ -1,67 +1,33 @@
 using System;
-using Commands;
-using GridObjects;
-using Units;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 namespace Managers
 {
     public class GridController : MonoBehaviour
     {
         [SerializeField] private Vector2Int levelBounds;
-        [SerializeField] private Vector2 gridOffset;
         [SerializeField] private Tilemap levelTilemap;
 
         private GridManager gridManager;
 
-        private BoundsInt bounds;
-        private Vector3 tilemapOriginPoint;
-
+        
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            gridManager.InitialiseGrid(levelTilemap, levelBounds, gridOffset);
-
-            // NOTE: You can reset the bounds by going to Tilemap settings in the inspector and select "Compress Tilemap Bounds"
-            bounds = gridManager.LevelTilemap.cellBounds;
-            tilemapOriginPoint = gridManager.LevelTilemap.transform.position;
-
-            //DrawGridOutline();
+            gridManager.InitialiseGrid(levelTilemap, levelBounds);
+            
             TestingGetGridObjectsByCoordinate(0);
         }
 
+
         #region Unit Testing
-
-        // DrawGridOutline shows the size of the grid in the scene view based on tilemap.cellBounds
-        private void DrawGridOutline()
-        {
-            Vector3[] gridCorners =
-            {
-                new Vector3(bounds.xMin + tilemapOriginPoint.x,
-                    bounds.yMin + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMax + tilemapOriginPoint.x,
-                    bounds.yMin + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMax + tilemapOriginPoint.x,
-                    bounds.yMax + tilemapOriginPoint.y, 0),
-                new Vector3(bounds.xMin + tilemapOriginPoint.x,
-                    bounds.yMax + tilemapOriginPoint.y, 0)
-            };
-
-            for (int i = 0; i < gridCorners.Length; i++)
-            {
-                if (i == gridCorners.Length - 1)
-                {
-                    Debug.DrawLine(gridCorners[i], gridCorners[0], Color.green, float.MaxValue);
-                }
-                else
-                {
-                    Debug.DrawLine(gridCorners[i], gridCorners[i + 1], Color.green, float.MaxValue);
-                }
-            }
-        }
-
+        
         private void TestingGetGridObjectsByCoordinate(int testCases)
         {
             for (int i = 0; i < testCases; i++)
@@ -75,6 +41,46 @@ namespace Managers
             }
         }
 
+        #endregion
+        
+        
+        #region Visualisation
+        
+#if UNITY_EDITOR
+        
+        private void OnDrawGizmos()
+        {
+            Handles.color = Color.green;
+            BoundsInt b = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x, levelBounds.y, 0)
+            );
+            
+            for (int x = b.xMin; x <= b.xMax; x++)
+            {
+                Vector3 start = levelTilemap.CellToWorld(new Vector3Int(x, b.yMin, 0));
+                Vector3 end = levelTilemap.CellToWorld(new Vector3Int(x, b.yMax, 0));
+            
+                if (x == b.xMin || x == b.xMax)
+                    Handles.DrawLine(start, end, 5.0f);
+                else
+                    Handles.DrawDottedLine(start, end, 5.0f);
+            }
+            
+            for (int y = b.yMin; y <= b.yMax; y++)
+            {
+                Vector3 start = levelTilemap.CellToWorld(new Vector3Int(b.xMin, y, 0));
+                Vector3 end = levelTilemap.CellToWorld(new Vector3Int(b.xMax, y, 0));
+            
+                if (y == b.yMin || y == b.yMax)
+                    Handles.DrawLine(start, end, 5.0f);
+                else
+                    Handles.DrawDottedLine(start, end, 5.0f);
+            }
+        }
+        
+#endif
+        
         #endregion
     }
 }

@@ -90,7 +90,7 @@ namespace UI
             if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
 
-            abilityDirection = (mouseWorld - gridManager.ConvertCoordinateToPosition(selectedUnit.Coordinate + Vector2Int.one)).normalized;
+            abilityDirection = (mouseWorld - gridManager.ConvertCoordinateToPosition(selectedUnit.Coordinate)).normalized;
             gridSpacesSelected.Invoke(new GridSelection(new[] {selectedUnit.Coordinate}, GridSelectionType.Invalid));
             UpdateGrid();
         }
