@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
@@ -35,11 +34,10 @@ namespace Managers
         private List<IUnit> nextTurnQueue = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         
-        private bool randomizedSpeed;
+        private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
 
         #endregion
-    
 
         #region Manager Overrides
         
@@ -65,11 +63,11 @@ namespace Managers
         /// </summary>
         public void SetupTurnQueue()
         {
-            randomizedSpeed = true;
             RoundCount = 0;
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
+            
             UpdateNextTurnQueue();
             currentTurnQueue = nextTurnQueue;
 
@@ -82,23 +80,12 @@ namespace Managers
         public void SetupTurnQueue(GameObject[] premadeTimeline)
         {
             randomizedSpeed = false;
-            RoundCount = 0;
-            TotalTurnCount = 0;
-            CurrentTurnIndex = 0;
-            previousTurnQueue = new List<IUnit>();
-            
+
             foreach(GameObject prefab in premadeTimeline)
                 preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
             
-            UpdateNextTurnQueue();
-            currentTurnQueue = nextTurnQueue;
-
-            if (!(ActingEnemyUnit is null))
-                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            
-            commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
+            SetupTurnQueue();
         }
-        
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
@@ -250,7 +237,7 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            //TODO: Test
+            // TODO: Test
             
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
@@ -270,23 +257,19 @@ namespace Managers
         /// </summary>
         private List<IUnit> CreateTurnQueue()
         {
+            if (!randomizedSpeed)
+                return preMadeTurnQueue;
+            
             List<IUnit> turnQueue = new List<IUnit>();
-
-            if (randomizedSpeed)
-            {
-                turnQueue.AddRange(unitManager.AllUnits);
-                turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-                return turnQueue;
-            }
-
-            return preMadeTurnQueue;
+            turnQueue.AddRange(unitManager.AllUnits);
+            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
+            return turnQueue;
         }
 
         /// <summary>
         /// Should be called whenever the number of units in the turn queue has been changed.
         /// </summary>
         private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
-        
 
         /// <summary>
         /// Adds a new unit to the timeline and setting it to the end of the current turn queue
