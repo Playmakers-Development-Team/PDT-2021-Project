@@ -30,9 +30,9 @@ namespace Managers
             LevelTilemap = levelTilemap;
             GridOffset = gridOffset;
 
-            for (int x = 0; x < levelBounds.x; x++)
+            for (int x =  Mathf.FloorToInt(levelBounds.x/-2) + 1 - levelBounds.x % 2; x <= levelBounds.x / 2; x++)
             {
-                for (int y = 0; y < levelBounds.y; y++)
+                for (int y = Mathf.FloorToInt(levelBounds.x/-2) + 1 - levelBounds.y % 2; y <= levelBounds.y / 2; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
@@ -46,8 +46,6 @@ namespace Managers
                     // }
                 }
             }
-            
-            Debug.LogWarning($"{tileDatas.Count}");
         }
 
         #region GETTERS
