@@ -78,7 +78,7 @@ namespace UI
             defenceCard.Apply("DEF", (int) selectedUnit.Health.Defence.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
-            TenetStatusEffect[] effects = selectedUnit.TenetStatusEffects.ToArray();
+            TenetStatus[] effects = selectedUnit.TenetStatuses.ToArray();
 
             for (int i = 0; i < Mathf.Min(cards.Length, effects.Length); i++)
                 cards[i].Apply(effects[i].TenetType, effects[i].StackCount);

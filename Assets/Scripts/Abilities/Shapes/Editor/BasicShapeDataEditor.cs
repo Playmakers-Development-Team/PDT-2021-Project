@@ -1,7 +1,6 @@
-using System;
 using UnityEditor;
 
-namespace Commands.Shapes.Editor
+namespace Abilities.Shapes.Editor
 {
     [CustomEditor(typeof(BasicShapeData))]
     public class BasicShapeDataEditor : UnityEditor.Editor
