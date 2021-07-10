@@ -431,13 +431,13 @@ namespace Managers
                     null) // this stuff is temporary, should probably be done in a better way
                 {
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                        playerUnit.ChangeAnimation(AnimationStates.Right);
                     else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
+                        playerUnit.ChangeAnimation(AnimationStates.Up);
                     else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                        playerUnit.ChangeAnimation(AnimationStates.Left);
                     else if (movePath[i].y < currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
+                        playerUnit.ChangeAnimation(AnimationStates.Down);
                 }
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
@@ -451,7 +451,7 @@ namespace Managers
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
             if (playerUnit != null)
-                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+                playerUnit.ChangeAnimation(AnimationStates.Idle);
 
             Debug.Log(Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));

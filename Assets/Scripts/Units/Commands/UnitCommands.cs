@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using Abilities;
 using Commands;
 
 namespace Units.Commands
@@ -65,4 +67,84 @@ namespace Units.Commands
     /// Executed when all enemy units are spawned and ready in the scene.
     /// </summary>
     public class EnemyUnitsReadyCommand : Command {}
+    
+    /// <summary>
+    /// Executed when the total calculated amount of damage dealt to a unit is done.
+    /// Taking into account attack and defence modifiers
+    /// </summary>
+    public class TakeTotalDamageCommand : ValueCommand
+    {
+        public TakeTotalDamageCommand(IUnit unit) : base(unit) {}
+
+    }
+    
+    /// <summary>
+    /// Executed when damage is dealt to the player without any modifier consideration.
+    /// </summary>
+    public class TakeRawDamageCommand : ValueCommand
+    {
+        public TakeRawDamageCommand(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when the attack value of a unit is changed
+    /// </summary>
+    public class AttackChangeCommand : ValueCommand
+    {
+        public AttackChangeCommand(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when the attack value of a unit is changed
+    /// </summary>
+    public class DefenceChangeCommand : ValueCommand
+    {
+        public DefenceChangeCommand(IUnit unit) : base(unit) {}
+
+    }
+
+    /// <summary>
+    /// Executed when the health value of a unit is changed
+    /// </summary>
+    public class HealthChangedCommand : ValueCommand
+    {
+        public HealthChangedCommand(IUnit unit) : base(unit) {}
+
+    }
+
+    /// <summary>
+    /// Executed when the speed value of a unit is changed
+    /// </summary>
+    public class SpeedChangedCommand : ValueCommand
+    {
+        public SpeedChangedCommand(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when the abilities list value of a unit is changed
+    /// </summary>
+    public class AbilitiesChangedCommand : UnitCommand
+    {
+        public List<Ability> Abilities { get; set; }
+        public AbilitiesChangedCommand(IUnit unit) : base(unit) {}
+        
+    }
+    
+    /// <summary>
+    /// Executed when the movement action points  value of a unit is changed
+    /// </summary>
+    public class MovementActionPointChangedCommand : ValueCommand
+    {
+        public MovementActionPointChangedCommand(IUnit unit) : base(unit) {}
+
+    }
+    
+    /// <summary>
+    /// Executed when the movement action points  value of a unit is changed
+    /// </summary>
+    public class KnockbackModifierChangedCommand : ValueCommand
+    { 
+        public KnockbackModifierChangedCommand(IUnit unit) : base(unit) {}
+    }
+    
 }

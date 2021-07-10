@@ -22,7 +22,8 @@ namespace Units
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
         [SerializeField] private Sprite render;
-
+        private SpriteRenderer spriteRenderer;
+        
         public string Name
         {
             get => data.Name;
@@ -30,11 +31,46 @@ namespace Units
         }
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
+        
+        public Animator UnitAnimator { get; private set; }
+        public SpriteRenderer SpriteRenderer => spriteRenderer;
+        public Color UnitColor => spriteRenderer.color;
+        
         public TenetType Tenet => data.Tenet;
-        public ValueStat MovementActionPoints => data.MovementPoints;
-        public ValueStat Speed => data.Speed;
+
+        public ValueStat MovementActionPoints
+        {
+            get => data.MovementPoints;
+            set
+            {
+                MovementActionPoints = value;
+                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this){Value =
+                  value.Value});
+            }
+        }
+
+        public ValueStat Speed
+        {
+            get => data.Speed;
+            set
+            {
+                Speed = value;
+                commandManager.ExecuteCommand(new SpeedChangedCommand(this){Value =
+                    value.Value});
+            }
+        }
         public ModifierStat Attack => data.Attack;
-        public List<Ability> Abilities => data.Abilities;
+
+        public List<Ability> Abilities
+        {
+            get => data.Abilities;
+            set
+            {
+                Abilities = value;
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this){Abilities = 
+                    value});
+            }
+        }
 
         [Obsolete("Use TenetStatuses instead")]
         public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
@@ -43,25 +79,33 @@ namespace Units
         public static Type DataType => typeof(T);
         
         public Sprite Render => render;
+        
 
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
         private const int maxTenetStatusEffectCount = 2;
         private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
             new LinkedList<TenetStatus>();
+
+        private AnimationStates unitAnimationState;
         
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private CommandManager commandManager;
 
+        private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        
         protected override void Start()
         {
             base.Start();
 
             data.Initialise();
-            Health = new Health(new KillUnitCommand(this), data.HealthPoints, data.Defence);
+            Health = new Health(new TakeRawDamageCommand(this), new KillUnitCommand(this),
+                data.HealthPoints, data.Defence);
             Knockback = new Knockback(data.TakeKnockbackModifier);
+            UnitAnimator = GetComponentInChildren<Animator>();
 
+            
             // TODO Speed temporarily random for now until proper turn manipulation is done.
             Speed.Value += Random.Range(0, 101);
 
@@ -93,16 +137,32 @@ namespace Units
 
         #region ValueChanging
         
-        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
+        public void TakeDefence(int amount)
+        {
+            Health.Defence.Adder -= amount;
+            commandManager.ExecuteCommand(new AttackChangeCommand(this) {Value = amount});
 
-        public void TakeAttack(int amount) => Attack.Adder += amount;
+        }
+
+        public void TakeAttack(int amount)
+        {
+            Attack.Adder += amount;
+            commandManager.ExecuteCommand(new AttackChangeCommand(this) {Value = amount});
+        } 
 
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
+            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this) {Value = amount});
+
         }
 
-        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
+        public void TakeKnockback(int amount)
+        {
+            Knockback.TakeKnockback(amount);
+            commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this) {Value = amount});
+
+        } 
         
         #endregion
 
@@ -276,6 +336,53 @@ namespace Units
         private void HideDamageText() => damageTextCanvas.enabled = false;
 
         public void SetName() => nameText.text = Name;
+
+        #endregion
+
+        #region AnimationHandling
+
+        public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
+        {
+            unitAnimationState = animationStates;
+
+            switch (unitAnimationState)
+            {
+                case AnimationStates.Idle:
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Down:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Up:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    spriteRenderer.flipX = true;
+                    break;
+                
+                case AnimationStates.Left:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = true;
+                    break;
+                
+                case AnimationStates.Right:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Casting:
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetTrigger("attack");
+                    break;
+            }
+        }
 
         #endregion
         
