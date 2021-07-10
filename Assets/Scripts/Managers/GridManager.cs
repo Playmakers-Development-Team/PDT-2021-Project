@@ -17,7 +17,7 @@ namespace Managers
     {
         public Dictionary<Vector2Int, TileData> tileDatas { get; private set; }
         
-        private const int GridLineCastDefaultLimit = 10;
+        private const int gridLineCastDefaultLimit = 10;
 
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }

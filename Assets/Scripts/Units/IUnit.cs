@@ -22,8 +22,6 @@ namespace Units
 
         public Vector2Int Coordinate { get;}
 
-        GameObject gameObject { get; }
-        
         [Obsolete("Use TenetStatuses instead")]
         ICollection<TenetStatus> TenetStatusEffects { get; }
         ICollection<TenetStatus> TenetStatuses { get; }

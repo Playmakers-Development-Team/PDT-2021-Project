@@ -351,8 +351,8 @@ namespace Units
             if (unit is PlayerUnit)
             {
                 playerUnit = (PlayerUnit) unit;
-                if (playerUnit.animator != null)
-                    playerUnit.animator.SetInteger("Movement", 1);
+                if (playerUnit.UnitAnimator != null)
+                    playerUnit.UnitAnimator.SetInteger("Movement", 1);
             }
 
             // Check if tile is unoccupied
@@ -385,11 +385,11 @@ namespace Units
                     null) // this stuff is temporary, should probably be done in a better way
                 {
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
                     else if (movePath[i].y > currentCoordinate.y)
                         playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
                     else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
                     else if (movePath[i].y < currentCoordinate.y)
                         playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
                 }
