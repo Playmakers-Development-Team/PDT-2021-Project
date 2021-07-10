@@ -35,7 +35,7 @@ namespace Units
             
             commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
-                if (cmd.Unit != (IUnit)this)
+                if (!ReferenceEquals(cmd.Unit, this))
                     return;
                 
                 ChangeAnimation(AnimationStates.Casting);
