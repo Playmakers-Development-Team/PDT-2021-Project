@@ -42,7 +42,7 @@ namespace Units
             get => data.MovementPoints;
             set
             {
-                movementActionPoints = value;
+                data.MovementPoints = value;
                 commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this,value.Value));
             }
         }
@@ -52,7 +52,7 @@ namespace Units
             get => data.Speed;
             set
             {
-                speed = value;
+                data.Speed = value;
                 commandManager.ExecuteCommand(new SpeedChangedCommand(this, value.Value));
             }
         }
@@ -63,7 +63,7 @@ namespace Units
             get => data.Abilities;
             set
             {
-                abilities = value;
+                data.Abilities = value;
                 commandManager.ExecuteCommand(new AbilitiesChangedCommand(this,value));
             }
         }
@@ -84,11 +84,6 @@ namespace Units
             new LinkedList<TenetStatus>();
 
         private AnimationStates unitAnimationState;
-
-        private List<Ability> abilities;
-        private ValueStat speed;
-        private ModifierStat attack;
-        private ValueStat movementActionPoints;
         
         private TurnManager turnManager;
         private PlayerManager playerManager;

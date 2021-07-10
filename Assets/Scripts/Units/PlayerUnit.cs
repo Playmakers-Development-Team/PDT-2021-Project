@@ -16,8 +16,6 @@ namespace Units
             base.Start();
             commandManager = ManagerLocator.Get<CommandManager>();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
-            
-           
         }
 
         
