@@ -63,7 +63,7 @@ namespace Abilities
 
         private void UseEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            foreach (GridObject target in targets)
+            foreach (GridObject target in targets.ToArray())
             {
                 if (target is IUnit targetUnit)
                 {
