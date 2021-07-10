@@ -36,14 +36,14 @@ namespace Units
         public Color UnitColor => spriteRenderer.color;
         
         public TenetType Tenet => data.Tenet;
-
+        
         public ValueStat MovementActionPoints
         {
             get => data.MovementPoints;
             set
             {
                 movementActionPoints = value;
-                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this,value.Value));
+                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, value.Value));
             }
         }
 
@@ -56,6 +56,7 @@ namespace Units
                 commandManager.ExecuteCommand(new SpeedChangedCommand(this, value.Value));
             }
         }
+        
         public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
@@ -64,10 +65,10 @@ namespace Units
             set
             {
                 abilities = value;
-                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this,value));
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
             }
         }
-
+        
         [Obsolete("Use TenetStatuses instead")]
         public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
@@ -75,7 +76,6 @@ namespace Units
         public static Type DataType => typeof(T);
         
         public Sprite Render => render;
-        
 
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
@@ -105,7 +105,6 @@ namespace Units
                 data.HealthPoints, data.Defence);
             Knockback = new Knockback(data.TakeKnockbackModifier);
             UnitAnimator = GetComponentInChildren<Animator>();
-
             
             // TODO Speed temporarily random for now until proper turn manipulation is done.
             Speed.Value += Random.Range(0, 101);
@@ -136,39 +135,34 @@ namespace Units
                 nameText.text = Name;
             
             if (healthText)
-            {
-                healthText.text =
-                    (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
-            }
+                healthText.text = Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue;
         }
-
-        protected virtual void Update() {}
 
         #region ValueChanging
         
         public void TakeDefence(int amount)
         {
             Health.Defence.Adder -= amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
+            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
         }
 
         public void TakeAttack(int amount)
         {
             Attack.Adder += amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
+            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
         } 
 
         public void TakeDamage(int amount)
         {
             commandManager.ExecuteCommand(new TakeRawDamageCommand(this,amount));
             int damageTaken = Health.TakeDamage(amount);
-            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this,damageTaken));
+            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
 
         public void TakeKnockback(int amount)
         {
            int knockbackAmount = Knockback.TakeKnockback(amount);
-           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this,knockbackAmount));
+           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this, knockbackAmount));
         } 
         
         #endregion
@@ -183,11 +177,8 @@ namespace Units
                 return;
 
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusNode(status.TenetType,
-                out LinkedListNode<TenetStatus> foundNode))
-            {
+            if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
                 foundNode.Value += status;
-            }
             else
             {
                 // When we are already utilizing all the slots
@@ -213,6 +204,7 @@ namespace Units
 
                     if (node.Value.IsEmpty)
                         tenetStatusEffectSlots.Remove(node);
+                    
                     return true;
                 }
 
