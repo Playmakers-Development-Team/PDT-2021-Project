@@ -1,7 +1,6 @@
 using Abilities;
-using Commands;
-using GridObjects;
 using Managers;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -21,23 +20,33 @@ namespace Units
         public Animator UnitAnimator { get; private set; }
         public Ability CurrentlySelectedAbility { get; set; }
 
-        private AnimationStates UnitAnimationStates;
+        private AnimationStates unitAnimationStates;
         private SpriteRenderer spriteRenderer;
-        
+
+        private CommandManager commandManager;
         
         protected override void Start()
         {
             base.Start();
+            commandManager = ManagerLocator.Get<CommandManager>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
             UnitAnimator = GetComponentInChildren<Animator>();
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (cmd.Unit != this)
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
         }
 
         public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
         {
-            UnitAnimationStates = animationStates;
+            unitAnimationStates = animationStates;
 
-            switch (UnitAnimationStates)
+            switch (unitAnimationStates)
             {
                 case AnimationStates.Idle:
                     UnitAnimator.SetBool("moving", false);
