@@ -43,7 +43,7 @@ namespace Units
             set
             {
                 data.MovementPoints = value;
-                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this,value.Value));
+                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, value.Value));
             }
         }
 
@@ -65,7 +65,7 @@ namespace Units
             set
             {
                 data.Abilities = value;
-                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this,value));
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
             }
         }
         

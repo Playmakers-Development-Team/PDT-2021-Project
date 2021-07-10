@@ -23,7 +23,7 @@ namespace Units
         [SerializeField] private ModifierStat takeKnockbackModifier;
         [SerializeField] private List<Ability> abilities;
         
-        //TODO Set these to be auto properties 
+        // TODO: Change these to be serialized auto properties 
         public string Name
         {
             get => name;

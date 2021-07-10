@@ -69,8 +69,7 @@ namespace Units.Commands
     public class EnemyUnitsReadyCommand : Command {}
     
     /// <summary>
-    /// Executed when the total calculated amount of damage dealt to a unit is done.
-    /// Taking into account attack and defence modifiers
+    /// Executed when damage is dealt to a unit. Value takes into account attack and defence modifiers.
     /// </summary>
     public class TakeTotalDamageCommand : ValueCommand
     {
@@ -78,7 +77,7 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when damage is dealt to the player without any modifier consideration.
+    /// Executed when damage is dealt to a unit. Value does not take modifiers into consideration.
     /// </summary>
     public class TakeRawDamageCommand : ValueCommand
     {
@@ -86,7 +85,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the attack value of a unit is changed
+    /// Executed when the attack value of a unit is changed.
     /// </summary>
     public class AttackChangeCommand : ValueCommand
     {
@@ -94,7 +93,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the attack value of a unit is changed
+    /// Executed when the defence value of a unit is changed.
     /// </summary>
     public class DefenceChangeCommand : ValueCommand
     {
@@ -102,7 +101,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the health value of a unit is changed
+    /// Executed when the health value of a unit is changed.
     /// </summary>
     public class HealthChangedCommand : ValueCommand
     {
@@ -110,7 +109,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the speed value of a unit is changed
+    /// Executed when the speed value of a unit is changed.
     /// </summary>
     public class SpeedChangedCommand : ValueCommand
     {
@@ -118,7 +117,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the abilities list value of a unit is changed
+    /// Executed when the abilities list of a unit is changed.
     /// </summary>
     public class AbilitiesChangedCommand : UnitCommand
     {
@@ -127,7 +126,7 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when the movement action points  value of a unit is changed
+    /// Executed when the movement action points value of a unit is changed.
     /// </summary>
     public class MovementActionPointChangedCommand : ValueCommand
     {
@@ -135,7 +134,7 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when the movement action points  value of a unit is changed
+    /// Executed when the knockback modifer value of a unit is changed.
     /// </summary>
     public class KnockbackModifierChangedCommand : ValueCommand
     { 
