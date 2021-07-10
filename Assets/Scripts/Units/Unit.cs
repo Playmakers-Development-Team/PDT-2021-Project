@@ -407,8 +407,8 @@ namespace Units
             if (playerUnit != null)
                 playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
 
-            Debug.Log(Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+            /*Debug.Log(Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));*/
             
             // Should be called when all the movement and tweening has been completed
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
