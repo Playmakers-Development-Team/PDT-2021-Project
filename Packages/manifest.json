@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.e7.minefield": "git://github.com/5argon/Minefield.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.unity.2d.animation": "5.0.4",
     "com.unity.2d.pixel-perfect": "4.0.1",
@@ -46,5 +47,8 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "testables":[
+    "com.e7.minefield"
+  ]
 }
