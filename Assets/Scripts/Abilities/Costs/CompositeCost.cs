@@ -21,9 +21,7 @@ namespace Abilities.Costs
         public void ApplyCost(IUnit user, IUnit target)
         {
             foreach (var childCost in AllChildCosts)
-            {
                 childCost.ApplyCost(user, target);
-            }
         }
 
         public bool MeetsRequirements(IUnit user, IUnit target) =>
