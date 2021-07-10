@@ -11,14 +11,12 @@ namespace Units
         public ModifierStat Defence { get; }
 
         private readonly KillUnitCommand unitDeathCommand;
-        private readonly TakeRawDamageCommand takeRawDamageCommand;
 
         private readonly CommandManager commandManager;
         
-        public Health(TakeRawDamageCommand takeRawDamageCommand, KillUnitCommand unitDeathCommand,
+        public Health( KillUnitCommand unitDeathCommand,
                       ValueStat healthPoints, ModifierStat defence)
         {
-            this.takeRawDamageCommand = takeRawDamageCommand;
             this.unitDeathCommand = unitDeathCommand;
             HealthPoints = healthPoints;
             Defence = defence;
@@ -28,8 +26,6 @@ namespace Units
         public int TakeDamage(int amount)
         {
             int initialDamageTaken = (int) Defence.Modify(amount);
-            takeRawDamageCommand.Value = initialDamageTaken;
-            commandManager.ExecuteCommand(takeRawDamageCommand);
 
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             

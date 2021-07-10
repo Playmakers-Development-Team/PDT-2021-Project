@@ -75,7 +75,6 @@ namespace Units.Commands
     public class TakeTotalDamageCommand : ValueCommand
     {
         public TakeTotalDamageCommand(IUnit unit, int value) : base(unit,value) {}
-
     }
     
     /// <summary>
@@ -100,7 +99,6 @@ namespace Units.Commands
     public class DefenceChangeCommand : ValueCommand
     {
         public DefenceChangeCommand(IUnit unit,int value) : base(unit,value) {}
-
     }
 
     /// <summary>
@@ -109,7 +107,6 @@ namespace Units.Commands
     public class HealthChangedCommand : ValueCommand
     {
         public HealthChangedCommand(IUnit unit,int value) : base(unit,value) {}
-
     }
 
     /// <summary>
@@ -127,8 +124,6 @@ namespace Units.Commands
     {
         public List<Ability> Abilities { get; set; }
         public AbilitiesChangedCommand(IUnit unit, List<Ability> Abilities) : base(unit) => this.Abilities = Abilities;
-        
-        
     }
     
     /// <summary>
@@ -137,7 +132,6 @@ namespace Units.Commands
     public class MovementActionPointChangedCommand : ValueCommand
     {
         public MovementActionPointChangedCommand(IUnit unit,int value) : base(unit,value) {}
-
     }
     
     /// <summary>

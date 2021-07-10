@@ -17,13 +17,7 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
             
-            commandManager.ListenCommand<AbilityCommand>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.Unit, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
+           
         }
 
         

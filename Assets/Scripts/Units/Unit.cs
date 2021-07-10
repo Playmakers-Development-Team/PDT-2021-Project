@@ -9,7 +9,6 @@ using Managers;
 using TMPro;
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -43,7 +42,7 @@ namespace Units
             get => data.MovementPoints;
             set
             {
-                MovementActionPoints = value;
+                movementActionPoints = value;
                 commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this,value.Value));
             }
         }
@@ -53,7 +52,7 @@ namespace Units
             get => data.Speed;
             set
             {
-                Speed = value;
+                speed = value;
                 commandManager.ExecuteCommand(new SpeedChangedCommand(this, value.Value));
             }
         }
@@ -64,7 +63,7 @@ namespace Units
             get => data.Abilities;
             set
             {
-                Abilities = value;
+                abilities = value;
                 commandManager.ExecuteCommand(new AbilitiesChangedCommand(this,value));
             }
         }
@@ -85,6 +84,11 @@ namespace Units
             new LinkedList<TenetStatus>();
 
         private AnimationStates unitAnimationState;
+
+        private List<Ability> abilities;
+        private ValueStat speed;
+        private ModifierStat attack;
+        private ValueStat movementActionPoints;
         
         private TurnManager turnManager;
         private PlayerManager playerManager;
@@ -97,7 +101,7 @@ namespace Units
             base.Start();
 
             data.Initialise();
-            Health = new Health(new TakeRawDamageCommand(this,0), new KillUnitCommand(this),
+            Health = new Health(new KillUnitCommand(this),
                 data.HealthPoints, data.Defence);
             Knockback = new Knockback(data.TakeKnockbackModifier);
             UnitAnimator = GetComponentInChildren<Animator>();
@@ -117,6 +121,14 @@ namespace Units
             #region ListenCommands
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.Unit, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
 
             #endregion
 
@@ -138,7 +150,6 @@ namespace Units
         {
             Health.Defence.Adder -= amount;
             commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
-
         }
 
         public void TakeAttack(int amount)
@@ -149,16 +160,15 @@ namespace Units
 
         public void TakeDamage(int amount)
         {
+            commandManager.ExecuteCommand(new TakeRawDamageCommand(this,amount));
             int damageTaken = Health.TakeDamage(amount);
-            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this,amount));
-
+            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this,damageTaken));
         }
 
         public void TakeKnockback(int amount)
         {
-            Knockback.TakeKnockback(amount);
-            commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this,amount));
-
+           int knockbackAmount = Knockback.TakeKnockback(amount);
+           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this,knockbackAmount));
         } 
         
         #endregion
