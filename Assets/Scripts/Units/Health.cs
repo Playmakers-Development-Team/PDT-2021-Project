@@ -42,7 +42,6 @@ namespace Units
         {
             if (HealthPoints.Value <= 0)
                 ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
-            
         }
     }
 }

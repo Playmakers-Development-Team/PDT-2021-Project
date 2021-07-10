@@ -74,7 +74,7 @@ namespace Units.Commands
     /// </summary>
     public class TakeTotalDamageCommand : ValueCommand
     {
-        public TakeTotalDamageCommand(IUnit unit, int value) : base(unit,value) {}
+        public TakeTotalDamageCommand(IUnit unit, int value) : base(unit, value) {}
     }
     
     /// <summary>
@@ -82,7 +82,7 @@ namespace Units.Commands
     /// </summary>
     public class TakeRawDamageCommand : ValueCommand
     {
-        public TakeRawDamageCommand(IUnit unit, int value) : base(unit,value) {}
+        public TakeRawDamageCommand(IUnit unit, int value) : base(unit, value) {}
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ namespace Units.Commands
     /// </summary>
     public class AttackChangeCommand : ValueCommand
     {
-        public AttackChangeCommand(IUnit unit,int value) : base(unit,value) {}
+        public AttackChangeCommand(IUnit unit, int value) : base(unit, value) {}
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ namespace Units.Commands
     /// </summary>
     public class DefenceChangeCommand : ValueCommand
     {
-        public DefenceChangeCommand(IUnit unit,int value) : base(unit,value) {}
+        public DefenceChangeCommand(IUnit unit, int value) : base(unit, value) {}
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ namespace Units.Commands
     /// </summary>
     public class HealthChangedCommand : ValueCommand
     {
-        public HealthChangedCommand(IUnit unit,int value) : base(unit,value) {}
+        public HealthChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ namespace Units.Commands
     /// </summary>
     public class SpeedChangedCommand : ValueCommand
     {
-        public SpeedChangedCommand(IUnit unit,int value) : base(unit,value) {}
+        public SpeedChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
 
     /// <summary>
@@ -131,7 +131,7 @@ namespace Units.Commands
     /// </summary>
     public class MovementActionPointChangedCommand : ValueCommand
     {
-        public MovementActionPointChangedCommand(IUnit unit,int value) : base(unit,value) {}
+        public MovementActionPointChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
     
     /// <summary>
@@ -139,7 +139,6 @@ namespace Units.Commands
     /// </summary>
     public class KnockbackModifierChangedCommand : ValueCommand
     { 
-        public KnockbackModifierChangedCommand(IUnit unit,int value) : base(unit,value) {}
+        public KnockbackModifierChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
-    
 }

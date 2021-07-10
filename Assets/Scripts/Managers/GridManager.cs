@@ -391,12 +391,12 @@ namespace Managers
                                     "Failed to move unit");
             }
             
-            int moveRange = (int) unit.MovementActionPoints.Value;
+            int moveRange = unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
 
-            if (unit is PlayerUnit) // TODO: 1/3 Repeated Null Checks
+            if (unit is PlayerUnit)
             {
                 playerUnit = (PlayerUnit) unit;
                 if (playerUnit.UnitAnimator != null)
@@ -430,7 +430,7 @@ namespace Managers
             for (int i = 1; i < movePath.Count; i++)
             {
                 // TODO: this stuff is temporary, should probably be done in a better way
-                if (playerUnit != null) // TODO: 2/3 Repeated Null Checks
+                if (playerUnit != null)
                 {
                     if (movePath[i].x > currentCoordinate.x)
                         playerUnit.ChangeAnimation(AnimationStates.Right);
