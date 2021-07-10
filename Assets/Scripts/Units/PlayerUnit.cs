@@ -2,6 +2,7 @@ using Abilities;
 using Commands;
 using GridObjects;
 using Managers;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -23,14 +24,30 @@ namespace Units
 
         private AnimationStates UnitAnimationStates;
         private SpriteRenderer spriteRenderer;
+
+        private CommandManager commandManager;
+        
+        
         
         
         protected override void Start()
         {
             base.Start();
+            commandManager = ManagerLocator.Get<CommandManager>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
             UnitAnimator = GetComponentInChildren<Animator>();
+            
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (cmd.Unit != this)
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+                
+            });
+            
         }
 
         public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
