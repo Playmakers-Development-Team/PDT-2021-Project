@@ -9,6 +9,7 @@ using Managers;
 using TMPro;
 using Units.Commands;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -20,6 +21,7 @@ namespace Units
         [SerializeField] private TMP_Text healthText;
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
+        [SerializeField] private Sprite render;
 
         public string Name
         {
@@ -35,10 +37,12 @@ namespace Units
         public List<Ability> Abilities => data.Abilities;
 
         [Obsolete("Use TenetStatuses instead")]
-        public ICollection<TenetStatus> TenetStatusEffect => TenetStatuses;
+        public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
-        
+
         public static Type DataType => typeof(T);
+        
+        public Sprite Render => render;
 
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
@@ -92,16 +96,10 @@ namespace Units
         public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
 
         public void TakeAttack(int amount) => Attack.Adder += amount;
-        
+
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
-            
-            SpawnDamageText(damageTaken);
-            
-            if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
-            
         }
 
         public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
@@ -250,7 +248,7 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject +
                                    " as it is an unidentified unit");
                     break;
             }
