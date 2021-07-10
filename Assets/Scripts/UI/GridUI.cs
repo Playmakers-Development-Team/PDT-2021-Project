@@ -96,6 +96,9 @@ namespace UI
             Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
             Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
 
+            if (!gridManager.IsInBounds(coordinate))
+                return;
+
             manager.gridClicked.Invoke(coordinate);
         }
     }
