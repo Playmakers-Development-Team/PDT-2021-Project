@@ -26,6 +26,11 @@ namespace Managers
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
+
+        /// <summary>
+        /// Adds a unit to the <c>enemyUnits</c> list.
+        /// </summary>
+        public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
         
         private TurnManager turnManager;
         private GridManager gridManager;
@@ -256,6 +261,11 @@ namespace Managers
             return lowestHealthPlayerUnits;
         }
 
-        
+        public IUnit Spawn(EnemyUnit unit)
+        {
+            enemyUnits.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
     }
 }

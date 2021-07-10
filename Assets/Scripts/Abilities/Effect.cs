@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Bonuses;
+using Abilities.Costs;
 using StatusEffects;
 using Units;
 using UnityEngine;
@@ -14,15 +16,31 @@ namespace Abilities
         [SerializeField] private int damageValue;
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
-        [SerializeField] private TenetStatusEffect providingTenet;
-        [SerializeField] private List<Cost> costs;
+        [SerializeField] private TenetStatus providingTenet;
+        [SerializeField] private CompositeCost cost;
+        [SerializeField] private CompositeBonus bonus;
+        [SerializeField] private List<Keyword> keywords;
+
+        private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
+        private int TotalDefence => defenceValue + AllKeywordEffects.Sum(e => e.defenceValue);
+        private int TotalAttack => attackValue + AllKeywordEffects.Sum(e => e.attackValue);
+        
+        private IEnumerable<Effect> AllKeywordEffects => keywords.Select(k => k.Effect);
+        private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
+            .Select(e => e.cost)
+            .Prepend(cost);
+        private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
+            .Select(e => e.bonus)
+            .Prepend(bonus);
+
+        public IReadOnlyList<Keyword> Keywords => keywords.AsReadOnly();
 
         public bool ProcessTenet(IUnit user, IUnit target)
         {
             if (CanBeUsedBy(user, target))
             {
-                Provide(target);
-                Expend(user, target);
+                ProvideTenet(target);
+                ApplyCosts(user, target);
                 return true;
             }
 
@@ -31,31 +49,39 @@ namespace Abilities
         
         public bool CanBeUsedBy(IUnit user, IUnit target)
         {
-            return costs.All(cost => cost.MeetsRequirements(user, target));
+            return AllCosts.All(c => c.MeetsRequirements(user, target));
         }
 
-        private void Provide(IUnit unit) => 
-            unit.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
-
-        private void Expend(IUnit user, IUnit target)
+        private void ProvideTenet(IUnit unit)
         {
-            foreach (Cost cost in costs)
-                cost.Expend(user, target);
+            unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
+
+            foreach (Effect effect in AllKeywordEffects)
+            {
+                unit.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
+                    effect.providingTenet.StackCount);
+            }
+        }
+
+        private void ApplyCosts(IUnit user, IUnit target)
+        {
+            foreach (CompositeCost compositeCost in AllCosts)
+                compositeCost.ApplyCost(user, target);
         }
 
         public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
         {
             int value = valueType switch
             {
-                EffectValueType.Damage => damageValue,
-                EffectValueType.Defence => defenceValue,
-                EffectValueType.Attack => attackValue,
+                EffectValueType.Damage => TotalDamage,
+                EffectValueType.Defence => TotalDefence,
+                EffectValueType.Attack => TotalAttack,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user, target));
+            value *= AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
 
-            return bonusMultiplierSum == 0 ? value : bonusMultiplierSum * value;
+            return value;
         }
     }
 }

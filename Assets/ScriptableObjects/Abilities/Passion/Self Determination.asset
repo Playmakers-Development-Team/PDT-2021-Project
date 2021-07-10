@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Deal 2 damage\n User gains 2 Defense and 1 Passion\n \u21AF User
     may Spend Pride to deal 4 extra damage\n"
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 2 Damage
     damageValue: 2
@@ -25,7 +23,25 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
+  - name: 4 Damage IF User Spend Pride
+    damageValue: 4
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    cost:
+      tenetCosts:
+      - name: User Spend Pride
+        affectType: 0
+        tenetCostType: 2
+        tenetType: 0
+    bonuses: []
+    keywords: []
   userEffects:
   - name: Default, 2 Defence
     damageValue: 0
@@ -34,7 +50,10 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
   - name: Default, Provide 1 Passion
     damageValue: 0
     defenceValue: 0
@@ -42,4 +61,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 2
       stackCount: 1
-    costs: []
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []

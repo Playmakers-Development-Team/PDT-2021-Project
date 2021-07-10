@@ -21,19 +21,23 @@ namespace Managers
 
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }
-        public Vector2 GridOffset { get; private set; }
+        public BoundsInt LevelBoundsInt { get; private set; }
 
-        public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
+        public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds)
         {
             tileDatas = new Dictionary<Vector2Int, TileData>();
             
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
-            GridOffset = gridOffset;
+            
+            LevelBoundsInt = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x - 1, levelBounds.y - 1, 0)
+            );
 
-            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
+            for (int x = LevelBoundsInt.xMin; x <= LevelBoundsInt.xMax; x++)
             {
-                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
+                for (int y = LevelBoundsInt.xMin; y <= LevelBoundsInt.yMax; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
@@ -48,8 +52,20 @@ namespace Managers
                 }
             }
         }
-
+        
         #region GETTERS
+
+        public bool IsInBounds(Vector2Int coordinate)
+        {
+            return coordinate.x >= LevelBoundsInt.xMin && coordinate.x <= LevelBoundsInt.xMax &&
+                   coordinate.y >= LevelBoundsInt.yMin && coordinate.y <= LevelBoundsInt.yMax;
+        }
+
+        public bool IsInBounds(Vector3 worldPosition, bool clamp = false)
+        {
+            Vector2Int coordinate = ConvertPositionToCoordinate(worldPosition, clamp);
+            return IsInBounds(coordinate);
+        }
 
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
@@ -96,7 +112,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<GridObject> GridLineCast(Vector2Int originCoordinate, Vector2 targetVector,
-                                             int limit = GridLineCastDefaultLimit) =>
+                                             int limit = gridLineCastDefaultLimit) =>
             GridLineCast(originCoordinate, OrdinalDirectionUtility.From(Vector2.up, targetVector));
 
         /// <summary>
@@ -104,7 +120,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<T> GridLineCast<T>(Vector2Int originCoordinate, Vector2 targetVector,
-                                       int limit = GridLineCastDefaultLimit) where T : GridObject =>
+                                       int limit = gridLineCastDefaultLimit) where T : GridObject =>
             GridLineCast<T>(originCoordinate,
                 OrdinalDirectionUtility.From(Vector2.up, targetVector), limit);
 
@@ -114,7 +130,7 @@ namespace Managers
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<GridObject> GridLineCast(Vector2Int originCoordinate,
                                              OrdinalDirection direction,
-                                             int limit = GridLineCastDefaultLimit) =>
+                                             int limit = gridLineCastDefaultLimit) =>
             GridLineCast<GridObject>(originCoordinate, direction, limit);
 
         /// <summary>
@@ -122,7 +138,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<T> GridLineCast<T>(Vector2Int originCoordinate, OrdinalDirection direction,
-                                       int limit = GridLineCastDefaultLimit) where T : GridObject
+                                       int limit = gridLineCastDefaultLimit) where T : GridObject
         {
             Vector2Int increment = direction.ToVector2Int();
             Vector2Int currentCoordinate = originCoordinate;
@@ -355,20 +371,20 @@ namespace Managers
 
         #region CONVERSIONS
 
-        public Vector2Int ConvertPositionToCoordinate(Vector2 position)
+        public Vector2Int ConvertPositionToCoordinate(Vector2 position, bool clamp = false)
         {
-            // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
-            //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return (Vector2Int) LevelTilemap.layoutGrid.WorldToCell(position);
+            Vector3Int unbounded = LevelTilemap.layoutGrid.WorldToCell(position);
+
+            if (!clamp)
+                return (Vector2Int) unbounded;
+            
+            return new Vector2Int(
+                Mathf.Clamp(unbounded.x, LevelBoundsInt.xMin, LevelBoundsInt.xMax),
+                Mathf.Clamp(unbounded.y, LevelBoundsInt.xMin, LevelBoundsInt.xMax)
+                );
         }
 
-        public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate)
-        {
-            // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
-            //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) +
-                   GridOffset;
-        }
+        public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate) => LevelTilemap.GetCellCenterWorld((Vector3Int) coordinate);
 
         #endregion
 

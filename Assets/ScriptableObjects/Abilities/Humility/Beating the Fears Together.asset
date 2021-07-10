@@ -16,8 +16,6 @@ MonoBehaviour:
     user is with Joy, deal 3 extra damage\n\u21AF Target with Pride take 2 extra
     damage\n"
   shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -26,41 +24,53 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
-  - name: 4 Damage with Humility
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
+  - name: 4 Damage IF User With Humility
     damageValue: 4
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: User With Humility
-      affectType: 0
-      costType: 0
-      tenetType: 1
-  - name: 3 Damage with Joy
+    cost:
+      tenetCosts:
+      - name: User With Humility
+        affectType: 0
+        tenetCostType: 0
+        tenetType: 1
+    bonuses: []
+    keywords: []
+  - name: 3 Damage IF User With Joy
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: User With Joy
-      affectType: 0
-      costType: 0
-      tenetType: 4
-  - name: 2 Damage with Pride
+    cost:
+      tenetCosts:
+      - name: User With Joy
+        affectType: 0
+        tenetCostType: 0
+        tenetType: 4
+    bonuses: []
+    keywords: []
+  - name: 2 Damage IF User With Pride
     damageValue: 2
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: Target With Pride
-      affectType: 1
-      costType: 0
-      tenetType: 0
+    cost:
+      tenetCosts:
+      - name: User With Pride
+        affectType: 0
+        tenetCostType: 0
+        tenetType: 0
+    bonuses: []
+    keywords: []
   userEffects: []

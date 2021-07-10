@@ -10,6 +10,9 @@ namespace Units
 {
     public interface IUnit : IDamageable, IKnockbackable
     {
+        GameObject gameObject { get; }
+        Transform transform { get; }
+        
         public string Name { get; set; }
         public TenetType Tenet { get; }
         public ValueStat MovementActionPoints { get; }
@@ -21,35 +24,46 @@ namespace Units
 
         GameObject gameObject { get; }
         
-        IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
-
-        Type GetDataType();
+        [Obsolete("Use TenetStatuses instead")]
+        ICollection<TenetStatus> TenetStatusEffects { get; }
+        ICollection<TenetStatus> TenetStatuses { get; }
         
+        Sprite Render { get; }
+        
+        bool IsSelected { get; }
+
         void TakeDamage(int amount);
 
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
         void TakeAttack(int amount);
 
         List<Vector2Int> GetAllReachableTiles();
         
         void MoveUnit(StartMoveCommand startMoveCommand);
 
-        void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
+        void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1);
 
-        bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue);
+        bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue);
 
-        void ClearAllTenetStatusEffects();
+        void ClearAllTenetStatus();
 
+        [Obsolete("Use GetTenetStatusCount instead")]
         public int GetTenetStatusEffectCount(TenetType tenetType);
+        
+        public int GetTenetStatusCount(TenetType tenetType);
 
+        [Obsolete("Use HasTenetStatus instead")]
         bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
+        
+        bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1);
 
-        bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
-
-        bool IsSelected();
+        [Obsolete("Use TryGetTenetStatus instead")]
+        bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus);
+        
+        bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus);
 
         string RandomizeName();
     }

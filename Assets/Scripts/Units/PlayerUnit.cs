@@ -1,7 +1,6 @@
 using Abilities;
-using Commands;
-using GridObjects;
 using Managers;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units
@@ -11,60 +10,84 @@ namespace Units
         public enum AnimationStates
         {
             Idle,
-            Forward,
-            Backward,
+            Up,
+            Down,
             Left,
             Right,
-            Casting, }
+            Casting
+        }
+        
+        public Animator UnitAnimator { get; private set; }
+        public Ability CurrentlySelectedAbility { get; set; }
 
-        public AnimationStates animationStates;
-        public Animator animator;
-        public Ability CurrentlySelectedAbility;
+        private AnimationStates unitAnimationStates;
         private SpriteRenderer spriteRenderer;
 
+        private CommandManager commandManager;
+        
         protected override void Start()
         {
             base.Start();
+            commandManager = ManagerLocator.Get<CommandManager>();
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
+            UnitAnimator = GetComponentInChildren<Animator>();
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.Unit, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
         }
 
         public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
         {
-            this.animationStates = animationStates;
-            Debug.Log("AnimationStates" + animationStates);
+            unitAnimationStates = animationStates;
 
-            switch (this.animationStates)
+            switch (unitAnimationStates)
             {
                 case AnimationStates.Idle:
-                    animator.SetInteger("Movement", 0);
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = false;
-                    animator.SetBool("isCasting", false);
                     break;
-                case AnimationStates.Backward:
-                    animator.SetInteger("Movement", 2);
+                
+                case AnimationStates.Down:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = false;
-                    animator.SetBool("isCasting", false);
                     break;
-                case AnimationStates.Forward:
-                    animator.SetInteger("Movement", 1);
+                
+                case AnimationStates.Up:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    
                     spriteRenderer.flipX = true;
-                    animator.SetBool("isCasting", false);
                     break;
+                
                 case AnimationStates.Left:
-                    animator.SetInteger("Movement", 1);
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    
                     spriteRenderer.flipX = true;
-                    animator.SetBool("isCasting", false);
                     break;
+                
                 case AnimationStates.Right:
-                    animator.SetInteger("Movement", 1);
-                     spriteRenderer.flipX = false;
-                    animator.SetBool("isCasting", false);
-                    break;
-                case AnimationStates.Casting:
-                    animator.SetInteger("Movement", 0);
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    
                     spriteRenderer.flipX = false;
-                    animator.SetBool("isCasting", true);
+                    break;
+                
+                case AnimationStates.Casting:
+                    UnitAnimator.SetBool("moving", false);
+                    // UnitAnimator.SetBool("front", true);
+                    
+                    UnitAnimator.SetTrigger("attack");
                     break;
             }
         }
