@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GridObjects;
 using Units;
@@ -159,7 +160,7 @@ namespace Managers
 
             return new List<T>();
         }
-
+        
         public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
         {
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -184,151 +185,19 @@ namespace Managers
                 distance = visited[currentNode];
 
                 // Add neighbours of node to queue
-                VisitDistanceToAllNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitDistanceToAllNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitDistanceToAllNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                VisitDistanceToAllNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
                 
                 coordinateQueue.Dequeue();
             }
 
             return visited;
         }
-
-        public void VisitNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
-                               Queue<Vector2Int> coordinateQueue, string allegiance)
-        {
-            // Check grid node exists
-            if (tileDatas.ContainsKey(node))
-            {
-                // Check node is empty or matches allegiance
-                if (tileDatas[node].GridObjects.Count == 0 ||
-                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
-                {
-                    // Check node has not already been visited
-                    if (!visited.ContainsKey(node))
-                    {
-                        // Add node to queue and store the distance taken to arrive at it
-                        visited.Add(node, distance + 1);
-                        coordinateQueue.Enqueue(node);
-                    }
-                }
-            }
-        }
         
-        private void VisitDistanceToAllNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,
-                               Queue<Vector2Int> coordinateQueue, string allegiance)
-        {
-            // Check grid node exists
-            if (tileDatas.ContainsKey(node))
-            {
-                // Check node is empty or matches allegiance
-                if (tileDatas[node].GridObjects.Count == 0 ||
-                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
-                {
-                    // Check node has not already been visited
-                    if (!visited.ContainsKey(node))
-                    {
-                        // Add node to queue and store the distance taken to arrive at it
-                        visited.Add(node, distance + 1);
-                        coordinateQueue.Enqueue(node);
-                    }
-                }else if(tileDatas[node].GridObjects[0].tag.Equals("PlayerUnit"))
-                {
-                    if (!visited.ContainsKey(node))
-                    {
-                        visited.Add(node, distance + 1);
-                    }
-                }
-            }
-            
-        }
         public bool HasPlayerUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is PlayerUnit);
         public bool HasEnemyUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is EnemyUnit);
-
-        private void VisitPathNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
-                               Queue<Vector2Int> coordinateQueue, IUnit iunit)
-        {
-            // Check grid node exists
-            if (tileDatas.ContainsKey(node))
-            {
-                // Check node is empty or matches allegiance
-                if (tileDatas[node].GridObjects.Count == 0 || 
-                    iunit.GetType() == tileDatas[node].GridObjects[0].GetType())
-                {
-                    // Check node has not already been visited
-                    if (!visited.ContainsKey(node) && !visited.ContainsValue(node))
-                    {
-                        // Add node to queue and store the previous node
-                        visited.Add(node, coordinateQueue.Peek());
-                        coordinateQueue.Enqueue(node);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns a list of the path from one node to another
-        /// Returns an empty list if it cannot find a path
-        /// </summary>
-        public List<Vector2Int> GetCellPath(Vector2Int startingCoordinate,
-                                             Vector2Int targetCoordinate, IUnit iunit)
-        {
-            var visited = new Dictionary<Vector2Int, Vector2Int>();
-            var coordinateQueue = new Queue<Vector2Int>();
-            bool targetWasFound = false;
-            
-
-            coordinateQueue.Enqueue(startingCoordinate);
-            while (coordinateQueue.Count > 0)
-            {
-                var currentNode = coordinateQueue.Peek();
-
-                VisitPathNode(currentNode + CardinalDirection.North.ToVector2Int(), visited,
-                    coordinateQueue, iunit);
-                VisitPathNode(currentNode + CardinalDirection.East.ToVector2Int(), visited,
-                    coordinateQueue, iunit);
-                VisitPathNode(currentNode + CardinalDirection.South.ToVector2Int(), visited,
-                    coordinateQueue, iunit);
-                VisitPathNode(currentNode + CardinalDirection.West.ToVector2Int(), visited,
-                    coordinateQueue, iunit);
-
-                if (visited.ContainsKey(targetCoordinate))
-                {
-                    targetWasFound = true;
-                    coordinateQueue.Clear();
-                }
-                else
-                    coordinateQueue.Dequeue();
-            }
-
-            foreach (KeyValuePair<Vector2Int, Vector2Int> node in visited)
-            {
-                //Debug.Log($"NodeStuff {node}");
-            }
-
-            if (!targetWasFound)
-            {
-                return new List<Vector2Int>();
-            }
-            
-            var path = new List<Vector2Int>();
-            var currentNode2 = targetCoordinate;
-            int count = 0;
-            while (count < 20)
-            {
-                path.Add(currentNode2);
-                if (visited.ContainsKey(currentNode2))
-                    currentNode2 = visited[currentNode2];
-                else
-                    break;
-
-                count++;
-            }
-
-            path.Reverse();
-            return path;
-        }
 
         /// <summary>
         /// Returns the coordinate that is closest to the destination
@@ -344,7 +213,7 @@ namespace Managers
             
             foreach (var startingCoordinate in reachableCoordinates)
             {
-                List<Vector2Int> pathToTargetTile = GetCellPath(targetCoordinate, startingCoordinate, iunit);
+                List<Vector2Int> pathToTargetTile = Pathfinding.GetCellPath(targetCoordinate, startingCoordinate, iunit);
                 
                 //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
                 

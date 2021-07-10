@@ -319,13 +319,13 @@ namespace Units
                 }
 
                 // Add neighbours of node to queue
-                gridManager.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                Pathfinding.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
                     coordinateQueue, allegiance);
-                gridManager.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                Pathfinding.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
                     coordinateQueue, allegiance);
-                gridManager.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                Pathfinding.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
                     coordinateQueue, allegiance);
-                gridManager.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                Pathfinding.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
                     coordinateQueue, allegiance);
 
                 if (gridManager.GetGridObjectsByCoordinate(currentNode).Count == 0)
@@ -377,7 +377,7 @@ namespace Units
             }
 
             // TODO: Tween based on cell path
-            List<Vector2Int> movePath = gridManager.GetCellPath(currentCoordinate, newCoordinate, unit);
+            List<Vector2Int> movePath = Pathfinding.GetCellPath(currentCoordinate, newCoordinate, unit);
 
             for (int i = 1; i < movePath.Count; i++)
             {
