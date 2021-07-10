@@ -25,6 +25,11 @@ namespace Managers
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
         public void ClearEnemyUnits() => enemyUnits.Clear();
+
+        /// <summary>
+        /// Adds a unit to the <c>enemyUnits</c> list.
+        /// </summary>
+        public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
         
         private TurnManager turnManager;
         private GridManager gridManager;
@@ -151,30 +156,29 @@ namespace Managers
                             // TODO: Will later need to be turned into an ability command when enemies have abilities
                             playerUnit.TakeDamage((int) unit.Attack.Value);
                         }
+                        
                         return movementDir;
                     }
                 }
 
                 int newMovementX = 0;
                 int newMovementY = 0;
+                
                 // Check if x coordinate is not the same as target
                 if (unit.Coordinate.x != targetUnitCoordinate.x)
-                {
                     newMovementX = (int) Mathf.Sign(targetUnitCoordinate.x - unit.Coordinate.x - movementDir.x);
-                }
+                
                 // Check if y coordinate is not the same as target
                 if (unit.Coordinate.y != targetUnitCoordinate.y)
-                {
                    newMovementY = (int) Mathf.Sign(targetUnitCoordinate.y - unit.Coordinate.y - movementDir.y);
-                }
 
                 if (newMovementX != 0 && TryMoveX(unit, movementDir, newMovementX))
                 {
-                    movementDir = movementDir + Vector2Int.right * newMovementX;
+                    movementDir += Vector2Int.right * newMovementX;
                 }
-                else if(newMovementY != 0 && TryMoveY(unit, movementDir, newMovementY)) // If moving on the X fails, try move on the Y
+                else if (newMovementY != 0 && TryMoveY(unit, movementDir, newMovementY)) // If moving on the X fails, try move on the Y
                 {
-                    movementDir = movementDir + Vector2Int.up * newMovementY;
+                    movementDir += Vector2Int.up * newMovementY;
                 }
             }
 
@@ -231,11 +235,7 @@ namespace Managers
                     // i.e. The earlier player in the list is prioritised
                     if (closestPlayerUnit.Health.HealthPoints.Value != playerUnit.Health.HealthPoints.Value)
                     {
-                        float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
-                        if (lowerHealth == playerUnit.Health.HealthPoints.Value)
-                        {
-                            closestPlayerUnit = playerUnit;
-                        }
+                        closestPlayerUnit = LowestHealth(closestPlayerUnit, playerUnit);
                     }
                 }
             }
@@ -243,23 +243,37 @@ namespace Managers
             return closestPlayerUnit;
         }
         
+        private IUnit LowestHealth(IUnit closestPlayerUnit, IUnit playerUnit)
+        {
+            float lowerHealth = Mathf.Min(closestPlayerUnit.Health.HealthPoints.Value, playerUnit.Health.HealthPoints.Value);
+            
+            if (lowerHealth == playerUnit.Health.HealthPoints.Value)
+                return playerUnit;
+            
+            return closestPlayerUnit;
+        }
+
         private Vector2Int FindClosestAdjacentFreeSquare(EnemyUnit unit, IUnit targetUnit)
         {
             Dictionary<Vector2Int, float> coordinateDistances = new Dictionary<Vector2Int, float>();
-            
+
             Vector2Int northCoordinate = targetUnit.Coordinate + Vector2Int.up;
             Vector2Int eastCoordinate = targetUnit.Coordinate + Vector2Int.right;
             Vector2Int southCoordinate = targetUnit.Coordinate + Vector2Int.down;
             Vector2Int westCoordinate = targetUnit.Coordinate + Vector2Int.left;
-            
-            coordinateDistances.Add(northCoordinate, Vector2.Distance(northCoordinate, unit.Coordinate));
-            coordinateDistances.Add(eastCoordinate, Vector2.Distance(eastCoordinate, unit.Coordinate));
-            coordinateDistances.Add(southCoordinate, Vector2.Distance(southCoordinate, unit.Coordinate));
-            coordinateDistances.Add(westCoordinate, Vector2.Distance(westCoordinate, unit.Coordinate));
+
+            coordinateDistances.Add(northCoordinate,
+                Vector2.Distance(northCoordinate, unit.Coordinate));
+            coordinateDistances.Add(eastCoordinate,
+                Vector2.Distance(eastCoordinate, unit.Coordinate));
+            coordinateDistances.Add(southCoordinate,
+                Vector2.Distance(southCoordinate, unit.Coordinate));
+            coordinateDistances.Add(westCoordinate,
+                Vector2.Distance(westCoordinate, unit.Coordinate));
 
             Vector2Int closestCoordinate = targetUnit.Coordinate;
             float closestDistance = float.MaxValue; // Placeholder initialisation value
-            
+
 
             foreach (var coordinateDistance in coordinateDistances)
             {
@@ -270,19 +284,16 @@ namespace Managers
                     closestCoordinate = coordinateDistance.Key;
                 }
             }
-            
+
             // NOTE: If no nearby player squares are free, targetUnit.Coordinate is returned
             return closestCoordinate;
         }
-        
-        
+
         public IUnit Spawn(EnemyUnit unit)
         {
             enemyUnits.Add(unit);
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }
-        
-        
     }
 }

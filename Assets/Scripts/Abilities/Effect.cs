@@ -14,7 +14,7 @@ namespace Abilities
         [SerializeField] private int damageValue;
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
-        [SerializeField] private TenetStatusEffect providingTenet;
+        [SerializeField] private TenetStatus providingTenet;
         [SerializeField] private List<Cost> costs;
 
         public bool ProcessTenet(IUnit user, IUnit target)
@@ -35,7 +35,7 @@ namespace Abilities
         }
 
         private void Provide(IUnit unit) => 
-            unit.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
+            unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
 
         private void Expend(IUnit user, IUnit target)
         {
