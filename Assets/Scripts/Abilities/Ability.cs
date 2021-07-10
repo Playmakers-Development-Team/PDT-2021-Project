@@ -13,6 +13,7 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject
     {
+        [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         // [SerializeField] private int knockback;
@@ -20,25 +21,49 @@ namespace Abilities
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
 
+        /// <summary>
+        /// A complete description of the ability.
+        /// </summary>
         public string Description => description;
+        /// <summary>
+        /// Describes what and how the ability can hit units.
+        /// </summary>
         public IShape Shape => shape;
+        /// <summary>
+        /// All keywords used by this ability regardless whether they should be shown to
+        /// the player or not.
+        /// </summary>
+        public IEnumerable<Keyword> AllKeywords => TargetKeywords.Concat(UserKeywords);
+        /// <summary>
+        /// All keywords that should be shown in game which is used by this ability.
+        /// </summary>
+        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
 
-        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector, bool undo = false) =>
-            Use(user, shape.GetTargets(originCoordinate, targetVector), undo);
-        
-        public void Use(IUnit user, IEnumerable<GridObject> targets, bool undo = false)
+        private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
+        private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
+
+        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
-            Use(user, targetEffects, targets, undo);
+            UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
+        }
+
+        public void UseForTargets(IUnit user, params GridObject[] targets) => UseForTargets(user, targets.AsEnumerable());
+        
+        public void UseForTargets(IUnit user, IEnumerable<GridObject> targets)
+        {
+            UseEffectsForTargets(user, targetEffects, targets);
             
             // It can be assumed that IUnit can be converted to GridObject.
             if (user is GridObject userGridObject)
-                Use(user, userEffects, new List<GridObject> {userGridObject}, undo);
+                UseEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void Use(IUnit user, Effect[] effects, IEnumerable<GridObject> targets, bool undo = false)
+        private void UseEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+            UseEffectsForTargets(user, effects, targets.AsEnumerable());
+
+        private void UseEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
         {
-            // TODO: Use the undo parameter to invert values
-            foreach (GridObject target in targets)
+            foreach (GridObject target in targets.ToArray())
             {
                 if (target is IUnit targetUnit)
                 {
@@ -65,26 +90,35 @@ namespace Abilities
             }
         }
         
-        // TODO: Test undo functions once undo has been implemented
-        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector) =>
-            Use(user, originCoordinate, targetVector, true);
-
-        public void Undo(IUnit user, IEnumerable<GridObject> targets) =>
-            Use(user, targets, true);
-
-        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType)
+        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
         {
-            int bonus = 0;
-            
-            foreach (Effect effect in effects)
-            {
-                if (effect.CanBeUsedBy(user, target))
-                {
-                    bonus += effect.CalculateValue(user, target, valueType);
-                }
-            }
-
-            return bonus;
+            UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
+
+        public void UndoForTargets(IUnit user, params GridObject[] targets) => UndoForTargets(user, targets.AsEnumerable());
+        
+        public void UndoForTargets(IUnit user, IEnumerable<GridObject> targets)
+        {
+            UndoEffectsForTargets(user, targetEffects, targets);
+            
+            // It can be assumed that IUnit can be converted to GridObject.
+            if (user is GridObject userGridObject)
+                UndoEffectsForTargets(user, userEffects, userGridObject);
+        }
+
+        private void UndoEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+            UndoEffectsForTargets(user, effects, targets.AsEnumerable());
+
+        private void UndoEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Sum up all the values from each effect. Only count the effect if such effect can be used.
+        /// </summary>
+        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType) =>
+            effects.Where(e => e.CanBeUsedBy(user, target))
+                .Sum(e => e.CalculateValue(user, target, valueType));
     }
 }
