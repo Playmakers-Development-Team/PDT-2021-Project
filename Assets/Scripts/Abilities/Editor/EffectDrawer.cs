@@ -15,6 +15,7 @@ namespace Abilities.Editor
         {
             EditorGUI.BeginChangeCheck();
             EditorGUI.PropertyField(position, property, label, true);
+            
             if (EditorGUI.EndChangeCheck())
             {
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
@@ -41,11 +42,9 @@ namespace Abilities.Editor
                                     || provideCountProperty.intValue != 0;
                 
                 if (tenetCostsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
-                {
                     nameProperty.stringValue += "Default, ";
-                }
 
-                // Damage and defence
+                    // Damage and defence
                 if (hasValues)
                 {
                     if (damageProperty.intValue != 0)
@@ -62,9 +61,7 @@ namespace Abilities.Editor
                 }
                 
                 if (!hasValues)
-                {
                     valueNameList.Add("Nothing");
-                }
 
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
 
