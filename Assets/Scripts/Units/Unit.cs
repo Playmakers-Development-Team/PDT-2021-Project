@@ -44,8 +44,7 @@ namespace Units
             set
             {
                 MovementActionPoints = value;
-                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this){Value =
-                  value.Value});
+                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this,value.Value));
             }
         }
 
@@ -55,8 +54,7 @@ namespace Units
             set
             {
                 Speed = value;
-                commandManager.ExecuteCommand(new SpeedChangedCommand(this){Value =
-                    value.Value});
+                commandManager.ExecuteCommand(new SpeedChangedCommand(this, value.Value));
             }
         }
         public ModifierStat Attack => data.Attack;
@@ -67,8 +65,7 @@ namespace Units
             set
             {
                 Abilities = value;
-                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this){Abilities = 
-                    value});
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this,value));
             }
         }
 
@@ -100,7 +97,7 @@ namespace Units
             base.Start();
 
             data.Initialise();
-            Health = new Health(new TakeRawDamageCommand(this), new KillUnitCommand(this),
+            Health = new Health(new TakeRawDamageCommand(this,0), new KillUnitCommand(this),
                 data.HealthPoints, data.Defence);
             Knockback = new Knockback(data.TakeKnockbackModifier);
             UnitAnimator = GetComponentInChildren<Animator>();
@@ -140,27 +137,27 @@ namespace Units
         public void TakeDefence(int amount)
         {
             Health.Defence.Adder -= amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this) {Value = amount});
+            commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
 
         }
 
         public void TakeAttack(int amount)
         {
             Attack.Adder += amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this) {Value = amount});
+            commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
         } 
 
         public void TakeDamage(int amount)
         {
             int damageTaken = Health.TakeDamage(amount);
-            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this) {Value = amount});
+            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this,amount));
 
         }
 
         public void TakeKnockback(int amount)
         {
             Knockback.TakeKnockback(amount);
-            commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this) {Value = amount});
+            commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this,amount));
 
         } 
         

@@ -74,7 +74,7 @@ namespace Units.Commands
     /// </summary>
     public class TakeTotalDamageCommand : ValueCommand
     {
-        public TakeTotalDamageCommand(IUnit unit) : base(unit) {}
+        public TakeTotalDamageCommand(IUnit unit, int value) : base(unit,value) {}
 
     }
     
@@ -83,7 +83,7 @@ namespace Units.Commands
     /// </summary>
     public class TakeRawDamageCommand : ValueCommand
     {
-        public TakeRawDamageCommand(IUnit unit) : base(unit) {}
+        public TakeRawDamageCommand(IUnit unit, int value) : base(unit,value) {}
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ namespace Units.Commands
     /// </summary>
     public class AttackChangeCommand : ValueCommand
     {
-        public AttackChangeCommand(IUnit unit) : base(unit) {}
+        public AttackChangeCommand(IUnit unit,int value) : base(unit,value) {}
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ namespace Units.Commands
     /// </summary>
     public class DefenceChangeCommand : ValueCommand
     {
-        public DefenceChangeCommand(IUnit unit) : base(unit) {}
+        public DefenceChangeCommand(IUnit unit,int value) : base(unit,value) {}
 
     }
 
@@ -108,7 +108,7 @@ namespace Units.Commands
     /// </summary>
     public class HealthChangedCommand : ValueCommand
     {
-        public HealthChangedCommand(IUnit unit) : base(unit) {}
+        public HealthChangedCommand(IUnit unit,int value) : base(unit,value) {}
 
     }
 
@@ -117,7 +117,7 @@ namespace Units.Commands
     /// </summary>
     public class SpeedChangedCommand : ValueCommand
     {
-        public SpeedChangedCommand(IUnit unit) : base(unit) {}
+        public SpeedChangedCommand(IUnit unit,int value) : base(unit,value) {}
     }
 
     /// <summary>
@@ -126,7 +126,8 @@ namespace Units.Commands
     public class AbilitiesChangedCommand : UnitCommand
     {
         public List<Ability> Abilities { get; set; }
-        public AbilitiesChangedCommand(IUnit unit) : base(unit) {}
+        public AbilitiesChangedCommand(IUnit unit, List<Ability> Abilities) : base(unit) => this.Abilities = Abilities;
+        
         
     }
     
@@ -135,7 +136,7 @@ namespace Units.Commands
     /// </summary>
     public class MovementActionPointChangedCommand : ValueCommand
     {
-        public MovementActionPointChangedCommand(IUnit unit) : base(unit) {}
+        public MovementActionPointChangedCommand(IUnit unit,int value) : base(unit,value) {}
 
     }
     
@@ -144,7 +145,7 @@ namespace Units.Commands
     /// </summary>
     public class KnockbackModifierChangedCommand : ValueCommand
     { 
-        public KnockbackModifierChangedCommand(IUnit unit) : base(unit) {}
+        public KnockbackModifierChangedCommand(IUnit unit,int value) : base(unit,value) {}
     }
     
 }
