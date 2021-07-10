@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Target gains 4 Defense\n Give target and user 1 Humility\n \u21AF
     Target may Spend Joy to gain 4 Attack"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 4 Defence and Provide 1 Humility
     damageValue: 0
@@ -25,19 +23,21 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
-    costs: []
-  - name: 4 Attack spend Joy
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
+  - name: 4 Attack IF Target Spend Joy
     damageValue: 0
     defenceValue: 0
     attackValue: 4
     providingTenet:
       tenetType: 1
       stackCount: 0
-    costs:
-    - name: User Spend Joy
-      affectType: 0
-      costType: 2
-      tenetType: 4
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
   userEffects:
   - name: Default, Provide 1 Humility
     damageValue: 0
@@ -46,4 +46,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
-    costs: []
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []

@@ -377,9 +377,11 @@ namespace Managers
             }
         }
         
+        // TODO: Move from Grid system to Unit system
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
             IUnit unit = moveCommand.Unit;
+
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
@@ -389,12 +391,12 @@ namespace Managers
                                     "Failed to move unit");
             }
             
-            int moveRange = (int)unit.MovementActionPoints.Value;
+            int moveRange = (int) unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
 
-            if (unit is PlayerUnit)
+            if (unit is PlayerUnit) // TODO: 1/3 Repeated Null Checks
             {
                 playerUnit = (PlayerUnit) unit;
                 if (playerUnit.UnitAnimator != null)
@@ -427,8 +429,8 @@ namespace Managers
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                if (playerUnit !=
-                    null) // this stuff is temporary, should probably be done in a better way
+                // TODO: this stuff is temporary, should probably be done in a better way
+                if (playerUnit != null) // TODO: 2/3 Repeated Null Checks
                 {
                     if (movePath[i].x > currentCoordinate.x)
                         playerUnit.ChangeAnimation(AnimationStates.Right);
