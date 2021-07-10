@@ -8,15 +8,16 @@ namespace Managers
     {
         [SerializeField] private GameObject[] preMadeTimeline;
         [SerializeField] private bool isTimelineRandomised;
-        
-        /// <summary>
-        /// A reference to the TurnManager.
-        /// </summary>
+       
         private TurnManager turnManager;
+        private UnitManager unitManager;
+        
         
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
+            
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
@@ -31,6 +32,12 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
+            if (preMadeTimeline.Length < unitManager.AllUnits.Count)
+            {
+                isTimelineRandomised = true;
+                Debug.Log("Timeline was not filled or completed, automatically setting it to randomised");
+            }
+        
             if (isTimelineRandomised)
                 turnManager.SetupTurnQueue();
             else 
