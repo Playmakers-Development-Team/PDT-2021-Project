@@ -395,6 +395,11 @@ namespace Managers
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
+            
+            var manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
 
             if (unit is PlayerUnit)
             {
@@ -412,15 +417,12 @@ namespace Managers
             }
 
             // Check if tile is in range
+
             if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) &&
                 unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
-                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
-                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
-                              newCoordinate));
-
-                Debug.Log("Target tile out of range.");
+                Debug.Log($"Target tile out of range. Manhattan distance of {manhattanDistance}");
                 return;
             }
 
@@ -449,15 +451,11 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints( - Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
 
             if (playerUnit != null)
                 playerUnit.ChangeAnimation(AnimationStates.Idle);
 
-            Debug.Log(Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
-            
             // Should be called when all the movement and tweening has been completed
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }

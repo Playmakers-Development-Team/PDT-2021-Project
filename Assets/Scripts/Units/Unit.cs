@@ -48,7 +48,6 @@ namespace Units
             get => data.Speed;
             set => data.Speed = value;
         }
-        
 
         public ModifierStat Attack => data.Attack;
 
@@ -103,7 +102,7 @@ namespace Units
             UnitAnimator = GetComponentInChildren<Animator>();
             
             // TODO Speed temporarily random for now until proper turn manipulation is done.
-            SetSpeed(Random.Range(0, 101));
+            SetSpeed(Speed.Value + Random.Range(0, 101));
             
             #region ListenCommands
 
@@ -135,14 +134,14 @@ namespace Units
         }
 
         public void TakeAttack(int amount)
-        { 
+        {
             Attack.Adder += amount;
-           commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
+            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
         } 
 
         public void TakeDamage(int amount)
         {
-            commandManager.ExecuteCommand(new TakeRawDamageCommand(this,amount));
+            commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             int damageTaken = Health.TakeDamage(amount);
             commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
@@ -155,13 +154,13 @@ namespace Units
         
         public void SetSpeed(int amount)
         {
-            Speed.Value += amount;
+            Speed.Value = amount;
             commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
         }
         
         public void SetMovementActionPoints(int amount)
         {
-            MovementActionPoints.Value += amount;
+            MovementActionPoints.Value = amount;
             commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, amount));
         }
         
