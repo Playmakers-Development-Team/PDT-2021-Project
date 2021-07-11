@@ -28,6 +28,9 @@ namespace Units
         Sprite Render { get; }
         
         bool IsSelected { get; }
+        Animator UnitAnimator { get; }
+
+        void ChangeAnimation(AnimationStates animationStates);
 
         void TakeDamage(int amount);
 

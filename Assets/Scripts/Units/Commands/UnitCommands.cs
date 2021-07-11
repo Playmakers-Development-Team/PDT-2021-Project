@@ -134,4 +134,13 @@ namespace Units.Commands
     { 
         public KnockbackModifierChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
+    
+    /// <summary>
+    /// Executed when the an enemy unit attacks.
+    /// </summary>
+    public class EnemyAttack : UnitCommand
+    {
+        public EnemyAttack(IUnit unit) : base(unit) {}
+    }
+    
 }

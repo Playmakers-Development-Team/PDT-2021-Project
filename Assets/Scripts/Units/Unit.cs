@@ -116,6 +116,14 @@ namespace Units
                 
                 ChangeAnimation(AnimationStates.Casting);
             });
+            
+            commandManager.ListenCommand<EnemyAttack>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.Unit, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
 
             #endregion
 
