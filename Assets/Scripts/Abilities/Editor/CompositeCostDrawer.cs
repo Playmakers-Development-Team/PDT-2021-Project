@@ -98,7 +98,8 @@ namespace Abilities.Editor
         {
             if (property == null)
                 return "can't have tenet cost!";
-            
+
+            SerializedProperty countProperty = property.FindPropertyRelative("count");
             SerializedProperty tenetCostTypeProperty = property.FindPropertyRelative("tenetCostType");
             SerializedProperty tenetTypeProperty = property.FindPropertyRelative("tenetType");
 
@@ -106,7 +107,7 @@ namespace Abilities.Editor
                 ((TenetCostType) tenetCostTypeProperty.enumValueIndex).ToString();
             string tenetString = ((TenetType) tenetTypeProperty.enumValueIndex).ToString();
 
-            return $"{tenetCostTypeString} {tenetString}";
+            return $"{tenetCostTypeString} {countProperty.intValue} {tenetString}";
         }
 
         private void OnPropertyGUI(Rect position, SerializedProperty property, GUIContent label)
