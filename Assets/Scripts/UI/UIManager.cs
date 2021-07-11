@@ -131,9 +131,8 @@ namespace UI
             // Highlight movement squares
             if (IsPlayerTurn && !IsAbilitySelected)
             {
-                Vector2Int[] coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value).
-                    ToArray();
-                gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Valid));
+                List<Vector2Int> coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value);
+                gridSpacesSelected.Invoke(new GridSelection(coordinates.ToArray(), GridSelectionType.Valid));
             }
 
             // Highlight square under active IUnit
@@ -154,7 +153,7 @@ namespace UI
             if (!IsPlayerTurn || IsAbilitySelected)
                 return;
 
-            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value);
+            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value);
             if (!inRange.Contains(destination))
                 return;
             

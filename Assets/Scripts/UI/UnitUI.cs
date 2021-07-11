@@ -1,8 +1,10 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
 using GridObjects;
+using Managers;
 using TMPro;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace UI
@@ -13,7 +15,6 @@ namespace UI
         [SerializeField] private TextMeshProUGUI damageText;
         [SerializeField] private float damageTextDuration;
 
-        private float lastHealth;
         private IUnit unit;
 
 
@@ -25,23 +26,18 @@ namespace UI
             if (unit == null)
                 DestroyImmediate(gameObject);
             
-            // TODO: Listen to unit.onTakeDamage!
-        }
-
-        private void LateUpdate()
-        {
-            float health = unit.Health.HealthPoints.Value;
-            if (health < lastHealth)
-                OnTakeDamage((int) (lastHealth - health));
-            lastHealth = health;
+            ManagerLocator.Get<CommandManager>().ListenCommand((TakeTotalDamageCommand cmd) => OnTakeDamage(cmd));
         }
 
 
         public void OnClick() => manager.unitSelected.Invoke(unit);
 
-        private async void OnTakeDamage(int damage)
+        private async void OnTakeDamage(TakeTotalDamageCommand cmd)
         {
-            await DamageTextDisplay(damage);
+            if (cmd.Unit != unit)
+                return;
+            
+            await DamageTextDisplay(cmd.Value);
             DamageTextHide();
         }
 
