@@ -9,7 +9,6 @@ using Managers;
 using TMPro;
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -22,7 +21,8 @@ namespace Units
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
         [SerializeField] private float damageTextLifetime = 1.0f;
         [SerializeField] private Sprite render;
-
+        private SpriteRenderer spriteRenderer;
+        
         public string Name
         {
             get => data.Name;
@@ -30,12 +30,37 @@ namespace Units
         }
         public Health Health { get; private set; }
         public Knockback Knockback { get; private set; }
+        
+        public Animator UnitAnimator { get; private set; }
+        public SpriteRenderer SpriteRenderer => spriteRenderer;
+        public Color UnitColor => spriteRenderer.color;
+        
         public TenetType Tenet => data.Tenet;
-        public ValueStat MovementActionPoints => data.MovementPoints;
-        public ValueStat Speed => data.Speed;
-        public ModifierStat Attack => data.Attack;
-        public List<Ability> Abilities => data.Abilities;
+        
+        public ValueStat MovementActionPoints
+        {
+            get => data.MovementPoints;
+            set => data.MovementPoints = value;
+        }
 
+        public ValueStat Speed
+        {
+            get => data.Speed;
+            set => data.Speed = value;
+        }
+
+        public ModifierStat Attack => data.Attack;
+
+        public List<Ability> Abilities
+        {
+            get => data.Abilities;
+            set
+            {
+                data.Abilities = value;
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
+            }
+        }
+        
         [Obsolete("Use TenetStatuses instead")]
         public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
@@ -49,33 +74,47 @@ namespace Units
         private const int maxTenetStatusEffectCount = 2;
         private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
             new LinkedList<TenetStatus>();
+
+        private AnimationStates unitAnimationState;
         
         private TurnManager turnManager;
         private PlayerManager playerManager;
         private CommandManager commandManager;
 
+        private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        
         protected override void Start()
         {
             base.Start();
-
-            data.Initialise();
-            Health = new Health(new KillUnitCommand(this), data.HealthPoints, data.Defence);
-            Knockback = new Knockback(data.TakeKnockbackModifier);
-
-            // TODO Speed temporarily random for now until proper turn manipulation is done.
-            Speed.Value += Random.Range(0, 101);
-
             #region GetManagers
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
-
+            
             #endregion
 
+            data.Initialise();
+            Health = new Health(new KillUnitCommand(this),
+                data.HealthPoints, data.Defence);
+            
+            Knockback = new Knockback(data.TakeKnockbackModifier);
+            UnitAnimator = GetComponentInChildren<Animator>();
+            
+            // TODO Speed temporarily random for now until proper turn manipulation is done.
+            SetSpeed(Speed.Value + Random.Range(0, 101));
+            
             #region ListenCommands
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.Unit, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
 
             #endregion
 
@@ -83,26 +122,47 @@ namespace Units
                 nameText.text = Name;
             
             if (healthText)
-            {
-                healthText.text =
-                    (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
-            }
+                healthText.text = Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue;
         }
-
-        protected virtual void Update() {}
 
         #region ValueChanging
         
-        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
+        public void TakeDefence(int amount)
+        {
+            Health.Defence.Adder -= amount;
+            commandManager.ExecuteCommand(new DefenceChangeCommand(this, amount));
+        }
 
-        public void TakeAttack(int amount) => Attack.Adder += amount;
+        public void TakeAttack(int amount)
+        {
+            Attack.Adder += amount;
+            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
+        } 
 
         public void TakeDamage(int amount)
         {
+            commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             int damageTaken = Health.TakeDamage(amount);
+            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
 
-        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
+        public void TakeKnockback(int amount)
+        {
+           int knockbackAmount = Knockback.TakeKnockback(amount);
+           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this, knockbackAmount));
+        }
+        
+        public void SetSpeed(int amount)
+        {
+            Speed.Value = amount;
+            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
+        }
+        
+        public void SetMovementActionPoints(int amount)
+        {
+            MovementActionPoints.Value = amount;
+            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, amount));
+        }
         
         #endregion
 
@@ -116,11 +176,8 @@ namespace Units
                 return;
 
             // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusNode(status.TenetType,
-                out LinkedListNode<TenetStatus> foundNode))
-            {
+            if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
                 foundNode.Value += status;
-            }
             else
             {
                 // When we are already utilizing all the slots
@@ -146,6 +203,7 @@ namespace Units
 
                     if (node.Value.IsEmpty)
                         tenetStatusEffectSlots.Remove(node);
+                    
                     return true;
                 }
 
@@ -276,6 +334,53 @@ namespace Units
         private void HideDamageText() => damageTextCanvas.enabled = false;
 
         public void SetName() => nameText.text = Name;
+
+        #endregion
+
+        #region AnimationHandling
+
+        public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
+        {
+            unitAnimationState = animationStates;
+
+            switch (unitAnimationState)
+            {
+                case AnimationStates.Idle:
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Down:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Up:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    spriteRenderer.flipX = true;
+                    break;
+                
+                case AnimationStates.Left:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", true);
+                    spriteRenderer.flipX = true;
+                    break;
+                
+                case AnimationStates.Right:
+                    UnitAnimator.SetBool("moving", true);
+                    UnitAnimator.SetBool("front", false);
+                    spriteRenderer.flipX = false;
+                    break;
+                
+                case AnimationStates.Casting:
+                    UnitAnimator.SetBool("moving", false);
+                    UnitAnimator.SetTrigger("attack");
+                    break;
+            }
+        }
 
         #endregion
         

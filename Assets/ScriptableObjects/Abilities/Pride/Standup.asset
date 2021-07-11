@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Standup
   m_EditorClassIdentifier: 
-  description: "Deals 1 Damage.\n\u21AF Deal 3 extra Damage with Pride\n\u21AF Targets
-    may Spend Passion to deal 2 extra Damage"
+  description: "Deals 1 Damage.\n\u21AF Deal 2 extra Damage with Pride\n\u21AF User
+    may Spend Passion to deal 3 extra Damage"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -25,29 +23,38 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
-  - name: 3 Damage with Pride
-    damageValue: 3
-    defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    costs:
-    - name: With Pride
-      affectType: 0
-      costType: 0
-      tenetType: 0
-  - name: 2 Damage spend Passion
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
+  - name: 2 Damage IF User With Pride
     damageValue: 2
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: Spend Passion
-      affectType: 0
-      costType: 2
-      tenetType: 2
+    cost:
+      tenetCosts:
+      - name: User With Pride
+        affectType: 0
+        tenetCostType: 0
+        tenetType: 0
+    bonuses: []
+    keywords: []
+  - name: 3 Damage IF User Spend Passion
+    damageValue: 3
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    cost:
+      tenetCosts:
+      - name: User Spend Passion
+        affectType: 0
+        tenetCostType: 2
+        tenetType: 2
+    bonuses: []
+    keywords: []
   userEffects: []

@@ -1,4 +1,3 @@
-using Commands;
 using GridObjects;
 using Managers;
 using Units.Commands;
@@ -11,19 +10,23 @@ namespace Units
         public ValueStat HealthPoints { get; }
         public ModifierStat Defence { get; }
 
-        private KillUnitCommand unitDeathCommand;
+        private readonly KillUnitCommand unitDeathCommand;
 
-        public Health(KillUnitCommand unitDeathCommand, ValueStat healthPoints, ModifierStat 
-        defence)
+        private readonly CommandManager commandManager;
+        
+        public Health( KillUnitCommand unitDeathCommand,
+                      ValueStat healthPoints, ModifierStat defence)
         {
             this.unitDeathCommand = unitDeathCommand;
             HealthPoints = healthPoints;
             Defence = defence;
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
         
         public int TakeDamage(int amount)
         {
             int initialDamageTaken = (int) Defence.Modify(amount);
+
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             
             HealthPoints.Value -= calculatedDamageTaken;
@@ -38,9 +41,7 @@ namespace Units
         private void CheckDeath()
         {
             if (HealthPoints.Value <= 0)
-            {
                 ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
-            }
         }
     }
 }

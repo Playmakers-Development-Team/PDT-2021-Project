@@ -12,10 +12,10 @@ namespace Units
             TakeKnockbackModifier = takeKnockbackModifier;
         }
 
-        public void TakeKnockback(int amount)
+        public int TakeKnockback(int amount)
         {
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);
-            Debug.Log(knockbackTaken + " knockback taken.");
+            return knockbackTaken;
         }
     }
 }

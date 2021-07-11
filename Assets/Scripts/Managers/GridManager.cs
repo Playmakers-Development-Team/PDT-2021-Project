@@ -377,9 +377,11 @@ namespace Managers
             }
         }
         
+        // TODO: Move from Grid system to Unit system
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
             IUnit unit = moveCommand.Unit;
+
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
@@ -389,10 +391,15 @@ namespace Managers
                                     "Failed to move unit");
             }
             
-            int moveRange = (int)unit.MovementActionPoints.Value;
+            int moveRange = unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
+            
+            var manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
 
             if (unit is PlayerUnit)
             {
@@ -410,15 +417,12 @@ namespace Managers
             }
 
             // Check if tile is in range
+
             if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) &&
                 unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
-                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
-                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
-                              newCoordinate));
-
-                Debug.Log("Target tile out of range.");
+                Debug.Log($"Target tile out of range. Manhattan distance of {manhattanDistance}");
                 return;
             }
 
@@ -427,17 +431,17 @@ namespace Managers
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                if (playerUnit !=
-                    null) // this stuff is temporary, should probably be done in a better way
+                // TODO: this stuff is temporary, should probably be done in a better way
+                if (playerUnit != null)
                 {
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                        playerUnit.ChangeAnimation(AnimationStates.Right);
                     else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
+                        playerUnit.ChangeAnimation(AnimationStates.Up);
                     else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                        playerUnit.ChangeAnimation(AnimationStates.Left);
                     else if (movePath[i].y < currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
+                        playerUnit.ChangeAnimation(AnimationStates.Down);
                 }
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
@@ -447,15 +451,11 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.MovementActionPoints.Value -= Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
 
             if (playerUnit != null)
-                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+                playerUnit.ChangeAnimation(AnimationStates.Idle);
 
-            Debug.Log(Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
-            
             // Should be called when all the movement and tweening has been completed
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }

@@ -112,20 +112,18 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
-        private UniTask MoveUnit(EnemyUnit unit)
+        private UniTask MoveUnit(EnemyUnit enemyUnit)
         {
-            IUnit enemyUnit = unit;
-            IUnit closestPlayerUnit = FindClosestPlayer(unit);
+            IUnit closestPlayerUnit = FindClosestPlayer(enemyUnit);
             // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
             //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
 
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                enemyUnit.Coordinate + FindClosestPath(unit, closestPlayerUnit, (int) 
-                unit.MovementActionPoints.Value)
+                enemyUnit.Coordinate + FindClosestPath(enemyUnit, closestPlayerUnit, (int) 
+                enemyUnit.MovementActionPoints.Value)
             );
             
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(moveCommand);
             commandManager.ExecuteCommand(moveCommand);
             return UniTask.Delay(1000);
         }
