@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Abilities.Costs;
 using StatusEffects;
 using UnityEditor;
@@ -10,7 +11,7 @@ using UnityEngine.UIElements;
 
 namespace Abilities.Editor
 {
-    [CustomPropertyDrawer(typeof(CompositeCost))]
+    [CustomPropertyDrawer(typeof(CompositeCost), true)]
     public class CompositeCostDrawer : PropertyDrawer
     {
         private const string affectTypeName = "affectType";
@@ -46,14 +47,16 @@ namespace Abilities.Editor
             SerializedProperty affectTypeProperty = property.FindPropertyRelative(affectTypeName);
             SerializedProperty costTypeProperty = property.FindPropertyRelative(costTypeName);
 
-            SerializedProperty tenetCostProperty = property.FindPropertyRelative("tenetCost");
+            SerializedProperty costProperty = GetChildCostProperty(property, costTypeProperty);
 
             string affectString = ((AffectType) affectTypeProperty.enumValueIndex).ToString();
             CostType costType = (CostType) costTypeProperty.enumValueIndex;
 
             string suffix = costType switch
             {
-                CostType.Tenet => GetTenetCostDisplayName(tenetCostProperty),
+                CostType.None => "....",
+                CostType.Tenet => GetTenetCostDisplayName(costProperty),
+                CostType.Shape => GetShapeCostDisplayName(costProperty),
                 _ => throw new ArgumentOutOfRangeException(
                     $"{nameof(CostType)} not supported by {nameof(CompositeCostDrawer)}")
             };
@@ -61,8 +64,41 @@ namespace Abilities.Editor
             return $"{affectString} {suffix}";
         }
 
+        private string GetShapeCostDisplayName(SerializedProperty property)
+        {
+            // property should be null if the type does not have shape property
+            if (property == null)
+                return "can't have shape!";
+            
+            SerializedProperty shapeProperty = property.FindPropertyRelative("shape");
+            SerializedProperty shapeFilterProperty = property.FindPropertyRelative("shapeFilter");
+            SerializedProperty countProperty = property.FindPropertyRelative("minCount");
+            SerializedProperty costProperty = property.FindPropertyRelative("cost");
+            SerializedProperty costTypeProperty = costProperty.FindPropertyRelative("costType");
+
+            CostType costType = (CostType) costTypeProperty.enumValueIndex;
+
+            string shapeName = shapeProperty.objectReferenceValue != null
+                ? shapeProperty.objectReferenceValue.name
+                : "No Defined Shape";
+            string shapeFilterString = ((ShapeFilter) shapeFilterProperty.enumValueIndex)
+                .ToString();
+            
+            // Put spaces between uppercase letters
+            shapeFilterString = Regex.Replace(shapeFilterString, @"([A-Z])", " $0")
+                .Substring(1);
+            
+            string costName = costProperty.FindPropertyRelative("name").stringValue;
+            string costString = costType != CostType.None ? $" where {costName}" : string.Empty;
+
+            return $"finds {countProperty.intValue} {shapeFilterString} in {shapeName}{costString}";
+        }
+
         private string GetTenetCostDisplayName(SerializedProperty property)
         {
+            if (property == null)
+                return "can't have tenet cost!";
+            
             SerializedProperty tenetCostTypeProperty = property.FindPropertyRelative("tenetCostType");
             SerializedProperty tenetTypeProperty = property.FindPropertyRelative("tenetType");
 
@@ -98,7 +134,9 @@ namespace Abilities.Editor
 
                 float costY = costTypePosition.y + costTypePosition.height;
                 Rect costPosition = new Rect(position.x, costY, position.width, position.height - costY);
-                OnChildCostGUI(costPosition, property, costTypeProperty);
+                
+                if ((CostType) costTypeProperty.enumValueIndex != CostType.None)
+                    OnChildCostGUI(costPosition, property, costTypeProperty);
             }
         }
 
@@ -106,6 +144,10 @@ namespace Abilities.Editor
                                     SerializedProperty costTypeProperty)
         {
             SerializedProperty costProperty = GetChildCostProperty(property, costTypeProperty);
+
+            if (costProperty == null)
+                return;
+            
             Rect currentRect = new Rect(position.x, position.y, position.width, MiddleSpacing);
 
             foreach (SerializedProperty currentProperty in GetChildCostProperties(costProperty))
@@ -122,18 +164,23 @@ namespace Abilities.Editor
             SerializedProperty currentProperty = costProperty.Copy();
             bool hasNext = currentProperty.NextVisible(true);
 
-            while (hasNext && currentProperty.depth > costProperty.depth)
+            while (hasNext && currentProperty.depth == costProperty.depth + 1)
             {
                 yield return currentProperty.Copy();
                 hasNext = currentProperty.NextVisible(true);
             }
         }
 
+        /// <summary>
+        /// Might return null if the property does not support the cost type
+        /// </summary>
         private SerializedProperty GetChildCostProperty(SerializedProperty property,
                                                         SerializedProperty costTypeProperty) =>
             (CostType) costTypeProperty.enumValueIndex switch
             {
+                CostType.None => null,
                 CostType.Tenet => property.FindPropertyRelative("tenetCost"),
+                CostType.Shape => property.FindPropertyRelative("shapeCost"),
                 _ => throw new ArgumentOutOfRangeException(
                     $"{nameof(CostType)} not supported by {nameof(CompositeCostDrawer)}")
             };
@@ -150,8 +197,10 @@ namespace Abilities.Editor
                                + MiddleSpacing
                                + EditorGUIUtility.standardVerticalSpacing;
 
-            float costHeight = GetChildCostProperties(costProperty).Sum(p =>
-                EditorGUI.GetPropertyHeight(p) + EditorGUIUtility.standardVerticalSpacing);
+            float costHeight = costProperty != null
+                ? GetChildCostProperties(costProperty)
+                    .Sum(p => EditorGUI.GetPropertyHeight(p) + EditorGUIUtility.standardVerticalSpacing)
+                : 0f;
 
             return baseHeight + EditorGUIUtility.singleLineHeight + costHeight;
         }

@@ -29,5 +29,7 @@ namespace Units
             ManagerLocator.Get<EnemyManager>().Spawn(this);
             Name = RandomizeName();
         }
+
+        public override bool IsSameTeamWith(IUnit other) => other is EnemyUnit;
     }
 }

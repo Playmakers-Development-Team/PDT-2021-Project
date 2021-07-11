@@ -18,7 +18,7 @@ namespace Abilities
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
         [SerializeField] private CompositeBonus bonus;
-        [SerializeField] private CompositeCost[] costs;
+        [SerializeField] private WholeCost[] costs;
         [SerializeField] private List<Keyword> keywords;
 
         private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);

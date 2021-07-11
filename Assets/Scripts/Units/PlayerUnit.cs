@@ -12,5 +12,7 @@ namespace Units
             base.Start();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
         }
+
+        public override bool IsSameTeamWith(IUnit other) => other is PlayerUnit;
     }
 }

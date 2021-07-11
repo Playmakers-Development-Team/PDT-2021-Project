@@ -13,20 +13,27 @@ namespace Abilities.Costs
     [Serializable]
     public class CompositeCost : Conditional
     {
-        [SerializeField] private CostType costType;
-
+        [SerializeField] protected CostType costType;
         [SerializeField] private TenetCost tenetCost;
         
-        private ICost ChildCost => costType switch
+        protected virtual ICost ChildCost => costType switch
         {
+            CostType.None => throw new ArgumentException(
+                $"Trying to get child cost but {nameof(CostType)} has not been set!"),
             CostType.Tenet => tenetCost,
-            _ => throw new ArgumentOutOfRangeException($"Unsupported {nameof(CostType)} {costType}")
+            _ => throw new ArgumentOutOfRangeException(
+                $"Unsupported {nameof(CostType)} {costType} for {nameof(CompositeCost)}")
         };
 
-        public void ApplyCost(IUnit user, IUnit target) =>
+        public void ApplyCost(IUnit user, IUnit target)
+        {
+            if (costType == CostType.None)
+                return;
+            
             ChildCost.ApplyCost(GetAffectedUnit(user, target));
+        }
 
         public bool MeetsRequirements(IUnit user, IUnit target) =>
-            ChildCost.MeetsRequirements(GetAffectedUnit(user, target));
+            costType == CostType.None || ChildCost.MeetsRequirements(GetAffectedUnit(user, target));
     }
 }

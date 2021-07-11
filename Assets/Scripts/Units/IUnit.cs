@@ -62,6 +62,8 @@ namespace Units
         
         bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus);
 
+        bool IsSameTeamWith(IUnit other);
+
         string RandomizeName();
     }
 }

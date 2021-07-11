@@ -383,6 +383,12 @@ namespace Units
         }
 
         #endregion
+
+        #region Utility
+
+        public abstract bool IsSameTeamWith(IUnit other);
+
+        #endregion
         
         #region RandomizeNames
         
