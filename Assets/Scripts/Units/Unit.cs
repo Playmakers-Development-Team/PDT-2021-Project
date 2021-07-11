@@ -40,23 +40,16 @@ namespace Units
         public ValueStat MovementActionPoints
         {
             get => data.MovementPoints;
-            set
-            {
-                data.MovementPoints = value;
-                commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, value.Value));
-            }
+            set => data.MovementPoints = value;
         }
 
         public ValueStat Speed
         {
             get => data.Speed;
-            set
-            {
-                data.Speed = value;
-                commandManager.ExecuteCommand(new SpeedChangedCommand(this, value.Value));
-            }
+            set => data.Speed = value;
         }
         
+
         public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
@@ -94,24 +87,24 @@ namespace Units
         protected override void Start()
         {
             base.Start();
-
-            data.Initialise();
-            Health = new Health(new KillUnitCommand(this),
-                data.HealthPoints, data.Defence);
-            Knockback = new Knockback(data.TakeKnockbackModifier);
-            UnitAnimator = GetComponentInChildren<Animator>();
-            
-            // TODO Speed temporarily random for now until proper turn manipulation is done.
-            Speed.Value += Random.Range(0, 101);
-
             #region GetManagers
 
             turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
-
+            
             #endregion
 
+            data.Initialise();
+            Health = new Health(new KillUnitCommand(this),
+                data.HealthPoints, data.Defence);
+            
+            Knockback = new Knockback(data.TakeKnockbackModifier);
+            UnitAnimator = GetComponentInChildren<Animator>();
+            
+            // TODO Speed temporarily random for now until proper turn manipulation is done.
+            SetSpeed(Random.Range(0, 101));
+            
             #region ListenCommands
 
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
@@ -138,13 +131,13 @@ namespace Units
         public void TakeDefence(int amount)
         {
             Health.Defence.Adder -= amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
+            commandManager.ExecuteCommand(new DefenceChangeCommand(this, amount));
         }
 
         public void TakeAttack(int amount)
-        {
+        { 
             Attack.Adder += amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
+           commandManager.ExecuteCommand(new AttackChangeCommand(this,amount));
         } 
 
         public void TakeDamage(int amount)
@@ -158,7 +151,19 @@ namespace Units
         {
            int knockbackAmount = Knockback.TakeKnockback(amount);
            commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this, knockbackAmount));
-        } 
+        }
+        
+        public void SetSpeed(int amount)
+        {
+            Speed.Value += amount;
+            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
+        }
+        
+        public void SetMovementActionPoints(int amount)
+        {
+            MovementActionPoints.Value += amount;
+            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, amount));
+        }
         
         #endregion
 

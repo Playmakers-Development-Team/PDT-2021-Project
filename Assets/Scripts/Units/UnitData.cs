@@ -49,8 +49,8 @@ namespace Units
 
         public ValueStat Speed
         {
-            get => movementPoints;
-            set => movementPoints = value;
+            get => speed;
+            set => speed = value;
         } 
     
         public ModifierStat Attack

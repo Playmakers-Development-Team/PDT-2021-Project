@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Abilities;
 using Commands;
+using GridObjects;
 
 namespace Units.Commands
 {
@@ -67,11 +68,12 @@ namespace Units.Commands
     /// Executed when all enemy units are spawned and ready in the scene.
     /// </summary>
     public class EnemyUnitsReadyCommand : Command {}
+
     
     /// <summary>
     /// Executed when damage is dealt to a unit. Value takes into account attack and defence modifiers.
     /// </summary>
-    public class TakeTotalDamageCommand : ValueCommand
+    public class TakeTotalDamageCommand :  ValueCommand
     {
         public TakeTotalDamageCommand(IUnit unit, int value) : base(unit, value) {}
     }
@@ -79,7 +81,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when damage is dealt to a unit. Value does not take modifiers into consideration.
     /// </summary>
-    public class TakeRawDamageCommand : ValueCommand
+    public class TakeRawDamageCommand :  ValueCommand
     {
         public TakeRawDamageCommand(IUnit unit, int value) : base(unit, value) {}
     }
@@ -89,29 +91,21 @@ namespace Units.Commands
     /// </summary>
     public class AttackChangeCommand : ValueCommand
     {
-        public AttackChangeCommand(IUnit unit, int value) : base(unit, value) {}
+        public AttackChangeCommand(IUnit unit, int value) : base(unit, value){}
     }
 
     /// <summary>
     /// Executed when the defence value of a unit is changed.
     /// </summary>
-    public class DefenceChangeCommand : ValueCommand
+    public class DefenceChangeCommand :  ValueCommand
     {
         public DefenceChangeCommand(IUnit unit, int value) : base(unit, value) {}
     }
-
-    /// <summary>
-    /// Executed when the health value of a unit is changed.
-    /// </summary>
-    public class HealthChangedCommand : ValueCommand
-    {
-        public HealthChangedCommand(IUnit unit, int value) : base(unit, value) {}
-    }
-
+    
     /// <summary>
     /// Executed when the speed value of a unit is changed.
     /// </summary>
-    public class SpeedChangedCommand : ValueCommand
+    public class SpeedChangedCommand :  ValueCommand
     {
         public SpeedChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
@@ -128,7 +122,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when the movement action points value of a unit is changed.
     /// </summary>
-    public class MovementActionPointChangedCommand : ValueCommand
+    public class MovementActionPointChangedCommand :  ValueCommand
     {
         public MovementActionPointChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
@@ -136,7 +130,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when the knockback modifer value of a unit is changed.
     /// </summary>
-    public class KnockbackModifierChangedCommand : ValueCommand
+    public class KnockbackModifierChangedCommand :  ValueCommand
     { 
         public KnockbackModifierChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }

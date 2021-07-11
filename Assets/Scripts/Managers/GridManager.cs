@@ -449,8 +449,8 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.MovementActionPoints.Value -= Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
+            unit.SetMovementActionPoints( - Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
 
             if (playerUnit != null)
                 playerUnit.ChangeAnimation(AnimationStates.Idle);
