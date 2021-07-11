@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GridObjects;
@@ -7,7 +8,6 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
 using Cysharp.Threading.Tasks;
-using Microsoft.Unity.VisualStudio.Editor;
 using Random = UnityEngine.Random;
 using TileData = Tiles.TileData;
 
@@ -17,21 +17,25 @@ namespace Managers
     {
         private Dictionary<Vector2Int, TileData> tileDatas = new Dictionary<Vector2Int, TileData>();
 
-        private const int GridLineCastDefaultLimit = 10;
+        private const int gridLineCastDefaultLimit = 10;
 
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }
-        public Vector2 GridOffset { get; private set; }
+        public BoundsInt LevelBoundsInt { get; private set; }
 
-        public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds, Vector2 gridOffset)
+        public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds)
         {
             LevelBounds = levelBounds;
             LevelTilemap = levelTilemap;
-            GridOffset = gridOffset;
+            
+            LevelBoundsInt = new BoundsInt(
+                new Vector3Int(-Mathf.FloorToInt(levelBounds.x / 2.0f), -Mathf.FloorToInt(levelBounds.y / 2.0f), 0),
+                new Vector3Int(levelBounds.x - 1, levelBounds.y - 1, 0)
+            );
 
-            for (int x = -levelBounds.x / 2 - 1; x <= levelBounds.x / 2; x++)
+            for (int x = LevelBoundsInt.xMin; x <= LevelBoundsInt.xMax; x++)
             {
-                for (int y = -levelBounds.y / 2 - 1; y <= levelBounds.y / 2; y++)
+                for (int y = LevelBoundsInt.xMin; y <= LevelBoundsInt.yMax; y++)
                 {
                     TileBase tile = levelTilemap.GetTile(new Vector3Int(x, y, 0));
                     // This is going to be null, if there is no tile there but that's fine
@@ -46,8 +50,20 @@ namespace Managers
                 }
             }
         }
-
+        
         #region GETTERS
+
+        public bool IsInBounds(Vector2Int coordinate)
+        {
+            return coordinate.x >= LevelBoundsInt.xMin && coordinate.x <= LevelBoundsInt.xMax &&
+                   coordinate.y >= LevelBoundsInt.yMin && coordinate.y <= LevelBoundsInt.yMax;
+        }
+
+        public bool IsInBounds(Vector3 worldPosition, bool clamp = false)
+        {
+            Vector2Int coordinate = ConvertPositionToCoordinate(worldPosition, clamp);
+            return IsInBounds(coordinate);
+        }
 
         public TileData GetTileDataByCoordinate(Vector2Int coordinate)
         {
@@ -94,7 +110,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<GridObject> GridLineCast(Vector2Int originCoordinate, Vector2 targetVector,
-                                             int limit = GridLineCastDefaultLimit) =>
+                                             int limit = gridLineCastDefaultLimit) =>
             GridLineCast(originCoordinate, OrdinalDirectionUtility.From(Vector2.up, targetVector));
 
         /// <summary>
@@ -102,7 +118,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<T> GridLineCast<T>(Vector2Int originCoordinate, Vector2 targetVector,
-                                       int limit = GridLineCastDefaultLimit) where T : GridObject =>
+                                       int limit = gridLineCastDefaultLimit) where T : GridObject =>
             GridLineCast<T>(originCoordinate,
                 OrdinalDirectionUtility.From(Vector2.up, targetVector), limit);
 
@@ -112,7 +128,7 @@ namespace Managers
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<GridObject> GridLineCast(Vector2Int originCoordinate,
                                              OrdinalDirection direction,
-                                             int limit = GridLineCastDefaultLimit) =>
+                                             int limit = gridLineCastDefaultLimit) =>
             GridLineCast<GridObject>(originCoordinate, direction, limit);
 
         /// <summary>
@@ -120,7 +136,7 @@ namespace Managers
         /// </summary>
         /// <returns>All the GridObjects found at the coordinate of the first found target.</returns>
         public List<T> GridLineCast<T>(Vector2Int originCoordinate, OrdinalDirection direction,
-                                       int limit = GridLineCastDefaultLimit) where T : GridObject
+                                       int limit = gridLineCastDefaultLimit) where T : GridObject
         {
             Vector2Int increment = direction.ToVector2Int();
             Vector2Int currentCoordinate = originCoordinate;
@@ -289,20 +305,20 @@ namespace Managers
 
         #region CONVERSIONS
 
-        public Vector2Int ConvertPositionToCoordinate(Vector2 position)
+        public Vector2Int ConvertPositionToCoordinate(Vector2 position, bool clamp = false)
         {
-            // Debug.Log("WorldSpace: " + worldSpace + " | GridSpace: " + 
-            //           (Vector2Int) levelTilemap.layoutGrid.WorldToCell(worldSpace));
-            return (Vector2Int) LevelTilemap.layoutGrid.WorldToCell(position);
+            Vector3Int unbounded = LevelTilemap.layoutGrid.WorldToCell(position);
+
+            if (!clamp)
+                return (Vector2Int) unbounded;
+            
+            return new Vector2Int(
+                Mathf.Clamp(unbounded.x, LevelBoundsInt.xMin, LevelBoundsInt.xMax),
+                Mathf.Clamp(unbounded.y, LevelBoundsInt.xMin, LevelBoundsInt.xMax)
+                );
         }
 
-        public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate)
-        {
-            // Debug.Log("GridSpace: " + gridSpace + " | WorldSpace: " + 
-            //           levelTilemap.layoutGrid.CellToWorld((Vector3Int) gridSpace));
-            return (Vector2) LevelTilemap.layoutGrid.CellToWorld((Vector3Int) coordinate) +
-                   GridOffset;
-        }
+        public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate) => LevelTilemap.GetCellCenterWorld((Vector3Int) coordinate);
 
         #endregion
 
@@ -361,22 +377,30 @@ namespace Managers
             }
         }
         
+        // TODO: Move from Grid system to Unit system
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
             IUnit unit = moveCommand.Unit;
+
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
             TileData tileData = GetTileDataByCoordinate(newCoordinate);
-            int moveRange = (int)unit.MovementActionPoints.Value;
+            if (tileData is null)
+            {
+                throw new Exception($"No tile data at coordinate {newCoordinate}. " +
+                                    "Failed to move unit");
+            }
+            
+            int moveRange = (int) unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
 
-            if (unit is PlayerUnit)
+            if (unit is PlayerUnit) // TODO: 1/3 Repeated Null Checks
             {
                 playerUnit = (PlayerUnit) unit;
                 if (playerUnit.UnitAnimator != null)
-                    playerUnit.UnitAnimator.SetInteger("Movement", 1);
+                    playerUnit.UnitAnimator.SetBool("moving", true);
             }
 
             // Check if tile is unoccupied
@@ -405,17 +429,17 @@ namespace Managers
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                if (playerUnit !=
-                    null) // this stuff is temporary, should probably be done in a better way
+                // TODO: this stuff is temporary, should probably be done in a better way
+                if (playerUnit != null) // TODO: 2/3 Repeated Null Checks
                 {
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Backward);
-                    else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
-                    else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Forward);
-                    else if (movePath[i].y < currentCoordinate.y)
                         playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                    else if (movePath[i].y > currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
+                    else if (movePath[i].x < currentCoordinate.x)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                    else if (movePath[i].y < currentCoordinate.y)
+                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
                 }
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
@@ -428,7 +452,7 @@ namespace Managers
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
 
-            if (playerUnit != null)
+            if (playerUnit != null) // TODO: 3/3 Repeated Null Checks
                 playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
 
             Debug.Log(Mathf.Max(0,

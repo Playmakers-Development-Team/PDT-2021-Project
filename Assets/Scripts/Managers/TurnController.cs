@@ -1,5 +1,6 @@
 using Units.Commands;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Managers
 {
@@ -15,12 +16,18 @@ namespace Managers
         [Tooltip("The global turn phase for every player unit")] 
         /// A reference to the TurnManager.
         /// </summary>
+        [SerializeField] private GameObject[] preMadeTimeline;
+        [SerializeField] private bool isTimelineRandomised;
+       
         private TurnManager turnManager;
+        private UnitManager unitManager;
         
-
+        
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
+            
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
 
             commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
@@ -44,6 +51,16 @@ namespace Managers
         private void SetupTurnQueue()
         {
             turnManager.SetupTurnQueue(turnPhases);
+            if (preMadeTimeline.Length < unitManager.AllUnits.Count)
+            {
+                isTimelineRandomised = true;
+                Debug.Log("Timeline was not filled or completed, automatically setting it to randomised");
+            }
+        
+            if (isTimelineRandomised)
+                turnManager.SetupTurnQueue();
+            else 
+                turnManager.SetupTurnQueue(preMadeTimeline);
         }
     }
 }

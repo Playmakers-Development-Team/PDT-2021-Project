@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Commands;
@@ -90,7 +91,7 @@ namespace UI
             if (!IsPlayerTurn || !IsAbilitySelected)
                 return;
 
-            abilityDirection = (mouseWorld - gridManager.ConvertCoordinateToPosition(selectedUnit.Coordinate + Vector2Int.one)).normalized;
+            abilityDirection = (mouseWorld - gridManager.ConvertCoordinateToPosition(selectedUnit.Coordinate)).normalized;
             gridSpacesSelected.Invoke(new GridSelection(new[] {selectedUnit.Coordinate}, GridSelectionType.Invalid));
             UpdateGrid();
         }
@@ -152,6 +153,10 @@ namespace UI
         private void TryMove(Vector2Int destination)
         {
             if ((!IsPlayerTurn || IsAbilitySelected) && !turnManager.IsMovementPhase())
+                return;
+
+            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value);
+            if (!inRange.Contains(destination))
                 return;
             
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));

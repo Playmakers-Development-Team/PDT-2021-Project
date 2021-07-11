@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Target gains 6 Defense\n User takes 3 damage\n  \u21AF User may Spend
     Humility to gain 3 Defense"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 6 Defence
     damageValue: 0
@@ -25,7 +23,10 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
   userEffects:
   - name: Default, 3 Damage
     damageValue: 3
@@ -34,16 +35,22 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs: []
-  - name: 3 Defence spend Humility
+    cost:
+      tenetCosts: []
+    bonuses: []
+    keywords: []
+  - name: 3 Defence IF User Spend Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    costs:
-    - name: User Spend Humility
-      affectType: 0
-      costType: 2
-      tenetType: 1
+    cost:
+      tenetCosts:
+      - name: User Spend Humility
+        affectType: 0
+        tenetCostType: 2
+        tenetType: 1
+    bonuses: []
+    keywords: []
