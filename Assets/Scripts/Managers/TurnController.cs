@@ -11,12 +11,12 @@ namespace Managers
         [Tooltip("Debug Tool to check if you can turn manipulate")] 
         [SerializeField] private bool maniplulateTurn;
         
-        /// <summary>
+        [Tooltip("The global phase each player unit has to follow sequentially")]
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
-        [Tooltip("The global turn phase for every player unit")] 
-        /// A reference to the TurnManager.
-        /// </summary>
+        
+        [Tooltip("The global turn phase for every player unit")]
         [SerializeField] private GameObject[] preMadeTimeline;
+        
         [SerializeField] private bool isTimelineRandomised;
        
         private TurnManager turnManager;
@@ -50,7 +50,6 @@ namespace Managers
         /// </summary>
         private void SetupTurnQueue()
         {
-            turnManager.SetupTurnQueue(turnPhases);
             if (preMadeTimeline.Length < unitManager.AllUnits.Count)
             {
                 isTimelineRandomised = true;
@@ -58,9 +57,9 @@ namespace Managers
             }
         
             if (isTimelineRandomised)
-                turnManager.SetupTurnQueue();
+                turnManager.SetupTurnQueue(turnPhases);
             else 
-                turnManager.SetupTurnQueue(preMadeTimeline);
+                turnManager.SetupTurnQueue(preMadeTimeline,turnPhases);
         }
     }
 }

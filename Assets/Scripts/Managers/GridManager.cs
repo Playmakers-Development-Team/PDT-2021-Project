@@ -396,12 +396,7 @@ namespace Managers
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
 
-            if (unit is PlayerUnit) // TODO: 1/3 Repeated Null Checks
-            {
-                playerUnit = (PlayerUnit) unit;
-                if (playerUnit.UnitAnimator != null)
-                    playerUnit.UnitAnimator.SetBool("moving", true);
-            }
+         
 
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
@@ -423,15 +418,20 @@ namespace Managers
                 Debug.Log("Target tile out of range.");
                 return;
             }
+         
 
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                // TODO: this stuff is temporary, should probably be done in a better way
-                if (playerUnit != null) // TODO: 2/3 Repeated Null Checks
+                if (unit is PlayerUnit unit1) 
                 {
+                    playerUnit = unit1;
+
+                    if (playerUnit.UnitAnimator != null)
+                        playerUnit.UnitAnimator.SetBool("moving", true);
+                    
                     if (movePath[i].x > currentCoordinate.x)
                         playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
                     else if (movePath[i].y > currentCoordinate.y)
@@ -451,8 +451,7 @@ namespace Managers
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
             unit.MovementActionPoints.Value -= Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
-
-            if (playerUnit != null) // TODO: 3/3 Repeated Null Checks
+            
                 playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
 
             Debug.Log(Mathf.Max(0,

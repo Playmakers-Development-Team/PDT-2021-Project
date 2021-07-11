@@ -61,7 +61,16 @@ namespace Managers
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
-          
+            commandManager.ListenCommand<EndMoveCommand>(cmd => {
+                if (cmd.Unit is PlayerUnit)
+                    UpdateMovementPhase();
+            });
+
+            commandManager.ListenCommand<EndMoveCommand>(cmd => {
+                if (cmd.Unit is PlayerUnit)
+                    UpdateAbilityPhase();
+            });
+            
         }
         
         #endregion
@@ -74,7 +83,6 @@ namespace Managers
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
-
             for (int i = 0; i < 3; i++)
             {
                 switch (newTurnPhases[i].ToString())
@@ -106,14 +114,14 @@ namespace Managers
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
         
-        public void SetupTurnQueue(GameObject[] premadeTimeline)
+        public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
         {
             randomizedSpeed = false;
 
             foreach(GameObject prefab in premadeTimeline)
                 preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
             
-            SetupTurnQueue();
+            SetupTurnQueue(newTurnPhases);
         }
         
         /// <summary>
@@ -122,7 +130,7 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
-        public void RemoveUnitFromQueue(IUnit unit) =>
+        private void RemoveUnitFromQueue(IUnit unit) =>
             RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
 
         /// <summary>
@@ -150,7 +158,7 @@ namespace Managers
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
-        public void NextTurn()
+        private void NextTurn()
         {
             CurrentTurnIndex++;
             TotalTurnCount++;
@@ -336,7 +344,7 @@ namespace Managers
             else
                 PhaseIndex++;
             
-            //TODO DELETE DEBUG AND RETURN STATEMENT (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
+            //TODO: DELETE DEBUG AND RETURN STATEMENT BEFORE MERGE (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
             Debug.Log("Turn Manipulation started");
             return;
             
@@ -398,7 +406,7 @@ namespace Managers
         /// Checks if the current player unit can do the turn phase
         /// </summary>
         /// <returns></returns>
-        public bool IsTurnPhase() => TurnManipulationPhaseIndex >= PhaseIndex;
+        public bool IsTurnManipulatePhase() => TurnManipulationPhaseIndex >= PhaseIndex;
         
         /// <summary>
         /// Checks if the current player unit can do the movement phase
@@ -449,7 +457,7 @@ namespace Managers
             }
         }
 
-        public void UpdateMovementPhase()
+        private void UpdateMovementPhase()
         {
             if (MovementPhaseIndex > PhaseIndex)
                 PhaseIndex = MovementPhaseIndex + 1;

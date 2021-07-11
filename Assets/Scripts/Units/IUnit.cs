@@ -37,6 +37,7 @@ namespace Units
 
         void TakeAttack(int amount);
 
+
         void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1);
 
         bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue);
