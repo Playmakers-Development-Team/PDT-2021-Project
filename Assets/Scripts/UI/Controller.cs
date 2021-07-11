@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +7,12 @@ namespace UI
     [AddComponentMenu("UI System/UI Controller", 0)]
     internal class Controller : Element
     {
-        [SerializeField] private float raycastPlaneZ = 0;
+        private GridManager gridManager;
+
+        protected override void OnAwake()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+        }
 
         private void Update()
         {
@@ -20,7 +25,7 @@ namespace UI
             if (Mouse.current.wasUpdatedThisFrame && Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                Plane plane = new Plane(-Camera.main.transform.forward, raycastPlaneZ);
+                Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);
             
                 if (!plane.Raycast(worldRay, out float distance))
                     return;
