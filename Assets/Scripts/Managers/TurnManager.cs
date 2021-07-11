@@ -10,14 +10,15 @@ namespace Managers
 {
     public class TurnManager : Manager
     {
-        #region Properties and Fields
-        
         public enum TurnPhases
         {
             TurnManipulation, 
             Movement, 
             Ability
         };
+        
+        #region Properties and Fields
+        
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
@@ -70,7 +71,6 @@ namespace Managers
                 if (cmd.Unit is PlayerUnit)
                     UpdateAbilityPhase();
             });
-            
         }
         
         #endregion
@@ -85,15 +85,15 @@ namespace Managers
         {
             for (int i = 0; i < 3; i++)
             {
-                switch (newTurnPhases[i].ToString())
+                switch (newTurnPhases[i])
                 {
-                    case "TurnManipulation":
+                    case TurnPhases.TurnManipulation:
                         TurnManipulationPhaseIndex = i;
                         break;
-                    case "Movement":
+                    case TurnPhases.Movement:
                         MovementPhaseIndex = i;
                         break;
-                    case "Ability":
+                    case TurnPhases.Ability:
                         AbilityPhaseIndex = i;
                         break;
                 }
@@ -412,14 +412,13 @@ namespace Managers
         /// Checks if the current player unit can do the movement phase
         /// </summary>
         /// <returns></returns>
-        public bool IsMovementPhase()  => MovementPhaseIndex >= PhaseIndex;
+        public bool IsMovementPhase() => MovementPhaseIndex >= PhaseIndex;
         
         /// <summary>
         /// Checks if the current player unit can do the ability phase
         /// </summary>
         /// <returns></returns>
-        public bool IsAbilityPhase()  => AbilityPhaseIndex >= PhaseIndex;
-        
+        public bool IsAbilityPhase() => AbilityPhaseIndex >= PhaseIndex;
         
         /// <summary>
         /// Check if there are any player units in the queue.
@@ -457,23 +456,35 @@ namespace Managers
             }
         }
 
+        // TODO: Rename
         private void UpdateMovementPhase()
         {
-            if (MovementPhaseIndex > PhaseIndex)
+            // TODO: Ask Francisco
+            // if (MovementPhaseIndex > PhaseIndex)
+            //     PhaseIndex = MovementPhaseIndex + 1;
+            // else
+            //     PhaseIndex++;
+            
+            if (IsMovementPhase())
                 PhaseIndex = MovementPhaseIndex + 1;
             else
-                PhaseIndex++;
+                Debug.LogWarning("Movement was done out of phase.");
         }
         
+        // TODO: Rename
         public void UpdateAbilityPhase()
         {
-            if (AbilityPhaseIndex > PhaseIndex)
-                AbilityPhaseIndex = TurnManipulationPhaseIndex + 1;
+            // TODO: Ask Francisco
+            // if (AbilityPhaseIndex > PhaseIndex)
+            //     AbilityPhaseIndex = TurnManipulationPhaseIndex + 1;
+            // else
+            //     PhaseIndex++;
+            
+            if (IsAbilityPhase())
+                PhaseIndex = AbilityPhaseIndex + 1;
             else
-                PhaseIndex++;
+                Debug.LogWarning("Ability was done out of phase.");
         }
-        
-        
         
         #endregion
     }

@@ -419,16 +419,17 @@ namespace Managers
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                   unit.UnitAnimator.SetBool("moving", true);
-                        if (movePath[i].x > currentCoordinate.x)
-                        unit.ChangeAnimation(AnimationStates.Right);
-                    else if (movePath[i].y > currentCoordinate.y)
-                        unit.ChangeAnimation(AnimationStates.Up);
-                    else if (movePath[i].x < currentCoordinate.x)
-                        unit.ChangeAnimation(AnimationStates.Left);
-                    else if (movePath[i].y < currentCoordinate.y)
-                        unit.ChangeAnimation(AnimationStates.Down);
-                        
+                unit.UnitAnimator.SetBool("moving", true);
+                
+                if (movePath[i].x > currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Right);
+                else if (movePath[i].y > currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Up);
+                else if (movePath[i].x < currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Left);
+                else if (movePath[i].y < currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Down);
+
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
                     ConvertCoordinateToPosition(movePath[i]), 1f);
                 unit.gameObject.transform.position = ConvertCoordinateToPosition(movePath[i]);
@@ -436,8 +437,13 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints( - Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+
+            var manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
+            
+            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
             
             unit.ChangeAnimation(AnimationStates.Idle);
             
