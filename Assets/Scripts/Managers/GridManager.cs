@@ -404,6 +404,7 @@ namespace Managers
             }
 
             // Check if tile is in range
+
             if (!GetAllReachableTiles(currentCoordinate, moveRange).Contains(newCoordinate) &&
                 unit.GetType() == typeof(PlayerUnit))
             {
