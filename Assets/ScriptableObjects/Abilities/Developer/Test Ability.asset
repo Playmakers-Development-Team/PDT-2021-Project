@@ -24,8 +24,20 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
     costs: []
+    bonus:
+      tenetBonuses: []
     keywords:
     - {fileID: 11400000, guid: d24fce744630dd3fbb46f50032b621e1, type: 2}
+  - name: Default, Nothing
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs: []
+    bonus:
+      tenetBonuses: []
+    keywords: []
   userEffects: []

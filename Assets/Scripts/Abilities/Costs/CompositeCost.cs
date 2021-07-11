@@ -8,23 +8,25 @@ namespace Abilities.Costs
 {
     /// <summary>
     /// A convenient class that stores all the different type of costs into one class.
-    /// The Composite Pattern for a better structure and organization.
+    /// Sort of an implementation of the Composite Pattern for a better structure and organization.
     /// </summary>
     [Serializable]
-    public class CompositeCost : ICost
+    public class CompositeCost : Conditional
     {
-        [SerializeField] protected TenetCost[] tenetCosts;
+        [SerializeField] private CostType costType;
+
+        [SerializeField] private TenetCost tenetCost;
         
-        // All cost variables should be put together here.
-        private IEnumerable<ICost> AllChildCosts => tenetCosts;
-        
-        public void ApplyCost(IUnit user, IUnit target)
+        private ICost ChildCost => costType switch
         {
-            foreach (var childCost in AllChildCosts)
-                childCost.ApplyCost(user, target);
-        }
+            CostType.Tenet => tenetCost,
+            _ => throw new ArgumentOutOfRangeException($"Unsupported {nameof(CostType)} {costType}")
+        };
+
+        public void ApplyCost(IUnit user, IUnit target) =>
+            ChildCost.ApplyCost(GetAffectedUnit(user, target));
 
         public bool MeetsRequirements(IUnit user, IUnit target) =>
-            AllChildCosts.All(c => c.MeetsRequirements(user, target));
+            ChildCost.MeetsRequirements(GetAffectedUnit(user, target));
     }
 }

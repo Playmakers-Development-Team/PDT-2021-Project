@@ -23,8 +23,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts: []
+    costs: []
     bonus:
       tenetBonuses: []
     keywords: []
@@ -35,12 +34,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: User Consume Passion
-        affectType: 0
+    costs:
+    - name: User Consume Passion
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
         tenetCostType: 1
         tenetType: 2
+      testCost:
+        x: 0
     bonus:
       tenetBonuses:
       - name: User Passion
@@ -54,12 +57,16 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: User With Pride
-        affectType: 0
+    costs:
+    - name: User With Pride
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
         tenetCostType: 0
         tenetType: 0
+      testCost:
+        x: 0
     bonus:
       tenetBonuses: []
     keywords: []

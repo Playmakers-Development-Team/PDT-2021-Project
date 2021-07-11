@@ -7,8 +7,8 @@ namespace Abilities.Costs
     /// </summary>
     public interface ICost
     {
-        void ApplyCost(IUnit user, IUnit target);
+        void ApplyCost(IUnit unit);
 
-        bool MeetsRequirements(IUnit user, IUnit target);
+        bool MeetsRequirements(IUnit unit);
     }
 }

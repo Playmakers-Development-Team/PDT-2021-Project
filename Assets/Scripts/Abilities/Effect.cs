@@ -17,8 +17,8 @@ namespace Abilities
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
-        [SerializeField] private CompositeCost cost;
         [SerializeField] private CompositeBonus bonus;
+        [SerializeField] private CompositeCost[] costs;
         [SerializeField] private List<Keyword> keywords;
 
         private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
@@ -27,8 +27,8 @@ namespace Abilities
         
         private IEnumerable<Effect> AllKeywordEffects => keywords.Select(k => k.Effect);
         private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
-            .Select(e => e.cost)
-            .Prepend(cost);
+            .SelectMany(e => e.costs)
+            .Concat(costs);
         private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
             .Select(e => e.bonus)
             .Prepend(bonus);

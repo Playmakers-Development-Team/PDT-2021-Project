@@ -23,23 +23,28 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
-    cost:
-      tenetCosts: []
-    bonuses: []
+    costs: []
+    bonus:
+      tenetBonuses: []
     keywords: []
-  - name: 3 Defence IF Target With Humility
+  - name: 3 Defence IF Target Spend Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: Target With Humility
-        affectType: 1
-        tenetCostType: 0
+    costs:
+    - name: Target Spend Humility
+      affectType: 1
+      costType: 0
+      tenetCost:
+        name: 
+        tenetCostType: 2
         tenetType: 1
-    bonuses: []
+      testCost:
+        x: 0
+    bonus:
+      tenetBonuses: []
     keywords: []
   userEffects: []
