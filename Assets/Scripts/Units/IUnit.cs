@@ -35,6 +35,10 @@ namespace Units
 
         void TakeDefence(int amount);
 
+        void SetSpeed(int amount);
+        
+        void SetMovementActionPoints(int amount);
+        
         void TakeAttack(int amount);
 
 

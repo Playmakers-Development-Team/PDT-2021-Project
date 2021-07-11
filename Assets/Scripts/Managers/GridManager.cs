@@ -391,7 +391,7 @@ namespace Managers
                                     "Failed to move unit");
             }
             
-            int moveRange = (int) unit.MovementActionPoints.Value;
+            int moveRange = unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
             PlayerUnit playerUnit = null;
@@ -433,13 +433,13 @@ namespace Managers
                         playerUnit.UnitAnimator.SetBool("moving", true);
                     
                     if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Right);
+                        playerUnit.ChangeAnimation(AnimationStates.Right);
                     else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Up);
+                        playerUnit.ChangeAnimation(AnimationStates.Up);
                     else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Left);
+                        playerUnit.ChangeAnimation(AnimationStates.Left);
                     else if (movePath[i].y < currentCoordinate.y)
-                        playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Down);
+                        playerUnit.ChangeAnimation(AnimationStates.Down);
                 }
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
@@ -449,10 +449,11 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.MovementActionPoints.Value -= Mathf.Max(0,
-                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate));
-            
-                playerUnit.ChangeAnimation(PlayerUnit.AnimationStates.Idle);
+            unit.SetMovementActionPoints( - Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
+
+            if (playerUnit != null)
+                playerUnit.ChangeAnimation(AnimationStates.Idle);
 
             Debug.Log(Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));
