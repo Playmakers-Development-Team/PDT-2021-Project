@@ -134,6 +134,7 @@ namespace Units.Commands
         public KnockbackModifierChangedCommand(IUnit unit, int value) : base(unit, value) {}
     }
     
+    // TODO: Can be deleted once enemy abilities are implemented
     /// <summary>
     /// Executed when the an enemy unit attacks.
     /// </summary>
@@ -141,5 +142,4 @@ namespace Units.Commands
     {
         public EnemyAttack(IUnit unit) : base(unit) {}
     }
-    
 }
