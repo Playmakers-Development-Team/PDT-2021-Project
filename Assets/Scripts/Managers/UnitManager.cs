@@ -8,7 +8,6 @@ namespace Managers
     public class UnitManager : Manager
     {
         public IUnit SelectedUnit { get; private set; }
-        public int Insight { get; private set; }
         
         protected CommandManager commandManager;
         private EnemyManager enemyManager;
@@ -27,7 +26,6 @@ namespace Managers
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
-            Insight = 0;
         }
 
         /// <summary>
@@ -84,11 +82,6 @@ namespace Managers
 
             SelectedUnit = unit;
             commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
-        }
-
-        public void IncrementInsight(int i)
-        {
-            Insight += i;
         }
 
         /// <summary>

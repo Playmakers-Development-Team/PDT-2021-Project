@@ -30,6 +30,7 @@ namespace Managers
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
+
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
@@ -43,7 +44,8 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
-        private List<IUnit> meditatedUnit = new List<IUnit>();
+        private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
+        private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         
         private bool randomizedSpeed = true;
@@ -210,12 +212,16 @@ namespace Managers
                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
             }
-
+            
             previousTurnQueue = currentTurnQueue;
             currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;   // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
+            
+            unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
+            unitsMeditatedThisRound.Clear();
+            
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
         }
@@ -255,20 +261,8 @@ namespace Managers
         {
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-
-            // BUG Cannot move target to first position
-            if (CurrentTurnIndex < 2 || CurrentTurnIndex == targetIndex ||
-                CurrentTurnIndex == targetIndex - 1)
-                return;
-
-            int aboveIndex = CurrentTurnIndex - 1;
-
-            ShiftTurnQueue(aboveIndex, targetIndex);
-
-            // Set the current turn to be the unit before first, later coming back to the current unit
-            CurrentTurnIndex = aboveIndex;
-
-            // TODO: Test
+            
+            ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
         }
         
@@ -280,34 +274,23 @@ namespace Managers
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
-            // TODO: Test
-            
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
 
-            // BUG Cannot move target to last position
-            if (CurrentTurnIndex >= currentTurnQueue.Count - 1 || CurrentTurnIndex == targetIndex ||
-                CurrentTurnIndex == targetIndex + 1)
-                return;
-
-            int belowIndex = CurrentTurnIndex + 1;
-            ShiftTurnQueue(belowIndex, targetIndex);
+            ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
-        public bool Meditate()
+        public void Meditate()
         {
-            if (TurnManipulationPhaseIndex < PhaseIndex)
+            if (!(ActingUnit is PlayerUnit) || !UnitCanDoTurnManipulation(ActingUnit))
             {
-                Debug.Log("not in Manupulation Phase");
-                return false;
+                Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
+                return;
             }
-            else
-            {
-
-                meditatedUnit.Add(ActingUnit);
-                PhaseIndex++;
-                return true;
-            }
+            
+            unitsMeditatedThisRound.Add(ActingUnit);
+            playerManager.Insight.Value += 1;
+            EndTurnManipulationPhase();
         }
 
         /// <summary>
@@ -352,18 +335,20 @@ namespace Managers
             if (startIndex == endIndex)
                 return;
 
-            int difference = endIndex - startIndex;
+            int difference = startIndex - endIndex;
             int increment = difference / Mathf.Abs(difference);
-            int currentIndex = startIndex + increment;
+            int currentIndex = endIndex;
+            IUnit tempUnit = currentTurnQueue[endIndex];
             
-            while (currentIndex != endIndex)
+            while (currentIndex != startIndex)
             {
+                currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex + increment];
                 currentIndex += increment;
-                currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex - increment];
             }
-
-            currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
-            
+        
+            ManagerLocator.Get<PlayerManager>().Insight.Value--;
+            currentTurnQueue[startIndex] = tempUnit;
+            commandManager.ExecuteCommand(new TurnManipulatedCommand());
             EndTurnManipulationPhase();
         }
         
@@ -428,7 +413,17 @@ namespace Managers
         private bool LastPhaseHasEnded() => !IsAbilityPhase() &&
                                             !IsMovementPhase() &&
                                             !IsTurnManipulationPhase();
-        
+
+        public bool UnitCanDoTurnManipulation(IUnit unit) =>
+            !unitsMeditatedLastRound.Contains(unit) &&
+            !unitsMeditatedThisRound.Contains(unit) &&
+            IsTurnManipulationPhase();
+
+        // TODO: Make sure meditated units cannot be turn manipulated
+        public bool UnitCanBeTurnManipulated(IUnit unit) =>
+            !unitsMeditatedLastRound.Contains(unit) &&
+            !unitsMeditatedThisRound.Contains(unit);
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>
