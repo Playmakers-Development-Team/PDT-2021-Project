@@ -1,6 +1,6 @@
-using Units;
+using Commands;
 
-namespace Commands
+namespace Units.Commands
 {
     public abstract class UnitCommand : Command
     {

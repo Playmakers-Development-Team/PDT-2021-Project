@@ -1,6 +1,4 @@
-using Units;
-
-namespace Commands
+namespace Units.Commands
 {
     public abstract class HistoricalCommand : UnitCommand
     {

@@ -1,4 +1,6 @@
-namespace Commands
+using Commands;
+
+namespace Game.Commands
 {
     public class GameCommands
     {

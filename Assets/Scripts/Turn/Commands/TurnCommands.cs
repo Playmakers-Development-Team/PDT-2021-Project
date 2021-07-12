@@ -1,6 +1,8 @@
+using Commands;
 using Units;
+using Units.Commands;
 
-namespace Commands
+namespace Turn.Commands
 {
     /// <summary>
     /// Executed when the turn queue is created and ready.
