@@ -1,7 +1,6 @@
 ﻿using System;
-using UnityEngine;
 
-namespace Units
+namespace Units.Players
 {
     [Serializable]
     public class PlayerUnitData : UnitData

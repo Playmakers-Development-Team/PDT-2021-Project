@@ -1,7 +1,7 @@
 using Abilities;
 using Managers;
 
-namespace Units
+namespace Units.Players
 {
     public class PlayerUnit : Unit<PlayerUnitData>
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GridObjects
+namespace Units.Stats
 {
     [Serializable]
     public class ValueStat

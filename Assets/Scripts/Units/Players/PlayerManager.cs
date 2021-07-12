@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using GridObjects;
-using Units;
 using Units.Commands;
+using Units.Stats;
 using UnityEngine;
 
-namespace Managers
+namespace Units.Players
 {
     public class PlayerManager : UnitManager
     {

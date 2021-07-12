@@ -3,7 +3,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
 using GridObjects;
-using StatusEffects;
+using Units.Stats;
+using Units.TenetStatuses;
 using UnityEngine.Serialization;
 
 namespace Units

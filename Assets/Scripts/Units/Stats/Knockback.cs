@@ -1,7 +1,4 @@
-using GridObjects;
-using UnityEngine;
-
-namespace Units
+namespace Units.Stats
 {
     public class Knockback
     {

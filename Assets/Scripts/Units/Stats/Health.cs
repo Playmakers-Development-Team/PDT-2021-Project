@@ -1,9 +1,8 @@
-using GridObjects;
 using Managers;
 using Units.Commands;
 using UnityEngine;
 
-namespace Units
+namespace Units.Stats
 {
     public class Health
     {

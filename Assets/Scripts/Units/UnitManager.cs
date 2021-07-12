@@ -1,9 +1,11 @@
 using System.Collections.Generic;
-using Units;
+using Managers;
 using Units.Commands;
+using Units.Enemies;
+using Units.Players;
 using UnityEngine;
 
-namespace Managers
+namespace Units
 {
     public class UnitManager : Manager
     {

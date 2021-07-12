@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using Commands;
 using Managers;
+using Units.Players;
 
-namespace Units
+namespace Units.Enemies
 {
     public class EnemyUnit : Unit<EnemyUnitData>
     {

@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using Commands;
 using Cysharp.Threading.Tasks;
 using GridObjects;
-using Units;
+using Managers;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 
-namespace Managers
+namespace Units.Enemies
 {
     public class EnemyManager : UnitManager
     {

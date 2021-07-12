@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Bonuses;
 using Abilities.Costs;
-using StatusEffects;
 using Units;
+using Units.TenetStatuses;
 using UnityEngine;
 
 namespace Abilities

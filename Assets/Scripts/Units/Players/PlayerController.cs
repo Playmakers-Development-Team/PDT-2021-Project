@@ -1,8 +1,8 @@
-using System;
+using Managers;
 using Units.Commands;
 using UnityEngine;
 
-namespace Managers
+namespace Units.Players
 {
     public class PlayerController : MonoBehaviour
     {

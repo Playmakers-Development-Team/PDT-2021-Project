@@ -1,3 +1,5 @@
+using Units.Stats;
+
 namespace Units
 {
     public interface IDamageable

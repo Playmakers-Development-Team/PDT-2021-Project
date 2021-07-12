@@ -1,6 +1,6 @@
 using System;
-using StatusEffects;
 using Units;
+using Units.TenetStatuses;
 using UnityEngine;
 
 namespace Abilities.Bonuses

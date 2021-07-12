@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using GridObjects;
 using Abilities;
-using StatusEffects;
 using Units.Commands;
+using Units.Stats;
+using Units.TenetStatuses;
 using UnityEngine;
 
 namespace Units

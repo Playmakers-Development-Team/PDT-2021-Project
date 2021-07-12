@@ -1,11 +1,9 @@
 using System.Linq;
-using GridObjects;
-using Units;
 using UnityEditor;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-namespace Brushes
+namespace Units.Brushes
 {
     [CreateAssetMenu]
     [CustomGridBrush(false, true, false, "Unit Brush")]

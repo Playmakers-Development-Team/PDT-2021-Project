@@ -1,9 +1,9 @@
 using GridObjects;
-using Units;
+using Managers;
 using Units.Commands;
 using UnityEngine;
 
-namespace Managers
+namespace Units.Enemies
 {
     public class EnemyController : MonoBehaviour
     {

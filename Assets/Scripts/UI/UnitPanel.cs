@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Linq;
-using StatusEffects;
 using TMPro;
 using Units;
+using Units.TenetStatuses;
 using UnityEngine;
 using UnityEngine.UI;
 
