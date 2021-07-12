@@ -30,10 +30,13 @@ namespace Managers
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
+
+        public IReadOnlyList<IUnit> CurrentUpdatedTurnQueue => currentUpdatedTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
+
         
         private CommandManager commandManager;
         private PlayerManager playerManager;
@@ -43,7 +46,9 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
-        private List<IUnit> meditatedUnit = new List<IUnit>();
+        private List<IUnit> currentUpdatedTurnQueue = new List<IUnit>();
+        private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
+        private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         
         private bool randomizedSpeed = true;
@@ -107,6 +112,8 @@ namespace Managers
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
+            unitsMeditatedLastRound = new List<IUnit>();
+            unitsMeditatedThisRound = new List<IUnit>();
             
             UpdateNextTurnQueue();
             currentTurnQueue = nextTurnQueue;
@@ -216,6 +223,10 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
+            
+            unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
+            unitsMeditatedThisRound.Clear();
+            
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
         }
@@ -274,6 +285,19 @@ namespace Managers
             ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
+        public void Meditate()
+        {
+            if (!(ActingUnit is PlayerUnit) || !UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
+                return;
+            }
+            
+            unitsMeditatedThisRound.Add(ActingUnit);
+            playerManager.Insight.Value += 1;
+            EndTurnManipulationPhase();
+        }
+
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
@@ -313,6 +337,8 @@ namespace Managers
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
         public void ShiftTurnQueue(int startIndex, int endIndex)
         {
+            // TODO: Prevent a unit from being manipulated if UnitCanBeTurnManipulated == false
+            
             if (startIndex == endIndex)
                 return;
             
@@ -329,8 +355,10 @@ namespace Managers
                 currentIndex += increment;
             }
         
+            ManagerLocator.Get<PlayerManager>().Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new RefreshTimelineCommand());
+            EndTurnManipulationPhase();
         }
         
         #endregion
@@ -394,7 +422,36 @@ namespace Managers
         private bool LastPhaseHasEnded() => !IsAbilityPhase() &&
                                             !IsMovementPhase() &&
                                             !IsTurnManipulationPhase();
+
+        public bool UnitCanDoTurnManipulation(IUnit unit)
+        {
+
+            if (!unitsMeditatedLastRound.Contains(unit))
+            {
+                Debug.Log("Pass1");
+            }  
+            
+            
+            if (!unitsMeditatedThisRound.Contains(unit))
+            {
+                Debug.Log("Pass2");
+            }
+            
+            
+            if (IsTurnManipulationPhase())
+            {
+                Debug.Log("Pass3");
+            }
+
+            return !unitsMeditatedLastRound.Contains(unit) && !unitsMeditatedThisRound.Contains(unit) && IsTurnManipulationPhase();
+
+
+        } 
         
+        public bool ActingUnitCanBeTurnManipulated(IUnit unit) =>
+            unitsMeditatedLastRound.Contains(unit) ||
+            IsTurnManipulationPhase();
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>

@@ -1,6 +1,5 @@
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Managers
 {
@@ -30,21 +29,9 @@ namespace Managers
                     SetupTurnQueue();
                 });
             
-            commandManager.ListenCommand<RefreshTimelineCommand>(cmd =>
-            {
-                UpdateForNewRound();
-            });
+          
             
             
-        }
-
-        public void Meditate()
-        {
-            Debug.Log("meditated c:");
-            if (turnManager.Meditate())
-            {
-                unitManager.IncrementInsight(1);
-            }
         }
 
         /// <summary>
@@ -62,6 +49,12 @@ namespace Managers
                 turnManager.SetupTurnQueue(turnPhases);
             else 
                 turnManager.SetupTurnQueue(preMadeTimeline,turnPhases);
+        }
+
+        // TODO: Can be removed once proper UI is in place
+        public void Meditate()
+        {
+            turnManager.Meditate();
         }
     }
 }

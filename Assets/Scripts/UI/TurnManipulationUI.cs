@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Commands;
 using Managers;
+using Units;
 using UnityEngine;
 
 namespace UI
@@ -7,62 +10,78 @@ namespace UI
     //TODO DELETE THIS CLASS 
     public class TurnManipulationUI : MonoBehaviour
     {
-
-         public GameObject turnManipulateButton;
+        public GameObject turnManipulateButton;
+        [SerializeField] private Transform parent;
         [SerializeField] private TurnController turnController;
+
+        private PlayerManager playerManager;
+
         private TurnManager turnManager;
-        
+
+        private List<GameObject> allButtons = new List<GameObject>();
+
+        private List<IUnit> currentUnits = new List<IUnit>();
 
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
         private void Start()
         {
             turnController = GameObject.FindGameObjectWithTag("TurnController").
                 GetComponent<TurnController>();
+
+            ManagerLocator.Get<CommandManager>().
+                ListenCommand<RefreshTimelineCommand>(cmd =>
+                {
+                    DestroyButtons();
+                });
+        }
+
+        private void DestroyButtons()
+        {
+            foreach (var button in allButtons)
+                Destroy(button);
         }
 
         public void ManipulateBefore()
         {
-            foreach (var unit in turnManager.CurrentTurnQueue)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
+                playerManager.Insight.Value <= 0)
+                return;
+
+            Debug.Log($"CURRENT INDEX {turnManager.PhaseIndex}");
+
+            for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (unit != turnManager.ActingUnit)
+                if (i > turnManager.CurrentTurnIndex)
                 {
-                    foreach(UnitCard unitcard in turnController.allUnitCards)
-                    {
-                        if (unit == unitcard.Unit)
-                        {
-                            GameObject btnUnit = Instantiate(turnManipulateButton,unitcard.transform);
-                            btnUnit.GetComponent<TurnManipulateTargetUI>().InitialiseButton(unit,
-                            unitcard.transform,true);
-                        }
-                    }
+                    GameObject temp = Instantiate(turnManipulateButton, parent);
+                    temp.GetComponent<TurnManipulateTargetUI>().
+                        InitialiseButton(turnManager.CurrentTurnQueue[i], parent, true);
+                    allButtons.Add(temp);
                 }
             }
         }
-        
+
         public void ManipulateAfter()
         {
-            foreach (var unit in turnManager.CurrentTurnQueue)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
+                playerManager.Insight.Value <= 0)
+                return;
+
+            for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (unit != turnManager.ActingUnit)
+                if (i > turnManager.CurrentTurnIndex)
                 {
-                    foreach(UnitCard unitcard in turnController.allUnitCards)
-                    {
-                        if (unit == unitcard.Unit)
-                        {
-                            GameObject btnUnit = Instantiate(turnManipulateButton,unitcard.transform);
-                            btnUnit.GetComponent<TurnManipulateTargetUI>().InitialiseButton(unit,
-                                unitcard.transform,false);
-                        }
-                    }
+                    GameObject temp = Instantiate(turnManipulateButton, parent);
+                    temp.GetComponent<TurnManipulateTargetUI>().
+                        InitialiseButton(turnManager.CurrentTurnQueue[i], parent, false);
+                    allButtons.Add(temp);
                 }
             }
         }
-        
-        
-        
     }
 }

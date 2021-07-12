@@ -72,6 +72,13 @@ namespace UI
             commandManager.ListenCommand((StartTurnCommand c) => turnChanged.Invoke());
             commandManager.ListenCommand((EndTurnCommand c) => turnChanged.Invoke());
             commandManager.ListenCommand((TurnQueueCreatedCommand c) => turnChanged.Invoke());
+            
+            ManagerLocator.Get<CommandManager>().ListenCommand<RefreshTimelineCommand>(cmd =>
+            {
+                turnChanged.Invoke();
+            });
+            
+            
         }
 
         

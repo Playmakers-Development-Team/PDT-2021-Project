@@ -17,10 +17,11 @@ namespace UI
         private IUnit unit;
         private Transform parent;
         private bool spawningBeforeCurrentUnit;
-    
+
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+     
         }
 
         public void InitialiseButton(IUnit unit, Transform parent, bool spawningBeforeCurrentUnit)
@@ -34,13 +35,13 @@ namespace UI
 
         public void ManipulateUnit()
         {
+            
             if (spawningBeforeCurrentUnit)
                 turnManager.MoveTargetBeforeCurrent(turnManager.FindTurnIndexFromCurrentQueue
                 (unit));
             else
                 turnManager.MoveTargetAfterCurrent(turnManager.FindTurnIndexFromCurrentQueue
                     (unit));
-            
         }
         
         
