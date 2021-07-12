@@ -22,7 +22,6 @@ namespace Managers
         private TurnManager turnManager;
         private UnitManager unitManager;
         
-        
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
@@ -36,7 +35,6 @@ namespace Managers
                     SetupTurnQueue();
                 });
         }
-
 
         //TODO DELETE THIS FUNCTION BEFORE MERGE
         private void OnValidate()

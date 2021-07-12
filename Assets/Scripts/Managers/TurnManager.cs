@@ -64,12 +64,12 @@ namespace Managers
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
             commandManager.ListenCommand<EndMoveCommand>(cmd => {
                 if (cmd.Unit is PlayerUnit)
-                    UpdateMovementPhase();
+                    EndMovementPhase();
             });
 
-            commandManager.ListenCommand<EndMoveCommand>(cmd => {
+            commandManager.ListenCommand<AbilityCommand>(cmd => {
                 if (cmd.Unit is PlayerUnit)
-                    UpdateAbilityPhase();
+                    EndAbilityPhase();
             });
         }
         
@@ -332,20 +332,23 @@ namespace Managers
             if (startIndex == endIndex)
                 return;
             
-            if (TurnManipulationPhaseIndex < PhaseIndex )
-            {
-                //TODO DELETE DEBUG
-                Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
-                return;
-            }
-
-            if (TurnManipulationPhaseIndex > PhaseIndex)
-                PhaseIndex = TurnManipulationPhaseIndex + 1;
-            else
-                PhaseIndex++;
+            // if (!IsTurnManipulationPhase())
+            // {
+            //     // TODO: DELETE DEBUG
+            //     Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
+            //     return;
+            // }
+            //
+            // if (TurnManipulationPhaseIndex > PhaseIndex)
+            //     PhaseIndex = TurnManipulationPhaseIndex + 1;
+            // else
+            //     PhaseIndex++;
             
             //TODO: DELETE DEBUG AND RETURN STATEMENT BEFORE MERGE (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
             Debug.Log("Turn Manipulation started");
+            
+            EndTurnManipulationPhase();
+            
             return;
             
             int difference = endIndex - startIndex;
@@ -406,19 +409,19 @@ namespace Managers
         /// Checks if the current player unit can do the turn phase
         /// </summary>
         /// <returns></returns>
-        public bool IsTurnManipulatePhase() => TurnManipulationPhaseIndex >= PhaseIndex;
+        public bool IsTurnManipulationPhase() => PhaseIndex <= TurnManipulationPhaseIndex;
         
         /// <summary>
         /// Checks if the current player unit can do the movement phase
         /// </summary>
         /// <returns></returns>
-        public bool IsMovementPhase() => MovementPhaseIndex >= PhaseIndex;
+        public bool IsMovementPhase() => PhaseIndex <= MovementPhaseIndex;
         
         /// <summary>
         /// Checks if the current player unit can do the ability phase
         /// </summary>
         /// <returns></returns>
-        public bool IsAbilityPhase() => AbilityPhaseIndex >= PhaseIndex;
+        public bool IsAbilityPhase() => PhaseIndex <= AbilityPhaseIndex;
         
         /// <summary>
         /// Check if there are any player units in the queue.
@@ -456,34 +459,28 @@ namespace Managers
             }
         }
 
-        // TODO: Rename
-        private void UpdateMovementPhase()
+        private void EndMovementPhase()
         {
-            // TODO: Ask Francisco
-            // if (MovementPhaseIndex > PhaseIndex)
-            //     PhaseIndex = MovementPhaseIndex + 1;
-            // else
-            //     PhaseIndex++;
-            
             if (IsMovementPhase())
                 PhaseIndex = MovementPhaseIndex + 1;
             else
                 Debug.LogWarning("Movement was done out of phase.");
         }
         
-        // TODO: Rename
-        public void UpdateAbilityPhase()
+        public void EndAbilityPhase()
         {
-            // TODO: Ask Francisco
-            // if (AbilityPhaseIndex > PhaseIndex)
-            //     AbilityPhaseIndex = TurnManipulationPhaseIndex + 1;
-            // else
-            //     PhaseIndex++;
-            
             if (IsAbilityPhase())
                 PhaseIndex = AbilityPhaseIndex + 1;
             else
                 Debug.LogWarning("Ability was done out of phase.");
+        }
+        
+        public void EndTurnManipulationPhase()
+        {
+            if (IsTurnManipulationPhase())
+                PhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                Debug.LogWarning("Turn manipulation was done out of phase.");
         }
         
         #endregion
