@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using GridObjects;
+using Cysharp.Threading.Tasks;
+using Grid.GridObjects;
+using Managers;
 using Units;
-using Units.Commands;
+using Units.Enemies;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utility;
-using Cysharp.Threading.Tasks;
-using Units.Enemies;
-using Units.Players;
 using Random = UnityEngine.Random;
-using TileData = Tiles.TileData;
+using TileData = Grid.Tiles.TileData;
 
-namespace Managers
+namespace Grid
 {
     public class GridManager : Manager
     {

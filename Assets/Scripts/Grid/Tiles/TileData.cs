@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using GridObjects;
+using Grid.GridObjects;
 using UnityEngine.Tilemaps;
 
-namespace Tiles
+namespace Grid.Tiles
 {
     public class TileData
     {

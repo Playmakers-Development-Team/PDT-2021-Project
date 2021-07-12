@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GridObjects;
+using Grid;
+using Grid.GridObjects;
 using Managers;
 using UnityEngine;
 using Utility;

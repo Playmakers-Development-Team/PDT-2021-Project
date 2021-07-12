@@ -1,7 +1,7 @@
 using Managers;
 using UnityEngine;
 
-namespace GridObjects
+namespace Grid.GridObjects
 {
     public class GridObject : MonoBehaviour
     {

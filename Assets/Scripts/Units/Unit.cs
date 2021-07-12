@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GridObjects;
 using Abilities;
 using Abilities.Commands;
 using Cysharp.Threading.Tasks;
+using Grid;
+using Grid.GridObjects;
+using Grid.Tiles;
 using Managers;
-using Tiles;
 using TMPro;
 using Units.Commands;
 using Units.Enemies;

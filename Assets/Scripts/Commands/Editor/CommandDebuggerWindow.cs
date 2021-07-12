@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Abilities;
-using GridObjects;
+using Grid.GridObjects;
 using Managers;
 using Units;
 using UnityEditor;

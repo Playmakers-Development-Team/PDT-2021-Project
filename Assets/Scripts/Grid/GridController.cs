@@ -1,13 +1,14 @@
-using System;
+using Managers;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 #if UNITY_EDITOR
-using UnityEditor;
+
 #endif
 
 
-namespace Managers
+namespace Grid
 {
     public class GridController : MonoBehaviour
     {

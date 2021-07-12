@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
-using GridObjects;
+using Grid.GridObjects;
 using Units;
 using UnityEngine;
 
