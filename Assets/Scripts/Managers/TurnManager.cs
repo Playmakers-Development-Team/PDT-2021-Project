@@ -341,8 +341,8 @@ namespace Managers
             
             if (startIndex == endIndex)
                 return;
-            
-            int difference = startIndex - endIndex;
+
+            int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
             int currentIndex = endIndex;
             IUnit tempUnit = currentTurnQueue[endIndex];

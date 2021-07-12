@@ -23,15 +23,8 @@ namespace Tiles
                 GridObjects.Add(gridObject);
             }
         }
-        
-        public void RemoveGridObjects(GridObject gridObject)
-        {
-            GridObjects.Remove(gridObject);
-        }
-        
-        public void ClearGridObjects()
-        {
-            GridObjects.Clear();
-        }
+        public void RemoveGridObjects(GridObject gridObject) => GridObjects.Remove(gridObject);
+
+        public void ClearGridObjects() => GridObjects.Clear();
     }
 }
