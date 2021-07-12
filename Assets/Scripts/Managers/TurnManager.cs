@@ -43,6 +43,7 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private List<IUnit> meditatedUnit = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         
         private bool randomizedSpeed = true;
@@ -179,6 +180,7 @@ namespace Managers
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             else
                 PhaseIndex = 0;
+                //enable button
             
             SelectCurrentUnit();
         }
@@ -292,6 +294,23 @@ namespace Managers
             ShiftTurnQueue(belowIndex, targetIndex);
         }
 
+        public bool Meditate()
+        {
+            if (TurnManipulationPhaseIndex < PhaseIndex)
+            {
+                Debug.Log("not in Manupulation Phase");
+                return false;
+            }
+            else
+            {
+
+                meditatedUnit.Add(ActingUnit);
+                PhaseIndex++;
+                return true;
+            }
+        }
+
+
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
@@ -334,6 +353,24 @@ namespace Managers
             if (startIndex == endIndex)
                 return;
             
+// TODO: Test
+            if (TurnManipulationPhaseIndex < PhaseIndex )
+            {
+                //TODO DELETE DEBUG
+                Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
+                return;
+            }
+
+            if (TurnManipulationPhaseIndex > PhaseIndex)
+                PhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                PhaseIndex++;
+            
+            //TODO DELETE DEBUG AND RETURN STATEMENT (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
+            Debug.Log("Turn Manipulation started");
+            return;
+            
+
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
             int currentIndex = startIndex + increment;
