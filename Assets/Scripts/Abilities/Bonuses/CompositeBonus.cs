@@ -25,6 +25,6 @@ namespace Abilities.Bonuses
         public int CalculateBonusMultiplier(IUnit user, IUnit target) =>
             tenetBonuses.Count > 0
                 ? tenetBonuses.Sum(b => b.CalculateBonusMultiplier(user, target))
-                : 1;
+                : 0;
     }
 }

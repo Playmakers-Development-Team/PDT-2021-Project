@@ -79,7 +79,8 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            value *= AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            int bonusSum = AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            value *= Mathf.Max(1, bonusSum);
 
             return value;
         }
