@@ -56,11 +56,9 @@ namespace Managers
         
         #region GETTERS
 
-        public bool IsInBounds(Vector2Int coordinate)
-        {
-            return coordinate.x >= LevelBoundsInt.xMin && coordinate.x <= LevelBoundsInt.xMax &&
-                   coordinate.y >= LevelBoundsInt.yMin && coordinate.y <= LevelBoundsInt.yMax;
-        }
+        public bool IsInBounds(Vector2Int coordinate) =>
+            coordinate.x >= LevelBoundsInt.xMin && coordinate.x <= LevelBoundsInt.xMax &&
+            coordinate.y >= LevelBoundsInt.yMin && coordinate.y <= LevelBoundsInt.yMax;
 
         public bool IsInBounds(Vector3 worldPosition, bool clamp = false)
         {
@@ -90,11 +88,9 @@ namespace Managers
             return tileData.GridObjects;
         }
 
-        public Vector2Int GetRandomCoordinates()
-        {
-            return new Vector2Int(Random.Range(-(LevelBounds.x / 2), (LevelBounds.x / 2)),
+        public Vector2Int GetRandomCoordinates() =>
+            new Vector2Int(Random.Range(-(LevelBounds.x / 2), (LevelBounds.x / 2)),
                 Random.Range(-(LevelBounds.y / 2), (LevelBounds.y / 2)));
-        }
 
         public Vector2Int GetRandomUnoccupiedCoordinates()
         {
@@ -234,6 +230,22 @@ namespace Managers
                 return reachableCoordinates[0];
             }
             //Debug.Log("Chosen Tile Coordinate: "+closestTile);
+        }
+
+        [Obsolete("Use Unit.GetAllReachableTiles() instead, this function has been moved to the unit system")]
+        public List<Vector2Int> GetAllReachableTiles(Vector2Int startingCoordinate, int range)
+        {
+            IUnit unit = GetGridObjectsByCoordinate(startingCoordinate)
+                .OfType<IUnit>()
+                .FirstOrDefault();
+
+            if (unit != null)
+            {
+                return unit.GetAllReachableTiles();
+            }
+
+            Debug.LogWarning($"Obsoleted function can't find unit at coordinate {startingCoordinate}");
+            return new List<Vector2Int>();
         }
 
         #endregion

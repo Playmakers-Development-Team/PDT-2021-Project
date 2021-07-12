@@ -97,7 +97,6 @@ public static class Pathfinding
                 }
             }
         }
-            
     }
     
     private static void VisitPathNode(Vector2Int node, Dictionary<Vector2Int, Vector2Int> visited,
