@@ -43,7 +43,8 @@ namespace Managers
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
-        private List<IUnit> meditatedUnit = new List<IUnit>();
+        private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
+        private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         
         private bool randomizedSpeed = true;
@@ -216,6 +217,10 @@ namespace Managers
             timelineNeedsUpdating = false;
             nextTurnQueue = CreateTurnQueue();
             CurrentTurnIndex = 0;
+
+            unitsMeditatedLastRound = unitsMeditatedThisRound;
+            unitsMeditatedThisRound.Clear();
+            
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
         }
@@ -296,10 +301,16 @@ namespace Managers
 
         public void Meditate()
         {
-            meditatedUnit.Add(ActingUnit);
+            if (!(ActingUnit is PlayerUnit))
+            {
+                Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
+                return;
+            }
+            
+            unitsMeditatedThisRound.Add(ActingUnit);
             
             playerManager.Insight.Value += 1;
-            
+
             EndTurnManipulationPhase();
         }
 
@@ -342,26 +353,10 @@ namespace Managers
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
         public void ShiftTurnQueue(int startIndex, int endIndex)
         {
+            // TODO: Prevent a unit from being manipulated if UnitCanBeTurnManipulated == false
+            
             if (startIndex == endIndex)
                 return;
-            
-// TODO: Test
-            if (TurnManipulationPhaseIndex < PhaseIndex )
-            {
-                //TODO DELETE DEBUG
-                Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
-                return;
-            }
-
-            if (TurnManipulationPhaseIndex > PhaseIndex)
-                PhaseIndex = TurnManipulationPhaseIndex + 1;
-            else
-                PhaseIndex++;
-            
-            //TODO DELETE DEBUG AND RETURN STATEMENT (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
-            Debug.Log("Turn Manipulation started");
-            return;
-            
 
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
@@ -440,6 +435,14 @@ namespace Managers
                                             !IsMovementPhase() &&
                                             !IsTurnManipulationPhase();
         
+        public bool UnitCanDoTurnManipulation(IUnit unit) => 
+            unitsMeditatedLastRound.Contains(unit) ||
+            unitsMeditatedThisRound.Contains(unit);
+        
+        public bool ActingUnitCanBeTurnManipulated(IUnit unit) =>
+            unitsMeditatedLastRound.Contains(unit) ||
+            unitsMeditatedThisRound.Contains(unit);
+
         /// <summary>
         /// Check if there are any player units in the queue.
         /// </summary>

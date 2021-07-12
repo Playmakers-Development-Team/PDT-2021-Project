@@ -46,5 +46,11 @@ namespace Managers
             else 
                 turnManager.SetupTurnQueue(preMadeTimeline,turnPhases);
         }
+
+        // TODO: Can be removed once proper UI is in place
+        public void Meditate()
+        {
+            turnManager.Meditate();
+        }
     }
 }
