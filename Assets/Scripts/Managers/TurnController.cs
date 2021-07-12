@@ -6,11 +6,6 @@ namespace Managers
 {
     public class TurnController : MonoBehaviour
     {
-        
-        //TODO DELETE THIS BEFORE MERGE
-        [Tooltip("Debug Tool to check if you can turn manipulate")] 
-        [SerializeField] private bool maniplulateTurn;
-        
         [Tooltip("The global phase each player unit has to follow sequentially")]
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
         
@@ -21,7 +16,6 @@ namespace Managers
        
         private TurnManager turnManager;
         private UnitManager unitManager;
-        
         
         private void Awake()
         {
@@ -35,14 +29,6 @@ namespace Managers
                 {
                     SetupTurnQueue();
                 });
-        }
-
-
-        //TODO DELETE THIS FUNCTION BEFORE MERGE
-        private void OnValidate()
-        {
-            if (maniplulateTurn)
-                turnManager.ShiftTurnQueue(1,3);
         }
 
         /// <summary>
