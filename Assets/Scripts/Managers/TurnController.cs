@@ -1,6 +1,5 @@
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Managers
 {
@@ -29,15 +28,6 @@ namespace Managers
                 {
                     SetupTurnQueue();
                 });
-        }
-
-        public void Meditate()
-        {
-            Debug.Log("meditated c:");
-            if (turnManager.Meditate())
-            {
-                unitManager.IncrementInsight(1);
-            }
         }
 
         /// <summary>

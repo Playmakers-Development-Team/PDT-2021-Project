@@ -294,22 +294,14 @@ namespace Managers
             ShiftTurnQueue(belowIndex, targetIndex);
         }
 
-        public bool Meditate()
+        public void Meditate()
         {
-            if (TurnManipulationPhaseIndex < PhaseIndex)
-            {
-                Debug.Log("not in Manupulation Phase");
-                return false;
-            }
-            else
-            {
-
-                meditatedUnit.Add(ActingUnit);
-                PhaseIndex++;
-                return true;
-            }
+            meditatedUnit.Add(ActingUnit);
+            
+            playerManager.Insight.Value += 1;
+            
+            EndTurnManipulationPhase();
         }
-
 
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
