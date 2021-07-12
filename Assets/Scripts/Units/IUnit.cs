@@ -25,8 +25,10 @@ namespace Units
         ICollection<TenetStatus> TenetStatusEffects { get; }
         ICollection<TenetStatus> TenetStatuses { get; }
         
+        // TODO: Move Render and UnitColor to UI system...
         Sprite Render { get; }
-        
+        Color UnitColor { get; }
+
         bool IsSelected { get; }
 
         void TakeDamage(int amount);

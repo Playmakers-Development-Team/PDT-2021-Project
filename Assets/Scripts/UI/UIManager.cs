@@ -38,6 +38,9 @@ namespace UI
             cmd.ListenCommand((EndTurnCommand c) => turnChanged.Invoke());
             cmd.ListenCommand((TurnQueueCreatedCommand c) => turnChanged.Invoke());
             cmd.ListenCommand((TakeTotalDamageCommand c) => unitDamaged.Invoke(new StatDifference(c)));
+            
+            // TODO: TEMPORARY...
+            turnChanged.AddListener(unitDeselected.Invoke);
         }
     }
     

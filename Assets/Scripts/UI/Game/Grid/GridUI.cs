@@ -35,7 +35,7 @@ namespace UI
 
         private bool IsPlayerTurn => turnManager.ActingPlayerUnit != null &&
                                      selectedUnit != null &&
-                                     turnManager.ActingPlayerUnit == (PlayerUnit) selectedUnit;
+                                     turnManager.ActingUnit == selectedUnit;
         
         
         protected override void OnAwake()
@@ -102,10 +102,13 @@ namespace UI
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
-            else
+            else if (selectedUnit.MovementActionPoints.Value > 0)
             {
+                // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
+                // BUG: IndexOutOfRange when clicking unit while moving...
                 Vector2Int[] coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value).
-                    ToArray();
+                    Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
         }
@@ -142,7 +145,10 @@ namespace UI
             if (!IsPlayerTurn || selectedAbility != null)
                 return;
 
-            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value);
+            // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
+            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value).
+                Where(vec => gridManager.IsInBounds(vec)).ToList();
+            
             if (!inRange.Contains(destination))
                 return;
             

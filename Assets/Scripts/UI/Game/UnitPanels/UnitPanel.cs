@@ -69,6 +69,8 @@ namespace UI
             
             // Render image
             renderImage.sprite = selectedUnit.Render;
+            // TODO: YUCKY CAST
+            renderImage.color = selectedUnit.UnitColor;
             
             // Health bar
             healthSlider.minValue = 0;

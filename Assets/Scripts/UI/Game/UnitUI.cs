@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GridObjects;
+using Managers;
 using TMPro;
 using Units;
 using UnityEngine;
@@ -43,7 +44,10 @@ namespace UI
         }
 
 
-        public void OnClick() => manager.unitSelected.Invoke(unit);
+        public void OnClick()
+        {
+            manager.unitSelected.Invoke(unit);
+        }
 
         private void OnTakeDamage(StatDifference data)
         {

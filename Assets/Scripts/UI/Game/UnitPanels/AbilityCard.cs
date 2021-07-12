@@ -17,9 +17,6 @@ namespace UI
         
         internal Ability Ability { get; private set; }
         
-        
-        internal void Disable() => button.interactable = false;
-
         internal void Assign(Ability ability)
         {
             Ability = ability;
@@ -28,13 +25,42 @@ namespace UI
             descriptionText.text = ability.Description;
         }
 
+        private void OnEnable()
+        {
+            manager.abilityDeselected.AddListener(OnAbilityDeselect);
+            manager.unitDeselected.AddListener(OnUnitDeselected);
+        }
+
+        private void OnDisable()
+        {
+            manager.abilityDeselected.RemoveListener(OnAbilityDeselect);
+            manager.unitDeselected.AddListener(OnUnitDeselected);
+        }
+
         public void OnCardClicked()
         {
             clicked = !clicked;
             if (clicked)
-                manager.abilitySelected.Invoke(Ability);
-            else
+            {
+                // TODO: this should call manager.abilityDeselected.Invoke(manager.SelectedAbility)...
                 manager.abilityDeselected.Invoke(Ability);
+                manager.abilitySelected.Invoke(Ability);
+                button.image.color = Color.green;
+            }
+            else
+            {
+                manager.abilityDeselected.Invoke(Ability);
+            }
+        }
+
+        private void OnAbilityDeselect(Ability ability)
+        {
+            button.image.color = Color.white;
+        }
+
+        private void OnUnitDeselected()
+        {
+            manager.abilityDeselected.Invoke(Ability);
         }
 
         internal void Destroy()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Commands;
 using Managers;
 using Units;
 using UnityEngine;
@@ -29,7 +30,13 @@ namespace UI
             UpdatePortraits();
         }
 
-        public void OnDelayButtonPressed() {}
+        public void OnDelayButtonPressed()
+        {
+            if (turnManager.ActingPlayerUnit == null)
+                return;
+            
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+        }
 
         private void UpdatePortraits()
         {
