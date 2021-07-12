@@ -25,7 +25,7 @@ namespace Abilities
         private int TotalDefence => defenceValue + AllKeywordEffects.Sum(e => e.defenceValue);
         private int TotalAttack => attackValue + AllKeywordEffects.Sum(e => e.attackValue);
         
-        private IEnumerable<Effect> AllKeywordEffects => keywords.Select(k => k.Effect);
+        private IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
         private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
             .SelectMany(e => e.costs)
             .Concat(costs);
@@ -33,7 +33,7 @@ namespace Abilities
             .Select(e => e.bonus)
             .Prepend(bonus);
 
-        public IReadOnlyList<Keyword> Keywords => keywords.AsReadOnly();
+        public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
 
         public bool ProcessTenet(IUnit user, IUnit target)
         {

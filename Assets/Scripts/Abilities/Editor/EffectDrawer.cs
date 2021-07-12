@@ -86,7 +86,9 @@ namespace Abilities.Editor
                 for (int i = 0; i < keywordsProperty.arraySize; i++)
                 {
                     SerializedProperty keywordProperty = keywordsProperty.GetArrayElementAtIndex(i);
-                    keywordNameList.Add(keywordProperty.objectReferenceValue.name);
+                    
+                    if (keywordProperty.objectReferenceValue != null)
+                        keywordNameList.Add(keywordProperty.objectReferenceValue.name);
                 }
 
                 return $"WITH {string.Join(" and ", keywordNameList)}";
