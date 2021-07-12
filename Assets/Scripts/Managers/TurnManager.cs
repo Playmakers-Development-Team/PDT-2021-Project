@@ -10,11 +10,22 @@ namespace Managers
 {
     public class TurnManager : Manager
     {
+        public enum TurnPhases
+        {
+            TurnManipulation, 
+            Movement, 
+            Ability
+        };
+        
         #region Properties and Fields
         
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
+        public int TurnManipulationPhaseIndex { get; private set; }
+        public int MovementPhaseIndex { get; private set; }
+        public int AbilityPhaseIndex { get; private set; }
+        public int PhaseIndex { get; set; }
         public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
@@ -28,10 +39,14 @@ namespace Managers
         private PlayerManager playerManager;
         private UnitManager unitManager;
         private EnemyManager enemyManager;
-        
+
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private List<IUnit> meditatedUnit = new List<IUnit>();
+        private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
+        
+        private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
 
         #endregion
@@ -48,6 +63,17 @@ namespace Managers
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
+            commandManager.ListenCommand<EndMoveCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndMovementPhase();
+            });
+
+            commandManager.ListenCommand<AbilityCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndAbilityPhase();
+            });
         }
         
         #endregion
@@ -58,49 +84,58 @@ namespace Managers
         /// Create a turn queue based on existing player and enemy units.
         /// Should be called after the level is loaded and all the units are ready.
         /// </summary>
-        public void SetupTurnQueue()
+        public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
+            for (int i = 0; i < 3; i++)
+            {
+                switch (newTurnPhases[i])
+                {
+                    case TurnPhases.TurnManipulation:
+                        TurnManipulationPhaseIndex = i;
+                        break;
+                    case TurnPhases.Movement:
+                        MovementPhaseIndex = i;
+                        break;
+                    case TurnPhases.Ability:
+                        AbilityPhaseIndex = i;
+                        break;
+                }
+            }
+
+            PhaseIndex = 0;
             RoundCount = 0;
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
-            UpdateNextTurnQueue();
-            currentTurnQueue = new List<IUnit>(nextTurnQueue);
             
+            UpdateNextTurnQueue();
+            currentTurnQueue = nextTurnQueue;
+
             if (!(ActingEnemyUnit is null))
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
         
-        /// <summary>
-        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
-        /// <c>EnemyManager</c>. Calculate the turn order based on speed.
-        /// </summary>
-        private List<IUnit> CreateTurnQueue()
+        public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
         {
-            List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
-            return turnQueue;
+            randomizedSpeed = false;
+
+            foreach(GameObject prefab in premadeTimeline)
+                preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
+            
+            SetupTurnQueue(newTurnPhases);
         }
         
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
         /// </summary>
-        /// <param name="targetUnit">The unit to remove.</param>
-        /// <exception cref="ArgumentException">If the unit does not exist in the queue.</exception>
-        private void RemoveUnitFromQueue(IUnit targetUnit)
-        {
-            var targetIndex = FindTurnIndexFromCurrentQueue(targetUnit);
+        /// <param name="unit">Target unit</param>
+        /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
+        private void RemoveUnitFromQueue(IUnit unit) =>
+            RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
 
-            if (targetIndex == -1)
-                throw new ArgumentException($"The unit {targetUnit} does not exist in the queue and could not be removed.");
-            
-            RemoveUnitFromQueue(targetIndex);
-        }
-        
         /// <summary>
         /// Remove a unit completely from the current turn queue and future turn queues.
         /// For situations such as when a unit is killed.
@@ -111,7 +146,7 @@ namespace Managers
         {
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
-            
+
             if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
                 CurrentTurnIndex--;
             
@@ -122,24 +157,11 @@ namespace Managers
             SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
         
-        /// <summary>
-        /// Should be called whenever the number of units in the turn queue has been changed.
-        /// </summary>
-        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
-        
-        /// <summary>
-        /// Adds a new unit to the timeline and setting it to the end of the current turn queue.
-        /// </summary>
-        private void AddNewUnitToTimeline(IUnit unit)
-        {
-            currentTurnQueue.Add(unit);
-            timelineNeedsUpdating = true;
-        }
         
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
-        public void NextTurn()
+        private void NextTurn()
         {
             CurrentTurnIndex++;
             TotalTurnCount++;
@@ -153,9 +175,12 @@ namespace Managers
         private void StartTurn()
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
-            
+
             if (!(ActingEnemyUnit is null))
                 enemyManager.DecideEnemyIntention(ActingEnemyUnit);
+            else
+                PhaseIndex = 0;
+                //enable button
             
             SelectCurrentUnit();
         }
@@ -250,6 +275,36 @@ namespace Managers
         }
 
         /// <summary>
+        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
+        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// </summary>
+        private List<IUnit> CreateTurnQueue()
+        {
+            if (!randomizedSpeed)
+                return preMadeTurnQueue;
+            
+            List<IUnit> turnQueue = new List<IUnit>();
+            turnQueue.AddRange(unitManager.AllUnits);
+            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
+            return turnQueue;
+        }
+
+        /// <summary>
+        /// Should be called whenever the number of units in the turn queue has been changed.
+        /// </summary>
+        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
+
+        /// <summary>
+        /// Adds a new unit to the timeline and setting it to the end of the current turn queue
+        /// </summary>
+        public void AddNewUnitToTimeline(IUnit unit)
+        {
+            currentTurnQueue.Add(unit);
+            //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
+            timelineNeedsUpdating = true;
+        }
+
+        /// <summary>
         /// Shift everything towards the <c>targetIndex</c> in the <c>currentTurnQueue</c>.
         /// This means every element in the list will be moved up or down by 1.
         /// </summary>
@@ -317,6 +372,28 @@ namespace Managers
         /// True if there is at least one <c>EnemyUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
         private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
+
+        /// <summary>
+        /// Checks if the acting unit can do the turn phase.
+        /// </summary>
+        public bool IsTurnManipulationPhase() => PhaseIndex <= TurnManipulationPhaseIndex;
+        
+        /// <summary>
+        /// Checks if the acting unit can do the movement phase.
+        /// </summary>
+        public bool IsMovementPhase() => PhaseIndex <= MovementPhaseIndex;
+        
+        /// <summary>
+        /// Checks if the acting unit can do the ability phase.
+        /// </summary>
+        public bool IsAbilityPhase() => PhaseIndex <= AbilityPhaseIndex;
+        
+        /// <summary>
+        /// Checks if the acting unit has completed all turn phases.
+        /// </summary>
+        private bool LastPhaseHasEnded() => !IsAbilityPhase() &&
+                                            !IsMovementPhase() &&
+                                            !IsTurnManipulationPhase();
         
         /// <summary>
         /// Check if there are any player units in the queue.
@@ -353,7 +430,40 @@ namespace Managers
                 unit.Health.Defence.Reset();
             }
         }
-        
+
+        private void EndMovementPhase()
+        {
+            if (IsMovementPhase())
+                PhaseIndex = MovementPhaseIndex + 1;
+            else
+                Debug.LogWarning("Movement was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
+        }
+
+        private void EndAbilityPhase()
+        {
+            if (IsAbilityPhase())
+                PhaseIndex = AbilityPhaseIndex + 1;
+            else
+                Debug.LogWarning("Ability was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
+        }
+
+        private void EndTurnManipulationPhase()
+        {
+            if (IsTurnManipulationPhase())
+                PhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                Debug.LogWarning("Turn manipulation was done out of phase.");
+
+            if (LastPhaseHasEnded())
+                NextTurn();
+        }
+
         #endregion
     }
 }

@@ -8,6 +8,7 @@ namespace Managers
     public class UnitManager : Manager
     {
         public IUnit SelectedUnit { get; private set; }
+        public int Insight { get; private set; }
         
         protected CommandManager commandManager;
         private EnemyManager enemyManager;
@@ -26,6 +27,7 @@ namespace Managers
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            Insight = 0;
         }
 
         /// <summary>
@@ -38,11 +40,6 @@ namespace Managers
             allUnits.AddRange(playerManager.PlayerUnits);
             return allUnits;
         }
-
-        /// <summary>
-        /// Removes a unit from the current timeline.
-        /// </summary>
-        /// <param name="targetUnit"></param>
 
         /// <summary>
         /// Spawns a unit.
@@ -87,6 +84,11 @@ namespace Managers
 
             SelectedUnit = unit;
             commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
+        }
+
+        public void IncrementInsight(int i)
+        {
+            Insight += i;
         }
 
         /// <summary>
