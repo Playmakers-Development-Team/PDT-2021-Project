@@ -28,6 +28,9 @@ namespace Units
         Sprite Render { get; }
         
         bool IsSelected { get; }
+        Animator UnitAnimator { get; }
+
+        void ChangeAnimation(AnimationStates animationStates);
 
         void TakeDamage(int amount);
 
@@ -35,7 +38,12 @@ namespace Units
 
         void TakeDefence(int amount);
 
+        void SetSpeed(int amount);
+        
+        void SetMovementActionPoints(int amount);
+        
         void TakeAttack(int amount);
+
 
         void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1);
 

@@ -10,14 +10,15 @@ namespace Managers
 {
     public class TurnManager : Manager
     {
-        #region Properties and Fields
-        
         public enum TurnPhases
         {
             TurnManipulation, 
             Movement, 
             Ability
         };
+        
+        #region Properties and Fields
+        
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
@@ -62,7 +63,17 @@ namespace Managers
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
-          
+            commandManager.ListenCommand<EndMoveCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndMovementPhase();
+            });
+
+            commandManager.ListenCommand<AbilityCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndAbilityPhase();
+            });
         }
         
         #endregion
@@ -75,18 +86,17 @@ namespace Managers
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
-
             for (int i = 0; i < 3; i++)
             {
-                switch (newTurnPhases[i].ToString())
+                switch (newTurnPhases[i])
                 {
-                    case "TurnManipulation":
+                    case TurnPhases.TurnManipulation:
                         TurnManipulationPhaseIndex = i;
                         break;
-                    case "Movement":
+                    case TurnPhases.Movement:
                         MovementPhaseIndex = i;
                         break;
-                    case "Ability":
+                    case TurnPhases.Ability:
                         AbilityPhaseIndex = i;
                         break;
                 }
@@ -107,22 +117,14 @@ namespace Managers
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
         }
         
-        
-    
-        
-        /// <summary>
-        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
-        /// <c>EnemyManager</c>. Calculate the turn order based on speed.
-        /// </summary>
-        private List<IUnit> CreateTurnQueue()
-        public void SetupTurnQueue(GameObject[] premadeTimeline)
+        public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
         {
             randomizedSpeed = false;
 
             foreach(GameObject prefab in premadeTimeline)
                 preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
             
-            SetupTurnQueue();
+            SetupTurnQueue(newTurnPhases);
         }
         
         /// <summary>
@@ -131,7 +133,7 @@ namespace Managers
         /// </summary>
         /// <param name="unit">Target unit</param>
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
-        public void RemoveUnitFromQueue(IUnit unit) =>
+        private void RemoveUnitFromQueue(IUnit unit) =>
             RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
 
         /// <summary>
@@ -159,7 +161,7 @@ namespace Managers
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
         /// </summary>
-        public void NextTurn()
+        private void NextTurn()
         {
             CurrentTurnIndex++;
             TotalTurnCount++;
@@ -351,6 +353,7 @@ namespace Managers
             if (startIndex == endIndex)
                 return;
             
+// TODO: Test
             if (TurnManipulationPhaseIndex < PhaseIndex )
             {
                 //TODO DELETE DEBUG
@@ -379,6 +382,8 @@ namespace Managers
             }
 
             currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
+            
+            EndTurnManipulationPhase();
         }
         
         #endregion
@@ -396,7 +401,6 @@ namespace Managers
             
             return null;
         }
-        
 
         /// <summary>
         /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
@@ -423,23 +427,26 @@ namespace Managers
         private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
 
         /// <summary>
-        /// Checks if the current player unit can do the turn phase
+        /// Checks if the acting unit can do the turn phase.
         /// </summary>
-        /// <returns></returns>
-        public bool IsTurnPhase() => TurnManipulationPhaseIndex >= PhaseIndex;
+        public bool IsTurnManipulationPhase() => PhaseIndex <= TurnManipulationPhaseIndex;
         
         /// <summary>
-        /// Checks if the current player unit can do the movement phase
+        /// Checks if the acting unit can do the movement phase.
         /// </summary>
-        /// <returns></returns>
-        public bool IsMovementPhase()  => MovementPhaseIndex >= PhaseIndex;
+        public bool IsMovementPhase() => PhaseIndex <= MovementPhaseIndex;
         
         /// <summary>
-        /// Checks if the current player unit can do the ability phase
+        /// Checks if the acting unit can do the ability phase.
         /// </summary>
-        /// <returns></returns>
-        public bool IsAbilityPhase()  => AbilityPhaseIndex >= PhaseIndex;
+        public bool IsAbilityPhase() => PhaseIndex <= AbilityPhaseIndex;
         
+        /// <summary>
+        /// Checks if the acting unit has completed all turn phases.
+        /// </summary>
+        private bool LastPhaseHasEnded() => !IsAbilityPhase() &&
+                                            !IsMovementPhase() &&
+                                            !IsTurnManipulationPhase();
         
         /// <summary>
         /// Check if there are any player units in the queue.
@@ -477,24 +484,39 @@ namespace Managers
             }
         }
 
-        public void UpdateMovementPhase()
+        private void EndMovementPhase()
         {
-            if (MovementPhaseIndex > PhaseIndex)
+            if (IsMovementPhase())
                 PhaseIndex = MovementPhaseIndex + 1;
             else
-                PhaseIndex++;
+                Debug.LogWarning("Movement was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
         }
-        
-        public void UpdateAbilityPhase()
+
+        private void EndAbilityPhase()
         {
-            if (AbilityPhaseIndex > PhaseIndex)
-                AbilityPhaseIndex = TurnManipulationPhaseIndex + 1;
+            if (IsAbilityPhase())
+                PhaseIndex = AbilityPhaseIndex + 1;
             else
-                PhaseIndex++;
+                Debug.LogWarning("Ability was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
         }
-        
-        
-        
+
+        private void EndTurnManipulationPhase()
+        {
+            if (IsTurnManipulationPhase())
+                PhaseIndex = TurnManipulationPhaseIndex + 1;
+            else
+                Debug.LogWarning("Turn manipulation was done out of phase.");
+
+            if (LastPhaseHasEnded())
+                NextTurn();
+        }
+
         #endregion
     }
 }
