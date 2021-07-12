@@ -4,7 +4,6 @@ using System.Linq;
 using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
-using Units;
 using UnityEngine;
 
 namespace Abilities
@@ -42,30 +41,30 @@ namespace Abilities
         private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
-        public void Use(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
+        public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void UseForTargets(IUnit user, params GridObject[] targets) => UseForTargets(user, targets.AsEnumerable());
+        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => UseForTargets(user, targets.AsEnumerable());
         
-        public void UseForTargets(IUnit user, IEnumerable<GridObject> targets)
+        public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
             UseEffectsForTargets(user, targetEffects, targets);
             
-            // It can be assumed that IUnit can be converted to GridObject.
+            // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
                 UseEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void UseEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
             UseEffectsForTargets(user, effects, targets.AsEnumerable());
 
-        private void UseEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
         {
             foreach (GridObject target in targets.ToArray())
             {
-                if (target is IUnit targetUnit)
+                if (target is IAbilityUser targetUnit)
                 {
                     int attack = CalculateValue(user, targetUnit, effects, EffectValueType.Attack);
                     int defence = CalculateValue(user, targetUnit,effects, EffectValueType.Defence);
@@ -73,10 +72,7 @@ namespace Abilities
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
-                    
-                    // Attack modifiers should only work when the effect actually intends to do damage
-                    if (damage > 0)
-                        targetUnit.TakeDamage(Mathf.RoundToInt(user.Attack.Modify(damage)));
+                    targetUnit.TakeDamage(damage);
                 
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)
@@ -90,26 +86,26 @@ namespace Abilities
             }
         }
         
-        public void Undo(IUnit user, Vector2Int originCoordinate, Vector2 targetVector)
+        public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
             UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void UndoForTargets(IUnit user, params GridObject[] targets) => UndoForTargets(user, targets.AsEnumerable());
+        public void UndoForTargets(IAbilityUser user, params GridObject[] targets) => UndoForTargets(user, targets.AsEnumerable());
         
-        public void UndoForTargets(IUnit user, IEnumerable<GridObject> targets)
+        public void UndoForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
             UndoEffectsForTargets(user, targetEffects, targets);
             
-            // It can be assumed that IUnit can be converted to GridObject.
+            // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
                 UndoEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void UndoEffectsForTargets(IUnit user, Effect[] effects, params GridObject[] targets) =>
+        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
             UndoEffectsForTargets(user, effects, targets.AsEnumerable());
 
-        private void UndoEffectsForTargets(IUnit user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
         {
             // TODO
         }
@@ -117,7 +113,7 @@ namespace Abilities
         /// <summary>
         /// Sum up all the values from each effect. Only count the effect if such effect can be used.
         /// </summary>
-        private int CalculateValue(IUnit user, IUnit target, Effect[] effects, EffectValueType valueType) =>
+        private int CalculateValue(IAbilityUser user, IAbilityUser target, Effect[] effects, EffectValueType valueType) =>
             effects.Where(e => e.CanBeUsedBy(user, target))
                 .Sum(e => e.CalculateValue(user, target, valueType));
     }

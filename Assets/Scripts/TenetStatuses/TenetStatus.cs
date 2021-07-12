@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Units.TenetStatuses
+namespace TenetStatuses
 {
     [Serializable]
     public struct TenetStatus

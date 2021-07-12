@@ -1,31 +1,31 @@
 using Commands;
-using Units;
-using Units.Commands;
 using UnityEngine;
 
 namespace Abilities.Commands
 {
-    public class AbilityCommand : HistoricalCommand
+    public class AbilityCommand : Command
     {
         private readonly Ability ability;
         public Vector2 TargetVector { get; }
         public Vector2Int OriginCoordinate { get; }
+        public IAbilityUser AbilityUser { get; }
         
-        public AbilityCommand(IUnit unit, Vector2 targetVector, Ability ability) : base(unit)
+        public AbilityCommand(IAbilityUser abilityUser, Vector2 targetVector, Ability ability)
         {
             this.ability = ability;
             TargetVector = targetVector;
-            OriginCoordinate = unit.Coordinate;
+            OriginCoordinate = abilityUser.Coordinate;
+            AbilityUser = abilityUser;
         }
 
         public override void Execute()
         {
-            ability.Use(Unit, OriginCoordinate, TargetVector);
+            ability.Use(AbilityUser, OriginCoordinate, TargetVector);
         }
 
-        public override void Undo()
-        {
-            ability.Undo(Unit, OriginCoordinate, TargetVector);
-        }
+        // public override void Undo()
+        // {
+        //     ability.Undo(AbilityUser, OriginCoordinate, TargetVector);
+        // }
     }
 }

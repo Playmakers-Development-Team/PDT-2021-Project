@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using TMPro;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine;
 
 namespace UI

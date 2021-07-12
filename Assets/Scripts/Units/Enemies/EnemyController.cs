@@ -80,7 +80,7 @@ namespace Units.Enemies
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)
-                enemyManager.EnemyUnits[0].TakeDamage(1);
+                enemyManager.EnemyUnits[0].TakeDamageWithoutModifiers(1);
 
             debugKillEnemyButton = false;
         }
@@ -95,7 +95,7 @@ namespace Units.Enemies
                     if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
                     {
                         // TODO: Get proper damage formula here
-                        firstAdjacentPlayerUnit.TakeDamage(5);
+                        firstAdjacentPlayerUnit.TakeDamageWithoutModifiers(5);
                         debugDamagePlayerButton = false;
                         return;
                     }

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
+using Grid;
 using Managers;
-using Units;
 using UnityEngine;
 using Utilities;
 using TileData = Grid.Tiles.TileData;
 
-namespace Grid
+namespace Units
 {
     public static class Pathfinding
     {

@@ -6,8 +6,6 @@ using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
 using Managers;
-using Turn;
-using Turn.Commands;
 using Units.Commands;
 using Units.Players;
 using UnityEngine;
@@ -36,17 +34,17 @@ namespace Units.Enemies
         /// </summary>
         public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
         
-        private TurnManager turnManager;
         private GridManager gridManager;
         private PlayerManager playerManager;
+        private UnitManager unitManager;
 
         public override void ManagerStart()
         {
             base.ManagerStart();
             
-            turnManager = ManagerLocator.Get<TurnManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
+            unitManager = ManagerLocator.Get<UnitManager>();
         }
 
         /// <summary>
@@ -117,7 +115,7 @@ namespace Units.Enemies
                 return;
             }
             
-            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
 
         // TODO: Will later need to be turned into an ability command when enemies have abilities
@@ -127,7 +125,7 @@ namespace Units.Enemies
             commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
             
             Debug.Log(enemyUnit.Name + " ENEMY-INT: Damage player");
-            playerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
+            playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
             
             // Wait so that an enemies turn is not over instantly
             await UniTask.Delay(1000); 
@@ -177,7 +175,7 @@ namespace Units.Enemies
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
 
-            Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
+            Vector2Int chosenTargetTile = unitManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
 
             Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " + chosenTargetTile + " towards " + targetUnit + " at " + targetUnit.Coordinate);
             return chosenTargetTile;
@@ -222,7 +220,7 @@ namespace Units.Enemies
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             
-            Dictionary<Vector2Int, int> distanceToAllCells = gridManager.GetDistanceToAllCells(enemyUnit.Coordinate);
+            Dictionary<Vector2Int, int> distanceToAllCells = unitManager.GetDistanceToAllCells(enemyUnit.Coordinate);
             
             List<IUnit> closestPlayerUnits = new List<IUnit>();
             int closestPlayerUnitDistance = Int32.MaxValue;

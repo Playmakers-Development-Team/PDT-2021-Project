@@ -4,9 +4,6 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Managers;
-using Units;
-using Units.Enemies;
-using Units.Players;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Utilities;
@@ -157,97 +154,9 @@ namespace Grid
 
             return new List<T>();
         }
-        
-        public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
-        {
-            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
-            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
-            string allegiance = "";
 
-            if (tileDatas[startingCoordinate].GridObjects.Count > 0)
-            {
-                allegiance= tileDatas[startingCoordinate].GridObjects[0].tag;
-            }
-             
-
-            // Add the starting coordinate to the queue
-            coordinateQueue.Enqueue(startingCoordinate);
-            int distance = 0;
-            visited.Add(startingCoordinate, distance);
-            
-            // Loop until all nodes are processed
-            while (coordinateQueue.Count > 0)
-            {
-                Vector2Int currentNode = coordinateQueue.Peek();
-                distance = visited[currentNode];
-
-                // Add neighbours of node to queue
-                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
-                
-                coordinateQueue.Dequeue();
-            }
-
-            return visited;
-        }
-        
-        public bool HasPlayerUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is PlayerUnit);
-        public bool HasEnemyUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is EnemyUnit);
-
-        /// <summary>
-        /// Returns the coordinate that is closest to the destination
-        /// from a list of coordinates. Will find the closest tile even
-        /// if targetCoordinate is not in range
-        /// </summary>
-        public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> reachableCoordinates,
-                                            Vector2Int targetCoordinate, IUnit iunit)
-        {
-            // PLACEHOLDER INITIALISATION
-            Vector2Int closestTile = reachableCoordinates[0];
-            int shortestDistance = int.MaxValue;
-            
-            foreach (var startingCoordinate in reachableCoordinates)
-            {
-                List<Vector2Int> pathToTargetTile = Pathfinding.GetCellPath(targetCoordinate, startingCoordinate, iunit);
-                
-                //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
-                
-                if (pathToTargetTile.Count != 0 && pathToTargetTile.Count < shortestDistance)
-                {
-                    shortestDistance = pathToTargetTile.Count;
-                    closestTile = startingCoordinate;
-                }
-            }
-            
-            if (shortestDistance != int.MaxValue)
-            {
-                return closestTile;
-            }
-            else
-            {
-                Debug.LogWarning($"Could not find tile to move to, returning {reachableCoordinates[0]}");
-                return reachableCoordinates[0];
-            }
-            //Debug.Log("Chosen Tile Coordinate: "+closestTile);
-        }
-
-        [Obsolete("Use Unit.GetAllReachableTiles() instead, this function has been moved to the unit system")]
-        public List<Vector2Int> GetAllReachableTiles(Vector2Int startingCoordinate, int range)
-        {
-            IUnit unit = GetGridObjectsByCoordinate(startingCoordinate)
-                .OfType<IUnit>()
-                .FirstOrDefault();
-
-            if (unit != null)
-            {
-                return unit.GetAllReachableTiles();
-            }
-
-            Debug.LogWarning($"Obsoleted function can't find unit at coordinate {startingCoordinate}");
-            return new List<Vector2Int>();
-        }
+        // public bool HasPlayerUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is PlayerUnit);
+        // public bool HasEnemyUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is EnemyUnit);
 
         #endregion
 
@@ -378,16 +287,16 @@ namespace Grid
         }
         
         // TODO: Use for when we want enemies to perform flanking maneuvers
-        public List<Vector2Int> GetAdjacentFreeSquares(IUnit targetUnit)
+        public List<Vector2Int> GetAdjacentFreeSquares(GridObject gridObject)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             
             List<Vector2Int> adjacentCoordinates = new List<Vector2Int>();
 
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.up);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.right);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.down);
-            adjacentCoordinates.Add(targetUnit.Coordinate + Vector2Int.left);
+            adjacentCoordinates.Add(gridObject.Coordinate + Vector2Int.up);
+            adjacentCoordinates.Add(gridObject.Coordinate + Vector2Int.right);
+            adjacentCoordinates.Add(gridObject.Coordinate + Vector2Int.down);
+            adjacentCoordinates.Add(gridObject.Coordinate + Vector2Int.left);
 
             for (int i = adjacentCoordinates.Count - 1; i > -1; i--)
             {

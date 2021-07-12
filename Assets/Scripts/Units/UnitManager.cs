@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using Commands;
+using Grid;
 using Managers;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
+using Utilities;
 
 namespace Units
 {
@@ -15,6 +17,7 @@ namespace Units
         protected CommandManager commandManager;
         private EnemyManager enemyManager;
         private PlayerManager playerManager;
+        private GridManager gridManager;
 
         /// <summary>
         /// All the units currently in the level.
@@ -29,6 +32,7 @@ namespace Units
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            gridManager = ManagerLocator.Get<GridManager>();
         }
 
         /// <summary>
@@ -99,5 +103,80 @@ namespace Units
             commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
             SelectedUnit = null;
         }
+
+        #region Pathfinding
+        
+        public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
+        {
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            string allegiance = "";
+
+            if (gridManager.GetTileDataByCoordinate(startingCoordinate).GridObjects.Count > 0)
+            {
+                allegiance = gridManager.GetTileDataByCoordinate(startingCoordinate).GridObjects[0].tag;
+            }
+
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+            
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                // Add neighbours of node to queue
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                Pathfinding.VisitDistanceToAllNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance, coordinateQueue, allegiance);
+                
+                coordinateQueue.Dequeue();
+            }
+
+            return visited;
+        }
+
+        /// <summary>
+        /// Returns the coordinate that is closest to the destination
+        /// from a list of coordinates. Will find the closest tile even
+        /// if targetCoordinate is not in range
+        /// </summary>
+        public Vector2Int GetClosestCoordinateFromList(List<Vector2Int> reachableCoordinates,
+                                                       Vector2Int targetCoordinate, IUnit iunit)
+        {
+            // PLACEHOLDER INITIALISATION
+            Vector2Int closestTile = reachableCoordinates[0];
+            int shortestDistance = int.MaxValue;
+            
+            foreach (var startingCoordinate in reachableCoordinates)
+            {
+                List<Vector2Int> pathToTargetTile = Pathfinding.GetCellPath(targetCoordinate, startingCoordinate, iunit);
+                
+                //Debug.Log("Tile Coordinate: "+startingCoordinate+". TargetCoordinate(enemy): "+targetCoordinate+" Count: "+pathToTargetTile.Count);
+                
+                if (pathToTargetTile.Count != 0 && pathToTargetTile.Count < shortestDistance)
+                {
+                    shortestDistance = pathToTargetTile.Count;
+                    closestTile = startingCoordinate;
+                }
+            }
+            
+            if (shortestDistance != int.MaxValue)
+            {
+                return closestTile;
+            }
+            else
+            {
+                Debug.LogWarning($"Could not find tile to move to, returning {reachableCoordinates[0]}");
+                return reachableCoordinates[0];
+            }
+            //Debug.Log("Chosen Tile Coordinate: "+closestTile);
+        }
+
+        #endregion
     }
 }

@@ -78,9 +78,12 @@ namespace Turn
 
             commandManager.ListenCommand<AbilityCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
-                if (cmd.Unit is PlayerUnit)
+                if (cmd.AbilityUser is PlayerUnit)
                     EndAbilityPhase();
             });
+            
+            commandManager.ListenCommand<EnemyActionsCompletedCommand>(cmd => 
+                commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));
         }
         
         #endregion

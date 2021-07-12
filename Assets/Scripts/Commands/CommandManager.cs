@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Managers;
-using Units.Commands;
 using UnityEngine;
 
 namespace Commands
@@ -15,10 +14,10 @@ namespace Commands
     { 
         // TODO: The Command system should not depend of the Unit system's HistoricalCommand.
         // TODO: CommandHistory should be moved to the Unit system.
-        /// <summary>
-        /// A record of all the historical commands, the first command in the list is the latest command.
-        /// </summary>
-        private readonly LinkedList<HistoricalCommand> commandHistory = new LinkedList<HistoricalCommand>();
+        // /// <summary>
+        // /// A record of all the historical commands, the first command in the list is the latest command.
+        // /// </summary>
+        // private readonly LinkedList<HistoricalCommand> commandHistory = new LinkedList<HistoricalCommand>();
 
         /// <summary>
         /// Keeps track of which listeners need to be called when a command is executed.
@@ -79,10 +78,10 @@ namespace Commands
         {
             Type commandType = command.GetType();
 
-            if (command is HistoricalCommand historicalCommand)
-            {
-                commandHistory.AddFirst(historicalCommand);
-            }
+            // if (command is HistoricalCommand historicalCommand)
+            // {
+            //     commandHistory.AddFirst(historicalCommand);
+            // }
             
             command.Execute();
             OnCommandExecuteEvent?.Invoke(command);
@@ -607,23 +606,23 @@ namespace Commands
             }
         }
 
-        /// <summary>
-        /// Preforms Undo on the last historical command and removes it from the command history.
-        /// </summary>
-        public void UndoLastHistoricalCommand()
-        {
-            var historicalCommand = commandHistory.First.Value;
-            commandHistory.RemoveFirst();
-            historicalCommand.Undo();
-        }
-
-        /// <summary>
-        /// Gets rid of all stored historical commands. That means all the commands that has undo
-        /// are now forgotten.
-        /// </summary>
-        public void ClearCommandHistory()
-        {
-            commandHistory.Clear();
-        }
+        // /// <summary>
+        // /// Preforms Undo on the last historical command and removes it from the command history.
+        // /// </summary>
+        // public void UndoLastHistoricalCommand()
+        // {
+        //     var historicalCommand = commandHistory.First.Value;
+        //     commandHistory.RemoveFirst();
+        //     historicalCommand.Undo();
+        // }
+        //
+        // /// <summary>
+        // /// Gets rid of all stored historical commands. That means all the commands that has undo
+        // /// are now forgotten.
+        // /// </summary>
+        // public void ClearCommandHistory()
+        // {
+        //     commandHistory.Clear();
+        // }
     }
 }

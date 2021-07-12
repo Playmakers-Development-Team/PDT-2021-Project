@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
+using Commands;
 using Managers;
 using Units.Commands;
 using UnityEngine;
 
-namespace Commands
+namespace Units
 {
     /// <summary>
     /// An example script used to use commands with await and coroutines. This script outputs

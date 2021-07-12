@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Abilities.Costs;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEditor;
 using UnityEngine;
 

@@ -1,6 +1,5 @@
 using System;
-using Units;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -20,9 +19,9 @@ namespace Abilities.Costs
         public TenetCostType TenetCostType => tenetCostType;
         public TenetType TenetType => tenetType;
         
-        public void ApplyCost(IUnit user, IUnit target)
+        public void ApplyCost(IAbilityUser user, IAbilityUser target)
         {
-            IUnit unit = GetAffectedUnit(user, target);
+            IAbilityUser unit = GetAffectedUser(user, target);
 
             switch (TenetCostType)
             {
@@ -35,7 +34,7 @@ namespace Abilities.Costs
             }
         }
         
-        public bool MeetsRequirements(IUnit user, IUnit target) => 
-            GetAffectedUnit(user, target).GetTenetStatusCount(tenetType) > 0;
+        public bool MeetsRequirements(IAbilityUser user, IAbilityUser target) => 
+            GetAffectedUser(user, target).GetTenetStatusCount(tenetType) > 0;
     }
 }

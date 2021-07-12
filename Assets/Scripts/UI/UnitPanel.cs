@@ -2,7 +2,7 @@
 using System.Linq;
 using TMPro;
 using Units;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine;
 using UnityEngine.UI;
 

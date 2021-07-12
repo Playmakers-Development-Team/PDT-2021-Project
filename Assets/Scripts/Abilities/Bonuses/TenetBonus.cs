@@ -1,6 +1,5 @@
 using System;
-using Units;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities.Bonuses
@@ -10,7 +9,7 @@ namespace Abilities.Bonuses
     {
         [SerializeField] private TenetType tenetType;
         
-        public int CalculateBonusMultiplier(IUnit user, IUnit target) =>
-            GetAffectedUnit(user, target).GetTenetStatusCount(tenetType);
+        public int CalculateBonusMultiplier(IAbilityUser user, IAbilityUser target) =>
+            GetAffectedUser(user, target).GetTenetStatusCount(tenetType);
     }
 }

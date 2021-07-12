@@ -1,4 +1,4 @@
-namespace Units.TenetStatuses
+namespace TenetStatuses
 {
     public enum TenetType
     {

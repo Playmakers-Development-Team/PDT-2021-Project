@@ -10,14 +10,12 @@ using Grid.GridObjects;
 using Grid.Tiles;
 using Managers;
 using TMPro;
-using Turn;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using Units.Stats;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Utilities;
 using Random = UnityEngine.Random;
 
@@ -87,7 +85,6 @@ namespace Units
 
         private AnimationStates unitAnimationState;
         
-        private TurnManager turnManager;
         private PlayerManager playerManager;
         private CommandManager commandManager;
 
@@ -98,7 +95,6 @@ namespace Units
             base.Start();
             #region GetManagers
 
-            turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
             
@@ -120,7 +116,7 @@ namespace Units
             
             commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
-                if (!ReferenceEquals(cmd.Unit, this))
+                if (!ReferenceEquals(cmd.AbilityUser, this))
                     return;
                 
                 ChangeAnimation(AnimationStates.Casting);
@@ -156,9 +152,18 @@ namespace Units
         {
             Attack.Adder += amount;
             commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
-        } 
+        }
 
         public void TakeDamage(int amount)
+        {
+            // Attack modifiers should only work when the effect actually intends to do damage
+            if (amount <= 0)
+                return;
+            
+            TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+        }
+
+        public void TakeDamageWithoutModifiers(int amount)
         {
             commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             int damageTaken = Health.TakeDamage(amount);

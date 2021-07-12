@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
 using Units.Stats;
-using Units.TenetStatuses;
+using TenetStatuses;
 using UnityEngine.Serialization;
 
 namespace Units
