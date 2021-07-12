@@ -116,19 +116,23 @@ namespace Managers
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
 
+        // TODO: Will later need to be turned into an ability command when enemies have abilities
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
-            // TODO: Will later need to be turned into an ability command when enemies have abilities
+            // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
+            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
+            
             Debug.Log(enemyUnit.Name + " ENEMY-INT: Damage player");
             playerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
             
-            await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
-
+            // Wait so that an enemies turn is not over instantly
+            await UniTask.Delay(1000); 
+            
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
         }
 
-        private UniTask MoveUnit(EnemyUnit enemyUnit)
+        private async Task MoveUnit(EnemyUnit enemyUnit)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
 			
@@ -142,7 +146,7 @@ namespace Managers
             );
             
             commandManager.ExecuteCommand(moveCommand);
-            return UniTask.Delay(3500);
+            await UniTask.Delay(3500);
         }
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)

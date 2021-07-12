@@ -20,8 +20,8 @@ namespace Units
         public ModifierStat Attack { get; }
         public List<Ability> Abilities { get; }
 
-        public Vector2Int Coordinate { get;}
-
+        public Vector2Int Coordinate { get; }
+        
         [Obsolete("Use TenetStatuses instead")]
         ICollection<TenetStatus> TenetStatusEffects { get; }
         ICollection<TenetStatus> TenetStatuses { get; }
@@ -29,6 +29,9 @@ namespace Units
         Sprite Render { get; }
         
         bool IsSelected { get; }
+        Animator UnitAnimator { get; }
+
+        void ChangeAnimation(AnimationStates animationStates);
 
         void TakeDamage(int amount);
 
@@ -36,8 +39,12 @@ namespace Units
 
         void TakeDefence(int amount);
 
+        void SetSpeed(int amount);
+        
+        void SetMovementActionPoints(int amount);
+        
         void TakeAttack(int amount);
-
+        
         List<Vector2Int> GetAllReachableTiles();
         
         void MoveUnit(StartMoveCommand startMoveCommand);

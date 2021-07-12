@@ -79,7 +79,7 @@ namespace UI
 
         private void OnSelectedAbility(Ability ability)
         {
-            if (!IsPlayerTurn)
+            if (!IsPlayerTurn || !turnManager.IsAbilityPhase())
                 return;
             
             currentAbility = ability;
@@ -108,7 +108,7 @@ namespace UI
                 return;
             
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
-            commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
+            deselectedAbility.Invoke();
         }
         
         #endregion
@@ -129,7 +129,7 @@ namespace UI
             }
             
             // Highlight movement squares
-            if (IsPlayerTurn && !IsAbilitySelected)
+            if (IsPlayerTurn && !IsAbilitySelected && turnManager.IsMovementPhase())
             {
                 Vector2Int[] coordinates = selectedUnit.GetAllReachableTiles().ToArray();
                 gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Valid));
@@ -150,13 +150,18 @@ namespace UI
 
         private void TryMove(Vector2Int destination)
         {
-            if (!IsPlayerTurn || IsAbilitySelected)
+            if (!IsPlayerTurn || IsAbilitySelected || !turnManager.IsMovementPhase())
+            {
+                gridSpacesDeselected.Invoke();
+                unitDeselected.Invoke();
                 return;
+            }
 
             List<Vector2Int> inRange = selectedUnit.GetAllReachableTiles();
             if (!inRange.Contains(destination))
                 return;
-            
+            Debug.Log($"CURRENT PHASE INDEX: {turnManager.PhaseIndex} current movement index: {turnManager.MovementPhaseIndex}");
+
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
             unitDeselected.Invoke();
         }
