@@ -10,7 +10,7 @@ namespace Units.Commands
     /// </summary>
     public class StartMoveCommand : HistoricalCommand
     {
-        private GridManager gridManager;
+        private IUnit Unit;
         
         public Vector2Int TargetCoords { get; }
         
@@ -18,14 +18,14 @@ namespace Units.Commands
 
         public StartMoveCommand(IUnit unit, Vector2Int target) : base(unit)
         {
-            gridManager = ManagerLocator.Get<GridManager>();
+            Unit = unit;
             TargetCoords = target;
             StartCoords = unit.Coordinate;
         }
 
         public override void Execute()
         {
-            gridManager.MoveUnit(this);
+            Unit.MoveUnit(this);
         }
 
         public override void Undo()

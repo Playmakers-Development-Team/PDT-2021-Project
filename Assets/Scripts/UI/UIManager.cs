@@ -131,8 +131,8 @@ namespace UI
             // Highlight movement squares
             if (IsPlayerTurn && !IsAbilitySelected && turnManager.IsMovementPhase())
             {
-                List<Vector2Int> coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value);
-                gridSpacesSelected.Invoke(new GridSelection(coordinates.ToArray(), GridSelectionType.Valid));
+                Vector2Int[] coordinates = selectedUnit.GetAllReachableTiles().ToArray();
+                gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Valid));
             }
 
             // Highlight square under active IUnit
@@ -157,7 +157,7 @@ namespace UI
                 return;
             }
 
-            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value);
+            List<Vector2Int> inRange = selectedUnit.GetAllReachableTiles();
             if (!inRange.Contains(destination))
                 return;
             Debug.Log($"CURRENT PHASE INDEX: {turnManager.PhaseIndex} current movement index: {turnManager.MovementPhaseIndex}");

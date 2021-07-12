@@ -310,7 +310,6 @@ namespace Managers
             }
         }
 
-
         /// <summary>
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
@@ -352,24 +351,6 @@ namespace Managers
         {
             if (startIndex == endIndex)
                 return;
-            
-// TODO: Test
-            if (TurnManipulationPhaseIndex < PhaseIndex )
-            {
-                //TODO DELETE DEBUG
-                Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
-                return;
-            }
-
-            if (TurnManipulationPhaseIndex > PhaseIndex)
-                PhaseIndex = TurnManipulationPhaseIndex + 1;
-            else
-                PhaseIndex++;
-            
-            //TODO DELETE DEBUG AND RETURN STATEMENT (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
-            Debug.Log("Turn Manipulation started");
-            return;
-            
 
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
