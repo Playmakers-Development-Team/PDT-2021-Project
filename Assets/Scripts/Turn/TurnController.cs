@@ -1,8 +1,9 @@
+using Managers;
 using Units;
 using Units.Commands;
 using UnityEngine;
 
-namespace Managers
+namespace Turn
 {
     public class TurnController : MonoBehaviour
     {

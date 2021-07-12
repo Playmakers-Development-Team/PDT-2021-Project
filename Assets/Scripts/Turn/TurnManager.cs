@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Commands;
 using Commands;
+using Managers;
 using Units;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
 
-namespace Managers
+namespace Turn
 {
     public class TurnManager : Manager
     {
