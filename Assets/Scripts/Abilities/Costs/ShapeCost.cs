@@ -9,6 +9,7 @@ namespace Abilities.Costs
 {
     public enum ShapeFilter
     {
+        AnyTeam,
         SameTeam, 
         OtherTeam
     }
@@ -61,9 +62,9 @@ namespace Abilities.Costs
                 .Where(target => MatchesShapeFilter(unit, target))
                 .Where(target => cost.MeetsRequirements(unit, target));
 
-        private bool MatchesShapeFilter(IUnit unit, IUnit target) => 
-            shapeFilter == ShapeFilter.SameTeam 
-                ? unit.IsSameTeamWith(target) 
+        private bool MatchesShapeFilter(IUnit unit, IUnit target) =>
+            shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
+                ? unit.IsSameTeamWith(target)
                 : !unit.IsSameTeamWith(target);
     }
 }
