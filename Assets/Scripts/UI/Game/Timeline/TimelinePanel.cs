@@ -29,10 +29,7 @@ namespace UI
             UpdatePortraits();
         }
 
-        public void OnDelayButtonPressed()
-        {
-            Debug.Log("Delay button pressed...");
-        }
+        public void OnDelayButtonPressed() {}
 
         private void UpdatePortraits()
         {

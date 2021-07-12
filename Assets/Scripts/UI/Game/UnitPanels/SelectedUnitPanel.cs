@@ -2,7 +2,7 @@
 
 namespace UI
 {
-    public class SelectedUnitPanel : UnitPanel
+    internal class SelectedUnitPanel : UnitPanel
     {
         protected override void OnAwake()
         {

@@ -43,11 +43,5 @@ namespace UI
                 cards.Add(newCard);
             }
         }
-
-        internal void Disable()
-        {
-            foreach (AbilityCard card in cards)
-                card.Disable();
-        }
     }
 }

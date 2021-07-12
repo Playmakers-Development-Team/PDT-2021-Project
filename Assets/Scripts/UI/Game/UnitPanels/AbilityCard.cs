@@ -11,7 +11,9 @@ namespace UI
         [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI descriptionText;
-        
+
+        private bool clicked;
+
         
         internal Ability Ability { get; private set; }
         
@@ -28,7 +30,11 @@ namespace UI
 
         public void OnCardClicked()
         {
-            manager.selectedAbility.Invoke(Ability);
+            clicked = !clicked;
+            if (clicked)
+                manager.abilitySelected.Invoke(Ability);
+            else
+                manager.abilityDeselected.Invoke(Ability);
         }
 
         internal void Destroy()

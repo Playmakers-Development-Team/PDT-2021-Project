@@ -16,8 +16,8 @@ namespace UI
 
         private void Update()
         {
-            if (Keyboard.current.enterKey.wasPressedThisFrame)
-                manager.confirmedAbility.Invoke();
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+                manager.abilityConfirmed.Invoke();
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 manager.unitDeselected.Invoke();
@@ -31,7 +31,7 @@ namespace UI
                     return;
             
                 Vector2 worldPosition = worldRay.GetPoint(distance);
-                manager.rotatedAbility.Invoke(worldPosition);
+                manager.abilityRotated.Invoke(worldPosition);
             }
         }
     }

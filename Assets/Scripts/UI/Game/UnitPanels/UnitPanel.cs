@@ -8,8 +8,10 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public abstract class UnitPanel : Element
+    internal abstract class UnitPanel : Element
     {
+        // TODO: Optimise redrawing by implementing different value changes in UIManager...
+        
         [SerializeField] protected Canvas canvas;
         
         [SerializeField] protected TextMeshProUGUI nameText;
@@ -28,16 +30,17 @@ namespace UI
 
 
         protected IUnit selectedUnit;
-
-
+        
         protected override void OnAwake()
         {
-            manager.unitChanged.AddListener(OnUnitChanged);
+            // TODO: Listening may be able to be moved to sub-classes...
+            manager.turnChanged.AddListener(() => OnUnitChanged(selectedUnit));
         }
 
         private void OnDisable()
         {
-            manager.unitChanged.RemoveListener(OnUnitChanged);
+            // TODO: Once stat listeners are implemented, add RemoveListener calls...
+            
             Disabled();
         }
         
@@ -80,8 +83,18 @@ namespace UI
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
             TenetStatus[] effects = selectedUnit.TenetStatuses.ToArray();
 
-            for (int i = 0; i < Mathf.Min(cards.Length, effects.Length); i++)
+            for (int i = 0; i < cards.Length; i++)
+            {
+                if (i >= effects.Length)
+                {
+                    // TODO: Create Hide() and Show() methods in IStatCard rather than disabling GameObjects here...
+                    cards[i].gameObject.SetActive(false);
+                    continue;
+                }
+                
+                cards[i].gameObject.SetActive(true);
                 cards[i].Apply(effects[i].TenetType, effects[i].StackCount);
+            }
             
             // Ability cards
             abilityCards.Redraw(selectedUnit);

@@ -2,17 +2,18 @@
 
 namespace UI
 {
-    public class TimelineUnitPanel : UnitPanel
+    internal class TimelineUnitPanel : UnitPanel
     {
         private TurnManager turnManager;
         
         protected override void OnAwake()
         {
-            base.OnAwake();
-
+            // TODO: Ensure these are in the correct order...
             turnManager = ManagerLocator.Get<TurnManager>();
             
             manager.turnChanged.AddListener(OnTurnChanged);
+            
+            base.OnAwake();
         }
 
         protected override void Disabled()
