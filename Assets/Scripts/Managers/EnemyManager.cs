@@ -88,14 +88,7 @@ namespace Managers
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
 
             if (adjacentPlayerUnit != null)
-            {
-                // TODO: Will later need to be turned into an ability command when enemies have abilities
-                adjacentPlayerUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
-                await UniTask.Delay(1000); // just so that an enemies turn does not instantly occ
-
-                while (playerManager.WaitForDeath)
-                    await UniTask.Yield();
-            }
+                AttackUnit(enemyUnit, adjacentPlayerUnit);
             else if (playerManager.PlayerUnits.Count > 0)
             {
                 await MoveUnit(enemyUnit);
@@ -111,6 +104,21 @@ namespace Managers
             
             commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingUnit));
         }
+
+        // TODO: Will later need to be turned into an ability command when enemies have abilities
+        private async void AttackUnit(IUnit enemyUnit, IUnit targetUnit)
+        {
+            // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
+            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
+
+            targetUnit.TakeDamage((int) enemyUnit.Attack.Modify(1));
+                
+            // Wait so that an enemies turn is not over instantly
+            await UniTask.Delay(1000); 
+
+            while (playerManager.WaitForDeath)
+                await UniTask.Yield();
+        } 
 
         private UniTask MoveUnit(EnemyUnit enemyUnit)
         {
@@ -148,12 +156,7 @@ namespace Managers
                     {
                         // If there are still available movement points, do an attack
                         if (i + 1 < movementPoints)
-                        {
-                            IUnit playerUnit = (IUnit) adjacentGridObject;
-                            
-                            // TODO: Will later need to be turned into an ability command when enemies have abilities
-                            playerUnit.TakeDamage((int) unit.Attack.Value);
-                        }
+                            AttackUnit(unit, (IUnit) adjacentGridObject);
                         
                         return movementDir;
                     }

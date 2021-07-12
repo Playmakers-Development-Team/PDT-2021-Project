@@ -115,6 +115,15 @@ namespace Units
                 
                 ChangeAnimation(AnimationStates.Casting);
             });
+            
+            // TODO: Can be deleted once enemy abilities are implemented
+            commandManager.ListenCommand<EnemyAttack>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.Unit, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
 
             #endregion
 

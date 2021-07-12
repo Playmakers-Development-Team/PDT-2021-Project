@@ -394,20 +394,7 @@ namespace Managers
             int moveRange = unit.MovementActionPoints.Value;
             Vector2Int startingCoordinate = unit.Coordinate;
             Vector2Int currentCoordinate = startingCoordinate;
-            PlayerUnit playerUnit = null;
             
-            var manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
-                startingCoordinate,
-                newCoordinate
-            ));
-
-            if (unit is PlayerUnit)
-            {
-                playerUnit = (PlayerUnit) unit;
-                if (playerUnit.UnitAnimator != null)
-                    playerUnit.UnitAnimator.SetBool("moving", true);
-            }
-
             // Check if tile is unoccupied
             if (tileData.GridObjects.Count != 0)
             {
@@ -422,27 +409,26 @@ namespace Managers
                 unit.GetType() == typeof(PlayerUnit))
             {
                 // TODO: Provide feedback to the player
-                Debug.Log($"Target tile out of range. Manhattan distance of {manhattanDistance}");
+                
+                Debug.Log("Target tile out of range.");
                 return;
             }
-
+            
             // TODO: Tween based on cell path
             List<Vector2Int> movePath = GetCellPath(currentCoordinate, newCoordinate);
 
             for (int i = 1; i < movePath.Count; i++)
             {
-                // TODO: this stuff is temporary, should probably be done in a better way
-                if (playerUnit != null)
-                {
-                    if (movePath[i].x > currentCoordinate.x)
-                        playerUnit.ChangeAnimation(AnimationStates.Right);
-                    else if (movePath[i].y > currentCoordinate.y)
-                        playerUnit.ChangeAnimation(AnimationStates.Up);
-                    else if (movePath[i].x < currentCoordinate.x)
-                        playerUnit.ChangeAnimation(AnimationStates.Left);
-                    else if (movePath[i].y < currentCoordinate.y)
-                        playerUnit.ChangeAnimation(AnimationStates.Down);
-                }
+                unit.UnitAnimator.SetBool("moving", true);
+                
+                if (movePath[i].x > currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Right);
+                else if (movePath[i].y > currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Up);
+                else if (movePath[i].x < currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Left);
+                else if (movePath[i].y < currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Down);
 
                 await MovementTween(unit.gameObject, ConvertCoordinateToPosition(currentCoordinate),
                     ConvertCoordinateToPosition(movePath[i]), 1f);
@@ -451,11 +437,16 @@ namespace Managers
             }
 
             MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+
+            var manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
+            
             unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
-
-            if (playerUnit != null)
-                playerUnit.ChangeAnimation(AnimationStates.Idle);
-
+            
+            unit.ChangeAnimation(AnimationStates.Idle);
+            
             // Should be called when all the movement and tweening has been completed
             ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
         }
