@@ -28,10 +28,6 @@ namespace Managers
                 {
                     SetupTurnQueue();
                 });
-            
-          
-            
-            
         }
 
         /// <summary>

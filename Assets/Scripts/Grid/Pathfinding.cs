@@ -17,10 +17,7 @@ public static class Pathfinding
         string allegiance = "";
 
         if (tileDatas[startingCoordinate].GridObjects.Count > 0)
-        {
-            allegiance= tileDatas[startingCoordinate].GridObjects[0].tag;
-        }
-             
+            allegiance = tileDatas[startingCoordinate].GridObjects[0].tag;
 
         // Add the starting coordinate to the queue
         coordinateQueue.Enqueue(startingCoordinate);

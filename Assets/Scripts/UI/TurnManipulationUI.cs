@@ -34,7 +34,7 @@ namespace UI
                 GetComponent<TurnController>();
 
             ManagerLocator.Get<CommandManager>().
-                ListenCommand<RefreshTimelineCommand>(cmd =>
+                ListenCommand<TurnManipulatedCommand>(cmd =>
                 {
                     DestroyButtons();
                 });

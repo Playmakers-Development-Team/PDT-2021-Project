@@ -22,7 +22,6 @@ namespace UI
             turnManager = ManagerLocator.Get<TurnManager>();
             
             manager.turnChanged.AddListener(OnTurnChanged);
-            
         }
 
         private void OnTurnChanged()
