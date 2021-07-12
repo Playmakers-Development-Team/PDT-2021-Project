@@ -69,10 +69,11 @@ namespace Abilities.Editor
             // property should be null if the type does not have shape property
             if (property == null)
                 return "can't have shape!";
-            
+
             SerializedProperty shapeProperty = property.FindPropertyRelative("shape");
             SerializedProperty shapeFilterProperty = property.FindPropertyRelative("shapeFilter");
-            SerializedProperty countProperty = property.FindPropertyRelative("minCount");
+            SerializedProperty countProperty = property.FindPropertyRelative("count");
+            SerializedProperty countConstraintProperty = property.FindPropertyRelative("countConstraint");
             SerializedProperty costProperty = property.FindPropertyRelative("cost");
             SerializedProperty costTypeProperty = costProperty.FindPropertyRelative("costType");
 
@@ -81,17 +82,18 @@ namespace Abilities.Editor
             string shapeName = shapeProperty.objectReferenceValue != null
                 ? shapeProperty.objectReferenceValue.name
                 : "No Defined Shape";
-            string shapeFilterString = ((ShapeFilter) shapeFilterProperty.enumValueIndex)
-                .ToString();
+            string shapeFilterString =
+                ((ShapeFilter) shapeFilterProperty.enumValueIndex).ToString();
+            string countConstraintString = UppercaseCaseToReadable(
+                ((ShapeCountConstraint) countConstraintProperty.enumValueIndex).ToString());
             
-            // Put spaces between uppercase letters
-            shapeFilterString = Regex.Replace(shapeFilterString, @"([A-Z])", " $0")
-                .Substring(1);
-            
+            shapeFilterString = UppercaseCaseToReadable(shapeFilterString);
+
             string costName = costProperty.FindPropertyRelative("name").stringValue;
             string costString = costType != CostType.None ? $" where {costName}" : string.Empty;
 
-            return $"finds {countProperty.intValue} {shapeFilterString} in {shapeName}{costString}";
+            return $"finds {countConstraintString} {countProperty.intValue} {shapeFilterString} "
+                   + $"in {shapeName}{costString}";
         }
 
         private string GetTenetCostDisplayName(SerializedProperty property)
@@ -100,7 +102,8 @@ namespace Abilities.Editor
                 return "can't have tenet cost!";
 
             SerializedProperty countProperty = property.FindPropertyRelative("count");
-            SerializedProperty tenetCostTypeProperty = property.FindPropertyRelative("tenetCostType");
+            SerializedProperty tenetCostTypeProperty =
+                property.FindPropertyRelative("tenetCostType");
             SerializedProperty tenetTypeProperty = property.FindPropertyRelative("tenetType");
 
             string tenetCostTypeString =
@@ -122,6 +125,8 @@ namespace Abilities.Editor
 
             if (property.isExpanded)
             {
+                EditorGUI.indentLevel++;
+                
                 Rect affectTypePosition = new Rect(position.x, namePosition.y + namePosition.height,
                     position.width, EditorGUIUtility.singleLineHeight);
                 Rect costTypePosition = new Rect(position.x,
@@ -134,10 +139,13 @@ namespace Abilities.Editor
                 EditorGUI.PropertyField(costTypePosition, costTypeProperty);
 
                 float costY = costTypePosition.y + costTypePosition.height;
-                Rect costPosition = new Rect(position.x, costY, position.width, position.height - costY);
-                
+                Rect costPosition = new Rect(position.x, costY, position.width,
+                    position.height - costY);
+
                 if ((CostType) costTypeProperty.enumValueIndex != CostType.None)
                     OnChildCostGUI(costPosition, property, costTypeProperty);
+                
+                EditorGUI.indentLevel--;
             }
         }
 
@@ -148,7 +156,7 @@ namespace Abilities.Editor
 
             if (costProperty == null)
                 return;
-            
+
             Rect currentRect = new Rect(position.x, position.y, position.width, MiddleSpacing);
 
             foreach (SerializedProperty currentProperty in GetChildCostProperties(costProperty))
@@ -160,7 +168,8 @@ namespace Abilities.Editor
             }
         }
 
-        private IEnumerable<SerializedProperty> GetChildCostProperties(SerializedProperty costProperty)
+        private IEnumerable<SerializedProperty> GetChildCostProperties(
+        SerializedProperty costProperty)
         {
             SerializedProperty currentProperty = costProperty.Copy();
             bool hasNext = currentProperty.NextVisible(true);
@@ -199,11 +208,17 @@ namespace Abilities.Editor
                                + EditorGUIUtility.standardVerticalSpacing;
 
             float costHeight = costProperty != null
-                ? GetChildCostProperties(costProperty)
-                    .Sum(p => EditorGUI.GetPropertyHeight(p) + EditorGUIUtility.standardVerticalSpacing)
+                ? GetChildCostProperties(costProperty).Sum(p =>
+                    EditorGUI.GetPropertyHeight(p) + EditorGUIUtility.standardVerticalSpacing)
                 : 0f;
 
             return baseHeight + EditorGUIUtility.singleLineHeight + costHeight;
         }
+
+        /// <summary>
+        /// Put spaces between uppercase letters
+        /// </summary> 
+        private string UppercaseCaseToReadable(string s) =>
+            Regex.Replace(s, @"([A-Z])", " $0").Substring(1);
     }
 }
