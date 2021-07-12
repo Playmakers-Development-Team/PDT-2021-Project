@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using Background;
 using Background.Pipeline;
+using Managers;
 using UnityEngine;
 
-namespace Managers
+namespace Background
 {
     public class BackgroundManager : Manager
     {
@@ -14,7 +14,7 @@ namespace Managers
 
         public BackgroundCamera BackgroundCamera { get; set; }
 
-        public static Pipeline ActivePipeline { get; private set; }
+        public static Pipeline.Pipeline ActivePipeline { get; private set; }
 
 
         public static void MarkToRelease(RenderTexture texture)
@@ -59,7 +59,7 @@ namespace Managers
             Execute(Settings.GlobalPipeline, line, wash);
         }
 
-        public static void Execute(Pipeline pipeline, RenderTexture line, RenderTexture wash)
+        public static void Execute(Pipeline.Pipeline pipeline, RenderTexture line, RenderTexture wash)
         {
             featureTextures.Clear();
             

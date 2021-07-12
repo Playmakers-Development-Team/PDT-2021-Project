@@ -1,6 +1,6 @@
-using UnityEngine;
+using Managers;
 
-namespace Managers
+namespace Audio
 {
     public class AudioManager : Manager
     {

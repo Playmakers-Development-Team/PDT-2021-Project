@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Commands;
 using Cysharp.Threading.Tasks;
+using Managers;
 using UnityEngine;
 
-namespace Managers
+namespace Commands
 {
     public class CommandManager : Manager
     { 

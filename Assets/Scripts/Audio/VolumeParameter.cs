@@ -1,4 +1,4 @@
-namespace Utilities
+namespace Audio
 {
     public enum VolumeParameter
     {
