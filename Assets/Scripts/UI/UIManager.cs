@@ -108,6 +108,7 @@ namespace UI
                 return;
             
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
+            deselectedAbility.Invoke();
         }
         
         #endregion
