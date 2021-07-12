@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Managers;
 using Units;
 using UnityEngine;
-using Utility;
+using Utilities;
 using TileData = Grid.Tiles.TileData;
 
 namespace Grid

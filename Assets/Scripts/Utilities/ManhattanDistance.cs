@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Utility
+namespace Utilities
 {
     public static class ManhattanDistance
     {

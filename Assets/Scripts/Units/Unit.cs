@@ -15,8 +15,8 @@ using Units.Players;
 using Units.Stats;
 using Units.TenetStatuses;
 using UnityEngine;
-using Utility;
 using UnityEngine.InputSystem;
+using Utilities;
 using Random = UnityEngine.Random;
 
 namespace Units

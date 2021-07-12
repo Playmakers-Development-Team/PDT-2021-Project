@@ -9,7 +9,7 @@ using Units.Enemies;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Utility;
+using Utilities;
 using Random = UnityEngine.Random;
 using TileData = Grid.Tiles.TileData;
 
