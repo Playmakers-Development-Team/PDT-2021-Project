@@ -7816,26 +7816,6 @@ PrefabInstance:
       value: TurnController
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
-      propertyPath: isTimelineRandomised
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
-      propertyPath: turnPhases.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
-      propertyPath: turnPhases.Array.data[0]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
-      propertyPath: turnPhases.Array.data[1]
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
-      propertyPath: turnPhases.Array.data[2]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: premadeTimeline.Array.size
       value: 5
       objectReference: {fileID: 0}

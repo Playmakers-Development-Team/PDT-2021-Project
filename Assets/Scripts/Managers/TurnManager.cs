@@ -334,25 +334,6 @@ namespace Managers
             if (startIndex == endIndex)
                 return;
             
-            // if (!IsTurnManipulationPhase())
-            // {
-            //     // TODO: DELETE DEBUG
-            //     Debug.Log("Unable to do Turn Manipulation phase, it has been completed");
-            //     return;
-            // }
-            //
-            // if (TurnManipulationPhaseIndex > PhaseIndex)
-            //     PhaseIndex = TurnManipulationPhaseIndex + 1;
-            // else
-            //     PhaseIndex++;
-            
-            //TODO: DELETE DEBUG AND RETURN STATEMENT BEFORE MERGE (RETURN STATEMENT IS SO THE FOLLOWING CODE DOES NOT RUN)
-            Debug.Log("Turn Manipulation started");
-            
-            EndTurnManipulationPhase();
-            
-            return;
-            
             int difference = endIndex - startIndex;
             int increment = difference / Mathf.Abs(difference);
             int currentIndex = startIndex + increment;
@@ -364,6 +345,8 @@ namespace Managers
             }
 
             currentTurnQueue[startIndex] = currentTurnQueue[endIndex];
+            
+            EndTurnManipulationPhase();
         }
         
         #endregion
