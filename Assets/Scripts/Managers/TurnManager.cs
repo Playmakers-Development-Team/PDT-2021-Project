@@ -63,11 +63,13 @@ namespace Managers
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
             commandManager.ListenCommand<EndMoveCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
                 if (cmd.Unit is PlayerUnit)
                     EndMovementPhase();
             });
 
             commandManager.ListenCommand<AbilityCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
                 if (cmd.Unit is PlayerUnit)
                     EndAbilityPhase();
             });
@@ -379,7 +381,6 @@ namespace Managers
             
             return null;
         }
-        
 
         /// <summary>
         /// Returns the <c>EnemyUnit</c> whose turn it currently is. Returns null if no
@@ -406,22 +407,26 @@ namespace Managers
         private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
 
         /// <summary>
-        /// Checks if the current player unit can do the turn phase
+        /// Checks if the acting unit can do the turn phase.
         /// </summary>
-        /// <returns></returns>
         public bool IsTurnManipulationPhase() => PhaseIndex <= TurnManipulationPhaseIndex;
         
         /// <summary>
-        /// Checks if the current player unit can do the movement phase
+        /// Checks if the acting unit can do the movement phase.
         /// </summary>
-        /// <returns></returns>
         public bool IsMovementPhase() => PhaseIndex <= MovementPhaseIndex;
         
         /// <summary>
-        /// Checks if the current player unit can do the ability phase
+        /// Checks if the acting unit can do the ability phase.
         /// </summary>
-        /// <returns></returns>
         public bool IsAbilityPhase() => PhaseIndex <= AbilityPhaseIndex;
+        
+        /// <summary>
+        /// Checks if the acting unit has completed all turn phases.
+        /// </summary>
+        private bool LastPhaseHasEnded() => !IsAbilityPhase() &&
+                                            !IsMovementPhase() &&
+                                            !IsTurnManipulationPhase();
         
         /// <summary>
         /// Check if there are any player units in the queue.
@@ -465,24 +470,33 @@ namespace Managers
                 PhaseIndex = MovementPhaseIndex + 1;
             else
                 Debug.LogWarning("Movement was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
         }
-        
-        public void EndAbilityPhase()
+
+        private void EndAbilityPhase()
         {
             if (IsAbilityPhase())
                 PhaseIndex = AbilityPhaseIndex + 1;
             else
                 Debug.LogWarning("Ability was done out of phase.");
+            
+            if (LastPhaseHasEnded())
+                NextTurn();
         }
-        
-        public void EndTurnManipulationPhase()
+
+        private void EndTurnManipulationPhase()
         {
             if (IsTurnManipulationPhase())
                 PhaseIndex = TurnManipulationPhaseIndex + 1;
             else
                 Debug.LogWarning("Turn manipulation was done out of phase.");
+
+            if (LastPhaseHasEnded())
+                NextTurn();
         }
-        
+
         #endregion
     }
 }

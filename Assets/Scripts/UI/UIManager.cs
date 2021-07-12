@@ -108,7 +108,6 @@ namespace UI
                 return;
             
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
-            commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
         }
         
         #endregion

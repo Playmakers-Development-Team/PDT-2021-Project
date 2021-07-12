@@ -37,10 +37,13 @@ namespace Managers
         }
 
         //TODO DELETE THIS FUNCTION BEFORE MERGE
-        private void OnValidate()
+        private void Update()
         {
             if (maniplulateTurn)
-                turnManager.ShiftTurnQueue(1,3);
+            {
+                maniplulateTurn = false;
+                turnManager.ShiftTurnQueue(1, 3);
+            }
         }
 
         /// <summary>
