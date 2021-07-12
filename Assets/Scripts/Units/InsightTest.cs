@@ -1,9 +1,13 @@
+using System;
 using Managers;
 using TMPro;
+using Units.Players;
 using UnityEngine;
 
 namespace Units
 {
+    // TODO delete this
+    [Obsolete]
     public class InsightTest : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI text;

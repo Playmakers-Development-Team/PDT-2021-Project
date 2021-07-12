@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GridObjects;
-using StatusEffects;
 using Abilities;
+using Abilities.Commands;
+using Commands;
 using Cysharp.Threading.Tasks;
+using Grid;
+using Grid.GridObjects;
+using Grid.Tiles;
 using Managers;
-using Tiles;
 using TMPro;
 using Units.Commands;
+using Units.Enemies;
+using Units.Players;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine;
-using Utility;
-using UnityEngine.InputSystem;
+using Utilities;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -80,7 +85,6 @@ namespace Units
 
         private AnimationStates unitAnimationState;
         
-        private TurnManager turnManager;
         private PlayerManager playerManager;
         private CommandManager commandManager;
 
@@ -91,7 +95,6 @@ namespace Units
             base.Start();
             #region GetManagers
 
-            turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
             
@@ -113,7 +116,7 @@ namespace Units
             
             commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
-                if (!ReferenceEquals(cmd.Unit, this))
+                if (!ReferenceEquals(cmd.AbilityUser, this))
                     return;
                 
                 ChangeAnimation(AnimationStates.Casting);
@@ -149,9 +152,18 @@ namespace Units
         {
             Attack.Adder += amount;
             commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
-        } 
+        }
 
         public void TakeDamage(int amount)
+        {
+            // Attack modifiers should only work when the effect actually intends to do damage
+            if (amount <= 0)
+                return;
+            
+            TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+        }
+
+        public void TakeDamageWithoutModifiers(int amount)
         {
             commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             int damageTaken = Health.TakeDamage(amount);
