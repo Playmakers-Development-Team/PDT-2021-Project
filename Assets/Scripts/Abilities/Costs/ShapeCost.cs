@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Abilities.Shapes;
 using UnityEngine;
+using Utilities;
 
 namespace Abilities.Costs
 {
@@ -37,9 +38,10 @@ namespace Abilities.Costs
             {
                 string costString = cost.CostType != CostType.None ? $" where {cost}" : string.Empty;
                 string shapeName = shape != null ? shape.name : "no defined shape";
+                string countConstraintString = StringUtility.UppercaseToReadable(countConstraint);
+                string shapeFilterString = StringUtility.UppercaseToReadable(shapeFilter);
                 
-                return $"finds {UppercaseCaseToReadable(countConstraint)} {count} " 
-                       + $"{UppercaseCaseToReadable(shapeFilter)} in {shapeName}{costString}";
+                return $"finds {countConstraintString} {count} {shapeFilterString} in {shapeName}{costString}";
             }
         }
 
@@ -78,11 +80,5 @@ namespace Abilities.Costs
             shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
                 ? unit.IsSameTeamWith(target)
                 : !unit.IsSameTeamWith(target);
-        
-        /// <summary>
-        /// Put spaces between uppercase letters
-        /// </summary> 
-        private string UppercaseCaseToReadable(object o) =>
-            Regex.Replace(o.ToString(), @"([A-Z])", " $0").Substring(1);
     }
 }
