@@ -6,7 +6,9 @@ TagManager:
   tags:
   - PlayerUnit
   - EnemyUnit
-  - DecalSpawnPosition
+  - LevelTilemap
+  - UnitPalette
+  - TurnController
   layers:
   - Default
   - TransparentFX
@@ -20,7 +22,7 @@ TagManager:
   - Line
   - Paper
   - Preview
-  - 
+  - Unit
   - 
   - 
   - 
@@ -52,4 +54,7 @@ TagManager:
     locked: 0
   - name: Text
     uniqueID: 3215308255
+    locked: 0
+  - name: UI
+    uniqueID: 3525006975
     locked: 0

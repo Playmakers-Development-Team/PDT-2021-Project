@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
-using StatusEffects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Abilities.Costs;
+using TenetStatuses;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +15,7 @@ namespace Abilities.Editor
         {
             EditorGUI.BeginChangeCheck();
             EditorGUI.PropertyField(position, property, label, true);
+            
             if (EditorGUI.EndChangeCheck())
             {
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
@@ -22,7 +26,12 @@ namespace Abilities.Editor
                 SerializedProperty provideCountProperty = provideProperty.FindPropertyRelative("stackCount");
                 
                 SerializedProperty nameProperty = property.FindPropertyRelative("name");
-                SerializedProperty costsProperty = property.FindPropertyRelative("costs");
+                SerializedProperty bonusProperty = property.FindPropertyRelative("bonus");
+                SerializedProperty tenetBonusesProperty = bonusProperty.FindPropertyRelative("tenetBonuses");
+                SerializedProperty keywordsProperty = property.FindPropertyRelative("keywords");
+                SerializedProperty costProperty = property.FindPropertyRelative("cost");
+                SerializedProperty tenetCostsProperty =
+                    costProperty.FindPropertyRelative("tenetCosts");
 
                 List<string> valueNameList = new List<string>();
                 nameProperty.stringValue = string.Empty;
@@ -32,12 +41,10 @@ namespace Abilities.Editor
                                     || attackProperty.intValue != 0 
                                     || provideCountProperty.intValue != 0;
                 
-                if (costsProperty.arraySize == 0)
-                {
+                if (tenetCostsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
                     nameProperty.stringValue += "Default, ";
-                }
 
-                // Damage and defence
+                    // Damage and defence
                 if (hasValues)
                 {
                     if (damageProperty.intValue != 0)
@@ -54,59 +61,104 @@ namespace Abilities.Editor
                 }
                 
                 if (!hasValues)
-                {
                     valueNameList.Add("Nothing");
-                }
 
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
+
                 
-                if (costsProperty.arraySize != 0)
-                {
-                    nameProperty.stringValue += " ";
-                    
-                    for (int i = 0; i < costsProperty.arraySize; i++)
-                    {
-                        if (i > 0)
-                            nameProperty.stringValue += ", ";
-                        
-                        SerializedProperty costProperty = costsProperty.GetArrayElementAtIndex(i);
-                        string affectString = ((AffectType) costProperty.FindPropertyRelative("affectType").enumValueIndex).ToString();
-                        string costName = $"{affectString} ";
+                if (tenetBonusesProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessTenetBonusesDisplayName(tenetBonusesProperty);
+                
+                if (tenetCostsProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessTenetCostsDisplayName(tenetCostsProperty);
 
-                        // Cost type
-                        switch (costProperty.FindPropertyRelative("costType").enumValueIndex)
-                        {
-                            case 0:
-                                nameProperty.stringValue += "with ";
-                                costName += "With ";
-                                break;
-                            case 1:
-                                nameProperty.stringValue += "per ";
-                                costName += "Per ";
-                                break;
-                            case 2:
-                                nameProperty.stringValue += "spend ";
-                                costName += "Spend ";
-                                break;
-                        }
-
-                        // Tenet
-                        string tenet = ((TenetType) costProperty.FindPropertyRelative("tenetType").enumValueIndex).ToString();
-                        nameProperty.stringValue += tenet;
-                        costName += tenet;
-
-                        costProperty.FindPropertyRelative("name").stringValue = costName;
-                        costProperty.serializedObject.ApplyModifiedProperties();
-                    }
-                }
+                if (keywordsProperty.arraySize != 0)
+                    nameProperty.stringValue += " " + ProcessKeywordsDisplayName(keywordsProperty);
 
                 property.serializedObject.ApplyModifiedProperties();
             }
         }
 
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        private string ProcessKeywordsDisplayName(SerializedProperty keywordsProperty)
         {
-            return EditorGUI.GetPropertyHeight(property);
+            if (keywordsProperty.arraySize > 0)
+            {
+                List<string> keywordNameList = new List<string>();
+
+                for (int i = 0; i < keywordsProperty.arraySize; i++)
+                {
+                    SerializedProperty keywordProperty = keywordsProperty.GetArrayElementAtIndex(i);
+                    keywordNameList.Add(keywordProperty.objectReferenceValue.name);
+                }
+
+                return $"WITH {string.Join(" and ", keywordNameList)}";
+            }
+            
+            return string.Empty;
         }
+
+        private string ProcessTenetBonusesDisplayName(SerializedProperty tenetBonusesProperty)
+        {
+            List<string> tenetBonusStringList = new List<string>();
+
+            for (int i = 0; i < tenetBonusesProperty.arraySize; i++)
+            {
+                SerializedProperty tenetBonusProperty = tenetBonusesProperty.GetArrayElementAtIndex(i);
+                
+                SerializedProperty affectTypeProperty = tenetBonusProperty
+                    .FindPropertyRelative("affectType");
+                SerializedProperty tenetTypeProperty = tenetBonusProperty
+                    .FindPropertyRelative("tenetType");
+                
+                string affectString = ((AffectType) affectTypeProperty.enumValueIndex)
+                    .ToString();
+                string tenetTypeString = ((TenetType) tenetTypeProperty.enumValueIndex).ToString();
+
+                string tenetBonusString = $"{affectString} {tenetTypeString}";
+                tenetBonusProperty.FindPropertyRelative("name").stringValue = tenetBonusString;
+                tenetBonusStringList.Add(tenetBonusString);
+            }
+            
+            return $"BONUSED BY {string.Join(" and ", tenetBonusStringList)}";
+        }
+
+        private string ProcessTenetCostsDisplayName(SerializedProperty tenetCostsProperty)
+        {
+            if (tenetCostsProperty.arraySize > 0)
+            {
+                List<string> tenetCostStringList = new List<string>();
+                    
+                for (int i = 0; i < tenetCostsProperty.arraySize; i++)
+                {
+                    SerializedProperty tenetCostProperty = tenetCostsProperty.GetArrayElementAtIndex(i);
+                    
+                    SerializedProperty affectTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("affectType");
+                    SerializedProperty tenetCostTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("tenetCostType");
+                    SerializedProperty tenetTypeProperty = tenetCostProperty
+                        .FindPropertyRelative("tenetType");
+
+                    string affectString = ((AffectType) affectTypeProperty.enumValueIndex)
+                        .ToString();
+                    string tenetCostTypeString = ((TenetCostType) tenetCostTypeProperty.enumValueIndex)
+                        .ToString();
+                    string tenetString = ((TenetType) tenetTypeProperty.enumValueIndex)
+                        .ToString();
+                    
+                    string costName = $"{affectString} {tenetCostTypeString} {tenetString}";
+                    tenetCostProperty.FindPropertyRelative("name").stringValue = costName;
+                    tenetCostStringList.Add(costName);
+                    tenetCostProperty.serializedObject.ApplyModifiedProperties();
+                }
+
+                return $"IF {string.Join(" and ", tenetCostStringList)}";
+            }
+
+            return string.Empty;
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => 
+            EditorGUI.GetPropertyHeight(property);
     }
 }

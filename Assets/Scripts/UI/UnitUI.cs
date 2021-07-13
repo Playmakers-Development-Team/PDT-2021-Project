@@ -1,71 +1,57 @@
-using System;
-using System.Linq;
+﻿using System;
 using Commands;
+using Cysharp.Threading.Tasks;
+using Grid.GridObjects;
 using Managers;
-using StatusEffects;
 using TMPro;
 using Units;
 using Units.Commands;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
-    public class UnitUI : MonoBehaviour
+    public class UnitUI : Element
     {
-        private IUnit selectedUnit;
-        [SerializeField] private Image icon;
-        [SerializeField] private TextMeshProUGUI nameText;
-        [SerializeField] private TextMeshProUGUI health;
-        [SerializeField] private TextMeshProUGUI movementPointsText;
-        [SerializeField] private TextMeshProUGUI attack;
-        [SerializeField] private TextMeshProUGUI defence;
-        [SerializeField] private TextMeshProUGUI speed;
-        [SerializeField] private TextMeshProUGUI tenetUI;
+        [SerializeField] private GridObject unitGridObject;
+        [SerializeField] private TextMeshProUGUI damageText;
+        [SerializeField] private float damageTextDuration;
 
-        private void Start()
+        private IUnit unit;
+
+
+        protected override void OnAwake()
         {
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Pride, 3);
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Passion, 3);
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Sorrow, 3);
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Humility, 3);
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Joy, 3);
-            // selectedPlayerUnit.AddOrReplaceTenetStatusEffect(TenetType.Apathy, 3);
             
-            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            unit = unitGridObject as IUnit;
             
-            commandManager.ListenCommand<UnitSelectedCommand>(cmd => SelectUnit());
-            commandManager.ListenCommand<AbilityCommand>(cmd => SelectUnit());
-            commandManager.ListenCommand<UnitDeselectedCommand>(cmd => DeselectUnit());
-        }
-        
-        public void SelectUnit()
-        {
-            selectedUnit = ManagerLocator.Get<UnitManager>().SelectedUnit;
+            if (unit == null)
+                DestroyImmediate(gameObject);
             
-            if (selectedUnit != null)
-                UpdateUnitUI();
-            
-            gameObject.SetActive(selectedUnit != null);
+            ManagerLocator.Get<CommandManager>().ListenCommand((TakeTotalDamageCommand cmd) => OnTakeDamage(cmd));
         }
 
-        public void DeselectUnit() => gameObject.SetActive(false);
-        
-        public void UpdateUnitUI()
+
+        public void OnClick() => manager.unitSelected.Invoke(unit);
+
+        private async void OnTakeDamage(TakeTotalDamageCommand cmd)
         {
-            // TODO: Icon setup for realsies
-            //icon.sprite = selectedPlayerUnit.sprite;
+            if (cmd.Unit != unit)
+                return;
             
-            nameText.text = selectedUnit.Name;
-            health.text = "Health: " + selectedUnit.Health.HealthPoints.Value;
-            movementPointsText.text = "MP: " + selectedUnit.MovementActionPoints.Value;
-            attack.text = "Attack: " + selectedUnit.Attack.Value;
-            // TODO: Consider changing the way this works in the game logic rather than just in the UI
-            defence.text = "Defence: " + selectedUnit.Health.Defence.Value * -1;
-            speed.text = "Speed: " + selectedUnit.Speed.Value;
-            
-            string tenetText = String.Join("\n",selectedUnit.TenetStatusEffects.Select(t => t.TenetType+": " + t.StackCount) );
-            tenetUI.text = tenetText;
+            await DamageTextDisplay(cmd.Value);
+            DamageTextHide();
+        }
+
+        private UniTask DamageTextDisplay(int damage)
+        {
+            damageText.text = damage.ToString();
+            damageText.enabled = true;
+            return UniTask.Delay((int) damageTextDuration * 1000);
+        }
+
+        private void DamageTextHide()
+        {
+            damageText.enabled = false;
         }
     }
 }

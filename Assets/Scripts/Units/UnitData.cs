@@ -2,31 +2,89 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
-using GridObjects;
-using StatusEffects;
+using Units.Stats;
+using TenetStatuses;
+using UnityEngine.Serialization;
 
 namespace Units
 {
     public abstract class UnitData
     {
-        public string name;
-        public TenetType tenet;
-        public ValueStat healthPoints;
-        public ValueStat movementActionPoints;
-        public ValueStat speed;
-        public ModifierStat dealDamageModifier;
-        public ModifierStat takeDamageModifier;
-        public ModifierStat takeKnockbackModifier;
-        public List<Ability> abilities;
+        [SerializeField] private string name;
+        [SerializeField] private TenetType tenet;
+        [SerializeField] private ValueStat healthPoints;
+        [FormerlySerializedAs("movementActionPoints")]
+        [SerializeField] private ValueStat movementPoints;
+        [SerializeField] private ValueStat speed;
+        [FormerlySerializedAs("dealDamageModifier")]
+        [SerializeField] private ModifierStat attack;
+        [FormerlySerializedAs("takeDamageModifier")]
+        [SerializeField] private ModifierStat defence;
+        [SerializeField] private ModifierStat takeKnockbackModifier;
+        [SerializeField] private List<Ability> abilities;
         
+        // TODO: Change these to be serialized auto properties 
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+
+        public TenetType Tenet
+        {
+            get => tenet;
+            set => tenet = value;
+        } 
+
+        public ValueStat HealthPoints
+        {
+            get => healthPoints;
+            set => healthPoints = value;
+        } 
+        public ValueStat MovementPoints
+        {
+            get => movementPoints;
+            set => movementPoints = value;
+        }
+
+        public ValueStat Speed
+        {
+            get => speed;
+            set => speed = value;
+        } 
+    
+        public ModifierStat Attack
+        {
+            get => attack;
+            set => attack = value;
+        }
+
+        public ModifierStat Defence
+        {
+            get => defence;
+            set => defence = value;
+        }
+
+        public ModifierStat TakeKnockbackModifier
+        {
+            get => takeKnockbackModifier;
+            set => takeKnockbackModifier = value;
+        }
+
+        public List<Ability> Abilities
+        {
+            get => abilities;
+            set => abilities = value;
+        }
+
         public void Initialise()
         {
-            healthPoints.Reset();
-            movementActionPoints.Reset();
-            speed.Reset();
-            dealDamageModifier.Reset();
-            takeDamageModifier.Reset();
-            takeKnockbackModifier.Reset();
+            HealthPoints.Reset();
+            MovementPoints.Reset();
+            Speed.Reset();
+            Attack.Reset();
+            Defence.Reset();
+            TakeKnockbackModifier.Reset();
         }
     }
 }

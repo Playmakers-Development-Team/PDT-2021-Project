@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Abilities;
-using GridObjects;
+using Grid.GridObjects;
 using Managers;
 using Units;
+using Units.Commands;
 using UnityEditor;
 using UnityEngine;
 
@@ -52,6 +53,9 @@ namespace Commands.Editor
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void RegisterCommandManager()
         {
+            if (Instance == null)
+                return;
+            
             Instance.currentCommandManager = ManagerLocator.Get<CommandManager>();
             Instance.currentCommandManager.OnCommandExecuteEvent += OnCommandExecuted;
         }
@@ -149,11 +153,11 @@ namespace Commands.Editor
                         }
                         else if (typeof(Ability).IsAssignableFrom(parameterType))
                         {
-                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(Ability));
+                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(Ability), false);
                         }
                         else if (typeof(UnityEngine.Object).IsAssignableFrom(parameterType))
                         {
-                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(ScriptableObject));
+                            parameterValues[i] = EditorGUILayout.ObjectField(parameterName, (UnityEngine.Object) parameterValues[i], typeof(ScriptableObject), true);
                         }
                         else if (typeof(IUnit).IsAssignableFrom(parameterType))
                         {
