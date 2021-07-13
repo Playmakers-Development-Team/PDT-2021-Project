@@ -8,25 +8,12 @@ using Utilities;
 
 namespace Abilities.Costs
 {
-    public enum ShapeFilter
-    {
-        AnyTeam,
-        SameTeam, 
-        OtherTeam
-    }
-
-    public enum ShapeCountConstraint
-    {
-        AtLeast,
-        AtMost,
-    }
-
     [Serializable]
     public class ShapeCost : ICost
     {
         [SerializeField] private BasicShapeData shape;
-        [SerializeField, Min(0)] private int count;
         [SerializeField] private ShapeCountConstraint countConstraint;
+        [SerializeField, Min(0)] private int count;
         [SerializeField] private ShapeFilter shapeFilter;
         [SerializeField] private CompositeCost cost;
 
