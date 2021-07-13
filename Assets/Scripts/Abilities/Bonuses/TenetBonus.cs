@@ -1,6 +1,5 @@
 using System;
-using StatusEffects;
-using Units;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities.Bonuses
@@ -12,7 +11,7 @@ namespace Abilities.Bonuses
 
         public string DisplayName => tenetType.ToString();
         
-        public int CalculateBonusMultiplier(IUnit unit) =>
+        public int CalculateBonusMultiplier(IAbilityUser unit) =>
             unit.GetTenetStatusCount(tenetType);
     }
 }

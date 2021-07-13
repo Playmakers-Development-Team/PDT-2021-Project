@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Bonuses;
 using Abilities.Costs;
-using StatusEffects;
-using Units;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities
@@ -35,7 +34,7 @@ namespace Abilities
 
         public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
 
-        public bool ProcessTenet(IUnit user, IUnit target)
+        public bool ProcessTenet(IAbilityUser user, IAbilityUser target)
         {
             if (CanBeUsedBy(user, target))
             {
@@ -47,12 +46,12 @@ namespace Abilities
             return false;
         }
         
-        public bool CanBeUsedBy(IUnit user, IUnit target)
+        public bool CanBeUsedBy(IAbilityUser user, IAbilityUser target)
         {
             return AllCosts.All(c => c.MeetsRequirements(user, target));
         }
 
-        private void ProvideTenet(IUnit unit)
+        private void ProvideTenet(IAbilityUser unit)
         {
             unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
 
@@ -63,13 +62,13 @@ namespace Abilities
             }
         }
 
-        private void ApplyCosts(IUnit user, IUnit target)
+        private void ApplyCosts(IAbilityUser user, IAbilityUser target)
         {
             foreach (CompositeCost compositeCost in AllCosts)
                 compositeCost.ApplyCost(user, target);
         }
 
-        public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
+        public int CalculateValue(IAbilityUser user, IAbilityUser target, EffectValueType valueType)
         {
             int value = valueType switch
             {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GridObjects;
+using Grid.GridObjects;
 using UnityEngine;
 
 namespace Abilities.Shapes

@@ -1,6 +1,5 @@
 using System;
-using StatusEffects;
-using Units;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -23,7 +22,7 @@ namespace Abilities.Costs
 
         public string DisplayName => $"{tenetCostType} {count} {tenetType}";
 
-        public void ApplyCost(IUnit unit)
+        public void ApplyCost(IAbilityUser unit)
         {
             switch (TenetCostType)
             {
@@ -36,7 +35,7 @@ namespace Abilities.Costs
             }
         }
         
-        public bool MeetsRequirements(IUnit unit) => unit.GetTenetStatusCount(tenetType) >= count;
+        public bool MeetsRequirements(IAbilityUser unit) => unit.GetTenetStatusCount(tenetType) >= count;
 
         public void OnBeforeSerialize()
         {

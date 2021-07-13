@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Units;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -31,15 +30,15 @@ namespace Abilities.Costs
                 $"Unsupported {nameof(CostType)} {costType} for {nameof(CompositeCost)}")
         };
 
-        public void ApplyCost(IUnit user, IUnit target)
+        public void ApplyCost(IAbilityUser user, IAbilityUser target)
         {
             if (costType == CostType.None)
                 return;
             
-            ChildCost.ApplyCost(GetAffectedUnit(user, target));
+            ChildCost.ApplyCost(GetAffectedUser(user, target));
         }
 
-        public bool MeetsRequirements(IUnit user, IUnit target) =>
-            costType == CostType.None || ChildCost.MeetsRequirements(GetAffectedUnit(user, target));
+        public bool MeetsRequirements(IAbilityUser user, IAbilityUser target) =>
+            costType == CostType.None || ChildCost.MeetsRequirements(GetAffectedUser(user, target));
     }
 }

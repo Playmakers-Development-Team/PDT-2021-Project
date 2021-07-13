@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Units;
 using UnityEngine;
 
 namespace Abilities.Bonuses
@@ -31,9 +30,9 @@ namespace Abilities.Bonuses
         /// Calculates the multiplier based on all bonuses.
         /// If there aren't any just return a multiplier of 1.
         /// </summary>
-        public int CalculateBonusMultiplier(IUnit user, IUnit target) =>
+        public int CalculateBonusMultiplier(IAbilityUser user, IAbilityUser target) =>
             bonusType != BonusType.None
-                ? ChildBonus.CalculateBonusMultiplier(GetAffectedUnit(user, target))
+                ? ChildBonus.CalculateBonusMultiplier(GetAffectedUser(user, target))
                 : 0;
     }
 }

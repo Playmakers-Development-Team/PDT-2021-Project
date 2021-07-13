@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GridObjects;
-using StatusEffects;
 using Abilities;
+using Abilities.Commands;
+using Commands;
 using Cysharp.Threading.Tasks;
+using Grid;
+using Grid.GridObjects;
+using Grid.Tiles;
 using Managers;
 using TMPro;
 using Units.Commands;
+using Units.Enemies;
+using Units.Players;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine;
+using Utilities;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -77,7 +85,6 @@ namespace Units
 
         private AnimationStates unitAnimationState;
         
-        private TurnManager turnManager;
         private PlayerManager playerManager;
         private CommandManager commandManager;
 
@@ -88,7 +95,6 @@ namespace Units
             base.Start();
             #region GetManagers
 
-            turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
             
@@ -109,6 +115,15 @@ namespace Units
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
             
             commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                if (!ReferenceEquals(cmd.AbilityUser, this))
+                    return;
+                
+                ChangeAnimation(AnimationStates.Casting);
+            });
+            
+            // TODO: Can be deleted once enemy abilities are implemented
+            commandManager.ListenCommand<EnemyAttack>(cmd =>
             {
                 if (!ReferenceEquals(cmd.Unit, this))
                     return;
@@ -137,9 +152,18 @@ namespace Units
         {
             Attack.Adder += amount;
             commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
-        } 
+        }
 
         public void TakeDamage(int amount)
+        {
+            // Attack modifiers should only work when the effect actually intends to do damage
+            if (amount <= 0)
+                return;
+            
+            TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+        }
+
+        public void TakeDamageWithoutModifiers(int amount)
         {
             commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             int damageTaken = Health.TakeDamage(amount);
@@ -160,8 +184,10 @@ namespace Units
         
         public void SetMovementActionPoints(int amount)
         {
-            MovementActionPoints.Value = amount;
-            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, amount));
+            // Clamp it here, movement points cannot be less than 0
+            int clampedAmount = Mathf.Max(0, amount);
+            MovementActionPoints.Value = clampedAmount;
+            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, clampedAmount));
         }
         
         #endregion
@@ -177,7 +203,9 @@ namespace Units
 
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
+            {
                 foundNode.Value += status;
+            }
             else
             {
                 // When we are already utilizing all the slots
@@ -290,7 +318,6 @@ namespace Units
         {
             playerManager.WaitForDeath = true;
             Debug.Log($"Unit Killed: {name} : {Coordinate}");
-            gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
 
@@ -386,10 +413,144 @@ namespace Units
 
         #region Utility
 
-        public abstract bool IsSameTeamWith(IUnit other);
+        public abstract bool IsSameTeamWith(IAbilityUser other);
 
         #endregion
         
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position
+        /// within the given range.
+        /// </summary>
+        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
+        /// <param name="range">The range from the starting tile using manhattan distance.</param>
+        /// <returns>A list of the coordinates of reachable tiles.</returns>
+        public List<Vector2Int> GetAllReachableTiles()
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            int range = (int) MovementActionPoints.Value;
+            
+            List<Vector2Int> reachable = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            string allegiance = "";
+
+            if (gridManager.tileDatas[startingCoordinate].GridObjects.Count > 0)
+            {
+                allegiance= gridManager.tileDatas[startingCoordinate].GridObjects[0].tag;
+            }
+            
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                if (distance > range)
+                {
+                    break;
+                }
+
+                // Add neighbours of node to queue
+                Pathfinding.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+
+                if (gridManager.GetGridObjectsByCoordinate(currentNode).Count == 0)
+                    reachable.Add(currentNode);
+
+                coordinateQueue.Dequeue();
+            }
+
+            return reachable;
+        }
+
+        public async void MoveUnit(StartMoveCommand moveCommand)
+        {
+            IUnit unit = this;
+            Vector2Int newCoordinate = moveCommand.TargetCoords;
+
+            TileData tileData = gridManager.GetTileDataByCoordinate(newCoordinate);
+            
+            if (tileData is null)
+            {
+                throw new Exception($"No tile data at coordinate {newCoordinate}. " +
+                                    "Failed to move unit");
+            }
+            
+            Vector2Int startingCoordinate = unit.Coordinate;
+            Vector2Int currentCoordinate = startingCoordinate;
+
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+
+            // Check if tile is in range
+            if (!GetAllReachableTiles().Contains(newCoordinate) 
+                && unit.GetType() == typeof(PlayerUnit))
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
+                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
+                              newCoordinate));
+
+                Debug.Log("Target tile out of range.");
+                return;
+            }
+
+            // TODO: Tween based on cell path
+            List<Vector2Int> movePath = Pathfinding.GetCellPath(currentCoordinate, newCoordinate, unit);
+
+            for (int i = 1; i < movePath.Count; i++)
+            {
+                unit.UnitAnimator.SetBool("moving", true);
+            
+                if (movePath[i].x > currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Right);
+                else if (movePath[i].y > currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Up);
+                else if (movePath[i].x < currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Left);
+                else if (movePath[i].y < currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Down);
+
+                await gridManager.MovementTween(unit.gameObject, 
+                    gridManager.ConvertCoordinateToPosition(currentCoordinate),
+                    gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
+                unit.gameObject.transform.position =
+                    gridManager.ConvertCoordinateToPosition(movePath[i]);
+                currentCoordinate = movePath[i];
+            }
+            
+            int manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
+            
+            gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
+            unit.ChangeAnimation(AnimationStates.Idle);
+
+            /*Debug.Log(Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));*/
+            
+            // Should be called when all the movement and tweening has been completed
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
+        }
+
         #region RandomizeNames
         
         public string RandomizeName()

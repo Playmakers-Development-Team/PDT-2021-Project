@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using GridObjects;
 using Abilities;
-using StatusEffects;
+using Units.Commands;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Units
 {
-    public interface IUnit : IDamageable, IKnockbackable
+    public interface IUnit : IDamageable, IKnockbackable, IAbilityUser
     {
         GameObject gameObject { get; }
         Transform transform { get; }
@@ -19,50 +20,32 @@ namespace Units
         public ModifierStat Attack { get; }
         public List<Ability> Abilities { get; }
 
-        public Vector2Int Coordinate { get; }
-        
-        [Obsolete("Use TenetStatuses instead")]
-        ICollection<TenetStatus> TenetStatusEffects { get; }
-        ICollection<TenetStatus> TenetStatuses { get; }
-        
+        public new Vector2Int Coordinate { get; }
+
         Sprite Render { get; }
         
         bool IsSelected { get; }
+        Animator UnitAnimator { get; }
 
-        void TakeDamage(int amount);
+        void ChangeAnimation(AnimationStates animationStates);
 
-        void TakeKnockback(int amount);
+        void TakeDamageWithoutModifiers(int amount);
 
-        void TakeDefence(int amount);
+        new void TakeDamage(int amount);
+
+        new void TakeKnockback(int amount);
+
+        new void TakeDefence(int amount);
 
         void SetSpeed(int amount);
         
         void SetMovementActionPoints(int amount);
         
-        void TakeAttack(int amount);
-
-        void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1);
-
-        bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue);
-
-        void ClearAllTenetStatus();
-
-        [Obsolete("Use GetTenetStatusCount instead")]
-        public int GetTenetStatusEffectCount(TenetType tenetType);
+        new void TakeAttack(int amount);
         
-        public int GetTenetStatusCount(TenetType tenetType);
-
-        [Obsolete("Use HasTenetStatus instead")]
-        bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
+        List<Vector2Int> GetAllReachableTiles();
         
-        bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1);
-
-        [Obsolete("Use TryGetTenetStatus instead")]
-        bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus);
-        
-        bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus);
-
-        bool IsSameTeamWith(IUnit other);
+        void MoveUnit(StartMoveCommand startMoveCommand);
 
         string RandomizeName();
     }

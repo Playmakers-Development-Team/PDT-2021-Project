@@ -1,5 +1,4 @@
 using System;
-using Units;
 using UnityEngine;
 
 namespace Abilities
@@ -10,7 +9,7 @@ namespace Abilities
         [SerializeField, HideInInspector] protected string name;
         [SerializeField] protected AffectType affectType;
         
-        protected IUnit GetAffectedUnit(IUnit user, IUnit target) => 
+        protected IAbilityUser GetAffectedUser(IAbilityUser user, IAbilityUser target) => 
             affectType == AffectType.Target ? target : user;
     }
 }

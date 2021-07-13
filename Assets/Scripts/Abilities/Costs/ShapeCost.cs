@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Abilities.Shapes;
-using Units;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -44,10 +43,10 @@ namespace Abilities.Costs
             }
         }
 
-        public void ApplyCost(IUnit unit)
+        public void ApplyCost(IAbilityUser unit)
         {
             // Keep in an array here to prevent potential modification exceptions
-            IUnit[] targets = countConstraint switch
+            IAbilityUser[] targets = countConstraint switch
             {
                 // In case there are more units than the count, we want to randomise the order and
                 // pick the count amount
@@ -60,22 +59,22 @@ namespace Abilities.Costs
                     $"Unsupported {nameof(ShapeCountConstraint)} {countConstraint}")
             };
             
-            foreach (IUnit target in targets)
+            foreach (IAbilityUser target in targets)
                 cost.ApplyCost(unit, target);
         }
 
-        public bool MeetsRequirements(IUnit unit) =>
+        public bool MeetsRequirements(IAbilityUser unit) =>
             countConstraint == ShapeCountConstraint.AtLeast
                 ? GetShapeTargets(unit).Count() >= count
                 : GetShapeTargets(unit).Count() <= count; 
         
-        private IEnumerable<IUnit> GetShapeTargets(IUnit unit) => 
+        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser unit) => 
             shape.GetTargets(unit.Coordinate, Vector2.zero)
-                .OfType<IUnit>()
+                .OfType<IAbilityUser>()
                 .Where(target => MatchesShapeFilter(unit, target))
                 .Where(target => cost.MeetsRequirements(unit, target));
 
-        private bool MatchesShapeFilter(IUnit unit, IUnit target) =>
+        private bool MatchesShapeFilter(IAbilityUser unit, IAbilityUser target) =>
             shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
                 ? unit.IsSameTeamWith(target)
                 : !unit.IsSameTeamWith(target);
