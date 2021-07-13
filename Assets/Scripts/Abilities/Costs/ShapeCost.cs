@@ -23,7 +23,12 @@ namespace Abilities.Costs
         {
             get
             {
-                string costString = cost.CostType != CostType.None ? $" where {cost}" : string.Empty;
+                string costString = cost.CostType switch
+                {
+                    CostType.None => string.Empty,
+                    CostType.Shape => "~CAN'T HAVE SHAPE COST!",
+                    _ => $" where {cost.DisplayName}"
+                };
                 string shapeName = shape != null ? shape.name : "no defined shape";
                 string countConstraintString = StringUtility.UppercaseToReadable(countConstraint);
                 string shapeFilterString = StringUtility.UppercaseToReadable(shapeFilter);
