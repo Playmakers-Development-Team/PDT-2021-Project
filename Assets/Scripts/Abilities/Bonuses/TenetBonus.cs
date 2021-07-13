@@ -11,7 +11,7 @@ namespace Abilities.Bonuses
 
         public string DisplayName => tenetType.ToString();
         
-        public int CalculateBonusMultiplier(IAbilityUser unit) =>
-            unit.GetTenetStatusCount(tenetType);
+        public int CalculateBonusMultiplier(IAbilityUser user) =>
+            user.GetTenetStatusCount(tenetType);
     }
 }

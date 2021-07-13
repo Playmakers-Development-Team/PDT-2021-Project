@@ -16,7 +16,7 @@ namespace Abilities
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
-        [SerializeField] private CompositeBonus[] bonuses;
+        [SerializeField] private WholeBonus[] bonuses;
         [SerializeField] private WholeCost[] costs;
         [SerializeField] private List<Keyword> keywords;
 

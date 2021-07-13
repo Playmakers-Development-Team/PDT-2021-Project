@@ -12,15 +12,19 @@ namespace Abilities.Bonuses
     /// The Composite Pattern for a better structure and organization.</p>
     /// </summary>
     [Serializable]
-    public class CompositeBonus : Conditional
+    public class CompositeBonus : Conditional, IDisplayable
     {
-        [SerializeField] private BonusType bonusType;
+        [SerializeField] protected BonusType bonusType;
         
         [CompositeChild((int) BonusType.Tenet)]
         [SerializeField] protected TenetBonus tenetBonus;
         // Put more types of bonuses here, they need to be protected to be read by the property drawer
+        
+        public string DisplayName => ChildBonus.DisplayName;
 
-        public IBonus ChildBonus => bonusType switch
+        public BonusType BonusType => bonusType;
+
+        protected virtual IBonus ChildBonus => bonusType switch
         {
             BonusType.Tenet => tenetBonus,
             _ => throw new ArgumentOutOfRangeException(nameof(bonusType), bonusType, null)

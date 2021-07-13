@@ -5,6 +5,6 @@ namespace Abilities.Bonuses
     /// </summary>
     public interface IBonus : IDisplayable
     {
-        int CalculateBonusMultiplier(IAbilityUser unit);
+        int CalculateBonusMultiplier(IAbilityUser user);
     }
 }
