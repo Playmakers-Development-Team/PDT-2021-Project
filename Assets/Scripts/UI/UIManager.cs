@@ -2,10 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Abilities.Commands;
 using Commands;
+using Grid;
 using Managers;
+using Turn;
+using Turn.Commands;
 using Units;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 
 namespace UI
@@ -72,14 +77,16 @@ namespace UI
             commandManager.ListenCommand((StartTurnCommand c) => turnChanged.Invoke());
             commandManager.ListenCommand((EndTurnCommand c) => turnChanged.Invoke());
             commandManager.ListenCommand((TurnQueueCreatedCommand c) => turnChanged.Invoke());
+            
+            ManagerLocator.Get<CommandManager>().ListenCommand<TurnManipulatedCommand>(
+                cmd => turnChanged.Invoke());
         }
-
         
         #region Abilities
 
         private void OnSelectedAbility(Ability ability)
         {
-            if (!IsPlayerTurn)
+            if (!IsPlayerTurn || !turnManager.IsAbilityPhase())
                 return;
             
             currentAbility = ability;
@@ -108,7 +115,7 @@ namespace UI
                 return;
             
             commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, currentAbility));
-            commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
+            deselectedAbility.Invoke();
         }
         
         #endregion
@@ -129,10 +136,9 @@ namespace UI
             }
             
             // Highlight movement squares
-            if (IsPlayerTurn && !IsAbilitySelected)
+            if (IsPlayerTurn && !IsAbilitySelected && turnManager.IsMovementPhase())
             {
-                Vector2Int[] coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value).
-                    ToArray();
+                Vector2Int[] coordinates = selectedUnit.GetAllReachableTiles().ToArray();
                 gridSpacesSelected.Invoke(new GridSelection(coordinates, GridSelectionType.Valid));
             }
 
@@ -151,13 +157,18 @@ namespace UI
 
         private void TryMove(Vector2Int destination)
         {
-            if (!IsPlayerTurn || IsAbilitySelected)
+            if (!IsPlayerTurn || IsAbilitySelected || !turnManager.IsMovementPhase())
+            {
+                gridSpacesDeselected.Invoke();
+                unitDeselected.Invoke();
                 return;
+            }
 
-            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, (int) selectedUnit.MovementActionPoints.Value);
+            List<Vector2Int> inRange = selectedUnit.GetAllReachableTiles();
             if (!inRange.Contains(destination))
                 return;
-            
+            Debug.Log($"CURRENT PHASE INDEX: {turnManager.PhaseIndex} current movement index: {turnManager.MovementPhaseIndex}");
+
             commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
             unitDeselected.Invoke();
         }

@@ -1,5 +1,3 @@
-using Units;
-
 namespace Abilities.Bonuses
 {
     /// <summary>
@@ -7,6 +5,6 @@ namespace Abilities.Bonuses
     /// </summary>
     public interface IBonus
     {
-        int CalculateBonusMultiplier(IUnit user, IUnit target);
+        int CalculateBonusMultiplier(IAbilityUser user, IAbilityUser target);
     }
 }

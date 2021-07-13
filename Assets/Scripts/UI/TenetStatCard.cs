@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using StatusEffects;
 using TMPro;
+using TenetStatuses;
 using UnityEngine;
 
 namespace UI

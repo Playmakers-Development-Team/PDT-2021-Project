@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GridObjects;
+using Grid.GridObjects;
 using UnityEngine;
 
 namespace Abilities.Shapes
@@ -37,14 +37,14 @@ namespace Abilities.Shapes
         /// Get all the cells within this shape. May be empty if this shape is not an AoE.
         /// </summary>
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, 
-                                                                 Vector2 targetVector);
+                                                                 Vector2 directionVector);
 
         /// <summary>
         /// Get all targets that would be affected by this shape.
         /// </summary>
         /// <param name="originCoordinate">The position where this shape is used from, typically the unit position</param>
-        /// <param name="targetVector">The direction which this shape is used, for players, this would be the (mouse position - unit position)</param>
+        /// <param name="directionVector">The direction which this shape is used, for players, this would be the (mouse position - unit position)</param>
         /// <returns>All targets that are affected</returns>
-        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 targetVector);
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector);
     }
 }

@@ -2,8 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
-using GridObjects;
-using StatusEffects;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine.Serialization;
 
 namespace Units
@@ -23,19 +23,59 @@ namespace Units
         [SerializeField] private ModifierStat takeKnockbackModifier;
         [SerializeField] private List<Ability> abilities;
         
+        // TODO: Change these to be serialized auto properties 
         public string Name
         {
             get => name;
             set => name = value;
         }
-        public TenetType Tenet => tenet;
-        public ValueStat HealthPoints => healthPoints;
-        public ValueStat MovementPoints => movementPoints;
-        public ValueStat Speed => speed;
-        public ModifierStat Attack => attack;
-        public ModifierStat Defence => defence;
-        public ModifierStat TakeKnockbackModifier => takeKnockbackModifier;
-        public List<Ability> Abilities => abilities;
+
+        public TenetType Tenet
+        {
+            get => tenet;
+            set => tenet = value;
+        } 
+
+        public ValueStat HealthPoints
+        {
+            get => healthPoints;
+            set => healthPoints = value;
+        } 
+        public ValueStat MovementPoints
+        {
+            get => movementPoints;
+            set => movementPoints = value;
+        }
+
+        public ValueStat Speed
+        {
+            get => speed;
+            set => speed = value;
+        } 
+    
+        public ModifierStat Attack
+        {
+            get => attack;
+            set => attack = value;
+        }
+
+        public ModifierStat Defence
+        {
+            get => defence;
+            set => defence = value;
+        }
+
+        public ModifierStat TakeKnockbackModifier
+        {
+            get => takeKnockbackModifier;
+            set => takeKnockbackModifier = value;
+        }
+
+        public List<Ability> Abilities
+        {
+            get => abilities;
+            set => abilities = value;
+        }
 
         public void Initialise()
         {

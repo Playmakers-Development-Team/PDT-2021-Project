@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GridObjects;
+using Grid;
+using Grid.GridObjects;
 using Managers;
 using UnityEngine;
-using Utility;
+using Utilities;
 
 namespace Abilities.Shapes
 {
@@ -49,15 +50,26 @@ namespace Abilities.Shapes
         public bool IsLineOfSight => shapeParts.All(p => p.isLineOfSight);
         public bool ShouldShowLine => IsLineOfSight;
 
+        /// <summary>
+        /// Retrieve all tiles which is hit by this shape. Can be used for highlighting which tiles
+        /// are hit.
+        /// </summary>
+        /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
+        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate,
-                                                                 Vector2 targetVector) =>
-            GetAffectedCoordinates(originCoordinate, targetVector);
+                                                                 Vector2 directionVector) =>
+            GetAffectedCoordinates(originCoordinate, directionVector);
 
-        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 targetVector)
+        /// <summary>
+        /// Retrieve units that are hit by this shape.
+        /// </summary>
+        /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
+        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             IEnumerable<Vector2Int> coordinates =
-                GetAffectedCoordinates(originCoordinate, targetVector);
+                GetAffectedCoordinates(originCoordinate, directionVector);
             return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
         }
 
@@ -65,14 +77,21 @@ namespace Abilities.Shapes
         /// Get all world space coordinates that will be targeted by this shape based on the shape
         /// parts. 
         /// </summary>
+        /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
+        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2Int originCoordinate, 
-                                                               Vector2 targetVector)
+                                                               Vector2 directionVector)
         {
+            // We want to rotate the direction vector 45 degrees because we need to go to the 
+            // isometric grid space.
+            Vector2 isometricDirectionVector =
+                Quaternion.AngleAxis(-45f, Vector3.forward) * directionVector;
+            
             // We want to convert to cardinal direction first because we don't want to get the ordinal
             // directions e.g NorthEast. Only return the cardinal directions based on the vector.
             OrdinalDirection direction = IsDiagonalShape
-                ? OrdinalDirectionUtility.From(Vector2.zero, targetVector)
-                : CardinalDirectionUtility.From(Vector2.zero, targetVector).ToOrdinalDirection();
+                ? OrdinalDirectionUtility.From(Vector2.zero, isometricDirectionVector)
+                : CardinalDirectionUtility.From(Vector2.zero, isometricDirectionVector).ToOrdinalDirection();
 
             IEnumerable<Vector2Int> affectedCoordinates = shapeParts
                 .Where(shapePart => shapePart.CannotBeDirected 

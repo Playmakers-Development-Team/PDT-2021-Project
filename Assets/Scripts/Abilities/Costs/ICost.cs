@@ -1,5 +1,3 @@
-using Units;
-
 namespace Abilities.Costs
 {
     /// <summary>
@@ -7,8 +5,8 @@ namespace Abilities.Costs
     /// </summary>
     public interface ICost
     {
-        void ApplyCost(IUnit user, IUnit target);
+        void ApplyCost(IAbilityUser user, IAbilityUser target);
 
-        bool MeetsRequirements(IUnit user, IUnit target);
+        bool MeetsRequirements(IAbilityUser user, IAbilityUser target);
     }
 }
