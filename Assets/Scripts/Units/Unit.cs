@@ -404,7 +404,6 @@ namespace Units
                 case AnimationStates.Casting:
                     UnitAnimator.SetBool("moving", false);
                     UnitAnimator.SetTrigger("attack");
-
                     float flag = 0;
 
                     while (flag < UnitAnimator.GetCurrentAnimatorStateInfo(0).length)
