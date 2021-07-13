@@ -9,7 +9,9 @@ namespace Abilities
 
         void TakeAttack(int amount);
         
-        void TakeDamage(int amount);
+        void TakeDamageWithoutModifiers(int amount);
+        
+        void DealDamageTo(IAbilityUser other, int amount);
 
         void TakeKnockback(int amount);
 

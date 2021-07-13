@@ -29,20 +29,10 @@ namespace Units
 
         void ChangeAnimation(AnimationStates animationStates);
 
-        void TakeDamageWithoutModifiers(int amount);
-
-        new void TakeDamage(int amount);
-
-        new void TakeKnockback(int amount);
-
-        new void TakeDefence(int amount);
-
         void SetSpeed(int amount);
         
         void SetMovementActionPoints(int amount);
-        
-        new void TakeAttack(int amount);
-        
+
         List<Vector2Int> GetAllReachableTiles();
         
         void MoveUnit(StartMoveCommand startMoveCommand);
