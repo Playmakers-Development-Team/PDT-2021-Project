@@ -11,8 +11,22 @@ namespace Tests.Beacons
     {
         private readonly InputTestFixture inputTestFixture = new InputTestFixture();
         private Mouse mouse;
+        private Keyboard keyboard;
 
         private Mouse Mouse => mouse ??= InputSystem.AddDevice<Mouse>();
+        private Keyboard Keyboard => keyboard ??= InputSystem.AddDevice<Keyboard>();
+
+        public IEnumerator PressKey(Func<Keyboard, KeyControl> func)
+        {
+            inputTestFixture.PressAndRelease(func(Keyboard));
+            yield return null;
+        }
+        
+        public IEnumerator PressKey(KeyControl keyControl)
+        {
+            inputTestFixture.PressAndRelease(keyControl);
+            yield return null;
+        }
 
         public IEnumerator ClickLeft<T>(T label, bool ignoreError = false) where T : Enum =>
             ClickButton(label, Mouse.leftButton, ignoreError);
