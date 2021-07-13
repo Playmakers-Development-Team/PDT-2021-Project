@@ -5,7 +5,6 @@ using Abilities;
 using Abilities.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
-using Grid;
 using Grid.GridObjects;
 using Grid.Tiles;
 using Managers;
@@ -366,7 +365,7 @@ namespace Units
 
         #region AnimationHandling
 
-        public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
+        public async void ChangeAnimation(AnimationStates animationStates) 
         {
             unitAnimationState = animationStates;
 
@@ -405,6 +404,16 @@ namespace Units
                 case AnimationStates.Casting:
                     UnitAnimator.SetBool("moving", false);
                     UnitAnimator.SetTrigger("attack");
+
+                    float flag = 0;
+
+                    while (flag < UnitAnimator.GetCurrentAnimatorStateInfo(0).length)
+                    {
+                        flag += Time.deltaTime;
+                        await UniTask.Yield();
+                    }
+                    
+                    commandManager.ExecuteCommand(new EndEnemyCastingCommand(this));
                     break;
             }
         }
