@@ -11,10 +11,16 @@ namespace Abilities.Costs
     /// Sort of an implementation of the Composite Pattern for a better structure and organization.
     /// </summary>
     [Serializable]
-    public class CompositeCost : Conditional
+    public class CompositeCost : Conditional, IDisplayable
     {
         [SerializeField] protected CostType costType;
-        [SerializeField] private TenetCost tenetCost;
+        [CompositeChild((int) CostType.Tenet)]
+        [SerializeField] protected TenetCost tenetCost;
+        // Put more types of costs here, they need to be protected to be read by the property drawer
+
+        public CostType CostType => costType;
+        
+        public string DisplayName => ChildCost.DisplayName;
         
         protected virtual ICost ChildCost => costType switch
         {

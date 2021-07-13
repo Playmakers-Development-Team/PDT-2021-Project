@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Abilities.Shapes;
 using Units;
 using UnityEngine;
@@ -30,6 +31,18 @@ namespace Abilities.Costs
         [SerializeField] private CompositeCost cost;
 
         public IShape Shape => shape;
+
+        public string DisplayName
+        {
+            get
+            {
+                string costString = cost.CostType != CostType.None ? $" where {cost}" : string.Empty;
+                string shapeName = shape != null ? shape.name : "no defined shape";
+                
+                return $"finds {UppercaseCaseToReadable(countConstraint)} {count} " 
+                       + $"{UppercaseCaseToReadable(shapeFilter)} in {shapeName}{costString}";
+            }
+        }
 
         public void ApplyCost(IUnit unit)
         {
@@ -66,5 +79,11 @@ namespace Abilities.Costs
             shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
                 ? unit.IsSameTeamWith(target)
                 : !unit.IsSameTeamWith(target);
+        
+        /// <summary>
+        /// Put spaces between uppercase letters
+        /// </summary> 
+        private string UppercaseCaseToReadable(object o) =>
+            Regex.Replace(o.ToString(), @"([A-Z])", " $0").Substring(1);
     }
 }

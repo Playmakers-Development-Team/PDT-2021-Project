@@ -10,6 +10,7 @@ namespace Abilities.Costs
     [Serializable]
     public class WholeCost : CompositeCost
     {
+        [CompositeChild((int) CostType.Shape)]
         [SerializeField] private ShapeCost shapeCost;
 
         protected override ICost ChildCost => costType switch 

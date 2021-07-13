@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abilities.Costs;
 using StatusEffects;
 using UnityEditor;
 using UnityEngine;
@@ -64,8 +63,8 @@ namespace Abilities.Editor
                 nameProperty.stringValue += string.Join(" and ", valueNameList);
                 
                 
-                if (tenetBonusesProperty.arraySize != 0)
-                    nameProperty.stringValue += " " + ProcessTenetBonusesDisplayName(tenetBonusesProperty);
+                // if (tenetBonusesProperty.arraySize != 0)
+                //     nameProperty.stringValue += " " + ProcessTenetBonusesDisplayName(tenetBonusesProperty);
                 
                 if (costsProperty.arraySize != 0)
                     nameProperty.stringValue += " " + ProcessCostsDisplayName(costsProperty);

@@ -21,6 +21,8 @@ namespace Abilities.Costs
         public TenetCostType TenetCostType => tenetCostType;
         public TenetType TenetType => tenetType;
 
+        public string DisplayName => $"{tenetCostType} {count} {tenetType}";
+
         public void ApplyCost(IUnit unit)
         {
             switch (TenetCostType)
