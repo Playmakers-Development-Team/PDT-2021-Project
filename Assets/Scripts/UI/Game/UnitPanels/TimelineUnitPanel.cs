@@ -6,14 +6,14 @@ namespace UI
     {
         private TurnManager turnManager;
         
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             // TODO: Ensure these are in the correct order...
             turnManager = ManagerLocator.Get<TurnManager>();
             
             manager.turnChanged.AddListener(OnTurnChanged);
             
-            base.OnAwake();
+            base.OnComponentAwake();
         }
 
         protected override void Disabled()

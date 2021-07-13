@@ -31,7 +31,7 @@ namespace UI
 
         protected IUnit selectedUnit;
         
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             // TODO: Listening may be able to be moved to sub-classes...
             manager.turnChanged.AddListener(() => OnUnitChanged(selectedUnit));
@@ -59,10 +59,7 @@ namespace UI
         protected void Redraw()
         {
             if (selectedUnit == null)
-            {
-                Debug.LogWarning("Attempted to redraw Unit UI without a selected Unit");
                 return;
-            }
 
             // Unit name text
             nameText.text = selectedUnit.Name;

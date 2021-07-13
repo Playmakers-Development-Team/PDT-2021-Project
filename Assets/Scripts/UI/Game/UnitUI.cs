@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using GridObjects;
-using Managers;
 using TMPro;
 using Units;
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace UI
         private IUnit unit;
 
 
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             
             unit = unitGridObject as IUnit;

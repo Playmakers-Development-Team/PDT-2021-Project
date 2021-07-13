@@ -4,9 +4,9 @@ namespace UI
 {
     internal class SelectedUnitPanel : UnitPanel
     {
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
-            base.OnAwake();
+            base.OnComponentAwake();
             
             manager.unitSelected.AddListener(OnUnitSelected);
             manager.unitDeselected.AddListener(OnUnitDeselected);

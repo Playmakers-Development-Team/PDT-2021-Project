@@ -9,7 +9,7 @@ namespace UI
     {
         private GridManager gridManager;
 
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
         }

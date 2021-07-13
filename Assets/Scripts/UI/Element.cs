@@ -7,12 +7,12 @@ namespace UI
     {
         protected UIManager manager;
         
-        private void Awake()
+        protected void Awake()
         {
             manager = ManagerLocator.Get<UIManager>();
-            OnAwake();
+            OnComponentAwake();
         }
 
-        protected virtual void OnAwake() {}
+        protected virtual void OnComponentAwake() {}
     }
 }

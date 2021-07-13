@@ -38,7 +38,7 @@ namespace UI
                                      turnManager.ActingUnit == selectedUnit;
         
         
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();

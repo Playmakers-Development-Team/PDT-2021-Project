@@ -14,7 +14,7 @@ namespace UI
         private ScrollRect scrollView;
         
 
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             TryGetComponent(out scrollView);
         }

@@ -18,7 +18,7 @@ namespace UI
         private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
         private TurnManager turnManager;
 
-        protected override void OnAwake()
+        protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             
