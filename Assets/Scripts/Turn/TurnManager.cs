@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Commands;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using Turn.Commands;
 using Units;
@@ -52,6 +53,9 @@ namespace Turn
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
+
+        private TurnPhases lastPhase;
+        
         
         private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
@@ -78,9 +82,12 @@ namespace Turn
 
             commandManager.ListenCommand<AbilityCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
+
                 if (cmd.AbilityUser is PlayerUnit)
                     EndAbilityPhase();
             });
+            
+            
             
             commandManager.ListenCommand<EnemyActionsCompletedCommand>(cmd => 
                 commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));
@@ -102,16 +109,25 @@ namespace Turn
                 {
                     case TurnPhases.TurnManipulation:
                         TurnManipulationPhaseIndex = i;
+
+                        if (i == newTurnPhases.Length - 1)
+                            lastPhase = TurnPhases.TurnManipulation;
                         break;
                     case TurnPhases.Movement:
                         MovementPhaseIndex = i;
+                        
+                        if (i == newTurnPhases.Length - 1)
+                            lastPhase = TurnPhases.Movement;
                         break;
                     case TurnPhases.Ability:
                         AbilityPhaseIndex = i;
+                        
+                        if (i == newTurnPhases.Length - 1)
+                            lastPhase = TurnPhases.Ability;
                         break;
                 }
             }
-
+            
             PhaseIndex = 0;
             RoundCount = 0;
             TotalTurnCount = 0;
@@ -182,6 +198,7 @@ namespace Turn
             StartTurn();
         }
 
+        
         private void StartTurn()
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
@@ -194,6 +211,7 @@ namespace Turn
             
             SelectCurrentUnit();
         }
+        
         
         /// <summary>
         /// Finish the current round. May transition to the next round or finish the encounter if
@@ -468,29 +486,36 @@ namespace Turn
             }
         }
 
-        private void EndMovementPhase()
+        private async void EndMovementPhase()
         {
             if (IsMovementPhase())
                 PhaseIndex = MovementPhaseIndex + 1;
             else
                 Debug.LogWarning("Movement was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
+            {
+                await WaitForLastPhase();
                 NextTurn();
+            }
         }
 
-        private void EndAbilityPhase()
+        private async void EndAbilityPhase()
         {
             if (IsAbilityPhase())
                 PhaseIndex = AbilityPhaseIndex + 1;
             else
                 Debug.LogWarning("Ability was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
+            {
+                await WaitForLastPhase();
                 NextTurn();
+
+            }
         }
 
-        private void EndTurnManipulationPhase()
+        private async void EndTurnManipulationPhase()
         {
             if (IsTurnManipulationPhase())
                 PhaseIndex = TurnManipulationPhaseIndex + 1;
@@ -498,9 +523,26 @@ namespace Turn
                 Debug.LogWarning("Turn manipulation was done out of phase.");
 
             if (LastPhaseHasEnded())
+            {
+                await WaitForLastPhase();
                 NextTurn();
+            }
         }
 
+        private async UniTask WaitForLastPhase()
+        {
+            switch (lastPhase)
+            {
+                case TurnPhases.Ability: 
+                    await commandManager.WaitForCommand<EndUnitCastingCommand>();
+                     break;
+                case TurnPhases.Movement: 
+                    await commandManager.WaitForCommand<EndMoveCommand>();
+                    break;
+                    
+            }
+        }
+        
         #endregion
     }
 }

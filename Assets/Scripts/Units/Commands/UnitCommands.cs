@@ -145,9 +145,9 @@ namespace Units.Commands
     /// <summary>
     /// Executed when the an enemy unit casting animation has completed.
     /// </summary>
-    public class EndEnemyCastingCommand : UnitCommand
+    public class EndUnitCastingCommand : UnitCommand
     {
-        public EndEnemyCastingCommand(IUnit unit) : base(unit) {}
+        public EndUnitCastingCommand(IUnit unit) : base(unit) {}
     }
     
     /// <summary>

@@ -412,7 +412,7 @@ namespace Units
                         await UniTask.Yield();
                     }
                     
-                    commandManager.ExecuteCommand(new EndEnemyCastingCommand(this));
+                    commandManager.ExecuteCommand(new EndUnitCastingCommand(this));
                     break;
             }
         }

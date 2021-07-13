@@ -116,7 +116,7 @@ namespace Units.Enemies
         {
             // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
             commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
-            await commandManager.WaitForCommand<EndEnemyCastingCommand>();
+            await commandManager.WaitForCommand<EndUnitCastingCommand>();
             playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
             
             while (playerManager.WaitForDeath)
