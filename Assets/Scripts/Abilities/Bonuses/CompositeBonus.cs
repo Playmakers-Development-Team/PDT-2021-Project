@@ -13,18 +13,27 @@ namespace Abilities.Bonuses
     /// The Composite Pattern for a better structure and organization.</p>
     /// </summary>
     [Serializable]
-    public class CompositeBonus : IBonus
+    public class CompositeBonus : Conditional
     {
-        [SerializeField] private List<TenetBonus> tenetBonuses;
-        // Add more types of bonuses here
+        [SerializeField] private BonusType bonusType;
+        
+        [CompositeChild((int) BonusType.Tenet)]
+        [SerializeField] protected TenetBonus tenetBonus;
+        // Put more types of bonuses here, they need to be protected to be read by the property drawer
+
+        public IBonus ChildBonus => bonusType switch
+        {
+            BonusType.Tenet => tenetBonus,
+            _ => throw new ArgumentOutOfRangeException(nameof(bonusType), bonusType, null)
+        };
 
         /// <summary>
         /// Calculates the multiplier based on all bonuses.
         /// If there aren't any just return a multiplier of 1.
         /// </summary>
         public int CalculateBonusMultiplier(IUnit user, IUnit target) =>
-            tenetBonuses.Count > 0
-                ? tenetBonuses.Sum(b => b.CalculateBonusMultiplier(user, target))
+            bonusType != BonusType.None
+                ? ChildBonus.CalculateBonusMultiplier(GetAffectedUnit(user, target))
                 : 0;
     }
 }
