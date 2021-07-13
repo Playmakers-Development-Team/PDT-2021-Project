@@ -1,7 +1,4 @@
 using System;
-using E7.Minefield;
-using Grid;
-using Managers;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,6 +10,8 @@ namespace Tests.Beacons
         [SerializeField] private Vector2Int coordinate;
         [SerializeField] private bool autoSetTilemap = true;
         [SerializeField] private Tilemap levelTilemap;
+
+        public Vector2Int Coordinate => coordinate;
 
         public Vector3 SnappedPosition => levelTilemap.layoutGrid.GetCellCenterWorld((Vector3Int) coordinate);
 

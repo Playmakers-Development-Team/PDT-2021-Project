@@ -8,5 +8,5 @@ namespace Tests.Beacons
         PlayerA, PlayerB, PlayerC, EnemyA, EnemyB, EnemyC 
     }
     
-    public class UnitBeacon : LabelBeacon<UnitBeacons> {}
+    public class UnitBeacon : ScreenBeacon<UnitBeacons> {}
 }

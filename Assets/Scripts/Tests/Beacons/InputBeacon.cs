@@ -38,13 +38,13 @@ namespace Tests.Beacons
             }
         }
         
-        private IEnumerator ClickLeftWhen<T>(T label, BeaconConstraint bc, 
+        public IEnumerator ClickLeftWhen<T>(T label, BeaconConstraint bc, 
                                              bool ignoreError = false) where T : Enum
         {
             yield return ClickButtonWhen(label, bc, Mouse.leftButton, ignoreError);
         }
         
-        private IEnumerator ClickRightWhen<T>(T label, BeaconConstraint bc, 
+        public IEnumerator ClickRightWhen<T>(T label, BeaconConstraint bc, 
                                               bool ignoreError = false) where T : Enum
         {
             yield return ClickButtonWhen(label, bc, Mouse.rightButton, ignoreError);
