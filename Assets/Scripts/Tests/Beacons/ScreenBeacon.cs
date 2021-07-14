@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tests.Beacons
 {
-    public class ScreenBeacon<T> : LabelBeacon<T> where T : Enum
+    public class ScreenBeacon<T> : LabelBeacon<T>, IScreenBeacon where T : Enum
     {
         public virtual Vector3 WorldClickPosition => gameObject.transform.position;
 

@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 namespace Tests.Beacons
 {
     [ExecuteAlways]
-    public class TileBeacon<T> : ScreenBeacon<T> where T : Enum
+    public class TileBeacon<T> : ScreenBeacon<T>, ITileBeacon where T : Enum
     {
         [SerializeField] private Vector2Int coordinate;
         [SerializeField] private bool autoSetTilemap = true;
