@@ -185,6 +185,26 @@ PrefabInstance:
       propertyPath: unitGridObject
       value: 
       objectReference: {fileID: 6708204597060251326}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.render
+      value: 
+      objectReference: {fileID: -4956321453074165602, guid: 576c432028e851b4b864d34fb4e08644, type: 3}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533424, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_Name
       value: Unit UI

@@ -9,6 +9,8 @@ namespace UI
 {
     public class UnitUI : UIComponent<GameDialogue>
     {
+        [SerializeField] private GameDialogue.UnitInfo unitInfo;
+        
         [SerializeField] private GridObject unitGridObject;
         
         [Header("Damage Text")]
@@ -32,10 +34,14 @@ namespace UI
             
             if (unit == null)
                 DestroyImmediate(gameObject);
+
+            unitInfo.SetUnit(unit);
         }
 
         protected override void Subscribe()
         {
+            dialogue.unitSpawned.Invoke(unitInfo);
+            
             dialogue.unitDamaged.AddListener(OnTakeDamage);
         }
 
@@ -49,7 +55,7 @@ namespace UI
 
         public void OnClick()
         {
-            dialogue.unitSelected.Invoke(unit);
+            dialogue.unitSelected.Invoke(unitInfo);
         }
 
         private void OnTakeDamage(StatDifference data)

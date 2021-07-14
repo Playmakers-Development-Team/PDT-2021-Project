@@ -1,16 +1,15 @@
 ﻿using System.Globalization;
 using System.Linq;
 using TMPro;
-using Units;
 using TenetStatuses;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    internal abstract class UnitPanel : Element
+    internal abstract class UnitPanel : UIComponent<GameDialogue>
     {
-        // TODO: Optimise redrawing by implementing different value changes in UIManager...
+        // TODO: Optimise redrawing by implementing different value changes in GameDialogue...
         
         [SerializeField] protected Canvas canvas;
         
@@ -27,60 +26,35 @@ namespace UI
         [SerializeField] protected TenetStatCard secondaryTenetCard;
 
         [SerializeField] protected AbilityList abilityCards;
-
-
-        protected IUnit selectedUnit;
         
-        protected override void OnComponentAwake()
-        {
-            // TODO: Listening may be able to be moved to sub-classes...
-            manager.turnChanged.AddListener(() => OnUnitChanged(selectedUnit));
-        }
-
-        private void OnDisable()
-        {
-            // TODO: Once stat listeners are implemented, add RemoveListener calls...
-            
-            Disabled();
-        }
-        
-        protected virtual void Disabled() {}
-
-
-        private void OnUnitChanged(IUnit unit)
-        {
-            if (unit != selectedUnit)
-                return;
-            
-            Redraw();
-        }
+        protected GameDialogue.UnitInfo unitInfo;
         
 
         protected void Redraw()
         {
-            if (selectedUnit == null)
+            if (unitInfo == null)
                 return;
-
+            
             // Unit name text
-            nameText.text = selectedUnit.Name;
+            nameText.text = unitInfo.Unit.Name;
             
             // Render image
-            renderImage.sprite = selectedUnit.Render;
+            renderImage.sprite = unitInfo.Render;
             // TODO: YUCKY CAST
-            renderImage.color = selectedUnit.UnitColor;
+            renderImage.color = unitInfo.Color;
             
             // Health bar
             healthSlider.minValue = 0;
-            healthSlider.maxValue = selectedUnit.Health.HealthPoints.BaseValue;
-            healthSlider.value = selectedUnit.Health.HealthPoints.Value;
+            healthSlider.maxValue = unitInfo.Unit.Health.HealthPoints.BaseValue;
+            healthSlider.value = unitInfo.Unit.Health.HealthPoints.Value;
             healthText.text = healthSlider.value.ToString(CultureInfo.InvariantCulture);
             
             // Stat cards
-            attackCard.Apply("ATT", (int) selectedUnit.Attack.Value);
-            defenceCard.Apply("DEF", (int) selectedUnit.Health.Defence.Value);
+            attackCard.Apply("ATT", (int) unitInfo.Unit.Attack.Value);
+            defenceCard.Apply("DEF", (int) unitInfo.Unit.Health.Defence.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
-            TenetStatus[] effects = selectedUnit.TenetStatuses.ToArray();
+            TenetStatus[] effects = unitInfo.Unit.TenetStatuses.ToArray();
 
             for (int i = 0; i < cards.Length; i++)
             {
@@ -96,7 +70,8 @@ namespace UI
             }
             
             // Ability cards
-            abilityCards.Redraw(selectedUnit);
+            // TODO: This will soon become Unit.AbilityList or something like that...
+            abilityCards.Redraw(unitInfo.Unit);
         }
     }
 }
