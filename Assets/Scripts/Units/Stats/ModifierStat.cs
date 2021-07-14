@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Units.Stats
 {
-    [Serializable]
+    [Serializable][Obsolete("Modifier stat is not being used, use the Stat Class instead")]
     public class ModifierStat
     {
         [field: SerializeField] public float BaseMultiplier { get; set; }

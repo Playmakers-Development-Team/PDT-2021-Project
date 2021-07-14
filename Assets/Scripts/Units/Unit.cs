@@ -36,7 +36,18 @@ namespace Units
             get => data.Name;
             set => data.Name = value;
         }
+        
+        public HealthStat HealthStat { get; set; }
+        public Stat AttackStat { get; }
+        public Stat DefenceStat { get; }
+        public Stat MovementPoints { get; }
+        public Stat SpeedStat { get; }
+        public Stat KnockbackStat { get; }
+        
+        [Obsolete("Use HealthStat instead")]
         public Health Health { get; private set; }
+        
+        [Obsolete("Use KnockbackStat instead")]
         public Knockback Knockback { get; private set; }
         
         public Animator UnitAnimator { get; private set; }
@@ -45,18 +56,22 @@ namespace Units
         
         public TenetType Tenet => data.Tenet;
         
+        [Obsolete("Use MovementPoints instead")]
         public ValueStat MovementActionPoints
         {
             get => data.MovementPoints;
             set => data.MovementPoints = value;
         }
-
+        
+        
+        [Obsolete("Use SpeedStat instead")]
         public ValueStat Speed
         {
             get => data.Speed;
             set => data.Speed = value;
         }
 
+        [Obsolete("Use AttackStat instead")]
         public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
@@ -101,8 +116,12 @@ namespace Units
             #endregion
 
             data.Initialise();
+            
             Health = new Health(new KillUnitCommand(this),
                 data.HealthPoints, data.Defence);
+
+            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.BaseHealth, StatTypes.Health);
+            
             
             Knockback = new Knockback(data.TakeKnockbackModifier);
             UnitAnimator = GetComponentInChildren<Animator>();
@@ -562,5 +581,7 @@ namespace Units
         }
         
         #endregion
+
+      
     }
 }

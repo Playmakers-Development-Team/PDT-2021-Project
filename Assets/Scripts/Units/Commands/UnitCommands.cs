@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Abilities;
 using Commands;
+using Units.Stats;
 
 namespace Units.Commands
 {
@@ -68,6 +69,15 @@ namespace Units.Commands
     /// </summary>
     public class EnemyUnitsReadyCommand : Command {}
 
+
+    public class StatChangedCommand : UnitCommand
+    {
+        public StatChangedCommand(IUnit unit, int value, StatTypes type) : base(unit){}
+        
+        
+    }
+    
+    
     /// <summary>
     /// Executed when damage is dealt to a unit. Value takes into account attack and defence modifiers.
     /// </summary>

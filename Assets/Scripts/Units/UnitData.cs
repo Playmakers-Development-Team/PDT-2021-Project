@@ -13,17 +13,27 @@ namespace Units
         [SerializeField] private string name;
         [SerializeField] private TenetType tenet;
         [SerializeField] private ValueStat healthPoints;
-        [FormerlySerializedAs("movementActionPoints")]
-        [SerializeField] private ValueStat movementPoints;
+
+        [FormerlySerializedAs("movementActionPoints")] [SerializeField]
+        private ValueStat movementPoints;
+
         [SerializeField] private ValueStat speed;
-        [FormerlySerializedAs("dealDamageModifier")]
-        [SerializeField] private ModifierStat attack;
-        [FormerlySerializedAs("takeDamageModifier")]
-        [SerializeField] private ModifierStat defence;
+
+        [FormerlySerializedAs("dealDamageModifier")] [SerializeField]
+        private ModifierStat attack;
+
+        [FormerlySerializedAs("takeDamageModifier")] [SerializeField]
+        private ModifierStat defence;
+
         [SerializeField] private ModifierStat takeKnockbackModifier;
         [SerializeField] private List<Ability> abilities;
+
+
+        [SerializeField] private Stat testStat;
         
-        // TODO: Change these to be serialized auto properties 
+        public Stat TestStat { get; set; }
+
+        // TODO: Remove all fields of type "ModifierStat" or "ValueStat".
         public string Name
         {
             get => name;
@@ -34,13 +44,14 @@ namespace Units
         {
             get => tenet;
             set => tenet = value;
-        } 
+        }
 
         public ValueStat HealthPoints
         {
             get => healthPoints;
             set => healthPoints = value;
-        } 
+        }
+
         public ValueStat MovementPoints
         {
             get => movementPoints;
@@ -51,8 +62,8 @@ namespace Units
         {
             get => speed;
             set => speed = value;
-        } 
-    
+        }
+
         public ModifierStat Attack
         {
             get => attack;
@@ -77,14 +88,40 @@ namespace Units
             set => abilities = value;
         }
 
-        public void Initialise()
+        [field: SerializeField] public Stat SpeedStat { get; set; }
+        
+        
+        [field: SerializeField] public Stat DefenceStat { get; set; }
+        
+        [field: SerializeField] public int BaseHealth { get; private set; }
+        
+        // public Stat SpeedStat { get; set; }
+        // public Stat SpeedStat { get; set; }
+        // public Stat SpeedStat { get; set; }
+        // public Stat SpeedStat { get; set; }
+
+
+
+
+
+
+
+
+
+    public void Initialise()
         {
+            //TODO: Remove the following.
+            //-----BEGIN REMOVE-----
             HealthPoints.Reset();
             MovementPoints.Reset();
             Speed.Reset();
             Attack.Reset();
             Defence.Reset();
             TakeKnockbackModifier.Reset();
+            //----END REMOVE--------
+            
+            
+            
         }
     }
 }
