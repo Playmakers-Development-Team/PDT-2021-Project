@@ -23,6 +23,8 @@ namespace UI
         {
             manager = ManagerLocator.Get<UIManager>();
             canvasGroup = GetComponent<CanvasGroup>();
+            
+            OnAwake();
         }
 
         private void Start()
@@ -56,6 +58,9 @@ namespace UI
             OnDemote();
             demoted.Invoke();
         }
+
+
+        internal virtual void OnAwake() {}
 
 
         protected abstract void OnHide();
