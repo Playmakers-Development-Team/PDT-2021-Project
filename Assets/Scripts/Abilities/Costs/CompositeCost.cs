@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Units;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -18,13 +17,13 @@ namespace Abilities.Costs
         // All cost variables should be put together here.
         private IEnumerable<ICost> AllChildCosts => tenetCosts;
         
-        public void ApplyCost(IUnit user, IUnit target)
+        public void ApplyCost(IAbilityUser user, IAbilityUser target)
         {
             foreach (var childCost in AllChildCosts)
                 childCost.ApplyCost(user, target);
         }
 
-        public bool MeetsRequirements(IUnit user, IUnit target) =>
+        public bool MeetsRequirements(IAbilityUser user, IAbilityUser target) =>
             AllChildCosts.All(c => c.MeetsRequirements(user, target));
     }
 }

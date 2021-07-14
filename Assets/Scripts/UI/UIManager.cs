@@ -2,10 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Abilities.Commands;
 using Commands;
+using Grid;
 using Managers;
+using Turn;
+using Turn.Commands;
 using Units;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 
 namespace UI
@@ -23,10 +28,10 @@ namespace UI
             Dialogue front = dialogues.FirstOrDefault();
             if (front != null)
                 front.Demote();
-            
+
             dialogues.Insert(0, dialogue);
             dialogueAdded.Invoke(dialogue);
-            
+
             dialogue.Promote();
         }
 
@@ -35,7 +40,7 @@ namespace UI
             dialogues.Remove(dialogue);
             dialogue.Hide();
         }
-        
+
         internal Dialogue Pop()
         {
             Dialogue removed = Peek();
@@ -49,29 +54,29 @@ namespace UI
             Dialogue front = dialogues.FirstOrDefault();
             if (front != null)
                 front.Promote();
-            
+
             return removed;
         }
-        
+
         internal Dialogue Peek() => dialogues.FirstOrDefault();
 
         #endregion
-        
-        
+
+
         // Unit
         internal readonly Event<IUnit> unitSelected = new Event<IUnit>();
         internal readonly Event unitDeselected = new Event();
 
         internal readonly Event<StatDifference> unitDamaged = new Event<StatDifference>();
-        
+
         // Abilities
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
-        
+
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
-        
+
         internal readonly Event abilityConfirmed = new Event();
-        
+
         // Turn
         // TODO: Should have type struct that contains information of the previous and current units, rounds, etc.
         internal readonly Event turnChanged = new Event();
@@ -85,12 +90,12 @@ namespace UI
             cmd.ListenCommand((EndTurnCommand c) => turnChanged.Invoke());
             cmd.ListenCommand((TurnQueueCreatedCommand c) => turnChanged.Invoke());
             cmd.ListenCommand((TakeTotalDamageCommand c) => unitDamaged.Invoke(new StatDifference(c)));
-            
+
             // TODO: TEMPORARY...
             turnChanged.AddListener(unitDeselected.Invoke);
         }
     }
-    
+
 
     internal readonly struct StatDifference
     {

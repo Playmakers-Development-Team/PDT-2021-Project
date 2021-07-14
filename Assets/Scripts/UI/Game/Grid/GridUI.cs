@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Abilities.Commands;
 using Commands;
+using Grid;
 using Managers;
+using Turn;
+using Turn.Commands;
 using Units;
 using Units.Commands;
 using UnityEngine;
@@ -106,8 +110,7 @@ namespace UI
             {
                 // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
                 // BUG: IndexOutOfRange when clicking unit while moving...
-                Vector2Int[] coordinates = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value).
-                    Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                Vector2Int[] coordinates = selectedUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
@@ -146,8 +149,7 @@ namespace UI
                 return;
 
             // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-            List<Vector2Int> inRange = gridManager.GetAllReachableTiles(selectedUnit.Coordinate, selectedUnit.MovementActionPoints.Value).
-                Where(vec => gridManager.IsInBounds(vec)).ToList();
+            List<Vector2Int> inRange = selectedUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
             
             if (!inRange.Contains(destination))
                 return;

@@ -2,8 +2,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using Abilities;
-using GridObjects;
-using StatusEffects;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine.Serialization;
 
 namespace Units

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using GridObjects;
+using Grid.GridObjects;
 using TMPro;
 using Units;
 using UnityEngine;

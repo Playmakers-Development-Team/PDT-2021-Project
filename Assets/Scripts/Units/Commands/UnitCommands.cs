@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Abilities;
 using Commands;
-using GridObjects;
 
 namespace Units.Commands
 {
@@ -132,5 +131,23 @@ namespace Units.Commands
     public class KnockbackModifierChangedCommand : ValueCommand
     { 
         public KnockbackModifierChangedCommand(IUnit unit, int value) : base(unit, value) {}
+    }
+    
+    // TODO: Can be deleted once enemy abilities are implemented
+    /// <summary>
+    /// Executed when the an enemy unit attacks.
+    /// </summary>
+    public class EnemyAttack : UnitCommand
+    {
+        public EnemyAttack(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when all the enemy logic has been completed.
+    /// Hence, we may be free to proceed to the next turn
+    /// </summary>
+    public class EnemyActionsCompletedCommand : UnitCommand
+    {
+        public EnemyActionsCompletedCommand(IUnit unit) : base(unit) {}
     }
 }
