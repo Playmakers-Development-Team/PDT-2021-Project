@@ -184,6 +184,7 @@ namespace Units
 
         public void AddSpeed(int amount)
         {
+            Debug.LogError("Old speed value = " + Speed.Value);
             Speed.Value += amount;
             Debug.LogError("New speed value = " + Speed.Value);
             commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
