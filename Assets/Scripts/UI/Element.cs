@@ -1,8 +1,10 @@
-﻿using Managers;
+﻿using System;
+using Managers;
 using UnityEngine;
 
 namespace UI
 {
+    [Obsolete]
     public abstract class Element : MonoBehaviour
     {
         protected UIManager manager;

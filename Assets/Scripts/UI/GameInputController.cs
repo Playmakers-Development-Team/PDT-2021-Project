@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 namespace UI
 {
-    [AddComponentMenu("UI System/UI Controller", 0)]
-    internal class Controller : Element
+    [AddComponentMenu("Playmakers/UI/Input Controller", 0)]
+    internal class GameInputController : UIComponent<GameDialogue>
     {
         private GridManager gridManager;
 
@@ -15,13 +15,17 @@ namespace UI
             gridManager = ManagerLocator.Get<GridManager>();
         }
 
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
+
         private void Update()
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
-                manager.abilityConfirmed.Invoke();
+                dialogue.abilityConfirmed.Invoke();
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
-                manager.unitDeselected.Invoke();
+                dialogue.unitDeselected.Invoke();
 
             if (Mouse.current.wasUpdatedThisFrame && Camera.main)
             {
@@ -32,7 +36,7 @@ namespace UI
                     return;
             
                 Vector2 worldPosition = worldRay.GetPoint(distance);
-                manager.abilityRotated.Invoke(worldPosition);
+                dialogue.abilityRotated.Invoke(worldPosition);
             }
         }
     }

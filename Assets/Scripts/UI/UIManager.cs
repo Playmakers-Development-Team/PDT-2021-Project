@@ -58,7 +58,9 @@ namespace UI
 
         #endregion
 
-
+        
+        #region Old
+        
         // Unit
         internal readonly Event<IUnit> unitSelected = new Event<IUnit>();
         internal readonly Event unitDeselected = new Event();
@@ -121,4 +123,6 @@ namespace UI
             Difference = oldValue - newValue;
         }
     }
+    
+    #endregion
 }

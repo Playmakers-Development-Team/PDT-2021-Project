@@ -1,9 +1,11 @@
-﻿using Abilities;
+﻿using System;
+using Abilities;
 using Abilities.Commands;
 using Commands;
 using Managers;
 using Turn.Commands;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace UI
@@ -83,6 +85,7 @@ namespace UI
             // Subscribe to Commands
             commandManager.ListenCommand(typeof(AbilityCommand), OnAbilityConfirmed);
             commandManager.ListenCommand(typeof(EndTurnCommand), OnEndTurn);
+            commandManager.ListenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
         }
 
         private void OnDisable()
@@ -90,6 +93,7 @@ namespace UI
             // Unsubscribe from Commands
             commandManager.UnlistenCommand(typeof(AbilityCommand), OnAbilityConfirmed);
             commandManager.UnlistenCommand(typeof(EndTurnCommand), OnEndTurn);
+            commandManager.UnlistenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
         }
         
         #endregion
@@ -105,6 +109,11 @@ namespace UI
         private void OnEndTurn()
         {
             turnEnded.Invoke();
+        }
+
+        private void OnUnitDamaged(TakeTotalDamageCommand cmd)
+        {
+            unitDamaged.Invoke(new StatDifference(cmd));
         }
         
         #endregion

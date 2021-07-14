@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class UnitUI : Element
+    public class UnitUI : UIComponent<GameDialogue>
     {
         [SerializeField] private GridObject unitGridObject;
         
@@ -28,24 +28,28 @@ namespace UI
 
         protected override void OnComponentAwake()
         {
-            
             unit = unitGridObject as IUnit;
             
             if (unit == null)
                 DestroyImmediate(gameObject);
-
-            manager.unitDamaged.AddListener(OnTakeDamage);
         }
 
-        private void OnDisable()
+        protected override void Subscribe()
         {
-            manager.unitDamaged.RemoveListener(OnTakeDamage);
+            dialogue.unitDamaged.AddListener(OnTakeDamage);
+        }
+
+        protected override void Unsubscribe() {}
+
+        protected override void OnComponentDisabled()
+        {
+            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
         }
 
 
         public void OnClick()
         {
-            manager.unitSelected.Invoke(unit);
+            dialogue.unitSelected.Invoke(unit);
         }
 
         private void OnTakeDamage(StatDifference data)
@@ -69,17 +73,19 @@ namespace UI
 
         private async void UpdateHealthBar(StatDifference data)
         {
-            // TODO: Update to use data.OldValue to reduce number of calculations...
             if (data.Difference <= 0)
                 return;
             
             float baseAmount = data.BaseValue;
+            
+            float oldAmount = data.OldValue;
             float currentAmount = data.NewValue;
+            
+            float tOld = oldAmount / baseAmount;
             float tCurrent = currentAmount / baseAmount;
-            float tDifference = data.Difference / baseAmount;
             
             healthBarCurrent.fillAmount = tCurrent;
-            healthBarDifference.fillAmount = tCurrent + tDifference;
+            healthBarDifference.fillAmount = tOld;
 
             await Task.Delay((int) (differenceDelay * 1000));
 
@@ -89,7 +95,7 @@ namespace UI
             while (Time.time - start < duration)
             {
                 float t = (Time.time - start) / duration;
-                healthBarDifference.fillAmount = Mathf.Lerp(tDifference + tCurrent, tCurrent, t);
+                healthBarDifference.fillAmount = Mathf.Lerp(tOld, tCurrent, t);
                 await Task.Yield();
             }
 
