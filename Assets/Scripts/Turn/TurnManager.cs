@@ -173,6 +173,7 @@ namespace Turn
         /// </summary>
         private void NextTurn()
         {
+            UpdateNextTurnQueue();
             CurrentTurnIndex++;
             TotalTurnCount++;
             

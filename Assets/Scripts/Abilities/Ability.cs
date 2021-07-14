@@ -16,6 +16,7 @@ namespace Abilities
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         // [SerializeField] private int knockback;
+        [SerializeField] [Range(-5,5)] private int speed;
 
         [SerializeField] private Effect[] targetEffects;
         [SerializeField] private Effect[] userEffects;
@@ -27,7 +28,11 @@ namespace Abilities
         /// <summary>
         /// Describes what and how the ability can hit units.
         /// </summary>
-        public IShape Shape => shape;
+        public IShape Shape => shape;        
+        /// <summary>
+        /// A complete description of the ability.
+        /// </summary>
+        public int Speed => speed;
         /// <summary>
         /// All keywords used by this ability regardless whether they should be shown to
         /// the player or not.
@@ -43,6 +48,7 @@ namespace Abilities
 
         public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
+            user.AddSpeed(speed);
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
@@ -88,6 +94,7 @@ namespace Abilities
         
         public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
+            user.AddSpeed(-speed);
             UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 

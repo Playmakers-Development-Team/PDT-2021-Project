@@ -38,6 +38,8 @@ namespace Units
         new void TakeDefence(int amount);
 
         void SetSpeed(int amount);
+
+        new void AddSpeed(int amount);
         
         void SetMovementActionPoints(int amount);
         

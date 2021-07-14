@@ -181,6 +181,13 @@ namespace Units
             Speed.Value = amount;
             commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
         }
+
+        public void AddSpeed(int amount)
+        {
+            Speed.Value += amount;
+            Debug.LogError("New speed value = " + Speed.Value);
+            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
+        }
         
         public void SetMovementActionPoints(int amount)
         {
