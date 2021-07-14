@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Abilities;
 using Commands;
 using Managers;
 using Units.Players;
@@ -30,5 +31,7 @@ namespace Units.Enemies
             ManagerLocator.Get<EnemyManager>().Spawn(this);
             //Name = RandomizeName();
         }
+
+        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
     }
 }

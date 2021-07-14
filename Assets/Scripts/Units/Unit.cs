@@ -154,13 +154,13 @@ namespace Units
             commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
         }
 
-        public void TakeDamage(int amount)
+        public void DealDamageTo(IAbilityUser other, int amount)
         {
             // Attack modifiers should only work when the effect actually intends to do damage
             if (amount <= 0)
                 return;
             
-            TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+            other.TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
         }
 
         public void TakeDamageWithoutModifiers(int amount)
@@ -415,6 +415,12 @@ namespace Units
                     break;
             }
         }
+
+        #endregion
+
+        #region Utility
+
+        public abstract bool IsSameTeamWith(IAbilityUser other);
 
         #endregion
         

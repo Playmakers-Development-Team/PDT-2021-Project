@@ -78,7 +78,7 @@ namespace Abilities
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
-                    targetUnit.TakeDamage(damage);
+                    user.DealDamageTo(targetUnit, damage);
                 
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)

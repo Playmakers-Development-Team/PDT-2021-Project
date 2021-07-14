@@ -23,20 +23,38 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs: []
     keywords: []
-  - name: 4 Attack IF Target Spend Joy
+  - name: 4 Attack IF Target Spend 1 Joy
     damageValue: 0
     defenceValue: 0
     attackValue: 4
     providingTenet:
       tenetType: 1
       stackCount: 0
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs:
+    - name: Target Spend 1 Joy
+      affectType: 1
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 4
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
     keywords: []
   userEffects:
   - name: Default, Provide 1 Humility
@@ -46,7 +64,6 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs: []
     keywords: []
