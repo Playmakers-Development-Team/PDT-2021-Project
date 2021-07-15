@@ -15,7 +15,7 @@ namespace Units
         [SerializeField] private ValueStat healthPoints;
 
         [FormerlySerializedAs("movementActionPoints")] [SerializeField]
-        private ValueStat movementPoints;
+        private Stat movementPoints;
 
         [SerializeField] private ValueStat speed;
 
@@ -27,12 +27,14 @@ namespace Units
 
         [SerializeField] private ModifierStat takeKnockbackModifier;
         [SerializeField] private List<Ability> abilities;
-
-
-        [SerializeField] private Stat testStat;
         
-        public Stat TestStat { get; set; }
-
+        [field: SerializeField] public HealthStat HealthValue { get; set; }
+        [field: SerializeField] public Stat SpeedStat { get; set; }
+        [field: SerializeField] public Stat DefenceStat { get; set; }
+        [field: SerializeField] public Stat AttackStat { get; set; }
+        [field: SerializeField] public Stat KnockbackStat { get; set; }
+        
+        
         // TODO: Remove all fields of type "ModifierStat" or "ValueStat".
         public string Name
         {
@@ -52,7 +54,7 @@ namespace Units
             set => healthPoints = value;
         }
 
-        public ValueStat MovementPoints
+        public Stat MovementPoints
         {
             get => movementPoints;
             set => movementPoints = value;
@@ -87,38 +89,18 @@ namespace Units
             get => abilities;
             set => abilities = value;
         }
-
-        [field: SerializeField] public Stat SpeedStat { get; set; }
         
-        
-        [field: SerializeField] public Stat DefenceStat { get; set; }
-        
-        [field: SerializeField] public int BaseHealth { get; private set; }
-        
-        // public Stat SpeedStat { get; set; }
-        // public Stat SpeedStat { get; set; }
-        // public Stat SpeedStat { get; set; }
-        // public Stat SpeedStat { get; set; }
-
-
-
-
-
-
-
-
-
-    public void Initialise()
+         
+        //TODO: Remove this function.
+        public void Initialise()
         {
-            //TODO: Remove the following.
-            //-----BEGIN REMOVE-----
             HealthPoints.Reset();
-            MovementPoints.Reset();
             Speed.Reset();
             Attack.Reset();
             Defence.Reset();
             TakeKnockbackModifier.Reset();
-            //----END REMOVE--------
+          
+            
             
             
             

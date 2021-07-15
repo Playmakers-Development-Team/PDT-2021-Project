@@ -1,44 +1,43 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Commands;
 using Managers;
 using Units.Commands;
+using UnityEngine;
 
 namespace Units.Stats
 {
+    [Serializable]
     public class Stat
     {
-        public int Value
+       public int Value
         {
             get => value;
             set
             {
-                this.value = value;
+                this.value = Mathf.Max(0,value);
                 commandManager.ExecuteCommand(new StatChangedCommand(unit, value, StatType));
             }
         }
-        public int BaseValue { get; set; }
+       
+        [field: SerializeField] public int BaseValue { get; set; }
         public StatTypes StatType { get; private set; }
 
-        private readonly CommandManager commandManager;
+        public readonly CommandManager commandManager; 
+
+        public readonly IUnit unit;
         
-        private IUnit unit;
         private int value;
 
         public Stat(IUnit unit,int baseValue, StatTypes statType)
         {
+            commandManager = ManagerLocator.Get<CommandManager>();
             BaseValue = baseValue;
             Value = baseValue;
             StatType = statType;
             this.unit = unit;
-            ManagerLocator.Get<CommandManager>();
         }
 
         public void Reset() => Value = BaseValue;
-        
-        
-        
-        
-        
-        
     }
 }

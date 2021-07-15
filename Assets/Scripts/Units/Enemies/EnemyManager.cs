@@ -125,8 +125,9 @@ namespace Units.Enemies
             commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
             
             Debug.Log(enemyUnit.Name + " ENEMY-INT: Damage player");
-            playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
-            
+          //  playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
+         // playerUnit.HealthStat.Value -= enemyUnit.AttackStat.Value;  
+         playerUnit.HealthStat.TakeDamage(enemyUnit.AttackStat.Value);
             // Wait so that an enemies turn is not over instantly
             await UniTask.Delay(1000); 
             
@@ -144,7 +145,7 @@ namespace Units.Enemies
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
-                enemyUnit.MovementActionPoints.Value)
+                enemyUnit.MovementPoints.Value)
             );
             
             commandManager.ExecuteCommand(moveCommand);
@@ -252,10 +253,10 @@ namespace Units.Enemies
             
             foreach (var playerUnit in playerUnits)
             {
-                if (lowestHealthValue > playerUnit.Health.HealthPoints.Value)
+                if (lowestHealthValue > playerUnit.HealthStat.Value)
                 {
                     lowestHealthPlayerUnits.Clear();
-                    lowestHealthValue = playerUnit.Health.HealthPoints.Value;
+                    lowestHealthValue = playerUnit.HealthStat.Value;
                     lowestHealthPlayerUnits.Add(playerUnit);
                 }
                 else if (lowestHealthValue == playerUnit.Health.HealthPoints.Value)

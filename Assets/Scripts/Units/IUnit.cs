@@ -17,21 +17,19 @@ namespace Units
         public string Name { get; set; }
         public TenetType Tenet { get; }
         
-        [Obsolete("Use MovementPoints instead")]
-        public ValueStat MovementActionPoints { get; }
+        // [Obsolete("Use MovementPoints instead")]
+        // public ValueStat MovementActionPoints { get; }
         public Stat MovementPoints { get; }
         
         [Obsolete("Use SpeedStat instead ")] 
         public ValueStat Speed { get; }
-
-        public Stat SpeedStat { get; }
         
         [Obsolete ("Use AttackStat instead")]
         public ModifierStat Attack { get; }
         public Stat AttackStat { get; }
-        
         public Stat DefenceStat { get; }
-        
+        public Stat SpeedStat { get; }
+
         public Stat KnockbackStat { get; }
         
         //TODO: Change this to a loadout type.
@@ -46,6 +44,7 @@ namespace Units
 
         void ChangeAnimation(AnimationStates animationStates);
 
+        [Obsolete("Directly alter the HealthStat instead")]
         void TakeDamageWithoutModifiers(int amount);
 
         [Obsolete("Directly alter the Knockback stat instead")]
@@ -62,6 +61,7 @@ namespace Units
         [Obsolete("Directly alter the MovementPoints stat instead")]
         void SetMovementActionPoints(int amount);
         
+        [Obsolete("Directly alter the HealthStat instead")]
         new void TakeAttack(int amount);
         
         List<Vector2Int> GetAllReachableTiles();

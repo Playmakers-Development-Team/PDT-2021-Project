@@ -9,6 +9,7 @@ using Units;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
+using Units.Stats;
 using UnityEngine;
 
 namespace Turn
@@ -31,6 +32,9 @@ namespace Turn
         public int MovementPhaseIndex { get; private set; }
         public int AbilityPhaseIndex { get; private set; }
         public int PhaseIndex { get; set; }
+        
+        public Stat Insight { get; set; }
+        
         public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
@@ -117,14 +121,13 @@ namespace Turn
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
+            Insight = new Stat(null, 0, StatTypes.Insight);
             
             UpdateNextTurnQueue();
             currentTurnQueue = nextTurnQueue;
-
-            if (!(ActingEnemyUnit is null))
-                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
+            StartTurn();
         }
         
         public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
@@ -312,7 +315,7 @@ namespace Turn
             
             List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
+            turnQueue.Sort((x, y) => x.SpeedStat.Value.CompareTo(y.SpeedStat.Value));
             return turnQueue;
         }
 
@@ -353,8 +356,8 @@ namespace Turn
                 currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex + increment];
                 currentIndex += increment;
             }
-        
-            ManagerLocator.Get<PlayerManager>().Insight.Value--;
+
+            playerManager.Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new TurnManipulatedCommand());
             EndTurnManipulationPhase();
@@ -462,9 +465,9 @@ namespace Turn
         {
             foreach (IUnit unit in unitManager.AllUnits)
             {
-                unit.MovementActionPoints.Reset();
-                unit.Attack.Reset();
-                unit.Health.Defence.Reset();
+                unit.MovementPoints.Reset();
+                unit.AttackStat.Reset();
+                unit.DefenceStat.Reset();
             }
         }
 

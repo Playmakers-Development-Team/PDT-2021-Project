@@ -37,13 +37,14 @@ namespace Units
             set => data.Name = value;
         }
         
-        public HealthStat HealthStat { get; set; }
-        public Stat AttackStat { get; }
-        public Stat DefenceStat { get; }
-        public Stat MovementPoints { get; }
-        public Stat SpeedStat { get; }
-        public Stat KnockbackStat { get; }
+        public HealthStat HealthStat { get; private set; }
+        public Stat AttackStat { get; private set; }
+        public Stat DefenceStat { get; private set; }
+        public Stat MovementPoints { get; private set; }
+        public Stat SpeedStat { get; private set; }
+        public Stat KnockbackStat { get; private set; }
         
+
         [Obsolete("Use HealthStat instead")]
         public Health Health { get; private set; }
         
@@ -56,12 +57,12 @@ namespace Units
         
         public TenetType Tenet => data.Tenet;
         
-        [Obsolete("Use MovementPoints instead")]
-        public ValueStat MovementActionPoints
-        {
-            get => data.MovementPoints;
-            set => data.MovementPoints = value;
-        }
+        // [Obsolete("Use MovementPoints instead")]
+        // // public ValueStat MovementActionPoints
+        // // {
+        // //     get => data.MovementPoints;
+        // //     set => data.MovementPoints = value;
+        // // }
         
         
         [Obsolete("Use SpeedStat instead")]
@@ -114,20 +115,16 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
             
             #endregion
-
-            data.Initialise();
             
-            Health = new Health(new KillUnitCommand(this),
-                data.HealthPoints, data.Defence);
-
-            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.BaseHealth, StatTypes.Health);
+            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
+            StatTypes.Health);
+            DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
+            AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
+            SpeedStat = new Stat(this, data.SpeedStat.BaseValue, StatTypes.Speed);
+            MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
+            KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             
-            
-            Knockback = new Knockback(data.TakeKnockbackModifier);
             UnitAnimator = GetComponentInChildren<Animator>();
-            
-            // TODO Speed temporarily random for now until proper turn manipulation is done.
-            SetSpeed(Speed.Value + Random.Range(0, 101));
             
             #region ListenCommands
 
@@ -156,58 +153,40 @@ namespace Units
                 nameText.text = Name;
             
             if (healthText)
-                healthText.text = Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue;
+                healthText.text = HealthStat.Value + " / " + HealthStat.BaseValue;
         }
 
         #region ValueChanging
         
-        public void TakeDefence(int amount)
-        {
-            Health.Defence.Adder -= amount;
-            commandManager.ExecuteCommand(new DefenceChangeCommand(this, amount));
-        }
-
-        public void TakeAttack(int amount)
-        {
-            Attack.Adder += amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
-        }
-
+        public void TakeDefence(int amount) => DefenceStat.Value += amount;
+        
+        public void TakeAttack(int amount) => AttackStat.Value += amount;
+        
+        
         public void TakeDamage(int amount)
         {
-            // Attack modifiers should only work when the effect actually intends to do damage
             if (amount <= 0)
                 return;
             
-            TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+            HealthStat.TakeDamage(amount);
         }
 
+        
+        //TODO: Remove this function.
         public void TakeDamageWithoutModifiers(int amount)
         {
-            commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
-            int damageTaken = Health.TakeDamage(amount);
-            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
+            // commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
+            // int damageTaken = Health.TakeDamage(amount);
+            // commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
 
-        public void TakeKnockback(int amount)
-        {
-           int knockbackAmount = Knockback.TakeKnockback(amount);
-           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this, knockbackAmount));
-        }
+
+        public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
-        public void SetSpeed(int amount)
-        {
-            Speed.Value = amount;
-            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
-        }
+        public void SetSpeed(int amount) => SpeedStat.Value = amount;
         
-        public void SetMovementActionPoints(int amount)
-        {
-            // Clamp it here, movement points cannot be less than 0
-            int clampedAmount = Mathf.Max(0, amount);
-            MovementActionPoints.Value = clampedAmount;
-            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, clampedAmount));
-        }
+        [Obsolete("Directly alter MovementPoints Value instead")]
+        public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
         
         #endregion
 
@@ -440,7 +419,7 @@ namespace Units
         public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
-            int range = (int) MovementActionPoints.Value;
+            int range = (int) MovementPoints.Value;
             
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -554,7 +533,7 @@ namespace Units
             ));
             
             gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
+            unit.SetMovementActionPoints(unit.MovementPoints.Value - manhattanDistance);
             unit.ChangeAnimation(AnimationStates.Idle);
 
             /*Debug.Log(Mathf.Max(0,

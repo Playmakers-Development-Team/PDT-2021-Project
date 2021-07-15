@@ -7,7 +7,8 @@
         Health,
         Speed,
         Knockback,
-        MovementPoints
+        MovementPoints,
+        Insight,
     }
     
     
