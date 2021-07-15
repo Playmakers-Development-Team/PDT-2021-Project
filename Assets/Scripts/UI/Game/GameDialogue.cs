@@ -182,13 +182,11 @@ namespace UI.Game
         protected override void OnPromote()
         {
             canvasGroup.interactable = true;
-            canvasGroup.alpha = 1.0f;
         }
 
         protected override void OnDemote()
         {
             canvasGroup.interactable = false;
-            canvasGroup.alpha = 0.5f;
         }
         
         #endregion

@@ -12,13 +12,14 @@ namespace UI.Settings.Volume
         private AudioManager audioManager;
 
 
+        // TODO: Assign slider value once AudioManager.GetVolume() implemented...
         protected override void OnComponentAwake()
         {
             audioManager = ManagerLocator.Get<AudioManager>();
         }
 
 
-        public void OnValueChanged(Single volume)
+        public void OnValueChanged(float volume)
         {
             audioManager.ChangeVolume(volumeParameter.ToString(), volume);
         }
