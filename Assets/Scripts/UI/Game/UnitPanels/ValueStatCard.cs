@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI
 {
-    public class ValueStatCard : Element
+    public class ValueStatCard : UIComponent<GameDialogue>
     {
         [SerializeField] private TextMeshProUGUI labelText;
         [SerializeField] private TextMeshProUGUI valueText;
@@ -14,5 +14,9 @@ namespace UI
             labelText.text = label;
             valueText.text = value.ToString(CultureInfo.InvariantCulture);
         }
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
     }
 }

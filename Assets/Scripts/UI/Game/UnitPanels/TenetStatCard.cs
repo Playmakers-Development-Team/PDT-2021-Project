@@ -1,11 +1,10 @@
-﻿using System.Globalization;
-using TMPro;
+﻿using TMPro;
 using TenetStatuses;
 using UnityEngine;
 
 namespace UI
 {
-    public class TenetStatCard : Element
+    public class TenetStatCard : UIComponent<GameDialogue>
     {
         [SerializeField] private TextMeshProUGUI labelText;
         [SerializeField] private TextMeshProUGUI valueText;
@@ -25,7 +24,11 @@ namespace UI
             };
 
             labelText.text = label;
-            valueText.text = value.ToString(CultureInfo.InvariantCulture);
+            valueText.text = value.ToString();
         }
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace UI
 {
-    [Obsolete]
+    [Obsolete("Element is obsolete, inherit from UIComponent<T> instead.")]
     public abstract class Element : MonoBehaviour
     {
         protected UIManager manager;

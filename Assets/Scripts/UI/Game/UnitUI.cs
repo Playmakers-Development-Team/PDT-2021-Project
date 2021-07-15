@@ -73,6 +73,10 @@ namespace UI
             damageText.enabled = true;
             
             await Task.Delay((int) damageTextDuration * 1000);
+
+            // BUG: See below...
+            if (damageText == null)
+                return;
             
             damageText.enabled = false;
         }
@@ -101,6 +105,14 @@ namespace UI
             while (Time.time - start < duration)
             {
                 float t = (Time.time - start) / duration;
+                
+                // BUG: Null reference here, preventing with scuffed check...
+                // I think the IUnit can die while this async function runs, it should kill the function
+                //  by listening to dialogue.unitKilled but I don't know how best to do that right now...
+                
+                if (healthBarDifference == null)
+                    return;
+                    
                 healthBarDifference.fillAmount = Mathf.Lerp(tOld, tCurrent, t);
                 await Task.Yield();
             }
