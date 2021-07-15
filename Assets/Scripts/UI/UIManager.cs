@@ -26,7 +26,7 @@ namespace UI
         internal void Remove(Dialogue dialogue)
         {
             dialogues.Remove(dialogue);
-            dialogue.Hide();
+            dialogue.Close();
         }
 
         internal Dialogue Pop()
@@ -36,7 +36,7 @@ namespace UI
             if (removed != null)
             {
                 dialogues.Remove(removed);
-                removed.Hide();
+                removed.Close();
             }
 
             Dialogue front = dialogues.FirstOrDefault();
@@ -48,6 +48,6 @@ namespace UI
 
         internal Dialogue Peek() => dialogues.FirstOrDefault();
 
-        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d is T) as T;
+        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d.GetType().IsAssignableFrom(typeof(T))) as T;
     }
 }

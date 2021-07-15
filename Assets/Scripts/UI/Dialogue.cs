@@ -3,21 +3,15 @@ using UnityEngine;
 
 namespace UI
 {
-    /*
-     * Showing a dialogue
-     * Hiding a dialogue
-     * Disabling a dialogue
-     * Enabling a dialogue
-     */
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour
     {
-        internal readonly Event hidden = new Event();
+        internal readonly Event closed = new Event();
         internal readonly Event promoted = new Event();
         internal readonly Event demoted = new Event();
         
-        private UIManager manager;
-        private CanvasGroup canvasGroup;
+        protected UIManager manager;
+        protected CanvasGroup canvasGroup;
         
         private void Awake()
         {
@@ -32,19 +26,16 @@ namespace UI
             manager.Add(this);
         }
 
-        internal void Hide()
+        internal void Close()
         {
-            canvasGroup.interactable = false;
-            canvasGroup.alpha = 0.0f;
-
-            OnHide();
-            hidden.Invoke();
+            OnClose();
+            Destroy(gameObject);
+            closed.Invoke();
         }
 
         internal void Promote()
         {
             canvasGroup.interactable = true;
-            canvasGroup.alpha = 1.0f;
             
             OnPromote();
             promoted.Invoke();
@@ -53,7 +44,6 @@ namespace UI
         internal void Demote()
         {
             canvasGroup.interactable = false;
-            canvasGroup.alpha = 0.5f;
             
             OnDemote();
             demoted.Invoke();
@@ -63,7 +53,7 @@ namespace UI
         internal virtual void OnAwake() {}
 
 
-        protected abstract void OnHide();
+        protected abstract void OnClose();
 
         protected abstract void OnPromote();
 

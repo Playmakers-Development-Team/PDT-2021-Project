@@ -177,11 +177,19 @@ namespace UI.Game
 
         #region Dialogue Event Functions
 
-        protected override void OnHide() {}
+        protected override void OnClose() {}
 
-        protected override void OnPromote() {}
+        protected override void OnPromote()
+        {
+            canvasGroup.interactable = true;
+            canvasGroup.alpha = 1.0f;
+        }
 
-        protected override void OnDemote() {}
+        protected override void OnDemote()
+        {
+            canvasGroup.interactable = false;
+            canvasGroup.alpha = 0.5f;
+        }
         
         #endregion
         

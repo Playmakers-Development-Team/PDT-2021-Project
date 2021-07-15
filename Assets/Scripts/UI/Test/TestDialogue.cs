@@ -6,7 +6,7 @@ namespace UI.Test
     {
         internal readonly Event testEvent = new Event();
 
-        protected override void OnHide()
+        protected override void OnClose()
         {
             Debug.Log("Hidden...");
             Destroy(gameObject);
