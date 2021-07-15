@@ -22,7 +22,7 @@ namespace UI
         internal readonly Event<StatDifference> unitDamaged = new Event<StatDifference>();
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
-        internal readonly Event abilityDeselected = new Event();
+        internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
         internal readonly Event abilityConfirmed = new Event();
         
@@ -40,6 +40,8 @@ namespace UI
         internal Ability SelectedAbility { get; private set; }
         
         internal Vector2 AbilityDirection { get; private set; }
+
+        private bool IsAbilitySelected => SelectedAbility != null;
         
         
         #region MonoBehaviour Events
@@ -65,24 +67,26 @@ namespace UI
             {
                 bool changed = SelectedUnit != unit;
                 
-                SelectedUnit = unit;
-            
                 if (changed)
-                    abilityDeselected.Invoke(); 
+                    unitDeselected.Invoke();
+                
+                SelectedUnit = unit;
             });
             
             unitDeselected.AddListener(() =>
             {
                 SelectedUnit = null;
-                abilityDeselected.Invoke();
             });
             
             abilitySelected.AddListener(ability =>
             {
+                if (SelectedAbility != null)
+                    abilityDeselected.Invoke(SelectedAbility);
+                
                 SelectedAbility = ability;
             });
             
-            abilityDeselected.AddListener(() =>
+            abilityDeselected.AddListener(ability =>
             {
                 SelectedAbility = null;
             });
@@ -94,7 +98,11 @@ namespace UI
             
             abilityConfirmed.AddListener(() =>
             {
-                commandManager.ExecuteCommand(new AbilityCommand(SelectedUnit.Unit, AbilityDirection, SelectedAbility));
+                if (turnManager.ActingPlayerUnit == null || !IsAbilitySelected)
+                    return;
+
+                commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit, AbilityDirection, SelectedAbility));
+                commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
             });
         }
 

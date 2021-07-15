@@ -17,6 +17,12 @@ namespace UI
 
         private void OnEnable()
         {
+            if (!dialogue)
+                dialogue = manager.GetDialogue<T>();
+            
+            if (dialogue)
+                Subscribe();
+            
             OnComponentEnabled();
         }
 
@@ -24,6 +30,8 @@ namespace UI
         {
             OnComponentDisabled();
             Unsubscribe();
+            
+            dialogue = null;
         }
         
         private void OnDialogueAdded(Dialogue addedDialogue)

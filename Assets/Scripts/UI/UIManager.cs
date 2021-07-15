@@ -56,6 +56,8 @@ namespace UI
 
         internal Dialogue Peek() => dialogues.FirstOrDefault();
 
+        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d is T) as T;
+
         #endregion
 
         

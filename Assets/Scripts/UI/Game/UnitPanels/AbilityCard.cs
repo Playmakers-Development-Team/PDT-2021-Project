@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class AbilityCard : Element
+    public class AbilityCard : UIComponent<GameDialogue>
     {
         [SerializeField] private Button button;
-        [SerializeField] private Image image;
         [SerializeField] private TextMeshProUGUI titleText;
         [SerializeField] private TextMeshProUGUI descriptionText;
 
@@ -25,42 +24,34 @@ namespace UI
             descriptionText.text = ability.Description;
         }
 
-        private void OnEnable()
+        protected override void Subscribe()
         {
-            manager.abilityDeselected.AddListener(OnAbilityDeselect);
-            manager.unitDeselected.AddListener(OnUnitDeselected);
+            dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
         }
 
-        private void OnDisable()
+        protected override void Unsubscribe()
         {
-            manager.abilityDeselected.RemoveListener(OnAbilityDeselect);
-            manager.unitDeselected.AddListener(OnUnitDeselected);
+            dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
         }
 
         public void OnCardClicked()
         {
-            clicked = !clicked;
-            if (clicked)
+            if (!clicked)
             {
-                // TODO: this should call manager.abilityDeselected.Invoke(manager.SelectedAbility)...
-                manager.abilityDeselected.Invoke(Ability);
-                manager.abilitySelected.Invoke(Ability);
+                dialogue.abilitySelected.Invoke(Ability);
                 button.image.color = Color.green;
+                clicked = true;
             }
             else
             {
-                manager.abilityDeselected.Invoke(Ability);
+                dialogue.abilityDeselected.Invoke(Ability);
             }
         }
 
-        private void OnAbilityDeselect(Ability ability)
+        private void OnAbilityDeselected(Ability ability)
         {
+            clicked = false;
             button.image.color = Color.white;
-        }
-
-        private void OnUnitDeselected()
-        {
-            manager.abilityDeselected.Invoke(Ability);
         }
 
         internal void Destroy()

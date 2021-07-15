@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class AbilityList : Element
+    public class AbilityList : UIComponent<GameDialogue>
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private List<AbilityCard> cards;
@@ -18,6 +18,10 @@ namespace UI
         {
             TryGetComponent(out scrollView);
         }
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
 
         internal void Redraw(IUnit unit)
         {
