@@ -17,7 +17,6 @@ namespace Units.Stats
         
         public int TakeDamage(int amount)
         {
-            
             int initialDamageTaken = amount - unit.DefenceStat.Value;
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             Value -= calculatedDamageTaken;

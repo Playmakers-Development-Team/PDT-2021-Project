@@ -153,7 +153,8 @@ namespace Units.Commands
     /// </summary>
     public class EnemyAttack : UnitCommand
     {
-        public EnemyAttack(IUnit unit) : base(unit) {}
+        public EnemyAttack(IUnit unit, IUnit playerUnit, int amount) : base(unit) =>
+            playerUnit.TakeDamage(amount);
     }
 
     /// <summary>

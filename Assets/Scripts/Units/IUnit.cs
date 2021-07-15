@@ -44,24 +44,19 @@ namespace Units
 
         void ChangeAnimation(AnimationStates animationStates);
 
-        [Obsolete("Directly alter the HealthStat instead")]
+        [Obsolete]
         void TakeDamageWithoutModifiers(int amount);
 
-        [Obsolete("Directly alter the Knockback stat instead")]
         new void TakeDamage(int amount);
 
-        [Obsolete("Directly alter the Knockback stat instead")]
         new void TakeKnockback(int amount);
         
-        [Obsolete("Directly alter the Defence stat instead")]
         new void TakeDefence(int amount);
 
         void SetSpeed(int amount);
         
-        [Obsolete("Directly alter the MovementPoints stat instead")]
         void SetMovementActionPoints(int amount);
         
-        [Obsolete("Directly alter the HealthStat instead")]
         new void TakeAttack(int amount);
         
         List<Vector2Int> GetAllReachableTiles();
