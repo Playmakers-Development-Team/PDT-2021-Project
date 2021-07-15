@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Tests.Beacons
+namespace Tests.Beacons.Base
 {
     public class TileBeacon<T> : ScreenBeacon<T>, ITileBeacon where T : Enum
     {

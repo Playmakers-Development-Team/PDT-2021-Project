@@ -4,6 +4,7 @@ using Grid;
 using Managers;
 using NUnit.Framework.Constraints;
 using Tests.Beacons;
+using Tests.Beacons.Base;
 using Units;
 using UnityEngine;
 

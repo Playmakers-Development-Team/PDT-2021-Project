@@ -1,3 +1,5 @@
+using Tests.Beacons.Base;
+
 namespace Tests.Beacons
 {
     public enum GridBeacons

@@ -2,7 +2,7 @@ using System;
 using E7.Minefield;
 using UnityEngine;
 
-namespace Tests.Beacons
+namespace Tests.Beacons.Base
 {
     public class ScreenBeacon<T> : LabelBeacon<T>, IScreenBeacon where T : Enum
     {

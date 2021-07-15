@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
 using E7.Minefield;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-namespace Tests.Beacons
+namespace Tests.Beacons.Base
 {
     public class InputBeacon
     {

@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-namespace Tests.Beacons
+namespace Tests.Beacons.Base
 {
     [ExecuteAlways]
     public class AutoTileBeacon<T> : TileBeacon<T>, ITileBeacon where T : Enum

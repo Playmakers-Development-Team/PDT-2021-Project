@@ -1,4 +1,5 @@
 using E7.Minefield;
+using Tests.Beacons.Base;
 using UnityEngine;
 
 namespace Tests.Beacons

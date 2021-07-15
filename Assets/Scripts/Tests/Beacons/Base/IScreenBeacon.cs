@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Tests.Beacons
+namespace Tests.Beacons.Base
 {
     public interface IScreenBeacon
     {

@@ -7,6 +7,7 @@ using Grid;
 using Managers;
 using NUnit.Framework;
 using Tests.Beacons;
+using Tests.Beacons.Base;
 using Tests.Constraints;
 using Turn;
 using Turn.Commands;
