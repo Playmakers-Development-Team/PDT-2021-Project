@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abilities;
-using Abilities.Commands;
 using Commands;
 using Grid;
 using Managers;
 using Turn;
-using Turn.Commands;
-using Units;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 namespace UI
 {
-    // TODO: Move selectedAbility, abilityDirection to UIManager...
-    public class GridUI : Element
+    public class GridUI : UIComponent<GameDialogue>
     {
         [Header("Tile types")]
         
@@ -30,48 +27,46 @@ namespace UI
         [SerializeField] private Tilemap tilemap;
         
         private GridManager gridManager;
-        private TurnManager turnManager;
         private CommandManager commandManager;
-        private IUnit selectedUnit;
-        private Ability selectedAbility;
-        private Vector2 abilityDirection;
-
-
-        private bool IsPlayerTurn => turnManager.ActingPlayerUnit != null &&
-                                     selectedUnit != null &&
-                                     turnManager.ActingUnit == selectedUnit;
+        private TurnManager turnManager;
         
+        
+        #region UIComponent
         
         protected override void OnComponentAwake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
-
-            manager.unitSelected.AddListener(OnUnitSelected);
-            manager.unitDeselected.AddListener(OnUnitDeselected);
-            
-            manager.abilitySelected.AddListener(OnAbilitySelected);
-            manager.abilityDeselected.AddListener(OnAbilityDeselected);
-            manager.abilityRotated.AddListener(OnAbilityRotated);
-            manager.abilityConfirmed.AddListener(OnAbilityConfirmed);
+            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
-        private void OnDisable()
+        protected override void Subscribe()
         {
-            manager.unitSelected.RemoveListener(OnUnitSelected);
-            manager.unitDeselected.RemoveListener(OnUnitDeselected);
-            
-            manager.abilitySelected.RemoveListener(OnAbilitySelected);
-            manager.abilityDeselected.RemoveListener(OnAbilityDeselected);
-            manager.abilityRotated.RemoveListener(OnAbilityRotated);
-            manager.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
+            dialogue.turnStarted.AddListener(OnTurnStarted);
+            dialogue.abilitySelected.AddListener(OnAbilitySelected);
+            dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
+            dialogue.abilityRotated.AddListener(OnAbilityRotated);
         }
+
+        protected override void Unsubscribe()
+        {
+            dialogue.turnStarted.AddListener(OnTurnStarted);
+            dialogue.abilitySelected.RemoveListener(OnAbilitySelected);
+            dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
+            dialogue.abilityRotated.RemoveListener(OnAbilityRotated);
+        }
+        
+        #endregion
+        
+        
+        #region MonoBehaviour
 
         private void Start()
         {
             FillAll();
         }
+        
+        #endregion
 
         
         private void FillAll(GridSelectionType type = GridSelectionType.Default)
@@ -92,25 +87,24 @@ namespace UI
 
         private void UpdateGrid()
         {
+            // TODO: Add IUnit.IsMoving check whenever that's implemented...
+            
             FillAll();
             
-            if (!IsPlayerTurn)
-                return;
-            
             // Draw the tiles in range of the selected ability or draw the tile in range of movement
-            if (selectedAbility != null)
+            if (dialogue.SelectedAbility != null)
             {
                 // TODO: Remove Where() when BasicShapeData.GetAffectedCoordinates() only returns in-bounds coordinates...
-                Vector2Int[] coordinates = selectedAbility.Shape.GetHighlightedCoordinates(selectedUnit.Coordinate, abilityDirection).
-                    Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                Vector2Int[] coordinates = dialogue.SelectedAbility.Shape.
+                    GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).Where(vec => gridManager.IsInBounds(vec)).
+                    ToArray();
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
-            else if (selectedUnit.MovementActionPoints.Value > 0)
+            else if (turnManager.ActingUnit.MovementActionPoints.Value > 0)
             {
                 // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-                // BUG: IndexOutOfRange when clicking unit while moving...
-                Vector2Int[] coordinates = selectedUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
@@ -145,58 +139,48 @@ namespace UI
         
         private void TryMove(Vector2Int destination)
         {
-            if (!IsPlayerTurn || selectedAbility != null)
+            if (!(turnManager.ActingUnit is PlayerUnit playerUnit))
                 return;
 
             // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-            List<Vector2Int> inRange = selectedUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
+            List<Vector2Int> inRange = playerUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
             
             if (!inRange.Contains(destination))
                 return;
             
-            commandManager.ExecuteCommand(new StartMoveCommand(selectedUnit, destination));
-            manager.unitDeselected.Invoke();
+            FillAll();
+            commandManager.ExecuteCommand(new StartMoveCommand(playerUnit, destination));
         }
 
-        private void OnUnitSelected(IUnit unit)
+        private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            OnUnitDeselected();
-            selectedUnit = unit;
-            UpdateGrid();
-        }
-
-        private void OnUnitDeselected()
-        {
-            selectedUnit = null;
-            selectedAbility = null;
-            UpdateGrid();
+            if (info.CurrentUnit.Unit is PlayerUnit)
+                UpdateGrid();
+            else
+                FillAll();
         }
 
         private void OnAbilitySelected(Ability ability)
         {
-            selectedAbility = ability;
             UpdateGrid();
         }
 
         private void OnAbilityDeselected(Ability ability)
         {
-            selectedAbility = null;
+            // TODO: Remove once UpdateGrid checks if an IUnit is moving...
+            if (ability == null)
+                return;
+            
             UpdateGrid();
         }
 
         private void OnAbilityRotated(Vector2 direction)
         {
-            abilityDirection = direction;
-            UpdateGrid();
-        }
-
-        private void OnAbilityConfirmed()
-        {
-            if (!IsPlayerTurn || selectedAbility == null)
+            // TODO: Remove once UpdateGrid checks if an IUnit is moving...
+            if (dialogue.SelectedAbility == null)
                 return;
             
-            commandManager.ExecuteCommand(new AbilityCommand(selectedUnit, abilityDirection, selectedAbility));
-            commandManager.ExecuteCommand(new EndTurnCommand(selectedUnit));
+            UpdateGrid();
         }
 
         private TileBase GetTile(GridSelectionType type)

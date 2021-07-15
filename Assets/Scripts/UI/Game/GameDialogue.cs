@@ -19,7 +19,7 @@ namespace UI
         internal readonly Event<UnitInfo> unitSelected = new Event<UnitInfo>();
         internal readonly Event unitDeselected = new Event();
         
-        internal readonly Event<StatDifference> unitDamaged = new Event<StatDifference>();
+        internal readonly Event<StatChangeInfo> unitDamaged = new Event<StatChangeInfo>();
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
@@ -27,6 +27,9 @@ namespace UI
         internal readonly Event abilityConfirmed = new Event();
         
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
+
+        internal readonly Event<UnitInfo> delayConfirmed = new Event<UnitInfo>();
+        internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
 
 
         private CommandManager commandManager;
@@ -102,7 +105,21 @@ namespace UI
                     return;
 
                 commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit, AbilityDirection, SelectedAbility));
-                commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+            });
+            
+            turnStarted.AddListener(info =>
+            {
+                abilityDeselected.Invoke(SelectedAbility);
+            });
+            
+            delayConfirmed.AddListener(info =>
+            {
+                commandManager.ExecuteCommand(new EndTurnCommand(info.Unit));
+            });
+            
+            moveConfirmed.AddListener(info =>
+            {
+                commandManager.ExecuteCommand(new StartMoveCommand(info.UnitInfo.Unit, info.Destination));
             });
         }
 
@@ -139,7 +156,7 @@ namespace UI
 
         private void OnUnitDamaged(TakeTotalDamageCommand cmd)
         {
-            unitDamaged.Invoke(new StatDifference(cmd));
+            unitDamaged.Invoke(new StatChangeInfo(cmd));
         }
 
         private void OnUnitKilled(KilledUnitCommand cmd)
@@ -191,8 +208,7 @@ namespace UI
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;
         }
 
-        [Serializable]
-        internal class TurnInfo
+        internal readonly struct TurnInfo
         {
             internal UnitInfo CurrentUnit { get; }
 
@@ -200,6 +216,48 @@ namespace UI
             public TurnInfo(UnitInfo currentUnit)
             {
                 CurrentUnit = currentUnit;
+            }
+        }
+        
+        internal readonly struct StatChangeInfo
+        {
+            internal IUnit Unit { get; }
+            internal int NewValue { get; }
+            internal int OldValue { get; }
+            internal int BaseValue { get; }
+            internal int Difference { get; }
+
+            internal StatChangeInfo(TakeTotalDamageCommand cmd)
+            {
+                // TODO: Update so that Difference is positive when stat going up, negative when going down..
+                // TODO: Have this constructor simply call the other...
+                Unit = cmd.Unit;
+                NewValue = Unit.Health.HealthPoints.Value;
+                OldValue = NewValue + cmd.Value;
+                BaseValue = Unit.Health.HealthPoints.BaseValue;
+                Difference = OldValue - NewValue;
+            }
+
+            internal StatChangeInfo(IUnit unit, int newValue, int oldValue, int baseValue)
+            {
+                Unit = unit;
+                NewValue = newValue;
+                OldValue = oldValue;
+                BaseValue = baseValue;
+                Difference = oldValue - newValue;
+            }
+        }
+
+        internal readonly struct MoveInfo
+        {
+            internal Vector2Int Destination { get; }
+            internal UnitInfo UnitInfo { get; }
+
+
+            public MoveInfo(Vector2Int destination, UnitInfo unitInfo)
+            {
+                Destination = destination;
+                UnitInfo = unitInfo;
             }
         }
         

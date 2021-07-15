@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Commands;
 using Managers;
 using Turn;
-using Turn.Commands;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,8 +15,7 @@ namespace UI
         [SerializeField] private GameObject dividerPrefab;
         
         private TurnManager turnManager;
-        private CommandManager commandManager;
-        
+
         private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
 
         
@@ -27,7 +24,6 @@ namespace UI
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         protected override void Subscribe()
@@ -56,7 +52,7 @@ namespace UI
                 return;
             
             // TODO: If anything else needs to know when this button is pressed, it'll need to be moved to an Event...
-            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+            dialogue.delayConfirmed.Invoke(dialogue.GetInfo(turnManager.ActingPlayerUnit));
         }
 
         #endregion

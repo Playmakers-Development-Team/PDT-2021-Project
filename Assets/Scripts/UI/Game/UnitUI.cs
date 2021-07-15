@@ -58,7 +58,7 @@ namespace UI
             dialogue.unitSelected.Invoke(unitInfo);
         }
         
-        private void OnTakeDamage(StatDifference data)
+        private void OnTakeDamage(GameDialogue.StatChangeInfo data)
         {
             if (data.Unit != unit)
                 return;
@@ -67,7 +67,7 @@ namespace UI
             UpdateHealthBar(data);
         }
 
-        private async void UpdateDamageText(StatDifference data)
+        private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
         {
             damageText.text = data.Difference.ToString();
             damageText.enabled = true;
@@ -81,7 +81,7 @@ namespace UI
             damageText.enabled = false;
         }
 
-        private async void UpdateHealthBar(StatDifference data)
+        private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)
         {
             if (data.Difference <= 0)
                 return;
