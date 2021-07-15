@@ -5,7 +5,7 @@ using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game.Timeline
 {
     public class TimelinePanel : UIComponent<GameDialogue>
     {

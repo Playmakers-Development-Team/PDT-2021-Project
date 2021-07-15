@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.Game.UnitPanels
 {
     public class ValueStatCard : UIComponent<GameDialogue>
     {

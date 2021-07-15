@@ -10,7 +10,7 @@ using Units;
 using Units.Commands;
 using UnityEngine;
 
-namespace UI
+namespace UI.Game
 {
     public class GameDialogue : Dialogue
     {
@@ -63,6 +63,9 @@ namespace UI
             
             unitKilled.AddListener(info =>
             {
+                if (SelectedUnit == info)
+                    unitDeselected.Invoke();
+                
                 units.Remove(info);
             });
             

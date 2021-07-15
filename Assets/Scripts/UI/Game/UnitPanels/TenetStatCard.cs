@@ -1,8 +1,8 @@
-﻿using TMPro;
-using TenetStatuses;
+﻿using TenetStatuses;
+using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace UI.Game.UnitPanels
 {
     public class TenetStatCard : UIComponent<GameDialogue>
     {

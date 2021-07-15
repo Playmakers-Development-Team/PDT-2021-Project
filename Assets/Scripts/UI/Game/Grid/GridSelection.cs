@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace UI
+namespace UI.Game.Grid
 {
     [Serializable]
     public struct GridSelection

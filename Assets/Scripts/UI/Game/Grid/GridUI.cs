@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
-namespace UI
+namespace UI.Game.Grid
 {
     public class GridUI : UIComponent<GameDialogue>
     {
@@ -46,6 +46,7 @@ namespace UI
             dialogue.abilitySelected.AddListener(OnAbilitySelected);
             dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
             dialogue.abilityRotated.AddListener(OnAbilityRotated);
+            dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
         }
 
         protected override void Unsubscribe()
@@ -54,6 +55,7 @@ namespace UI
             dialogue.abilitySelected.RemoveListener(OnAbilitySelected);
             dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
             dialogue.abilityRotated.RemoveListener(OnAbilityRotated);
+            dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
         }
         
         #endregion
@@ -181,6 +183,11 @@ namespace UI
                 return;
             
             UpdateGrid();
+        }
+
+        private void OnAbilityConfirmed()
+        {
+            FillAll();
         }
 
         private TileBase GetTile(GridSelectionType type)

@@ -1,4 +1,4 @@
-﻿namespace UI
+﻿namespace UI.Game.Grid
 {
     public enum GridSelectionType
     {

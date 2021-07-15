@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game.UnitPanels
 {
     public class AbilityCard : UIComponent<GameDialogue>
     {

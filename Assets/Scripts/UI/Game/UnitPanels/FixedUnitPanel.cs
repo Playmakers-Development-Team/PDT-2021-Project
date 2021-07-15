@@ -1,4 +1,4 @@
-﻿namespace UI
+﻿namespace UI.Game.UnitPanels
 {
     internal class FixedUnitPanel : UnitPanel
     {

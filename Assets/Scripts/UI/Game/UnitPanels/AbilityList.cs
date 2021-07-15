@@ -4,7 +4,7 @@ using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game.UnitPanels
 {
     public class AbilityList : UIComponent<GameDialogue>
     {

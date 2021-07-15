@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Managers;
-using Units;
-using Units.Commands;
 
 namespace UI
 {

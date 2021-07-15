@@ -1,18 +1,21 @@
 ﻿using Grid;
 using Managers;
+using Turn;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace UI
+namespace UI.Game
 {
     [AddComponentMenu("Playmakers/UI/Input Controller", 0)]
     internal class GameInputController : UIComponent<GameDialogue>
     {
         private GridManager gridManager;
+        private TurnManager turnManager;
 
         protected override void OnComponentAwake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
+            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
         protected override void Subscribe() {}
@@ -27,16 +30,18 @@ namespace UI
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 dialogue.unitDeselected.Invoke();
 
-            if (Mouse.current.wasUpdatedThisFrame && Camera.main)
+            if (turnManager.ActingPlayerUnit != null &&  Mouse.current.wasUpdatedThisFrame && Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
                 Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);
-            
+                
                 if (!plane.Raycast(worldRay, out float distance))
                     return;
             
                 Vector2 worldPosition = worldRay.GetPoint(distance);
-                dialogue.abilityRotated.Invoke(worldPosition);
+                Vector2 direction = (worldPosition - gridManager.ConvertCoordinateToPosition(turnManager.ActingPlayerUnit.Coordinate)).normalized;
+                
+                dialogue.abilityRotated.Invoke(direction);
             }
         }
     }

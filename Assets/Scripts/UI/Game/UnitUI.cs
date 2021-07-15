@@ -5,7 +5,7 @@ using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game
 {
     public class UnitUI : UIComponent<GameDialogue>
     {

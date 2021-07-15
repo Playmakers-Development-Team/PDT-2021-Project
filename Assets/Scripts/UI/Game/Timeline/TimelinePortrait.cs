@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game.Timeline
 {
     public class TimelinePortrait : UIComponent<GameDialogue>
     {

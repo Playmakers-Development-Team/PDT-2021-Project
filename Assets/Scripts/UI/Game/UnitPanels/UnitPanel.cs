@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using System.Linq;
-using TMPro;
 using TenetStatuses;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.Game.UnitPanels
 {
     internal abstract class UnitPanel : UIComponent<GameDialogue>
     {
