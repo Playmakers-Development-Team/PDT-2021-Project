@@ -4,27 +4,47 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class TimelinePortrait : Element
+    public class TimelinePortrait : UIComponent<GameDialogue>
     {
         [SerializeField] private Image image;
 
-        private IUnit unit;
+        private GameDialogue.UnitInfo unitInfo;
         
         
-        internal void Assign(IUnit newUnit)
+        #region UIComponent
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
+        
+        #endregion
+        
+
+        #region Listeners
+        
+        public void OnClick()
         {
-            image.sprite = newUnit.Render;
-            unit = newUnit;
+            dialogue.unitSelected.Invoke(unitInfo);
+        }
+        
+        #endregion
+        
+        
+        #region Management
+        
+        internal void Assign(IUnit unit)
+        {
+            unitInfo = dialogue.GetInfo(unit);
+            
+            image.sprite = unitInfo.Render;
+            image.color = unitInfo.Color;
         }
 
         internal void Destroy()
         {
             DestroyImmediate(gameObject);
         }
-
-        public void OnClick()
-        {
-            manager.unitSelected.Invoke(unit);
-        }
+        
+        #endregion
     }
 }

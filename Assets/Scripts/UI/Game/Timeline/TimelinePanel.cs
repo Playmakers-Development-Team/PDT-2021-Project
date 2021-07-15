@@ -9,25 +9,43 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class TimelinePanel : Element
+    public class TimelinePanel : UIComponent<GameDialogue>
     {
         [SerializeField] private ScrollRect scrollRect;
-        [SerializeField] private Button delayButton;
         
         [SerializeField] private GameObject portraitPrefab;
         [SerializeField] private GameObject dividerPrefab;
         
-        private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
         private TurnManager turnManager;
+        private CommandManager commandManager;
+        
+        private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
 
+        
+        #region UIComponent
+        
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
-            
-            manager.turnChanged.AddListener(OnTurnChanged);
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
-        private void OnTurnChanged()
+        protected override void Subscribe()
+        {
+            dialogue.turnStarted.AddListener(OnTurnStarted);
+        }
+        
+        protected override void Unsubscribe()
+        {
+            dialogue.turnStarted.RemoveListener(OnTurnStarted);
+        }
+        
+        #endregion
+        
+
+        #region Listeners
+        
+        private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             UpdatePortraits();
         }
@@ -37,9 +55,15 @@ namespace UI
             if (turnManager.ActingPlayerUnit == null)
                 return;
             
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+            // TODO: If anything else needs to know when this button is pressed, it'll need to be moved to an Event...
+            commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
         }
 
+        #endregion
+        
+        
+        #region Portrait Management
+        
         private void UpdatePortraits()
         {
             ClearPortraits();
@@ -80,5 +104,7 @@ namespace UI
 
             portraits.Add(portrait);
         }
+        
+        #endregion
     }
 }

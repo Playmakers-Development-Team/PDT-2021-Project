@@ -57,7 +57,7 @@ namespace UI
         {
             dialogue.unitSelected.Invoke(unitInfo);
         }
-
+        
         private void OnTakeDamage(StatDifference data)
         {
             if (data.Unit != unit)
@@ -96,7 +96,7 @@ namespace UI
             
             healthBarCurrent.fillAmount = tCurrent;
             healthBarDifference.fillAmount = tOld;
-
+            
             await Task.Delay((int) (differenceDelay * 1000));
 
             float start = Time.time;
@@ -108,7 +108,8 @@ namespace UI
                 
                 // BUG: Null reference here, preventing with scuffed check...
                 // I think the IUnit can die while this async function runs, it should kill the function
-                //  by listening to dialogue.unitKilled but I don't know how best to do that right now...
+                //  by listening to dialogue.unitKilled but I don't know how best to do that right now.
+                // BUG: ALSO need to abort these if the unit is damaged again, or it'll wait for this to start...
                 
                 if (healthBarDifference == null)
                     return;
