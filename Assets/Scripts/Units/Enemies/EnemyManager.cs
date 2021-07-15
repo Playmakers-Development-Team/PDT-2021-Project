@@ -96,11 +96,12 @@ namespace Units.Enemies
             else if (playerManager.PlayerUnits.Count > 0)
             {
                 await MoveUnit(enemyUnit);
-                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit); // If a player is now next to the enemy, attack the player
+                
+                // If a player is now next to the enemy, attack the player
+                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
                 
                 if (adjacentPlayerUnit != null)
                     await AttackUnit(enemyUnit, adjacentPlayerUnit);
-                
             }
             else
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
 using Commands;
@@ -86,6 +87,11 @@ namespace Units
         
         private PlayerManager playerManager;
         private CommandManager commandManager;
+        
+        // TODO: Rename
+        private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
+        private static readonly int frontAnimationParameter = Animator.StringToHash("front");
+        private static readonly int attackAnimationParameter = Animator.StringToHash("attack");
 
         private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
@@ -372,46 +378,41 @@ namespace Units
             switch (unitAnimationState)
             {
                 case AnimationStates.Idle:
-                    UnitAnimator.SetBool("moving", false);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Down:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Up:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", false);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
                     spriteRenderer.flipX = true;
                     break;
                 
                 case AnimationStates.Left:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = true;
                     break;
                 
                 case AnimationStates.Right:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", false);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Casting:
-                    UnitAnimator.SetBool("moving", false);
-                    UnitAnimator.SetTrigger("attack");
-                    float flag = 0;
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetTrigger(attackAnimationParameter);
 
-                    while (flag < UnitAnimator.GetCurrentAnimatorStateInfo(0).length)
-                    {
-                        flag += Time.deltaTime;
-                        await UniTask.Yield();
-                    }
-                    
+                    await Task.Delay((int) UnitAnimator.GetCurrentAnimatorStateInfo(0).length * 1000);
+
                     commandManager.ExecuteCommand(new EndUnitCastingCommand(this));
                     break;
             }
@@ -550,7 +551,7 @@ namespace Units
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));*/
             
             // Should be called when all the movement and tweening has been completed
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
+            commandManager.ExecuteCommand(new EndMoveCommand(moveCommand));
         }
 
         #region RandomizeNames
