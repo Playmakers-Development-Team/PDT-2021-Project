@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abilities.Commands;
 using Commands;
 using Managers;
 using Turn.Commands;
@@ -39,7 +38,6 @@ namespace Turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
-
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
@@ -56,7 +54,7 @@ namespace Turn
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
-        
+
         private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
 
@@ -80,9 +78,9 @@ namespace Turn
                     EndMovementPhase();
             });
 
-            commandManager.ListenCommand<AbilityCommand>(cmd => {
+            commandManager.ListenCommand<EndUnitCastingCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
-                if (cmd.AbilityUser is PlayerUnit)
+                if (cmd.Unit is PlayerUnit)
                     EndAbilityPhase();
             });
             
@@ -100,6 +98,13 @@ namespace Turn
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
+            if (newTurnPhases.Length != 3)
+            {
+                Debug.LogError("Could not set up turn queue. Turn phases list must contain" +
+                               " three elements.");
+                return;
+            }
+                
             for (int i = 0; i < 3; i++)
             {
                 switch (newTurnPhases[i])
@@ -169,7 +174,6 @@ namespace Turn
             timelineNeedsUpdating = true;
             SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
-        
         
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
@@ -477,7 +481,7 @@ namespace Turn
                 PhaseIndex = MovementPhaseIndex + 1;
             else
                 Debug.LogWarning("Movement was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
                 NextTurn();
         }
@@ -488,7 +492,7 @@ namespace Turn
                 PhaseIndex = AbilityPhaseIndex + 1;
             else
                 Debug.LogWarning("Ability was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
                 NextTurn();
         }

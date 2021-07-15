@@ -157,6 +157,14 @@ namespace Units.Commands
     }
 
     /// <summary>
+    /// Executed when the an enemy unit casting animation has completed.
+    /// </summary>
+    public class EndUnitCastingCommand : UnitCommand
+    {
+        public EndUnitCastingCommand(IUnit unit) : base(unit) {}
+    }
+    
+    /// <summary>
     /// Executed when all the enemy logic has been completed.
     /// Hence, we may be free to proceed to the next turn
     /// </summary>
