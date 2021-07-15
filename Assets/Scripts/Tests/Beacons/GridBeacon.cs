@@ -5,5 +5,5 @@ namespace Tests.Beacons
         A, B, C, D, E, F, G, H, I, J, K, L, M
     }
     
-    public class GridBeacon : TileBeacon<GridBeacons> {}
+    public class GridBeacon : AutoTileBeacon<GridBeacons> {}
 }
