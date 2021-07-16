@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Grid.GridObjects;
 using TMPro;
+using UI.Core;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Game
+namespace UI.Game.Unit
 {
     public class UnitUI : UIComponent<GameDialogue>
     {
         [SerializeField] private GameDialogue.UnitInfo unitInfo;
-        
         [SerializeField] private GridObject unitGridObject;
         
         [Header("Damage Text")]
@@ -28,6 +28,8 @@ namespace UI.Game
         private IUnit unit;
 
 
+        #region UIComponent
+        
         protected override void OnComponentAwake()
         {
             unit = unitGridObject as IUnit;
@@ -36,6 +38,11 @@ namespace UI.Game
                 DestroyImmediate(gameObject);
 
             unitInfo.SetUnit(unit);
+        }
+
+        protected override void OnComponentDisabled()
+        {
+            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
         }
 
         protected override void Subscribe()
@@ -47,12 +54,11 @@ namespace UI.Game
 
         protected override void Unsubscribe() {}
 
-        protected override void OnComponentDisabled()
-        {
-            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
-        }
+        #endregion
+        
 
-
+        #region Listeners
+        
         public void OnClick()
         {
             dialogue.unitSelected.Invoke(unitInfo);
@@ -66,6 +72,11 @@ namespace UI.Game
             UpdateDamageText(data);
             UpdateHealthBar(data);
         }
+        
+        #endregion
+        
+        
+        #region Drawing
 
         private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
         {
@@ -120,5 +131,7 @@ namespace UI.Game
 
             healthBarDifference.fillAmount = 0.0f;
         }
+        
+        #endregion
     }
 }

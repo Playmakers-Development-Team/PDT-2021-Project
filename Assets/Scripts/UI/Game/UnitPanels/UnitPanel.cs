@@ -2,6 +2,9 @@
 using System.Linq;
 using TenetStatuses;
 using TMPro;
+using UI.Core;
+using UI.Game.UnitPanels.Abilities;
+using UI.Game.UnitPanels.Stats;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +12,6 @@ namespace UI.Game.UnitPanels
 {
     internal abstract class UnitPanel : UIComponent<GameDialogue>
     {
-        // TODO: Optimise redrawing by implementing different value changes in GameDialogue...
-        
         [SerializeField] protected Canvas canvas;
         
         [SerializeField] protected TextMeshProUGUI nameText;
@@ -30,6 +31,9 @@ namespace UI.Game.UnitPanels
         protected GameDialogue.UnitInfo unitInfo;
         
 
+        #region Drawing
+        
+        // TODO: Optimise redrawing by implementing different value changes in GameDialogue...
         protected void Redraw()
         {
             if (unitInfo == null)
@@ -73,5 +77,7 @@ namespace UI.Game.UnitPanels
             // TODO: This will soon become Unit.AbilityList or something like that...
             abilityCards.Redraw(unitInfo.Unit);
         }
+        
+        #endregion
     }
 }

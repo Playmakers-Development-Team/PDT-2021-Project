@@ -2,6 +2,8 @@
 {
     internal class FloatingUnitPanel : UnitPanel
     {
+        #region UIComponent
+        
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
@@ -22,7 +24,11 @@
             Hide();
         }
 
+        #endregion
+        
 
+        #region Listeners
+        
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             Redraw();
@@ -42,9 +48,15 @@
             Hide();
         }
         
+        #endregion
+        
+        
+        #region Drawing
         
         private void Hide() => canvas.enabled = false;
 
         private void Show() => canvas.enabled = true;
+        
+        #endregion
     }
 }

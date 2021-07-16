@@ -1,12 +1,15 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace UI
+namespace UI.Core
 {
     public abstract class UIComponent<T> : MonoBehaviour where T : Dialogue
     {
         protected UIManager manager;
         protected T dialogue;
+        
+        
+        #region MonoBehaviour
         
         private void Awake()
         {
@@ -33,6 +36,11 @@ namespace UI
             
             dialogue = null;
         }
+
+        #endregion
+        
+        
+        #region UIComponent
         
         private void OnDialogueAdded(Dialogue addedDialogue)
         {
@@ -44,9 +52,6 @@ namespace UI
 
             Subscribe();
         }
-
-        
-        #region Abstract
         
         protected virtual void OnComponentAwake() {}
 

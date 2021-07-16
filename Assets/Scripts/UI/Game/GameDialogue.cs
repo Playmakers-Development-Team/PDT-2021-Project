@@ -6,9 +6,11 @@ using Commands;
 using Managers;
 using Turn;
 using Turn.Commands;
+using UI.Core;
 using Units;
 using Units.Commands;
 using UnityEngine;
+using Event = UI.Core.Event;
 
 namespace UI.Game
 {
@@ -30,8 +32,7 @@ namespace UI.Game
 
         internal readonly Event<UnitInfo> delayConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
-
-
+        
         private CommandManager commandManager;
         private TurnManager turnManager;
         
@@ -175,7 +176,7 @@ namespace UI.Game
         #endregion
 
 
-        #region Dialogue Event Functions
+        #region Dialogue
 
         protected override void OnClose() {}
 
@@ -192,7 +193,7 @@ namespace UI.Game
         #endregion
         
         
-        #region Utility Functions
+        #region Querying
 
         internal UnitInfo GetInfo(IUnit unit) => units.Find(u => u.Unit == unit);
         
@@ -201,6 +202,7 @@ namespace UI.Game
         
         #region Structs
 
+        // TODO: Turn this into a struct, null comparison can be made on UnitInfo.Unit...
         [Serializable]
         internal class UnitInfo
         {

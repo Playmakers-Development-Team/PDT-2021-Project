@@ -1,4 +1,5 @@
-﻿using Units;
+﻿using UI.Core;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +31,7 @@ namespace UI.Game.Timeline
         #endregion
         
         
-        #region Management
+        #region Drawing
         
         internal void Assign(IUnit unit)
         {

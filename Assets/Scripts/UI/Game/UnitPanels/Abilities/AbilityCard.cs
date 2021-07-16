@@ -1,9 +1,10 @@
 ﻿using Abilities;
 using TMPro;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Game.UnitPanels
+namespace UI.Game.UnitPanels.Abilities
 {
     public class AbilityCard : UIComponent<GameDialogue>
     {
@@ -15,15 +16,10 @@ namespace UI.Game.UnitPanels
 
         
         internal Ability Ability { get; private set; }
-        
-        internal void Assign(Ability ability)
-        {
-            Ability = ability;
-            
-            titleText.text = ability.name;
-            descriptionText.text = ability.Description;
-        }
 
+        
+        #region UIComponent
+        
         protected override void Subscribe()
         {
             dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
@@ -33,7 +29,12 @@ namespace UI.Game.UnitPanels
         {
             dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
         }
-
+        
+        #endregion
+        
+        
+        #region Listeners
+        
         public void OnCardClicked()
         {
             if (!clicked)
@@ -54,9 +55,21 @@ namespace UI.Game.UnitPanels
             button.image.color = Color.white;
         }
 
-        internal void Destroy()
+        #endregion
+        
+        
+        #region Drawing
+        
+        internal void Assign(Ability ability)
         {
-            Destroy(gameObject);
+            Ability = ability;
+            
+            titleText.text = ability.name;
+            descriptionText.text = ability.Description;
         }
+        
+        internal void Destroy() => Destroy(gameObject);
+        
+        #endregion
     }
 }

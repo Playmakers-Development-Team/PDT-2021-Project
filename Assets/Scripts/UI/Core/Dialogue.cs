@@ -1,18 +1,21 @@
 ﻿using Managers;
 using UnityEngine;
 
-namespace UI
+namespace UI.Core
 {
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour
     {
-        internal readonly Event closed = new Event();
         internal readonly Event promoted = new Event();
         internal readonly Event demoted = new Event();
+        internal readonly Event closed = new Event();
         
         protected UIManager manager;
         protected CanvasGroup canvasGroup;
         
+        
+        #region MonoBehaviour
+
         private void Awake()
         {
             manager = ManagerLocator.Get<UIManager>();
@@ -26,12 +29,10 @@ namespace UI
             manager.Add(this);
         }
 
-        internal void Close()
-        {
-            OnClose();
-            Destroy(gameObject);
-            closed.Invoke();
-        }
+        #endregion
+        
+        
+        #region Dialogue
 
         internal void Promote()
         {
@@ -48,7 +49,13 @@ namespace UI
             OnDemote();
             demoted.Invoke();
         }
-
+        
+        internal void Close()
+        {
+            OnClose();
+            Destroy(gameObject);
+            closed.Invoke();
+        }
 
         internal virtual void OnAwake() {}
 
@@ -58,5 +65,7 @@ namespace UI
         protected abstract void OnPromote();
 
         protected abstract void OnDemote();
+        
+        #endregion
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Abilities;
+using UI.Core;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Game.UnitPanels
+namespace UI.Game.UnitPanels.Abilities
 {
     public class AbilityList : UIComponent<GameDialogue>
     {
@@ -13,16 +14,23 @@ namespace UI.Game.UnitPanels
 
         private ScrollRect scrollView;
         
+        
+        #region UIComponent
+        
+        protected override void Subscribe() {}
 
+        protected override void Unsubscribe() {}
+        
         protected override void OnComponentAwake()
         {
             TryGetComponent(out scrollView);
         }
 
-        protected override void Subscribe() {}
-
-        protected override void Unsubscribe() {}
-
+        #endregion
+        
+        
+        #region Drawing
+        
         internal void Redraw(IUnit unit)
         {
             // STEP 1. Destroy AbilityCards in cards that no longer exist.
@@ -47,5 +55,7 @@ namespace UI.Game.UnitPanels
                 cards.Add(newCard);
             }
         }
+        
+        #endregion
     }
 }

@@ -1,27 +1,20 @@
 ﻿using Grid;
 using Managers;
 using Turn;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace UI.Game
 {
-    [AddComponentMenu("Playmakers/UI/Input Controller", 0)]
     internal class GameInputController : UIComponent<GameDialogue>
     {
         private GridManager gridManager;
         private TurnManager turnManager;
 
-        protected override void OnComponentAwake()
-        {
-            gridManager = ManagerLocator.Get<GridManager>();
-            turnManager = ManagerLocator.Get<TurnManager>();
-        }
 
-        protected override void Subscribe() {}
-
-        protected override void Unsubscribe() {}
-
+        #region MonoBehaviour
+        
         private void Update()
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
@@ -44,5 +37,22 @@ namespace UI.Game
                 dialogue.abilityRotated.Invoke(direction);
             }
         }
+        
+        #endregion
+        
+        
+        #region UIComponent
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
+        
+        protected override void OnComponentAwake()
+        {
+            gridManager = ManagerLocator.Get<GridManager>();
+            turnManager = ManagerLocator.Get<TurnManager>();
+        }
+        
+        #endregion
     }
 }

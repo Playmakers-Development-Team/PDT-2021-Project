@@ -1,5 +1,8 @@
-﻿namespace UI.Game.Grid
+﻿using System;
+
+namespace UI.Game.Grid
 {
+    [Serializable]
     public enum GridSelectionType
     {
         Default,

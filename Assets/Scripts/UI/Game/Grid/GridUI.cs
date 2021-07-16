@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Abilities;
-using Commands;
 using Grid;
 using Managers;
 using Turn;
-using Units.Commands;
+using UI.Core;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,8 +26,17 @@ namespace UI.Game.Grid
         [SerializeField] private Tilemap tilemap;
         
         private GridManager gridManager;
-        private CommandManager commandManager;
         private TurnManager turnManager;
+        
+        
+        #region MonoBehaviour
+
+        private void Start()
+        {
+            FillAll();
+        }
+        
+        #endregion
         
         
         #region UIComponent
@@ -36,7 +44,6 @@ namespace UI.Game.Grid
         protected override void OnComponentAwake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
         }
 
@@ -59,65 +66,9 @@ namespace UI.Game.Grid
         }
         
         #endregion
-        
-        
-        #region MonoBehaviour
-
-        private void Start()
-        {
-            FillAll();
-        }
-        
-        #endregion
 
         
-        private void FillAll(GridSelectionType type = GridSelectionType.Default)
-        {
-            BoundsInt b = gridManager.LevelBoundsInt;
-            List<Vector2Int> coordinates = new List<Vector2Int>();
-            
-            for (int x = b.xMin; x <= b.xMax; x++)
-            {
-                for (int y = b.yMin; y <= b.yMax; y++)
-                {
-                    coordinates.Add(new Vector2Int(x, y));
-                }
-            }
-            
-            Fill(new GridSelection(coordinates.ToArray(), type));
-        }
-
-        private void UpdateGrid()
-        {
-            // TODO: Add IUnit.IsMoving check whenever that's implemented...
-            
-            FillAll();
-            
-            // Draw the tiles in range of the selected ability or draw the tile in range of movement
-            if (dialogue.SelectedAbility != null)
-            {
-                // TODO: Remove Where() when BasicShapeData.GetAffectedCoordinates() only returns in-bounds coordinates...
-                Vector2Int[] coordinates = dialogue.SelectedAbility.Shape.
-                    GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).Where(vec => gridManager.IsInBounds(vec)).
-                    ToArray();
-                
-                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
-            }
-            else if (turnManager.ActingUnit.MovementActionPoints.Value > 0)
-            {
-                // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-                Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
-                
-                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
-            }
-        }
-
-        private void Fill(GridSelection selection)
-        {
-            TileBase tile = GetTile(selection.Type);
-            foreach (Vector2Int coordinate in selection.Spaces)
-                tilemap.SetTile((Vector3Int) coordinate, tile);
-        }
+        #region Listeners
 
         public void OnGridButtonPressed()
         {
@@ -137,21 +88,6 @@ namespace UI.Game.Grid
                 return;
 
             TryMove(coordinate);
-        }
-        
-        private void TryMove(Vector2Int destination)
-        {
-            if (!(turnManager.ActingUnit is PlayerUnit playerUnit))
-                return;
-
-            // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-            List<Vector2Int> inRange = playerUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
-            
-            if (!inRange.Contains(destination))
-                return;
-            
-            FillAll();
-            commandManager.ExecuteCommand(new StartMoveCommand(playerUnit, destination));
         }
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
@@ -189,6 +125,59 @@ namespace UI.Game.Grid
         {
             FillAll();
         }
+        
+        #endregion
+        
+        
+        #region Drawing
+        
+        private void UpdateGrid()
+        {
+            // TODO: Add IUnit.IsMoving check whenever that's implemented...
+            
+            FillAll();
+            
+            // Draw the tiles in range of the selected ability or draw the tile in range of movement
+            if (dialogue.SelectedAbility != null)
+            {
+                // TODO: Remove Where() when BasicShapeData.GetAffectedCoordinates() only returns in-bounds coordinates...
+                Vector2Int[] coordinates = dialogue.SelectedAbility.Shape.
+                    GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).Where(vec => gridManager.IsInBounds(vec)).
+                    ToArray();
+                
+                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+            }
+            else if (turnManager.ActingUnit.MovementActionPoints.Value > 0)
+            {
+                // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
+                Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                
+                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+            }
+        }
+
+        private void Fill(GridSelection selection)
+        {
+            TileBase tile = GetTile(selection.Type);
+            foreach (Vector2Int coordinate in selection.Spaces)
+                tilemap.SetTile((Vector3Int) coordinate, tile);
+        }
+        
+        private void FillAll(GridSelectionType type = GridSelectionType.Default)
+        {
+            BoundsInt b = gridManager.LevelBoundsInt;
+            List<Vector2Int> coordinates = new List<Vector2Int>();
+            
+            for (int x = b.xMin; x <= b.xMax; x++)
+            {
+                for (int y = b.yMin; y <= b.yMax; y++)
+                {
+                    coordinates.Add(new Vector2Int(x, y));
+                }
+            }
+            
+            Fill(new GridSelection(coordinates.ToArray(), type));
+        }
 
         private TileBase GetTile(GridSelectionType type)
         {
@@ -201,5 +190,26 @@ namespace UI.Game.Grid
                 _ => null
             };
         }
+        
+        #endregion
+        
+        
+        #region Movement
+        
+        private void TryMove(Vector2Int destination)
+        {
+            if (!(turnManager.ActingUnit is PlayerUnit playerUnit))
+                return;
+
+            // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
+            List<Vector2Int> inRange = playerUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
+            
+            if (!inRange.Contains(destination))
+                return;
+            
+            dialogue.moveConfirmed.Invoke(new GameDialogue.MoveInfo(destination, dialogue.GetInfo(playerUnit)));
+        }
+        
+        #endregion
     }
 }
