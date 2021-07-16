@@ -33,7 +33,7 @@ namespace Turn
         /// <summary>
         /// The unit that is currently taking its turn.
         /// </summary>
-        public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex];
+        public IUnit ActingUnit => currentTurnQueue.Count == 0 ? null : currentTurnQueue[CurrentTurnIndex];
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
