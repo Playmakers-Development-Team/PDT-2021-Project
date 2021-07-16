@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Grid.GridObjects;
 using TMPro;
 using UI.Core;
-using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,9 +8,6 @@ namespace UI.Game.Unit
 {
     public class UnitUI : UIComponent<GameDialogue>
     {
-        [SerializeField] private GameDialogue.UnitInfo unitInfo;
-        [SerializeField] private GridObject unitGridObject;
-        
         [Header("Damage Text")]
         
         [SerializeField] private TextMeshProUGUI damageText;
@@ -25,34 +20,47 @@ namespace UI.Game.Unit
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
 
-        private IUnit unit;
+        private GameDialogue.UnitInfo unitInfo;
 
-
-        #region UIComponent
+        private RectTransform rectTransform;
+        private bool moving;
         
-        protected override void OnComponentAwake()
-        {
-            unit = unitGridObject as IUnit;
-            
-            if (unit == null)
-                DestroyImmediate(gameObject);
+        
+        #region MonoBehaviour
 
-            unitInfo.SetUnit(unit);
+        private void LateUpdate()
+        {
+            if (!moving)
+                return;
+            
+            rectTransform.position = unitInfo.Unit.transform.position;
         }
 
-        protected override void OnComponentDisabled()
+        #endregion
+        
+        
+        #region UIComponent
+
+        protected override void OnComponentAwake()
         {
-            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
+            TryGetComponent(out rectTransform);
         }
 
         protected override void Subscribe()
         {
-            dialogue.unitSpawned.Invoke(unitInfo);
-            
+            dialogue.startedMove.AddListener(OnStartedMove);
+            dialogue.endedMove.AddListener(OnEndedMove);
             dialogue.unitDamaged.AddListener(OnTakeDamage);
+            dialogue.unitKilled.AddListener(OnUnitKilled);
         }
 
-        protected override void Unsubscribe() {}
+        protected override void Unsubscribe()
+        {
+            dialogue.startedMove.RemoveListener(OnStartedMove);
+            dialogue.endedMove.RemoveListener(OnEndedMove);
+            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
+            dialogue.unitKilled.RemoveListener(OnUnitKilled);
+        }
 
         #endregion
         
@@ -63,20 +71,50 @@ namespace UI.Game.Unit
         {
             dialogue.unitSelected.Invoke(unitInfo);
         }
-        
-        private void OnTakeDamage(GameDialogue.StatChangeInfo data)
+
+        private void OnStartedMove(GameDialogue.MoveInfo info)
         {
-            if (data.Unit != unit)
+            if (info.UnitInfo.Unit != unitInfo.Unit)
+                return;
+
+            moving = true;
+        }
+
+        private void OnEndedMove(GameDialogue.UnitInfo info)
+        {
+            if (info.Unit != unitInfo.Unit)
+                return;
+
+            moving = false;
+        }
+        
+        private void OnTakeDamage(GameDialogue.StatChangeInfo info)
+        {
+            if (info.Unit != unitInfo.Unit)
                 return;
             
-            UpdateDamageText(data);
-            UpdateHealthBar(data);
+            UpdateDamageText(info);
+            UpdateHealthBar(info);
+        }
+
+        private void OnUnitKilled(GameDialogue.UnitInfo info)
+        {
+            if (info != unitInfo)
+                return;
+
+            Destroy(gameObject);
         }
         
         #endregion
         
         
         #region Drawing
+
+        internal void Assign(GameDialogue.UnitInfo info)
+        {
+            unitInfo = info;
+            rectTransform.position = unitInfo.Unit.transform.position;
+        }
 
         private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
         {

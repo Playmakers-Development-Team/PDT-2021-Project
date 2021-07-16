@@ -25,10 +25,7 @@ namespace UI.Core
             canvasGroup = GetComponent<CanvasGroup>();
             
             OnAwake();
-        }
-
-        private void Start()
-        {
+            
             manager.Add(this);
         }
 

@@ -20,6 +20,8 @@ namespace UI.Game
         internal readonly Event<UnitInfo> unitKilled = new Event<UnitInfo>();
         internal readonly Event<UnitInfo> unitSelected = new Event<UnitInfo>();
         internal readonly Event unitDeselected = new Event();
+        internal readonly Event<MoveInfo> startedMove = new Event<MoveInfo>();
+        internal readonly Event<UnitInfo> endedMove = new Event<UnitInfo>();
         
         internal readonly Event<StatChangeInfo> unitDamaged = new Event<StatChangeInfo>();
         
@@ -131,6 +133,8 @@ namespace UI.Game
         {
             // Subscribe to Commands
             commandManager.ListenCommand((Action<StartTurnCommand>) OnStartTurn);
+            commandManager.ListenCommand((Action<StartMoveCommand>) OnStartMove);
+            commandManager.ListenCommand((Action<EndMoveCommand>) OnEndMove);
             commandManager.ListenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
             commandManager.ListenCommand((Action<KilledUnitCommand>) OnUnitKilled);
         }
@@ -139,6 +143,8 @@ namespace UI.Game
         {
             // Unsubscribe from Commands
             commandManager.UnlistenCommand((Action<StartTurnCommand>) OnStartTurn);
+            commandManager.UnlistenCommand((Action<StartMoveCommand>) OnStartMove);
+            commandManager.UnlistenCommand((Action<EndMoveCommand>) OnEndMove);
             commandManager.UnlistenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
         }
@@ -158,11 +164,21 @@ namespace UI.Game
             turnStarted.Invoke(new TurnInfo(info));
         }
 
+        private void OnStartMove(StartMoveCommand cmd)
+        {
+            startedMove.Invoke(new MoveInfo(cmd.TargetCoords, GetInfo(cmd.Unit)));
+        }
+
+        private void OnEndMove(EndMoveCommand cmd)
+        {
+            endedMove.Invoke(GetInfo(cmd.Unit));
+        }
+
         private void OnUnitDamaged(TakeTotalDamageCommand cmd)
         {
             unitDamaged.Invoke(new StatChangeInfo(cmd));
         }
-
+        
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
             UnitInfo info = GetInfo(cmd.Unit);

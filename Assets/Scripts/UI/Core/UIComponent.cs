@@ -18,17 +18,17 @@ namespace UI.Core
         private void Awake()
         {
             manager = ManagerLocator.Get<UIManager>();
-            manager.dialogueAdded.AddListener(OnDialogueAdded);
             OnComponentAwake();
         }
 
         private void OnEnable()
         {
-            if (!dialogue)
-                dialogue = manager.GetDialogue<T>();
+            dialogue = manager.GetDialogue<T>();
             
             if (dialogue)
                 Subscribe();
+            else
+                manager.dialogueAdded.AddListener(OnDialogueAdded);
             
             OnComponentEnabled();
         }
@@ -39,6 +39,11 @@ namespace UI.Core
             Unsubscribe();
             
             dialogue = null;
+        }
+
+        private void Start()
+        {
+            OnComponentStart();
         }
 
         #endregion
@@ -62,6 +67,8 @@ namespace UI.Core
         protected virtual void OnComponentEnabled() {}
 
         protected virtual void OnComponentDisabled() {}
+
+        protected virtual void OnComponentStart() {}
 
         protected abstract void Subscribe();
 
