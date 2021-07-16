@@ -21,18 +21,16 @@ namespace Units.Stats
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             Value -= calculatedDamageTaken;
             CheckDeath();
-            Debug.Log(calculatedDamageTaken + " damage taken.");
-            Debug.Log($"Health Before: {Value + calculatedDamageTaken}  |  Health After: {Value}");
-            commandManager.ExecuteCommand(new StatChangedCommand(unit,calculatedDamageTaken,StatTypes.Health));
+            commandManager.ExecuteCommand(new StatChangedCommand(unit,StatTypes.Health,Value + 
+            calculatedDamageTaken,calculatedDamageTaken,Value));
             return calculatedDamageTaken;
         }
         
         public int HealDamage(int amount)
         {
             Value += amount;
-            Debug.Log(amount + " health gained!.");
-            Debug.Log($"Health Before: {Value - amount}  |  Health After: {Value}");
-            commandManager.ExecuteCommand(new StatChangedCommand(unit,amount,StatTypes.Health));
+            commandManager.ExecuteCommand(new StatChangedCommand(unit,StatTypes.Health,Value - 
+            amount,amount,Value));
             return amount;
         }
         

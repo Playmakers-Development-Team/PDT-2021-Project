@@ -1,5 +1,8 @@
-﻿namespace Units.Commands
+﻿using System;
+
+namespace Units.Commands
 {
+    [Obsolete("Use StatChangedCommand instead")]
     public class ValueCommand : UnitCommand
     {
         public int Value { get; set; }

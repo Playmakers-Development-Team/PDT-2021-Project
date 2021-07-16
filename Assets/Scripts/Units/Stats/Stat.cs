@@ -16,7 +16,8 @@ namespace Units.Stats
             set
             {
                 this.value = Mathf.Max(0,value);
-                commandManager.ExecuteCommand(new StatChangedCommand(unit, value, StatType));
+                commandManager.ExecuteCommand(new StatChangedCommand(unit, StatType,Value + 
+                value, value,Value));
             }
         }
        

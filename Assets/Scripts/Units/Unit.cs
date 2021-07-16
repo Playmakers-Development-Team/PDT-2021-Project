@@ -24,11 +24,22 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        
+        [Obsolete("you stupid x3")]
         [SerializeField] private TMP_Text nameText;
+        
+        [Obsolete("you stupid x5")]
         [SerializeField] private TMP_Text healthText;
+        
+        [Obsolete("you stupid x7.5")]
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        
+        [Obsolete("you stupid x39")]
         [SerializeField] private float damageTextLifetime = 1.0f;
+        
+        [Obsolete("you stupid x42")]
         [SerializeField] private Sprite render;
+        
         private SpriteRenderer spriteRenderer;
         
         public string Name
@@ -56,14 +67,6 @@ namespace Units
         public Color UnitColor => spriteRenderer.color;
         
         public TenetType Tenet => data.Tenet;
-        
-        // [Obsolete("Use MovementPoints instead")]
-        // // public ValueStat MovementActionPoints
-        // // {
-        // //     get => data.MovementPoints;
-        // //     set => data.MovementPoints = value;
-        // // }
-        
         
         [Obsolete("Use SpeedStat instead")]
         public ValueStat Speed
@@ -125,7 +128,7 @@ namespace Units
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
-            SpeedStat = new Stat(this, data.SpeedStat.BaseValue, StatTypes.Speed);
+            SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             
@@ -166,7 +169,6 @@ namespace Units
         public void TakeDefence(int amount) => DefenceStat.Value += amount;
         
         public void TakeAttack(int amount) => AttackStat.Value += amount;
-        
         
         public void TakeDamage(int amount)
         {
@@ -351,6 +353,7 @@ namespace Units
 
         #region Scene
         
+        [Obsolete("you stupid")]
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;
@@ -361,6 +364,7 @@ namespace Units
             Invoke("HideDamageText", damageTextLifetime);
         }
 
+        [Obsolete("you stupid x2")]
         private void HideDamageText() => damageTextCanvas.enabled = false;
 
         public void SetName() => nameText.text = Name;
