@@ -198,7 +198,7 @@ namespace UI.Game.Grid
         
         private void TryMove(Vector2Int destination)
         {
-            if (!(turnManager.ActingUnit is PlayerUnit playerUnit))
+            if (!(turnManager.ActingUnit is PlayerUnit playerUnit) || !turnManager.IsMovementPhase())
                 return;
 
             // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
@@ -208,6 +208,7 @@ namespace UI.Game.Grid
                 return;
             
             dialogue.moveConfirmed.Invoke(new GameDialogue.MoveInfo(destination, dialogue.GetInfo(playerUnit)));
+            FillAll();
         }
         
         #endregion
