@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace UI.Core
 {
+    /// <summary>
+    /// A UIComponent is any UI element that exists as part of a <see cref="Dialogue"/>. All UI Elements should extend this class. 
+    /// </summary>
+    /// <typeparam name="T">The <see cref="Dialogue"/> type this UIComponent is a part of.</typeparam>
     public abstract class UIComponent<T> : MonoBehaviour where T : Dialogue
     {
         protected UIManager manager;
