@@ -111,11 +111,10 @@ namespace Units
         private static readonly int frontAnimationParameter = Animator.StringToHash("front");
         private static readonly int attackAnimationParameter = Animator.StringToHash("attack");
 
-        private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
+            
             #region GetManagers
 
             playerManager = ManagerLocator.Get<PlayerManager>();
@@ -123,6 +122,13 @@ namespace Units
             
             #endregion
             
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+        
+        protected override void Start()
+        {
+            base.Start();
+
             HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
