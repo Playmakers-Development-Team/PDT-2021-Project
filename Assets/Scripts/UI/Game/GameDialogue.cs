@@ -9,6 +9,7 @@ using Turn.Commands;
 using UI.Core;
 using Units;
 using Units.Commands;
+using Units.Stats;
 using UnityEngine;
 using Event = UI.Core.Event;
 
@@ -135,7 +136,7 @@ namespace UI.Game
             commandManager.ListenCommand((Action<StartTurnCommand>) OnStartTurn);
             commandManager.ListenCommand((Action<StartMoveCommand>) OnStartMove);
             commandManager.ListenCommand((Action<EndMoveCommand>) OnEndMove);
-            commandManager.ListenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
+            commandManager.ListenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.ListenCommand((Action<KilledUnitCommand>) OnUnitKilled);
         }
 
@@ -145,7 +146,7 @@ namespace UI.Game
             commandManager.UnlistenCommand((Action<StartTurnCommand>) OnStartTurn);
             commandManager.UnlistenCommand((Action<StartMoveCommand>) OnStartMove);
             commandManager.UnlistenCommand((Action<EndMoveCommand>) OnEndMove);
-            commandManager.UnlistenCommand((Action<TakeTotalDamageCommand>) OnUnitDamaged);
+            commandManager.UnlistenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
         }
         
@@ -174,7 +175,7 @@ namespace UI.Game
             endedMove.Invoke(GetInfo(cmd.Unit));
         }
 
-        private void OnUnitDamaged(TakeTotalDamageCommand cmd)
+        private void OnUnitDamaged(StatChangedCommand cmd)
         {
             unitDamaged.Invoke(new StatChangeInfo(cmd));
         }
@@ -253,25 +254,16 @@ namespace UI.Game
             internal int OldValue { get; }
             internal int BaseValue { get; }
             internal int Difference { get; }
+            internal StatTypes StatType { get; }
 
-            internal StatChangeInfo(TakeTotalDamageCommand cmd)
+            internal StatChangeInfo(StatChangedCommand cmd)
             {
-                // TODO: Update so that Difference is positive when stat going up, negative when going down..
-                // TODO: Have this constructor simply call the other...
+                StatType = cmd.StatType;
                 Unit = cmd.Unit;
-                NewValue = Unit.Health.HealthPoints.Value;
-                OldValue = NewValue + cmd.Value;
-                BaseValue = Unit.Health.HealthPoints.BaseValue;
-                Difference = OldValue - NewValue;
-            }
-
-            internal StatChangeInfo(IUnit unit, int newValue, int oldValue, int baseValue)
-            {
-                Unit = unit;
-                NewValue = newValue;
-                OldValue = oldValue;
-                BaseValue = baseValue;
-                Difference = oldValue - newValue;
+                NewValue = cmd.NewValue;
+                OldValue = cmd.NewValue - cmd.Value;
+                BaseValue = cmd.BaseValue;
+                Difference = cmd.Value;
             }
         }
 

@@ -44,18 +44,17 @@ namespace UI.Game.UnitPanels
             
             // Render image
             renderImage.sprite = unitInfo.Render;
-            // TODO: YUCKY CAST
             renderImage.color = unitInfo.Color;
             
             // Health bar
             healthSlider.minValue = 0;
-            healthSlider.maxValue = unitInfo.Unit.Health.HealthPoints.BaseValue;
-            healthSlider.value = unitInfo.Unit.Health.HealthPoints.Value;
+            healthSlider.maxValue = unitInfo.Unit.HealthStat.BaseValue;
+            healthSlider.value = unitInfo.Unit.HealthStat.Value;
             healthText.text = healthSlider.value.ToString(CultureInfo.InvariantCulture);
             
             // Stat cards
-            attackCard.Apply("ATT", (int) unitInfo.Unit.Attack.Value);
-            defenceCard.Apply("DEF", (int) unitInfo.Unit.Health.Defence.Value);
+            attackCard.Apply("ATT", unitInfo.Unit.AttackStat.Value);
+            defenceCard.Apply("DEF", unitInfo.Unit.DefenceStat.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
             TenetStatus[] effects = unitInfo.Unit.TenetStatuses.ToArray();

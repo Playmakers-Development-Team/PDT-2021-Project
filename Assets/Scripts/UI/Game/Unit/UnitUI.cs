@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using TMPro;
 using UI.Core;
+using Units.Stats;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,7 +91,7 @@ namespace UI.Game.Unit
         
         private void OnTakeDamage(GameDialogue.StatChangeInfo info)
         {
-            if (info.Unit != unitInfo.Unit)
+            if (info.Unit != unitInfo.Unit || info.StatType != StatTypes.Health)
                 return;
             
             UpdateDamageText(info);

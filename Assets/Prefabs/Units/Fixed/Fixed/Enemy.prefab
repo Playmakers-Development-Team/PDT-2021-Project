@@ -166,6 +166,16 @@ MonoBehaviour:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
     abilities: []
+    <HealthValue>k__BackingField:
+      <BaseValue>k__BackingField: 10
+    <SpeedStat>k__BackingField:
+      <BaseValue>k__BackingField: 1
+    <DefenceStat>k__BackingField:
+      <BaseValue>k__BackingField: 0
+    <AttackStat>k__BackingField:
+      <BaseValue>k__BackingField: 4
+    <KnockbackStat>k__BackingField:
+      <BaseValue>k__BackingField: 1
   nameText: {fileID: 0}
   healthText: {fileID: 0}
   damageTextCanvas: {fileID: 0}

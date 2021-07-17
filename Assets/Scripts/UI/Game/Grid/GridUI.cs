@@ -147,7 +147,7 @@ namespace UI.Game.Grid
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
             }
-            else if (turnManager.ActingUnit.MovementActionPoints.Value > 0)
+            else if (turnManager.ActingUnit.MovementPoints.Value > 0)
             {
                 // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
                 Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
