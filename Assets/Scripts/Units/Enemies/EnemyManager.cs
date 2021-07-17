@@ -116,9 +116,9 @@ namespace Units.Enemies
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
             // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
-            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
+            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit,playerUnit,enemyUnit
+            .AttackStat.Value));
             await commandManager.WaitForCommand<EndUnitCastingCommand>();
-            playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
             
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
@@ -131,7 +131,7 @@ namespace Units.Enemies
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
-                enemyUnit.MovementActionPoints.Value)
+                enemyUnit.MovementPoints.Value)
             );
             
             commandManager.ExecuteCommand(moveCommand);
@@ -242,13 +242,13 @@ namespace Units.Enemies
             
             foreach (var playerUnit in playerUnits)
             {
-                if (lowestHealthValue > playerUnit.Health.HealthPoints.Value)
+                if (lowestHealthValue > playerUnit.HealthStat.Value)
                 {
                     lowestHealthPlayerUnits.Clear();
-                    lowestHealthValue = playerUnit.Health.HealthPoints.Value;
+                    lowestHealthValue = playerUnit.HealthStat.Value;
                     lowestHealthPlayerUnits.Add(playerUnit);
                 }
-                else if (lowestHealthValue == playerUnit.Health.HealthPoints.Value)
+                else if (lowestHealthValue == playerUnit.HealthStat.Value)
                 {
                     lowestHealthPlayerUnits.Add(playerUnit);
                 }
