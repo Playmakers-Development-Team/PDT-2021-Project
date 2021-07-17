@@ -88,8 +88,7 @@ namespace Units
             get => abilities;
             set => abilities = value;
         }
-        
-         
+
         //TODO: Remove this function.
         public void Initialise()
         {
