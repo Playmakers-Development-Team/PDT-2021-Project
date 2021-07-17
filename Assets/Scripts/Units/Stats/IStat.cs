@@ -3,7 +3,6 @@
     //TODO: Refactor names without the affix "Stat".
     public interface IStat
     {
-        
         public HealthStat HealthStat { get; }
 
         public Stat AttackStat { get; }
@@ -15,9 +14,5 @@
         public Stat SpeedStat { get; }
         
         public Stat KnockbackStat { get; }
-        
-        
-        
-        
     }
 }

@@ -10,7 +10,6 @@ namespace Units.Stats
 
         public Knockback(ModifierStat takeKnockbackModifier) => TakeKnockbackModifier = takeKnockbackModifier;
         
-
         public int TakeKnockback(int amount)
         {
             int knockbackTaken = (int) TakeKnockbackModifier.Modify(amount);

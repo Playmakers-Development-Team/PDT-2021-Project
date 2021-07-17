@@ -34,16 +34,10 @@ namespace Units.Stats
             return amount;
         }
         
-        
         private void CheckDeath()
         {
             if (Value <= 0)
                 ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
         }
-        
-        
-        
-        
-        
     }
 }

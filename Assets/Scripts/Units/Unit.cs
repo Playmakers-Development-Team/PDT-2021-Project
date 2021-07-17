@@ -54,7 +54,6 @@ namespace Units
         public Stat MovementPoints { get; private set; }
         public Stat SpeedStat { get; private set; }
         public Stat KnockbackStat { get; private set; }
-        
 
         [Obsolete("Use HealthStat instead")]
         public Health Health { get; private set; }

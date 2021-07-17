@@ -34,7 +34,6 @@ namespace Units
         [field: SerializeField] public Stat AttackStat { get; set; }
         [field: SerializeField] public Stat KnockbackStat { get; set; }
         
-        
         // TODO: Remove all fields of type "ModifierStat" or "ValueStat".
         public string Name
         {
@@ -99,11 +98,6 @@ namespace Units
             Attack.Reset();
             Defence.Reset();
             TakeKnockbackModifier.Reset();
-          
-            
-            
-            
-            
         }
     }
 }

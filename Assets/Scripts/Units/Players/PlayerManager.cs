@@ -22,7 +22,6 @@ namespace Units.Players
         [Obsolete("Use Insight of type 'Stat' instead from the TurnManager")]
         public ValueStat Insight { get; private set; }
         
-
         public override void ManagerStart()
         {
             base.ManagerStart();
