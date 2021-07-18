@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Commands;
 using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
@@ -96,18 +95,13 @@ namespace Units.Enemies
             }
             else if (playerManager.PlayerUnits.Count > 0)
             {
-                Debug.Log(enemyUnit.Name + " ENEMY-INT: Move towards player");
                 await MoveUnit(enemyUnit);
-                
-                while (playerManager.WaitForDeath)
-                    await UniTask.Yield();
                 
                 // If a player is now next to the enemy, attack the player
                 adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
+                
                 if (adjacentPlayerUnit != null)
-                {
                     await AttackUnit(enemyUnit, adjacentPlayerUnit);
-                }
             }
             else
             {
@@ -122,13 +116,9 @@ namespace Units.Enemies
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
             // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
-            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit));
-            
-            Debug.Log(enemyUnit.Name + " ENEMY-INT: Damage player");
-            playerUnit.TakeDamageWithoutModifiers((int) enemyUnit.Attack.Modify(1));
-            
-            // Wait so that an enemies turn is not over instantly
-            await UniTask.Delay(1000); 
+            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit,playerUnit,enemyUnit
+            .AttackStat.Value));
+            await commandManager.WaitForCommand<EndUnitCastingCommand>();
             
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
@@ -137,18 +127,18 @@ namespace Units.Enemies
         private async Task MoveUnit(EnemyUnit enemyUnit)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
-			
-            // Debug.Log("Closest player to " + enemyUnit + " at " + enemyUnit.Coordinate + 
-            //           " is " + closestPlayerUnit + " at " + closestPlayerUnit.Coordinate);
-
+            
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
-                enemyUnit.MovementActionPoints.Value)
+                enemyUnit.MovementPoints.Value)
             );
             
             commandManager.ExecuteCommand(moveCommand);
-            await UniTask.Delay(3500);
+            await commandManager.WaitForCommand<EndMoveCommand>();
+            
+            while (playerManager.WaitForDeath)
+                await UniTask.Yield();
         }
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
@@ -252,13 +242,13 @@ namespace Units.Enemies
             
             foreach (var playerUnit in playerUnits)
             {
-                if (lowestHealthValue > playerUnit.Health.HealthPoints.Value)
+                if (lowestHealthValue > playerUnit.HealthStat.Value)
                 {
                     lowestHealthPlayerUnits.Clear();
-                    lowestHealthValue = playerUnit.Health.HealthPoints.Value;
+                    lowestHealthValue = playerUnit.HealthStat.Value;
                     lowestHealthPlayerUnits.Add(playerUnit);
                 }
-                else if (lowestHealthValue == playerUnit.Health.HealthPoints.Value)
+                else if (lowestHealthValue == playerUnit.HealthStat.Value)
                 {
                     lowestHealthPlayerUnits.Add(playerUnit);
                 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Units.Commands;
 using Units.Stats;
@@ -18,8 +19,9 @@ namespace Units.Players
         public int DeathDelay { get; } = 1000;
         public int Count => playerUnits.Count;
 
+        [Obsolete("Use Insight of type 'Stat' instead from the TurnManager")]
         public ValueStat Insight { get; private set; }
-
+        
         public override void ManagerStart()
         {
             base.ManagerStart();

@@ -6,6 +6,7 @@ using Managers;
 using TMPro;
 using Units;
 using Units.Commands;
+using Units.Stats;
 using UnityEngine;
 
 namespace UI
@@ -27,15 +28,15 @@ namespace UI
             if (unit == null)
                 DestroyImmediate(gameObject);
             
-            ManagerLocator.Get<CommandManager>().ListenCommand((TakeTotalDamageCommand cmd) => OnTakeDamage(cmd));
+            ManagerLocator.Get<CommandManager>().ListenCommand((StatChangedCommand cmd) => OnTakeDamage(cmd));
         }
 
 
         public void OnClick() => manager.unitSelected.Invoke(unit);
 
-        private async void OnTakeDamage(TakeTotalDamageCommand cmd)
+        private async void OnTakeDamage(StatChangedCommand cmd)
         {
-            if (cmd.Unit != unit)
+            if (cmd.Unit != unit || cmd.StatType != StatTypes.Health)
                 return;
             
             await DamageTextDisplay(cmd.Value);

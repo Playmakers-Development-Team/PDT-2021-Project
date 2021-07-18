@@ -23,6 +23,15 @@ namespace Units.Players
             // Process stuff about players here
             
             commandManager.ExecuteCommand(new PlayerUnitsReadyCommand());
+            
+            commandManager.ListenCommand<StatChangedCommand>(cmd =>
+            {
+                if (cmd.Unit is null)
+                    return;
+                
+                Debug.Log($"{cmd.Unit.Name} , {cmd.StatType} has changed by {cmd.Value}");
+            });
+            
         }
     }
 }
