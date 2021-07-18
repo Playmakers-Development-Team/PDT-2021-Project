@@ -79,6 +79,8 @@ namespace Units.Commands
         
         public int Value { get;}
         
+        public int DisplayValue { get; }
+        
         public int NewValue { get; }
 
         public StatChangedCommand(IUnit unit, StatTypes type, int baseValue, int amount,
@@ -86,8 +88,13 @@ namespace Units.Commands
         {
             StatType = type;
             BaseValue = baseValue;
-            Value = amount;
+            DisplayValue = amount;
             NewValue = newValue;
+
+            if (NewValue < BaseValue)
+                Value = amount * -1;
+            else
+                Value = amount;
         }
     }
     

@@ -39,7 +39,7 @@ namespace UI
             if (cmd.Unit != unit || cmd.StatType != StatTypes.Health)
                 return;
             
-            await DamageTextDisplay(cmd.Value);
+            await DamageTextDisplay(cmd.DisplayValue);
             DamageTextHide();
         }
 
