@@ -182,8 +182,9 @@ namespace Units
             // Attack modifiers should only work when the effect actually intends to do damage
             if (amount <= 0)
                 return;
-            
-            other.TakeDamage(amount);
+
+            int damage = AttackStat.Value + amount;
+            other.TakeDamage(damage);
         }
 
         // TODO: Remove this function.
