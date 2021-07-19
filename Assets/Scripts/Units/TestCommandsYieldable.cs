@@ -11,8 +11,7 @@ namespace Units
     /// An example script used to use commands with await and coroutines. This script outputs
     /// spawn command in debug log.
     /// </summary>
-    
-    // TODO Delete this file and the CommandYieldTest Scene after merge to dev.
+    // TODO Move this to the Tests assembly/folder once it's there
     public class TestCommandsYieldable : MonoBehaviour
     {
         private CommandManager commandManager;
@@ -21,8 +20,18 @@ namespace Units
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             
+            // We're testing specific listening and un-listening functions from the command manager
+            commandManager.ListenCommand(typeof(PlayerUnitsReadyCommand), SomeFunction);
+            commandManager.UnlistenCommand(typeof(PlayerUnitsReadyCommand), SomeFunction);
+
+            // We're testing the yieldable/awaitable functions
             SomeAsyncFunction();
             StartCoroutine(SomeCoroutine());
+        }
+
+        private void SomeFunction()
+        {
+            Debug.LogWarning("Player units ready, though this should not be called!");
         }
 
         private async void SomeAsyncFunction()
