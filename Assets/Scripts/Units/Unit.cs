@@ -179,7 +179,7 @@ namespace Units
         
         public void DealDamageTo(IAbilityUser other, int amount)
         {
-            // Attack modifiers should only work when the effect actually intends to do damage
+            // Attack modifiers should only be applied when damage amount is non-zero
             if (amount <= 0)
                 return;
 

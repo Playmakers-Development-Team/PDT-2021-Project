@@ -42,10 +42,8 @@ namespace Abilities
         private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
-        public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
-        {
+        public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector) =>
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
-        }
 
         public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
             UseForTargets(user, targets.AsEnumerable());

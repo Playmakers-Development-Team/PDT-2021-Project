@@ -4,6 +4,7 @@ using System.Linq;
 using Abilities.Shapes;
 using UnityEngine;
 using Utilities;
+using Random = UnityEngine.Random;
 
 namespace Abilities.Bonuses
 {
@@ -52,6 +53,10 @@ namespace Abilities.Bonuses
             return baseBonus + childBonus;
         }
 
+        // TODO: Check the way this is implemented. At the moment the behaviour is inconsistent:
+        // TODO: If ShapeCountConstraint.AtLeast and there are less than the required amount, returns no targets.
+        // TODO: If ShapeCountConstraint.AtMost and there are more than that the required amount, returns the max amount of targets.
+        // TODO: Also, needs to be tested.
         private IEnumerable<IAbilityUser> GetValidShapeTargets(IAbilityUser user)
         {
             var targets = shape
@@ -62,18 +67,25 @@ namespace Abilities.Bonuses
 
             return countConstraint switch
             {
-                // If we more than we can take, try to randomise and pick the maximum set amount
+                // If there are more than the max targets, randomise them and return the max amount
                 ShapeCountConstraint.AtMost => targets
-                    .OrderBy((left) => UnityEngine.Random.Range(int.MinValue, int.MaxValue))
+                    .OrderBy(left => Random.Range(int.MinValue, int.MaxValue))
                     .Take(count),
                 ShapeCountConstraint.AtLeast => targets.Length >= count ? targets : Enumerable.Empty<IAbilityUser>(),
                 _ => throw new ArgumentOutOfRangeException(nameof(countConstraint), countConstraint, null)
             };
         }
 
-        private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target) =>
-            shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
-                ? user.IsSameTeamWith(target)
-                : !user.IsSameTeamWith(target);
+        // TODO: Duplicate code, see ShapeCost.MatchesShapeFilter
+        private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)
+        {
+            return shapeFilter switch
+            {
+                ShapeFilter.AnyTeam => true,
+                ShapeFilter.SameTeam => user.IsSameTeamWith(target),
+                ShapeFilter.OtherTeam => !user.IsSameTeamWith(target),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

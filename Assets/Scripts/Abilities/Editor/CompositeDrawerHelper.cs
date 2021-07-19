@@ -171,7 +171,7 @@ namespace Abilities.Editor
             }
         }
         
-        // This can probably be moved to an Editor utility class
+        // TODO: This can probably be moved to an Editor utility class
         private static object GetPropertyObject(SerializedProperty property)
         {
             object obj = property.serializedObject.targetObject;
