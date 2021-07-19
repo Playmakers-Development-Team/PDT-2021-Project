@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.Game.Timeline
 {
-    public class TimelinePanel : UIComponent<GameDialogue>
+    public class TimelinePanel : DialogueComponent<GameDialogue>
     {
         [SerializeField] private ScrollRect scrollRect;
         

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI.Game.Unit
 {
-    public class UnitUIWrapper : UIComponent<GameDialogue>
+    public class UnitUIWrapper : DialogueComponent<GameDialogue>
     {
         [SerializeField] private GridObject unitGridObject;
         [SerializeField] private GameDialogue.UnitInfo info;

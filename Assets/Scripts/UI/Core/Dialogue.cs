@@ -4,7 +4,7 @@ using UnityEngine;
 namespace UI.Core
 {
     /// <summary>
-    /// A Dialogue is a collection of <see cref="UIComponent{T}"/>s that should be presented and interacted with at the same time.
+    /// A Dialogue is a collection of <see cref="DialogueComponent{T}"/>s that should be presented and interacted with at the same time.
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public abstract class Dialogue : MonoBehaviour

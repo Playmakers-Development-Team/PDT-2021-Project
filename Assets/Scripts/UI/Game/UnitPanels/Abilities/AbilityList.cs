@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Abilities
 {
-    public class AbilityList : UIComponent<GameDialogue>
+    public class AbilityList : DialogueComponent<GameDialogue>
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private List<AbilityCard> cards;

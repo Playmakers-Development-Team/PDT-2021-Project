@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace UI.General
 {
-    public class OpenButton : UIComponent<Dialogue>
+    public class OpenButton : DialogueComponent<Dialogue>
     {
         [SerializeField] private GameObject dialoguePrefab;
 

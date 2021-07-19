@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Abilities
 {
-    public class AbilityCard : UIComponent<GameDialogue>
+    public class AbilityCard : DialogueComponent<GameDialogue>
     {
         [SerializeField] private Button button;
         [SerializeField] private TextMeshProUGUI titleText;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI.Settings.Volume
 {
-    public class VolumeSettingSlider : UIComponent<SettingsDialogue>
+    public class VolumeSettingSlider : DialogueComponent<SettingsDialogue>
     {
         [SerializeField] private VolumeParameter volumeParameter;
 

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels
 {
-    internal abstract class UnitPanel : UIComponent<GameDialogue>
+    internal abstract class UnitPanel : DialogueComponent<GameDialogue>
     {
         [SerializeField] protected Canvas canvas;
         

@@ -2,7 +2,7 @@
 
 namespace UI.General
 {
-    public class CloseButton : UIComponent<Dialogue>
+    public class CloseButton : DialogueComponent<Dialogue>
     {
         #region UIComponent
         

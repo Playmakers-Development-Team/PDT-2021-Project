@@ -1,6 +1,6 @@
 ﻿namespace UI.Game.UnitPanels
 {
-    internal class FloatingUnitPanel : UnitPanel
+    internal class SelectedUnitPanel : UnitPanel
     {
         #region UIComponent
         

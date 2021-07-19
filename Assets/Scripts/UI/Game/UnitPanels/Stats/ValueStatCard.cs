@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace UI.Game.UnitPanels.Stats
 {
-    public class ValueStatCard : UIComponent<GameDialogue>
+    public class ValueStatCard : DialogueComponent<GameDialogue>
     {
         [SerializeField] private TextMeshProUGUI labelText;
         [SerializeField] private TextMeshProUGUI valueText;

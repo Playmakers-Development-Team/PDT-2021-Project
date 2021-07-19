@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace UI.Game.Timeline
 {
-    public class TimelinePortrait : UIComponent<GameDialogue>
+    public class TimelinePortrait : DialogueComponent<GameDialogue>
     {
         [SerializeField] private Image image;
 

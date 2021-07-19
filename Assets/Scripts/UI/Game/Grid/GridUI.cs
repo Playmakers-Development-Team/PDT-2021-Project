@@ -12,7 +12,7 @@ using UnityEngine.Tilemaps;
 
 namespace UI.Game.Grid
 {
-    public class GridUI : UIComponent<GameDialogue>
+    public class GridUI : DialogueComponent<GameDialogue>
     {
         [Header("Tile types")]
         

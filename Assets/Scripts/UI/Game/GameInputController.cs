@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace UI.Game
 {
-    internal class GameInputController : UIComponent<GameDialogue>
+    internal class GameInputController : DialogueComponent<GameDialogue>
     {
         private GridManager gridManager;
         private TurnManager turnManager;
