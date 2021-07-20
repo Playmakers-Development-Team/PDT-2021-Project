@@ -140,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.3671476
+      value: 0.7162868
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1549733
+      value: -0.3918566
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -398,6 +398,22 @@ PrefabInstance:
     - target: {fileID: 3352983391058310811, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352983391058310812, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
+      propertyPath: validTile
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352983391058310812, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
+      propertyPath: defaultTile
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352983391058310812, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
+      propertyPath: invalidTile
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3352983391058310812, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
+      propertyPath: selectedTile
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3352983391058310813, guid: 0e675e276a3fdda4dbebad6f39c11b01, type: 3}
       propertyPath: m_Name

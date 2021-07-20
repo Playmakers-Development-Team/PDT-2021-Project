@@ -23,24 +23,38 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs: []
     keywords: []
-  - name: 4 Damage IF User Spend Pride
+  - name: 4 Damage IF User Spend 1 Pride
     damageValue: 4
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: User Spend Pride
-        affectType: 0
-        tenetCostType: 2
-        tenetType: 0
     bonuses: []
+    costs:
+    - name: User Spend 1 Pride
+      affectType: 0
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 0
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
     keywords: []
   userEffects:
   - name: Default, 2 Defence
@@ -50,9 +64,8 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs: []
     keywords: []
   - name: Default, Provide 1 Passion
     damageValue: 0
@@ -61,7 +74,6 @@ MonoBehaviour:
     providingTenet:
       tenetType: 2
       stackCount: 1
-    cost:
-      tenetCosts: []
     bonuses: []
+    costs: []
     keywords: []

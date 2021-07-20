@@ -176,16 +176,24 @@ namespace Units
             
             HealthStat.TakeDamage(amount);
         }
-
         
-        //TODO: Remove this function.
+        public void DealDamageTo(IAbilityUser other, int amount)
+        {
+            // Attack modifiers should only be applied when damage amount is non-zero
+            if (amount <= 0)
+                return;
+
+            int damage = AttackStat.Value + amount;
+            other.TakeDamage(damage);
+        }
+
+        // TODO: Remove this function.
         public void TakeDamageWithoutModifiers(int amount)
         {
             // commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
             // int damageTaken = Health.TakeDamage(amount);
             // commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
-
 
         public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
@@ -420,6 +428,12 @@ namespace Units
         }
 
         #endregion
+
+        #region Utility
+
+        public abstract bool IsSameTeamWith(IAbilityUser other);
+
+        #endregion
         
         /// <summary>
         /// Returns a list of all coordinates that are reachable from a given starting position
@@ -572,7 +586,5 @@ namespace Units
         }
         
         #endregion
-
-      
     }
 }

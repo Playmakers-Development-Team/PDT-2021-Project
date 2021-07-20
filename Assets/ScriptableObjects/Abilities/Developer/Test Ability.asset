@@ -24,8 +24,48 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
+    bonus:
+      name: 
+      affectType: 0
+      bonusType: 0
+      tenetBonus:
+        tenetType: 0
     costs: []
     keywords:
     - {fileID: 11400000, guid: d24fce744630dd3fbb46f50032b621e1, type: 2}
+  - name: Nothing IF User suffix
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonus:
+      name: 
+      affectType: 0
+      bonusType: 0
+      tenetBonus:
+        tenetType: 0
+    costs:
+    - name: User suffix
+      affectType: 0
+      costType: 1
+      tenetCost:
+        tenetCostType: 0
+        count: 1
+        tenetType: 0
+      shapeCost:
+        shape: {fileID: 0}
+        count: 0
+        countConstraint: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
   userEffects: []

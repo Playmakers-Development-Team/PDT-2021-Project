@@ -16,23 +16,23 @@ namespace Abilities
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
-        [SerializeField] private CompositeCost cost;
-        [SerializeField] private CompositeBonus bonus;
+        [SerializeField] private WholeBonus[] bonuses;
+        [SerializeField] private WholeCost[] costs;
         [SerializeField] private List<Keyword> keywords;
 
         private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
         private int TotalDefence => defenceValue + AllKeywordEffects.Sum(e => e.defenceValue);
         private int TotalAttack => attackValue + AllKeywordEffects.Sum(e => e.attackValue);
         
-        private IEnumerable<Effect> AllKeywordEffects => keywords.Select(k => k.Effect);
+        private IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
         private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
-            .Select(e => e.cost)
-            .Prepend(cost);
+            .SelectMany(e => e.costs)
+            .Concat(costs);
         private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
-            .Select(e => e.bonus)
-            .Prepend(bonus);
+            .SelectMany(e => e.bonuses)
+            .Concat(bonuses);
 
-        public IReadOnlyList<Keyword> Keywords => keywords.AsReadOnly();
+        public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
 
         public bool ProcessTenet(IAbilityUser user, IAbilityUser target)
         {
@@ -78,7 +78,8 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            value *= AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            int bonusSum = AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            value *= Mathf.Max(1, bonusSum);
 
             return value;
         }
