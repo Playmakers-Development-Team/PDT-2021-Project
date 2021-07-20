@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Abilities.Editor
 {
+    // TODO: Duplicate code, see CompositeCostDrawer
     [CustomPropertyDrawer(typeof(CompositeBonus), true)]
     public class CompositeBonusDrawer : PropertyDrawer
     {
@@ -15,10 +16,8 @@ namespace Abilities.Editor
             
             compositeDrawerHelper.OnPropertyGUI(position);
 
-            if (EditorGUI.EndChangeCheck() || !compositeDrawerHelper.IsNameInitialised(property))
-            {
+            if (EditorGUI.EndChangeCheck() || !CompositeDrawerHelper.IsNameInitialised(property))
                 compositeDrawerHelper.UpdatePropertyDisplayName();
-            }
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) =>
