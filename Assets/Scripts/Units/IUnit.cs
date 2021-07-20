@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Units
 {
     //TODO: Remove IDamageable and IKnockbackable reference.
-    public interface IUnit : IDamageable, IKnockbackable, IStat,IAbilityUser
+    public interface IUnit : IDamageable, IKnockbackable, IStat, IAbilityUser
     {
         GameObject gameObject { get; }
         Transform transform { get; }
@@ -45,21 +45,13 @@ namespace Units
 
         void ChangeAnimation(AnimationStates animationStates);
 
-        [Obsolete]
-        void TakeDamageWithoutModifiers(int amount);
-
-        new void TakeDamage(int amount);
-
-        new void TakeKnockback(int amount);
-        
-        new void TakeDefence(int amount);
-
         void SetSpeed(int amount);
 
         void SetMovementActionPoints(int amount);
 
-        new void TakeAttack(int amount);
-
+        [Obsolete]
+        void TakeDamageWithoutModifiers(int amount);
+        
         List<Vector2Int> GetAllReachableTiles();
 
         void MoveUnit(StartMoveCommand startMoveCommand);

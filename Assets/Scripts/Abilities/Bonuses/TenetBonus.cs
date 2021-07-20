@@ -5,11 +5,13 @@ using UnityEngine;
 namespace Abilities.Bonuses
 {
     [Serializable]
-    public class TenetBonus : Conditional
+    public class TenetBonus : IBonus
     {
         [SerializeField] private TenetType tenetType;
+
+        public string DisplayName => tenetType.ToString();
         
-        public int CalculateBonusMultiplier(IAbilityUser user, IAbilityUser target) =>
-            GetAffectedUser(user, target).GetTenetStatusCount(tenetType);
+        public int CalculateBonusMultiplier(IAbilityUser user) =>
+            user.GetTenetStatusCount(tenetType);
     }
 }

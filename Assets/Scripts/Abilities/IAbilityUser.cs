@@ -10,9 +10,13 @@ namespace Abilities
         void TakeAttack(int amount);
         
         void TakeDamage(int amount);
+        
+        void DealDamageTo(IAbilityUser other, int amount);
 
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
+        
+        bool IsSameTeamWith(IAbilityUser other);
     }
 }
