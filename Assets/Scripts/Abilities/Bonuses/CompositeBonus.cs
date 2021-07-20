@@ -32,7 +32,7 @@ namespace Abilities.Bonuses
 
         /// <summary>
         /// Calculates the multiplier based on all bonuses.
-        /// If there aren't any just return a multiplier of 1.
+        /// If there aren't any, returns a multiplier of zero.
         /// </summary>
         public int CalculateBonusMultiplier(IAbilityUser user, IAbilityUser target) =>
             bonusType != BonusType.None

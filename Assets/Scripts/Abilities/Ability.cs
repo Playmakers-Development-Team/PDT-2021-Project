@@ -15,6 +15,7 @@ namespace Abilities
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
+        [SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
 
@@ -51,13 +52,16 @@ namespace Abilities
             user.AddSpeed(speed);
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
-
-        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => UseForTargets(user, targets.AsEnumerable());
+        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
+            UseForTargets(user, targets.AsEnumerable());
         
         public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
-            UseEffectsForTargets(user, targetEffects, targets);
-            
+            IEnumerable<GridObject> finalTargets = excludeUserFromTargets
+                ? targets.Where(u => !ReferenceEquals(user, u))
+                : targets;
+            UseEffectsForTargets(user, targetEffects, finalTargets);
+
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
                 UseEffectsForTargets(user, userEffects, userGridObject);

@@ -69,13 +69,13 @@ namespace UI
             
             // Health bar
             healthSlider.minValue = 0;
-            healthSlider.maxValue = selectedUnit.Health.HealthPoints.BaseValue;
-            healthSlider.value = selectedUnit.Health.HealthPoints.Value;
+            healthSlider.maxValue = selectedUnit.HealthStat.BaseValue;
+            healthSlider.value = selectedUnit.HealthStat.Value;
             healthText.text = healthSlider.value.ToString(CultureInfo.InvariantCulture);
             
             // Stat cards
-            attackCard.Apply("ATT", (int) selectedUnit.Attack.Value);
-            defenceCard.Apply("DEF", (int) selectedUnit.Health.Defence.Value);
+            attackCard.Apply("ATT", (int) selectedUnit.AttackStat.Value);
+            defenceCard.Apply("DEF", (int) selectedUnit.DefenceStat.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
             TenetStatus[] effects = selectedUnit.TenetStatuses.ToArray();

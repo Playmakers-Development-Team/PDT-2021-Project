@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
-using Grid;
 using Grid.GridObjects;
 using Grid.Tiles;
 using Managers;
@@ -24,11 +24,22 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        
+        [Obsolete("you stupid x3")]
         [SerializeField] private TMP_Text nameText;
+        
+        [Obsolete("you stupid x5")]
         [SerializeField] private TMP_Text healthText;
+        
+        [Obsolete("you stupid x7.5")]
         [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
+        
+        [Obsolete("you stupid x39")]
         [SerializeField] private float damageTextLifetime = 1.0f;
+        
+        [Obsolete("you stupid x42")]
         [SerializeField] private Sprite render;
+        
         private SpriteRenderer spriteRenderer;
         
         public string Name
@@ -36,7 +47,18 @@ namespace Units
             get => data.Name;
             set => data.Name = value;
         }
+        
+        public HealthStat HealthStat { get; private set; }
+        public Stat AttackStat { get; private set; }
+        public Stat DefenceStat { get; private set; }
+        public Stat MovementPoints { get; private set; }
+        public Stat SpeedStat { get; private set; }
+        public Stat KnockbackStat { get; private set; }
+
+        [Obsolete("Use HealthStat instead")]
         public Health Health { get; private set; }
+        
+        [Obsolete("Use KnockbackStat instead")]
         public Knockback Knockback { get; private set; }
         
         public Animator UnitAnimator { get; private set; }
@@ -45,18 +67,14 @@ namespace Units
         
         public TenetType Tenet => data.Tenet;
         
-        public ValueStat MovementActionPoints
-        {
-            get => data.MovementPoints;
-            set => data.MovementPoints = value;
-        }
-
+        [Obsolete("Use SpeedStat instead")]
         public ValueStat Speed
         {
             get => data.Speed;
             set => data.Speed = value;
         }
 
+        [Obsolete("Use AttackStat instead")]
         public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
@@ -87,6 +105,11 @@ namespace Units
         
         private PlayerManager playerManager;
         private CommandManager commandManager;
+        
+        // TODO: Rename
+        private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
+        private static readonly int frontAnimationParameter = Animator.StringToHash("front");
+        private static readonly int attackAnimationParameter = Animator.StringToHash("attack");
 
         private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
@@ -99,16 +122,16 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
             
             #endregion
-
-            data.Initialise();
-            Health = new Health(new KillUnitCommand(this),
-                data.HealthPoints, data.Defence);
             
-            Knockback = new Knockback(data.TakeKnockbackModifier);
+            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
+            StatTypes.Health);
+            DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
+            AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
+            SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
+            MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
+            KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
+            
             UnitAnimator = GetComponentInChildren<Animator>();
-            
-            // TODO Speed temporarily random for now until proper turn manipulation is done.
-            SetSpeed(Speed.Value + Random.Range(0, 101));
             
             #region ListenCommands
 
@@ -137,66 +160,48 @@ namespace Units
                 nameText.text = Name;
             
             if (healthText)
-                healthText.text = Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue;
+                healthText.text = HealthStat.Value + " / " + HealthStat.BaseValue;
         }
 
         #region ValueChanging
         
-        public void TakeDefence(int amount)
+        public void TakeDefence(int amount) => DefenceStat.Value += amount;
+        
+        public void TakeAttack(int amount) => AttackStat.Value += amount;
+        
+        public void TakeDamage(int amount)
         {
-            Health.Defence.Adder -= amount;
-            commandManager.ExecuteCommand(new DefenceChangeCommand(this, amount));
-        }
-
-        public void TakeAttack(int amount)
-        {
-            Attack.Adder += amount;
-            commandManager.ExecuteCommand(new AttackChangeCommand(this, amount));
-        }
-
-        public void DealDamageTo(IAbilityUser other, int amount)
-        {
-            // Attack modifiers should only work when the effect actually intends to do damage
             if (amount <= 0)
                 return;
             
-            other.TakeDamageWithoutModifiers(Mathf.FloorToInt(Attack.Modify(amount)));
+            HealthStat.TakeDamage(amount);
+        }
+        
+        public void DealDamageTo(IAbilityUser other, int amount)
+        {
+            // Attack modifiers should only be applied when damage amount is non-zero
+            if (amount <= 0)
+                return;
+
+            int damage = AttackStat.Value + amount;
+            other.TakeDamage(damage);
         }
 
+        // TODO: Remove this function.
         public void TakeDamageWithoutModifiers(int amount)
         {
-            commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
-            int damageTaken = Health.TakeDamage(amount);
-            commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
+            // commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
+            // int damageTaken = Health.TakeDamage(amount);
+            // commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
         }
 
-        public void TakeKnockback(int amount)
-        {
-           int knockbackAmount = Knockback.TakeKnockback(amount);
-           commandManager.ExecuteCommand(new KnockbackModifierChangedCommand(this, knockbackAmount));
-        }
+        public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
-        public void SetSpeed(int amount)
-        {
-            Speed.Value = amount;
-            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
-        }
-
-        public void AddSpeed(int amount)
-        {
-            Debug.LogError("Old speed value = " + Speed.Value);
-            Speed.Value += amount;
-            Debug.LogError("New speed value = " + Speed.Value);
-            commandManager.ExecuteCommand(new SpeedChangedCommand(this, amount));
-        }
+        public void SetSpeed(int amount) => SpeedStat.Value = amount;
+        public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
-        public void SetMovementActionPoints(int amount)
-        {
-            // Clamp it here, movement points cannot be less than 0
-            int clampedAmount = Mathf.Max(0, amount);
-            MovementActionPoints.Value = clampedAmount;
-            commandManager.ExecuteCommand(new MovementActionPointChangedCommand(this, clampedAmount));
-        }
+        [Obsolete("Directly alter MovementPoints Value instead")]
+        public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
         
         #endregion
 
@@ -356,6 +361,7 @@ namespace Units
 
         #region Scene
         
+        [Obsolete("you stupid")]
         private void SpawnDamageText(int damageAmount)
         {
             damageTextCanvas.enabled = true;
@@ -366,6 +372,7 @@ namespace Units
             Invoke("HideDamageText", damageTextLifetime);
         }
 
+        [Obsolete("you stupid x2")]
         private void HideDamageText() => damageTextCanvas.enabled = false;
 
         public void SetName() => nameText.text = Name;
@@ -374,45 +381,49 @@ namespace Units
 
         #region AnimationHandling
 
-        public void ChangeAnimation(AnimationStates animationStates) // this stuff is temporary, should probably be done in a better way
+        public async void ChangeAnimation(AnimationStates animationStates) 
         {
             unitAnimationState = animationStates;
 
             switch (unitAnimationState)
             {
                 case AnimationStates.Idle:
-                    UnitAnimator.SetBool("moving", false);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Down:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Up:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", false);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
                     spriteRenderer.flipX = true;
                     break;
                 
                 case AnimationStates.Left:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", true);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
                     spriteRenderer.flipX = true;
                     break;
                 
                 case AnimationStates.Right:
-                    UnitAnimator.SetBool("moving", true);
-                    UnitAnimator.SetBool("front", false);
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
                     spriteRenderer.flipX = false;
                     break;
                 
                 case AnimationStates.Casting:
-                    UnitAnimator.SetBool("moving", false);
-                    UnitAnimator.SetTrigger("attack");
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetTrigger(attackAnimationParameter);
+
+                    await Task.Delay((int) UnitAnimator.GetCurrentAnimatorStateInfo(0).length * 1000);
+
+                    commandManager.ExecuteCommand(new EndUnitCastingCommand(this));
                     break;
             }
         }
@@ -435,7 +446,7 @@ namespace Units
         public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
-            int range = (int) MovementActionPoints.Value;
+            int range = (int) MovementPoints.Value;
             
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -549,14 +560,14 @@ namespace Units
             ));
             
             gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints(unit.MovementActionPoints.Value - manhattanDistance);
+            unit.SetMovementActionPoints(unit.MovementPoints.Value - manhattanDistance);
             unit.ChangeAnimation(AnimationStates.Idle);
 
             /*Debug.Log(Mathf.Max(0,
                 ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));*/
             
             // Should be called when all the movement and tweening has been completed
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new EndMoveCommand(moveCommand));
+            commandManager.ExecuteCommand(new EndMoveCommand(moveCommand));
         }
 
         #region RandomizeNames

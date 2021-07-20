@@ -6,8 +6,7 @@ using UnityEngine;
 namespace Abilities.Costs
 {
     /// <summary>
-    /// A convenient class that stores all the different type of costs into one class.
-    /// Sort of an implementation of the Composite Pattern for a better structure and organization.
+    /// Uses the Composite Pattern to store all the different types of costs in one class.
     /// </summary>
     [Serializable]
     public class CompositeCost : Conditional, IDisplayable

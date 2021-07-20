@@ -43,8 +43,6 @@ namespace Abilities.Costs
             count = Mathf.Max(1, count);
         }
 
-        public void OnAfterDeserialize()
-        {
-        }
+        public void OnAfterDeserialize() {}
     }
 }

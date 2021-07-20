@@ -15,6 +15,7 @@ MonoBehaviour:
   description: "Targets Does 1 Attack and 1 Defense. \n\u21AF Targets may Spend Passion,
     gain 2 Attack.\n\u21AF Targets may Spend Humility, gain 2 Defense."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  excludeUserFromTargets: 0
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0

@@ -18,20 +18,20 @@ namespace Abilities.Editor
         private SerializedProperty childProperty;
         private FieldInfo childField;
         
-        private float MiddleSpacing => EditorGUIUtility.standardVerticalSpacing * 3f;
+        private static float MiddleSpacing => EditorGUIUtility.standardVerticalSpacing * 3f;
         public bool IsCompositeTypeNone => compositeTypeProperty.enumValueIndex != 0;
 
         public CompositeDrawerHelper(Type type, SerializedProperty property, 
                                      string affectType, string compositeType)
         {
             this.type = type;
-            this.compositeProperty = property;
-            this.affectTypeProperty = property.FindPropertyRelative(affectType);
-            this.compositeTypeProperty = property.FindPropertyRelative(compositeType);
+            compositeProperty = property;
+            affectTypeProperty = property.FindPropertyRelative(affectType);
+            compositeTypeProperty = property.FindPropertyRelative(compositeType);
             UpdateChild();
         }
 
-        public bool IsNameInitialised(SerializedProperty property) =>
+        public static bool IsNameInitialised(SerializedProperty property) =>
             !string.IsNullOrEmpty(property.FindPropertyRelative("name").stringValue);
         
         public void UpdatePropertyDisplayName()
@@ -52,9 +52,7 @@ namespace Abilities.Editor
 
             if (childField != null && typeof(IDisplayable).IsAssignableFrom(childField.FieldType))
             {
-                IDisplayable displayable = GetPropertyObject(childProperty) as IDisplayable;
-
-                if (displayable != null)
+                if (GetPropertyObject(childProperty) is IDisplayable displayable)
                     childString = $" {displayable.DisplayName}";
             }
 
@@ -122,27 +120,30 @@ namespace Abilities.Editor
 
             foreach (SerializedProperty currentProperty in GetChildProperties())
             {
-                currentRect = new Rect(position.x,
-                    currentRect.y + currentRect.height + EditorGUIUtility.standardVerticalSpacing,
-                    position.width, EditorGUIUtility.singleLineHeight);
+                var yPos = currentRect.y + currentRect.height + EditorGUIUtility.standardVerticalSpacing;
+                
+                currentRect = new Rect(position.x, yPos, position.width, EditorGUIUtility.singleLineHeight);
+                
                 EditorGUI.PropertyField(currentRect, currentProperty);
             }
         }
 
         private void UpdateChild()
         {
-            this.childField = GetChildField();
-            this.childProperty = childField != null
+            childField = GetChildField();
+            childProperty = childField != null
                 ? compositeProperty.FindPropertyRelative(childField.Name)
                 : null;
         }
 
         private FieldInfo GetChildField()
         {
-            foreach (var field in type.GetFields(BindingFlags.Public 
-                                                 | BindingFlags.NonPublic 
-                                                 | BindingFlags.Instance 
-                                                 | BindingFlags.FlattenHierarchy))
+            var fieldInfos = type.GetFields(BindingFlags.Public 
+                                            | BindingFlags.NonPublic 
+                                            | BindingFlags.Instance 
+                                            | BindingFlags.FlattenHierarchy);
+            
+            foreach (var field in fieldInfos)
             {
                 if (field.IsDefined(typeof(CompositeChildAttribute)))
                 {
@@ -150,9 +151,7 @@ namespace Abilities.Editor
                         .GetCustomAttribute(typeof(CompositeChildAttribute));
 
                     if (attribute.EnumValue == compositeTypeProperty.enumValueIndex)
-                    {
                         return field;
-                    }
                 }
             }
 
@@ -171,7 +170,7 @@ namespace Abilities.Editor
             }
         }
         
-        // This can probably be moved to an Editor utility class
+        // TODO: This can probably be moved to an Editor utility class
         private static object GetPropertyObject(SerializedProperty property)
         {
             object obj = property.serializedObject.targetObject;

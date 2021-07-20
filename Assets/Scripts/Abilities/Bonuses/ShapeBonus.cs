@@ -4,6 +4,7 @@ using System.Linq;
 using Abilities.Shapes;
 using UnityEngine;
 using Utilities;
+using Random = UnityEngine.Random;
 
 namespace Abilities.Bonuses
 {
@@ -42,31 +43,49 @@ namespace Abilities.Bonuses
             if (shape == null)
                 return 0;
 
-            var targets = GetShapeTargets(user).ToArray();
+            var targets = GetValidShapeTargets(user).ToArray();
 
             int baseBonus = bonusByCount ? targets.Length : 0;
-            int childBonus = targets.Sum(u => bonus.CalculateBonusMultiplier(user, u));
+            int childBonus = targets.Length > 0
+                ? targets.Sum(u => bonus.CalculateBonusMultiplier(user, u))
+                : 0;
 
             return baseBonus + childBonus;
         }
 
-        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser user)
+        // TODO: Check the way this is implemented. At the moment the behaviour is inconsistent:
+        // TODO: If ShapeCountConstraint.AtLeast and there are less than the required amount, returns no targets.
+        // TODO: If ShapeCountConstraint.AtMost and there are more than that the required amount, returns the max amount of targets.
+        // TODO: Also, needs to be tested.
+        private IEnumerable<IAbilityUser> GetValidShapeTargets(IAbilityUser user)
         {
             var targets = shape
                 .GetTargets(user.Coordinate, Vector2.zero)
                 .OfType<IAbilityUser>()
-                .Where(u => MatchesShapeFilter(user, u));
+                .Where(u => MatchesShapeFilter(user, u))
+                .ToArray();
 
-            // If we more than we can take, try to randomise and pick the maximum set amount
-            return countConstraint == ShapeCountConstraint.AtMost
-                ? targets.OrderBy((left) => UnityEngine.Random.Range(int.MinValue, int.MaxValue))
-                    .Take(count)
-                : targets;
+            return countConstraint switch
+            {
+                // If there are more than the max targets, randomise them and return the max amount
+                ShapeCountConstraint.AtMost => targets
+                    .OrderBy(left => Random.Range(int.MinValue, int.MaxValue))
+                    .Take(count),
+                ShapeCountConstraint.AtLeast => targets.Length >= count ? targets : Enumerable.Empty<IAbilityUser>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(countConstraint), countConstraint, null)
+            };
         }
 
-        private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target) =>
-            shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
-                ? user.IsSameTeamWith(target)
-                : !user.IsSameTeamWith(target);
+        // TODO: Duplicate code, see ShapeCost.MatchesShapeFilter
+        private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)
+        {
+            return shapeFilter switch
+            {
+                ShapeFilter.AnyTeam => true,
+                ShapeFilter.SameTeam => user.IsSameTeamWith(target),
+                ShapeFilter.OtherTeam => !user.IsSameTeamWith(target),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }

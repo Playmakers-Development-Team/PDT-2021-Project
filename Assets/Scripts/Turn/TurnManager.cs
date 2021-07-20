@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Abilities.Commands;
 using Commands;
 using Managers;
 using Turn.Commands;
@@ -9,6 +8,7 @@ using Units;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
+using Units.Stats;
 using UnityEngine;
 
 namespace Turn
@@ -31,11 +31,13 @@ namespace Turn
         public int MovementPhaseIndex { get; private set; }
         public int AbilityPhaseIndex { get; private set; }
         public int PhaseIndex { get; set; }
+        
+        public Stat Insight { get; set; }
+        
         public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
-
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
@@ -52,7 +54,7 @@ namespace Turn
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
-        
+
         private bool randomizedSpeed = true;
         private bool timelineNeedsUpdating;
 
@@ -76,9 +78,9 @@ namespace Turn
                     EndMovementPhase();
             });
 
-            commandManager.ListenCommand<AbilityCommand>(cmd => {
+            commandManager.ListenCommand<EndUnitCastingCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
-                if (cmd.AbilityUser is PlayerUnit)
+                if (cmd.Unit is PlayerUnit)
                     EndAbilityPhase();
             });
             
@@ -96,6 +98,13 @@ namespace Turn
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
+            if (newTurnPhases.Length != 3)
+            {
+                Debug.LogError("Could not set up turn queue. Turn phases list must contain" +
+                               " three elements.");
+                return;
+            }
+                
             for (int i = 0; i < 3; i++)
             {
                 switch (newTurnPhases[i])
@@ -117,14 +126,13 @@ namespace Turn
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             previousTurnQueue = new List<IUnit>();
+            Insight = new Stat(null, 0, StatTypes.Insight);
             
             UpdateNextTurnQueue();
             currentTurnQueue = nextTurnQueue;
-
-            if (!(ActingEnemyUnit is null))
-                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
             
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
+            StartTurn();
         }
         
         public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
@@ -166,7 +174,6 @@ namespace Turn
             timelineNeedsUpdating = true;
             SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
-        
         
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
@@ -313,7 +320,7 @@ namespace Turn
             
             List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.Speed.Value.CompareTo(y.Speed.Value));
+            turnQueue.Sort((x, y) => x.SpeedStat.Value.CompareTo(y.SpeedStat.Value));
             return turnQueue;
         }
 
@@ -354,8 +361,8 @@ namespace Turn
                 currentTurnQueue[currentIndex] = currentTurnQueue[currentIndex + increment];
                 currentIndex += increment;
             }
-        
-            ManagerLocator.Get<PlayerManager>().Insight.Value--;
+
+            playerManager.Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new TurnManipulatedCommand());
             EndTurnManipulationPhase();
@@ -463,9 +470,9 @@ namespace Turn
         {
             foreach (IUnit unit in unitManager.AllUnits)
             {
-                unit.MovementActionPoints.Reset();
-                unit.Attack.Reset();
-                unit.Health.Defence.Reset();
+                unit.MovementPoints.Reset();
+                unit.AttackStat.Reset();
+                unit.DefenceStat.Reset();
             }
         }
 
@@ -475,7 +482,7 @@ namespace Turn
                 PhaseIndex = MovementPhaseIndex + 1;
             else
                 Debug.LogWarning("Movement was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
                 NextTurn();
         }
@@ -486,7 +493,7 @@ namespace Turn
                 PhaseIndex = AbilityPhaseIndex + 1;
             else
                 Debug.LogWarning("Ability was done out of phase.");
-            
+
             if (LastPhaseHasEnded())
                 NextTurn();
         }

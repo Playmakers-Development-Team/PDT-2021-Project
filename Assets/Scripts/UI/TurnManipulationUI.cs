@@ -52,7 +52,7 @@ namespace UI
         public void ManipulateBefore()
         {
             if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                playerManager.Insight.Value <= 0)
+                turnManager.Insight.Value <= 0)
                 return;
 
             Debug.Log($"CURRENT INDEX {turnManager.PhaseIndex}");

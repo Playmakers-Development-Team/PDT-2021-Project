@@ -45,7 +45,7 @@ namespace Abilities.Costs
                 // In case there are more units than the count, we want to randomise the order and
                 // pick the count amount
                 ShapeCountConstraint.AtLeast => GetShapeTargets(unit)
-                    .OrderBy((left) => UnityEngine.Random.Range(int.MinValue, int.MaxValue))
+                    .OrderBy(left => UnityEngine.Random.Range(int.MinValue, int.MaxValue))
                     .Take(count)
                     .ToArray(),
                 ShapeCountConstraint.AtMost => GetShapeTargets(unit).ToArray(),
@@ -68,9 +68,16 @@ namespace Abilities.Costs
                 .Where(target => MatchesShapeFilter(unit, target))
                 .Where(target => cost.MeetsRequirements(unit, target));
 
-        private bool MatchesShapeFilter(IAbilityUser unit, IAbilityUser target) =>
-            shapeFilter == ShapeFilter.AnyTeam || shapeFilter == ShapeFilter.SameTeam
-                ? unit.IsSameTeamWith(target)
-                : !unit.IsSameTeamWith(target);
+        // TODO: Duplicate code, see ShapeBonus.MatchesShapeFilter
+        private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)
+        {
+            return shapeFilter switch
+            {
+                ShapeFilter.AnyTeam => true,
+                ShapeFilter.SameTeam => user.IsSameTeamWith(target),
+                ShapeFilter.OtherTeam => !user.IsSameTeamWith(target),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
     }
 }
