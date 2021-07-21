@@ -10,13 +10,9 @@ namespace UI.General
 
         #region UIComponent
         
-        protected override void Subscribe()
-        {
-        }
+        protected override void Subscribe() {}
 
-        protected override void Unsubscribe()
-        {
-        }
+        protected override void Unsubscribe() {}
         
         #endregion
         

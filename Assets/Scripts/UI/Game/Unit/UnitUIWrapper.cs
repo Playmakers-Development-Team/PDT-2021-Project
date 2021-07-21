@@ -22,9 +22,7 @@ namespace UI.Game.Unit
             dialogue.unitSpawned.Invoke(info);
         }
 
-        protected override void Subscribe()
-        {
-        }
+        protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
         
