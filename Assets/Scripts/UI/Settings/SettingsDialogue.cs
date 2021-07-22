@@ -6,17 +6,11 @@ namespace UI.Settings
     {
         #region Dialogue
         
-        protected override void OnClose()
-        {
-        }
+        protected override void OnClose() {}
 
-        protected override void OnPromote()
-        {
-        }
+        protected override void OnPromote() {}
 
-        protected override void OnDemote()
-        {
-        }
+        protected override void OnDemote() {}
         
         #endregion
     }
