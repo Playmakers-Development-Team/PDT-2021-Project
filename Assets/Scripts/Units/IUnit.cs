@@ -13,7 +13,7 @@ namespace Units
     {
         GameObject gameObject { get; }
         Transform transform { get; }
-        
+
         public string Name { get; set; }
         public TenetType Tenet { get; }
         
@@ -38,21 +38,22 @@ namespace Units
         public new Vector2Int Coordinate { get; }
 
         Sprite Render { get; }
-        
+        Color UnitColor { get; }
+
         bool IsSelected { get; }
         Animator UnitAnimator { get; }
 
         void ChangeAnimation(AnimationStates animationStates);
 
         void SetSpeed(int amount);
-        
+
         void SetMovementActionPoints(int amount);
 
         [Obsolete]
         void TakeDamageWithoutModifiers(int amount);
         
         List<Vector2Int> GetAllReachableTiles();
-        
+
         void MoveUnit(StartMoveCommand startMoveCommand);
 
         string RandomizeName();
