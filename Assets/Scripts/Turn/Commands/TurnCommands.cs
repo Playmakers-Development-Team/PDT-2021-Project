@@ -39,4 +39,15 @@ namespace Turn.Commands
     /// Executed when the order of the turn queue is changed.
     /// </summary>
     public class TurnManipulatedCommand : Command {}
+
+    public class GameEndedCommand : Command
+    {
+        public bool DidPlayerWin { get; set; }
+        public GameEndedCommand(bool didPlayerWin) => DidPlayerWin = didPlayerWin;
+        
+    }
+
+
+    
+    
 }

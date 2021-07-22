@@ -28,9 +28,9 @@ namespace Playtest
         private const string levelPlayedField = "entry.295363220";
         private const string initialUnitStatField = "entry.512851580";
         private const string initialTimelineField = "entry.887732368";
-
+        private const string inGameStatField = "entry.1697534877";
+        private const string endUnitStatField = "entry.682653089";
         #endregion
-        
         
         private const string url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdnv_MhoRAG5l7yFEVhFOvBLpIgKGynzoiHUhjP7f19L-99Fw/formResponse";
         
@@ -67,6 +67,16 @@ namespace Playtest
             #endregion
             
         }
+
+        private void UpdateRound()
+        {
+            
+        }
+
+        private void EndGame()
+        {
+            
+        }
     
         private void Awake()
         {
@@ -78,6 +88,7 @@ namespace Playtest
         private void Start()
         {
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
+            commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame());
 
             commandManager.ListenCommand<StartMoveCommand>(cmd =>
             {
@@ -88,11 +99,7 @@ namespace Playtest
                 PostAll(data.Entries);
             else
                 InitialiseStats();
-            
-            
-              
         }
-
         
         private async void Post(string entryName, string response)
         {
@@ -100,7 +107,6 @@ namespace Playtest
             form.AddField(entryName, response);
             UnityWebRequest www = UnityWebRequest.Post(url, form);
             await www.SendWebRequest();
-
         }
 
         #region PostData
