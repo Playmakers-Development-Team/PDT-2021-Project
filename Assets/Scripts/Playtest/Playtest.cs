@@ -8,6 +8,7 @@ using Turn;
 using Turn.Commands;
 using Units;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ namespace Playtest
         private CommandManager commandManager;
         private TurnManager turnManager;
         private UnitManager unitManager;
+        private PlayerManager playerManager;
 
         #region EntryFields
 
@@ -30,6 +32,8 @@ namespace Playtest
         private const string initialTimelineField = "entry.887732368";
         private const string inGameStatField = "entry.1697534877";
         private const string endUnitStatField = "entry.682653089";
+        private const string endTimelineField = "entry.521626075";
+
         #endregion
         
         private const string url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdnv_MhoRAG5l7yFEVhFOvBLpIgKGynzoiHUhjP7f19L-99Fw/formResponse";
@@ -70,12 +74,21 @@ namespace Playtest
 
         private void UpdateRound()
         {
-            
+       
+
         }
 
         private void EndGame()
         {
+            foreach (IUnit unit in unitManager.AllUnits)
+            {
+                data.EndStateUnits = data.EndStateUnits +  unit.Name + " HP: " +unit.HealthStat
+                                        .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
+                                    unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value +
+                                    Environment.NewLine;
+            }
             
+            data.Entries.Add(new Tuple<string,string>(data.EndStateUnits,endUnitStatField));
         }
     
         private void Awake()
@@ -83,12 +96,14 @@ namespace Playtest
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
         private void Start()
         {
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
             commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame());
+            commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
 
             commandManager.ListenCommand<StartMoveCommand>(cmd =>
             {
