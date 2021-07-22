@@ -1,4 +1,6 @@
-﻿using UI.Core;
+﻿using Grid;
+using Managers;
+using UI.Core;
 using UnityEngine;
 
 namespace UI.Game.Unit
@@ -19,7 +21,8 @@ namespace UI.Game.Unit
 
         private void OnUnitSpawned(GameDialogue.UnitInfo info)
         {
-            UnitDisplay ui = Instantiate(unitUIPrefab, transform).GetComponent<UnitDisplay>();
+            UnitDisplay ui = Instantiate(unitUIPrefab, info.Unit.transform).GetComponent<UnitDisplay>();
+            ui.transform.position = ManagerLocator.Get<GridManager>().ConvertCoordinateToPosition(info.Unit.Coordinate);
             ui.Assign(info);
         }
     }
