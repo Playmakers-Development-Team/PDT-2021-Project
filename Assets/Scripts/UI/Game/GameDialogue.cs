@@ -33,7 +33,7 @@ namespace UI.Game
         
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
 
-        internal readonly Event<UnitInfo> delayConfirmed = new Event<UnitInfo>();
+        internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
         
         private CommandManager commandManager;
@@ -119,9 +119,9 @@ namespace UI.Game
                 abilityDeselected.Invoke(SelectedAbility);
             });
             
-            delayConfirmed.AddListener(info =>
+            meditateConfirmed.AddListener(info =>
             {
-                commandManager.ExecuteCommand(new EndTurnCommand(info.Unit));
+                turnManager.Meditate();
             });
             
             moveConfirmed.AddListener(info =>

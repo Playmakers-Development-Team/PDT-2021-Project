@@ -11,8 +11,6 @@ namespace UI.Game.UnitPanels.Abilities
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private List<AbilityCard> cards;
-
-        private ScrollRect scrollView;
         
         
         #region UIComponent
@@ -20,11 +18,6 @@ namespace UI.Game.UnitPanels.Abilities
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
-        
-        protected override void OnComponentAwake()
-        {
-            TryGetComponent(out scrollView);
-        }
 
         #endregion
         
@@ -49,7 +42,7 @@ namespace UI.Game.UnitPanels.Abilities
                 if (cards.Find(card => card.Ability == ability))
                     continue;
 
-                AbilityCard newCard = Instantiate(cardPrefab, scrollView.content).GetComponent<AbilityCard>();
+                AbilityCard newCard = Instantiate(cardPrefab, transform).GetComponent<AbilityCard>();
                 newCard.Assign(ability);
 
                 cards.Add(newCard);

@@ -1,7 +1,12 @@
-﻿namespace UI.Game.UnitPanels
+﻿using UnityEngine;
+
+namespace UI.Game.UnitPanels
 {
     internal class SelectedUnitPanel : UnitPanel
     {
+        [SerializeField] private Canvas canvas;
+        
+        
         #region UIComponent
         
         protected override void Subscribe()
