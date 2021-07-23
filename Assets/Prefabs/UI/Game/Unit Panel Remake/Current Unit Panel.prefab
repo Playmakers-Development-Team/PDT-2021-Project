@@ -1490,7 +1490,7 @@ GameObject:
   - component: {fileID: 8944564529047457277}
   - component: {fileID: 1921128618480122787}
   - component: {fileID: 1966661163620281348}
-  - component: {fileID: 1666075898854583529}
+  - component: {fileID: 4942036219408087530}
   m_Layer: 5
   m_Name: Move Card
   m_TagString: Untagged
@@ -1580,7 +1580,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1666075898854583529
+--- !u!114 &4942036219408087530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1589,7 +1589,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4025726708311469092}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4c3232280cb60d488aa53218dd02114, type: 3}
+  m_Script: {fileID: 11500000, guid: e3fab373c1854b43ac3576c14979ec62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 3277631610588947579}

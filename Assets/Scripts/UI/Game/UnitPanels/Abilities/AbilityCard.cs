@@ -11,6 +11,8 @@ namespace UI.Game.UnitPanels.Abilities
 
         protected override void OnSelected() => dialogue.abilitySelected.Invoke(Ability);
 
+        protected override void OnDeselected() => dialogue.abilityDeselected.Invoke(Ability);
+
         #endregion
 
 
@@ -22,7 +24,7 @@ namespace UI.Game.UnitPanels.Abilities
             labelText.text = ability.name;
         }
         
-        internal void Destroy() => Destroy(gameObject);
+        internal void Destroy() => DestroyImmediate(gameObject);
         
         #endregion
     }

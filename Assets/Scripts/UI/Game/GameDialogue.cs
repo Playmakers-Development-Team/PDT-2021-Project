@@ -35,6 +35,7 @@ namespace UI.Game
 
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
+        internal readonly Event buttonSelected = new Event();
         
         private CommandManager commandManager;
         private TurnManager turnManager;
@@ -121,7 +122,12 @@ namespace UI.Game
             
             meditateConfirmed.AddListener(info =>
             {
+                if (turnManager.ActingPlayerUnit == null)
+                    return;
+                
                 turnManager.Meditate();
+                commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+                
             });
             
             moveConfirmed.AddListener(info =>

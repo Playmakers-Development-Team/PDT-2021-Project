@@ -23,39 +23,50 @@ public class PanelButton : DialogueComponent<GameDialogue>
 
     protected override void Subscribe()
     {
-        dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
+        dialogue.buttonSelected.AddListener(OnButtonSelected);
+        dialogue.turnStarted.AddListener(OnTurnStarted);
     }
 
     protected override void Unsubscribe()
     {
-        dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
+        dialogue.buttonSelected.RemoveListener(OnButtonSelected);
+        dialogue.turnStarted.RemoveListener(OnTurnStarted);
     }
 
-    protected override void OnComponentAwake()
-    {
-        button.onClick.AddListener(OnClick);
-    }
+    protected override void OnComponentAwake() => button.onClick.AddListener(OnClick);
 
     #endregion
     
     
     #region Listeners
+
+    private void OnButtonSelected() => TryDeselect();
+
+    private void OnTurnStarted(GameDialogue.TurnInfo info) => TryDeselect();
     
     private void OnClick()
     {
         if (!clicked)
             Selected();
         else
+            TryDeselect();
+    }
+
+    private void TryDeselect()
+    {
+        if (clicked)
             Deselected();
     }
 
     private void Selected()
     {
-        OnSelected();
-     
+        dialogue.buttonSelected.Invoke();
+        
         clicked = true;
         EventSystem.current.SetSelectedGameObject(button.gameObject);
         labelText.font = selectedFont;
+        
+        OnSelected();
     }
 
     private void Deselected()
@@ -67,20 +78,12 @@ public class PanelButton : DialogueComponent<GameDialogue>
         OnDeselected();
     }
 
-    private void OnAbilityDeselected(Ability ability)
-    {
-        Deselected();
-    }
-
     #endregion
 
     
     #region PanelButton
 
-    protected virtual void OnSelected()
-    {
-        dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
-    }
+    protected virtual void OnSelected() {}
 
     protected virtual void OnDeselected() {}
     
