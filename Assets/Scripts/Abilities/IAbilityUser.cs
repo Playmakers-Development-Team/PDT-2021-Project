@@ -6,6 +6,8 @@ namespace Abilities
     public interface IAbilityUser : ITenetBearer
     {
         public Vector2Int Coordinate { get; }
+        
+        public string Name { get; }
 
         void TakeAttack(int amount);
         

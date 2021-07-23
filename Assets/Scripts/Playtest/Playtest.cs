@@ -1,14 +1,19 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities;
+using Abilities.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
+using Grid.GridObjects;
 using Managers;
 using Turn;
 using Turn.Commands;
 using Units;
 using Units.Commands;
 using Units.Players;
+using Units.Stats;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -130,8 +135,42 @@ namespace Playtest
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
             commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame());
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
+            
+            commandManager.ListenCommand<MeditatedCommand>(cmd =>
+            {
+                data.RoundEntry += $"{cmd.Unit} meditated" + Environment.NewLine;
+            });
+
+            commandManager.ListenCommand<AbilityCommand>(cmd =>
+            {
+                string targetNames = "";
+
+                GridObject[] targets = cmd.Ability.Shape.
+                    GetTargets(cmd.OriginCoordinate, cmd.TargetVector).
+                    AsEnumerable().
+                    ToArray();
+
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    if (targets[i] is IUnit unit)
+                    {
+                        if (i == targets.Length - 1 || targets.Length == 1)
+                            targetNames += unit.Name;
+                        else
+                            targetNames += unit.Name + " and ";
+                    }
+                }
+
+                data.RoundEntry +=
+                    $"{cmd.AbilityUser.Name} casted {cmd.Ability.name} at {targetNames}";
+                
+                data.RoundEntry += Environment.NewLine;
+            });
+            
             commandManager.ListenCommand<PrepareRoundCommand>(cmd =>
             {
+                data.RoundEntry =  "CURRENT INSIGHT: " +  playerManager.Insight.Value + Environment.NewLine + data.RoundEntry + 
+                                    
                 data.RoundCount++;
             });
             

@@ -305,7 +305,9 @@ namespace Turn
                 Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
                 return;
             }
-
+            
+            
+            commandManager.ExecuteCommand(new MeditatedCommand(ActingUnit));
             unitsMeditatedThisRound.Add(ActingUnit);
             playerManager.Insight.Value += 1;
             EndTurnManipulationPhase();

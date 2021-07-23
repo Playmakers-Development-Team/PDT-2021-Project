@@ -40,6 +40,12 @@ namespace Turn.Commands
     /// </summary>
     public class TurnManipulatedCommand : Command {}
 
+    public class MeditatedCommand : UnitCommand
+    {
+        public MeditatedCommand(IUnit unit) : base(unit) {}
+    }
+
+    
     public class GameEndedCommand : Command
     {
         public bool DidPlayerWin { get; set; }
