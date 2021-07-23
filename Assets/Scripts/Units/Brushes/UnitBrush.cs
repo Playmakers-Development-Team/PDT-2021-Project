@@ -61,7 +61,7 @@ namespace Units.Brushes
         /// <param name="position">The coordinates of the cell to paint data to.</param>
         public override void Paint(GridLayout grid, GameObject brushTarget, Vector3Int position)
         {
-            if (!brushTarget.CompareTag("LevelTilemap") && !brushTarget.CompareTag("UnitPalette"))
+            if (brushTarget.name != "LevelTilemap" && brushTarget.name != "UnitPalette")
             {
                 Debug.LogWarning("Do not use this tilemap. Use 'Level Tilemap' instead");
                 return;
