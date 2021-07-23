@@ -53,7 +53,7 @@ namespace UI.Game.Timeline
                 return;
             
             // TODO: If anything else needs to know when this button is pressed, it'll need to be moved to an Event...
-            dialogue.delayConfirmed.Invoke(dialogue.GetInfo(turnManager.ActingPlayerUnit));
+            dialogue.meditateConfirmed.Invoke(dialogue.GetInfo(turnManager.ActingPlayerUnit));
         }
 
         #endregion

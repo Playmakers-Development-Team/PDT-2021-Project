@@ -12,12 +12,9 @@ namespace UI.Game.UnitPanels
 {
     internal abstract class UnitPanel : DialogueComponent<GameDialogue>
     {
-        [SerializeField] protected Canvas canvas;
-        
-        [SerializeField] protected TextMeshProUGUI nameText;
         [SerializeField] protected Image renderImage;
 
-        [SerializeField] protected Slider healthSlider;
+        [SerializeField] protected Image healthImage;
         [SerializeField] protected TextMeshProUGUI healthText;
         
         [SerializeField] protected ValueStatCard attackCard;
@@ -27,6 +24,15 @@ namespace UI.Game.UnitPanels
         [SerializeField] protected TenetStatCard secondaryTenetCard;
 
         [SerializeField] protected AbilityList abilityCards;
+
+        [Header("Tenet Icons")]
+        
+        [SerializeField] protected Sprite passion;
+        [SerializeField] protected Sprite apathy;
+        [SerializeField] protected Sprite pride;
+        [SerializeField] protected Sprite humility;
+        [SerializeField] protected Sprite joy;
+        [SerializeField] protected Sprite sorrow;
         
         protected GameDialogue.UnitInfo unitInfo;
         
@@ -39,22 +45,17 @@ namespace UI.Game.UnitPanels
             if (unitInfo == null)
                 return;
             
-            // Unit name text
-            nameText.text = unitInfo.Unit.Name;
-            
             // Render image
             renderImage.sprite = unitInfo.Render;
             renderImage.color = unitInfo.Color;
             
             // Health bar
-            healthSlider.minValue = 0;
-            healthSlider.maxValue = unitInfo.Unit.HealthStat.BaseValue;
-            healthSlider.value = unitInfo.Unit.HealthStat.Value;
-            healthText.text = healthSlider.value.ToString(CultureInfo.InvariantCulture);
+            healthImage.fillAmount = unitInfo.Unit.HealthStat.Value / (float) unitInfo.Unit.HealthStat.BaseValue;
+            healthText.text = unitInfo.Unit.HealthStat.Value + "/" + unitInfo.Unit.HealthStat.BaseValue;
             
             // Stat cards
-            attackCard.Apply("ATT", unitInfo.Unit.AttackStat.Value);
-            defenceCard.Apply("DEF", unitInfo.Unit.DefenceStat.Value);
+            attackCard.Apply(unitInfo.Unit.AttackStat.Value);
+            defenceCard.Apply(unitInfo.Unit.DefenceStat.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
             TenetStatus[] effects = unitInfo.Unit.TenetStatuses.ToArray();
@@ -63,18 +64,31 @@ namespace UI.Game.UnitPanels
             {
                 if (i >= effects.Length)
                 {
-                    // TODO: Create Hide() and Show() methods in IStatCard rather than disabling GameObjects here...
-                    cards[i].gameObject.SetActive(false);
+                    cards[i].Hide();
                     continue;
                 }
                 
-                cards[i].gameObject.SetActive(true);
-                cards[i].Apply(effects[i].TenetType, effects[i].StackCount);
+                cards[i].Show();
+                cards[i].Apply(GetTenetIcon(effects[i].TenetType), effects[i].StackCount);
             }
             
             // Ability cards
             // TODO: This will soon become Unit.AbilityList or something like that...
             abilityCards.Redraw(unitInfo.Unit);
+        }
+
+        private Sprite GetTenetIcon(TenetType tenet)
+        {
+            return tenet switch
+            {
+                TenetType.Passion => passion,
+                TenetType.Apathy => apathy,
+                TenetType.Pride => pride,
+                TenetType.Humility => humility,
+                TenetType.Joy => joy,
+                TenetType.Sorrow => sorrow,
+                _ => null
+            };
         }
         
         #endregion

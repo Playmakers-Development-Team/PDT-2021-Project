@@ -7,7 +7,6 @@ namespace UI.Game.UnitPanels.Stats
 {
     public class ValueStatCard : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private TextMeshProUGUI labelText;
         [SerializeField] private TextMeshProUGUI valueText;
         
 
@@ -22,9 +21,8 @@ namespace UI.Game.UnitPanels.Stats
         
         #region Drawing
         
-        public void Apply(string label, int value)
+        public void Apply(int value)
         {
-            labelText.text = label;
             valueText.text = value.ToString(CultureInfo.InvariantCulture);
         }
         
