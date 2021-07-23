@@ -19,7 +19,7 @@ namespace Playtest
     public class Playtest : MonoBehaviour
     {
         [SerializeField] private PlaytestData data;
-        
+
         private CommandManager commandManager;
         private TurnManager turnManager;
         private UnitManager unitManager;
@@ -34,6 +34,17 @@ namespace Playtest
         private const string endUnitStatField = "entry.682653089";
         private const string endTimelineField = "entry.521626075";
 
+        private static readonly string[] roundFields =
+        {
+            "N/A",
+            "entry.1697534877","entry.1217979400","entry.1049741033","entry.957301180","entry.225039077",
+            "entry.225796238","entry.1733593626","entry.1822572691","entry.1416126283","entry.1255273599",
+            "entry.1343072204","entry.1950527946","entry.11679908","entry.1792358652","entry.1020408910",
+            "entry.375944825", "entry.772404417", "entry.139966911", "entry.205423091", "entry.599673676",
+            "entry.2108334703","entry.1887166720","entry.952498432","entry.827097642","entry.1867678434",
+            "entry.675949053","entry.1519987537", "entry.2005715946", "entry.535465027", "entry.386028226"
+        };
+
         #endregion
         
         private const string url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdnv_MhoRAG5l7yFEVhFOvBLpIgKGynzoiHUhjP7f19L-99Fw/formResponse";
@@ -41,16 +52,21 @@ namespace Playtest
         private void InitialiseStats()
         {
             #region DataInitialise
-            
+
+            data.RoundEntry = "";
             data.InitialUnits = "";
+            data.InitialUnitOrder = "";
+            data.EndStateUnits = "";
             data.TimesMoved = 0;
+            data.RoundCount = 0;
             data.activeScene = SceneManager.GetActiveScene().name;
         
             foreach (var unit in unitManager.AllUnits)
             {
                 data.InitialUnits = data.InitialUnits +  unit.Name + " HP: " +unit.HealthStat
                 .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
-                                    unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value +
+                                    unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value 
+                                     + " CORD: " + unit.Coordinate +
                                     Environment.NewLine;
             }
             
@@ -71,13 +87,11 @@ namespace Playtest
             #endregion
             
         }
+        
 
-        private void UpdateRound()
-        {
-       
-
-        }
-
+        /// <summary>
+        /// All data that is processed during the game will be calculated in this function
+        /// </summary>
         private void EndGame()
         {
             foreach (IUnit unit in unitManager.AllUnits)
@@ -89,10 +103,15 @@ namespace Playtest
             }
             
             data.Entries.Add(new Tuple<string,string>(data.EndStateUnits,endUnitStatField));
+            data.Entries.Add(new Tuple<string,string>(data.RoundCount.ToString(),initialTimelineField));
         }
     
         private void Awake()
         {
+            if (!Application.isPlaying)
+                return;
+            
+            
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
@@ -101,19 +120,36 @@ namespace Playtest
 
         private void Start()
         {
+
+            if (!Application.isPlaying)
+            {
+                PostAll(data.Entries);
+                return;
+            }
+            
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
             commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame());
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
-
+            commandManager.ListenCommand<PrepareRoundCommand>(cmd =>
+            {
+                data.RoundCount++;
+            });
+            
+            commandManager.ListenCommand<StartRoundCommand>(cmd =>
+            {
+                data.Entries.Add(new Tuple<string, string>(data.RoundEntry,roundFields[data.RoundCount]));
+                data.RoundEntry = "";
+            });
+           
+            
             commandManager.ListenCommand<StartMoveCommand>(cmd =>
             {
-                data.TimesMoved++;
+                data.RoundEntry =
+                    $"{data.RoundEntry} {cmd.Unit.Name} moved from {cmd.StartCoords} " +
+                    $"to {cmd.TargetCoords}" + Environment.NewLine;
             });
 
-            if (!Application.isPlaying)
-                PostAll(data.Entries);
-            else
-                InitialiseStats();
+           
         }
         
         private async void Post(string entryName, string response)

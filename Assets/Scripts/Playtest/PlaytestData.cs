@@ -23,6 +23,10 @@ namespace Playtest
 
         public int AmountOfTurnsManipulated { get; set; }
         
+        public int RoundCount { get; set; }
+        
+        public string RoundEntry { get; set; }
+        
         public List<Tuple<string, string>> Entries = new List<Tuple<string, string>>();
 
         public string InitialUnitOrder { get; set; }
