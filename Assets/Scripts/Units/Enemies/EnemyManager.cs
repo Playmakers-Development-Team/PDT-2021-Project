@@ -5,8 +5,10 @@ using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
 using Managers;
+using Turn;
 using Units.Commands;
 using Units.Players;
+using Units.Stats;
 using UnityEngine;
 
 namespace Units.Enemies
@@ -36,6 +38,7 @@ namespace Units.Enemies
         private GridManager gridManager;
         private PlayerManager playerManager;
         private UnitManager unitManager;
+        private TurnManager turnManager;
 
         public override void ManagerStart()
         {
@@ -44,6 +47,7 @@ namespace Units.Enemies
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
+            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
         /// <summary>
@@ -62,7 +66,6 @@ namespace Units.Enemies
 
         public GridObject FindAdjacentPlayer(IUnit enemyUnit)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
             List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
 
             foreach (var adjacentGridObject in adjacentGridObjects)
@@ -106,39 +109,64 @@ namespace Units.Enemies
 
         private async void DecideMeleeIntention(EnemyUnit enemyUnit)
         {
-            IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
-
-            if (adjacentPlayerUnit != null)
-            {
-                await AttackUnit(enemyUnit, adjacentPlayerUnit);
-            }
-            else if (playerManager.PlayerUnits.Count > 0)
-            {
-                await MoveUnit(enemyUnit);
-                
-                // If a player is now next to the enemy, attack the player
-                adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
-                
-                if (adjacentPlayerUnit != null)
-                    await AttackUnit(enemyUnit, adjacentPlayerUnit);
-            }
-            else
+            if (playerManager.PlayerUnits.Count <= 0)
             {
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;
             }
             
-            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
+            if (turnManager.TotalTurnCount % 2 == 0)
+            {
+                //TODO: Move away from player 2 tiles
+                
+                //TODO: Change to use EnemyUnitData instead of hard coded numbers
+                await BuffUnit(enemyUnit, enemyUnit.AttackStat, 
+                    StatTypes.Attack, 1);
+                await BuffUnit(enemyUnit, enemyUnit.DefenceStat, 
+                    StatTypes.Defence, 1);
+                
+                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
+            }
+            else
+            {
+                IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
+
+                if (adjacentPlayerUnit != null)
+                {
+                    await AttackUnit(enemyUnit, adjacentPlayerUnit);
+                }
+                else
+                {
+                    await MoveUnit(enemyUnit);
+                
+                    // If a player is now next to the enemy, attack the player
+                    adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
+
+                    if (adjacentPlayerUnit != null)
+                        await AttackUnit(enemyUnit, adjacentPlayerUnit);
+                    else
+                    {
+                        //TODO: Change to use EnemyUnitData instead of hard coded numbers
+                        await BuffUnit(enemyUnit, enemyUnit.AttackStat, 
+                            StatTypes.Attack, 1);
+                    }
+                        
+                }
+
+                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
+            }
         }
 
         #endregion
+
+        #region ENEMY ACTIONS
 
         // TODO: Will later need to be turned into an ability command when enemies have abilities
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
         {
             // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
             commandManager.ExecuteCommand(new EnemyAttack(enemyUnit,playerUnit,enemyUnit
-            .AttackStat.Value));
+                .AttackStat.Value));
             await commandManager.WaitForCommand<EndUnitCastingCommand>();
             
             while (playerManager.WaitForDeath)
@@ -152,7 +180,7 @@ namespace Units.Enemies
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
-                enemyUnit.MovementPoints.Value)
+                    enemyUnit.MovementPoints.Value)
             );
             
             commandManager.ExecuteCommand(moveCommand);
@@ -161,6 +189,23 @@ namespace Units.Enemies
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
         }
+
+        private async Task BuffUnit(EnemyUnit enemyUnit, Stat stat, StatTypes statType, int statChange)
+        {
+            var statChangedCommand = new StatChangedCommand(
+                enemyUnit,
+                statType,
+                stat.Value + statChange,
+                statChange,
+                stat.Value
+            );
+            
+            commandManager.ExecuteCommand(statChangedCommand);
+            await commandManager.WaitForCommand<EndUnitCastingCommand>();
+        }
+
+        #endregion
+        
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
@@ -171,8 +216,6 @@ namespace Units.Enemies
                           " ENEMY-TAR: Enemy is stationary as it has no movement points");
                 return Vector2Int.zero;
             }
-            
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
 
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
@@ -195,7 +238,6 @@ namespace Units.Enemies
         public IUnit GetTargetPlayer(IUnit enemyUnit)
         {
             IUnit targetPlayerUnit;
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
 
             List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.PlayerUnits);
             int closestPlayersCount = closestPlayers.Count;
@@ -229,8 +271,6 @@ namespace Units.Enemies
         
         private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
             Dictionary<Vector2Int, int> distanceToAllCells = unitManager.GetDistanceToAllCells(enemyUnit.Coordinate);
             
             List<IUnit> closestPlayerUnits = new List<IUnit>();
