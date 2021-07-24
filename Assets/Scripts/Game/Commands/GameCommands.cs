@@ -2,16 +2,13 @@ using Commands;
 
 namespace Game.Commands
 {
-    public class GameCommands
-    {
-        /// <summary>
-        /// Executed when the player has won the game (a.k.a combat encounter).
-        /// </summary>
-        public class WinCommand : Command {}
+    /// <summary>
+    /// Executed when the player has won a combat encounter.
+    /// </summary>
+    public class EncounterWonCommand : Command {}
 
-        /// <summary>
-        /// Executed when the player has lost the game (a.k.a combat encounter).
-        /// </summary>
-        public class LoseCommand : Command {}
-    }
+    /// <summary>
+    /// Executed when the player has lost a combat encounter.
+    /// </summary>
+    public class EncounterLostCommand : Command {}
 }

@@ -1,5 +1,6 @@
 using Background;
 using Commands;
+using Game.Commands;
 using Game.Map;
 using Managers;
 using Turn.Commands;
@@ -26,10 +27,7 @@ namespace Game
         }
 
         // TODO: Replace with a scene transition manager
-        private void ChangeScene(int buildIndex)
-        {
-            SceneManager.LoadScene(buildIndex);
-        }
+        private void ChangeScene(int buildIndex) => SceneManager.LoadScene(buildIndex);
 
         public void ToEncounter(EncounterData encounterData)
         {
@@ -49,6 +47,8 @@ namespace Game
         {
             // TODO: Go back to the main menu
             ToMap();
+            
+            commandManager.ExecuteCommand(new EncounterLostCommand());
         }
 
         private void EncounterWon()
@@ -56,6 +56,8 @@ namespace Game
             ToMap();
 
             CurrentMapData.EncounterCompleted(CurrentEncounterData);
+            
+            commandManager.ExecuteCommand(new EncounterWonCommand());
         }
     }
 }
