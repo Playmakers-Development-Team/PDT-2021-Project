@@ -12,14 +12,11 @@ namespace Game.Map
         [SerializeField] private bool startingNode;
         
         public EncounterData EncounterData => encounterData;
-
         public EncounterNodeState State { get; set; } = EncounterNodeState.Locked;
-
         public List<EncounterNode> ConnectedNodes { get; } = new List<EncounterNode>();
 
         public void Initialise(List<EncounterNode> allEncounterNodes)
         {
-            // TODO: This might be doubling up with code in MapData
             foreach (var connectedEncounter in connectedEncounters)
             {
                 ConnectedNodes.Add(allEncounterNodes.Find(

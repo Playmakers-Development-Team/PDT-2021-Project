@@ -37,7 +37,7 @@ namespace Game
             ChangeScene(1);
         }
 
-        public void ToMap()
+        public void LoadMap()
         {
             // TODO: Magic number
             ChangeScene(0);
@@ -45,15 +45,15 @@ namespace Game
         
         private void EncounterLost()
         {
-            // TODO: Go back to the main menu
-            ToMap();
+            // TODO: Go back to the main menu?
+            LoadMap();
             
             commandManager.ExecuteCommand(new EncounterLostCommand());
         }
 
         private void EncounterWon()
         {
-            ToMap();
+            LoadMap();
 
             CurrentMapData.EncounterCompleted(CurrentEncounterData);
             
