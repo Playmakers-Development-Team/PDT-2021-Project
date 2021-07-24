@@ -16,8 +16,6 @@ MonoBehaviour:
     user is with Joy, deal 3 extra damage\n\u21AF Target with Pride take 2 extra
     damage\n"
   shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 1 Damage
     damageValue: 1
@@ -26,41 +24,97 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 4 Damage with Humility
+    keywords: []
+  - name: 4 Damage IF User With 1 Humility
     damageValue: 4
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: User With Humility
+    - name: User With 1 Humility
       affectType: 0
-      costType: 0
-      tenetType: 1
-  - name: 3 Damage with Joy
+      costType: 1
+      tenetCost:
+        tenetCostType: 0
+        count: 1
+        tenetType: 1
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
+  - name: 3 Damage IF User With Joy
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
     - name: User With Joy
       affectType: 0
       costType: 0
-      tenetType: 4
-  - name: 2 Damage with Pride
+      tenetCost:
+        tenetCostType: 0
+        count: 1
+        tenetType: 4
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
+  - name: 2 Damage IF User With 1 Pride
     damageValue: 2
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Target With Pride
-      affectType: 1
-      costType: 0
-      tenetType: 0
+    - name: User With 1 Pride
+      affectType: 0
+      costType: 1
+      tenetCost:
+        tenetCostType: 0
+        count: 1
+        tenetType: 0
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
   userEffects: []

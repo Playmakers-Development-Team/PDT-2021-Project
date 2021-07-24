@@ -19,8 +19,7 @@ MonoBehaviour:
 
 '
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
+  excludeUserFromTargets: 0
   targetEffects:
   - name: Default, 2 Attack
     damageValue: 0
@@ -29,7 +28,9 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
+    keywords: []
   - name: Default, 1 Defence and Provide 1 Passion
     damageValue: 0
     defenceValue: 1
@@ -37,5 +38,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 2
       stackCount: 1
+    bonuses: []
     costs: []
+    keywords: []
   userEffects: []

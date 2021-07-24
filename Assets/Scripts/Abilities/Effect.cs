@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StatusEffects;
-using Units;
+using Abilities.Bonuses;
+using Abilities.Costs;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Abilities
@@ -14,48 +15,73 @@ namespace Abilities
         [SerializeField] private int damageValue;
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
-        [SerializeField] private TenetStatusEffect providingTenet;
-        [SerializeField] private List<Cost> costs;
+        [SerializeField] private TenetStatus providingTenet;
+        [SerializeField] private WholeBonus[] bonuses;
+        [SerializeField] private WholeCost[] costs;
+        [SerializeField] private List<Keyword> keywords;
 
-        public bool ProcessTenet(IUnit user, IUnit target)
+        private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
+        private int TotalDefence => defenceValue + AllKeywordEffects.Sum(e => e.defenceValue);
+        private int TotalAttack => attackValue + AllKeywordEffects.Sum(e => e.attackValue);
+        
+        private IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
+        private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
+            .SelectMany(e => e.costs)
+            .Concat(costs);
+        private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
+            .SelectMany(e => e.bonuses)
+            .Concat(bonuses);
+
+        public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
+
+        public bool ProcessTenet(IAbilityUser user, IAbilityUser target)
         {
             if (CanBeUsedBy(user, target))
             {
-                Provide(target);
-                Expend(user, target);
+                ProvideTenet(target);
+                ApplyCosts(user, target);
                 return true;
             }
 
             return false;
         }
         
-        public bool CanBeUsedBy(IUnit user, IUnit target)
+        public bool CanBeUsedBy(IAbilityUser user, IAbilityUser target)
         {
-            return costs.All(cost => cost.MeetsRequirements(user, target));
+            return AllCosts.All(c => c.MeetsRequirements(user, target));
         }
 
-        private void Provide(IUnit unit) => 
-            unit.AddOrReplaceTenetStatusEffect(providingTenet.TenetType, providingTenet.StackCount);
-
-        private void Expend(IUnit user, IUnit target)
+        private void ProvideTenet(IAbilityUser unit)
         {
-            foreach (Cost cost in costs)
-                cost.Expend(user, target);
+            unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
+
+            foreach (Effect effect in AllKeywordEffects)
+            {
+                unit.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
+                    effect.providingTenet.StackCount);
+            }
         }
 
-        public int CalculateValue(IUnit user, IUnit target, EffectValueType valueType)
+        private void ApplyCosts(IAbilityUser user, IAbilityUser target)
+        {
+            foreach (CompositeCost compositeCost in AllCosts)
+                compositeCost.ApplyCost(user, target);
+        }
+
+        public int CalculateValue(IAbilityUser user, IAbilityUser target, EffectValueType valueType)
         {
             int value = valueType switch
             {
-                EffectValueType.Damage => damageValue,
-                EffectValueType.Defence => defenceValue,
-                EffectValueType.Attack => attackValue,
+                EffectValueType.Damage => TotalDamage,
+                EffectValueType.Defence => TotalDefence,
+                EffectValueType.Attack => TotalAttack,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusMultiplierSum = costs.Sum(cost => cost.CalculateBonusMultiplier(user, target));
+            int bonusSum = AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            value *= Mathf.Max(1, bonusSum);
 
-            return bonusMultiplierSum == 0 ? value : bonusMultiplierSum * value;
+            return value;
         }
     }
 }
