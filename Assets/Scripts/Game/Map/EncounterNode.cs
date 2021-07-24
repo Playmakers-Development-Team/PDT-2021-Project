@@ -10,15 +10,10 @@ namespace Game.Map
         [SerializeField] private EncounterData encounterData;
         [SerializeField] private List<EncounterData> connectedEncounters;
         [SerializeField] private bool startingNode;
-        private EncounterNodeState state = EncounterNodeState.Locked;
-
+        
         public EncounterData EncounterData => encounterData;
 
-        public EncounterNodeState State
-        {
-            get => state;
-            set => state = value;
-        }
+        public EncounterNodeState State { get; set; } = EncounterNodeState.Locked;
 
         public List<EncounterNode> ConnectedNodes { get; } = new List<EncounterNode>();
 

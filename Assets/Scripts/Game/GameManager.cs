@@ -29,7 +29,7 @@ namespace Game
         // TODO: Replace with a scene transition manager
         private void ChangeScene(int buildIndex) => SceneManager.LoadScene(buildIndex);
 
-        public void ToEncounter(EncounterData encounterData)
+        public void LoadEncounter(EncounterData encounterData)
         {
             CurrentEncounterData = encounterData;
             
