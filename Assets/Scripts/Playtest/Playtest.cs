@@ -14,6 +14,7 @@ using Units;
 using Units.Commands;
 using Units.Players;
 using Units.Stats;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -38,6 +39,7 @@ namespace Playtest
         private const string inGameStatField = "entry.1697534877";
         private const string endUnitStatField = "entry.682653089";
         private const string endTimelineField = "entry.521626075";
+        private const string endAbilityUsagefield = "entry.225796238";
 
         private static readonly string[] roundFields =
         {
@@ -145,6 +147,21 @@ namespace Playtest
             {
                 string targetNames = "";
 
+                bool flag = true;
+                data.Abilities.ForEach(a =>
+                {
+                    if (a.Item1 == cmd.Ability)
+                    {
+                        int temp = a.Item2;
+                        data.Abilities.Remove(a);
+                        data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,temp++));
+                        flag = false;
+                    }
+                });
+
+                if (flag)
+                    data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,1));
+                
                 GridObject[] targets = cmd.Ability.Shape.
                     GetTargets(cmd.OriginCoordinate, cmd.TargetVector).
                     AsEnumerable().
@@ -163,15 +180,47 @@ namespace Playtest
 
                 data.RoundEntry +=
                     $"{cmd.AbilityUser.Name} casted {cmd.Ability.name} at {targetNames}";
+
+              //TODO: Add the effect of the ability to each affected unit here.
                 
                 data.RoundEntry += Environment.NewLine;
             });
             
+            
+            
             commandManager.ListenCommand<PrepareRoundCommand>(cmd =>
             {
-                data.RoundEntry =  "CURRENT INSIGHT: " +  playerManager.Insight.Value + Environment.NewLine + data.RoundEntry + 
-                                    
-                data.RoundCount++;
+                data.RoundEntry = Environment.NewLine + "CURRENT INSIGHT: " +  playerManager.Insight
+                .Value + 
+                Environment.NewLine + data.RoundEntry + data.RoundCount++;
+
+                
+                foreach (IUnit unit in unitManager.AllUnits)
+                {
+                    string tenet1 = "";
+                    string tenet2 = "";
+
+                    if (unit.TenetStatuses.AsEnumerable().ToArray().Length > 1)
+                    {
+                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType+ " "
+                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount + " ";
+                        
+                        tenet2 = unit.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
+                                 + unit.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
+                    }
+                    else if (unit.TenetStatuses.AsEnumerable().ToArray().Length == 1)
+                    {
+                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType.ToString()
+                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
+                    }
+
+                    data.RoundEntry = unit.Name + " HP: " + unit.HealthStat.Value + " ATK: " +
+                                      unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value +
+                                      " MP: " + unit.MovementPoints.Value + " SPD: " +
+                                      unit.SpeedStat.Value +
+                                      $" {tenet1} {tenet2} {Environment.NewLine} {data.RoundEntry} ";
+                }
+                
             });
             
             commandManager.ListenCommand<StartRoundCommand>(cmd =>
@@ -187,17 +236,27 @@ namespace Playtest
                     $"{data.RoundEntry} {cmd.Unit.Name} moved from {cmd.StartCoords} " +
                     $"to {cmd.TargetCoords}" + Environment.NewLine;
             });
+            
+           
 
            
         }
-        
-        private async void Post(string entryName, string response)
+
+        #region Process Data
+
+        private void UpdateAbilityUsage()
         {
-            WWWForm form = new WWWForm();
-            form.AddField(entryName, response);
-            UnityWebRequest www = UnityWebRequest.Post(url, form);
-            await www.SendWebRequest();
+            
+            
+            
+            
+            
         }
+        
+        
+
+        #endregion
+      
 
         #region PostData
 
@@ -208,6 +267,14 @@ namespace Playtest
             foreach (Tuple<string, string> entry in entries)
                 form.AddField(entry.Item2, entry.Item1);
             
+            UnityWebRequest www = UnityWebRequest.Post(url, form);
+            await www.SendWebRequest();
+        }
+        
+        private async void Post(string entryName, string response)
+        {
+            WWWForm form = new WWWForm();
+            form.AddField(entryName, response);
             UnityWebRequest www = UnityWebRequest.Post(url, form);
             await www.SendWebRequest();
         }

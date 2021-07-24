@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Abilities;
 using Units;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,8 +19,10 @@ namespace Playtest
         public string InitialUnits { get; set; }
         
         public string EndStateUnits { get; set; }
-
+        
         public string AbilityUsage { get; set; }
+
+        public List<Tuple<Ability,int>> Abilities { get; set; }
 
         public int AmountOfTurnsManipulated { get; set; }
         
