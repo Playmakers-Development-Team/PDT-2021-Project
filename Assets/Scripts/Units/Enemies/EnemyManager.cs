@@ -85,7 +85,26 @@ namespace Units.Enemies
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
-        public async void DecideEnemyIntention(EnemyUnit enemyUnit)
+        #region ENEMY INTENTIONS
+
+        public void DecideEnemyIntention(EnemyUnit enemyUnit)
+        {
+            switch (enemyUnit.EnemyType)
+            {
+                case EnemyType.Melee:
+                    DecideMeleeIntention(enemyUnit);
+                    break;
+                case EnemyType.Ranged:
+                    // TODO: Implement ranged function
+                    break;
+                default:
+                    Debug.LogWarning("EnemyType "+enemyUnit.EnemyType+
+                                     " does not have intentions implemented");
+                    break;
+            }
+        }
+
+        private async void DecideMeleeIntention(EnemyUnit enemyUnit)
         {
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
 
@@ -105,12 +124,14 @@ namespace Units.Enemies
             }
             else
             {
-                Debug.LogWarning("WARNING: No players remain, enemy intention is to do nothing");
+                Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;
             }
             
             commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
+
+        #endregion
 
         // TODO: Will later need to be turned into an ability command when enemies have abilities
         private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)

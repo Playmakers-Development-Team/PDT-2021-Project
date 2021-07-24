@@ -9,7 +9,7 @@ namespace Units.Enemies
 {
     public class EnemyUnit : Unit<EnemyUnitData>
     {
-        [SerializeField] private EnemyType enemyType;
+        public EnemyType EnemyType { get; private set; }
         
         public PlayerUnit Target;
 
