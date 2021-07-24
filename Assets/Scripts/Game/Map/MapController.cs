@@ -6,7 +6,6 @@ namespace Game.Map
 {
     public class MapController : MonoBehaviour
     {
-        // TODO: Temporary serialisation to get MapData
         [SerializeField] private MapData mapData;
         [SerializeField] private GameObject encounterButtonPrefab;
         [SerializeField] private Transform mapCanvas;
@@ -17,9 +16,17 @@ namespace Game.Map
         {
             gameManager = ManagerLocator.Get<GameManager>();
 
-            // TODO: Get MapData from the GameManager
-            
-            mapData.Initialise();
+            // Use the mapData stored in GameManager where possible. Serialised mapData can still be
+            // used for testing purposes.
+            if (gameManager.CurrentMapData != null)
+                mapData = gameManager.CurrentMapData;
+            else
+            {
+                gameManager.CurrentMapData = mapData;
+                
+                // TODO: Make sure mapData is still initialised if loaded from gameManager.
+                mapData.Initialise();
+            }
 
             DisplayMap();
         }

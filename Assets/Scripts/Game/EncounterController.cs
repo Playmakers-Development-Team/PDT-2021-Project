@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EncounterController : MonoBehaviour
 {
-    // TODO: Temporary serialisation to get EncounterData
     [SerializeField] private EncounterData encounterData;
     
     private GameManager gameManager;
@@ -12,9 +11,13 @@ public class EncounterController : MonoBehaviour
     private void Start()
     {
         gameManager = ManagerLocator.Get<GameManager>();
-
+        
+        // Use the encounterData stored in GameManager where possible. Serialised encounterData can
+        // still be used for testing purposes.
         if (gameManager.CurrentEncounterData != null)
             encounterData = gameManager.CurrentEncounterData;
+        else
+            gameManager.CurrentEncounterData = encounterData;
 
         Instantiate(encounterData.encounterPrefab);
     }
