@@ -3,11 +3,14 @@ using Abilities;
 using Commands;
 using Managers;
 using Units.Players;
+using UnityEngine;
 
 namespace Units.Enemies
 {
     public class EnemyUnit : Unit<EnemyUnitData>
     {
+        [SerializeField] private EnemyType enemyType;
+        
         public PlayerUnit Target;
 
         private List<Command> commandQueue = new List<Command>();
