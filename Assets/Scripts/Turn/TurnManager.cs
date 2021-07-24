@@ -214,18 +214,22 @@ namespace Turn
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
-                // Debug.Log("YOU WIN!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
                 // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                 AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+                
+                commandManager.ExecuteCommand(new NoRemainingEnemyUnitsCommand());
+
+                return;
             }
 
             if (!HasPlayerUnitInQueue())
             {
-               // Debug.Log("YOU LOSE!");
-               // TODO Player wins. End the encounter somehow, probably inform the GameManager
                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+               
+               commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
+               
+               return;
             }
 
             previousTurnQueue = currentTurnQueue;

@@ -39,4 +39,15 @@ namespace Turn.Commands
     /// Executed when the order of the turn queue is changed.
     /// </summary>
     public class TurnManipulatedCommand : Command {}
+
+    /// <summary>
+    /// Executed when there are no enemy units left alive.
+    /// </summary>
+    public class NoRemainingEnemyUnitsCommand : Command {}
+    
+    /// <summary>
+    /// Executed when there are no player units left alive.
+    /// </summary>
+    public class NoRemainingPlayerUnitsCommand : Command {}
+    
 }
