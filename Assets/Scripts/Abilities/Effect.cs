@@ -13,6 +13,8 @@ namespace Abilities
     {
         [SerializeField, HideInInspector] private string name;
         [SerializeField] private int damageValue;
+        [Tooltip("Should the damage be applied without attack modifiers or anything else?")]
+        [SerializeField] private bool directDamage;
         [SerializeField] private int defenceValue;
         [SerializeField] private int attackValue;
         [SerializeField] private TenetStatus providingTenet;
@@ -72,7 +74,8 @@ namespace Abilities
         {
             int value = valueType switch
             {
-                EffectValueType.Damage => TotalDamage,
+                EffectValueType.Damage => directDamage ? 0 : TotalDamage,
+                EffectValueType.DirectDamage => directDamage ? TotalDamage : 0,
                 EffectValueType.Defence => TotalDefence,
                 EffectValueType.Attack => TotalAttack,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)

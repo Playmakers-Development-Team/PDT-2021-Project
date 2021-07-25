@@ -18,6 +18,7 @@ namespace Abilities.Editor
             if (EditorGUI.EndChangeCheck())
             {
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
+                SerializedProperty directDamageProperty = property.FindPropertyRelative("directDamage");
                 SerializedProperty attackProperty = property.FindPropertyRelative("attackValue");
                 SerializedProperty defenceProperty = property.FindPropertyRelative("defenceValue");
                 SerializedProperty provideProperty = property.FindPropertyRelative("providingTenet");
@@ -43,8 +44,10 @@ namespace Abilities.Editor
                     // Damage and defence
                 if (hasValues)
                 {
+                    string directDamageString = directDamageProperty.boolValue ? " Directly" : string.Empty;
+                    
                     if (damageProperty.intValue != 0)
-                        valueNameList.Add($"{damageProperty.intValue} Damage");
+                        valueNameList.Add($"{damageProperty.intValue} Damage{directDamageString}");
                     
                     if (attackProperty.intValue != 0)
                         valueNameList.Add($"{attackProperty.intValue} Attack");

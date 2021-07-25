@@ -70,13 +70,15 @@ namespace Abilities
                 if (target is IAbilityUser targetUnit)
                 {
                     int attack = CalculateValue(user, targetUnit, effects, EffectValueType.Attack);
-                    int defence = CalculateValue(user, targetUnit,effects, EffectValueType.Defence);
+                    int defence = CalculateValue(user, targetUnit, effects, EffectValueType.Defence);
                     int damage = CalculateValue(user, targetUnit, effects, EffectValueType.Damage);
+                    int directDamage = CalculateValue(user, targetUnit, effects, EffectValueType.DirectDamage);
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
+                    targetUnit.TakeDamage(directDamage);
                     user.DealDamageTo(targetUnit, damage);
-                
+
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)
                         //targetUnit.TakeKnockback(knockback);
