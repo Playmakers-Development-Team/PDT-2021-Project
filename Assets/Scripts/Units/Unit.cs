@@ -222,7 +222,10 @@ namespace Units
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
             {
-                foundNode.Value += status;
+                TenetStatus newStatus = foundNode.Value + status;
+                // Remember make the added tenet the latest and last tenet in the list
+                tenetStatusEffectSlots.Remove(foundNode);
+                tenetStatusEffectSlots.AddLast(newStatus);
             }
             else
             {
