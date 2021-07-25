@@ -22,7 +22,7 @@ namespace Playtest
         
         public string AbilityUsage { get; set; }
 
-        public List<Tuple<Ability,int>> Abilities { get; set; }
+        public List<Tuple<Ability, int>> Abilities = new List<Tuple<Ability, int>>();
 
         public int AmountOfTurnsManipulated { get; set; }
         

@@ -66,6 +66,11 @@ namespace Playtest
             data.EndStateUnits = "";
             data.TimesMoved = 0;
             data.RoundCount = 0;
+            data.AbilityUsage = "";
+            
+            if (data.Abilities.Count != 0)
+                 data.Abilities.Clear();
+            
             data.activeScene = SceneManager.GetActiveScene().name;
         
             foreach (var unit in unitManager.AllUnits)
@@ -111,6 +116,7 @@ namespace Playtest
             
             data.Entries.Add(new Tuple<string,string>(data.EndStateUnits,endUnitStatField));
             data.Entries.Add(new Tuple<string,string>(data.RoundCount.ToString(),initialTimelineField));
+            UpdateAbilityUsage();
         }
     
         private void Awake()
@@ -148,17 +154,20 @@ namespace Playtest
                 string targetNames = "";
 
                 bool flag = true;
-                data.Abilities.ForEach(a =>
+                
+                
+                foreach(Tuple<Ability,int> ability in data.Abilities)
                 {
-                    if (a.Item1 == cmd.Ability)
-                    {
-                        int temp = a.Item2;
-                        data.Abilities.Remove(a);
-                        data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,temp++));
-                        flag = false;
-                    }
-                });
+                    if (ability.Item1 != cmd.Ability)
+                        continue;
 
+                    flag = false;
+                    int temp = ability.Item2 + 1;
+                    data.Abilities.Remove(ability);
+                    data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,temp));
+                    return;
+                }
+                
                 if (flag)
                     data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,1));
                 
@@ -246,11 +255,17 @@ namespace Playtest
 
         private void UpdateAbilityUsage()
         {
+            data.Abilities.Sort((x,y) => x.Item2.CompareTo(y.Item2));
+            Tuple<Ability, int> maxAbility = data.Abilities.FirstOrDefault();
+
+            data.AbilityUsage = $"Most used Ability {maxAbility.Item1.name} | {maxAbility.Item2}" + 
+            Environment.NewLine;
+
+            for (int i = 1; i < data.Abilities.Count; i++)
+                data.AbilityUsage += $"{data.Abilities[i].Item1.name} | {data.Abilities[i].Item2}" + 
+                Environment.NewLine;
             
-            
-            
-            
-            
+            data.Entries.Add(new Tuple<string, string>(data.AbilityUsage,endAbilityUsagefield));
         }
         
         
