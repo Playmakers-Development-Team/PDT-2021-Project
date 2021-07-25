@@ -57,10 +57,10 @@ namespace Abilities.Costs
                 cost.ApplyCost(unit, target);
         }
 
-        public bool MeetsRequirements(IAbilityUser unit) =>
+        public bool MeetsRequirements(IAbilityUser user) =>
             countConstraint == ShapeCountConstraint.AtLeast
-                ? GetShapeTargets(unit).Count() >= count
-                : GetShapeTargets(unit).Count() <= count; 
+                ? GetShapeTargets(user).Count() >= count
+                : GetShapeTargets(user).Count() <= count; 
         
         private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser unit) => 
             shape.GetTargets(unit.Coordinate, Vector2.zero)
