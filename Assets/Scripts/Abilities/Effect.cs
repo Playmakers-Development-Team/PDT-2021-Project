@@ -49,24 +49,16 @@ namespace Abilities
         public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
         public EffectOrder EffectOrder => effectOrder;
 
-        public bool ProcessTenet(IAbilityUser user, IAbilityUser target)
-        {
-            if (CanBeUsedBy(user, target))
-            {
-                ProvideTenet(target);
-                ApplyCosts(user, target);
-                return true;
-            }
+        public bool CanBeUsedWith(IAbilityUser user, IAbilityUser target) =>
+            AllCosts.All(c => c.MeetsRequirementsWith(user, target));
 
-            return false;
-        }
+        public bool CanBeUsedByUser(IAbilityUser user) =>
+            AllCosts.All(c => c.MeetsRequirementsForUser(user));
         
-        public bool CanBeUsedBy(IAbilityUser user, IAbilityUser target)
-        {
-            return AllCosts.All(c => c.MeetsRequirements(user, target));
-        }
+        public bool CanBeUsedForTarget(IAbilityUser target) =>
+            AllCosts.All(c => c.MeetsRequirementsForTarget(target));
 
-        private void ProvideTenet(IAbilityUser unit)
+        public void ProvideTenet(IAbilityUser unit)
         {
             unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
 
@@ -77,10 +69,16 @@ namespace Abilities
             }
         }
 
-        private void ApplyCosts(IAbilityUser user, IAbilityUser target)
+        public void ApplyTargetCosts(IAbilityUser target)
         {
             foreach (CompositeCost compositeCost in AllCosts)
-                compositeCost.ApplyCost(user, target);
+                compositeCost.ApplyAnyTargetCost(target);
+        }
+        
+        public void ApplyUserCosts(IAbilityUser user)
+        {
+            foreach (CompositeCost compositeCost in AllCosts)
+                compositeCost.ApplyAnyUserCost(user);
         }
 
         public int CalculateValue(IAbilityUser user, IAbilityUser target, EffectValueType valueType)

@@ -107,9 +107,19 @@ namespace Abilities
                     
                     foreach (Effect effect in effectsWithOrder)
                     {
-                        effect.ProcessTenet(user, targetUnit);
+                        if (effect.CanBeUsedForTarget(targetUnit))
+                        {
+                            effect.ProvideTenet(targetUnit);
+                            effect.ApplyTargetCosts(targetUnit);
+                        }
                     }
                 }
+            }
+
+            foreach (Effect effect in effectsWithOrder)
+            {
+                if (effect.CanBeUsedByUser(user))
+                    effect.ApplyUserCosts(user);
             }
         }
         

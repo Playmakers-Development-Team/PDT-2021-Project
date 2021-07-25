@@ -29,15 +29,25 @@ namespace Abilities.Costs
                 $"Unsupported {nameof(CostType)} {costType} for {nameof(CompositeCost)}")
         };
 
-        public void ApplyCost(IAbilityUser user, IAbilityUser target)
+        public void ApplyAnyTargetCost(IAbilityUser target)
         {
-            if (costType == CostType.None)
-                return;
-            
-            ChildCost.ApplyCost(GetAffectedUser(user, target));
+            if (affectType == AffectType.Target)
+                ChildCost.ApplyCost(target);
         }
 
-        public bool MeetsRequirements(IAbilityUser user, IAbilityUser target) =>
+        public void ApplyAnyUserCost(IAbilityUser user)
+        {
+            if (affectType == AffectType.User)
+                ChildCost.ApplyCost(user);
+        }
+        
+        public bool MeetsRequirementsForUser(IAbilityUser user) =>
+            costType == CostType.None || affectType == AffectType.Target || ChildCost.MeetsRequirements(user);
+
+        public bool MeetsRequirementsForTarget(IAbilityUser target) =>
+            costType == CostType.None || affectType == AffectType.User || ChildCost.MeetsRequirements(target);
+
+        public bool MeetsRequirementsWith(IAbilityUser user, IAbilityUser target) =>
             costType == CostType.None || ChildCost.MeetsRequirements(GetAffectedUser(user, target));
     }
 }
