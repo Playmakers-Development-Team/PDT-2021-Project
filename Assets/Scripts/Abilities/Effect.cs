@@ -12,6 +12,8 @@ namespace Abilities
     public class Effect
     {
         [SerializeField, HideInInspector] private string name;
+        [Tooltip("Determine the order in which effects should be applied")]
+        [SerializeField] private EffectOrder effectOrder;
         [SerializeField] private int damageValue;
         [Tooltip("Should the damage be applied without attack modifiers or anything else?")]
         [SerializeField] private bool directDamage;
@@ -35,6 +37,7 @@ namespace Abilities
             .Concat(bonuses);
 
         public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
+        public EffectOrder EffectOrder => effectOrder;
 
         public bool ProcessTenet(IAbilityUser user, IAbilityUser target)
         {

@@ -53,26 +53,41 @@ namespace Abilities
             IEnumerable<GridObject> finalTargets = excludeUserFromTargets
                 ? targets.Where(u => !ReferenceEquals(user, u))
                 : targets;
-            UseEffectsForTargets(user, targetEffects, finalTargets);
+            UseEffectsOnTargets(user, targetEffects, finalTargets);
 
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
-                UseEffectsForTargets(user, userEffects, userGridObject);
+                UseEffectsOnTargets(user, userEffects, userGridObject);
         }
 
-        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
-            UseEffectsForTargets(user, effects, targets.AsEnumerable());
+        private void UseEffectsOnTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
+            UseEffectsOnTargets(user, effects, targets.AsEnumerable());
 
-        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UseEffectsOnTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
         {
+            // Please ignore the multiple enumeration for now, isn't a bad thing since
+            // it doesn't actually make a performance difference because of the later code
+            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Early);
+            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Regular);
+            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Late);
+        }
+
+        private void UseEffectsOnTargetsForOrder(IAbilityUser user, IEnumerable<Effect> effects,
+                                                 IEnumerable<GridObject> targets, 
+                                                 EffectOrder effectOrder)
+        {
+            Effect[] effectsWithOrder = effects
+                .Where(e => e.EffectOrder == effectOrder)
+                .ToArray();
+            
             foreach (GridObject target in targets.ToArray())
             {
                 if (target is IAbilityUser targetUnit)
                 {
-                    int attack = CalculateValue(user, targetUnit, effects, EffectValueType.Attack);
-                    int defence = CalculateValue(user, targetUnit, effects, EffectValueType.Defence);
-                    int damage = CalculateValue(user, targetUnit, effects, EffectValueType.Damage);
-                    int directDamage = CalculateValue(user, targetUnit, effects, EffectValueType.DirectDamage);
+                    int attack = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Attack);
+                    int defence = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Defence);
+                    int damage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Damage);
+                    int directDamage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.DirectDamage);
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
@@ -81,9 +96,9 @@ namespace Abilities
 
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)
-                        //targetUnit.TakeKnockback(knockback);
+                    //targetUnit.TakeKnockback(knockback);
                     
-                    foreach (Effect effect in effects)
+                    foreach (Effect effect in effectsWithOrder)
                     {
                         effect.ProcessTenet(user, targetUnit);
                     }
