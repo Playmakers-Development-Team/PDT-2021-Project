@@ -45,36 +45,36 @@ namespace Abilities
         public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector) =>
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
 
-        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
-            UseForTargets(user, targets.AsEnumerable());
-        
-        public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
+        public void UseForTargets(IAbilityUser user, params GridObject[] targets)
+        {
+            UseForTargetsWithOrder(user, targets, EffectOrder.Early);
+            UseForTargetsWithOrder(user, targets, EffectOrder.Regular);
+            UseForTargetsWithOrder(user, targets, EffectOrder.Late);
+        }
+
+        public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets) =>
+            UseForTargets(user, targets.ToArray());
+
+        public void UseForTargetsWithOrder(IAbilityUser user, IEnumerable<GridObject> targets,
+                                           EffectOrder effectOrder)
         {
             IEnumerable<GridObject> finalTargets = excludeUserFromTargets
                 ? targets.Where(u => !ReferenceEquals(user, u))
                 : targets;
-            UseEffectsOnTargets(user, targetEffects, finalTargets);
+            UseEffectsOnTargetsWithOrder(user, targetEffects, effectOrder, finalTargets);
 
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
-                UseEffectsOnTargets(user, userEffects, userGridObject);
+                UseEffectsOnTargetsWithOrder(user, userEffects, effectOrder, userGridObject);
         }
 
-        private void UseEffectsOnTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
-            UseEffectsOnTargets(user, effects, targets.AsEnumerable());
+        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, Effect[] effects,
+                                                  EffectOrder effectOrder, params GridObject[] targets) =>
+            UseEffectsOnTargetsWithOrder(user, effects, effectOrder, targets.AsEnumerable());
 
-        private void UseEffectsOnTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
-        {
-            // Please ignore the multiple enumeration for now, isn't a bad thing since
-            // it doesn't actually make a performance difference because of the later code
-            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Early);
-            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Regular);
-            UseEffectsOnTargetsForOrder(user, effects, targets, EffectOrder.Late);
-        }
-
-        private void UseEffectsOnTargetsForOrder(IAbilityUser user, IEnumerable<Effect> effects,
-                                                 IEnumerable<GridObject> targets, 
-                                                 EffectOrder effectOrder)
+        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, IEnumerable<Effect> effects, 
+                                                 EffectOrder effectOrder,
+                                                 IEnumerable<GridObject> targets)
         {
             Effect[] effectsWithOrder = effects
                 .Where(e => e.EffectOrder == effectOrder)
