@@ -88,11 +88,18 @@ namespace Abilities
                     int defence = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Defence);
                     int damage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Damage);
                     int directDamage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.DirectDamage);
+                    int attackForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
+                        EffectValueType.AttackForEncounter);
+                    int defenceForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
+                        EffectValueType.DefenceForEncounter);
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
                     targetUnit.TakeDamage(directDamage);
                     user.DealDamageTo(targetUnit, damage);
+                    
+                    targetUnit.TakeAttackForEncounter(attackForEncounter);
+                    targetUnit.TakeDefenceForEncounter(defenceForEncounter);
 
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)

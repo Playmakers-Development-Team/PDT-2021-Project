@@ -17,8 +17,14 @@ namespace Abilities
         [SerializeField] private int damageValue;
         [Tooltip("Should the damage be applied without attack modifiers or anything else?")]
         [SerializeField] private bool directDamage;
+        [Tooltip("Every Defence on a unit reduces damage received by 1")]
         [SerializeField] private int defenceValue;
+        [Tooltip("Every Attack on a unit adds 1 extra damage")]
         [SerializeField] private int attackValue;
+        [Tooltip("Defence that lasts the entire encounter")]
+        [SerializeField] private int defenceForEncounter;
+        [Tooltip("Attack that lasts the entire encounter")]
+        [SerializeField] private int attackForEncounter;
         [SerializeField] private TenetStatus providingTenet;
         [SerializeField] private WholeBonus[] bonuses;
         [SerializeField] private WholeCost[] costs;
@@ -27,7 +33,11 @@ namespace Abilities
         private int TotalDamage => damageValue + AllKeywordEffects.Sum(e => e.damageValue);
         private int TotalDefence => defenceValue + AllKeywordEffects.Sum(e => e.defenceValue);
         private int TotalAttack => attackValue + AllKeywordEffects.Sum(e => e.attackValue);
-        
+        private int TotalDefenceForEncounter =>
+            defenceForEncounter + AllKeywordEffects.Sum(e => e.defenceForEncounter);
+        private int TotalAttackForEncounter =>
+            attackForEncounter + AllKeywordEffects.Sum(e => e.attackForEncounter);
+
         private IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
         private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
             .SelectMany(e => e.costs)
@@ -81,6 +91,8 @@ namespace Abilities
                 EffectValueType.DirectDamage => directDamage ? TotalDamage : 0,
                 EffectValueType.Defence => TotalDefence,
                 EffectValueType.Attack => TotalAttack,
+                EffectValueType.DefenceForEncounter => TotalDefenceForEncounter,
+                EffectValueType.AttackForEncounter => TotalAttackForEncounter,
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 

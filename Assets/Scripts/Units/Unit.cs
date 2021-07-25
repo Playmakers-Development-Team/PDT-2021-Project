@@ -174,7 +174,11 @@ namespace Units
         public void TakeDefence(int amount) => DefenceStat.Value += amount;
         
         public void TakeAttack(int amount) => AttackStat.Value += amount;
-        
+
+        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
+
+        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+
         public void TakeDamage(int amount)
         {
             if (amount <= 0)
