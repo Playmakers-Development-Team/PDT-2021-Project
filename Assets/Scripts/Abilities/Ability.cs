@@ -151,7 +151,7 @@ namespace Abilities
         /// Sum up all the values from each effect. Only count the effect if such effect can be used.
         /// </summary>
         private int CalculateValue(IAbilityUser user, IAbilityUser target, Effect[] effects, EffectValueType valueType) =>
-            effects.Where(e => e.CanBeUsedBy(user, target))
+            effects.Where(e => e.CanBeUsedWith(user, target))
                 .Sum(e => e.CalculateValue(user, target, valueType));
     }
 }

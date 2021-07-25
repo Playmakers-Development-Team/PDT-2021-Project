@@ -14,6 +14,8 @@ namespace Abilities.Costs
         [SerializeField] protected CostType costType;
         [CompositeChild((int) CostType.Tenet)]
         [SerializeField] protected TenetCost tenetCost;
+        [CompositeChild((int) CostType.TenetGroup)]
+        [SerializeField] protected TenetGroupCost tenetGroupCost;
         // Put more types of costs here, they need to be protected to be read by the property drawer
 
         public CostType CostType => costType;
@@ -25,6 +27,7 @@ namespace Abilities.Costs
             CostType.None => throw new ArgumentException(
                 $"Trying to get child cost but {nameof(CostType)} has not been set!"),
             CostType.Tenet => tenetCost,
+            CostType.TenetGroup => tenetGroupCost,
             _ => throw new ArgumentOutOfRangeException(
                 $"Unsupported {nameof(CostType)} {costType} for {nameof(CompositeCost)}")
         };

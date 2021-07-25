@@ -414,11 +414,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: -0.473
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.962
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2215,11 +2215,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.1606326
+      value: -0.8179622
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.8303163
+      value: 0.8410189
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7852,13 +7852,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.abilities.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: 602da944061b462acbe4da63f74d7171, type: 2}
     - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.abilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: b1367ccd70c78a55c8a00ecf714d629e, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
       propertyPath: data.abilities.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: f71d0f36bf7a618b293eab1f0472d22a, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.abilities.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 694d302dfb57b06ef93f95a6452cc541, type: 2}
     - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
       propertyPath: data.<StartingTenets>k__BackingField.Array.size
       value: 1
