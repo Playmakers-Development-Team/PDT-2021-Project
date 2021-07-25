@@ -98,8 +98,7 @@ namespace Units
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
         private const int maxTenetStatusEffectCount = 2;
-        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
-            new LinkedList<TenetStatus>();
+        private LinkedList<TenetStatus> tenetStatusEffectSlots = new LinkedList<TenetStatus>();
 
         private AnimationStates unitAnimationState;
         
@@ -136,6 +135,7 @@ namespace Units
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
+            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
             
             UnitAnimator = GetComponentInChildren<Animator>();
             
