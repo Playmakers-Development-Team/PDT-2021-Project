@@ -152,14 +152,14 @@ MonoBehaviour:
     tenet: 3
     healthPoints:
       <BaseValue>k__BackingField: 10
-    movementActionPoints:
+    movementPoints:
       <BaseValue>k__BackingField: 2
     speed:
       <BaseValue>k__BackingField: 1
-    dealDamageModifier:
+    attack:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
-    takeDamageModifier:
+    defence:
       <BaseMultiplier>k__BackingField: 1
       <BaseAdder>k__BackingField: 0
     takeKnockbackModifier:
@@ -169,6 +169,10 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 8d3d437d1fea409dba9214ab462e5a34, type: 2}
     - {fileID: 11400000, guid: 3778aeebe7b611cea8b3fc68fe223982, type: 2}
     - {fileID: 11400000, guid: 2d536796daea3e4aca17b47b0f614615, type: 2}
+  nameText: {fileID: 0}
+  healthText: {fileID: 0}
+  damageTextCanvas: {fileID: 0}
+  damageTextLifetime: 1
   render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
 --- !u!1001 &8795836277784652690
 PrefabInstance:
@@ -181,6 +185,26 @@ PrefabInstance:
       propertyPath: unitGridObject
       value: 
       objectReference: {fileID: 6708204597060251326}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.render
+      value: 
+      objectReference: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418134504987449689, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
+      propertyPath: unitInfo.color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5704961542752533424, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
       propertyPath: m_Name
       value: Unit UI

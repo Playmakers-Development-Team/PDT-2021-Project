@@ -11,30 +11,38 @@ namespace Abilities.Costs
     }
     
     [Serializable]
-    public class TenetCost : Conditional, ICost
+    public class TenetCost : ICost, ISerializationCallbackReceiver
     {
         [SerializeField] private TenetCostType tenetCostType;
+        [SerializeField, Min(1)] private int count = 1;
         [SerializeField] private TenetType tenetType;
         
         public TenetCostType TenetCostType => tenetCostType;
         public TenetType TenetType => tenetType;
-        
-        public void ApplyCost(IAbilityUser user, IAbilityUser target)
-        {
-            IAbilityUser unit = GetAffectedUser(user, target);
 
+        public string DisplayName => $"{tenetCostType} {count} {tenetType}";
+
+        public void ApplyCost(IAbilityUser unit)
+        {
             switch (TenetCostType)
             {
                 case TenetCostType.Consume:
                     unit.RemoveTenetStatus(TenetType);
                     break;
                 case TenetCostType.Spend:
-                    unit.RemoveTenetStatus(TenetType, 1);
+                    unit.RemoveTenetStatus(TenetType, count);
                     break;
             }
         }
         
-        public bool MeetsRequirements(IAbilityUser user, IAbilityUser target) => 
-            GetAffectedUser(user, target).GetTenetStatusCount(tenetType) > 0;
+        public bool MeetsRequirements(IAbilityUser unit) => unit.GetTenetStatusCount(tenetType) >= count;
+
+        public void OnBeforeSerialize()
+        {
+            // We need this to circumvent unity issue that does not set default values
+            count = Mathf.Max(1, count);
+        }
+
+        public void OnAfterDeserialize() {}
     }
 }

@@ -206,7 +206,7 @@ namespace Commands
         /// </summary>
         public void UnlistenCommand(Type type, Action action)
         {
-            if (!type.IsAssignableFrom(typeof(Command)))
+            if (!typeof(Command).IsAssignableFrom(type))
                 throw new ArgumentException($"Expected {nameof(Command)} type, but got {type}");
 
             var foundListener = listeners[type]

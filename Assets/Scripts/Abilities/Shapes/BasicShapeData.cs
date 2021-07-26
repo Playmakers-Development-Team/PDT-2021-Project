@@ -43,11 +43,13 @@ namespace Abilities.Shapes
         [SerializeField, HideInInspector]
         private bool shouldFollowMouse;
 
-        public bool IsDiagonalShape => shapeParts.Any(p => p.direction.HasDiagonal());
+        private bool HasShapeParts => shapeParts.Count > 0;
+        public bool IsDiagonalShape => HasShapeParts && shapeParts
+            .Any(p => p.direction.HasDiagonal());
         public bool IsCardinalShape => !IsDiagonalShape;
-        public bool HasNoDirection => shapeParts
+        public bool HasNoDirection => HasShapeParts && shapeParts
             .All(p => p.direction == OrdinalDirectionMask.None);
-        public bool IsLineOfSight => shapeParts.All(p => p.isLineOfSight);
+        public bool IsLineOfSight => HasShapeParts && shapeParts.All(p => p.isLineOfSight);
         public bool ShouldShowLine => IsLineOfSight;
 
         /// <summary>
