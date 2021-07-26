@@ -38,10 +38,11 @@ namespace Abilities
         private int TotalAttackForEncounter =>
             attackForEncounter + AllKeywordEffects.Sum(e => e.attackForEncounter);
 
-        private IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
-        private IEnumerable<CompositeCost> AllCosts => AllKeywordEffects
+        public IEnumerable<Effect> AllKeywordEffects => Keywords.Select(k => k.Effect);
+        private IEnumerable<CompositeCost> KeywordsCosts => AllKeywordEffects
             .SelectMany(e => e.costs)
-            .Concat(costs);
+            .Distinct(); // We only do keyword costs once, so only need unique ones
+        private IEnumerable<CompositeCost> AllCosts => KeywordsCosts.Concat(costs);
         private IEnumerable<CompositeBonus> AllBonuses => AllKeywordEffects
             .SelectMany(e => e.bonuses)
             .Concat(bonuses);
@@ -58,27 +59,60 @@ namespace Abilities
         public bool CanBeUsedForTarget(IAbilityUser target) =>
             AllCosts.All(c => c.MeetsRequirementsForTarget(target));
 
-        public void ProvideTenet(IAbilityUser unit)
+        /// <summary>
+        /// Give the IAbilityUser any tenets that this effect gives.
+        /// </summary>
+        public void ProvideTenet(IAbilityUser user)
         {
-            unit.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
+            user.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
 
             foreach (Effect effect in AllKeywordEffects)
             {
-                unit.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
+                user.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
                     effect.providingTenet.StackCount);
             }
         }
 
-        public void ApplyTargetCosts(IAbilityUser target)
+        /// <summary>
+        /// Apply costs both from effects and keywords.
+        /// </summary>
+        /// <param name="user">The IAbilityUser we are specifying</param>
+        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
+        public void ApplyCombinedCosts(IAbilityUser user, bool isTarget)
         {
-            foreach (CompositeCost compositeCost in AllCosts)
-                compositeCost.ApplyAnyTargetCost(target);
+            ApplyEffectCosts(user, isTarget);
+            ApplyKeywordCosts(user, isTarget);
         }
-        
-        public void ApplyUserCosts(IAbilityUser user)
+
+        /// <summary>
+        /// Apply all costs relating to this effect only. Does not include costs from keywords.
+        /// </summary>
+        /// <param name="user">The IAbilityUser we are specifying</param>
+        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
+        public void ApplyEffectCosts(IAbilityUser user, bool isTarget)
         {
-            foreach (CompositeCost compositeCost in AllCosts)
-                compositeCost.ApplyAnyUserCost(user);
+            foreach (WholeCost cost in costs)
+            {
+                if (isTarget)
+                    cost.ApplyAnyTargetCost(user);
+                else
+                    cost.ApplyAnyUserCost(user);
+            }
+        }
+        /// <summary>
+        /// Apply all costs from keywords.
+        /// </summary>
+        /// <param name="user">The IAbilityUser we are specifying</param>
+        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
+        public void ApplyKeywordCosts(IAbilityUser user, bool isTarget)
+        {
+            foreach (CompositeCost cost in KeywordsCosts)
+            {
+                if (isTarget)
+                    cost.ApplyAnyTargetCost(user);
+                else
+                    cost.ApplyAnyUserCost(user);
+            }
         }
 
         public int CalculateValue(IAbilityUser user, IAbilityUser target, EffectValueType valueType)

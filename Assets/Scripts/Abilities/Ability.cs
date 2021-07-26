@@ -55,7 +55,7 @@ namespace Abilities
         public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets) =>
             UseForTargets(user, targets.ToArray());
 
-        public void UseForTargetsWithOrder(IAbilityUser user, IEnumerable<GridObject> targets,
+        private void UseForTargetsWithOrder(IAbilityUser user, IEnumerable<GridObject> targets,
                                            EffectOrder effectOrder)
         {
             IEnumerable<GridObject> finalTargets = excludeUserFromTargets
@@ -66,6 +66,10 @@ namespace Abilities
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
                 UseEffectsOnTargetsWithOrder(user, userEffects, effectOrder, userGridObject);
+            
+            // All the user specific costs should be done afterwards. This is so that
+            // Keyword costs can be applied only ever once without impacting the execution order.
+            ApplyEffectsUserCosts(user, targetEffects.Concat(userEffects), effectOrder);
         }
 
         private void UseEffectsOnTargetsWithOrder(IAbilityUser user, Effect[] effects,
@@ -107,19 +111,47 @@ namespace Abilities
                     
                     foreach (Effect effect in effectsWithOrder)
                     {
-                        if (effect.CanBeUsedForTarget(targetUnit))
-                        {
+                        if (effect.CanBeUsedWith(user, targetUnit))
                             effect.ProvideTenet(targetUnit);
-                            effect.ApplyTargetCosts(targetUnit);
-                        }
+                        
+                        if (effect.CanBeUsedForTarget(targetUnit))
+                            effect.ApplyCombinedCosts(user, true);
                     }
                 }
             }
+        }
 
+        /// <summary>
+        /// Apply all the costs from the effect affecting the user. This function needs to be applied
+        /// after use effects.
+        /// The same Keywords will not be applied more than once.
+        /// </summary>
+        // Programmer NOTE: We can make this more organised but for now, we need something up and running
+        // quickly and this works
+        private void ApplyEffectsUserCosts(IAbilityUser user, IEnumerable<Effect> allEffects, 
+                                           EffectOrder effectOrder)
+        {
+            Effect[] effectsWithOrder = allEffects
+                .Where(e => e.EffectOrder == effectOrder)
+                .ToArray();
+            HashSet<Keyword> visitedKeywords = new HashSet<Keyword>();
+            
             foreach (Effect effect in effectsWithOrder)
             {
                 if (effect.CanBeUsedByUser(user))
-                    effect.ApplyUserCosts(user);
+                {
+                    effect.ApplyEffectCosts(user, false);
+
+                    foreach (Keyword keyword in effect.Keywords)
+                    {
+                        // The same keyword cost anywhere affecting the user will not be applied more than once.
+                        if (!visitedKeywords.Contains(keyword))
+                        {
+                            visitedKeywords.Add(keyword);
+                            keyword.Effect.ApplyCombinedCosts(user, false);
+                        }
+                    }
+                }
             }
         }
         
