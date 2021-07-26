@@ -320,7 +320,7 @@ namespace Turn
 
             List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.SpeedStat.Value.CompareTo(y.SpeedStat.Value));
+            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
             return turnQueue;
         }
 
