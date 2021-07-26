@@ -111,8 +111,14 @@ namespace Commands
 
                         if (!isNotReady)
                         {
+                            // Make sure that when we have more than 1 parameters, it is being passed in
+                            // in the right order.
+                            var parameters = requiredCommandTypes
+                                .Select(t => caughtCommands[action].First(t.IsInstanceOfType))
+                                .ToArray<object>();
+
                             // Need to cast to Array<object> for it to pass in parameters properly
-                            action.DynamicInvoke(caughtCommands[action].ToArray<object>());
+                            action.DynamicInvoke(parameters);
                             
                             // Remove it afterwards
                             RemoveCatchListener(action);
