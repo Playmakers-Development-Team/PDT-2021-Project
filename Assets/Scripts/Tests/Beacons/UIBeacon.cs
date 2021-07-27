@@ -4,7 +4,7 @@ namespace Tests.Beacons
 {
     public enum UIBeacons
     {
-        EndTurn, Meditate
+        AbilityA, AbilityB, AbilityC, AbilityD, EndTurn, Meditate
     }
     
     public class UIBeacon : NavigationBeacon<UIBeacons> {}

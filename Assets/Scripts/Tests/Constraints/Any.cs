@@ -19,5 +19,8 @@ namespace Tests.Constraints
 
         public static UnitAtConstraint UnitWithBeacon<T>(T beacon) where T : Enum =>
             new UnitAtConstraint<T>(beacon);
+
+        public static UnitCheckConstraint UnitEqualsHealth(int health) =>
+            new UnitCheckConstraint(u => u.HealthStat.Value == health, $"HEALTH OR DMG WRONG. EXPECTED UNIT HEALTH: {health} ");
     }
 }

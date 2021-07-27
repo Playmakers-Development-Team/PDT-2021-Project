@@ -4,6 +4,7 @@ using Turn;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utilities;
 
 namespace UI.Game
 {
@@ -17,13 +18,13 @@ namespace UI.Game
         
         private void Update()
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.rightButton.wasPressedThisFrame || TestHack.rightClick)
                 dialogue.abilityConfirmed.Invoke();
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 dialogue.unitDeselected.Invoke();
 
-            if (turnManager.ActingPlayerUnit != null &&  Mouse.current.wasUpdatedThisFrame && Camera.main)
+            if (turnManager.ActingPlayerUnit != null &&  (Mouse.current.wasUpdatedThisFrame || TestHack.mouseMove) && Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
                 Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);

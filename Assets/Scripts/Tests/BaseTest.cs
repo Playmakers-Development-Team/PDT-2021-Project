@@ -11,9 +11,8 @@ using Tests.Beacons.Base;
 using Tests.Constraints;
 using Turn;
 using Turn.Commands;
-using UI;
+using UI.Core;
 using Units;
-using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
@@ -25,7 +24,7 @@ namespace Tests
         protected InputBeacon InputBeacon { get; } = new InputBeacon();
         
         // The Default testing scene is MainTest
-        protected override string Scene => "MainTest";
+        protected override string Scene => "MainTest (UI Ref)"; // TODO: have the name be just main test
 
         protected virtual float TimeScale => 10f;
         

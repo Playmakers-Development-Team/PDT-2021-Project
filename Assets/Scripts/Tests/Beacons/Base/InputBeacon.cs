@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using E7.Minefield;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using Utilities;
 
 namespace Tests.Beacons.Base
 {
@@ -38,9 +40,25 @@ namespace Tests.Beacons.Base
             if (Beacon.FindActive(label, out ILabelBeacon foundBeacon) && foundBeacon is ScreenBeacon<T> screenBeacon)
             {
                 inputTestFixture.Move(Mouse.position, screenBeacon.ScreenClickPosition);
+                TestHack.mouseMove = true;
+                yield return null;
+                TestHack.mouseMove = false;
+                
+                if (buttonControl == Mouse.rightButton)
+                    TestHack.rightClick = true;
+                if (buttonControl == Mouse.leftButton)
+                    TestHack.leftClick = true;
+                
                 inputTestFixture.PressAndRelease(buttonControl);
+                yield return null;
+                
+                if (buttonControl == Mouse.rightButton)
+                    TestHack.rightClick = false;
+                if (buttonControl == Mouse.leftButton)
+                    TestHack.leftClick = false;
                 // We need this to wait a frame, so we don't do stuff before it has time to process click
                 yield return null;
+                
             }
             else
             {

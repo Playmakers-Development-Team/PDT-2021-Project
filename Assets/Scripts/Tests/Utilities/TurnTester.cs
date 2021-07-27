@@ -1,10 +1,12 @@
 using System.Collections;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using Turn;
 using Turn.Commands;
 using Units.Enemies;
 using Units.Players;
+using UnityEngine;
 
 namespace Tests.Utilities
 {
@@ -15,14 +17,12 @@ namespace Tests.Utilities
 
         public static IEnumerator WaitPlayerTurn()
         {
-            yield return CommandManager
-                .WaitForCommandYield<StartTurnCommand>(cmd => cmd.Unit is PlayerUnit);
+            yield return new WaitUntil(() => TurnManager.ActingUnit is PlayerUnit);
         }
         
         public static IEnumerator WaitEnemyTurn()
         {
-            yield return CommandManager
-                .WaitForCommandYield<StartTurnCommand>(cmd => cmd.Unit is EnemyUnit);
+            yield return new WaitUntil(() => TurnManager.ActingUnit is EnemyUnit);
         }
     }
 }
