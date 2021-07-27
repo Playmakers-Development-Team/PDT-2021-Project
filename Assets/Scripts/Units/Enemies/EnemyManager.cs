@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
+using Abilities.Commands;
 using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
@@ -10,6 +12,7 @@ using Units.Commands;
 using Units.Players;
 using Units.Stats;
 using UnityEngine;
+using Utilities;
 
 namespace Units.Enemies
 {
@@ -82,9 +85,14 @@ namespace Units.Enemies
 
         #region ENEMY ACTIONS
         
-        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, Vector2Int targetVector)
+        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, Vector2 targetVector)
         {
-            ability.Use(enemyUnit, enemyUnit.Coordinate, targetVector);
+            Quaternion quaternionTempFix = Quaternion.AngleAxis(45, Vector3.forward);
+
+            commandManager.ExecuteCommand(new AbilityCommand(enemyUnit, quaternionTempFix * targetVector, ability));
+
+            Debug.Log(enemyUnit.Name +
+                      " ENEMY-ABL: Enemy is using ability " + ability);
 
             await commandManager.WaitForCommand<EndUnitCastingCommand>();
             
@@ -95,7 +103,7 @@ namespace Units.Enemies
         public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, IUnit targetUnit) =>
             await DoUnitAbility(enemyUnit, ability, targetUnit.Coordinate - enemyUnit.Coordinate);
 
-        public async Task MoveUnit(EnemyUnit enemyUnit)
+        public async Task MoveUnitToTarget(EnemyUnit enemyUnit)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
             
@@ -113,13 +121,48 @@ namespace Units.Enemies
         }
         
         /// <summary>
-        /// Finds all tiles that are <c>distanceFromPlayer</c> tiles away.
-        /// Then choose a tile that is furthest away from most players.
+        /// Finds the tile that is furthest from most players. Only uses reachable tiles.
+        /// If there are no reachable tiles, then the enemy will not move.
         /// </summary>
-        /// <param name="distanceFromPlayer"></param>
-        public void MoveToDistantTile(int distanceFromPlayer)
+        /// /// <param name="enemyUnit"></param>
+        public async Task MoveToDistantTile(EnemyUnit enemyUnit)
         {
-            //TODO: logic here
+            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
+            Dictionary<Vector2Int, int> totalTileDistance = new Dictionary<Vector2Int, int>();
+
+            if (reachableTiles.Count <= 0)
+                return;
+            
+            foreach (var reachableTile in reachableTiles)
+            {
+                int tileDistance = 0;
+                
+                foreach (var playerUnit in playerManager.PlayerUnits)
+                {
+                    tileDistance += ManhattanDistance.GetManhattanDistance(
+                        reachableTile, playerUnit.Coordinate);
+                }
+                
+                totalTileDistance.Add(reachableTile, tileDistance);
+            }
+
+            Vector2Int targetTile = totalTileDistance
+                .OrderByDescending(d => d.Value)
+                .First().Key;
+            
+            var moveCommand = new StartMoveCommand(
+                enemyUnit,
+                targetTile
+            );
+            
+            Debug.Log(enemyUnit.Name +
+                      " ENEMY-TAR: Enemy is moving away from players to " + targetTile);
+            
+            commandManager.ExecuteCommand(moveCommand);
+            await commandManager.WaitForCommand<EndMoveCommand>();
+            
+            while (playerManager.WaitForDeath)
+                await UniTask.Yield();
         }
 
         #endregion

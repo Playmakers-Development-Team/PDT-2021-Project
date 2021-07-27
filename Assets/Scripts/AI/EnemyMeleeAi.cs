@@ -1,7 +1,5 @@
-using System;
 using Abilities;
 using Commands;
-using Cysharp.Threading.Tasks;
 using Managers;
 using Turn;
 using Turn.Commands;
@@ -9,7 +7,6 @@ using Units;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
-using Units.Stats;
 using UnityEngine;
 
 namespace AI
@@ -27,7 +24,7 @@ namespace AI
         [SerializeField] private Ability buffAbility;
 
         [SerializeField] private float actionDelay = 1.5f;
-        [SerializeField] private int playerFleeDistance = 2;
+        [SerializeField] private int specialMoveCount = 3;
         
         private void Awake()
         {
@@ -55,9 +52,9 @@ namespace AI
                 return;
             }
             
-            if (turnManager.TotalTurnCount % 2 == 0)
+            if (turnManager.RoundCount % specialMoveCount == 0)
             {
-                enemyManager.MoveToDistantTile(playerFleeDistance);
+                await enemyManager.MoveToDistantTile(enemyUnit);
                 
                 commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
             }
@@ -72,7 +69,7 @@ namespace AI
                 }
                 else
                 {
-                    await enemyManager.MoveUnit(enemyUnit);
+                    await enemyManager.MoveUnitToTarget(enemyUnit);
                 
                     // If a player is now next to the enemy, attack the player
                     adjacentPlayerUnit = (IUnit) enemyManager.FindAdjacentPlayer(enemyUnit);
