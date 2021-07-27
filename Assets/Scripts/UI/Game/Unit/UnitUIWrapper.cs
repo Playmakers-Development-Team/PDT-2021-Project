@@ -13,7 +13,7 @@ namespace UI.Game.Unit
         
         #region UIComponent
 
-        protected override void OnComponentStart()
+        protected override void OnComponentAwake()
         {
             if (!(unitGridObject is IUnit unit))
                 return;

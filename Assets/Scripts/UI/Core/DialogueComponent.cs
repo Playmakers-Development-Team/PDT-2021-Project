@@ -18,11 +18,7 @@ namespace UI.Core
         private void Awake()
         {
             manager = ManagerLocator.Get<UIManager>();
-            OnComponentAwake();
-        }
-
-        private void OnEnable()
-        {
+            
             dialogue = manager.GetDialogue<T>();
             
             if (dialogue)
@@ -30,6 +26,11 @@ namespace UI.Core
             else
                 manager.dialogueAdded.AddListener(OnDialogueAdded);
             
+            OnComponentAwake();
+        }
+
+        private void OnEnable()
+        {
             OnComponentEnabled();
         }
 
