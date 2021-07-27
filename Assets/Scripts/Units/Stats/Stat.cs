@@ -15,9 +15,8 @@ namespace Units.Stats
             get => value;
             set
             {
-                commandManager.ExecuteCommand(new StatChangedCommand(unit, StatType,Value + 
-                value, value,Value));
-                
+                commandManager.ExecuteCommand(new StatChangedCommand(unit, StatType,this.value,
+                this.value + value));
                 this.value = value;
             }
         }

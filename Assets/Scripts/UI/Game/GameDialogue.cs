@@ -261,9 +261,9 @@ namespace UI.Game
                 StatType = cmd.StatType;
                 Unit = cmd.Unit;
                 NewValue = cmd.NewValue;
-                OldValue = cmd.NewValue + cmd.Value;
+                OldValue = cmd.NewValue + cmd.Difference;
                 BaseValue = cmd.InitialValue;
-                Difference = cmd.Value;
+                Difference = cmd.Difference;
             }
         }
 
