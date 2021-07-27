@@ -5,7 +5,6 @@ using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
 using Managers;
-using Turn;
 using Units.Commands;
 using Units.Players;
 using Units.Stats;
@@ -38,7 +37,6 @@ namespace Units.Enemies
         private GridManager gridManager;
         private PlayerManager playerManager;
         private UnitManager unitManager;
-        private TurnManager turnManager;
 
         public override void ManagerStart()
         {
@@ -47,7 +45,6 @@ namespace Units.Enemies
             gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
-            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
         /// <summary>
@@ -115,7 +112,7 @@ namespace Units.Enemies
                 return;
             }
             
-            if (turnManager.TotalTurnCount % 2 == 0)
+            if (2 % 2 == 0) //TODO: make it so it used odd and even turns
             {
                 //TODO: Move away from player 2 tiles
                 
