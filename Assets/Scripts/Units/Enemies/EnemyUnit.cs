@@ -28,18 +28,24 @@ namespace Units.Enemies
             commandQueue.Clear();
         }   
         
+        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        
         protected override void Awake()
         {
             base.Awake();
             
             enemyManager = ManagerLocator.Get<EnemyManager>();
             
-            commandManager.ListenCommand<EnemyManagerReadyCommand>(cmd => Spawn());
-            
             //Name = RandomizeName();
         }
 
-        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        private void OnEnable() =>
+            commandManager.ListenCommand<EnemyManagerReadyCommand>(OnEnemyManagerReady);
+        
+        private void OnDisable() =>
+            commandManager.UnlistenCommand<EnemyManagerReadyCommand>(OnEnemyManagerReady);
+
+        private void OnEnemyManagerReady(EnemyManagerReadyCommand cmd) => Spawn();
         
         protected override void Spawn() => enemyManager.Spawn(this);
     }
