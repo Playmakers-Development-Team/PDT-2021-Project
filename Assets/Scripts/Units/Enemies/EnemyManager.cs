@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Abilities;
 using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.GridObjects;
@@ -60,20 +61,14 @@ namespace Units.Enemies
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }
-
-        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
-        {
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
-
-            foreach (var adjacentGridObject in adjacentGridObjects)
-            {
-                if (adjacentGridObject.CompareTag("PlayerUnit"))
-                    return adjacentGridObject;
-            }
-
-            return null;
-        }
         
+        public IUnit Spawn(EnemyUnit unit)
+        {
+            enemyUnits.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
+
         public void ClearUnits()
         {
             for (int i = enemyUnits.Count; i >= 0; i--)
@@ -85,92 +80,22 @@ namespace Units.Enemies
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
-        #region ENEMY INTENTIONS
-
-        public void DecideEnemyIntention(EnemyUnit enemyUnit)
-        {
-            switch (enemyUnit.EnemyType)
-            {
-                case EnemyType.Melee:
-                    DecideMeleeIntention(enemyUnit);
-                    break;
-                case EnemyType.Ranged:
-                    // TODO: Implement ranged function
-                    break;
-                default:
-                    Debug.LogWarning("EnemyType "+enemyUnit.EnemyType+
-                                     " does not have intentions implemented");
-                    break;
-            }
-        }
-
-        private async void DecideMeleeIntention(EnemyUnit enemyUnit)
-        {
-            if (playerManager.PlayerUnits.Count <= 0)
-            {
-                Debug.LogWarning("No players remain, enemy intention is to do nothing");
-                return;
-            }
-            
-            if (2 % 2 == 0) //TODO: make it so it used odd and even turns
-            {
-                //TODO: Move away from player 2 tiles
-                
-                //TODO: Change to use EnemyUnitData instead of hard coded numbers
-                await BuffUnit(enemyUnit, enemyUnit.AttackStat, 
-                    StatTypes.Attack, 1);
-                await BuffUnit(enemyUnit, enemyUnit.DefenceStat, 
-                    StatTypes.Defence, 1);
-                
-                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
-            }
-            else
-            {
-                IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
-
-                if (adjacentPlayerUnit != null)
-                {
-                    await AttackUnit(enemyUnit, adjacentPlayerUnit);
-                }
-                else
-                {
-                    await MoveUnit(enemyUnit);
-                
-                    // If a player is now next to the enemy, attack the player
-                    adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
-
-                    if (adjacentPlayerUnit != null)
-                        await AttackUnit(enemyUnit, adjacentPlayerUnit);
-                    else
-                    {
-                        //TODO: Change to use EnemyUnitData instead of hard coded numbers
-                        await BuffUnit(enemyUnit, enemyUnit.AttackStat, 
-                            StatTypes.Attack, 1);
-                    }
-                        
-                }
-
-                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
-            }
-        }
-
-        #endregion
-
         #region ENEMY ACTIONS
-
-        // TODO: Will later need to be turned into an ability command when enemies have abilities
-        private async Task AttackUnit(EnemyUnit enemyUnit, IUnit playerUnit)
+        
+        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, Vector2Int targetVector)
         {
-            // TODO: The EnemyAttack command can be deleted once enemy abilities are implemented
-            commandManager.ExecuteCommand(new EnemyAttack(enemyUnit,playerUnit,enemyUnit
-                .AttackStat.Value));
+            ability.Use(enemyUnit, enemyUnit.Coordinate, targetVector);
+
             await commandManager.WaitForCommand<EndUnitCastingCommand>();
             
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
         }
+        
+        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, IUnit targetUnit) =>
+            await DoUnitAbility(enemyUnit, ability, targetUnit.Coordinate - enemyUnit.Coordinate);
 
-        private async Task MoveUnit(EnemyUnit enemyUnit)
+        public async Task MoveUnit(EnemyUnit enemyUnit)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
             
@@ -186,23 +111,33 @@ namespace Units.Enemies
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
         }
-
-        private async Task BuffUnit(EnemyUnit enemyUnit, Stat stat, StatTypes statType, int statChange)
+        
+        /// <summary>
+        /// Finds all tiles that are <c>distanceFromPlayer</c> tiles away.
+        /// Then choose a tile that is furthest away from most players.
+        /// </summary>
+        /// <param name="distanceFromPlayer"></param>
+        public void MoveToDistantTile(int distanceFromPlayer)
         {
-            var statChangedCommand = new StatChangedCommand(
-                enemyUnit,
-                statType,
-                stat.Value + statChange,
-                statChange,
-                stat.Value
-            );
-            
-            commandManager.ExecuteCommand(statChangedCommand);
-            await commandManager.WaitForCommand<EndUnitCastingCommand>();
+            //TODO: logic here
         }
 
         #endregion
-        
+
+        #region ENEMY FINDING FUNCTIONS
+
+        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
+        {
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
+
+            foreach (var adjacentGridObject in adjacentGridObjects)
+            {
+                if (adjacentGridObject.CompareTag("PlayerUnit"))
+                    return adjacentGridObject;
+            }
+
+            return null;
+        }
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
@@ -314,12 +249,7 @@ namespace Units.Enemies
 
             return lowestHealthPlayerUnits;
         }
-
-        public IUnit Spawn(EnemyUnit unit)
-        {
-            enemyUnits.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            return unit;
-        }
+        
+        #endregion
     }
 }
