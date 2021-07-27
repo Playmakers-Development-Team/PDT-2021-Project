@@ -47,6 +47,8 @@ namespace Units
 
         void SetSpeed(int amount);
 
+        new void AddSpeed(int amount);
+        
         void SetMovementActionPoints(int amount);
 
         [Obsolete]
