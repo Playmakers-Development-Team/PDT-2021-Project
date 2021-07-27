@@ -7,6 +7,8 @@ namespace Abilities
     {
         public Vector2Int Coordinate { get; }
 
+        void AddSpeed(int amount);
+
         void TakeAttack(int amount);
         
         void TakeDamage(int amount);

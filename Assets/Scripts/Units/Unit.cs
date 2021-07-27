@@ -208,6 +208,7 @@ namespace Units
         public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
+        public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
         [Obsolete("Directly alter MovementPoints Value instead")]
         public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
