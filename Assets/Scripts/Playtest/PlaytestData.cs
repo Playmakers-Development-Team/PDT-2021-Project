@@ -39,28 +39,18 @@ namespace Playtest
         
         public int PlayerHealthPool { get; set; }
         public int EnemyHealthPool { get; set; }
-
         public string TurnManipulationData { get; set; }
-        
         public int AmountOfTurnsManipulated { get; set; }
         public int MeditateAmount { get; set; }
-
         public int RoundCount { get; set; }
-        
         public int TurnCount { get; set; }
-
         public string RoundEntry { get; set; }
-
         public string BattleOutcome { get; set; }
-
         public float OverallTime { get; set; }
-        
         public float RoundTimer { get; set; }
-        
         public float TurnTimer { get; set; }
-
+        
         public List<Tuple<string, string>> Entries = new List<Tuple<string, string>>();
-
         public string InitialUnitOrder { get; set; }
         
         

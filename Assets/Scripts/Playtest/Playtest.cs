@@ -30,7 +30,9 @@ namespace Playtest
     public class Playtest : MonoBehaviour
     {
         
-        public struct TemplateUnit
+        [SerializeField] private PlaytestData data;
+
+        private struct TemplateUnit
         {
             public int amount { get; set; }
 
@@ -45,18 +47,19 @@ namespace Playtest
 
                 return temp + $"| {amount}";
             }
-
-          
-            
         }
         
-        [SerializeField] private PlaytestData data;
+        #region Managers
 
         private CommandManager commandManager;
         private TurnManager turnManager;
         private UnitManager unitManager;
         private PlayerManager playerManager;
 
+        #endregion
+
+        #region UnitIntialise
+        
         private TemplateUnit mostDamageDealtUnits = new TemplateUnit();
         private TemplateUnit leastDamageDealtUnits = new TemplateUnit();
         private TemplateUnit mostDamageTakenUnits = new TemplateUnit();
@@ -65,6 +68,8 @@ namespace Playtest
         private TemplateUnit mostTimesMovedUnits = new TemplateUnit();
         private TemplateUnit leastTimesMovedUnits = new TemplateUnit();
         private TemplateUnit farthestMovedUnits = new TemplateUnit();
+
+        #endregion
 
         #region EntryFields
 
@@ -181,7 +186,6 @@ namespace Playtest
             #endregion
             
         }
-        
 
         /// <summary>
         /// All data that is processed during the game will be calculated in this function
@@ -241,7 +245,7 @@ namespace Playtest
             if (mostTurnManipulatedUnits.amount == MinValue)
                 mostTurnManipulatedUnits.amount = 0;
 
-                #endregion
+            #endregion
             
             #region UnitMovementEndGame
 
@@ -352,7 +356,9 @@ namespace Playtest
                 string.Format("{0:00}:{1:00}", tsThree.TotalMinutes, tsThree.Seconds);
             
             #endregion
-                    
+
+            #region Entries
+
             data.Entries.Add(new Tuple<string, string>(strOverallTime,
             totalPlaytimeField));
                      
@@ -381,11 +387,17 @@ namespace Playtest
             data.Entries.Add(new Tuple<string,string>(data.RoundCount.ToString(),initialTimelineField));
             data.Entries.Add(new Tuple<string, string>(data.AmountOfTurnsManipulated.ToString(),
             amountOfTimesTurnManipulatedField));
+            
             data.Entries.Add(new Tuple<string, string>(data.MeditateAmount.ToString(),totalTimesMeditatedField));
             
             UpdateAbilityUsage();
+            
+            #endregion
+
         }
-    
+
+        #region MonoBehaviour
+        
         private void Awake()
         {
             if (!Application.isPlaying)
@@ -395,18 +407,6 @@ namespace Playtest
             turnManager = ManagerLocator.Get<TurnManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
-        }
-
-        private void TurnManipulated(IUnit unit, IUnit targetUnit)
-        {
-            data.RoundEntry += $"{unit} turn manipulated with {targetUnit}" + 
-                               Environment.NewLine;
-
-            if (!data.UnitsTurnManipulated.ContainsKey(unit))
-                data.UnitsTurnManipulated.Add(unit, 1);
-            else
-                data.UnitsTurnManipulated[unit]++;
-            
         }
 
         private void Update()
@@ -442,49 +442,110 @@ namespace Playtest
             
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => TurnManipulated(cmd.Unit,
             cmd.TargetUnit));
-            
 
             commandManager.ListenCommand<AbilityCommand>(cmd =>
+                UpdateAbility(cmd.Ability, cmd.OriginCoordinate, cmd.TargetVector, cmd.AbilityUser));
+
+            commandManager.ListenCommand<PrepareRoundCommand>(cmd => UpdateRound());
+
+            commandManager.ListenCommand<StartRoundCommand>(cmd =>
             {
-                string targetNames = "";
-                bool flag = true;
-                
-                data.AbilitiesUsedInARound.Add(cmd.Ability);
-            
-                if (data.Abilities.ContainsKey(cmd.Ability))
-                    data.Abilities[cmd.Ability]++;
-                else
-                    data.Abilities.Add(cmd.Ability,1);
-         
-                GridObject[] targets = cmd.Ability.Shape.
-                    GetTargets(cmd.OriginCoordinate, cmd.TargetVector).
-                    AsEnumerable().
-                    ToArray();
-
-                for (int i = 0; i < targets.Length; i++)
-                {
-                    if (targets[i] is IUnit unit)
-                    {
-                        if (i == targets.Length - 1 || targets.Length == 1)
-                            targetNames += unit.Name;
-                        else
-                            targetNames += unit.Name + " and ";
-                    }
-                }
-
-                data.RoundEntry +=
-                    $"{cmd.AbilityUser.Name} casted {cmd.Ability.name} at {targetNames}";
-
-              //TODO: Add the effect of the ability to each affected unit here.
-                
-                data.RoundEntry += Environment.NewLine;
+                data.Entries.Add(new Tuple<string, string>(data.RoundEntry,roundFields[data.RoundCount]));
+                data.RoundEntry = "";
             });
+
+            commandManager.ListenCommand<StartMoveCommand>(cmd => UpdateMoveUsage(cmd.Unit,cmd
+            .StartCoords,cmd.TargetCoords));
             
+            commandManager.ListenCommand<EndTurnCommand>(cmd => UpdateTurn());
+        }
+        
+        #endregion
+
+        #region Process Data
+
+        private void UpdateMoveUsage(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord)
+        {
+            int distance = ManhattanDistance.GetManhattanDistance(startCoord, targetCoord);
             
+            data.RoundEntry =
+                $"{data.RoundEntry} {unit.Name} moved from {startCoord} " +
+                $"to {targetCoord}" + Environment.NewLine;
+
+            if (!data.UnitsMoved.ContainsKey(unit))
+                data.UnitsMoved.Add(unit, 1);
+            else
+                data.UnitsMoved[unit]++;
             
-            commandManager.ListenCommand<PrepareRoundCommand>(cmd =>
+            if (!data.UnitsMovedDistance.ContainsKey(unit))
+                data.UnitsMovedDistance.Add(unit, distance);
+            else
+                data.UnitsMovedDistance[unit] += distance;
+        }
+
+        private void UpdateTurn()
+        {
+            data.TurnCount++;
+            
+            canTimeTurns = false;
+            data.TimeForTurns.Add(data.TurnCount,data.TurnTimer);
+            data.TurnTimer = 0;
+            canTimeTurns = true;
+
+        }
+
+        private void UpdateAbility(Ability ability, Vector2Int originCoord, Vector2 targetVector,
+         IAbilityUser abilityUser)
+        {
+            string targetNames = "";
+            bool flag = true;
+                
+            data.AbilitiesUsedInARound.Add(ability);
+            
+            if (data.Abilities.ContainsKey(ability))
+                data.Abilities[ability]++;
+            else
+                data.Abilities.Add(ability,1);
+         
+            GridObject[] targets = ability.Shape.
+                GetTargets(originCoord, targetVector).
+                AsEnumerable().
+                ToArray();
+
+            for (int i = 0; i < targets.Length; i++)
             {
-                data.RoundEntry = Environment.NewLine + "CURRENT INSIGHT: " +  playerManager.Insight
+                if (targets[i] is IUnit unit)
+                {
+                    if (i == targets.Length - 1 || targets.Length == 1)
+                        targetNames += unit.Name;
+                    else
+                        targetNames += unit.Name + " and ";
+                }
+            }
+
+            data.RoundEntry +=
+                $"{abilityUser.Name} casted {ability.name} at {targetNames}";
+
+            //TODO: Add the effect of the ability to each affected unit here.
+                
+            data.RoundEntry += Environment.NewLine;
+        }
+        
+        private void TurnManipulated(IUnit unit, IUnit targetUnit)
+        {
+            data.RoundEntry += $"{unit} turn manipulated with {targetUnit}" + 
+                               Environment.NewLine;
+
+            if (!data.UnitsTurnManipulated.ContainsKey(unit))
+                data.UnitsTurnManipulated.Add(unit, 1);
+            else
+                data.UnitsTurnManipulated[unit]++;
+            
+        }
+
+        private void UpdateRound()
+        {
+               data.RoundEntry = Environment.NewLine + "CURRENT INSIGHT: " +  playerManager.Insight
                 .Value + 
                 Environment.NewLine + data.RoundEntry;
 
@@ -528,54 +589,6 @@ namespace Playtest
                     data.RoundEntry += Environment.NewLine + ability.name;
                 
                 data.AbilitiesUsedInARound.Clear();
-
-            });
-            
-            commandManager.ListenCommand<StartRoundCommand>(cmd =>
-            {
-                data.Entries.Add(new Tuple<string, string>(data.RoundEntry,roundFields[data.RoundCount]));
-                data.RoundEntry = "";
-            });
-
-
-            commandManager.ListenCommand<StartMoveCommand>(cmd => UpdateMoveUsage(cmd.Unit,cmd
-            .StartCoords,cmd.TargetCoords));
-            
-            commandManager.ListenCommand<EndTurnCommand>(cmd => UpdateTurn());
-
-
-        }
-
-        #region Process Data
-
-        private void UpdateMoveUsage(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord)
-        {
-            int distance = ManhattanDistance.GetManhattanDistance(startCoord, targetCoord);
-            
-            data.RoundEntry =
-                $"{data.RoundEntry} {unit.Name} moved from {startCoord} " +
-                $"to {targetCoord}" + Environment.NewLine;
-
-            if (!data.UnitsMoved.ContainsKey(unit))
-                data.UnitsMoved.Add(unit, 1);
-            else
-                data.UnitsMoved[unit]++;
-            
-            if (!data.UnitsMovedDistance.ContainsKey(unit))
-                data.UnitsMovedDistance.Add(unit, distance);
-            else
-                data.UnitsMovedDistance[unit] += distance;
-        }
-
-        private void UpdateTurn()
-        {
-            data.TurnCount++;
-            
-            canTimeTurns = false;
-            data.TimeForTurns.Add(data.TurnCount,data.TurnTimer);
-            data.TurnTimer = 0;
-            canTimeTurns = true;
-
         }
         
         private void UpdateAbilityUsage()
@@ -607,7 +620,6 @@ namespace Playtest
 
         #endregion
       
-
         #region PostData
 
         private async void PostAll(List<Tuple<string,string>> entries)
