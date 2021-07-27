@@ -7,6 +7,6 @@ namespace Abilities.Costs
     {
         void ApplyCost(IAbilityUser unit);
 
-        bool MeetsRequirements(IAbilityUser unit);
+        bool MeetsRequirements(IAbilityUser user);
     }
 }
