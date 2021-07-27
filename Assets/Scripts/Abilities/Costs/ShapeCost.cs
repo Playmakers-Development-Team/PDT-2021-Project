@@ -54,19 +54,23 @@ namespace Abilities.Costs
             };
             
             foreach (IAbilityUser target in targets)
-                cost.ApplyCost(unit, target);
+                cost.ApplyAnyTargetCost(target);
+            
+            cost.ApplyAnyUserCost(unit);
         }
 
-        public bool MeetsRequirements(IAbilityUser unit) =>
+        public bool MeetsRequirements(IAbilityUser user) =>
             countConstraint == ShapeCountConstraint.AtLeast
-                ? GetShapeTargets(unit).Count() >= count
-                : GetShapeTargets(unit).Count() <= count; 
-        
-        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser unit) => 
-            shape.GetTargets(unit.Coordinate, Vector2.zero)
-                .OfType<IAbilityUser>()
-                .Where(target => MatchesShapeFilter(unit, target))
-                .Where(target => cost.MeetsRequirements(unit, target));
+                ? GetShapeTargets(user).Count() >= count
+                : GetShapeTargets(user).Count() <= count;
+
+        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser unit) =>
+            cost.MeetsRequirementsForUser(unit)
+                ? shape.GetTargets(unit.Coordinate, Vector2.zero)
+                    .OfType<IAbilityUser>()
+                    .Where(target => MatchesShapeFilter(unit, target))
+                    .Where(target => cost.MeetsRequirementsForTarget(target))
+                : Enumerable.Empty<IAbilityUser>();
 
         // TODO: Duplicate code, see ShapeBonus.MatchesShapeFilter
         private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)

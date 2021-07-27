@@ -180,6 +180,7 @@ namespace Turn
         /// </summary>
         private void NextTurn()
         {
+            UpdateNextTurnQueue();
             CurrentTurnIndex++;
             TotalTurnCount++;
 
@@ -323,7 +324,9 @@ namespace Turn
 
             List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.SpeedStat.Value.CompareTo(y.SpeedStat.Value));
+            
+            // Sort units by speed in descending order
+            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
             return turnQueue;
         }
 
