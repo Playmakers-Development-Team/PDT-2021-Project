@@ -33,14 +33,14 @@ MonoBehaviour:
     keywords:
     - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
   userEffects:
-  - name: 2 Attack WITH Catharsis 3
+  - name: 2 Attack for the encounter WITH Catharsis 3
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 2
+    attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 0
+    attackForEncounter: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
