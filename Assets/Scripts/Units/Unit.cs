@@ -123,11 +123,6 @@ namespace Units
             #endregion
             
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        }
-        
-        protected override void Start()
-        {
-            base.Start();
 
             HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
             StatTypes.Health);

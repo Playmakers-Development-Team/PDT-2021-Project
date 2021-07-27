@@ -25,9 +25,9 @@ namespace Units.Enemies
             commandQueue.Clear();
         }   
         
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             ManagerLocator.Get<EnemyManager>().Spawn(this);
             //Name = RandomizeName();
         }

@@ -14,10 +14,7 @@ namespace Grid.GridObjects
         protected virtual void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
-        }
-
-        protected virtual void Start()
-        {
+            
             gridManager.AddGridObject(Coordinate, this);
             
             // Snap objects to grid

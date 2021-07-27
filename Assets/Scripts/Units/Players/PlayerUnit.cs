@@ -7,9 +7,9 @@ namespace Units.Players
     {
         public Ability CurrentlySelectedAbility { get; set; }
         
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             ManagerLocator.Get<PlayerManager>().Spawn(this);
         }
 
