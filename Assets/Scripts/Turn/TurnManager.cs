@@ -33,8 +33,32 @@ namespace Turn
         public int PhaseIndex { get; set; }
 
         public Stat Insight { get; set; }
+        
+        /// <summary>
+        /// The unit that is currently taking its turn. Returns null if no unit is taking its turn.
+        /// </summary>
+        public IUnit ActingUnit
+        {
+            get
+            {
+                if (currentTurnQueue.Count == 0)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed." +
+                                     $"{nameof(currentTurnQueue)} is empty.");
+                    return null;
+                }
+                
+                if (CurrentTurnIndex < 0 || CurrentTurnIndex >= currentTurnQueue.Count)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed." +
+                                     $"{nameof(CurrentTurnIndex)} is not valid.");
+                    return null;
+                }
+                
+                return currentTurnQueue[CurrentTurnIndex];
+            }
+        }
 
-        public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
