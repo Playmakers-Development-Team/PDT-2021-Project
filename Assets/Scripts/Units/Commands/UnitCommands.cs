@@ -75,7 +75,7 @@ namespace Units.Commands
     {
         public StatTypes StatType { get; }
         
-        public int BaseValue { get; }
+        public int InitialValue { get; }
         
         public int Value { get;}
         
@@ -85,7 +85,7 @@ namespace Units.Commands
                                   int newValue) : base(unit)
         {
             StatType = type;
-            BaseValue = baseValue;
+            InitialValue = baseValue;
             Value = amount;
             NewValue = newValue;
         }

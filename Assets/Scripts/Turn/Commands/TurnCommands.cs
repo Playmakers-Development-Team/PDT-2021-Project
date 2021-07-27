@@ -34,11 +34,17 @@ namespace Turn.Commands
     /// Executed after a new round starts.
     /// </summary>
     public class StartRoundCommand : Command {}
-    
+
     /// <summary>
     /// Executed when the order of the turn queue is changed.
     /// </summary>
-    public class TurnManipulatedCommand : Command {}
+    public class TurnManipulatedCommand : UnitCommand
+    {
+        public IUnit TargetUnit { get; private set; }
+
+        public TurnManipulatedCommand(IUnit unit, IUnit targetUnit) : base(unit) =>
+            TargetUnit = targetUnit;
+    }
 
     public class MeditatedCommand : UnitCommand
     {

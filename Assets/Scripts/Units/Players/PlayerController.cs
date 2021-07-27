@@ -29,7 +29,6 @@ namespace Units.Players
                 if (cmd.Unit is null)
                     return;
                 
-                Debug.Log($"{cmd.Unit.Name} , {cmd.StatType} has changed by {cmd.Value}");
             });
             
         }

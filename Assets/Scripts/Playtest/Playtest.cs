@@ -1,29 +1,55 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Abilities;
 using Abilities.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
+using ICSharpCode.NRefactory.Ast;
 using Managers;
 using Turn;
 using Turn.Commands;
 using Units;
 using Units.Commands;
+using Units.Enemies;
 using Units.Players;
 using Units.Stats;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using Utilities;
+using static System.Int32;
 
 namespace Playtest
 {
     [ExecuteAlways]
     public class Playtest : MonoBehaviour
     {
+        
+        public struct TemplateUnit
+        {
+            public int amount { get; set; }
+
+            public List<IUnit> Units;
+            
+            public override string ToString()
+            {
+                string temp = "";
+                
+                foreach (IUnit unit in Units)
+                    temp += unit.Name + " ";
+
+                return temp + $"| {amount}";
+            }
+
+          
+            
+        }
+        
         [SerializeField] private PlaytestData data;
 
         private CommandManager commandManager;
@@ -31,15 +57,37 @@ namespace Playtest
         private UnitManager unitManager;
         private PlayerManager playerManager;
 
+        private TemplateUnit mostDamageDealtUnits = new TemplateUnit();
+        private TemplateUnit leastDamageDealtUnits = new TemplateUnit();
+        private TemplateUnit mostDamageTakenUnits = new TemplateUnit();
+        private TemplateUnit leastDamageTakenUnits = new TemplateUnit();
+        private TemplateUnit mostTurnManipulatedUnits = new TemplateUnit();
+        private TemplateUnit mostTimesMovedUnits = new TemplateUnit();
+        private TemplateUnit leastTimesMovedUnits = new TemplateUnit();
+        private TemplateUnit farthestMovedUnits = new TemplateUnit();
+
         #region EntryFields
 
         private const string levelPlayedField = "entry.295363220";
         private const string initialUnitStatField = "entry.512851580";
         private const string initialTimelineField = "entry.887732368";
-        private const string inGameStatField = "entry.1697534877";
         private const string endUnitStatField = "entry.682653089";
-        private const string endTimelineField = "entry.521626075";
         private const string endAbilityUsagefield = "entry.225796238";
+        private const string amountOfTimesTurnManipulatedField = "entry.1916883487";
+        private const string totalTimesMeditatedField = "entry.1342463486";
+        private const string whichTeamWonField = "entry.1541678721";
+        private const string unitsThatTookTheMostDamageField = "entry.1698034145";
+        private const string unitsThatTookTheLeastDamageField = "entry.987243088";
+        private const string unitsThatDealtTheMostDamageField = "entry.2144379506";
+        private const string unitsThatDealtTheLeastDamageField = "entry.2086514507";
+        private const string unitsThatTurnManipulatedTheMostField = "entry.1814874951";
+        private const string unitsThatMovedTheMostField = "entry.892339909";
+        private const string unitsThatMovedTheLeastField = "entry.92297117";
+        private const string unitsThatMovedTheFarthestField = "entry.601566501";
+        private const string averageTimeTakenPerRoundField = "entry.216162399";
+        private const string averageTimeTakenPerTurnField = "entry.102012017";
+        private const string totalPlaytimeField = "entry.13297372";
+        private const string totalInsightGainedField = "entry.521626075";
 
         private static readonly string[] roundFields =
         {
@@ -53,6 +101,10 @@ namespace Playtest
         };
 
         #endregion
+
+        private bool canTimeRounds = false;
+        private bool canTimeTurns = false;
+        private bool canTimeOverall = false;
         
         private const string url = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdnv_MhoRAG5l7yFEVhFOvBLpIgKGynzoiHUhjP7f19L-99Fw/formResponse";
         
@@ -66,19 +118,46 @@ namespace Playtest
             data.EndStateUnits = "";
             data.TimesMoved = 0;
             data.RoundCount = 0;
+            data.AmountOfTurnsManipulated = 0;
+            data.PlayerHealthPool = 0;
+            data.EnemyHealthPool = 0;
+            data.MeditateAmount = 0;
             data.AbilityUsage = "";
+            data.BattleOutcome = "";
+            data.TurnTimer = 0;
+            data.RoundTimer = 0;
+            data.OverallTime = 0;
+            data.TurnCount = 0;
+
+            data.TimeForRounds.Clear();
+            data.TimeForTurns.Clear();
+            data.AbilitiesUsedInARound.Clear();
             
-            if (data.Abilities.Count != 0)
-                 data.Abilities.Clear();
+
+            data.TurnManipulationData = "";
+            data.UnitsMoved.Clear();
+            data.Abilities.Clear();
+            data.UnitsTurnManipulated.Clear();
+            data.UnitsMovedLeast.Clear();
             
-            data.activeScene = SceneManager.GetActiveScene().name;
+            data.ActiveScene = SceneManager.GetActiveScene().name;
         
             foreach (var unit in unitManager.AllUnits)
             {
+                switch (unit)
+                {
+                    case PlayerUnit pUnit:
+                        data.PlayerHealthPool += pUnit.HealthStat.Value;
+                        break;
+                    case EnemyUnit eUnit:
+                        data.EnemyHealthPool += eUnit.HealthStat.Value;
+                        break;
+                }
+
                 data.InitialUnits = data.InitialUnits +  unit.Name + " HP: " +unit.HealthStat
-                .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
+                                        .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
                                     unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value 
-                                     + " CORD: " + unit.Coordinate +
+                                    + " CORD: " + unit.Coordinate +
                                     Environment.NewLine;
             }
             
@@ -87,12 +166,15 @@ namespace Playtest
             
             #endregion
 
+            canTimeOverall = true;
+            canTimeRounds = true;
+            canTimeTurns = true;
+
             #region EntriesInitialisation
             
-            if(data.Entries.Count != 0)
-                 data.Entries.Clear();
+            data.Entries.Clear();
             
-            data.Entries.Add(new Tuple<string,string>(data.activeScene,levelPlayedField));
+            data.Entries.Add(new Tuple<string,string>(data.ActiveScene,levelPlayedField));
             data.Entries.Add(new Tuple<string,string>(data.InitialUnits,initialUnitStatField));
             data.Entries.Add(new Tuple<string,string>(data.InitialUnitOrder,initialTimelineField));
 
@@ -104,18 +186,203 @@ namespace Playtest
         /// <summary>
         /// All data that is processed during the game will be calculated in this function
         /// </summary>
-        private void EndGame()
+        private void EndGame(bool playerWin)
         {
+            List<IUnit> tempTurnManipulatedUnits = new List<IUnit>();
+            int curMaxTurnManipulated = MinValue;
+            
+            List<IUnit> tempUnitsMoved = new List<IUnit>();
+            int curMaxUnitMoved = MinValue;
+            
+            List<IUnit> tempUnitsMovedFarthest = new List<IUnit>();
+            int curFarthestUnit = MinValue;
+            
+            List<IUnit> tempUnitsMovedLeast = new List<IUnit>();
+            int curLeastUnitMoved = MaxValue;
+
+
+            int EndHealthPool = 0;
+            
+            canTimeOverall = false;
+            canTimeTurns = false;
+            canTimeRounds = false;
+
             foreach (IUnit unit in unitManager.AllUnits)
             {
+
+                EndHealthPool += unit.HealthStat.Value;
+                
                 data.EndStateUnits = data.EndStateUnits +  unit.Name + " HP: " +unit.HealthStat
                                         .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
                                     unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value +
                                     Environment.NewLine;
             }
+
+            #region TurnManipulationEndGame
+
+            foreach (KeyValuePair<IUnit,int> unit in data.UnitsTurnManipulated.OrderByDescending
+            (key => key.Value))
+            {
+                if (unit.Value > curMaxTurnManipulated)
+                {
+                    curMaxTurnManipulated = unit.Value;
+                    tempTurnManipulatedUnits.Clear();
+                    tempTurnManipulatedUnits.Add(unit.Key);
+                }
+                else if (unit.Value == curMaxTurnManipulated)
+                {
+                    tempTurnManipulatedUnits.Add(unit.Key);
+                }
+            }
+
+            mostTurnManipulatedUnits.Units = tempTurnManipulatedUnits;
+            mostTurnManipulatedUnits.amount = curMaxTurnManipulated;
+
+            if (mostTurnManipulatedUnits.amount == MinValue)
+                mostTurnManipulatedUnits.amount = 0;
+
+                #endregion
+            
+            #region UnitMovementEndGame
+
+            foreach (KeyValuePair<IUnit,int> unit in data.UnitsMoved.OrderByDescending
+                (key => key.Value))
+            {
+                if (unit.Value > curMaxUnitMoved)
+                {
+                    curMaxUnitMoved = unit.Value;
+                    tempUnitsMoved.Clear();
+                    tempUnitsMoved.Add(unit.Key);
+                }
+                else if (unit.Value == curMaxUnitMoved)
+                {
+                    tempUnitsMoved.Add(unit.Key);
+                }
+            }
+
+            mostTimesMovedUnits.Units = tempUnitsMoved;
+            mostTimesMovedUnits.amount = curMaxUnitMoved;
+            
+            foreach (KeyValuePair<IUnit,int> unit in data.UnitsMovedDistance.OrderByDescending
+                (key => key.Value))
+            {
+                if (unit.Value > curFarthestUnit)
+                {
+                    curFarthestUnit = unit.Value;
+                    tempUnitsMovedFarthest.Clear();
+                    tempUnitsMovedFarthest.Add(unit.Key);
+                }
+                else if (unit.Value == curFarthestUnit)
+                {
+                    tempUnitsMovedFarthest.Add(unit.Key);
+                }
+            }
+
+            farthestMovedUnits.Units = tempUnitsMoved;
+            farthestMovedUnits.amount = curFarthestUnit;
+            
+            foreach (KeyValuePair<IUnit,int> unit in data.UnitsMoved.OrderByDescending
+                (key => key.Value))
+            {
+                if (unit.Value < curLeastUnitMoved)
+                {
+                    curLeastUnitMoved = unit.Value;
+                    tempUnitsMovedLeast.Clear();
+                    tempUnitsMovedLeast.Add(unit.Key);
+                }
+                else if (unit.Value == curLeastUnitMoved)
+                {
+                    tempUnitsMovedLeast.Add(unit.Key);
+                }
+            }
+
+            leastTimesMovedUnits.Units = tempUnitsMovedLeast;
+            leastTimesMovedUnits.amount = curLeastUnitMoved;
+
+            #endregion
+            
+            #region BattleOutcome
+
+            float percentage = 0;
+
+            if (playerWin)
+            {
+                data.BattleOutcome = " Victory";
+                percentage = (float)EndHealthPool / data.PlayerHealthPool * 100;
+            }
+            else
+            {
+                data.BattleOutcome = " Defeat";
+                percentage = (float)EndHealthPool / data.EnemyHealthPool * 100;
+            }
+
+            if (percentage > 75)
+                data.BattleOutcome = "Total" + data.BattleOutcome;
+            else if (percentage >= 30 && percentage <= 74)
+                data.BattleOutcome = "Decisive" + data.BattleOutcome;
+            else if (percentage >= 10 && percentage <= 29)
+                data.BattleOutcome = "Close" + data.BattleOutcome;
+            else if (percentage < 9)
+                data.BattleOutcome = "Pyrrhic" + data.BattleOutcome;
+
+            #endregion
+
+            #region TimeCalculation
+
+            float averageTimeForRounds = 0;
+            float averageTimeForTurns = 0;
+
+            string strAverageTimeForRounds = "";
+            string strAverageTimesForTurns = "";
+            string strOverallTime = "";
+            
+            averageTimeForRounds = Queryable.Average(data.TimeForRounds.Values.AsQueryable());
+            averageTimeForTurns = Queryable.Average(data.TimeForTurns.Values.AsQueryable());
+
+            var tsOne = TimeSpan.FromSeconds(averageTimeForRounds);
+            strAverageTimeForRounds =
+                string.Format("{0:00}:{1:00}", tsOne.TotalMinutes, tsOne.Seconds);
+
+            var tsTwo = TimeSpan.FromSeconds(averageTimeForTurns);
+            strAverageTimesForTurns =
+                string.Format("{0:00}:{1:00}", tsTwo.TotalMinutes, tsTwo.Seconds);
+            
+            var tsThree = TimeSpan.FromSeconds(data.OverallTime);
+            strOverallTime =
+                string.Format("{0:00}:{1:00}", tsThree.TotalMinutes, tsThree.Seconds);
+            
+            #endregion
+                    
+            data.Entries.Add(new Tuple<string, string>(strOverallTime,
+            totalPlaytimeField));
+                     
+            data.Entries.Add(new Tuple<string, string>(strAverageTimeForRounds,
+                averageTimeTakenPerRoundField));
+            
+            data.Entries.Add(new Tuple<string, string>(strAverageTimesForTurns,
+                averageTimeTakenPerTurnField));
+            
+            data.Entries.Add(new Tuple<string, string>(mostTurnManipulatedUnits + " times",
+                unitsThatTurnManipulatedTheMostField));
+            
+            data.Entries.Add(new Tuple<string, string>(mostTimesMovedUnits + " times",
+                unitsThatMovedTheMostField));
+            
+            data.Entries.Add(new Tuple<string, string>(farthestMovedUnits + " cells",
+                unitsThatMovedTheFarthestField));
+            
+            data.Entries.Add(new Tuple<string, string>(leastTimesMovedUnits + " times",
+                unitsThatMovedTheLeastField));
+            
+            data.Entries.Add(new Tuple<string, string>(data.BattleOutcome,
+                whichTeamWonField));
             
             data.Entries.Add(new Tuple<string,string>(data.EndStateUnits,endUnitStatField));
             data.Entries.Add(new Tuple<string,string>(data.RoundCount.ToString(),initialTimelineField));
+            data.Entries.Add(new Tuple<string, string>(data.AmountOfTurnsManipulated.ToString(),
+            amountOfTimesTurnManipulatedField));
+            data.Entries.Add(new Tuple<string, string>(data.MeditateAmount.ToString(),totalTimesMeditatedField));
+            
             UpdateAbilityUsage();
         }
     
@@ -124,13 +391,36 @@ namespace Playtest
             if (!Application.isPlaying)
                 return;
             
-            
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
+        private void TurnManipulated(IUnit unit, IUnit targetUnit)
+        {
+            data.RoundEntry += $"{unit} turn manipulated with {targetUnit}" + 
+                               Environment.NewLine;
+
+            if (!data.UnitsTurnManipulated.ContainsKey(unit))
+                data.UnitsTurnManipulated.Add(unit, 1);
+            else
+                data.UnitsTurnManipulated[unit]++;
+            
+        }
+
+        private void Update()
+        {
+            if (canTimeOverall)
+                data.OverallTime += Time.deltaTime;
+
+            if (canTimeRounds)
+                data.RoundTimer += Time.deltaTime;
+
+            if (canTimeTurns)
+                data.TurnTimer += Time.deltaTime;
+        }
+        
         private void Start()
         {
 
@@ -141,36 +431,31 @@ namespace Playtest
             }
             
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
-            commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame());
+            commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame(cmd.DidPlayerWin));
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
             
             commandManager.ListenCommand<MeditatedCommand>(cmd =>
             {
+                data.MeditateAmount++;
                 data.RoundEntry += $"{cmd.Unit} meditated" + Environment.NewLine;
             });
+            
+            commandManager.ListenCommand<TurnManipulatedCommand>(cmd => TurnManipulated(cmd.Unit,
+            cmd.TargetUnit));
+            
 
             commandManager.ListenCommand<AbilityCommand>(cmd =>
             {
                 string targetNames = "";
-
                 bool flag = true;
                 
-                
-                foreach(Tuple<Ability,int> ability in data.Abilities)
-                {
-                    if (ability.Item1 != cmd.Ability)
-                        continue;
-
-                    flag = false;
-                    int temp = ability.Item2 + 1;
-                    data.Abilities.Remove(ability);
-                    data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,temp));
-                    return;
-                }
-                
-                if (flag)
-                    data.Abilities.Add(new Tuple<Ability, int>(cmd.Ability,1));
-                
+                data.AbilitiesUsedInARound.Add(cmd.Ability);
+            
+                if (data.Abilities.ContainsKey(cmd.Ability))
+                    data.Abilities[cmd.Ability]++;
+                else
+                    data.Abilities.Add(cmd.Ability,1);
+         
                 GridObject[] targets = cmd.Ability.Shape.
                     GetTargets(cmd.OriginCoordinate, cmd.TargetVector).
                     AsEnumerable().
@@ -201,8 +486,9 @@ namespace Playtest
             {
                 data.RoundEntry = Environment.NewLine + "CURRENT INSIGHT: " +  playerManager.Insight
                 .Value + 
-                Environment.NewLine + data.RoundEntry + data.RoundCount++;
+                Environment.NewLine + data.RoundEntry;
 
+                data.RoundCount++;
                 
                 foreach (IUnit unit in unitManager.AllUnits)
                 {
@@ -212,14 +498,14 @@ namespace Playtest
                     if (unit.TenetStatuses.AsEnumerable().ToArray().Length > 1)
                     {
                         tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType+ " "
-                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount + " ";
+                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
                         
                         tenet2 = unit.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
                                  + unit.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
                     }
                     else if (unit.TenetStatuses.AsEnumerable().ToArray().Length == 1)
                     {
-                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType.ToString()
+                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
                                  + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
                     }
 
@@ -229,7 +515,20 @@ namespace Playtest
                                       unit.SpeedStat.Value +
                                       $" {tenet1} {tenet2} {Environment.NewLine} {data.RoundEntry} ";
                 }
+
+
+                canTimeRounds = false;
+                data.TimeForRounds.Add(data.RoundCount,data.RoundTimer);
+                data.RoundTimer = 0;
+                canTimeRounds = true;
+
+                data.RoundEntry += Environment.NewLine + $"Abilities used in this round were: ";
+
+                foreach (Ability ability in data.AbilitiesUsedInARound)
+                    data.RoundEntry += Environment.NewLine + ability.name;
                 
+                data.AbilitiesUsedInARound.Clear();
+
             });
             
             commandManager.ListenCommand<StartRoundCommand>(cmd =>
@@ -237,38 +536,74 @@ namespace Playtest
                 data.Entries.Add(new Tuple<string, string>(data.RoundEntry,roundFields[data.RoundCount]));
                 data.RoundEntry = "";
             });
-           
-            
-            commandManager.ListenCommand<StartMoveCommand>(cmd =>
-            {
-                data.RoundEntry =
-                    $"{data.RoundEntry} {cmd.Unit.Name} moved from {cmd.StartCoords} " +
-                    $"to {cmd.TargetCoords}" + Environment.NewLine;
-            });
-            
-           
 
-           
+
+            commandManager.ListenCommand<StartMoveCommand>(cmd => UpdateMoveUsage(cmd.Unit,cmd
+            .StartCoords,cmd.TargetCoords));
+            
+            commandManager.ListenCommand<EndTurnCommand>(cmd => UpdateTurn());
+
+
         }
 
         #region Process Data
 
+        private void UpdateMoveUsage(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord)
+        {
+            int distance = ManhattanDistance.GetManhattanDistance(startCoord, targetCoord);
+            
+            data.RoundEntry =
+                $"{data.RoundEntry} {unit.Name} moved from {startCoord} " +
+                $"to {targetCoord}" + Environment.NewLine;
+
+            if (!data.UnitsMoved.ContainsKey(unit))
+                data.UnitsMoved.Add(unit, 1);
+            else
+                data.UnitsMoved[unit]++;
+            
+            if (!data.UnitsMovedDistance.ContainsKey(unit))
+                data.UnitsMovedDistance.Add(unit, distance);
+            else
+                data.UnitsMovedDistance[unit] += distance;
+        }
+
+        private void UpdateTurn()
+        {
+            data.TurnCount++;
+            
+            canTimeTurns = false;
+            data.TimeForTurns.Add(data.TurnCount,data.TurnTimer);
+            data.TurnTimer = 0;
+            canTimeTurns = true;
+
+        }
+        
         private void UpdateAbilityUsage()
         {
-            data.Abilities.Sort((x,y) => x.Item2.CompareTo(y.Item2));
-            Tuple<Ability, int> maxAbility = data.Abilities.FirstOrDefault();
 
-            data.AbilityUsage = $"Most used Ability {maxAbility.Item1.name} | {maxAbility.Item2}" + 
-            Environment.NewLine;
+            int max = data.Abilities.Max(x => x.Value);
+            KeyValuePair<Ability, int> favouriteAbility = new KeyValuePair<Ability, int>();
+            
+            foreach (KeyValuePair<Ability, int> ability in data.Abilities.OrderByDescending(key => key
+            .Value))
+            {
+                
+                if (ability.Value == max && favouriteAbility.Key is null)
+                {
+                    favouriteAbility = ability;
+                    data.AbilityUsage =
+                        $"Most used ability is {favouriteAbility.Key.name} | {favouriteAbility.Value}" +
+                        Environment.NewLine;
+                    
+                    continue;
+                }
 
-            for (int i = 1; i < data.Abilities.Count; i++)
-                data.AbilityUsage += $"{data.Abilities[i].Item1.name} | {data.Abilities[i].Item2}" + 
-                Environment.NewLine;
+                data.AbilityUsage +=
+                    $"{ability.Key.name} | {ability.Value}" + Environment.NewLine;
+            }  
             
             data.Entries.Add(new Tuple<string, string>(data.AbilityUsage,endAbilityUsagefield));
         }
-        
-        
 
         #endregion
       

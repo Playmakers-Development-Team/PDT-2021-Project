@@ -262,7 +262,7 @@ namespace UI.Game
                 Unit = cmd.Unit;
                 NewValue = cmd.NewValue;
                 OldValue = cmd.NewValue + cmd.Value;
-                BaseValue = cmd.BaseValue;
+                BaseValue = cmd.InitialValue;
                 Difference = cmd.Value;
             }
         }
