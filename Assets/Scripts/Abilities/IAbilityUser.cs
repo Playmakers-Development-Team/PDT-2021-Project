@@ -18,7 +18,11 @@ namespace Abilities
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
+        void TakeAttackForEncounter(int amount);
+
+        void TakeDefenceForEncounter(int amount);
+
         bool IsSameTeamWith(IAbilityUser other);
     }
 }

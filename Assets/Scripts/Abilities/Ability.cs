@@ -52,45 +52,112 @@ namespace Abilities
             user.AddSpeed(speed);
             UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
+
         public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
             UseForTargets(user, targets.AsEnumerable());
         
         public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
+            UseForTargetsWithOrder(user, targets, EffectOrder.Early);
+            UseForTargetsWithOrder(user, targets, EffectOrder.Regular);
+            UseForTargetsWithOrder(user, targets, EffectOrder.Late);
+        }
+
+        private void UseForTargetsWithOrder(IAbilityUser user, IEnumerable<GridObject> targets,
+                                            EffectOrder effectOrder)
+        {
             IEnumerable<GridObject> finalTargets = excludeUserFromTargets
                 ? targets.Where(u => !ReferenceEquals(user, u))
                 : targets;
-            UseEffectsForTargets(user, targetEffects, finalTargets);
+            UseEffectsOnTargetsWithOrder(user, targetEffects, effectOrder, finalTargets);
 
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
-                UseEffectsForTargets(user, userEffects, userGridObject);
+                UseEffectsOnTargetsWithOrder(user, userEffects, effectOrder, userGridObject);
+            
+            // All the user specific costs should be done afterwards. This is so that
+            // Keyword costs can be applied only ever once without impacting the execution order.
+            ApplyEffectsUserCosts(user, targetEffects.Concat(userEffects), effectOrder);
         }
 
-        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
-            UseEffectsForTargets(user, effects, targets.AsEnumerable());
+        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, Effect[] effects,
+                                                  EffectOrder effectOrder, params GridObject[] targets) =>
+            UseEffectsOnTargetsWithOrder(user, effects, effectOrder, targets.AsEnumerable());
 
-        private void UseEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, IEnumerable<Effect> effects, 
+                                                 EffectOrder effectOrder,
+                                                 IEnumerable<GridObject> targets)
         {
+            Effect[] effectsWithOrder = effects
+                .Where(e => e.EffectOrder == effectOrder)
+                .ToArray();
+            
             foreach (GridObject target in targets.ToArray())
             {
                 if (target is IAbilityUser targetUnit)
                 {
-                    int attack = CalculateValue(user, targetUnit, effects, EffectValueType.Attack);
-                    int defence = CalculateValue(user, targetUnit,effects, EffectValueType.Defence);
-                    int damage = CalculateValue(user, targetUnit, effects, EffectValueType.Damage);
+                    int attack = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Attack);
+                    int defence = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Defence);
+                    int damage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Damage);
+                    int directDamage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.DirectDamage);
+                    int attackForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
+                        EffectValueType.AttackForEncounter);
+                    int defenceForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
+                        EffectValueType.DefenceForEncounter);
                 
                     targetUnit.TakeAttack(attack);
                     targetUnit.TakeDefence(defence);
+                    targetUnit.TakeDamage(directDamage);
                     user.DealDamageTo(targetUnit, damage);
-                
+                    
+                    targetUnit.TakeAttackForEncounter(attackForEncounter);
+                    targetUnit.TakeDefenceForEncounter(defenceForEncounter);
+
                     // Check if knockback is supported first, because currently it sometimes doesn't
                     //if (targetUnit.Knockback != null)
-                        //targetUnit.TakeKnockback(knockback);
+                    //targetUnit.TakeKnockback(knockback);
                     
-                    foreach (Effect effect in effects)
+                    foreach (Effect effect in effectsWithOrder)
                     {
-                        effect.ProcessTenet(user, targetUnit);
+                        if (effect.CanBeUsedWith(user, targetUnit))
+                            effect.ProvideTenet(targetUnit);
+                        
+                        if (effect.CanBeUsedForTarget(targetUnit))
+                            effect.ApplyCombinedCosts(user, true);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Apply all the costs from the effect affecting the user. This function needs to be applied
+        /// after use effects.
+        /// The same Keywords will not be applied more than once.
+        /// </summary>
+        // Programmer NOTE: We can make this more organised but for now, we need something up and running
+        // quickly and this works
+        private void ApplyEffectsUserCosts(IAbilityUser user, IEnumerable<Effect> allEffects, 
+                                           EffectOrder effectOrder)
+        {
+            Effect[] effectsWithOrder = allEffects
+                .Where(e => e.EffectOrder == effectOrder)
+                .ToArray();
+            HashSet<Keyword> visitedKeywords = new HashSet<Keyword>();
+            
+            foreach (Effect effect in effectsWithOrder)
+            {
+                if (effect.CanBeUsedByUser(user))
+                {
+                    effect.ApplyEffectCosts(user, false);
+
+                    foreach (Keyword keyword in effect.Keywords)
+                    {
+                        // The same keyword cost anywhere affecting the user will not be applied more than once.
+                        if (!visitedKeywords.Contains(keyword))
+                        {
+                            visitedKeywords.Add(keyword);
+                            keyword.Effect.ApplyCombinedCosts(user, false);
+                        }
                     }
                 }
             }
@@ -125,7 +192,7 @@ namespace Abilities
         /// Sum up all the values from each effect. Only count the effect if such effect can be used.
         /// </summary>
         private int CalculateValue(IAbilityUser user, IAbilityUser target, Effect[] effects, EffectValueType valueType) =>
-            effects.Where(e => e.CanBeUsedBy(user, target))
+            effects.Where(e => e.CanBeUsedWith(user, target))
                 .Sum(e => e.CalculateValue(user, target, valueType));
     }
 }
