@@ -159,9 +159,6 @@ namespace UI.Game
         {
             UnitInfo info = GetInfo(cmd.Unit);
 
-            if (info == null)
-                throw new Exception("ActingUnit was not in GameDialogue.units.");
-            
             turnStarted.Invoke(new TurnInfo(info));
         }
 
@@ -183,9 +180,6 @@ namespace UI.Game
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
             UnitInfo info = GetInfo(cmd.Unit);
-
-            if (info == null)
-                throw new Exception("Killed Unit was not in GameDialogue.units.");
 
             unitKilled.Invoke(info);
         }
@@ -212,8 +206,25 @@ namespace UI.Game
         
         #region Querying
 
-        internal UnitInfo GetInfo(IUnit unit) => units.Find(u => u.Unit == unit);
-        
+        internal UnitInfo GetInfo(IUnit unit)
+        {
+            if (units.Count == 0)
+            {
+                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
+                                    $"{nameof(GameDialogue)}.{nameof(units)} is empty.");
+            }
+
+            var unitInfo = units.Find(u => u.Unit == unit);
+                
+            if (unitInfo == null)
+            {
+                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
+                                    $"{unit} is not in {nameof(GameDialogue)}.{nameof(units)}.");
+            }
+
+            return unitInfo;
+        }
+
         #endregion
         
         
