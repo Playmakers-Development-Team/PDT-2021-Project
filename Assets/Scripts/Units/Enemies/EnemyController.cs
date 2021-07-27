@@ -19,13 +19,14 @@ namespace Units.Enemies
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
         private EnemyManager enemyManager;
+        private CommandManager commandManager;
         private GameObject enemyPrefab;
-
 
         private void Awake()
         {
             gridManager = ManagerLocator.Get<GridManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
@@ -35,11 +36,12 @@ namespace Units.Enemies
             // Maybe do this through a level dictionary that contains these details?
             // For now placeholders will be used
 
-            gridManager = ManagerLocator.Get<GridManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
-
             // TODO: Replace with a GridReadyCommand listener
             isSpawningEnemies = true;
+            
+            enemyManager.ClearUnits();
+
+            commandManager.ExecuteCommand(new EnemyManagerReadyCommand());
         }
 
         private void Update()

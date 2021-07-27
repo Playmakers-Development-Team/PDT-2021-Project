@@ -8,21 +8,16 @@ namespace Units.Players
     public class PlayerController : MonoBehaviour
     {
         private CommandManager commandManager;
+        private PlayerManager playerManager;
 
         private void Awake()
         {
             #region GetManagers
 
             commandManager = ManagerLocator.Get<CommandManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
 
             #endregion
-        }
-
-        private void Start()
-        {
-            // Process stuff about players here
-            
-            commandManager.ExecuteCommand(new PlayerUnitsReadyCommand());
             
             commandManager.ListenCommand<StatChangedCommand>(cmd =>
             {
@@ -31,7 +26,15 @@ namespace Units.Players
                 
                 Debug.Log($"{cmd.Unit.Name} , {cmd.StatType} has changed by {cmd.Value}");
             });
+        }
+
+        private void Start()
+        {
+            playerManager.ClearUnits();
             
+            commandManager.ExecuteCommand(new PlayerManagerReadyCommand());
+            
+            commandManager.ExecuteCommand(new PlayerUnitsReadyCommand());
         }
     }
 }

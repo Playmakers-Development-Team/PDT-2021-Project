@@ -192,4 +192,14 @@ namespace Units.Commands
     {
         public EnemyActionsCompletedCommand(IUnit unit) : base(unit) {}
     }
+
+    /// <summary>
+    /// Executed when the PlayerManager is ready to accept PlayerUnit spawns.
+    /// </summary>
+    public class PlayerManagerReadyCommand : Command {}
+
+    /// <summary>
+    /// Executed when the EnemyManager is ready to accept EnemyUnit spawns.
+    /// </summary>
+    public class EnemyManagerReadyCommand : Command {}
 }

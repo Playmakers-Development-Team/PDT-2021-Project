@@ -104,7 +104,7 @@ namespace Units
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
-        private CommandManager commandManager;
+        protected CommandManager commandManager;
         
         // TODO: Rename
         private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
@@ -587,5 +587,8 @@ namespace Units
         }
         
         #endregion
+        
+        // TODO: Add to correct region
+        protected virtual void Spawn() {}
     }
 }

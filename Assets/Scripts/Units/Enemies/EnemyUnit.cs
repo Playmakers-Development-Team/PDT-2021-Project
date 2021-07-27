@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Abilities;
 using Commands;
 using Managers;
+using Units.Commands;
 using Units.Players;
 
 namespace Units.Enemies
@@ -11,6 +12,8 @@ namespace Units.Enemies
         public PlayerUnit Target;
 
         private List<Command> commandQueue = new List<Command>();
+        
+        private EnemyManager enemyManager;
 
         public void QueueCommand(Command command)
         {
@@ -28,10 +31,16 @@ namespace Units.Enemies
         protected override void Awake()
         {
             base.Awake();
-            ManagerLocator.Get<EnemyManager>().Spawn(this);
+            
+            enemyManager = ManagerLocator.Get<EnemyManager>();
+            
+            commandManager.ListenCommand<EnemyManagerReadyCommand>(cmd => Spawn());
+            
             //Name = RandomizeName();
         }
 
         public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        
+        protected override void Spawn() => enemyManager.Spawn(this);
     }
 }

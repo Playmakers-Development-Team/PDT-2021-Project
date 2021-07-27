@@ -74,15 +74,9 @@ namespace Units.Enemies
             return null;
         }
         
-        public void ClearUnits()
-        {
-            for (int i = enemyUnits.Count; i >= 0; i--)
-            {
-                if (enemyUnits[i] is null)
-                    enemyUnits.RemoveAt(i);
-            }
-        }
-        
+        // TODO: Duplicate code, see EnemyManager.ClearUnits. Should use generics for unit managers.
+        public void ClearUnits() => enemyUnits.Clear();
+
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
         public async void DecideEnemyIntention(EnemyUnit enemyUnit)

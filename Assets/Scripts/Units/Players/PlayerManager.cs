@@ -47,6 +47,9 @@ namespace Units.Players
         /// Adds a unit to the <c>playerUnits</c> list.
         /// </summary>
         public void AddUnit(IUnit targetUnit) => playerUnits.Add(targetUnit);
+        
+        // TODO: Duplicate code, see EnemyManager.ClearUnits. Should use generics for unit managers.
+        public void ClearUnits() => playerUnits.Clear();
 
         /// <summary>
         /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
