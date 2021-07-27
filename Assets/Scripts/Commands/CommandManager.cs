@@ -111,7 +111,7 @@ namespace Commands
 
                         if (!isNotReady)
                         {
-                            // Make sure that when we have more than 1 parameters, it is being passed in
+                            // Make sure that when we have more than one parameter, they are passed
                             // in the right order.
                             var parameters = requiredCommandTypes
                                 .Select(t => caughtCommands[action].First(t.IsInstanceOfType))
