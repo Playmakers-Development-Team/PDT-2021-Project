@@ -7,6 +7,8 @@ namespace Abilities
     {
         public Vector2Int Coordinate { get; }
 
+        void AddSpeed(int amount);
+
         void TakeAttack(int amount);
         
         void TakeDamage(int amount);
@@ -16,7 +18,11 @@ namespace Abilities
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
+        void TakeAttackForEncounter(int amount);
+
+        void TakeDefenceForEncounter(int amount);
+
         bool IsSameTeamWith(IAbilityUser other);
     }
 }
