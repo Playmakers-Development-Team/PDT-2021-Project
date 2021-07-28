@@ -10,17 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: TestAttack
+  m_Name: Demo Attack
   m_EditorClassIdentifier: 
   description: 'A basic, test attack. Does 3 damage to a single enemy. If you have
     Apathy, does 3 extra damage. '
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
+  speed: 0
   targetEffects:
   - name: Default, 3 Damage
+    effectOrder: 0
     damageValue: 3
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -29,9 +34,13 @@ MonoBehaviour:
     keywords: []
   userEffects:
   - name: 3 Attack IF User With 1 Apathy
+    effectOrder: 0
     damageValue: 0
+    directDamage: 0
     defenceValue: 0
     attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -44,6 +53,12 @@ MonoBehaviour:
         tenetCostType: 0
         count: 1
         tenetType: 3
+        tenetConstraint: 0
+      tenetGroupCost:
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
         shape: {fileID: 0}
         countConstraint: 0
@@ -57,4 +72,10 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords: []
