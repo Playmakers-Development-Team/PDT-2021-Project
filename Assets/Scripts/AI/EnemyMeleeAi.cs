@@ -19,11 +19,7 @@ namespace AI
             }
             
             if (turnManager.RoundCount % SpecialMoveCount == 0)
-            {
                 await enemyManager.MoveToDistantTile(enemyUnit);
-                
-                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
-            }
             else
             {
                 IUnit adjacentPlayerUnit = (IUnit) enemyManager.FindAdjacentPlayer(enemyUnit);
@@ -45,9 +41,9 @@ namespace AI
                     else
                         await enemyManager.DoUnitAbility(enemyUnit, buffAbility, Vector2Int.zero);
                 }
-
-                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
             }
+            
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
     }
 }

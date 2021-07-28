@@ -121,6 +121,52 @@ namespace Units.Enemies
         }
         
         /// <summary>
+        /// Similar to MoveUnitToTarget, but aims for tiles that are <c>distanceFromTarget</c>
+        /// away from the target
+        /// </summary>
+        /// <param name="enemyUnit"></param>
+        /// <param name="distanceFromTarget"></param>
+        public async Task MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget)
+        {
+            IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
+            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
+            Vector2Int targetTile = new Vector2Int();
+
+            if (reachableTiles.Count <= 0)
+                return;
+
+            foreach (var reachableTile in reachableTiles)
+            {
+                if(distanceFromTarget == ManhattanDistance
+                    .GetManhattanDistance(reachableTile, targetPlayerUnit.Coordinate))
+                {
+                    targetTile = reachableTile;
+                    break;
+                }
+            }
+
+            if (reachableTiles.Contains(targetTile))
+            {
+                var moveCommand = new StartMoveCommand(
+                    enemyUnit,
+                    targetTile
+                );
+            
+                commandManager.ExecuteCommand(moveCommand);
+                await commandManager.WaitForCommand<EndMoveCommand>();
+            
+                while (playerManager.WaitForDeath)
+                    await UniTask.Yield();
+            }
+            else
+            {
+                // If the enemy can't reach the distanceFromTarget range, they will attempt
+                // to move closer to the target
+                await MoveUnitToTarget(enemyUnit);
+            }
+        }
+        
+        /// <summary>
         /// Finds the tile that is furthest from most players. Only uses reachable tiles.
         /// If there are no reachable tiles, then the enemy will not move.
         /// </summary>
@@ -271,7 +317,7 @@ namespace Units.Enemies
             return closestPlayerUnits;
         }
 
-        private List<IUnit> GetLowestHealthPlayers(IReadOnlyList<IUnit> playerUnits)
+        public List<IUnit> GetLowestHealthPlayers(IReadOnlyList<IUnit> playerUnits)
         {
             List<IUnit> lowestHealthPlayerUnits = new List<IUnit>();
             float lowestHealthValue = Int32.MaxValue;

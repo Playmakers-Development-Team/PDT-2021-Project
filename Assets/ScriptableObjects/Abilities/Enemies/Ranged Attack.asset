@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Ranged Attack
+  m_EditorClassIdentifier: 
+  description: An attack that can be engaged from a distince, firing in either a
+    cardinal (NESW) or ordinal (NE, NW, SE, SW) direction. The range of the attack
+    is dependant on the LineOfSight range (e.g. A player 2 tiles NE can be hit with
+    a range of 2).
+  shape: {fileID: 11400000, guid: 55cddb5125685c64f92359dfd92bb1c6, type: 2}
+  excludeUserFromTargets: 1
+  speed: 0
+  targetEffects:
+  - name: Default, 3 Damage
+    effectOrder: 0
+    damageValue: 3
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  userEffects: []
