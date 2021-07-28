@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Units;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 using Utilities;
 
@@ -11,7 +13,6 @@ namespace AI
     public class EnemyRangedAi : EnemyAi
     {
         [SerializeField] private int safeDistanceRange = 2;
-        private int shootingRange;
 
         [SerializeField] private Ability rangedAttackAbility;
         [SerializeField] private Ability secondRangedAttackAbility;
@@ -19,8 +20,6 @@ namespace AI
         
         protected override async void DecideEnemyIntention()
         {
-            shootingRange = 3;
-            
             if (playerManager.PlayerUnits.Count <= 0)
             {
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
@@ -44,7 +43,7 @@ namespace AI
             }
             else //ODD TURNS
             {
-                await enemyManager.MoveToTargetRange(enemyUnit, shootingRange);
+                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange);
 
                 if (GetTargetsInRange().Count > 0)
                     await ShootPlayer(rangedAttackAbility);
@@ -69,25 +68,17 @@ namespace AI
             }
             return false;
         }
-        
+
         /// <summary>
         /// Returns all players within <c>shootingRange</c> tiles of the enemy.
         /// Assumes that all obstacles can be shot through
         /// </summary>
-        private List<IUnit> GetTargetsInRange()
-        {
-            List<IUnit> targetsInRange = new List<IUnit>();
-            
-            foreach (var playerUnit in playerManager.PlayerUnits)
-            {
-                if (shootingRange <= ManhattanDistance.GetManhattanDistance(
-                    playerUnit.Coordinate, enemyUnit.Coordinate))
-                    targetsInRange.Add(playerUnit);
-            }
-            
-            return targetsInRange;
-        }
-        
+        private List<IUnit> GetTargetsInRange() => rangedAttackAbility.Shape
+            .GetTargetsInAllDirections(enemyUnit.Coordinate)
+            .OfType<PlayerUnit>()
+            .OfType<IUnit>()
+            .ToList();
+
         /// <summary>
         /// Returns a player within shooting range. If there are multiple players, the player
         /// with the lowest HP is chosen
