@@ -97,7 +97,7 @@ namespace Tests.AutomatedTests
             
             Assert.Beacon(UnitBeacons.EnemyA, Any.UnitEqualsHealth(9));
             yield return new WaitForSecondsRealtime(2.5f);
-            Assert.Beacon(UnitBeacons.Estelle, Any.UnitEqualsHealth(7));
+            Assert.Beacon(UnitBeacons.Estelle, Any.UnitEqualsHealth(6));
         }
     }
 }
