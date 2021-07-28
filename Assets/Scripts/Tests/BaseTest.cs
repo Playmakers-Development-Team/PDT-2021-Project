@@ -2,6 +2,7 @@ using System.Collections;
 using System.Threading.Tasks;
 using Audio;
 using Commands;
+using Cysharp.Threading.Tasks;
 using E7.Minefield;
 using Grid;
 using Managers;
@@ -40,16 +41,17 @@ namespace Tests
         protected IEnumerator PrepareAndActivateScene()
         {
             ManagerLocator.Initialize();
-            Task task = CommandManager.WaitForCommand<TurnQueueCreatedCommand>();
+            UniTask task = CommandManager.WaitForCommand<TurnQueueCreatedCommand>();
             yield return ActivateScene();
             InputBeacon.PrepareVirtualDevices();
-            yield return new WaitUntil(() => task.IsCompleted);
+            yield return new WaitUntil(() => task.Status.IsCompleted());
             Time.timeScale = TimeScale;
         }
 
         [TearDown] 
         protected void TestCleanup()
         {
+            InputBeacon.RestoreRegularDevices();
             Time.timeScale = 1f;
         }
     }
