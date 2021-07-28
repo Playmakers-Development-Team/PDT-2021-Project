@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Tests.Beacons;
 using Tests.Constraints;
 using Tests.Utilities;
+using UI.Commands;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -19,15 +20,29 @@ namespace Tests.AutomatedTests
     {
         public IEnumerator BasicSelections()
         {
-            // TODO: Asserts to check that the correct unit is being displayed and selected
+            var estelleSelectedWatch = CommandWatcher
+                .BeginWatching<UIUnitSelectedCommand>(cmd => cmd.Unit.HasBeacon(UnitBeacons.Estelle, Is.Active));
+            var enemySelectedWatch = CommandWatcher
+                .BeginWatching<UIUnitSelectedCommand>(cmd => cmd.Unit.HasBeacon(UnitBeacons.EnemyA, Is.Active));
+            
             yield return InputBeacon.ClickLeft(UnitBeacons.Estelle);
             yield return new WaitForSeconds(0.5f);
             yield return InputBeacon.ClickLeft(UnitBeacons.EnemyA);
             yield return new WaitForSeconds(0.5f);
+            
+            estelleSelectedWatch.Assert("Can't select Estelle from mouse click");
+            enemySelectedWatch.Assert("Can't select Enemy from mouse click");
+            
+            estelleSelectedWatch.Rewatch();
+            enemySelectedWatch.Rewatch();
+            
             yield return Beacon.ClickWhen(UITimelineBeacons.Pos1, Is.Clickable);
             yield return new WaitForSeconds(0.5f);
             yield return Beacon.ClickWhen(UITimelineBeacons.Pos2, Is.Clickable);
             yield return new WaitForSeconds(0.5f);
+            
+            estelleSelectedWatch.Assert("Can't select Estelle from turn queue");
+            enemySelectedWatch.Assert("Can't select Enemy from turn queue");
         }
         
         public IEnumerator MoveEstelle()
@@ -48,7 +63,7 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest]
-        [Timeout(2000), Order(1)]
+        //[Timeout(2000), Order(1)]
         public IEnumerator SelectionTest()
         {
             yield return PrepareAndActivateScene();
