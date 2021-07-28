@@ -102,7 +102,11 @@ namespace Commands
                         // The current command type is now fulfilled for that catch listener
                         caughtCommands[action].Add(command);
                         
-                        var requiredCommandTypes = action.GetType().GetGenericArguments();
+                        // If it's a func, filter out the last parameter by only taking in commands
+                        var requiredCommandTypes = action.GetType()
+                            .GetGenericArguments()
+                            .Where(t => typeof(Command).IsAssignableFrom(t))
+                            .ToArray();
                         var caughtCommandTypes = caughtCommands[action].Select(cmd => cmd.GetType());
                         
                         // If any required commands are not in the caught commands, the
@@ -118,10 +122,12 @@ namespace Commands
                                 .ToArray<object>();
 
                             // Need to cast to Array<object> for it to pass in parameters properly
-                            action.DynamicInvoke(parameters);
+                            object obj = action.DynamicInvoke(parameters);
                             
                             // Remove it afterwards
-                            RemoveCatchListener(action);
+                            // if the action is a Func that return a bool, make sure we only remove it when it return trus
+                            if (obj == null || Equals(obj, true))
+                                RemoveCatchListener(action);
                         }
                     }
                     // Otherwise, try to invoke it with the command parameter
@@ -331,18 +337,23 @@ namespace Commands
         /// A lambda function which should return true if this is the command that we are expecting
         /// and hence we should stop waiting. Can be left empty if we accept any command.
         /// </param>
-        public async Task<T> WaitForCommand<T>(Predicate<T> filter = null) where T : Command
+        public async UniTask<T> WaitForCommand<T>(Predicate<T> filter = null) where T : Command
         {
             T caughtCmd1 = null;
             
             bool hasCaught = false;
-            CatchCommand((T cmd1) =>
+            RegisterCatchListener(new Func<T, bool>((T cmd1) =>
             {
                 caughtCmd1 = cmd1;
-                
+
                 if (filter == null || filter(cmd1))
+                {
                     hasCaught = true;
-            });
+                    return true;
+                }
+
+                return false;
+            }));
             await UniTask.WaitUntil(() => hasCaught);
             return caughtCmd1;
         }
@@ -351,7 +362,7 @@ namespace Commands
         /// <p>Wait for a command to be executed.</p>
         /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2)> WaitForCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
+        public async UniTask<(T1, T2)> WaitForCommand<T1, T2>(Func<T1, T2, bool> filter = null) 
             where T1 : Command
             where T2 : Command
         {
@@ -359,14 +370,19 @@ namespace Commands
             T2 caughtCmd2 = null;
             
             bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2) =>
+            RegisterCatchListener(new Func<T1, T2, bool>((T1 cmd1, T2 cmd2) =>
             {
                 caughtCmd1 = cmd1;
                 caughtCmd2 = cmd2;
-                
+
                 if (filter == null || filter(cmd1, cmd2))
+                {
                     hasCaught = true;
-            });
+                    return true;
+                }
+
+                return false;
+            }));
             await UniTask.WaitUntil(() => hasCaught);
             return (caughtCmd1, caughtCmd2);
         }
@@ -375,7 +391,7 @@ namespace Commands
         /// <p>Wait for a command to be executed.</p>
         /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3)> WaitForCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
+        public async UniTask<(T1, T2, T3)> WaitForCommand<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -384,15 +400,20 @@ namespace Commands
             T2 caughtCmd2 = null;
             T3 caughtCmd3 = null;
             bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3) =>
+            RegisterCatchListener(new Func<T1, T2, T3, bool>((T1 cmd1, T2 cmd2, T3 cmd3) =>
             {
                 caughtCmd1 = cmd1;
                 caughtCmd2 = cmd2;
                 caughtCmd3 = cmd3;
-                
+
                 if (filter == null || filter(cmd1, cmd2, cmd3))
+                {
                     hasCaught = true;
-            });
+                    return true;
+                }
+
+                return false;
+            }));
             await UniTask.WaitUntil(() => hasCaught);
             return (caughtCmd1, caughtCmd2, caughtCmd3);
         }
@@ -401,7 +422,7 @@ namespace Commands
         /// <p>Wait for a command to be executed.</p>
         /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3, T4)> WaitForCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
+        public async UniTask<(T1, T2, T3, T4)> WaitForCommand<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -412,16 +433,21 @@ namespace Commands
             T3 caughtCmd3 = null;
             T4 caughtCmd4 = null;
             bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
+            RegisterCatchListener(new Func<T1, T2, T3, T4, bool>((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
             {
                 caughtCmd1 = cmd1;
                 caughtCmd2 = cmd2;
                 caughtCmd3 = cmd3;
                 caughtCmd4 = cmd4;
-                
+
                 if (filter == null || filter(cmd1, cmd2, cmd3, cmd4))
+                {
                     hasCaught = true;
-            });
+                    return true;
+                }
+
+                return false;
+            }));
             await UniTask.WaitUntil(() => hasCaught);
             return (caughtCmd1, caughtCmd2, caughtCmd3, caughtCmd4);
         }
@@ -430,7 +456,7 @@ namespace Commands
         /// <p>Wait for a command to be executed.</p>
         /// Please see <see cref="WaitForCommand{T}"/> for detailed information and examples.
         /// </summary>
-        public async Task<(T1, T2, T3, T4, T5)> WaitForCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
+        public async UniTask<(T1, T2, T3, T4, T5)> WaitForCommand<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> filter = null) 
             where T1 : Command
             where T2 : Command
             where T3 : Command
@@ -443,17 +469,22 @@ namespace Commands
             T4 caughtCmd4 = null;
             T5 caughtCmd5 = null;
             bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
+            RegisterCatchListener(new Func<T1, T2, T3, T4, T5, bool>((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
             {
                 caughtCmd1 = cmd1;
                 caughtCmd2 = cmd2;
                 caughtCmd3 = cmd3;
                 caughtCmd4 = cmd4;
                 caughtCmd5 = cmd5;
-                
+
                 if (filter == null || filter(cmd1, cmd2, cmd3, cmd4, cmd5))
+                {
                     hasCaught = true;
-            });
+                    return true;
+                }
+
+                return false;
+            }));
             await UniTask.WaitUntil(() => hasCaught);
             return (caughtCmd1, caughtCmd2, caughtCmd3, caughtCmd4, caughtCmd5);
         }
@@ -479,16 +510,8 @@ namespace Commands
         /// A lambda function which should return true if this is the command that we are expecting
         /// and hence we should stop waiting. Can be left empty if we accept any command.
         /// </param>
-        public IEnumerator WaitForCommandYield<T>(Predicate<T> filter = null) where T : Command
-        {
-            bool hasCaught = false;
-            CatchCommand((T cmd1) =>
-            {
-                if (filter == null || filter(cmd1))
-                    hasCaught = true;
-            });
-            yield return new WaitUntil(() => hasCaught);
-        }
+        public IEnumerator WaitForCommandYield<T>(Predicate<T> filter = null) where T : Command  => 
+            UniTask.ToCoroutine(() => WaitForCommand(filter));
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
@@ -496,17 +519,9 @@ namespace Commands
         /// </summary>
         public IEnumerator WaitForCommandYield<T1, T2>(Func<T1, T2, bool> filter = null) 
             where T1 : Command
-            where T2 : Command
-        {
-            bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2) =>
-            {
-                if (filter == null || filter(cmd1, cmd2))
-                    hasCaught = true;
-            });
-            yield return new WaitUntil(() => hasCaught);
-        }
-        
+            where T2 : Command => 
+            UniTask.ToCoroutine(() => WaitForCommand(filter));
+
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
         /// Please see <see cref="WaitForCommandYieldYield{T}"/> for detailed information and examples.
@@ -514,16 +529,8 @@ namespace Commands
         public IEnumerator WaitForCommandYield<T1, T2, T3>(Func<T1, T2, T3, bool> filter = null) 
             where T1 : Command
             where T2 : Command
-            where T3 : Command
-        {
-            bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3) =>
-            {
-                if (filter == null || filter(cmd1, cmd2, cmd3))
-                    hasCaught = true;
-            });
-            yield return new WaitUntil(() => hasCaught);
-        }
+            where T3 : Command => 
+            UniTask.ToCoroutine(() => WaitForCommand(filter));
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
@@ -533,16 +540,8 @@ namespace Commands
             where T1 : Command
             where T2 : Command
             where T3 : Command
-            where T4 : Command
-        {
-            bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4) =>
-            {
-                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4))
-                    hasCaught = true;
-            });
-            yield return new WaitUntil(() => hasCaught);
-        }
+            where T4 : Command => 
+            UniTask.ToCoroutine(() => WaitForCommand(filter));
         
         /// <summary>
         /// <p>Wait for a command to be executed in a Unity Coroutine.</p>
@@ -553,16 +552,8 @@ namespace Commands
             where T2 : Command
             where T3 : Command
             where T4 : Command
-            where T5 : Command
-        {
-            bool hasCaught = false;
-            CatchCommand((T1 cmd1, T2 cmd2, T3 cmd3, T4 cmd4, T5 cmd5) =>
-            {
-                if (filter == null || filter(cmd1, cmd2, cmd3, cmd4, cmd5))
-                    hasCaught = true;
-            });
-            yield return new WaitUntil(() => hasCaught);
-        }
+            where T5 : Command => 
+            UniTask.ToCoroutine(() => WaitForCommand(filter));
 
         private void RegisterCatchListener(Delegate action)
         {
