@@ -1,4 +1,5 @@
 using Commands;
+using Grid.GridObjects;
 using Managers;
 using Units;
 using Units.Commands;
@@ -12,7 +13,7 @@ namespace Turn
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
         
         [Tooltip("The global turn phase for every player unit")]
-        [SerializeField] private GameObject[] preMadeTimeline;
+        [SerializeField] private GridObject[] preMadeTimeline;
         
         [SerializeField] private bool isTimelineRandomised;
        

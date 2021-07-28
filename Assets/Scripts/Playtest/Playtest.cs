@@ -29,9 +29,13 @@ namespace Playtest
     [ExecuteAlways]
     public class Playtest : MonoBehaviour
     {
+
+        [Tooltip("Determines whether or not it will record the data from the game")]
+        [SerializeField] private bool canRecordPlaytestData;
         
         [SerializeField] private PlaytestData data;
 
+        
         private struct TemplateUnit
         {
             public int amount { get; set; }
@@ -400,8 +404,10 @@ namespace Playtest
         
         private void Awake()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || !canRecordPlaytestData)
                 return;
+
+          
             
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
@@ -423,12 +429,17 @@ namespace Playtest
         
         private void Start()
         {
+            
+            if (!canRecordPlaytestData)
+                return;
 
             if (!Application.isPlaying)
             {
                 PostAll(data.Entries);
                 return;
             }
+
+            
             
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
             commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame(cmd.DidPlayerWin));

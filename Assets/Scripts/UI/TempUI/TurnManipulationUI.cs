@@ -48,11 +48,10 @@ namespace UI.TempUI
                 Destroy(button);
         }
 
-        // BUG: Not working
         public void ManipulateBefore()
         {
             if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                turnManager.Insight.Value <= 0)
+                playerManager.Insight.Value <= 0)
                 return;
 
             Debug.Log($"CURRENT INDEX {turnManager.PhaseIndex}");

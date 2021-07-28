@@ -50,7 +50,6 @@ namespace Turn.Commands
     {
         public MeditatedCommand(IUnit unit) : base(unit) {}
     }
-
     
     public class GameEndedCommand : Command
     {

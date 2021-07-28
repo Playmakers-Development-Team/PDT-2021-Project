@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
+using Grid.GridObjects;
 using Managers;
 using Turn.Commands;
 using Units;
@@ -135,11 +136,11 @@ namespace Turn
             StartTurn();
         }
 
-        public void SetupTurnQueue(GameObject[] premadeTimeline, TurnPhases[] newTurnPhases )
+        public void SetupTurnQueue(GridObject[] premadeTimeline, TurnPhases[] newTurnPhases )
         {
             randomizedSpeed = false;
 
-            foreach(GameObject prefab in premadeTimeline)
+            foreach(GridObject prefab in premadeTimeline)
                 preMadeTurnQueue.Add(prefab.GetComponent<IUnit>());
 
             SetupTurnQueue(newTurnPhases);
@@ -280,7 +281,7 @@ namespace Turn
         {
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-
+            
             ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
         }
