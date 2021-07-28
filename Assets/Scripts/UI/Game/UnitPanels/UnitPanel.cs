@@ -12,7 +12,7 @@ namespace UI.Game.UnitPanels
 {
     internal abstract class UnitPanel : DialogueComponent<GameDialogue>
     {
-        [SerializeField] protected Image renderImage;
+        [SerializeField] protected RawImage renderImage;
 
         [SerializeField] protected Image healthImage;
         [SerializeField] protected TextMeshProUGUI healthText;
@@ -46,7 +46,7 @@ namespace UI.Game.UnitPanels
                 return;
             
             // Render image
-            renderImage.sprite = unitInfo.Render;
+            renderImage.texture = unitInfo.Render;
             renderImage.color = unitInfo.Color;
             
             // Health bar

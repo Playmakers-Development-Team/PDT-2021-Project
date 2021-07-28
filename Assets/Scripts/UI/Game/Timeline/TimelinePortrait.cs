@@ -7,7 +7,7 @@ namespace UI.Game.Timeline
 {
     public class TimelinePortrait : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private Image image;
+        [SerializeField] private RawImage image;
 
         private GameDialogue.UnitInfo unitInfo;
         
@@ -37,7 +37,7 @@ namespace UI.Game.Timeline
         {
             unitInfo = dialogue.GetInfo(unit);
             
-            image.sprite = unitInfo.Render;
+            image.texture = unitInfo.Render;
             image.color = unitInfo.Color;
         }
 
