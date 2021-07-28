@@ -12,8 +12,6 @@ namespace Units.Enemies
         public PlayerUnit Target;
 
         private List<Command> commandQueue = new List<Command>();
-        
-        private EnemyManager enemyManager;
 
         public void QueueCommand(Command command)
         {
@@ -33,8 +31,8 @@ namespace Units.Enemies
         protected override void Awake()
         {
             base.Awake();
-            
-            enemyManager = ManagerLocator.Get<EnemyManager>();
+
+            unitManagerT = ManagerLocator.Get<EnemyManager>();
             
             //Name = RandomizeName();
         }
@@ -46,7 +44,5 @@ namespace Units.Enemies
             commandManager.UnlistenCommand<EnemyManagerReadyCommand>(OnEnemyManagerReady);
 
         private void OnEnemyManagerReady(EnemyManagerReadyCommand cmd) => Spawn();
-        
-        protected override void Spawn() => enemyManager.Spawn(this);
     }
 }

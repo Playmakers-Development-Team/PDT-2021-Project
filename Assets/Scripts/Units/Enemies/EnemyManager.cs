@@ -14,24 +14,19 @@ namespace Units.Enemies
     public class EnemyManager : UnitManager
     {
         /// <summary>
-        /// Holds all the enemy units currently in the level.
-        /// </summary>
-        private readonly List<IUnit> enemyUnits = new List<IUnit>();
-
-        /// <summary>
         /// Returns all enemy units currently in the level.
         /// </summary>
-        public IReadOnlyList<IUnit> EnemyUnits => enemyUnits.AsReadOnly();
+        public IReadOnlyList<IUnit> EnemyUnits => units.AsReadOnly();
 
         /// <summary>
         /// Clears all the enemies from the <c>enemyUnits</c> list.
         /// </summary>
-        public void ClearEnemyUnits() => enemyUnits.Clear();
+        public void ClearEnemyUnits() => units.Clear();
 
         /// <summary>
         /// Adds a unit to the <c>enemyUnits</c> list.
         /// </summary>
-        public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
+        public void AddUnit(IUnit targetUnit) => units.Add(targetUnit);
         
         private GridManager gridManager;
         private PlayerManager playerManager;
@@ -55,7 +50,7 @@ namespace Units.Enemies
         public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             IUnit unit = base.Spawn(unitPrefab, gridPosition);
-            enemyUnits.Add(unit);
+            units.Add(unit);
             commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
             return unit;
         }
@@ -75,9 +70,9 @@ namespace Units.Enemies
         }
         
         // TODO: Duplicate code, see EnemyManager.ClearUnits. Should use generics for unit managers.
-        public void ClearUnits() => enemyUnits.Clear();
+        public void ClearUnits() => units.Clear();
 
-        public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
+        public void RemoveUnit(IUnit targetUnit) => units.Remove(targetUnit);
 
         public async void DecideEnemyIntention(EnemyUnit enemyUnit)
         {
@@ -249,13 +244,6 @@ namespace Units.Enemies
             }
 
             return lowestHealthPlayerUnits;
-        }
-
-        public IUnit Spawn(EnemyUnit unit)
-        {
-            enemyUnits.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            return unit;
         }
     }
 }

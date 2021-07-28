@@ -8,15 +8,13 @@ namespace Units.Players
     {
         public Ability CurrentlySelectedAbility { get; set; }
 
-        private PlayerManager playerManager;
-        
         public override bool IsSameTeamWith(IAbilityUser other) => other is PlayerUnit;
 
         protected override void Awake()
         {
             base.Awake();
 
-            playerManager = ManagerLocator.Get<PlayerManager>();
+            unitManagerT = ManagerLocator.Get<PlayerManager>();
         }
 
         private void OnEnable() =>
@@ -26,7 +24,5 @@ namespace Units.Players
             commandManager.UnlistenCommand<PlayerManagerReadyCommand>(OnPlayerManagerReady);
 
         private void OnPlayerManagerReady(PlayerManagerReadyCommand cmd) => Spawn();
-
-        protected override void Spawn() => playerManager.Spawn(this);
     }
 }

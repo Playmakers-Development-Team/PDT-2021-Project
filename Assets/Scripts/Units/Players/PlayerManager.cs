@@ -8,16 +8,14 @@ namespace Units.Players
 {
     public class PlayerManager : UnitManager
     {
-        private readonly List<IUnit> playerUnits = new List<IUnit>();
-
         /// <summary>
         /// All the player units currently in the level.
         /// </summary>
-        public IReadOnlyList<IUnit> PlayerUnits => playerUnits.AsReadOnly();
+        public IReadOnlyList<IUnit> PlayerUnits => units.AsReadOnly();
         public bool WaitForDeath { get; set; }
         
         public int DeathDelay { get; } = 1000;
-        public int Count => playerUnits.Count;
+        public int Count => units.Count;
 
         [Obsolete("Use Insight of type 'Stat' instead from the TurnManager")]
         public ValueStat Insight { get; private set; }
@@ -35,21 +33,21 @@ namespace Units.Players
         /// <summary>
         /// Removes all the player units in the <c>playerUnits</c> list.
         /// </summary>
-        public void ClearPlayerUnits() => playerUnits.Clear();
+        public void ClearPlayerUnits() => units.Clear();
 
         /// <summary>
         /// Removes a target <c>IUnit</c> from <c>playerUnits</c>.
         /// </summary>
         /// <param name="targetUnit"></param>
-        public void RemoveUnit(IUnit targetUnit) => playerUnits.Remove(targetUnit);
+        public void RemoveUnit(IUnit targetUnit) => units.Remove(targetUnit);
         
         /// <summary>
         /// Adds a unit to the <c>playerUnits</c> list.
         /// </summary>
-        public void AddUnit(IUnit targetUnit) => playerUnits.Add(targetUnit);
+        public void AddUnit(IUnit targetUnit) => units.Add(targetUnit);
         
         // TODO: Duplicate code, see EnemyManager.ClearUnits. Should use generics for unit managers.
-        public void ClearUnits() => playerUnits.Clear();
+        public void ClearUnits() => units.Clear();
 
         /// <summary>
         /// Spawns a player unit and adds it to the <c>playerUnits</c> list.
@@ -68,11 +66,12 @@ namespace Units.Players
         /// that have been added to the scene in the editor.
         /// </summary>
         /// <param name="unit">The unit to add.</param>
-        public IUnit Spawn(PlayerUnit unit)
+        public override IUnit Spawn(IUnit unit)
         {
-            playerUnits.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            base.Spawn(unit);
+            
             SelectUnit(unit);
+            
             return unit;
         }
     }

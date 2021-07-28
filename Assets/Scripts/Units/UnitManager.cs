@@ -12,6 +12,8 @@ namespace Units
 {
     public class UnitManager : Manager
     {
+        protected readonly List<IUnit> units = new List<IUnit>();
+
         public IUnit SelectedUnit { get; private set; }
         
         protected CommandManager commandManager;
@@ -178,5 +180,12 @@ namespace Units
         }
 
         #endregion
+        
+        public virtual IUnit Spawn(IUnit unit)
+        {
+            units.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
     }
 }
