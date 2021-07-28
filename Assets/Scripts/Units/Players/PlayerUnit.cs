@@ -1,6 +1,5 @@
 using Abilities;
 using Managers;
-using Units.Commands;
 
 namespace Units.Players
 {
@@ -16,13 +15,5 @@ namespace Units.Players
 
             unitManagerT = ManagerLocator.Get<PlayerManager>();
         }
-
-        private void OnEnable() =>
-            commandManager.ListenCommand<PlayerManagerReadyCommand>(OnPlayerManagerReady);
-        
-        private void OnDisable() =>
-            commandManager.UnlistenCommand<PlayerManagerReadyCommand>(OnPlayerManagerReady);
-
-        private void OnPlayerManagerReady(PlayerManagerReadyCommand cmd) => Spawn();
     }
 }

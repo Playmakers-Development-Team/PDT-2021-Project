@@ -592,5 +592,13 @@ namespace Units
         
         // TODO: Add to correct region
         protected void Spawn() => unitManagerT.Spawn(this);
+        
+        private void OnEnable() =>
+            commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        
+        private void OnDisable() =>
+            commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+
+        private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
     }
 }

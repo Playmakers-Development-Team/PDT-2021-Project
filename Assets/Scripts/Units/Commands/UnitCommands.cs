@@ -194,12 +194,7 @@ namespace Units.Commands
     }
 
     /// <summary>
-    /// Executed when the PlayerManager is ready to accept PlayerUnit spawns.
+    /// Executed when a generic UnitManager is ready to accept IUnit spawns.
     /// </summary>
-    public class PlayerManagerReadyCommand : Command {}
-
-    /// <summary>
-    /// Executed when the EnemyManager is ready to accept EnemyUnit spawns.
-    /// </summary>
-    public class EnemyManagerReadyCommand : Command {}
+    public class UnitManagerReadyCommand<T> : Command where T : UnitData {}
 }

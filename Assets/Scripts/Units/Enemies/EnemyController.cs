@@ -41,7 +41,7 @@ namespace Units.Enemies
             
             enemyManager.ClearUnits();
 
-            commandManager.ExecuteCommand(new EnemyManagerReadyCommand());
+            commandManager.ExecuteCommand(new UnitManagerReadyCommand<EnemyUnitData>());
         }
 
         private void Update()

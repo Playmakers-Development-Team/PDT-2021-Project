@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Abilities;
 using Commands;
 using Managers;
-using Units.Commands;
 using Units.Players;
 
 namespace Units.Enemies
@@ -36,13 +35,5 @@ namespace Units.Enemies
             
             //Name = RandomizeName();
         }
-
-        private void OnEnable() =>
-            commandManager.ListenCommand<EnemyManagerReadyCommand>(OnEnemyManagerReady);
-        
-        private void OnDisable() =>
-            commandManager.UnlistenCommand<EnemyManagerReadyCommand>(OnEnemyManagerReady);
-
-        private void OnEnemyManagerReady(EnemyManagerReadyCommand cmd) => Spawn();
     }
 }

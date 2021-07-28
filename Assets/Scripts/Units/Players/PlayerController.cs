@@ -32,7 +32,7 @@ namespace Units.Players
         {
             playerManager.ClearUnits();
             
-            commandManager.ExecuteCommand(new PlayerManagerReadyCommand());
+            commandManager.ExecuteCommand(new UnitManagerReadyCommand<PlayerUnitData>());
             
             commandManager.ExecuteCommand(new PlayerUnitsReadyCommand());
         }
