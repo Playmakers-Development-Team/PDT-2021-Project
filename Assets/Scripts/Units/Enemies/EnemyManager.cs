@@ -151,6 +151,10 @@ namespace Units.Enemies
                     enemyUnit,
                     targetTile
                 );
+                
+                Debug.Log(enemyUnit.Name +
+                          " ENEMY-TAR: Enemy is moving to "+targetTile+" to maintain a "
+                          +distanceFromTarget+" tile distance from "+targetPlayerUnit.Name);
             
                 commandManager.ExecuteCommand(moveCommand);
                 await commandManager.WaitForCommand<EndMoveCommand>();
