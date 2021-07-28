@@ -26,6 +26,9 @@ namespace Managers
             
             foreach (Type type in types)
             {
+                if (type.ContainsGenericParameters)
+                    continue;
+                
                 dynamic manager = Convert.ChangeType(Activator.CreateInstance(type), type);
                 Register(manager);
             }

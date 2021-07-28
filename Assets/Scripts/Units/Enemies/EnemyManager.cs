@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Grid;
-using Grid.GridObjects;
 using Managers;
 using Units.Commands;
 using Units.Players;
@@ -11,24 +9,8 @@ using UnityEngine;
 
 namespace Units.Enemies
 {
-    public class EnemyManager : UnitManager
+    public class EnemyManager : UnitManager<EnemyUnitData>
     {
-        /// <summary>
-        /// Returns all enemy units currently in the level.
-        /// </summary>
-        public IReadOnlyList<IUnit> EnemyUnits => units.AsReadOnly();
-
-        /// <summary>
-        /// Clears all the enemies from the <c>enemyUnits</c> list.
-        /// </summary>
-        public void ClearEnemyUnits() => units.Clear();
-
-        /// <summary>
-        /// Adds a unit to the <c>enemyUnits</c> list.
-        /// </summary>
-        public void AddUnit(IUnit targetUnit) => units.Add(targetUnit);
-        
-        private GridManager gridManager;
         private PlayerManager playerManager;
         private UnitManager unitManager;
 
@@ -36,43 +18,9 @@ namespace Units.Enemies
         {
             base.ManagerStart();
             
-            gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
         }
-
-        /// <summary>
-        /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
-        /// </summary>
-        /// <param name="unitPrefab"></param>
-        /// <param name="gridPosition"></param>
-        /// <returns>The new <c>IUnit</c> that was added.</returns>
-        public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
-        {
-            IUnit unit = base.Spawn(unitPrefab, gridPosition);
-            units.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            return unit;
-        }
-
-        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
-        {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
-
-            foreach (var adjacentGridObject in adjacentGridObjects)
-            {
-                if (adjacentGridObject.CompareTag("PlayerUnit"))
-                    return adjacentGridObject;
-            }
-
-            return null;
-        }
-        
-        // TODO: Duplicate code, see EnemyManager.ClearUnits. Should use generics for unit managers.
-        public void ClearUnits() => units.Clear();
-
-        public void RemoveUnit(IUnit targetUnit) => units.Remove(targetUnit);
 
         public async void DecideEnemyIntention(EnemyUnit enemyUnit)
         {
@@ -82,7 +30,7 @@ namespace Units.Enemies
             {
                 await AttackUnit(enemyUnit, adjacentPlayerUnit);
             }
-            else if (playerManager.PlayerUnits.Count > 0)
+            else if (playerManager.Units.Count > 0)
             {
                 await MoveUnit(enemyUnit);
                 
@@ -119,7 +67,7 @@ namespace Units.Enemies
             
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
-                FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
+                FindClosestPath(enemyUnit, targetPlayerUnit,
                 enemyUnit.MovementPoints.Value)
             );
             
@@ -140,8 +88,6 @@ namespace Units.Enemies
                 return Vector2Int.zero;
             }
             
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
@@ -163,9 +109,8 @@ namespace Units.Enemies
         public IUnit GetTargetPlayer(IUnit enemyUnit)
         {
             IUnit targetPlayerUnit;
-            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
 
-            List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.PlayerUnits);
+            List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.Units);
             int closestPlayersCount = closestPlayers.Count;
 
             if (closestPlayersCount == 1)
@@ -197,8 +142,6 @@ namespace Units.Enemies
         
         private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
         {
-            GridManager gridManager = ManagerLocator.Get<GridManager>();
-            
             Dictionary<Vector2Int, int> distanceToAllCells = unitManager.GetDistanceToAllCells(enemyUnit.Coordinate);
             
             List<IUnit> closestPlayerUnits = new List<IUnit>();

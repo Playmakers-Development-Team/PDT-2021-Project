@@ -106,7 +106,7 @@ namespace Units
         private PlayerManager playerManager;
         protected CommandManager commandManager;
 
-        protected UnitManager unitManagerT; 
+        protected UnitManager<T> unitManagerT; 
         
         // TODO: Rename
         private static readonly int movingAnimationParameter = Animator.StringToHash("moving");

@@ -59,17 +59,11 @@ namespace Units.Commands
     {
         public UnitSelectedCommand(IUnit unit) : base(unit) {}
     }
-    
-    /// <summary>
-    /// Executed when all player units are spawned and ready in the scene.
-    /// </summary>
-    public class PlayerUnitsReadyCommand : Command {}
 
     /// <summary>
-    /// Executed when all enemy units are spawned and ready in the scene.
+    /// Executed when all units of type T are spawned and ready in the scene.
     /// </summary>
-    public class EnemyUnitsReadyCommand : Command {}
-
+    public class UnitsReadyCommand<T> : Command where T : UnitData {}
 
     public class StatChangedCommand : UnitCommand
     {
