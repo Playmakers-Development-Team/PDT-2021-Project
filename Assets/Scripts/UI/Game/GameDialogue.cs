@@ -252,6 +252,7 @@ namespace UI.Game
             internal IUnit Unit { get; }
             internal int NewValue { get; }
             internal int OldValue { get; }
+            // TODO: Same as OldValue, may be being used incorrectly.
             internal int BaseValue { get; }
             internal int Difference { get; }
             internal StatTypes StatType { get; }
@@ -261,7 +262,7 @@ namespace UI.Game
                 StatType = cmd.StatType;
                 Unit = cmd.Unit;
                 NewValue = cmd.NewValue;
-                OldValue = cmd.NewValue + cmd.Difference;
+                OldValue = cmd.InitialValue;
                 BaseValue = cmd.InitialValue;
                 Difference = cmd.Difference;
             }

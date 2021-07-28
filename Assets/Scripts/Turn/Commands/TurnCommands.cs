@@ -40,7 +40,7 @@ namespace Turn.Commands
     /// </summary>
     public class TurnManipulatedCommand : UnitCommand
     {
-        public IUnit TargetUnit { get; private set; }
+        public IUnit TargetUnit { get; }
 
         public TurnManipulatedCommand(IUnit unit, IUnit targetUnit) : base(unit) =>
             TargetUnit = targetUnit;
@@ -51,15 +51,11 @@ namespace Turn.Commands
         public MeditatedCommand(IUnit unit) : base(unit) {}
     }
 
-    
+    // TODO: Will be replaced with NoRemainingUnitsCommand when World Map is merged.
     public class GameEndedCommand : Command
     {
         public bool DidPlayerWin { get; set; }
         public GameEndedCommand(bool didPlayerWin) => DidPlayerWin = didPlayerWin;
         
     }
-
-
-    
-    
 }

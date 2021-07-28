@@ -77,17 +77,16 @@ namespace Units.Commands
         
         public int InitialValue { get; }
         
-        public int Difference { get;}
+        public int Difference { get; }
         
         public int NewValue { get; }
 
-        public StatChangedCommand(IUnit unit, StatTypes type, int baseValue, 
-                                  int newValue) : base(unit)
+        public StatChangedCommand(IUnit unit, StatTypes type, int initialValue, int newValue) : base(unit)
         {
             StatType = type;
-            InitialValue = baseValue;
+            InitialValue = initialValue;
             NewValue = newValue;
-            Difference = baseValue - newValue;
+            Difference = newValue - initialValue;
         }
     }
     
