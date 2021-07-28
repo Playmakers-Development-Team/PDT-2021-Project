@@ -57,7 +57,7 @@ namespace UI.Game.UnitPanels
             defenceCard.Apply("DEF", unitInfo.Unit.DefenceStat.Value);
 
             TenetStatCard[] cards = {primaryTenetCard, secondaryTenetCard};
-            TenetStatus[] effects = unitInfo.Unit.TenetStatuses.ToArray();
+            TenetStatus[] effects = unitInfo.Unit.TenetStatusEffectsContainer.TenetStatuses.ToArray();
 
             for (int i = 0; i < cards.Length; i++)
             {
