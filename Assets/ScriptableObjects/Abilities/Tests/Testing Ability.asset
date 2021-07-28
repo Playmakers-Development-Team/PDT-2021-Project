@@ -17,12 +17,12 @@ MonoBehaviour:
   excludeUserFromTargets: 1
   speed: 0
   targetEffects:
-  - name: Default, 1 Damage
+  - name: Default, 2 Damage and 1 Attack and 1 Defence
     effectOrder: 0
-    damageValue: 1
+    damageValue: 2
     directDamage: 0
-    defenceValue: 0
-    attackValue: 0
+    defenceValue: 1
+    attackValue: 1
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -31,4 +31,18 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects: []
+  userEffects:
+  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 1
+    attackValue: 1
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []

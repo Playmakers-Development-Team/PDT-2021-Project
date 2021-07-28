@@ -1,28 +1,28 @@
-﻿using System;
-using Commands;
+﻿using Commands;
 using Managers;
 using Turn.Commands;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Tests.Beacons.Base
+namespace Tests.Beacons.Components
 {
     public class UIAbilityListBeacons : MonoBehaviour
     {
         private CommandManager commandManager;
         private void Awake()
         {
-            commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.ListenCommand<StartTurnCommand>(cmd =>
-            {
-                if (cmd.Unit is PlayerUnit)
-                    AddBeacons();
-            });
+            // commandManager = ManagerLocator.Get<CommandManager>();
+            // commandManager.ListenCommand<StartTurnCommand>(cmd =>
+            // {
+            //     if (cmd.Unit is PlayerUnit)
+            //         AddBeacons();
+            // });
         }
 
         private void Update()
         {
+            // TODO: Replace this with a more efficient method
             if (GetComponentsInChildren<Button>() != null)
             {
                 AddBeacons();

@@ -221,7 +221,7 @@ namespace UI.Game
 
         // TODO: Turn this into a struct, null comparison can be made on UnitInfo.Unit...
         [Serializable]
-        internal class UnitInfo
+        public class UnitInfo
         {
             [SerializeField] private Sprite render;
             [SerializeField] private Color color;
@@ -230,7 +230,7 @@ namespace UI.Game
             internal Sprite Render => render;
             internal Color Color => color;
             
-            internal IUnit Unit { get; private set; }
+            public IUnit Unit { get; private set; }
 
 
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;

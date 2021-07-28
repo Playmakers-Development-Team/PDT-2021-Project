@@ -2034,6 +2034,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5753839982009922168, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
   m_PrefabInstance: {fileID: 1365152563}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &836008385 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 472586226157666841, guid: d15c34fc6c5ce9149bec842cd8b91a0f, type: 3}
+  m_PrefabInstance: {fileID: 6342436831976462502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &836008386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836008385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349ad355ae3306f4698b3cb7f7989570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &964141774 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4115682043588143929, guid: 42008766ea77711408b835b723985971, type: 3}
@@ -2130,6 +2147,10 @@ PrefabInstance:
     - target: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_Name
       value: Enemy (TESTING)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: data.name
+      value: EnemyA
       objectReference: {fileID: 0}
     - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
