@@ -1,50 +1,16 @@
 using Abilities;
-using Commands;
-using Managers;
-using Turn;
-using Turn.Commands;
 using Units;
 using Units.Commands;
-using Units.Enemies;
-using Units.Players;
 using UnityEngine;
 
 namespace AI
 {
-    public class EnemyMeleeAi : MonoBehaviour
+    public class EnemyMeleeAi : EnemyAi
     {
-        private EnemyUnit enemyUnit;
-        
-        private PlayerManager playerManager;
-        private CommandManager commandManager;
-        private TurnManager turnManager;
-        private EnemyManager enemyManager;
-
         [SerializeField] private Ability meleeAttackAbility;
         [SerializeField] private Ability buffAbility;
 
-        [SerializeField] private float actionDelay = 1.5f;
-        [SerializeField] private int specialMoveCount = 3;
-        
-        private void Awake()
-        {
-            enemyUnit = GetComponent<EnemyUnit>();
-            
-            playerManager = ManagerLocator.Get<PlayerManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
-            turnManager = ManagerLocator.Get<TurnManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
-            
-            commandManager.ListenCommand<StartTurnCommand>(StartTurn);
-        }
-        
-        private void StartTurn(StartTurnCommand startTurnCommand)
-        {
-            if(ReferenceEquals(startTurnCommand.Unit, enemyUnit))
-                DecideEnemyIntention();
-        }
-        
-        private async void DecideEnemyIntention()
+        protected override async void DecideEnemyIntention()
         {
             if (playerManager.PlayerUnits.Count <= 0)
             {
@@ -52,7 +18,7 @@ namespace AI
                 return;
             }
             
-            if (turnManager.RoundCount % specialMoveCount == 0)
+            if (turnManager.RoundCount % SpecialMoveCount == 0)
             {
                 await enemyManager.MoveToDistantTile(enemyUnit);
                 
