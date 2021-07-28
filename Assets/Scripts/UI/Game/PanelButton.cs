@@ -87,6 +87,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerEnter = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
         pointerEnter.callback.AddListener(info =>
         {
+            if (clicked)
+                return;
+            
             backgroundImage.sprite = backgroundLight;
             
             borderImage.sprite = borderDark;
@@ -99,6 +102,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerExit = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
         pointerExit.callback.AddListener(info =>
         {
+            if (clicked)
+                return;
+            
             backgroundImage.sprite = backgroundLight;
             
             animator.SetTrigger(borderFadeId);
@@ -108,16 +114,25 @@ public class PanelButton : DialogueComponent<GameDialogue>
         trigger.triggers.Add(pointerExit);
 
         EventTrigger.Entry pointerClick = new EventTrigger.Entry {eventID = EventTriggerType.PointerClick};
-        pointerClick.callback.AddListener(info => {});
+        pointerClick.callback.AddListener(info =>
+        {
+            if (!clicked)
+                Selected();
+            else
+            {
+                Deselected();
+            }
+        });
         trigger.triggers.Add(pointerClick);
         
-        EventTrigger.Entry select = new EventTrigger.Entry {eventID = EventTriggerType.Deselect};
-        select.callback.AddListener(info => {});
-        trigger.triggers.Add(select);
-
-        EventTrigger.Entry deselect = new EventTrigger.Entry {eventID = EventTriggerType.Deselect};
-        deselect.callback.AddListener(info => {});
-        trigger.triggers.Add(deselect);
+        EventTrigger.Entry pointerDown = new EventTrigger.Entry {eventID = EventTriggerType.PointerDown};
+        pointerDown.callback.AddListener(info =>
+        {
+            backgroundImage.sprite = backgroundDark;
+            borderImage.sprite = borderLight;
+            labelText.font = lightFont;
+        });
+        trigger.triggers.Add(pointerDown);
     }
 
     #endregion
@@ -125,27 +140,22 @@ public class PanelButton : DialogueComponent<GameDialogue>
     
     #region Listeners
 
-    private void OnButtonSelected() => TryDeselect();
-
-    private void OnTurnStarted(GameDialogue.TurnInfo info) => TryDeselect();
-    
-    private void OnPressed()
+    private void OnButtonSelected()
     {
         if (!clicked)
-            Selected();
-        else
-            TryDeselect();
-    }
-
-    private void OnHover()
-    {
+            return;
         
+        Deselected();
+        animator.SetTrigger(borderFadeId);
     }
 
-    private void TryDeselect()
+    private void OnTurnStarted(GameDialogue.TurnInfo info)
     {
-        if (clicked)
-            Deselected();
+        if (!clicked)
+            return;
+        
+        Deselected();
+        animator.SetTrigger(borderFadeId);
     }
 
     private void Selected()
@@ -154,7 +164,6 @@ public class PanelButton : DialogueComponent<GameDialogue>
         
         clicked = true;
         EventSystem.current.SetSelectedGameObject(gameObject);
-        labelText.font = lightFont;
         
         OnSelected();
     }
@@ -163,6 +172,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
     {
         clicked = false;
         EventSystem.current.SetSelectedGameObject(null);
+        
+        backgroundImage.sprite = backgroundLight;
+        borderImage.sprite = borderDark;
         labelText.font = darkFont;
         
         OnDeselected();
@@ -172,10 +184,6 @@ public class PanelButton : DialogueComponent<GameDialogue>
 
     
     #region PanelButton
-
-    private void HoverVisuals() {}
-    
-    private void DefaultVisuals() {}
 
     protected virtual void OnSelected() {}
 
