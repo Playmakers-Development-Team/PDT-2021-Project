@@ -82,14 +82,40 @@ namespace Units.Enemies
                     enemyUnits.RemoveAt(i);
             }
         }
+
+        private async Task Spawner(EnemySpawnerUnit spawnUnit)
+        {
+            // Get spawner stats
+            int curHealth = spawnUnit.HealthStat.Value;
+            int curSpeed = spawnUnit.SpeedStat.Value;
+            Vector2Int unitPosition = spawnUnit.unitPosition;
+
+            // Kill spawner
+            spawnUnit.TakeDamage(spawnUnit.HealthStat.Value + spawnUnit.DefenceStat.Value + 20);
+            await commandManager.WaitForCommand<KilledUnitCommand>();
+
+            // Spawn unit
+            GameObject spawnPrefab = spawnUnit.spawnPrefab;
+            spawnPrefab.GetComponent<EnemyUnit>().HealthStat.BaseValue = 5;
+            EnemyUnit enemyUnit = (EnemyUnit)Spawn(spawnPrefab, unitPosition);
+            await commandManager.WaitForCommand<SpawnedUnitCommand>(); //IMPORTANT
+            
+            // Apply spawner stats
+            enemyUnit.SetSpeed(curSpeed);
+            enemyUnit.TakeDamage(5);            
+        }
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 
         public async void DecideEnemyIntention(EnemyUnit enemyUnit)
         {
             IUnit adjacentPlayerUnit = (IUnit) FindAdjacentPlayer(enemyUnit);
-
-            if (adjacentPlayerUnit != null)
+            if(enemyUnit is EnemySpawnerUnit enemySpawnerUnit)
+            {
+                if (enemySpawnerUnit.Turn()) 
+                    await Spawner(enemySpawnerUnit);
+            }
+            else if (adjacentPlayerUnit != null)
             {
                 await AttackUnit(enemyUnit, adjacentPlayerUnit);
             }
