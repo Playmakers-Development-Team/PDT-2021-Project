@@ -7908,6 +7908,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TurnController
       objectReference: {fileID: 0}
+    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: isTimelineRandomised
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922168, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -8099,11 +8103,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.61168545
+      value: 0.7517388
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.0558428
+      value: 0.6258694
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: 368ec104affa4fe40b944cfa5cd513a2, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8700,6 +8704,10 @@ PrefabInstance:
     - target: {fileID: 3370911690624665845, guid: 393e0d89e56b59f458bd025c36ccc547, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4114164011016743723, guid: 393e0d89e56b59f458bd025c36ccc547, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 225.03296
       objectReference: {fileID: 0}
     - target: {fileID: 4674566750165157467, guid: 393e0d89e56b59f458bd025c36ccc547, type: 3}
       propertyPath: m_AnchorMax.x
