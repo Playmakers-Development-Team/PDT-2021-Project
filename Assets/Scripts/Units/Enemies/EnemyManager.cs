@@ -86,7 +86,7 @@ namespace Units.Enemies
         private async Task Spawner(EnemySpawnerUnit spawnUnit)
         {
             // Get spawner stats
-            int curHealth = spawnUnit.HealthStat.Value;
+            int damage = spawnUnit.HealthStat.BaseValue - spawnUnit.HealthStat.Value;
             int curSpeed = spawnUnit.SpeedStat.Value;
             Vector2Int unitPosition = spawnUnit.unitPosition;
 
@@ -102,7 +102,7 @@ namespace Units.Enemies
             
             // Apply spawner stats
             enemyUnit.SetSpeed(curSpeed);
-            enemyUnit.TakeDamage(5);            
+            enemyUnit.TakeDamage(damage);            
         }
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
