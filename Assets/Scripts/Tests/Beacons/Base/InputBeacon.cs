@@ -4,6 +4,7 @@ using E7.Minefield;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 using Utilities;
 
 namespace Tests.Beacons.Base
@@ -16,6 +17,22 @@ namespace Tests.Beacons.Base
 
         private Mouse Mouse => mouse ??= InputSystem.AddDevice<Mouse>();
         private Keyboard Keyboard => keyboard ??= InputSystem.AddDevice<Keyboard>();
+
+        public void PrepareVirtualDevices()
+        {
+            var preExistingDevices = InputSystem.devices.ToArray();
+            
+            mouse = Mouse;
+            keyboard = Keyboard;
+            
+            Mouse.MakeCurrent();
+            Keyboard.MakeCurrent();
+            
+            foreach (var inputDevice in preExistingDevices)
+            {
+                InputSystem.RemoveDevice(inputDevice);
+            }
+        }
 
         public IEnumerator PressKey(Func<Keyboard, KeyControl> func)
         {
@@ -30,35 +47,33 @@ namespace Tests.Beacons.Base
         }
 
         public IEnumerator ClickLeft<T>(T label, bool ignoreError = false) where T : Enum =>
-            ClickButton(label, Mouse.leftButton, ignoreError);
+            ClickButton(label, MouseButton.Left, ignoreError);
         
         public IEnumerator ClickRight<T>(T label, bool ignoreError = false) where T : Enum =>
-            ClickButton(label, Mouse.rightButton, ignoreError);
+            ClickButton(label, MouseButton.Right, ignoreError);
         
-        private IEnumerator ClickButton<T>(T label, ButtonControl buttonControl, bool ignoreError = false) where T : Enum
+        private IEnumerator ClickButton<T>(T label, MouseButton mouseButton, bool ignoreError = false) where T : Enum
         {
             if (Beacon.FindActive(label, out ILabelBeacon foundBeacon) && foundBeacon is ScreenBeacon<T> screenBeacon)
             {
-                inputTestFixture.Move(Mouse.position, screenBeacon.ScreenClickPosition);
-                TestHack.mouseMove = true;
+                var pressState = new MouseState
+                {
+                    position = screenBeacon.ScreenClickPosition
+                };
+                pressState.WithButton(mouseButton, true);
+
+                var releaseState = new MouseState
+                {
+                    position = screenBeacon.ScreenClickPosition
+                };
+                releaseState.WithButton(mouseButton, false);
+
+                InputSystem.QueueStateEvent(Mouse, pressState);
+                // Make sure to wait one frame so that Monobehaviour.Update() can listen to the change
                 yield return null;
-                TestHack.mouseMove = false;
-                
-                if (buttonControl == Mouse.rightButton)
-                    TestHack.rightClick = true;
-                if (buttonControl == Mouse.leftButton)
-                    TestHack.leftClick = true;
-                
-                inputTestFixture.PressAndRelease(buttonControl);
-                yield return null;
-                
-                if (buttonControl == Mouse.rightButton)
-                    TestHack.rightClick = false;
-                if (buttonControl == Mouse.leftButton)
-                    TestHack.leftClick = false;
+                InputSystem.QueueStateEvent(Mouse, releaseState);
                 // We need this to wait a frame, so we don't do stuff before it has time to process click
                 yield return null;
-                
             }
             else
             {
@@ -72,16 +87,16 @@ namespace Tests.Beacons.Base
         public IEnumerator ClickLeftWhen<T>(T label, BeaconConstraint bc, 
                                              bool ignoreError = false) where T : Enum
         {
-            yield return ClickButtonWhen(label, bc, Mouse.leftButton, ignoreError);
+            yield return ClickButtonWhen(label, bc, MouseButton.Left, ignoreError);
         }
         
         public IEnumerator ClickRightWhen<T>(T label, BeaconConstraint bc, 
                                               bool ignoreError = false) where T : Enum
         {
-            yield return ClickButtonWhen(label, bc, Mouse.rightButton, ignoreError);
+            yield return ClickButtonWhen(label, bc, MouseButton.Right, ignoreError);
         }
         
-        private IEnumerator ClickButtonWhen<T>(T label, BeaconConstraint bc, ButtonControl buttonControl, 
+        private IEnumerator ClickButtonWhen<T>(T label, BeaconConstraint bc, MouseButton buttonControl, 
                                                bool ignoreError = false) where T : Enum
         {
             yield return Beacon.WaitUntil(label, bc);

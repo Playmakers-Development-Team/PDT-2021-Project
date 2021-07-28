@@ -18,13 +18,13 @@ namespace UI.Game
         
         private void Update()
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame || TestHack.rightClick)
+            if (Mouse.current.rightButton.isPressed)
                 dialogue.abilityConfirmed.Invoke();
 
-            if (Keyboard.current.escapeKey.wasPressedThisFrame)
+            if (Keyboard.current.escapeKey.isPressed)
                 dialogue.unitDeselected.Invoke();
 
-            if (turnManager.ActingPlayerUnit != null &&  (Mouse.current.wasUpdatedThisFrame || TestHack.mouseMove) && Camera.main)
+            if (turnManager.ActingPlayerUnit != null &&  (Mouse.current.wasUpdatedThisFrame) && Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
                 Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);
