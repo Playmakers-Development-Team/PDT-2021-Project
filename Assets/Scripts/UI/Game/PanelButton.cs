@@ -1,4 +1,4 @@
-using Abilities;
+using System;
 using TMPro;
 using UI.Core;
 using UI.Game;
@@ -8,17 +8,63 @@ using UnityEngine.UI;
 
 public class PanelButton : DialogueComponent<GameDialogue>
 {
-    [SerializeField] protected Button button;
+    [SerializeField] protected EventTrigger trigger;
+    [SerializeField] protected Animator animator;
     [SerializeField] protected TextMeshProUGUI labelText;
+    
+    [SerializeField] protected Image backgroundImage;
+    [SerializeField] protected Image borderImage;
+
+    [Header("Sprites")]
+    
+    [SerializeField] protected Sprite backgroundLight;
+    [SerializeField] protected Sprite backgroundDark;
+    
+    [SerializeField] protected Sprite borderLight;
+    [SerializeField] protected Sprite borderDark;
         
     [Header("Fonts")]
         
-    [SerializeField] private TMP_FontAsset defaultFont;
-    [SerializeField] private TMP_FontAsset selectedFont;
+    [SerializeField] private TMP_FontAsset lightFont;
+    [SerializeField] private TMP_FontAsset darkFont;
+    
+    [SerializeField, Range(0f, 1f)] private float fill;
     
     private bool clicked;
-
+    private bool animating;
     
+    private static readonly int borderFillId = Animator.StringToHash("Fill");
+    private static readonly int borderFadeId = Animator.StringToHash("Fade");
+    private static readonly int fillId = Shader.PropertyToID("_Fill");
+    
+
+    private void LateUpdate()
+    {
+        if (!animating)
+            return;
+
+        borderImage.material.SetFloat(fillId, fill);
+    }
+    
+
+    public void AnimationStarted()
+    {
+        animating = true;
+    }
+    
+    public void FillComplete()
+    {
+        animating = false;
+        borderImage.material.SetFloat(fillId, 1.0f);
+    }
+
+    public void FadeComplete()
+    {
+        animating = false;
+        borderImage.material.SetFloat(fillId, 0.0f);
+    }
+
+
     #region DialogueComponent
 
     protected override void Subscribe()
@@ -33,7 +79,46 @@ public class PanelButton : DialogueComponent<GameDialogue>
         dialogue.turnStarted.RemoveListener(OnTurnStarted);
     }
 
-    protected override void OnComponentAwake() => button.onClick.AddListener(OnClick);
+    protected override void OnComponentAwake()
+    {
+        backgroundImage.material = Instantiate(backgroundImage.material);
+        borderImage.material = Instantiate(borderImage.material);
+        
+        EventTrigger.Entry pointerEnter = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
+        pointerEnter.callback.AddListener(info =>
+        {
+            backgroundImage.sprite = backgroundLight;
+            
+            borderImage.sprite = borderDark;
+            animator.SetTrigger(borderFillId);
+            
+            labelText.font = darkFont;
+        });
+        trigger.triggers.Add(pointerEnter);
+
+        EventTrigger.Entry pointerExit = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
+        pointerExit.callback.AddListener(info =>
+        {
+            backgroundImage.sprite = backgroundLight;
+            
+            animator.SetTrigger(borderFadeId);
+
+            labelText.font = darkFont;
+        });
+        trigger.triggers.Add(pointerExit);
+
+        EventTrigger.Entry pointerClick = new EventTrigger.Entry {eventID = EventTriggerType.PointerClick};
+        pointerClick.callback.AddListener(info => {});
+        trigger.triggers.Add(pointerClick);
+        
+        EventTrigger.Entry select = new EventTrigger.Entry {eventID = EventTriggerType.Deselect};
+        select.callback.AddListener(info => {});
+        trigger.triggers.Add(select);
+
+        EventTrigger.Entry deselect = new EventTrigger.Entry {eventID = EventTriggerType.Deselect};
+        deselect.callback.AddListener(info => {});
+        trigger.triggers.Add(deselect);
+    }
 
     #endregion
     
@@ -44,12 +129,17 @@ public class PanelButton : DialogueComponent<GameDialogue>
 
     private void OnTurnStarted(GameDialogue.TurnInfo info) => TryDeselect();
     
-    private void OnClick()
+    private void OnPressed()
     {
         if (!clicked)
             Selected();
         else
             TryDeselect();
+    }
+
+    private void OnHover()
+    {
+        
     }
 
     private void TryDeselect()
@@ -63,8 +153,8 @@ public class PanelButton : DialogueComponent<GameDialogue>
         dialogue.buttonSelected.Invoke();
         
         clicked = true;
-        EventSystem.current.SetSelectedGameObject(button.gameObject);
-        labelText.font = selectedFont;
+        EventSystem.current.SetSelectedGameObject(gameObject);
+        labelText.font = lightFont;
         
         OnSelected();
     }
@@ -73,7 +163,7 @@ public class PanelButton : DialogueComponent<GameDialogue>
     {
         clicked = false;
         EventSystem.current.SetSelectedGameObject(null);
-        labelText.font = defaultFont;
+        labelText.font = darkFont;
         
         OnDeselected();
     }
@@ -82,6 +172,10 @@ public class PanelButton : DialogueComponent<GameDialogue>
 
     
     #region PanelButton
+
+    private void HoverVisuals() {}
+    
+    private void DefaultVisuals() {}
 
     protected virtual void OnSelected() {}
 
