@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using E7.Minefield;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,23 +15,44 @@ namespace Tests.Beacons.Base
         private readonly InputTestFixture inputTestFixture = new InputTestFixture();
         private Mouse mouse;
         private Keyboard keyboard;
+        private InputDevice[] preExistingDevices;
 
         private Mouse Mouse => mouse ??= InputSystem.AddDevice<Mouse>();
         private Keyboard Keyboard => keyboard ??= InputSystem.AddDevice<Keyboard>();
 
         public void PrepareVirtualDevices()
         {
-            var preExistingDevices = InputSystem.devices.ToArray();
+            preExistingDevices = InputSystem.devices.ToArray();
             
             mouse = Mouse;
             keyboard = Keyboard;
             
+            // We don't want the .current to be null, Monobehaviour.Update methods listening to it might break.
             Mouse.MakeCurrent();
             Keyboard.MakeCurrent();
             
             foreach (var inputDevice in preExistingDevices)
-            {
                 InputSystem.RemoveDevice(inputDevice);
+        }
+
+        public void RestoreRegularDevices()
+        {
+            foreach (InputDevice inputDevice in preExistingDevices)
+                InputSystem.AddDevice(inputDevice);
+            
+            // Very important that we remove the virtual devices, so that we don't accidentally remove them
+            // again when we set up.
+
+            if (mouse != null)
+            {
+                InputSystem.RemoveDevice(mouse);
+                mouse = null;
+            }
+
+            if (keyboard != null)
+            {
+                InputSystem.RemoveDevice(keyboard);
+                keyboard = null;
             }
         }
 
