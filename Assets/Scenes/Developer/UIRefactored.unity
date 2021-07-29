@@ -8795,8 +8795,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5051146189784817613, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
-      propertyPath: m_AnchoredPosition.x
+    - target: {fileID: 868424619134143759, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 868424619134143759, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2087450197805125250, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6487709696776052042, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
@@ -8843,17 +8851,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6560663352091503436, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7312701980012198095, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
       propertyPath: m_Name
       value: Game Dialogue (Second Iteration)
       objectReference: {fileID: 0}
-    - target: {fileID: 7604764965974880629, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
+    - target: {fileID: 8142333982293233839, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8142333982293233839, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8ff1d573030f7548b99bb926911b717, type: 3}

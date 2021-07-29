@@ -15,7 +15,8 @@ namespace UI.Game.UnitPanels
         [SerializeField] protected RawImage renderImage;
 
         [SerializeField] protected Image healthImage;
-        [SerializeField] protected TextMeshProUGUI healthText;
+        [SerializeField] protected TextMeshProUGUI currentHealthText;
+        [SerializeField] protected TextMeshProUGUI baseHealthText;
         
         [SerializeField] protected ValueStatCard attackCard;
         [SerializeField] protected ValueStatCard defenceCard;
@@ -36,6 +37,18 @@ namespace UI.Game.UnitPanels
         
         protected GameDialogue.UnitInfo unitInfo;
         
+        private static readonly int fillId = Shader.PropertyToID("Fill");
+
+
+        #region DialogueComponent
+
+        protected override void OnComponentAwake()
+        {
+            healthImage.material = Instantiate(healthImage.material);
+        }
+
+        #endregion
+        
 
         #region Drawing
         
@@ -50,8 +63,9 @@ namespace UI.Game.UnitPanels
             renderImage.color = unitInfo.Color;
             
             // Health bar
-            healthImage.fillAmount = unitInfo.Unit.HealthStat.Value / (float) unitInfo.Unit.HealthStat.BaseValue;
-            healthText.text = unitInfo.Unit.HealthStat.Value + "/" + unitInfo.Unit.HealthStat.BaseValue;
+            healthImage.material.SetFloat(fillId, unitInfo.Unit.HealthStat.Value / (float) unitInfo.Unit.HealthStat.BaseValue);
+            currentHealthText.text = unitInfo.Unit.HealthStat.Value.ToString();
+            baseHealthText.text = unitInfo.Unit.HealthStat.BaseValue.ToString();
             
             // Stat cards
             attackCard.Apply(unitInfo.Unit.AttackStat.Value);
