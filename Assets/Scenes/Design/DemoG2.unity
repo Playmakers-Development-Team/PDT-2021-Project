@@ -235,6 +235,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: specialMoveCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -360,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2062,7 +2066,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8085,7 +8089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8216,7 +8220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5473781427429180235, guid: a2c31554a82329849b0b0fd66a8afbab, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5473781427429180235, guid: a2c31554a82329849b0b0fd66a8afbab, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8692,6 +8696,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: specialMoveCount
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -8764,7 +8772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6645545424259333540, guid: 8a3fab5549b2e3541af6e451fe3885ad, type: 3}
       propertyPath: m_LocalPosition.x
