@@ -155,6 +155,22 @@ namespace Grid
             return new List<T>();
         }
 
+        public List<Vector2> GetEmptyTiles()
+        {
+            List<Vector2> empty = new List<Vector2>();
+            for (int i = 0; i < LevelBoundsInt.xMax; i++)
+            {
+                for (int x = 0; x < LevelBoundsInt.yMax; x++)
+                {
+                    if (GetGridObjectsByCoordinate(new Vector2Int(i, x)).Count < 1)
+                    {
+                        empty.Add(new Vector2(i,x));
+                    }
+                }
+            }
+            return empty;
+        }
+
         // public bool HasPlayerUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is PlayerUnit);
         // public bool HasEnemyUnitAt(Vector2Int coords) => GetGridObjectsByCoordinate(coords).Any(o => o is EnemyUnit);
 

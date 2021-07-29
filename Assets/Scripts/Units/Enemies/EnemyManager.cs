@@ -13,6 +13,7 @@ using Units.Players;
 using Units.Stats;
 using UnityEngine;
 using Utilities;
+using Random = System.Random;
 
 namespace Units.Enemies
 {
@@ -82,6 +83,60 @@ namespace Units.Enemies
         }
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
+
+        public void SpawnSwarm(GameObject unit, int limit, int amount)
+        {
+            for (int z = 0; z < amount; z++)
+            {
+
+                List<Vector2> freeTiles = gridManager.GetEmptyTiles();
+                List<Vector2> playerCoord = playerManager.returnAllCoords();
+                Vector2 target = new Vector2();
+                while (freeTiles.Count > 0)
+                {
+                    int option = UnityEngine.Random.Range(0, freeTiles.Count - 1);
+                    for (int x = 0; x < playerCoord.Count; x++)
+                    {
+                        if (Mathf.Abs(playerCoord[x].x - freeTiles[option].x) > limit + 1 ||
+                            Mathf.Abs(playerCoord[x].y - freeTiles[option].y) > limit + 1)
+                        {
+                            target = freeTiles[option];
+                        }
+                        else
+                        {
+                            target = new Vector2();
+                            break;
+                        }
+                    }
+
+                    if (target != new Vector2())
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        freeTiles.RemoveAt(option);
+                    }
+                }
+
+                while (target == new Vector2())
+                {
+                    Vector2Int tal = gridManager.GetRandomUnoccupiedCoordinates();
+                    for (int x = 0; x < playerCoord.Count; x++)
+                    {
+                        if (Mathf.Abs(playerCoord[x].x - tal.x) < 3 ||
+                            Mathf.Abs(playerCoord[x].y - tal.y) < 3)
+                        {
+                            target = tal;
+                            break;
+                        }
+                    }
+                }
+
+                Spawn(unit, new Vector2Int((int) target.x, (int) target.y));
+                z++;
+            }
+        }
 
         #region ENEMY ACTIONS
         

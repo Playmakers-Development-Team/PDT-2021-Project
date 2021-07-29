@@ -60,6 +60,17 @@ namespace Units.Players
             return newUnit;
         }
 
+        public List<Vector2> returnAllCoords()
+        {
+            List<Vector2> coords = new List<Vector2>();
+            for (int i = 0; i < playerUnits.Count; i++)
+            {
+                coords.Add(new Vector2(playerUnits[i].Coordinate.x,playerUnits[i].Coordinate.y));
+            }
+
+            return coords;
+        }
+
         /// <summary>
         /// Adds an already existing unit to the <c>playerUnits</c> list. Currently used by units
         /// that have been added to the scene in the editor.
