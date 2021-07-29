@@ -98,8 +98,7 @@ namespace Units
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
 
         private const int maxTenetStatusEffectCount = 2;
-        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
-            new LinkedList<TenetStatus>();
+        private LinkedList<TenetStatus> tenetStatusEffectSlots = new LinkedList<TenetStatus>();
 
         private AnimationStates unitAnimationState;
         
@@ -111,11 +110,10 @@ namespace Units
         private static readonly int frontAnimationParameter = Animator.StringToHash("front");
         private static readonly int attackAnimationParameter = Animator.StringToHash("attack");
 
-        private void Awake() => spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
+            
             #region GetManagers
 
             playerManager = ManagerLocator.Get<PlayerManager>();
@@ -123,6 +121,13 @@ namespace Units
             
             #endregion
             
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+        
+        protected override void Start()
+        {
+            base.Start();
+
             HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
@@ -130,6 +135,7 @@ namespace Units
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
+            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
             
             UnitAnimator = GetComponentInChildren<Animator>();
             
@@ -168,7 +174,11 @@ namespace Units
         public void TakeDefence(int amount) => DefenceStat.Value += amount;
         
         public void TakeAttack(int amount) => AttackStat.Value += amount;
-        
+
+        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
+
+        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+
         public void TakeDamage(int amount)
         {
             if (amount <= 0)
@@ -198,6 +208,7 @@ namespace Units
         public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
+        public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
         [Obsolete("Directly alter MovementPoints Value instead")]
         public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
@@ -216,7 +227,10 @@ namespace Units
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
             {
-                foundNode.Value += status;
+                TenetStatus newStatus = foundNode.Value + status;
+                // Remember make the added tenet the latest and last tenet in the list
+                tenetStatusEffectSlots.Remove(foundNode);
+                tenetStatusEffectSlots.AddLast(newStatus);
             }
             else
             {

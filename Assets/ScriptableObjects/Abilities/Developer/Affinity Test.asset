@@ -12,19 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Affinity Test
   m_EditorClassIdentifier: 
-  description: 'User Gain 3 Affinity with Affinity
+  description: 'User Gain 3 Humility with Affinity
 
 '
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 0
   targetEffects:
-  - name: Provide 2 Humility WITH Affinity
+  - name: Provide 3 Humility WITH Affinity
+    effectOrder: 0
     damageValue: 0
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 1
-      stackCount: 2
+      stackCount: 3
     bonuses: []
     costs: []
     keywords:

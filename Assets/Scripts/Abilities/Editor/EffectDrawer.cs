@@ -18,8 +18,13 @@ namespace Abilities.Editor
             if (EditorGUI.EndChangeCheck())
             {
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
+                SerializedProperty directDamageProperty = property.FindPropertyRelative("directDamage");
                 SerializedProperty attackProperty = property.FindPropertyRelative("attackValue");
                 SerializedProperty defenceProperty = property.FindPropertyRelative("defenceValue");
+                SerializedProperty attackForEncounterProperty =
+                    property.FindPropertyRelative("attackForEncounter");
+                SerializedProperty defenceForEncounterProperty =
+                    property.FindPropertyRelative("defenceForEncounter");
                 SerializedProperty provideProperty = property.FindPropertyRelative("providingTenet");
                 SerializedProperty provideTenetTypeProperty = provideProperty.FindPropertyRelative("tenetType");
                 SerializedProperty provideCountProperty = provideProperty.FindPropertyRelative("stackCount");
@@ -31,11 +36,13 @@ namespace Abilities.Editor
                 
                 List<string> valueNameList = new List<string>();
                 nameProperty.stringValue = string.Empty;
-                
-                bool hasValues = damageProperty.intValue != 0 
-                                    || defenceProperty.intValue != 0
-                                    || attackProperty.intValue != 0 
-                                    || provideCountProperty.intValue != 0;
+
+                bool hasValues = damageProperty.intValue != 0
+                                 || defenceProperty.intValue != 0
+                                 || attackProperty.intValue != 0
+                                 || provideCountProperty.intValue != 0
+                                 || attackForEncounterProperty.intValue != 0
+                                 || defenceForEncounterProperty.intValue != 0;
                 
                 if (costsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
                     nameProperty.stringValue += "Default, ";
@@ -43,11 +50,19 @@ namespace Abilities.Editor
                     // Damage and defence
                 if (hasValues)
                 {
+                    string directDamageString = directDamageProperty.boolValue ? " Directly" : string.Empty;
+                    
                     if (damageProperty.intValue != 0)
-                        valueNameList.Add($"{damageProperty.intValue} Damage");
+                        valueNameList.Add($"{damageProperty.intValue} Damage{directDamageString}");
                     
                     if (attackProperty.intValue != 0)
                         valueNameList.Add($"{attackProperty.intValue} Attack");
+                    
+                    if (attackForEncounterProperty.intValue != 0)
+                        valueNameList.Add($"{attackForEncounterProperty.intValue} Attack for the encounter");
+                    
+                    if (defenceForEncounterProperty.intValue != 0)
+                        valueNameList.Add($"{defenceForEncounterProperty.intValue} Defence for the encounter");
                     
                     if (defenceProperty.intValue != 0)
                         valueNameList.Add($"{defenceProperty.intValue} Defence");

@@ -69,7 +69,7 @@ namespace Grid
             if (tileDatas.TryGetValue(coordinate, out TileData tileData))
                 return tileData;
 
-            Debug.Log("No tile found at coordinates " + coordinate);
+            //Debug.Log("No tile found at coordinates " + coordinate);
             return null;
         }
 
@@ -79,7 +79,7 @@ namespace Grid
 
             if (tileData is null)
             {
-                Debug.Log("No tile found at coordinates " + coordinate);
+                //Debug.Log("No tile found at coordinates " + coordinate);
                 return new List<GridObject>();
             }
 
