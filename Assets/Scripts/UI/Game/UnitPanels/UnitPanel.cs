@@ -37,7 +37,7 @@ namespace UI.Game.UnitPanels
         
         protected GameDialogue.UnitInfo unitInfo;
         
-        private static readonly int fillId = Shader.PropertyToID("Fill");
+        private static readonly int fillId = Shader.PropertyToID("_Fill");
 
 
         #region DialogueComponent
