@@ -6,6 +6,10 @@ namespace Abilities
     public interface IAbilityUser : ITenetBearer
     {
         public Vector2Int Coordinate { get; }
+        
+        public string Name { get; }
+
+        void AddSpeed(int amount);
 
         void TakeAttack(int amount);
         
@@ -16,7 +20,11 @@ namespace Abilities
         void TakeKnockback(int amount);
 
         void TakeDefence(int amount);
-        
+
+        void TakeAttackForEncounter(int amount);
+
+        void TakeDefenceForEncounter(int amount);
+
         bool IsSameTeamWith(IAbilityUser other);
     }
 }
