@@ -20,13 +20,6 @@ namespace Units.Stats
             int initialDamageTaken = amount - unit.DefenceStat.Value;
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             
-            commandManager.ExecuteCommand(new StatChangedCommand(
-                unit,
-                StatTypes.Health,
-                Value,
-                Value - calculatedDamageTaken
-            ));
-            
             Value -= calculatedDamageTaken;
             CheckDeath();
             return calculatedDamageTaken;
@@ -34,13 +27,6 @@ namespace Units.Stats
         
         public int HealDamage(int amount)
         {
-            commandManager.ExecuteCommand(new StatChangedCommand(
-                unit,
-                StatTypes.Health,
-                Value,
-                Value + amount
-            ));
-            
             Value += amount;
             return amount;
         }

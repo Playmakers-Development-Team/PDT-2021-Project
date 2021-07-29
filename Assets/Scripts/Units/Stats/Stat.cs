@@ -19,7 +19,7 @@ namespace Units.Stats
                     unit,
                     StatType,
                     this.value,
-                    this.value + value
+                    value
                 ));
                 
                 this.value = value;
