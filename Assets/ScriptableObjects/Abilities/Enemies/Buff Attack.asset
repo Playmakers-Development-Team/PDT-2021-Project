@@ -19,12 +19,12 @@ MonoBehaviour:
   speed: 0
   targetEffects: []
   userEffects:
-  - name: Default, 1 Attack for the encounter
+  - name: Default, 1 Attack and 1 Attack for the encounter
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 0
+    attackValue: 1
     defenceForEncounter: 0
     attackForEncounter: 1
     providingTenet:
