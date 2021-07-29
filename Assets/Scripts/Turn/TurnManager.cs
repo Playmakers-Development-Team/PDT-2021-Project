@@ -194,9 +194,7 @@ namespace Turn
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
 
-            if (!(ActingEnemyUnit is null))
-                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            else
+            if (ActingEnemyUnit is null)
                 PhaseIndex = 0;
                 //enable button
 
