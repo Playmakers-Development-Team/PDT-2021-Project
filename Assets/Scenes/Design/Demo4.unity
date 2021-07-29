@@ -700,6 +700,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+--- !u!1 &388851860 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2383202020650920776, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+  m_PrefabInstance: {fileID: 388851859}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &502321648 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 234206475871496287, guid: df3fd9623c946a74e8488ca01a5540a7, type: 3}
@@ -2626,6 +2631,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+--- !u!1 &1035265703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+  m_PrefabInstance: {fileID: 1035265702}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1037755928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2790,6 +2800,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 22e2f22a35188fd49947a914a0e93100, type: 3}
+--- !u!1 &1227914892 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2383202020650920776, guid: 22e2f22a35188fd49947a914a0e93100, type: 3}
+  m_PrefabInstance: {fileID: 1227914891}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1269454750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8400,20 +8415,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[0]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 388851860}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1227914892}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[2]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1035265703}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[3]
       value: 
