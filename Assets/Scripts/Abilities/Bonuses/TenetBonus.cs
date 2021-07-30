@@ -23,6 +23,6 @@ namespace Abilities.Bonuses
         }
 
         public int CalculateBonusMultiplier(IAbilityUser user) =>
-            tenetConstraint.Satisfies(user, tenetType) ? user.TenetStatusEffectsContainer.GetTenetStatusCount(tenetType) : 0;
+            tenetConstraint.Satisfies(user, tenetType) ? user.GetTenetStatusCount(tenetType) : 0;
     }
 }

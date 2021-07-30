@@ -562,21 +562,21 @@ namespace Playtest
                 string tenet1 = "";
                 string tenet2 = "";
 
-                if (unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray().Length > 1)
+                if (unit.TenetStatuses.AsEnumerable().ToArray().Length > 1)
                 {
                     // TODO: Repeated code. Turn into a function.
-                    tenet1 = unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
-                        + unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
+                    tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
 
                     // TODO: Repeated code. Turn into a function.
-                    tenet2 = unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
-                        + unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
+                    tenet2 = unit.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
                 }
-                else if (unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray().Length == 1)
+                else if (unit.TenetStatuses.AsEnumerable().ToArray().Length == 1)
                 {
                     // TODO: Repeated code. Turn into a function.
-                    tenet1 = unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
-                        + unit.TenetStatusEffectsContainer.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
+                    tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
                 }
 
                 // TODO: Repeated code. See Playtest.EndGame and Playtest.InitialiseStats

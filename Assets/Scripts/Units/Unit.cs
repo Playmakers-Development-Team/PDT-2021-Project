@@ -494,7 +494,48 @@ namespace Units
         }
 
         private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
+        
+        #region TenetStatusEffects
 
-        public TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
+        private TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
+
+        [Obsolete("Use TenetStatuses instead")]
+        public ICollection<TenetStatus> TenetStatusEffects =>
+            TenetStatusEffectsContainer.TenetStatusEffects;
+        
+        public ICollection<TenetStatus> TenetStatuses =>
+            TenetStatusEffectsContainer.TenetStatuses;
+
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1) =>
+            TenetStatusEffectsContainer.AddOrReplaceTenetStatus(tenetType, stackCount);
+
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue) =>
+            TenetStatusEffectsContainer.RemoveTenetStatus(tenetType, amount);
+
+        public void ClearAllTenetStatus() =>
+            TenetStatusEffectsContainer.ClearAllTenetStatus();
+        
+        [Obsolete("Use GetTenetStatusCount instead")]
+        public int GetTenetStatusEffectCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusEffectCount(tenetType);
+
+        public int GetTenetStatusCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusCount(tenetType);
+
+        [Obsolete("Use HasTenetStatus instead")]
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatusEffect(tenetType, minimumStackCount);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatus(tenetType, minimumStackCount);
+        
+        [Obsolete("Use TryGetTenetStatus instead")]
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
+
+        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatusEffect(tenetType, out tenetStatus);
+
+        #endregion
     }
 }

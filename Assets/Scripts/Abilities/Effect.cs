@@ -64,11 +64,11 @@ namespace Abilities
         /// </summary>
         public void ProvideTenet(IAbilityUser user)
         {
-            user.TenetStatusEffectsContainer.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
+            user.AddOrReplaceTenetStatus(providingTenet.TenetType, providingTenet.StackCount);
 
             foreach (Effect effect in AllKeywordEffects)
             {
-                user.TenetStatusEffectsContainer.AddOrReplaceTenetStatus(
+                user.AddOrReplaceTenetStatus(
                     effect.providingTenet.TenetType,
                     effect.providingTenet.StackCount
                 );

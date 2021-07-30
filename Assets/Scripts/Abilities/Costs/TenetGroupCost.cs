@@ -23,7 +23,7 @@ namespace Abilities.Costs
             
             if (tenetTarget == TenetTarget.All)
             {
-                allTypes.AddRange(GetMatchingTenets(user.TenetStatusEffectsContainer.TenetStatuses));
+                allTypes.AddRange(GetMatchingTenets(user.TenetStatuses));
             }
             else
             {
@@ -38,10 +38,10 @@ namespace Abilities.Costs
                 switch (tenetCostType)
                 {
                     case TenetCostType.Spend:
-                        user.TenetStatusEffectsContainer.RemoveTenetStatus(tenetType, count);
+                        user.RemoveTenetStatus(tenetType, count);
                         break;
                     case TenetCostType.Consume:
-                        user.TenetStatusEffectsContainer.RemoveTenetStatus(tenetType);
+                        user.RemoveTenetStatus(tenetType);
                         break;
                 }
             }
@@ -65,11 +65,11 @@ namespace Abilities.Costs
                 return false;
 
             return tenetFilter.IsTenetInMask(tenetType.Value)
-                   && user.TenetStatusEffectsContainer.GetTenetStatusCount(tenetType.Value) >= count;
+                   && user.GetTenetStatusCount(tenetType.Value) >= count;
         }
 
         private bool MatchAnyTenets(IAbilityUser user) => 
-            GetMatchingTenets(user.TenetStatusEffectsContainer.TenetStatuses).Count() >= count;
+            GetMatchingTenets(user.TenetStatuses).Count() >= count;
 
         private IEnumerable<TenetType> GetMatchingTenets(IEnumerable<TenetStatus> tenets) =>
             tenets

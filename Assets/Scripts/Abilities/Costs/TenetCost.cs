@@ -39,16 +39,16 @@ namespace Abilities.Costs
             switch (TenetCostType)
             {
                 case TenetCostType.Consume:
-                    unit.TenetStatusEffectsContainer.RemoveTenetStatus(TenetType);
+                    unit.RemoveTenetStatus(TenetType);
                     break;
                 case TenetCostType.Spend:
-                    unit.TenetStatusEffectsContainer.RemoveTenetStatus(TenetType, count);
+                    unit.RemoveTenetStatus(TenetType, count);
                     break;
             }
         }
         
         public bool MeetsRequirements(IAbilityUser user) => 
-            tenetConstraint.Satisfies(user, tenetType) && user.TenetStatusEffectsContainer.GetTenetStatusCount(tenetType) >= count;
+            tenetConstraint.Satisfies(user, tenetType) && user.GetTenetStatusCount(tenetType) >= count;
 
         public void OnBeforeSerialize()
         {

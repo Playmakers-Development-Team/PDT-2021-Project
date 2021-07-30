@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TenetStatuses
 {
-    public class TenetStatusEffectsContainer
+    public class TenetStatusEffectsContainer : ITenetBearer
     {
         private const int maxTenetStatusEffectCount = 2;
         private LinkedList<TenetStatus> tenetStatusEffectSlots =
