@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using System.Threading.Tasks;
 using Commands;
 using Managers;
 using UnityEngine;
@@ -31,7 +30,7 @@ namespace Tests.Utilities
 
         public void Rewatch() => StartWatching();
 
-        public void Assert(string failMessage = null)
+        public IEnumerator Assert(string failMessage = null)
         {
             if (!task.HasValue)
             {
@@ -42,6 +41,8 @@ namespace Tests.Utilities
             if (string.IsNullOrEmpty(failMessage))
                 failMessage = $"Expected {CommandsDescription}, but didn't get any!";
             
+            yield return UniTask.ToCoroutine(async () => await UniTask.Yield());
+            yield return UniTask.ToCoroutine(async () => await UniTask.Yield());
             NUnit.Framework.Assert.True(task.Value.GetAwaiter().IsCompleted, failMessage);
         }
 

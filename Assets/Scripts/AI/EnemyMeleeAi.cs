@@ -22,10 +22,12 @@ namespace AI
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;
             }
-            
-            if (specialMoveCount != 0 && (turnManager.RoundCount + specialMoveOffset) % specialMoveCount == 0)
+
+            if (specialMoveCount != 0 &&
+                (turnManager.RoundCount + specialMoveOffset) % specialMoveCount == 0)
             {
                 await enemyManager.MoveToDistantTile(enemyUnit);
+            }
             else
             {
                 IUnit adjacentPlayerUnit = (IUnit) enemyManager.FindAdjacentPlayer(enemyUnit);
@@ -38,14 +40,16 @@ namespace AI
                 else
                 {
                     await enemyManager.MoveUnitToTarget(enemyUnit);
-                
+
                     // If a player is now next to the enemy, attack the player
                     adjacentPlayerUnit = (IUnit) enemyManager.FindAdjacentPlayer(enemyUnit);
 
                     if (adjacentPlayerUnit != null)
-                        await enemyManager.DoUnitAbility(enemyUnit, meleeAttackAbility, adjacentPlayerUnit);
-                    else
-                        await enemyManager.DoUnitAbility(enemyUnit, buffAbility, Vector2Int.zero);
+                        await enemyManager.DoUnitAbility(enemyUnit, meleeAttackAbility,
+                            adjacentPlayerUnit);
+                    else if (buffAbility != null)
+                        await enemyManager.DoUnitAbility(enemyUnit, buffAbility,
+                            Vector2Int.zero);
                 }
             }
             

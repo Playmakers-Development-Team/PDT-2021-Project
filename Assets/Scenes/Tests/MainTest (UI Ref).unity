@@ -2153,6 +2153,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 768614113}
     m_Modifications:
     - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: buffAbility
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: specialMoveCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: meleeAttackAbility
+      value: 
+      objectReference: {fileID: 11400000, guid: 17f435995a7876c4fb1272ba67e012a8, type: 2}
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: <SpecialMoveCount>k__BackingField
       value: 99
       objectReference: {fileID: 0}

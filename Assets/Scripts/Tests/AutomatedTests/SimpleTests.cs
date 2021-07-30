@@ -24,7 +24,7 @@ namespace Tests.AutomatedTests
     {
         #region Basic Test Cases
 
-        public IEnumerator BasicSelections()
+        private IEnumerator BasicSelections()
         {
             var estelleSelectedWatch = CommandWatcher
                 .BeginWatching<UIUnitSelectedCommand>(cmd => cmd.Unit.HasBeacon(UnitBeacons.Estelle, Is.Active));
@@ -50,8 +50,8 @@ namespace Tests.AutomatedTests
             estelleSelectedWatch.Assert("Can't select Estelle from turn queue");
             enemySelectedWatch.Assert("Can't select Enemy from turn queue");
         }
-        
-        public IEnumerator MoveEstelle()
+
+        private IEnumerator MoveEstelle()
         {
             yield return Beacon.WaitUntil(UnitBeacons.Estelle, Any.ActingUnit);
             yield return InputBeacon.ClickLeft(UnitBeacons.Estelle);
@@ -116,13 +116,45 @@ namespace Tests.AutomatedTests
         }
         
         [UnityTest] 
-        [Timeout(2000)]
+        [Timeout(5000)]
         [Order(5)]
-        public IEnumerator KillingUnits()
+        public IEnumerator KillingEnemyUnits()
         {
             yield return PrepareAndActivateScene();
             yield return InputBeacon.ClickLeftWhen(UIBeacons.EndTurn, Is.Clickable);
             yield return TurnTester.WaitPlayerTurn();
+            yield return MoveEstelle();
+            
+            var enemyDeathWatcher = CommandWatcher
+                .BeginWatching<KilledUnitCommand>(cmd => cmd.Unit.HasBeacon(UnitBeacons.EnemyA, Is.Active));
+            
+            yield return InputBeacon.ClickLeftWhen(UIBeacons.AbilityB, Is.Clickable);
+            yield return new WaitForSecondsRealtime(0.2f);
+            yield return InputBeacon.ClickRight(UnitBeacons.EnemyA);
+
+            //yield return enemyDeathWatcher.Wait();
+            yield return enemyDeathWatcher.Assert("Failed");
+            
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
+        
+        [UnityTest] 
+        [Timeout(5000)]
+        [Order(5)]
+        public IEnumerator KillingPlayerUnits()
+        {
+            yield return PrepareAndActivateScene();
+            
+            var unitDeathWatcher = CommandWatcher
+                .BeginWatching<KilledUnitCommand>(cmd => cmd.Unit.HasBeacon(UnitBeacons.Estelle, Is.Active));
+            
+            yield return InputBeacon.ClickLeftWhen(UIBeacons.AbilityC, Is.Clickable);
+            yield return new WaitForSecondsRealtime(0.2f);
+            yield return InputBeacon.ClickRight(UnitBeacons.Estelle);
+
+            yield return unitDeathWatcher.Wait();
+            
+            yield return new WaitForSecondsRealtime(0.8f);
         }
 
         /// <summary>
@@ -151,7 +183,9 @@ namespace Tests.AutomatedTests
             Assert.Beacon(UnitBeacons.EnemyA, Any.UnitEqualsHealth(9));
             yield return CommandManager.WaitForCommandYield<StatChangedCommand>(cmd => 
                 cmd.Unit.HasBeacon(UnitBeacons.Estelle, Is.Active));
-            Assert.Beacon(UnitBeacons.Estelle, Any.UnitEqualsHealth(6));
+            Assert.Beacon(UnitBeacons.Estelle, Any.UnitEqualsHealth(9));
+            yield return CommandManager.WaitForCommandYield<StatChangedCommand>(cmd => 
+                cmd.Unit.HasBeacon(UnitBeacons.EnemyA, Is.Active));
             yield return new WaitForSecondsRealtime(1.0f);
         }
 
