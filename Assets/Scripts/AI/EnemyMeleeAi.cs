@@ -10,6 +10,11 @@ namespace AI
         [SerializeField] private Ability meleeAttackAbility;
         [SerializeField] private Ability buffAbility;
 
+        [SerializeField] private float actionDelay = 1.5f;
+        [SerializeField] private int specialMoveCount = 3;
+        [Tooltip("If set to 1, enemy will start retreating on the second round, if set to 0 on the first round")]
+        [SerializeField] private int specialMoveOffset = 1;
+        
         protected override async void DecideEnemyIntention()
         {
             if (playerManager.PlayerUnits.Count <= 0)
@@ -18,7 +23,8 @@ namespace AI
                 return;
             }
             
-            if (turnManager.RoundCount % SpecialMoveCount == 0)
+            if (specialMoveCount != 0 && (turnManager.RoundCount + specialMoveOffset) % specialMoveCount == 0)
+            {
                 await enemyManager.MoveToDistantTile(enemyUnit);
             else
             {

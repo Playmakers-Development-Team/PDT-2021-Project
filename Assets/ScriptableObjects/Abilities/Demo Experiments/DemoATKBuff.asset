@@ -10,26 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Buff Attack
+  m_Name: DemoATKBuff
   m_EditorClassIdentifier: 
-  description: An ability that raises an enemy's attack by 1 for the rest of the
-    encounter
-  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
-  excludeUserFromTargets: 0
+  description: 'Grant adjacent units 3 attack and 1 passion. '
+  shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
+  excludeUserFromTargets: 1
   speed: 0
-  targetEffects: []
-  userEffects:
-  - name: Default, 1 Attack and 1 Attack for the encounter
+  targetEffects:
+  - name: Default, 3 Attack and Provide 1 Passion
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 1
+    attackValue: 3
     defenceForEncounter: 0
-    attackForEncounter: 1
+    attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 2
+      stackCount: 1
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []

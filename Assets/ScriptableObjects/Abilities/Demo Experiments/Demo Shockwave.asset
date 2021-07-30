@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Buff Attack
+  m_Name: Demo Shockwave
   m_EditorClassIdentifier: 
-  description: An ability that raises an enemy's attack by 1 for the rest of the
-    encounter
-  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
-  excludeUserFromTargets: 0
+  description: 'Deals 2 damage
+
+    Deal 2 extra damage by spending Sorrow'
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  excludeUserFromTargets: 1
   speed: 0
-  targetEffects: []
-  userEffects:
-  - name: Default, 1 Attack and 1 Attack for the encounter
+  targetEffects:
+  - name: Default, 2 Damage
     effectOrder: 0
-    damageValue: 0
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
-    attackValue: 1
+    attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 1
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []
