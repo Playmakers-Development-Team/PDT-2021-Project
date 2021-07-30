@@ -439,7 +439,8 @@ namespace Playtest
             
             // TODO: Move ListenCommand calls to Awake. 
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
-            commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame(cmd.DidPlayerWin));
+            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EndGame(true));
+            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EndGame(false));
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
             
             commandManager.ListenCommand<MeditatedCommand>(cmd =>
