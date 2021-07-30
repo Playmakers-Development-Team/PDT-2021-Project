@@ -15,6 +15,7 @@ MonoBehaviour:
   description: "Deal 2 damage\nGain 2 Defence and 1 Pride\n\u21AF User may Spend
     Passion to deal 3 extra damage"
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  speed: 50
   targetEffects:
   - name: Default, 2 Damage
     damageValue: 2
