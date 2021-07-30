@@ -33,6 +33,8 @@ namespace Units
         [field: SerializeField] public Stat AttackStat { get; set; }
         [field: SerializeField] public Stat KnockbackStat { get; set; }
         
+        [field: SerializeField] public List<TenetStatus> StartingTenets { get; set; }
+        
         // TODO: Remove all fields of type "ModifierStat" or "ValueStat".
         public string Name
         {

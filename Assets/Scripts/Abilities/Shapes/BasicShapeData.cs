@@ -75,6 +75,21 @@ namespace Abilities.Shapes
             return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
         }
 
+        public IEnumerable<GridObject> GetTargetsInAllDirections(Vector2Int originCoordinate)
+        {
+            var targets = Enumerable.Empty<GridObject>();
+
+            foreach (OrdinalDirection direction in Enum.GetValues(typeof(OrdinalDirection)))
+            {
+                Vector2 tempRotatedDirection =
+                    Quaternion.AngleAxis(45f, Vector3.forward) * direction.ToVector2();
+
+                targets = targets.Concat(GetTargets(originCoordinate, tempRotatedDirection));
+            }
+
+            return targets;
+        }
+
         /// <summary>
         /// Get all world space coordinates that will be targeted by this shape based on the shape
         /// parts. 

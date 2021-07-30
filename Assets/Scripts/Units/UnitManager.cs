@@ -202,7 +202,7 @@ namespace Units
 
             return null;
         }
-        
+
         public IUnit Spawn(IUnit unit)
         {
             units.Add(unit);

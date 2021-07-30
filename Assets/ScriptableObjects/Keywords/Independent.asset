@@ -12,14 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
   m_Name: Independent
   m_EditorClassIdentifier: 
-  displayName: 
+  displayName: Independent
   isVisibleInGame: 1
   description: 
   effect:
     name: Nothing IF User finds At Most 0 Same Team in Adjacent Shape
+    effectOrder: 0
     damageValue: 0
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -32,6 +36,7 @@ MonoBehaviour:
         tenetCostType: 0
         count: 1
         tenetType: 0
+        tenetConstraint: 0
       shapeCost:
         shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
         countConstraint: 1
@@ -45,4 +50,5 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetType: 0
+            tenetConstraint: 0
     keywords: []

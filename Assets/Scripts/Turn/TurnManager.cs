@@ -204,6 +204,7 @@ namespace Turn
         /// </summary>
         private void NextTurn()
         {
+            UpdateNextTurnQueue();
             CurrentTurnIndex++;
             TotalTurnCount++;
 
@@ -217,9 +218,7 @@ namespace Turn
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
 
-            if (!(ActingEnemyUnit is null))
-                enemyManager.DecideEnemyIntention(ActingEnemyUnit);
-            else
+            if (ActingEnemyUnit is null)
                 PhaseIndex = 0;
                 //enable button
 
@@ -238,6 +237,9 @@ namespace Turn
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
+                commandManager.ExecuteCommand(new GameEndedCommand(true));
+                // Debug.Log("YOU WIN!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
                 // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                 AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
                 
@@ -248,12 +250,16 @@ namespace Turn
 
             if (!HasPlayerUnitInQueue())
             {
-               // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-               AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+                commandManager.ExecuteCommand(new GameEndedCommand(false));
+
+                // Debug.Log("YOU LOSE!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
                
-               commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
+                commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
                
-               return;
+                return;
             }
 
             previousTurnQueue = currentTurnQueue;
@@ -330,7 +336,8 @@ namespace Turn
                 Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
                 return;
             }
-
+            
+            commandManager.ExecuteCommand(new MeditatedCommand(ActingUnit));
             unitsMeditatedThisRound.Add(ActingUnit);
             playerManager.Insight.Value += 1;
             EndTurnManipulationPhase();
@@ -347,7 +354,9 @@ namespace Turn
 
             List<IUnit> turnQueue = new List<IUnit>();
             turnQueue.AddRange(unitManager.AllUnits);
-            turnQueue.Sort((x, y) => x.SpeedStat.Value.CompareTo(y.SpeedStat.Value));
+            
+            // Sort units by speed in descending order
+            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
             return turnQueue;
         }
 
@@ -391,7 +400,8 @@ namespace Turn
 
             playerManager.Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
-            commandManager.ExecuteCommand(new TurnManipulatedCommand());
+            commandManager.ExecuteCommand(new TurnManipulatedCommand(currentTurnQueue[startIndex],
+                currentTurnQueue[endIndex]));
             EndTurnManipulationPhase();
         }
 
@@ -511,7 +521,7 @@ namespace Turn
                 Debug.LogWarning("Movement was done out of phase.");
 
             if (LastPhaseHasEnded())
-                NextTurn();
+                commandManager.ExecuteCommand(new EndTurnCommand(ActingUnit));
         }
 
         private void EndAbilityPhase()
@@ -522,7 +532,7 @@ namespace Turn
                 Debug.LogWarning("Ability was done out of phase.");
 
             if (LastPhaseHasEnded())
-                NextTurn();
+                commandManager.ExecuteCommand(new EndTurnCommand(ActingUnit));
         }
 
         private void EndTurnManipulationPhase()
@@ -533,7 +543,7 @@ namespace Turn
                 Debug.LogWarning("Turn manipulation was done out of phase.");
 
             if (LastPhaseHasEnded())
-                NextTurn();
+                commandManager.ExecuteCommand(new EndTurnCommand(ActingUnit));
         }
 
         #endregion

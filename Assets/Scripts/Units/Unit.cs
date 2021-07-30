@@ -91,7 +91,6 @@ namespace Units
         public Sprite Render => render;
 
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
-
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
@@ -124,6 +123,7 @@ namespace Units
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
+            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
             
             UnitAnimator = GetComponentInChildren<Animator>();
             
@@ -162,7 +162,11 @@ namespace Units
         public void TakeDefence(int amount) => DefenceStat.Value += amount;
         
         public void TakeAttack(int amount) => AttackStat.Value += amount;
-        
+
+        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
+
+        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+
         public void TakeDamage(int amount)
         {
             if (amount <= 0)
@@ -192,12 +196,12 @@ namespace Units
         public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
+        public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
         [Obsolete("Directly alter MovementPoints Value instead")]
         public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
         
         #endregion
-
         #region UnitDeath
 
         /// <summary>

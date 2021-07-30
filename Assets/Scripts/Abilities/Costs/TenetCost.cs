@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using TenetStatuses;
 using UnityEngine;
+using Utilities;
 
 namespace Abilities.Costs
 {
@@ -16,11 +18,21 @@ namespace Abilities.Costs
         [SerializeField] private TenetCostType tenetCostType;
         [SerializeField, Min(1)] private int count = 1;
         [SerializeField] private TenetType tenetType;
-        
+        [SerializeField] private TenetConstraint tenetConstraint;
+
         public TenetCostType TenetCostType => tenetCostType;
         public TenetType TenetType => tenetType;
 
-        public string DisplayName => $"{tenetCostType} {count} {tenetType}";
+        public string DisplayName
+        {
+            get
+            {
+                string constraintString = tenetConstraint == TenetConstraint.None
+                    ? string.Empty
+                    : $" {StringUtility.UppercaseToReadable(tenetConstraint)}";
+                return $"{tenetCostType} {count} {tenetType}{constraintString}";
+            }
+        }
 
         public void ApplyCost(IAbilityUser unit)
         {
@@ -35,7 +47,8 @@ namespace Abilities.Costs
             }
         }
         
-        public bool MeetsRequirements(IAbilityUser unit) => unit.TenetStatusEffectsContainer.GetTenetStatusCount(tenetType) >= count;
+        public bool MeetsRequirements(IAbilityUser user) => 
+            tenetConstraint.Satisfies(user, tenetType) && user.TenetStatusEffectsContainer.GetTenetStatusCount(tenetType) >= count;
 
         public void OnBeforeSerialize()
         {

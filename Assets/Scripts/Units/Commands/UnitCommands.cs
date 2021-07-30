@@ -69,19 +69,18 @@ namespace Units.Commands
     {
         public StatTypes StatType { get; }
         
-        public int BaseValue { get; }
+        public int InitialValue { get; }
         
-        public int Value { get;}
+        public int Difference { get; }
         
         public int NewValue { get; }
 
-        public StatChangedCommand(IUnit unit, StatTypes type, int baseValue, int amount,
-                                  int newValue) : base(unit)
+        public StatChangedCommand(IUnit unit, StatTypes type, int initialValue, int newValue) : base(unit)
         {
             StatType = type;
-            BaseValue = baseValue;
-            Value = amount;
+            InitialValue = initialValue;
             NewValue = newValue;
+            Difference = newValue - initialValue;
         }
     }
     
