@@ -7,7 +7,9 @@ namespace Game.Map
 {
     public class MapController : MonoBehaviour
     {
-        [SerializeField] private MapData mapData;
+        [SerializeField] private MapData mapDataAsset;
+
+        private MapData mapData;
         
         private GameManager gameManager;
         private CommandManager commandManager;
@@ -25,6 +27,8 @@ namespace Game.Map
                 mapData = gameManager.CurrentMapData;
             else
             {
+                // TODO: There must be a better way to make sure the data doesn't get modified.
+                mapData = Instantiate(mapDataAsset);
                 gameManager.CurrentMapData = mapData;
                 
                 // TODO: Make sure mapData is still initialised if loaded from gameManager.

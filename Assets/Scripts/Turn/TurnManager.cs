@@ -43,14 +43,14 @@ namespace Turn
             {
                 if (currentTurnQueue.Count == 0)
                 {
-                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed." +
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
                                      $"{nameof(currentTurnQueue)} is empty.");
                     return null;
                 }
                 
                 if (CurrentTurnIndex < 0 || CurrentTurnIndex >= currentTurnQueue.Count)
                 {
-                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed." +
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
                                      $"{nameof(CurrentTurnIndex)} is not valid.");
                     return null;
                 }
