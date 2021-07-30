@@ -2152,6 +2152,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 768614113}
     m_Modifications:
+    - target: {fileID: -7540669148004731161, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: <SpecialMoveCount>k__BackingField
+      value: 99
+      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_Name
       value: Enemy (TESTING)
@@ -2159,6 +2163,10 @@ PrefabInstance:
     - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: data.name
       value: EnemyA
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: data.movementPoints.<BaseValue>k__BackingField
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField

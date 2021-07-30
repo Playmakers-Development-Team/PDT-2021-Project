@@ -18,6 +18,8 @@ namespace Tests.AutomatedTests
     // go in alphabetical order
     // NOTE: Input beacons for clicking in world space and screen space. Use Click() for world space
     // and ClickLeftWhen() for screen space.
+    // Also Timeouts should be enough to complete the test + a reasonable extra amount of time to allow
+    // for slower PCs to complete.
     public class SimpleTests : BaseTest
     {
         #region Basic Test Cases
@@ -72,7 +74,7 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest]
-        [Timeout(3000)]
+        [Timeout(5000)]
         [Order(1)]
         public IEnumerator SelectionTest()
         {
