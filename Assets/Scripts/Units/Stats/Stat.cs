@@ -17,7 +17,7 @@ namespace Units.Stats
             {
                 commandManager.ExecuteCommand(new StatChangedCommand(
                     unit,
-                    StatType,
+                    StatType,BaseValue,
                     this.value,
                     value
                 ));
