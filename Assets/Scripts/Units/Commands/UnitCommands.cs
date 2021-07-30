@@ -47,6 +47,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when a unit is no longer selected by the player.
     /// </summary>
+    [Obsolete]
     public class UnitDeselectedCommand : UnitCommand
     {
         public UnitDeselectedCommand(IUnit unit) : base(unit) {}
@@ -55,6 +56,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when a unit is selected by the player.
     /// </summary>
+    [Obsolete]
     public class UnitSelectedCommand : UnitCommand
     {
         public UnitSelectedCommand(IUnit unit) : base(unit) {}

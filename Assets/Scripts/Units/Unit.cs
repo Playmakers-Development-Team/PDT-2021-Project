@@ -89,6 +89,7 @@ namespace Units
         
         public Sprite Render => render;
 
+        [Obsolete]
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
         private AnimationStates unitAnimationState;
         

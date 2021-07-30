@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Commands;
 using Grid;
@@ -13,6 +14,7 @@ namespace Units
 {
     public class UnitManager : Manager
     {
+        [Obsolete]
         public IUnit SelectedUnit { get; private set; }
         
         protected CommandManager commandManager;
