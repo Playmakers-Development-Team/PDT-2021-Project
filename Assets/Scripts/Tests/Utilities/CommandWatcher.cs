@@ -30,7 +30,7 @@ namespace Tests.Utilities
 
         public void Rewatch() => StartWatching();
 
-        public IEnumerator Assert(string failMessage = null)
+        public void Assert(string failMessage = null)
         {
             if (!task.HasValue)
             {
@@ -41,9 +41,7 @@ namespace Tests.Utilities
             if (string.IsNullOrEmpty(failMessage))
                 failMessage = $"Expected {CommandsDescription}, but didn't get any!";
             
-            yield return UniTask.ToCoroutine(async () => await UniTask.Yield());
-            yield return UniTask.ToCoroutine(async () => await UniTask.Yield());
-            NUnit.Framework.Assert.True(task.Value.GetAwaiter().IsCompleted, failMessage);
+            NUnit.Framework.Assert.True(task.Value.Status.IsCompleted(), failMessage);
         }
 
         public IEnumerator Wait()
@@ -55,6 +53,25 @@ namespace Tests.Utilities
             }
             
             yield return new WaitUntil(() => task.Value.Status.IsCompleted());
+        }
+
+        public IEnumerator WaitWithTimeout(float seconds, string failMessage = null) => 
+            WaitWithTimeout(TimeSpan.FromSeconds(seconds), failMessage);
+
+        public IEnumerator WaitWithTimeout(TimeSpan timeSpan, string failMessage = null)
+        {
+            if (!task.HasValue)
+            {
+                throw new InvalidOperationException(
+                    $"Cannot Wait when we haven't even start watching {CommandsDescription}");
+            }
+
+            yield return new WaitForSeconds(timeSpan.Seconds);
+            
+            if (string.IsNullOrEmpty(failMessage))
+                failMessage = $"Expected {CommandsDescription}, but didn't get any under timeout of {timeSpan.TotalSeconds} seconds!";
+            
+            NUnit.Framework.Assert.True(task.Value.GetAwaiter().IsCompleted, failMessage);
         }
 
         private static CommandManager CommandManager => ManagerLocator.Get<CommandManager>();

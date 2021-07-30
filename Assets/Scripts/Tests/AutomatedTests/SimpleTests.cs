@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using E7.Minefield;
 using NUnit.Framework;
@@ -132,8 +133,7 @@ namespace Tests.AutomatedTests
             yield return new WaitForSecondsRealtime(0.2f);
             yield return InputBeacon.ClickRight(UnitBeacons.EnemyA);
 
-            //yield return enemyDeathWatcher.Wait();
-            yield return enemyDeathWatcher.Assert("Failed");
+            yield return enemyDeathWatcher.WaitWithTimeout(5, "Enemy not killed, took longer than 5 seconds");
             
             yield return new WaitForSecondsRealtime(0.2f);
         }
@@ -152,7 +152,7 @@ namespace Tests.AutomatedTests
             yield return new WaitForSecondsRealtime(0.2f);
             yield return InputBeacon.ClickRight(UnitBeacons.Estelle);
 
-            yield return unitDeathWatcher.Wait();
+            yield return unitDeathWatcher.WaitWithTimeout(5, "Estelle not killed, took longer than 5 seconds");
             
             yield return new WaitForSecondsRealtime(0.8f);
         }
