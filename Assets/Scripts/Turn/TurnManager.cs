@@ -27,7 +27,7 @@ namespace Turn
         public int TotalTurnCount { get; private set; }
         public int RoundCount { get; private set; }
         public int CurrentTurnIndex { get; private set; }
-        public int TurnManipulationPhaseIndex { get; private set; }
+        public int TurnManipulationPhaseIndex { get;  set; }
         public int MovementPhaseIndex { get; private set; }
         public int AbilityPhaseIndex { get; private set; }
         public int PhaseIndex { get; set; }

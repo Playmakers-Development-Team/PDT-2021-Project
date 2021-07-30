@@ -86,7 +86,7 @@ namespace Units.Enemies
 
         public void SpawnSwarm(GameObject unit, int limit, int amount)
         {
-            for (int z = 0; z < amount; z++)
+            for (int z = 0; z < amount+1; z++)
             {
 
                 List<Vector2> freeTiles = gridManager.GetEmptyTiles();
