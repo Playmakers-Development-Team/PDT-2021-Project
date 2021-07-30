@@ -16,17 +16,17 @@ namespace Abilities.Costs
         {
             return tenetTarget switch
             {
-                TenetTarget.Newest => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.Last().TenetType
+                TenetTarget.Newest => user.TenetStatusEffectsContainer.TenetStatuses.Count > 0
+                    ? user.TenetStatusEffectsContainer.TenetStatuses.Last().TenetType
                     : (TenetType?) null,
-                TenetTarget.Oldest => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.First().TenetType
+                TenetTarget.Oldest => user.TenetStatusEffectsContainer.TenetStatuses.Count > 0
+                    ? user.TenetStatusEffectsContainer.TenetStatuses.First().TenetType
                     : (TenetType?) null,
-                TenetTarget.LastToFirst => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.Last().TenetType
+                TenetTarget.LastToFirst => user.TenetStatusEffectsContainer.TenetStatuses.Count > 0
+                    ? user.TenetStatusEffectsContainer.TenetStatuses.Last().TenetType
                     : (TenetType?) null,
-                TenetTarget.FirstToLast => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.First().TenetType
+                TenetTarget.FirstToLast => user.TenetStatusEffectsContainer.TenetStatuses.Count > 0
+                    ? user.TenetStatusEffectsContainer.TenetStatuses.First().TenetType
                     : (TenetType?) null,
                 _ => null
             };

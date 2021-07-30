@@ -17,9 +17,9 @@ namespace Abilities
             {
                 TenetConstraint.None => true,
                 TenetConstraint.WhenNewest => 
-                    user.TenetStatuses.Count > 0 && user.TenetStatuses.Last().TenetType == tenetType,
+                    user.TenetStatusEffectsContainer.TenetStatuses.Count > 0 && user.TenetStatusEffectsContainer.TenetStatuses.Last().TenetType == tenetType,
                 TenetConstraint.WhenOldest => 
-                    user.TenetStatuses.Count > 0 && user.TenetStatuses.First().TenetType == tenetType,
+                    user.TenetStatusEffectsContainer.TenetStatuses.Count > 0 && user.TenetStatusEffectsContainer.TenetStatuses.First().TenetType == tenetType,
                 _ => throw new ArgumentOutOfRangeException(nameof(tenetConstraint), tenetConstraint, null)
             };
     }

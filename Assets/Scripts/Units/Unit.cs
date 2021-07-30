@@ -123,7 +123,7 @@ namespace Units
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
-            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
+            TenetStatusEffectsContainer.Initialise(data.StartingTenets);
             
             UnitAnimator = GetComponentInChildren<Animator>();
             

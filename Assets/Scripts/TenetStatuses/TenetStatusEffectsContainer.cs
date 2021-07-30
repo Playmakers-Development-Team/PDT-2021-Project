@@ -7,12 +7,17 @@ namespace TenetStatuses
     public class TenetStatusEffectsContainer
     {
         private const int maxTenetStatusEffectCount = 2;
-        private readonly LinkedList<TenetStatus> tenetStatusEffectSlots =
+        private LinkedList<TenetStatus> tenetStatusEffectSlots =
             new LinkedList<TenetStatus>();
         
         [Obsolete("Use TenetStatuses instead")]
         public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
+
+        public void Initialise(IEnumerable<TenetStatus> startingTenets)
+        {
+            tenetStatusEffectSlots = new LinkedList<TenetStatus>(startingTenets);
+        }
         
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {

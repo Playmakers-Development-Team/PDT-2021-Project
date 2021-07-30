@@ -20,7 +20,7 @@ namespace AI
         
         protected override async void DecideEnemyIntention()
         {
-            if (playerManager.PlayerUnits.Count <= 0)
+            if (playerManager.Units.Count <= 0)
             {
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;
@@ -60,7 +60,7 @@ namespace AI
         /// </summary>
         private bool ArePlayersClose()
         {
-            foreach (var playerUnit in playerManager.PlayerUnits)
+            foreach (var playerUnit in playerManager.Units)
             {
                 if (safeDistanceRange <= ManhattanDistance.GetManhattanDistance(
                     playerUnit.Coordinate, enemyUnit.Coordinate))
