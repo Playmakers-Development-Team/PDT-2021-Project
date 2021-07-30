@@ -5,6 +5,7 @@ using Tests.Beacons;
 using Tests.Constraints;
 using Tests.Utilities;
 using UI.Commands;
+using Units.Commands;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -15,9 +16,12 @@ namespace Tests.AutomatedTests
     /// </summary>
     // Goes top down, to ensure this, please have the order be ascending otherwise it will
     // go in alphabetical order
-    // NOTE: Input beacons for clicking in world space, Beacon.Click for screen space/UI
+    // NOTE: Input beacons for clicking in world space and screen space. Use Click() for world space
+    // and ClickLeftWhen() for screen space.
     public class SimpleTests : BaseTest
     {
+        #region Basic Test Cases
+
         public IEnumerator BasicSelections()
         {
             var estelleSelectedWatch = CommandWatcher
@@ -36,9 +40,9 @@ namespace Tests.AutomatedTests
             estelleSelectedWatch.Rewatch();
             enemySelectedWatch.Rewatch();
             
-            yield return Beacon.ClickWhen(UITimelineBeacons.Pos1, Is.Clickable);
+            yield return InputBeacon.ClickLeftWhen(UITimelineBeacons.Pos1, Is.Clickable);
             yield return new WaitForSeconds(0.5f);
-            yield return Beacon.ClickWhen(UITimelineBeacons.Pos2, Is.Clickable);
+            yield return InputBeacon.ClickLeftWhen(UITimelineBeacons.Pos2, Is.Clickable);
             yield return new WaitForSeconds(0.5f);
             
             estelleSelectedWatch.Assert("Can't select Estelle from turn queue");
@@ -54,24 +58,34 @@ namespace Tests.AutomatedTests
             yield return InputBeacon.ClickLeft(GridBeacons.A);
             yield return Beacon.WaitUntil(GridBeacons.A, Any.PlayerUnit);
         }
-        
+
+        #endregion
+
+        #region Unity Tests
+
         [UnityTest]
-        [Timeout(2000), Order(0)]
+        [Timeout(2000)]
+        [Order(0)]
         public IEnumerator BasicGameRun()
         {
             yield return PrepareAndActivateScene();
         }
 
         [UnityTest]
-        //[Timeout(2000), Order(1)]
+        [Timeout(3000)]
+        [Order(1)]
         public IEnumerator SelectionTest()
         {
             yield return PrepareAndActivateScene();
-            yield return BasicSelections();
+            for (int i = 0; i < 10; i++)
+            {
+                yield return BasicSelections();
+            }
         }
         
         [UnityTest]
-        [Timeout(2000), Order(2)]
+        [Timeout(2000)]
+        [Order(2)]
         public IEnumerator MovePlayerUnit()
         {
             yield return PrepareAndActivateScene();
@@ -79,7 +93,8 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest] 
-        [Timeout(2000), Order(3)]
+        [Timeout(2000)]
+        [Order(3)]
         public IEnumerator BasicEnemyMove()
         {
             yield return PrepareAndActivateScene();
@@ -88,12 +103,33 @@ namespace Tests.AutomatedTests
             yield return TurnTester.WaitPlayerTurn();
         }
 
+        [UnityTest] 
+        [Timeout(2000)]
+        [Order(4)]
+        public IEnumerator TurnTest()
+        {
+            yield return PrepareAndActivateScene();
+            yield return InputBeacon.ClickLeftWhen(UIBeacons.EndTurn, Is.Clickable);
+            yield return TurnTester.WaitPlayerTurn();
+        }
+        
+        [UnityTest] 
+        [Timeout(2000)]
+        [Order(5)]
+        public IEnumerator KillingUnits()
+        {
+            yield return PrepareAndActivateScene();
+            yield return InputBeacon.ClickLeftWhen(UIBeacons.EndTurn, Is.Clickable);
+            yield return TurnTester.WaitPlayerTurn();
+        }
+
         /// <summary>
         /// This is the standard test all tasks must pass
         /// </summary>
         /// <returns></returns>
         [UnityTest] 
-        [Timeout(8000), Order(4)]
+        [Timeout(8000)]
+        [Order(999)]
         public IEnumerator StandardTest()
         {
             yield return PrepareAndActivateScene();
@@ -102,7 +138,7 @@ namespace Tests.AutomatedTests
             yield return Beacon.WaitUntil(GridBeacons.B, Any.EnemyUnit);
             yield return TurnTester.WaitPlayerTurn();
             yield return MoveEstelle();
-            yield return Beacon.ClickWhen(UIBeacons.AbilityA, Is.Clickable);
+            yield return InputBeacon.ClickLeftWhen(UIBeacons.AbilityA, Is.Clickable);
             yield return new WaitForSecondsRealtime(0.2f); // Waits so tester can confirm it was selected
             
             // Right click on unit or grid beacon but not both. Functionally the same but depends 
@@ -111,8 +147,13 @@ namespace Tests.AutomatedTests
             yield return InputBeacon.ClickRight(UnitBeacons.EnemyA);
             
             Assert.Beacon(UnitBeacons.EnemyA, Any.UnitEqualsHealth(9));
-            yield return new WaitForSecondsRealtime(2.5f);
+            yield return CommandManager.WaitForCommandYield<StatChangedCommand>(cmd => 
+                cmd.Unit.HasBeacon(UnitBeacons.Estelle, Is.Active));
             Assert.Beacon(UnitBeacons.Estelle, Any.UnitEqualsHealth(6));
+            yield return new WaitForSecondsRealtime(1.0f);
         }
+
+        #endregion
+        
     }
 }

@@ -24,7 +24,7 @@ namespace UI.Game
             if (Keyboard.current.escapeKey.isPressed)
                 dialogue.unitDeselected.Invoke();
 
-            if (turnManager.ActingPlayerUnit != null &&  (Mouse.current.wasUpdatedThisFrame) && Camera.main)
+            if (turnManager.ActingPlayerUnit != null &&  Mouse.current.wasUpdatedThisFrame && Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
                 Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);

@@ -43,8 +43,8 @@ namespace Tests
             ManagerLocator.Initialize();
             UniTask task = CommandManager.WaitForCommand<TurnQueueCreatedCommand>();
             yield return ActivateScene();
-            InputBeacon.PrepareVirtualDevices();
             yield return new WaitUntil(() => task.Status.IsCompleted());
+            InputBeacon.PrepareVirtualDevices();
             Time.timeScale = TimeScale;
         }
 
