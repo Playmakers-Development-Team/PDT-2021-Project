@@ -21,6 +21,7 @@ namespace Tests.AutomatedTests
     // and ClickLeftWhen() for screen space.
     // Also Timeouts should be enough to complete the test + a reasonable extra amount of time to allow
     // for slower PCs to complete.
+    [Category("Automated Testing")]
     public class SimpleTests : BaseTest
     {
         #region Basic Test Cases
