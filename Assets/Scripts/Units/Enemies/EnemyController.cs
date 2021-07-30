@@ -32,27 +32,28 @@ namespace Units.Enemies
             #endregion
         }
 
+        // TODO: Removed for now, needs to be refactored.
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
-        protected override void Start()
-        {
-            if (totalEnemies <= 0)
-            {
-                base.Start();
-                return;
-            }
-            
-            // TODO: Is all of this still necessary?
-            // TODO: Obtain the number of enemies, their tenets and starting positions
-            // Maybe do this through a level dictionary that contains these details?
-            // For now placeholders will be used
-
-            // TODO: Replace with a GridReadyCommand listener
-            isSpawningEnemies = true;
-
-            unitManagerT.ClearUnits();
-
-            commandManager.ExecuteCommand(new UnitManagerReadyCommand<EnemyUnitData>());
-        }
+        // protected override void Start()
+        // {
+        //     if (totalEnemies <= 0)
+        //     {
+        //         base.Start();
+        //         return;
+        //     }
+        //     
+        //     // TODO: Is all of this still necessary?
+        //     // TODO: Obtain the number of enemies, their tenets and starting positions
+        //     // Maybe do this through a level dictionary that contains these details?
+        //     // For now placeholders will be used
+        //
+        //     // TODO: Replace with a GridReadyCommand listener
+        //     isSpawningEnemies = true;
+        //
+        //     unitManagerT.ClearUnits();
+        //
+        //     commandManager.ExecuteCommand(new UnitManagerReadyCommand<EnemyUnitData>());
+        // }
 
         private void Update()
         {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
-using Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
@@ -94,7 +93,6 @@ namespace Units
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
-        protected CommandManager commandManager;
 
         protected UnitManager<T> unitManagerT; 
         
@@ -110,7 +108,6 @@ namespace Units
             #region GetManagers
 
             playerManager = ManagerLocator.Get<PlayerManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             
             #endregion
             
@@ -124,31 +121,8 @@ namespace Units
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
-            
+
             UnitAnimator = GetComponentInChildren<Animator>();
-            
-            #region ListenCommands
-
-            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
-            commandManager.ListenCommand<AbilityCommand>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.AbilityUser, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-            
-            // TODO: Can be deleted once enemy abilities are implemented
-            commandManager.ListenCommand<EnemyAttack>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.Unit, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-
-            #endregion
 
             if (nameText)
                 nameText.text = Name;
@@ -336,7 +310,7 @@ namespace Units
         public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
-            int range = (int) MovementPoints.Value;
+            int range = MovementPoints.Value;
             
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -481,11 +455,42 @@ namespace Units
         // TODO: Add to correct region
         protected void Spawn() => unitManagerT.Spawn(this);
         
-        private void OnEnable() =>
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.ListenCommand<AbilityCommand>(OnAbility);
+            commandManager.ListenCommand<EnemyAttack>(OnEnemyAttack);
             commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
-        
-        private void OnDisable() =>
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.UnlistenCommand<AbilityCommand>(OnAbility);
+            commandManager.UnlistenCommand<EnemyAttack>(OnEnemyAttack);
             commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        private void OnAbility(AbilityCommand cmd)
+        {
+            if (!ReferenceEquals(cmd.AbilityUser, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
+
+        // TODO: Can be deleted once enemy abilities are implemented
+        private void OnEnemyAttack(EnemyAttack cmd)
+        {
+            if (!ReferenceEquals(cmd.Unit, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
 
         private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
 

@@ -1,4 +1,6 @@
-﻿using Commands;
+﻿using System;
+using Commands;
+using Grid.Commands;
 using Managers;
 using Units.Commands;
 using UnityEngine;
@@ -19,7 +21,11 @@ namespace Units
             #endregion
         }
 
-        protected virtual void Start()
+        private void OnEnable() => commandManager.ListenCommand<GridReadyCommand>(OnGridReady);
+
+        private void OnDisable() => commandManager.UnlistenCommand<GridReadyCommand>(OnGridReady);
+
+        private void OnGridReady(GridReadyCommand obj)
         {
             unitManagerT.ClearUnits();
             
