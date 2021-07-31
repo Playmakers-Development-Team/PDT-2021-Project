@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Demo Attack
+  m_Name: Weak Demo Attack
   m_EditorClassIdentifier: 
-  description: 'A basic, test attack. Does 3 damage to a single enemy. If you have
-    Apathy, does 3 extra damage. '
+  description: A weak test attack. Does 1 damage to a single enemy. If you have Passion,
+    deal 3 extra damage.
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   targetEffects:
-  - name: Default, 3 Damage
+  - name: Default, 1 Damage
     effectOrder: 0
-    damageValue: 3
+    damageValue: 1
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
     costs: []
     keywords: []
   userEffects:
-  - name: 3 Attack IF User With 1 Apathy
+  - name: 3 Attack IF User With 1 Passion
     effectOrder: 1
     damageValue: 0
     directDamage: 0
@@ -46,13 +46,13 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With 1 Apathy
+    - name: User With 1 Passion
       affectType: 0
       costType: 1
       tenetCost:
         tenetCostType: 0
         count: 1
-        tenetType: 3
+        tenetType: 2
         tenetConstraint: 0
       tenetGroupCost:
         tenetTarget: 0
