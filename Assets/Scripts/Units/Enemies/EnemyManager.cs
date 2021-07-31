@@ -107,6 +107,9 @@ namespace Units.Enemies
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
             
+            if (enemyUnit.GetAllReachableTiles().Count <= 0 || targetPlayerUnit is null)
+                return;
+            
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
@@ -132,7 +135,7 @@ namespace Units.Enemies
             List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             Vector2Int targetTile = new Vector2Int();
 
-            if (reachableTiles.Count <= 0)
+            if (reachableTiles.Count <= 0 || targetPlayerUnit is null)
                 return;
 
             foreach (var reachableTile in reachableTiles)
@@ -286,8 +289,7 @@ namespace Units.Enemies
             }
             else
             {
-                Debug.LogWarning("WARNING: GetTargetPlayer() called but no players remain in" +
-                                 "PlayerManager.PlayerUnits. Please avoid calling this function");
+                Debug.Log(enemyUnit.Name + " used GetTargetPlayer() called but no players are reachable");
                 return null;
             }
 
@@ -303,18 +305,21 @@ namespace Units.Enemies
             
             foreach (var playerUnit in playerUnits)
             {
-                int playerDistanceToEnemy = distanceToAllCells[playerUnit.Coordinate];
+                if (distanceToAllCells.ContainsKey(playerUnit.Coordinate))
+                {
+                    int playerDistanceToEnemy = distanceToAllCells[playerUnit.Coordinate];
 
-                // If a new closest unit is found, assign a new closest unit
-                if (closestPlayerUnitDistance > playerDistanceToEnemy)
-                {
-                    closestPlayerUnits.Clear();
-                    closestPlayerUnitDistance = playerDistanceToEnemy;
-                    closestPlayerUnits.Add(playerUnit);
-                }
-                else if (closestPlayerUnitDistance == playerDistanceToEnemy)
-                {
-                    closestPlayerUnits.Add(playerUnit);
+                    // If a new closest unit is found, assign a new closest unit
+                    if (closestPlayerUnitDistance > playerDistanceToEnemy)
+                    {
+                        closestPlayerUnits.Clear();
+                        closestPlayerUnitDistance = playerDistanceToEnemy;
+                        closestPlayerUnits.Add(playerUnit);
+                    }
+                    else if (closestPlayerUnitDistance == playerDistanceToEnemy)
+                    {
+                        closestPlayerUnits.Add(playerUnit);
+                    }
                 }
             }
 

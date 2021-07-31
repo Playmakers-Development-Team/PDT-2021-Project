@@ -71,7 +71,7 @@ namespace AI
 
         /// <summary>
         /// Returns all players within <c>shootingRange</c> tiles of the enemy.
-        /// Assumes that all obstacles can be shot through
+        /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
         private List<IUnit> GetTargetsInRange(Ability abilityType) => abilityType.Shape
             .GetTargetsInAllDirections(enemyUnit.Coordinate)
@@ -97,7 +97,7 @@ namespace AI
         
         /// <summary>
         /// Returns true if a player is within <c>shootingRange</c> tiles of the enemy.
-        /// Assumes that all obstacles can be shot through
+        /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
         private async Task ShootPlayer(Ability abilityType)
         {
