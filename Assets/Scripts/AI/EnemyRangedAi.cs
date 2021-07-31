@@ -26,7 +26,7 @@ namespace AI
                 return;
             }
             
-            if (turnManager.RoundCount % SpecialMoveCount == 0) //EVEN TURNS
+            if (turnManager.RoundCount + 1 % SpecialMoveCount == 0) //EVEN TURNS
             {
                 if (ArePlayersClose())
                 {
