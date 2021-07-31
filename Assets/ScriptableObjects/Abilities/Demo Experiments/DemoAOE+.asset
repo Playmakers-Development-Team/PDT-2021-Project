@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: DemoAOE+
   m_EditorClassIdentifier: 
-  description: 'Big Area of effect attack. Does 1 damage base, add 3 damage by spending
+  description: 'Big Area of effect attack. Does 2 damage base, add 3 damage by spending
     Passion.
 
     Give targets 1 Sorrow
@@ -38,7 +38,7 @@ MonoBehaviour:
     keywords: []
   userEffects:
   - name: 3 Attack IF User Spend 1 Passion
-    effectOrder: 0
+    effectOrder: 1
     damageValue: 0
     directDamage: 0
     defenceValue: 0
