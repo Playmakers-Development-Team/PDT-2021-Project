@@ -116,6 +116,13 @@ namespace Units.Enemies
                     enemyUnit.MovementPoints.Value)
             );
             
+            if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                return;
+            
+            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " +
+                      moveCommand.TargetCoords + " towards " + targetPlayerUnit + 
+                      " at " + targetPlayerUnit.Coordinate);
+            
             commandManager.ExecuteCommand(moveCommand);
             await commandManager.WaitForCommand<EndMoveCommand>();
             
@@ -154,6 +161,9 @@ namespace Units.Enemies
                     enemyUnit,
                     targetTile
                 );
+                
+                if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                    return;
                 
                 Debug.Log(enemyUnit.Name +
                           " ENEMY-TAR: Enemy is moving to "+targetTile+" to maintain a "
@@ -208,6 +218,9 @@ namespace Units.Enemies
                 targetTile
             );
             
+            if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                return;
+            
             Debug.Log(enemyUnit.Name +
                       " ENEMY-TAR: Enemy is moving away from players to " + targetTile);
             
@@ -237,7 +250,6 @@ namespace Units.Enemies
         
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
-            //TODO: Find out why negative movement points are being passed in
             if (movementPoints <= 0)
             {
                 Debug.Log(enemyUnit.Name +
@@ -248,8 +260,7 @@ namespace Units.Enemies
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
-            List<Vector2Int> reachableTiles =
-                enemyUnit.GetAllReachableTiles();
+            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             // Add in the tile the enemy is on to reachableTiles so that GetClosestCoordinateFromList
             // can check if it's the closest tile to the target
             reachableTiles.Add(enemyUnit.Coordinate);
@@ -258,8 +269,6 @@ namespace Units.Enemies
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
 
             Vector2Int chosenTargetTile = unitManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
-
-            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " + chosenTargetTile + " towards " + targetUnit + " at " + targetUnit.Coordinate);
             return chosenTargetTile;
         }
 
