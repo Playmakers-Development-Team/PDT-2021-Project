@@ -1,43 +1,79 @@
 fileFormatVersion: 2
-guid: 165cbdcacee948342851eed899bf71ea
+guid: 576c432028e851b4b864d34fb4e08644
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3560305601958632307
-    second: estelle_move_front_0
+      213: -4956321453074165602
+    second: estelle_idle_0
   - first:
-      213: 1459797107356305832
-    second: estelle_move_front_1
+      213: -1428640104024781453
+    second: estelle_idle_1
   - first:
-      213: 8911944602053523772
-    second: estelle_move_front_2
+      213: -2416191674325977745
+    second: estelle_idle_2
   - first:
-      213: -8843541113435734146
-    second: estelle_move_front_3
+      213: 2172801822388982634
+    second: estelle_idle_3
   - first:
-      213: 404955481213776497
-    second: estelle_move_front_4
+      213: -1456521054965074041
+    second: estelle_idle_4
   - first:
-      213: -6752481779125754628
-    second: estelle_move_front_5
+      213: -7085040513323929926
+    second: estelle_idle_5
   - first:
-      213: 5844957468433524776
-    second: estelle_move_front_6
+      213: -5567011003033395841
+    second: estelle_idle_6
   - first:
-      213: -3145668900583793693
-    second: estelle_move_front_7
+      213: -7309870624903204729
+    second: estelle_idle_7
   - first:
-      213: 7941781024279850613
-    second: estelle_move_front_8
+      213: 2374608423045328567
+    second: estelle_idle_8
   - first:
-      213: -4388468701487575409
-    second: estelle_move_front_9
+      213: -5544504232877748979
+    second: estelle_idle_9
   - first:
-      213: 2802574830099578039
-    second: estelle_move_front_10
+      213: -7526580156796939167
+    second: estelle_idle_10
   - first:
-      213: 3623730324713581024
-    second: estelle_move_front_11
+      213: 7761717708989502994
+    second: estelle_idle_11
+  - first:
+      213: -94988130306329352
+    second: estelle_idle_front_0
+  - first:
+      213: -7565560369255073503
+    second: estelle_idle_front_1
+  - first:
+      213: 5193973638879668772
+    second: estelle_idle_front_2
+  - first:
+      213: 2077640289110060108
+    second: estelle_idle_front_3
+  - first:
+      213: -6279568483968156773
+    second: estelle_idle_front_4
+  - first:
+      213: -5136432582260807995
+    second: estelle_idle_front_5
+  - first:
+      213: -6248902718747662286
+    second: estelle_idle_front_6
+  - first:
+      213: 5661318131203979373
+    second: estelle_idle_front_7
+  - first:
+      213: 6409770319896005892
+    second: estelle_idle_front_8
+  - first:
+      213: 6992950247172172739
+    second: estelle_idle_front_9
+  - first:
+      213: -6587206652624959749
+    second: estelle_idle_front_10
+  - first:
+      213: 5817987976262907780
+    second: estelle_idle_front_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -73,7 +109,7 @@ TextureImporter:
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -151,7 +187,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: estelle_move_front_0
+      name: estelle_idle_front_0
       rect:
         serializedVersion: 2
         x: 0
@@ -165,14 +201,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37bd398e41fb86130800000000000000
-      internalID: 3560305601958632307
+      spriteID: 8f4763b7cc88eaef0800000000000000
+      internalID: -94988130306329352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_1
+      name: estelle_idle_front_1
       rect:
         serializedVersion: 2
         x: 1024
@@ -186,14 +222,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a98d1c1cbd324410800000000000000
-      internalID: 1459797107356305832
+      spriteID: 12937cf9deab10790800000000000000
+      internalID: -7565560369255073503
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_2
+      name: estelle_idle_front_2
       rect:
         serializedVersion: 2
         x: 2048
@@ -207,14 +243,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c393c57e5669dab70800000000000000
-      internalID: 8911944602053523772
+      spriteID: 42a6a267183b41840800000000000000
+      internalID: 5193973638879668772
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_3
+      name: estelle_idle_front_3
       rect:
         serializedVersion: 2
         x: 3072
@@ -228,14 +264,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7fb911663e654580800000000000000
-      internalID: -8843541113435734146
+      spriteID: c4ce17bc5d245dc10800000000000000
+      internalID: 2077640289110060108
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_4
+      name: estelle_idle_front_4
       rect:
         serializedVersion: 2
         x: 0
@@ -249,14 +285,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17238975dd0be9500800000000000000
-      internalID: 404955481213776497
+      spriteID: b9bf6520cbd7ad8a0800000000000000
+      internalID: -6279568483968156773
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_5
+      name: estelle_idle_front_5
       rect:
         serializedVersion: 2
         x: 1024
@@ -270,14 +306,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cf469ea199d5a42a0800000000000000
-      internalID: -6752481779125754628
+      spriteID: 5c62a99c7c9b7b8b0800000000000000
+      internalID: -5136432582260807995
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_6
+      name: estelle_idle_front_6
       rect:
         serializedVersion: 2
         x: 2048
@@ -291,14 +327,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8282f3189d57d1150800000000000000
-      internalID: 5844957468433524776
+      spriteID: 238a21dd5107749a0800000000000000
+      internalID: -6248902718747662286
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_7
+      name: estelle_idle_front_7
       rect:
         serializedVersion: 2
         x: 3072
@@ -312,14 +348,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3eb95b72dc65854d0800000000000000
-      internalID: -3145668900583793693
+      spriteID: d6834ea68da019e40800000000000000
+      internalID: 5661318131203979373
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_8
+      name: estelle_idle_front_8
       rect:
         serializedVersion: 2
         x: 0
@@ -333,14 +369,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57e6324a3cfd63e60800000000000000
-      internalID: 7941781024279850613
+      spriteID: 40d4e31452414f850800000000000000
+      internalID: 6409770319896005892
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_9
+      name: estelle_idle_front_9
       rect:
         serializedVersion: 2
         x: 1024
@@ -354,14 +390,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8ec9e397f60913c0800000000000000
-      internalID: -4388468701487575409
+      spriteID: 3cb6da61333fb0160800000000000000
+      internalID: 6992950247172172739
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_10
+      name: estelle_idle_front_10
       rect:
         serializedVersion: 2
         x: 2048
@@ -375,14 +411,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7bc398495feb4e620800000000000000
-      internalID: 2802574830099578039
+      spriteID: bf60330337a8594a0800000000000000
+      internalID: -6587206652624959749
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_11
+      name: estelle_idle_front_11
       rect:
         serializedVersion: 2
         x: 3072
@@ -396,8 +432,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0e92d5ee7831a4230800000000000000
-      internalID: 3623730324713581024
+      spriteID: 487f4a84d35adb050800000000000000
+      internalID: 5817987976262907780
       vertices: []
       indices: 
       edges: []
@@ -405,7 +441,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 71f8ff5a9d846b04f9c73eaaf1696a6e
     internalID: 0
     vertices: []
     indices: 

@@ -1,43 +1,79 @@
 fileFormatVersion: 2
-guid: 576c432028e851b4b864d34fb4e08644
+guid: 0b1023e462784b846b748f8f1aa128b2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4956321453074165602
-    second: estelle_idle_0
+      213: -8410964834616118383
+    second: helena_idle_0
   - first:
-      213: -1428640104024781453
-    second: estelle_idle_1
+      213: 6915660754510777241
+    second: helena_idle_1
   - first:
-      213: -2416191674325977745
-    second: estelle_idle_2
+      213: 254159609507388160
+    second: helena_idle_2
   - first:
-      213: 2172801822388982634
-    second: estelle_idle_3
+      213: 4192925634489091993
+    second: helena_idle_3
   - first:
-      213: -1456521054965074041
-    second: estelle_idle_4
+      213: -4831174637176069962
+    second: helena_idle_4
   - first:
-      213: -7085040513323929926
-    second: estelle_idle_5
+      213: 5146705894854149867
+    second: helena_idle_5
   - first:
-      213: -5567011003033395841
-    second: estelle_idle_6
+      213: 5304530260187634000
+    second: helena_idle_6
   - first:
-      213: -7309870624903204729
-    second: estelle_idle_7
+      213: -8037703941470931701
+    second: helena_idle_7
   - first:
-      213: 2374608423045328567
-    second: estelle_idle_8
+      213: 7795998486417060763
+    second: helena_idle_8
   - first:
-      213: -5544504232877748979
-    second: estelle_idle_9
+      213: -2902869780662813774
+    second: helena_idle_9
   - first:
-      213: -7526580156796939167
-    second: estelle_idle_10
+      213: 7959179953387350558
+    second: helena_idle_10
   - first:
-      213: 7761717708989502994
-    second: estelle_idle_11
+      213: 7518791712741059924
+    second: helena_idle_11
+  - first:
+      213: 2191200005125493607
+    second: helena_idle_front_0
+  - first:
+      213: 8046909381262901982
+    second: helena_idle_front_1
+  - first:
+      213: 4376626478180544561
+    second: helena_idle_front_2
+  - first:
+      213: 465679454313750257
+    second: helena_idle_front_3
+  - first:
+      213: -8687433290860284974
+    second: helena_idle_front_4
+  - first:
+      213: -1941918207824680220
+    second: helena_idle_front_5
+  - first:
+      213: 8731246116221087777
+    second: helena_idle_front_6
+  - first:
+      213: -6815789093205394875
+    second: helena_idle_front_7
+  - first:
+      213: 8633451964220136649
+    second: helena_idle_front_8
+  - first:
+      213: -3418744063093515021
+    second: helena_idle_front_9
+  - first:
+      213: 6721196300823312078
+    second: helena_idle_front_10
+  - first:
+      213: 1951334640103805346
+    second: helena_idle_front_11
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -68,8 +104,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
-    aniso: 0
+    filterMode: -1
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
@@ -82,9 +118,9 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1024
+  spritePixelsToUnits: 512
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -151,7 +187,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: estelle_idle_0
+      name: helena_idle_front_0
       rect:
         serializedVersion: 2
         x: 0
@@ -159,20 +195,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e90dddce5eb973bb0800000000000000
-      internalID: -4956321453074165602
+      spriteID: 763d6519bc4b86e10800000000000000
+      internalID: 2191200005125493607
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_1
+      name: helena_idle_front_1
       rect:
         serializedVersion: 2
         x: 1024
@@ -180,20 +216,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37dc9b705637c2ce0800000000000000
-      internalID: -1428640104024781453
+      spriteID: ed20fe9a27d5caf60800000000000000
+      internalID: 8046909381262901982
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_2
+      name: helena_idle_front_2
       rect:
         serializedVersion: 2
         x: 2048
@@ -201,20 +237,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f653b864976f77ed0800000000000000
-      internalID: -2416191674325977745
+      spriteID: 1303582f796ecbc30800000000000000
+      internalID: 4376626478180544561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_3
+      name: helena_idle_front_3
       rect:
         serializedVersion: 2
         x: 3072
@@ -222,20 +258,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a6311d6deb7572e10800000000000000
-      internalID: 2172801822388982634
+      spriteID: 1fe91951ffc667600800000000000000
+      internalID: 465679454313750257
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_4
+      name: helena_idle_front_4
       rect:
         serializedVersion: 2
         x: 0
@@ -243,20 +279,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 787fde641d569cbe0800000000000000
-      internalID: -1456521054965074041
+      spriteID: 2d3be503379007780800000000000000
+      internalID: -8687433290860284974
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_5
+      name: helena_idle_front_5
       rect:
         serializedVersion: 2
         x: 1024
@@ -264,20 +300,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: abe6318f031ecad90800000000000000
-      internalID: -7085040513323929926
+      spriteID: 4ea2fbfbdabec05e0800000000000000
+      internalID: -1941918207824680220
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_6
+      name: helena_idle_front_6
       rect:
         serializedVersion: 2
         x: 2048
@@ -285,20 +321,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7dd08fecf00eb2b0800000000000000
-      internalID: -5567011003033395841
+      spriteID: 120fdd3251e9b2970800000000000000
+      internalID: 8731246116221087777
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_7
+      name: helena_idle_front_7
       rect:
         serializedVersion: 2
         x: 3072
@@ -306,20 +342,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 780f490656f1e8a90800000000000000
-      internalID: -7309870624903204729
+      spriteID: 54ab28b6ee37961a0800000000000000
+      internalID: -6815789093205394875
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_8
+      name: helena_idle_front_8
       rect:
         serializedVersion: 2
         x: 0
@@ -327,20 +363,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7be644097cd44f020800000000000000
-      internalID: 2374608423045328567
+      spriteID: 9cc5db8c1de20d770800000000000000
+      internalID: 8633451964220136649
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_9
+      name: helena_idle_front_9
       rect:
         serializedVersion: 2
         x: 1024
@@ -348,20 +384,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d0d0ca7b6c6fd03b0800000000000000
-      internalID: -5544504232877748979
+      spriteID: 3fcd55d436e2e80d0800000000000000
+      internalID: -3418744063093515021
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_10
+      name: helena_idle_front_10
       rect:
         serializedVersion: 2
         x: 2048
@@ -369,20 +405,20 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1645d9499373c8790800000000000000
-      internalID: -7526580156796939167
+      spriteID: ec63e38dc6c764d50800000000000000
+      internalID: 6721196300823312078
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_idle_11
+      name: helena_idle_front_11
       rect:
         serializedVersion: 2
         x: 3072
@@ -390,14 +426,14 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.5, y: 0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2169d2b022927bb60800000000000000
-      internalID: 7761717708989502994
+      spriteID: 2a15d4d3488841b10800000000000000
+      internalID: 1951334640103805346
       vertices: []
       indices: 
       edges: []
@@ -405,7 +441,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 71f8ff5a9d846b04f9c73eaaf1696a6e
+    spriteID: 44e2d078177a1df4985a05f4cec5e626
     internalID: 0
     vertices: []
     indices: 

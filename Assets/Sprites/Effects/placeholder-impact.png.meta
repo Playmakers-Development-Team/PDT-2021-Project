@@ -1,43 +1,46 @@
 fileFormatVersion: 2
-guid: 165cbdcacee948342851eed899bf71ea
+guid: 514f7698182f52343917694a6c5be65a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3560305601958632307
-    second: estelle_move_front_0
+      213: -7689245729056495994
+    second: placeholder-impact_0
   - first:
-      213: 1459797107356305832
-    second: estelle_move_front_1
+      213: -5477697089769353802
+    second: placeholder-impact_1
   - first:
-      213: 8911944602053523772
-    second: estelle_move_front_2
+      213: -9153720539549797975
+    second: placeholder-impact_2
   - first:
-      213: -8843541113435734146
-    second: estelle_move_front_3
+      213: -2897971667080587284
+    second: placeholder-impact_3
   - first:
-      213: 404955481213776497
-    second: estelle_move_front_4
+      213: 5778423825922765618
+    second: placeholder-impact_4
   - first:
-      213: -6752481779125754628
-    second: estelle_move_front_5
+      213: 2841472268011103097
+    second: placeholder-impact_5
   - first:
-      213: 5844957468433524776
-    second: estelle_move_front_6
+      213: -7332952748275815203
+    second: placeholder-impact_6
   - first:
-      213: -3145668900583793693
-    second: estelle_move_front_7
+      213: 2419875000153331439
+    second: placeholder-impact_7
   - first:
-      213: 7941781024279850613
-    second: estelle_move_front_8
+      213: 4874838879975799524
+    second: placeholder-impact_8
   - first:
-      213: -4388468701487575409
-    second: estelle_move_front_9
+      213: -2398110146326493267
+    second: placeholder-impact_9
   - first:
-      213: 2802574830099578039
-    second: estelle_move_front_10
+      213: -5853438896362707807
+    second: placeholder-impact_10
   - first:
-      213: 3623730324713581024
-    second: estelle_move_front_11
+      213: -6339835193393738633
+    second: placeholder-impact_11
+  - first:
+      213: -7340427964540221365
+    second: placeholder-impact_12
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -68,12 +71,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
-    aniso: 0
+    filterMode: -1
+    aniso: -1
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: -1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -82,7 +85,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 512
+  spritePixelsToUnits: 225
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -101,7 +104,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -113,7 +116,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -125,7 +128,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: iPhone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -137,7 +140,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -151,253 +154,274 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: estelle_move_front_0
+      name: placeholder-impact_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2048
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        y: 450
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37bd398e41fb86130800000000000000
-      internalID: 3560305601958632307
+      spriteID: 686e5e0bfbf4a4590800000000000000
+      internalID: -7689245729056495994
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_1
+      name: placeholder-impact_1
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 2048
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 225
+        y: 450
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a98d1c1cbd324410800000000000000
-      internalID: 1459797107356305832
+      spriteID: 6bd4b19d48f4bf3b0800000000000000
+      internalID: -5477697089769353802
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_2
+      name: placeholder-impact_2
       rect:
         serializedVersion: 2
-        x: 2048
-        y: 2048
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 450
+        y: 450
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c393c57e5669dab70800000000000000
-      internalID: 8911944602053523772
+      spriteID: 9a1ffe2faa377f080800000000000000
+      internalID: -9153720539549797975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_3
+      name: placeholder-impact_3
       rect:
         serializedVersion: 2
-        x: 3072
-        y: 2048
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 675
+        y: 450
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7fb911663e654580800000000000000
-      internalID: -8843541113435734146
+      spriteID: ce7d3867f1658c7d0800000000000000
+      internalID: -2897971667080587284
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_4
+      name: placeholder-impact_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1024
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 900
+        y: 450
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 17238975dd0be9500800000000000000
-      internalID: 404955481213776497
+      spriteID: 233b7c1bad5113050800000000000000
+      internalID: 5778423825922765618
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_5
-      rect:
-        serializedVersion: 2
-        x: 1024
-        y: 1024
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cf469ea199d5a42a0800000000000000
-      internalID: -6752481779125754628
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: estelle_move_front_6
-      rect:
-        serializedVersion: 2
-        x: 2048
-        y: 1024
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8282f3189d57d1150800000000000000
-      internalID: 5844957468433524776
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: estelle_move_front_7
-      rect:
-        serializedVersion: 2
-        x: 3072
-        y: 1024
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3eb95b72dc65854d0800000000000000
-      internalID: -3145668900583793693
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: estelle_move_front_8
+      name: placeholder-impact_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        y: 225
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57e6324a3cfd63e60800000000000000
-      internalID: 7941781024279850613
+      spriteID: 973ece519ffee6720800000000000000
+      internalID: 2841472268011103097
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_9
+      name: placeholder-impact_6
       rect:
         serializedVersion: 2
-        x: 1024
-        y: 0
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 225
+        y: 225
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8ec9e397f60913c0800000000000000
-      internalID: -4388468701487575409
+      spriteID: ddcab4cb35e1c3a90800000000000000
+      internalID: -7332952748275815203
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_10
+      name: placeholder-impact_7
       rect:
         serializedVersion: 2
-        x: 2048
-        y: 0
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 450
+        y: 225
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7bc398495feb4e620800000000000000
-      internalID: 2802574830099578039
+      spriteID: fe6dcf8dd7f159120800000000000000
+      internalID: 2419875000153331439
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: estelle_move_front_11
+      name: placeholder-impact_8
       rect:
         serializedVersion: 2
-        x: 3072
-        y: 0
-        width: 1024
-        height: 1024
-      alignment: 9
-      pivot: {x: 0.5, y: 0.125}
+        x: 675
+        y: 225
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0e92d5ee7831a4230800000000000000
-      internalID: 3623730324713581024
+      spriteID: 4ea78322228e6a340800000000000000
+      internalID: 4874838879975799524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder-impact_9
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 225
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da703f3178338bed0800000000000000
+      internalID: -2398110146326493267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder-impact_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a4a8db265864cea0800000000000000
+      internalID: -5853438896362707807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder-impact_11
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 0
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77c0f334b716408a0800000000000000
+      internalID: -6339835193393738633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: placeholder-impact_12
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 0
+        width: 225
+        height: 225
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b488c3258af812a90800000000000000
+      internalID: -7340427964540221365
       vertices: []
       indices: 
       edges: []
@@ -405,7 +429,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: a3102539e5809c74b9bd24e1b13c7268
     internalID: 0
     vertices: []
     indices: 
