@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Tilemaps;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace Units.Brushes
 {
     [CreateAssetMenu]
-    [CustomGridBrush(false, true, false, "Unit Brush")]
+    [CustomGridBrush(false, true, true, "Unit Brush")]
     public class UnitBrush : PrefabBrush
     {
         private enum Units
@@ -24,10 +25,8 @@ namespace Units.Brushes
         [SerializeField] private Quaternion prefabRotation;
         
         [SerializeField] private Units units;
-
         public bool EraseAnyObject { get; set; }
 
-        
         public override void Rotate(RotationDirection direction, GridLayout.CellLayout layout)
         {
             var angle = layout == GridLayout.CellLayout.Hexagon ? 60f : 90f;
