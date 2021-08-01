@@ -108,13 +108,21 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest] 
-        [Timeout(2000)]
+        [Timeout(8000)]
         [Order(4)]
         public IEnumerator TurnTest()
         {
             yield return PrepareAndActivateScene();
-            yield return InputBeacon.ClickLeftWhen(UIBeacons.EndTurn, Is.Clickable);
-            yield return TurnTester.WaitPlayerTurn();
+
+            for (int i = 0; i < 4; i++)
+            {
+                yield return InputBeacon.ClickLeftWhen(UIBeacons.EndTurn, Is.Clickable);
+                yield return TurnTester.WaitEnemyTurn();
+                yield return TurnTester.WaitPlayerTurn();
+                
+                // We need move the cursor away for some reason so that the button click will be registered 
+                yield return InputBeacon.ClickLeft(GridBeacons.A);
+            }
         }
         
         [UnityTest] 
