@@ -26,10 +26,12 @@ namespace Editor
             {
                 if (Application.isPlaying)
                 {
-                    Debug.Log(speed);
-
+                    
+                    IUnit iunit = (IUnit)property.serializedObject.targetObject;
                     CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-                    commandManager.ExecuteCommand(new SpeedChangedCommand((IUnit)property.serializedObject.targetObject, 1));
+                    commandManager.ExecuteCommand(new AttackChangeCommand(iunit, (int)iunit.Attack.BaseAdder));
+                    commandManager.ExecuteCommand(new MovementActionPointChangedCommand(iunit, iunit.MovementActionPoints.BaseValue));
+                    commandManager.ExecuteCommand(new SpeedChangedCommand(iunit, iunit.Speed.BaseValue));
                 }
                 else
                 {
@@ -37,48 +39,11 @@ namespace Editor
                 }
             }
             
-            //base.OnGUI(position, property, label);
-            
-            // EditorGUI.BeginProperty(position, label, property);
-            //
-            // // Draw label
-            // position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-            //
-            // // Don't make child fields be indented
-            // var indent = EditorGUI.indentLevel;
-            // EditorGUI.indentLevel = 0;
-            //
-            //
-            //
-            // top = new Rect(position.x, position.y, position.width, position.height);
-            // bottom = new Rect(position.x, position.y, position.width, position.height);
-            //
-            // var healthRect = new Rect(position.x, position.y + 20, position.width, position.height);
-            // var moveRect = new Rect(position.x, position.y + 40, position.width, position.height);
-            // var speedRect = new Rect(position.x, position.y + 60, position.width, position.height);
-            //
-            // //Find Property Relatives
-            // health = property.FindPropertyRelative("healthPoints");
-            // movement = property.FindPropertyRelative("movementPoints");
-            // speed = property.FindPropertyRelative("speed");
-            //
-            // // EditorGUI.PropertyField(healthRect, health, GUIContent.none);
-            // // EditorGUI.PropertyField(moveRect, movement, GUIContent.none);
-            // // EditorGUI.PropertyField(speedRect, speed, GUIContent.none);
-            //
-            // // Set indent back to what it was
-            // EditorGUI.indentLevel = indent;
-            //
-            // // if (GUI.Button(bottom, "Test"))
-            // // {
-            // //     Debug.Log("health");
-            // // }
-            // base.OnGUI(position, property, label);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return base.GetPropertyHeight(property, label) + 400;
+            return base.GetPropertyHeight(property, label) + 440;
         }
     }
 }
