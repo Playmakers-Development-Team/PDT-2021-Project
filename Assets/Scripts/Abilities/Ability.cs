@@ -5,12 +5,13 @@ using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Abilities
 {
     [Serializable]
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
-    public class Ability : ScriptableObject
+    public class Ability : ScriptableObject, ISerializationCallbackReceiver
     {
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
@@ -19,8 +20,10 @@ namespace Abilities
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
 
-        [SerializeField] private Effect[] targetEffects;
-        [SerializeField] private Effect[] userEffects;
+        [FormerlySerializedAs("targetEffects")]
+        [SerializeField] private List<Effect> effects;
+        // We're not using this anymore, but we are supporting backwards compat so keep it here
+        [HideInInspector, SerializeField] private List<Effect> userEffects;
 
         /// <summary>
         /// A complete description of the ability.
@@ -44,7 +47,7 @@ namespace Abilities
         /// </summary>
         public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
 
-        private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
+        private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
         public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
@@ -69,7 +72,7 @@ namespace Abilities
             IEnumerable<GridObject> finalTargets = excludeUserFromTargets
                 ? targets.Where(u => !ReferenceEquals(user, u))
                 : targets;
-            UseEffectsOnTargetsWithOrder(user, targetEffects, effectOrder, finalTargets);
+            UseEffectsOnTargetsWithOrder(user, effects, effectOrder, finalTargets);
 
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
@@ -77,10 +80,10 @@ namespace Abilities
             
             // All the user specific costs should be done afterwards. This is so that
             // Keyword costs can be applied only ever once without impacting the execution order.
-            ApplyEffectsUserCosts(user, targetEffects.Concat(userEffects), effectOrder);
+            ApplyEffectsUserCosts(user, effects.Concat(userEffects), effectOrder);
         }
 
-        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, Effect[] effects,
+        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, IEnumerable<Effect> effects,
                                                   EffectOrder effectOrder, params GridObject[] targets) =>
             UseEffectsOnTargetsWithOrder(user, effects, effectOrder, targets.AsEnumerable());
 
@@ -173,17 +176,17 @@ namespace Abilities
         
         public void UndoForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
-            UndoEffectsForTargets(user, targetEffects, targets);
+            UndoEffectsForTargets(user, effects, targets);
             
             // It can be assumed that IAbilityUser can be converted to GridObject.
             if (user is GridObject userGridObject)
                 UndoEffectsForTargets(user, userEffects, userGridObject);
         }
 
-        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
+        private void UndoEffectsForTargets(IAbilityUser user, IEnumerable<Effect> effects, params GridObject[] targets) =>
             UndoEffectsForTargets(user, effects, targets.AsEnumerable());
 
-        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
+        private void UndoEffectsForTargets(IAbilityUser user, IEnumerable<Effect> effects, IEnumerable<GridObject> targets)
         {
             // TODO
         }
@@ -194,5 +197,29 @@ namespace Abilities
         private int CalculateValue(IAbilityUser user, IAbilityUser target, Effect[] effects, EffectValueType valueType) =>
             effects.Where(e => e.CanBeUsedWith(user, target))
                 .Sum(e => e.CalculateValue(user, target, valueType));
+
+        public void OnBeforeSerialize()
+        {
+            // cache array, prevent modification exceptions
+            var userEffectsCopy = userEffects.ToArray();
+
+            foreach (Effect userEffect in userEffectsCopy)
+            {
+                userEffects.Remove(userEffect);
+                userEffect.affectTargets = false;
+                userEffect.affectUser = true;
+                effects.Add(userEffect);
+            }
+            
+#if UNITY_EDITOR
+            if (userEffectsCopy.Length > 0)
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
+        }
+
+        public void OnAfterDeserialize()
+        {
+            
+        }
     }
 }

@@ -16,8 +16,11 @@ MonoBehaviour:
     encounter
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
-  targetEffects:
-  - name: 4 Damage WITH Catharsis 3
+  speed: 0
+  effects:
+  - name: "Target \u27A4 4 Damage WITH Catharsis 3"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 4
     directDamage: 0
@@ -32,8 +35,9 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
-  userEffects:
-  - name: 2 Attack for the encounter WITH Catharsis 3
+  - name: "User \u27A4 2 Attack for the encounter WITH Catharsis 3"
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -48,3 +52,4 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
+  userEffects: []
