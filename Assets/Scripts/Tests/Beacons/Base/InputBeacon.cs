@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
-using System.Linq;
 using E7.Minefield;
 using Tests.AutomatedTests;
-using Tests.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.LowLevel;
-using Utilities;
 
 namespace Tests.Beacons.Base
 {
@@ -50,6 +47,8 @@ namespace Tests.Beacons.Base
 
         public void RestoreRegularDevices()
         {
+            // Very important that we remove the virtual devices, so that we don't accidentally
+            // remove them again when we set up.
             preExistingDevices ??= InputSystem.devices.ToArray();
             foreach (var inputDevice in InputSystem.devices.ToArray())
             {
@@ -58,21 +57,6 @@ namespace Tests.Beacons.Base
             
             foreach (InputDevice inputDevice in preExistingDevices)
                 InputSystem.AddDevice(inputDevice);
-            
-            // Very important that we remove the virtual devices, so that we don't accidentally
-            // remove them again when we set up.
-
-            // if (mouse != null)
-            // {
-            //     InputSystem.RemoveDevice(mouse);
-            //     mouse = null;
-            // }
-            //
-            // if (keyboard != null)
-            // {
-            //     InputSystem.RemoveDevice(keyboard);
-            //     keyboard = null;
-            // }
         }
 
         public IEnumerator PressKey(Func<Keyboard, KeyControl> func)

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Threading.Tasks;
 using Audio;
 using Commands;
 using Cysharp.Threading.Tasks;
@@ -7,9 +6,7 @@ using E7.Minefield;
 using Grid;
 using Managers;
 using NUnit.Framework;
-using Tests.Beacons;
 using Tests.Beacons.Base;
-using Tests.Constraints;
 using Turn;
 using Turn.Commands;
 using UI.Core;
@@ -17,8 +14,6 @@ using Units;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TestTools;
 
 namespace Tests
 {

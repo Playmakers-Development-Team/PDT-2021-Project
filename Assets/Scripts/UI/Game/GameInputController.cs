@@ -18,10 +18,10 @@ namespace UI.Game
         
         private void Update()
         {
-            if (Mouse.current.rightButton.isPressed)
+            if (Mouse.current.rightButton.wasPressedThisFrame)
                 dialogue.abilityConfirmed.Invoke();
 
-            if (Keyboard.current.escapeKey.isPressed)
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 dialogue.unitDeselected.Invoke();
 
             if (turnManager.ActingPlayerUnit != null &&  Mouse.current.wasUpdatedThisFrame && Camera.main)
