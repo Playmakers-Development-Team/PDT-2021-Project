@@ -13,9 +13,9 @@ namespace AI
 
         protected override async void DecideEnemyIntention()
         {
+            
             if(enemyUnit is EnemySpawnerUnit enemySpawnerUnit)
             {
-                await
                 if(enemySpawnerUnit.Turn()) enemyManager.Spawner(enemySpawnerUnit);
                 else commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
             }
