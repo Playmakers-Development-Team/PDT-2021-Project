@@ -255,6 +255,7 @@ namespace UI.Game
             // TODO: Same as OldValue, may be being used incorrectly.
             internal int BaseValue { get; }
             internal int Difference { get; }
+            internal int DisplayValue { get; }
             internal StatTypes StatType { get; }
 
             internal StatChangeInfo(StatChangedCommand cmd)
@@ -263,8 +264,9 @@ namespace UI.Game
                 Unit = cmd.Unit;
                 NewValue = cmd.NewValue;
                 OldValue = cmd.InitialValue;
-                BaseValue = cmd.InitialValue;
+                BaseValue = cmd.MaxValue;
                 Difference = cmd.Difference;
+                DisplayValue = cmd.DisplayValue;
             }
         }
 
@@ -272,7 +274,6 @@ namespace UI.Game
         {
             internal Vector2Int Destination { get; }
             internal UnitInfo UnitInfo { get; }
-
 
             public MoveInfo(Vector2Int destination, UnitInfo unitInfo)
             {
