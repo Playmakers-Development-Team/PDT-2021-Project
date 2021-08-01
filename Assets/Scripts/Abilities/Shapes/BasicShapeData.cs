@@ -43,11 +43,13 @@ namespace Abilities.Shapes
         [SerializeField, HideInInspector]
         private bool shouldFollowMouse;
 
-        public bool IsDiagonalShape => shapeParts.Any(p => p.direction.HasDiagonal());
+        private bool HasShapeParts => shapeParts.Count > 0;
+        public bool IsDiagonalShape => HasShapeParts && shapeParts
+            .Any(p => p.direction.HasDiagonal());
         public bool IsCardinalShape => !IsDiagonalShape;
-        public bool HasNoDirection => shapeParts
+        public bool HasNoDirection => HasShapeParts && shapeParts
             .All(p => p.direction == OrdinalDirectionMask.None);
-        public bool IsLineOfSight => shapeParts.All(p => p.isLineOfSight);
+        public bool IsLineOfSight => HasShapeParts && shapeParts.All(p => p.isLineOfSight);
         public bool ShouldShowLine => IsLineOfSight;
 
         /// <summary>
@@ -71,6 +73,21 @@ namespace Abilities.Shapes
             IEnumerable<Vector2Int> coordinates =
                 GetAffectedCoordinates(originCoordinate, directionVector);
             return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
+        }
+
+        public IEnumerable<GridObject> GetTargetsInAllDirections(Vector2Int originCoordinate)
+        {
+            var targets = Enumerable.Empty<GridObject>();
+
+            foreach (OrdinalDirection direction in Enum.GetValues(typeof(OrdinalDirection)))
+            {
+                Vector2 tempRotatedDirection =
+                    Quaternion.AngleAxis(45f, Vector3.forward) * direction.ToVector2();
+
+                targets = targets.Concat(GetTargets(originCoordinate, tempRotatedDirection));
+            }
+
+            return targets;
         }
 
         /// <summary>

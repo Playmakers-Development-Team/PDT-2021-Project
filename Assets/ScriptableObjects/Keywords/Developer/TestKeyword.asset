@@ -23,15 +23,25 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
-    cost:
-      tenetCosts:
-      - name: User With Pride
-        affectType: 0
+    costs:
+    - name: User With Pride
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
         tenetCostType: 0
         tenetType: 0
-      - name: User With Humility
-        affectType: 0
+      testCost:
+        x: 0
+    - name: User With Humility
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
         tenetCostType: 0
         tenetType: 1
+      testCost:
+        x: 0
+    bonus:
+      tenetBonuses: []
     keywords: []

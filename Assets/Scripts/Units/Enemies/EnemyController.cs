@@ -77,6 +77,7 @@ namespace Units.Enemies
            // Debug.Log(enemyUnit.Name);
         }
 
+        // TODO: Refactor or remove.
         private void DebugKillEnemyFunction()
         {
             if (enemyManager.EnemyUnits.Count > 0)
@@ -85,6 +86,7 @@ namespace Units.Enemies
             debugKillEnemyButton = false;
         }
 
+        // TODO: Refactor or remove.
         private void DebugDamagePlayerButton()
         {
             foreach (var enemy in enemyManager.EnemyUnits)

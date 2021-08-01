@@ -23,44 +23,84 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts: []
-    bonus:
-      tenetBonuses: []
+    bonuses: []
+    costs: []
     keywords: []
-  - name: 1 Damage BONUSED BY User Passion IF User Consume Passion
+  - name: 1 Damage BONUSED BY User Passion IF User Consume 1 Passion
     damageValue: 1
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: User Consume Passion
-        affectType: 0
+    bonuses:
+    - name: User Passion
+      affectType: 0
+      bonusType: 1
+      tenetBonus:
+        tenetType: 2
+      shapeBonus:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        bonusByCount: 0
+        bonus:
+          name: 
+          affectType: 0
+          bonusType: 0
+          tenetBonus:
+            tenetType: 0
+    costs:
+    - name: User Consume 1 Passion
+      affectType: 0
+      costType: 1
+      tenetCost:
         tenetCostType: 1
+        count: 1
         tenetType: 2
-    bonus:
-      tenetBonuses:
-      - name: User Passion
-        affectType: 0
-        tenetType: 2
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
     keywords: []
-  - name: 3 Damage IF User With Pride
+  - name: 3 Damage IF User With 1 Pride
     damageValue: 3
     defenceValue: 0
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    cost:
-      tenetCosts:
-      - name: User With Pride
-        affectType: 0
+    bonuses: []
+    costs:
+    - name: User With 1 Pride
+      affectType: 0
+      costType: 1
+      tenetCost:
         tenetCostType: 0
+        count: 1
         tenetType: 0
-    bonus:
-      tenetBonuses: []
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
     keywords: []
   userEffects: []

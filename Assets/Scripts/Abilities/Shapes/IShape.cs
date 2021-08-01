@@ -46,5 +46,11 @@ namespace Abilities.Shapes
         /// <param name="directionVector">The direction which this shape is used, for players, this would be the (mouse position - unit position)</param>
         /// <returns>All targets that are affected</returns>
         public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector);
+
+        /// <summary>
+        /// Gets all possible targets from a position to all possible directions. Might be useful for AI things.
+        /// </summary>
+        /// <param name="originCoordinate">The position where this shape is used from, typically the unit position</param>
+        public IEnumerable<GridObject> GetTargetsInAllDirections(Vector2Int originCoordinate);
     }
 }
