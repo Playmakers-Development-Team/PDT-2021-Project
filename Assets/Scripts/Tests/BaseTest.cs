@@ -25,7 +25,7 @@ namespace Tests
         protected InputBeacon InputBeacon { get; } = new InputBeacon();
         
         // The Default testing scene is MainTest
-        protected override string Scene => "MainTest (UI Ref)"; // TODO: have the name be just main test
+        protected override string Scene => "MainTest";
 
         protected virtual float TimeScale => 10f;
         
