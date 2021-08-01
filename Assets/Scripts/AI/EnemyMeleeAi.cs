@@ -18,7 +18,7 @@ namespace AI
                 return;
             }
             
-            if (turnManager.RoundCount % SpecialMoveCount == 0)
+            if (turnManager.RoundCount + 1 % SpecialMoveCount == 0)
                 await enemyManager.MoveToDistantTile(enemyUnit);
             else
             {
