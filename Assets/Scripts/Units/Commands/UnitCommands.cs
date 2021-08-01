@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Abilities;
 using Commands;
+using UnityEngine;
 
 namespace Units.Commands
 {
@@ -105,7 +106,11 @@ namespace Units.Commands
     /// </summary>
     public class SpeedChangedCommand : ValueCommand
     {
-        public SpeedChangedCommand(IUnit unit, int value) : base(unit, value) {}
+        public SpeedChangedCommand(IUnit unit, int value) : base(unit, value)
+        {
+            Debug.Log(unit.Name);
+            Debug.Log(value);
+        }
     }
 
     /// <summary>

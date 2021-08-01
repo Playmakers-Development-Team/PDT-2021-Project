@@ -8,7 +8,7 @@ namespace Units.Stats
     {
         [field: SerializeField] public int BaseValue { get; set; }
         
-        public int Value { get; set; }
+        [field: SerializeField]public int Value { get; set; }
         
         public void Reset()
         {
