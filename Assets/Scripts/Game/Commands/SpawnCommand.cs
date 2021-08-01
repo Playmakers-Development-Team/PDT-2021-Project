@@ -34,10 +34,8 @@ public class SpawnCommand : MonoBehaviour
         if (unitsOnBoard)
         {
             unitsOnBoard = false;
-            if (parameter < enemyManager.EnemyUnits.Count)
-            {
+            if (parameter < enemyManager.EnemyUnits.Count) 
                 enemyManager.SpawnSwarm(unitToSpawn, minDistToSpawn, amountToSpawn);
-            }
         }
         
 
@@ -45,28 +43,21 @@ public class SpawnCommand : MonoBehaviour
         {
             amountOfTurns = false;
             if (turnManager.TotalTurnCount == parameter)
-            {
                 enemyManager.SpawnSwarm(unitToSpawn, minDistToSpawn, amountToSpawn);
-            }
         }
 
         if (amountOfRounds)
         {
             amountOfRounds = false;
             if (turnManager.RoundCount == parameter)
-            {
                 enemyManager.SpawnSwarm(unitToSpawn, minDistToSpawn, amountToSpawn);
-            }
         }
 
         if (increasePhase)
-        {
             turnManager.TurnManipulationPhaseIndex = turnManager.TurnManipulationPhaseIndex+1;
-        }
 
         if (decreasePhase)
-        {
             turnManager.TurnManipulationPhaseIndex = turnManager.TurnManipulationPhaseIndex-1;
-        }
+        
     }
 }
