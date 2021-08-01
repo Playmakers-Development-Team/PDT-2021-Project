@@ -17,6 +17,8 @@ using Units;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
 
 namespace Tests
 {
@@ -51,7 +53,6 @@ namespace Tests
         [TearDown] 
         protected void TestCleanup()
         {
-            InputBeacon.RestoreRegularDevices();
             Time.timeScale = 1f;
         }
     }

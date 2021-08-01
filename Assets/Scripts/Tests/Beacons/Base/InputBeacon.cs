@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Linq;
 using E7.Minefield;
+using Tests.AutomatedTests;
+using Tests.Utilities;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -17,13 +19,14 @@ namespace Tests.Beacons.Base
         private Keyboard keyboard;
         private InputDevice[] preExistingDevices;
         private RectTransform cursor;
+        private TestObject testGameObject;
 
         private Mouse Mouse => mouse ??= InputSystem.AddDevice<Mouse>();
         private Keyboard Keyboard => keyboard ??= InputSystem.AddDevice<Keyboard>();
 
         public void PrepareVirtualDevices()
         {
-            preExistingDevices = InputSystem.devices.ToArray();
+            preExistingDevices ??= InputSystem.devices.ToArray();
             
             mouse = Mouse;
             keyboard = Keyboard;
@@ -31,6 +34,10 @@ namespace Tests.Beacons.Base
             cursor = GameObject.Find("TestingCursor")?.GetComponent<RectTransform>();
             if (cursor is null)
                 throw new Exception("Testing Cursor game object not found");
+            testGameObject = GameObject.Find("TestingObject")?.GetComponent<TestObject>();
+            if (testGameObject is null)
+                throw new Exception("TestingObject game object not found");
+            testGameObject.inputBeacon = this;
 
             // We don't want the .current to be null, Monobehaviour.Update methods listening to it
             // might break.
@@ -43,23 +50,29 @@ namespace Tests.Beacons.Base
 
         public void RestoreRegularDevices()
         {
+            preExistingDevices ??= InputSystem.devices.ToArray();
+            foreach (var inputDevice in InputSystem.devices.ToArray())
+            {
+                InputSystem.RemoveDevice(inputDevice);
+            }
+            
             foreach (InputDevice inputDevice in preExistingDevices)
                 InputSystem.AddDevice(inputDevice);
             
             // Very important that we remove the virtual devices, so that we don't accidentally
             // remove them again when we set up.
 
-            if (mouse != null)
-            {
-                InputSystem.RemoveDevice(mouse);
-                mouse = null;
-            }
-
-            if (keyboard != null)
-            {
-                InputSystem.RemoveDevice(keyboard);
-                keyboard = null;
-            }
+            // if (mouse != null)
+            // {
+            //     InputSystem.RemoveDevice(mouse);
+            //     mouse = null;
+            // }
+            //
+            // if (keyboard != null)
+            // {
+            //     InputSystem.RemoveDevice(keyboard);
+            //     keyboard = null;
+            // }
         }
 
         public IEnumerator PressKey(Func<Keyboard, KeyControl> func)
