@@ -90,7 +90,7 @@ namespace Units.Enemies
             {
 
                 List<Vector2> freeTiles = gridManager.GetEmptyTiles();
-                List<Vector2> playerCoord = playerManager.returnAllCoords();
+                List<Vector2> playerCoord = playerManager.ReturnAllCoords();
                 Vector2 target = new Vector2();
                 while (freeTiles.Count > 0)
                 {

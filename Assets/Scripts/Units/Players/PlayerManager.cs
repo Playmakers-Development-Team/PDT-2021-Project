@@ -60,7 +60,7 @@ namespace Units.Players
             return newUnit;
         }
 
-        public List<Vector2> returnAllCoords()
+        public List<Vector2> ReturnAllCoords()
         {
             List<Vector2> coords = new List<Vector2>();
             for (int i = 0; i < playerUnits.Count; i++)
