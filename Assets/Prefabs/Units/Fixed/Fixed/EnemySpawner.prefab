@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 5076836118822117033}
   - component: {fileID: 591563304003242143}
   - component: {fileID: 7068379517129078417}
+  - component: {fileID: 6237635461972298730}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: EnemyUnit
@@ -176,6 +177,10 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 0
     <KnockbackStat>k__BackingField:
       <BaseValue>k__BackingField: 1
+    <StartingTenets>k__BackingField: []
+    TemporaryAttackIncrease: 0
+    TemporaryDefenceIncrease: 0
+    PermanentAttackIncrease: 0
   nameText: {fileID: 0}
   healthText: {fileID: 0}
   damageTextCanvas: {fileID: 0}
@@ -202,3 +207,18 @@ MonoBehaviour:
   info:
     render: {fileID: 21300000, guid: ce876afbd35a78e40af8d4ea9d8aa605, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &6237635461972298730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211234922025711274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020c446c0ac8dd446ae1f08ee514a137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <SpecialMoveCount>k__BackingField: 0
+  meleeAttackAbility: {fileID: 0}
+  buffAbility: {fileID: 0}

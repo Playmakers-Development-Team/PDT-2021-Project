@@ -8652,11 +8652,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5076836118822117033, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.53
+      value: -1.3457774
       objectReference: {fileID: 0}
     - target: {fileID: 5076836118822117033, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.16536954
+      value: 0.6229147
       objectReference: {fileID: 0}
     - target: {fileID: 5076836118822117033, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8690,6 +8690,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7356984096423941700, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
 --- !u!1 &2640585566305992222 stripped
@@ -8697,6 +8701,21 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3211234922025711274, guid: 02d8c1e3caca98c41a2179beae05b56b, type: 3}
   m_PrefabInstance: {fileID: 591563304034027700}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2640585566305992223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2640585566305992222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 020c446c0ac8dd446ae1f08ee514a137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <SpecialMoveCount>k__BackingField: 0
+  meleeAttackAbility: {fileID: 0}
+  buffAbility: {fileID: 0}
 --- !u!1001 &3057458395280218538
 PrefabInstance:
   m_ObjectHideFlags: 0
