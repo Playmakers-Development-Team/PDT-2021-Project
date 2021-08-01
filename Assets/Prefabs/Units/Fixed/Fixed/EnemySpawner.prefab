@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 431085340472312112}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.33, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5076836118822117033}
@@ -186,11 +186,11 @@ MonoBehaviour:
   damageTextCanvas: {fileID: 0}
   damageTextLifetime: 1
   render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
-  indestructible: 1
+  Indestructible: 0
   Target: {fileID: 0}
   timer: 3
-  spawnPrefab: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
-  unitPosition: {x: 0, y: 0}
+  SpawnPrefab: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+  UnitPosition: {x: 0, y: 0}
 --- !u!114 &7068379517129078417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,5 +220,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SpecialMoveCount>k__BackingField: 0
-  meleeAttackAbility: {fileID: 0}
-  buffAbility: {fileID: 0}

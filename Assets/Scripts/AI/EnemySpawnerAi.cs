@@ -8,8 +8,6 @@ namespace AI
 {
     public class EnemySpawnerAi : EnemyAi
     {
-        [SerializeField] private Ability meleeAttackAbility;
-        [SerializeField] private Ability buffAbility;
 
         protected override async void DecideEnemyIntention()
         {
