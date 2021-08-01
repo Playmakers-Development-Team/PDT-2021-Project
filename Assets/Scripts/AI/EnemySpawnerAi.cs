@@ -15,6 +15,7 @@ namespace AI
         {
             if(enemyUnit is EnemySpawnerUnit enemySpawnerUnit)
             {
+                await
                 if(enemySpawnerUnit.Turn()) enemyManager.Spawner(enemySpawnerUnit);
                 else commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
             }

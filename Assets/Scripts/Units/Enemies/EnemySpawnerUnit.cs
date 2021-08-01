@@ -12,15 +12,15 @@ namespace Units.Enemies
     public class EnemySpawnerUnit : EnemyUnit
     {
         [SerializeField] private int timer = 5;
-        public GameObject spawnPrefab;
+        public GameObject SpawnPrefab;
         private EnemyUnit spawnUnit;
 
-        public Vector2Int unitPosition;
+        public Vector2Int UnitPosition;
 
         protected override void Start()
         {            
             base.Start();
-            spawnUnit = spawnPrefab.GetComponent<EnemyUnit>();  
+            spawnUnit = SpawnPrefab.GetComponent<EnemyUnit>();  
             HealthStat.BaseValue = Mathf.FloorToInt(((float)spawnUnit.GetBaseHealth())/2);
             HealthStat.Reset();
             AddOrReplaceTenetStatus(TenetType.Pride, timer); //temp?
@@ -31,8 +31,8 @@ namespace Units.Enemies
             RemoveTenetStatus(TenetType.Pride, 1); //temp?
             if(--timer == 0)
             {
-                indestructible = false;
-                unitPosition = gridManager.ConvertPositionToCoordinate(transform.position);
+                Indestructible = false;
+                UnitPosition = gridManager.ConvertPositionToCoordinate(transform.position);
                 return true;
             }
             return false;
