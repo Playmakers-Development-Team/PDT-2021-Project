@@ -22,8 +22,6 @@ namespace Game
             backgroundManager = ManagerLocator.Get<BackgroundManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
-            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EncounterWon());
-            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EncounterLost());
         }
 
         // TODO: Replace with a scene transition manager
@@ -31,6 +29,10 @@ namespace Game
 
         public void LoadEncounter(EncounterData encounterData)
         {
+            // Only listen to the end of an encounter if it was loaded from the map scene
+            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EncounterWon());
+            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EncounterLost());
+            
             CurrentEncounterData = encounterData;
             
             // TODO: Magic number
