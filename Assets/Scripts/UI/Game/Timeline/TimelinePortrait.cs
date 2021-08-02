@@ -10,6 +10,7 @@ namespace UI.Game.Timeline
         [SerializeField] private Image image;
 
         private GameDialogue.UnitInfo unitInfo;
+        public GameDialogue.UnitInfo UnitInfo => unitInfo;
         
         
         #region UIComponent
