@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414735, b: 0.1210785, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -296,6 +296,26 @@ PrefabInstance:
       propertyPath: data.abilities.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 1ffcebdb74b000142ac8361e9050a7c7, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.<Abilities>k__BackingField.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.<Abilities>k__BackingField.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 17f435995a7876c4fb1272ba67e012a8, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.<Abilities>k__BackingField.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: a4ba14fb862adb843aa5587c910ee43e, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.<Abilities>k__BackingField.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1ffcebdb74b000142ac8361e9050a7c7, type: 2}
+    - target: {fileID: 6708204597060251326, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
+      propertyPath: data.<MovementPoints>k__BackingField.<BaseValue>k__BackingField
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd8d55b2e15d3b7408da02de42ab9da4, type: 3}
 --- !u!1 &229119496
@@ -2183,6 +2203,10 @@ PrefabInstance:
     - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4867198168489326303, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
+      propertyPath: data.<MovementPoints>k__BackingField.<BaseValue>k__BackingField
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5638836853045114003, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
       propertyPath: m_RootOrder
