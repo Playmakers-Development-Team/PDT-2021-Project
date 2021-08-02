@@ -1,4 +1,8 @@
-﻿namespace UI.Game.UnitPanels
+﻿using Commands;
+using Managers;
+using UI.Commands;
+
+namespace UI.Game.UnitPanels
 {
     internal class SelectedUnitPanel : UnitPanel
     {
@@ -40,6 +44,8 @@
             
             Show();
             Redraw();
+            
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new UIUnitSelectedCommand(unit.Unit));
         }
 
         private void OnUnitDeselected()

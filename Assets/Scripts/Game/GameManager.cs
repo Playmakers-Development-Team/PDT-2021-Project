@@ -34,13 +34,13 @@ namespace Game
             CurrentEncounterData = encounterData;
             
             // TODO: Magic number
-            ChangeScene(1);
+            ChangeScene(2);
         }
 
         public void LoadMap()
         {
             // TODO: Magic number
-            ChangeScene(0);
+            ChangeScene(1);
         }
         
         private void EncounterLost()
