@@ -208,6 +208,9 @@ namespace Turn
             CurrentTurnIndex++;
             TotalTurnCount++;
 
+            if (!CheckUnitsRemaining())
+                return;
+
             if (CurrentTurnIndex >= currentTurnQueue.Count)
                 NextRound();
 
@@ -234,34 +237,6 @@ namespace Turn
             RoundCount++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
 
-            // TODO Add option for a draw
-            if (!HasEnemyUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(true));
-                // Debug.Log("YOU WIN!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
-                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-                
-                commandManager.ExecuteCommand(new NoRemainingEnemyUnitsCommand());
-
-                return;
-            }
-
-            if (!HasPlayerUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(false));
-
-                // Debug.Log("YOU LOSE!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
-                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-               
-                commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
-               
-                return;
-            }
-
             previousTurnQueue = currentTurnQueue;
             currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;   // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
             timelineNeedsUpdating = false;
@@ -273,6 +248,39 @@ namespace Turn
 
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
+        }
+
+        private bool CheckUnitsRemaining()
+        {
+            // TODO Add option for a draw
+            if (!HasEnemyUnitInQueue())
+            {
+                commandManager.ExecuteCommand(new GameEndedCommand(true));
+                // Debug.Log("YOU WIN!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingEnemyUnitsCommand());
+
+                return false;
+            }
+
+            if (!HasPlayerUnitInQueue())
+            {
+                commandManager.ExecuteCommand(new GameEndedCommand(false));
+
+                // Debug.Log("YOU LOSE!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
+
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
