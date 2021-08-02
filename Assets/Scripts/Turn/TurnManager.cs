@@ -338,7 +338,7 @@ namespace Turn
         /// </summary>
         public void AddNewUnitToTimeline(IUnit unit)
         {
-            currentTurnQueue.Add(unit);
+            if (!currentTurnQueue.Contains(unit)) currentTurnQueue.Add(unit);
             //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
             timelineNeedsUpdating = true;
         }

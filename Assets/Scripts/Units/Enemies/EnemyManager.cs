@@ -80,6 +80,30 @@ namespace Units.Enemies
                     enemyUnits.RemoveAt(i);
             }
         }
+
+        public async Task Spawner(EnemySpawnerUnit spawnUnit)
+        {
+            // Get spawner stats
+            int damage = spawnUnit.HealthStat.BaseValue - spawnUnit.HealthStat.Value;
+            int curSpeed = spawnUnit.SpeedStat.Value;
+            Vector2Int unitPosition = spawnUnit.UnitPosition;
+
+            // Kill spawner
+            spawnUnit.TakeDamage(spawnUnit.HealthStat.Value + spawnUnit.DefenceStat.Value + 20);
+            await commandManager.WaitForCommand<KilledUnitCommand>();
+
+            // Spawn unit
+            GameObject spawnPrefab = spawnUnit.SpawnPrefab;
+            spawnPrefab.GetComponent<EnemyUnit>().HealthStat.BaseValue = 5;
+            EnemyUnit enemyUnit = (EnemyUnit)Spawn(spawnPrefab, unitPosition);
+            await commandManager.WaitForCommand<SpawnedUnitCommand>(); //IMPORTANT
+
+            // Apply spawner stats
+            enemyUnit.SetSpeed(curSpeed);
+            enemyUnit.TakeDamage(damage);
+
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(spawnUnit));
+        }
         
         public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
 

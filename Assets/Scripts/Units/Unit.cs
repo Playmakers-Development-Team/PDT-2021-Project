@@ -55,6 +55,8 @@ namespace Units
         public Stat SpeedStat { get; private set; }
         public Stat KnockbackStat { get; private set; }
 
+        public bool Indestructible;
+
         [Obsolete("Use HealthStat instead")]
         public Health Health { get; private set; }
         
@@ -335,6 +337,7 @@ namespace Units
             if (!ReferenceEquals(killUnitCommand.Unit, this))
                 return;
             
+            if (Indestructible) return;
             // Since we're about to remove the object, stop listening to the command
             commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
             KillUnit();

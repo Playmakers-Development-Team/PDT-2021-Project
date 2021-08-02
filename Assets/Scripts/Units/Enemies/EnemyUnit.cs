@@ -12,6 +12,8 @@ namespace Units.Enemies
 
         private List<Command> commandQueue = new List<Command>();
 
+        public int GetBaseHealth() => data.HealthValue.BaseValue;
+
         public void QueueCommand(Command command)
         {
             commandQueue.Add(command);
