@@ -8,10 +8,8 @@ namespace AI
 {
     public class EnemySpawnerAi : EnemyAi
     {
-
         protected override async void DecideEnemyIntention()
         {
-            
             if(enemyUnit is EnemySpawnerUnit enemySpawnerUnit)
             {
                 if(enemySpawnerUnit.Turn()) enemyManager.Spawner(enemySpawnerUnit);
