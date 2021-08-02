@@ -148,27 +148,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    name: Helena
-    tenet: 0
-    healthPoints:
-      <BaseValue>k__BackingField: 12
-    movementPoints:
-      <BaseValue>k__BackingField: 2
-    speed:
-      <BaseValue>k__BackingField: 1
-    attack:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
-    defence:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
-    takeKnockbackModifier:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 1
-    abilities:
-    - {fileID: 11400000, guid: e1888d845cd1e6aafb56fec48a2c6d70, type: 2}
-    - {fileID: 11400000, guid: a44a1c36f93163f1e8cc9267db8fc017, type: 2}
-    - {fileID: 11400000, guid: 81dbbde15d5646c138b079576dae00c9, type: 2}
+    <Name>k__BackingField: Helena
+    <Tenet>k__BackingField: 0
+    <MovementPoints>k__BackingField:
+      <BaseValue>k__BackingField: 3
+    <Abilities>k__BackingField: []
     <HealthValue>k__BackingField:
       <BaseValue>k__BackingField: 10
     <SpeedStat>k__BackingField:
@@ -179,11 +163,7 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 0
     <KnockbackStat>k__BackingField:
       <BaseValue>k__BackingField: 1
-  nameText: {fileID: 0}
-  healthText: {fileID: 0}
-  damageTextCanvas: {fileID: 0}
-  damageTextLifetime: 1
-  render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
+    <StartingTenets>k__BackingField: []
 --- !u!114 &5945961282055924207
 MonoBehaviour:
   m_ObjectHideFlags: 0

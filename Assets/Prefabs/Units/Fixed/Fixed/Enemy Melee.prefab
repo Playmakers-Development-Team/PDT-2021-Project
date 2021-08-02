@@ -149,24 +149,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    name: Enemy
-    tenet: 0
-    healthPoints:
-      <BaseValue>k__BackingField: 15
-    movementPoints:
+    <Name>k__BackingField: Melee Enemy
+    <Tenet>k__BackingField: 0
+    <MovementPoints>k__BackingField:
       <BaseValue>k__BackingField: 2
-    speed:
-      <BaseValue>k__BackingField: 1
-    attack:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 4
-    defence:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
-    takeKnockbackModifier:
-      <BaseMultiplier>k__BackingField: 1
-      <BaseAdder>k__BackingField: 0
-    abilities: []
+    <Abilities>k__BackingField: []
     <HealthValue>k__BackingField:
       <BaseValue>k__BackingField: 10
     <SpeedStat>k__BackingField:
@@ -181,11 +168,6 @@ MonoBehaviour:
     TemporaryAttackIncrease: 0
     TemporaryDefenceIncrease: 0
     PermanentAttackIncrease: 0
-  nameText: {fileID: 0}
-  healthText: {fileID: 0}
-  damageTextCanvas: {fileID: 0}
-  damageTextLifetime: 1
-  render: {fileID: 21300000, guid: 1ef6790eeec5d9943b94058ef4940bb5, type: 3}
   Target: {fileID: 0}
 --- !u!114 &-1575615520848126805
 MonoBehaviour:
@@ -218,3 +200,6 @@ MonoBehaviour:
   <SpecialMoveCount>k__BackingField: 3
   meleeAttackAbility: {fileID: 11400000, guid: 3369e02bbc3677d4c92e11d599922ad1, type: 2}
   buffAbility: {fileID: 11400000, guid: 528d0c3989a04fc44b124a6a49f88607, type: 2}
+  actionDelay: 1.5
+  specialMoveCount: 3
+  specialMoveOffset: 1
