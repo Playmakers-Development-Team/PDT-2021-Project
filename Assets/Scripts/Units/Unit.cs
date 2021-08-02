@@ -7,7 +7,6 @@ using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
 using Managers;
-using TMPro;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
@@ -22,22 +21,7 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
-        [Obsolete("you stupid x3")]
-        [SerializeField] private TMP_Text nameText;
-        
-        [Obsolete("you stupid x5")]
-        [SerializeField] private TMP_Text healthText;
-        
-        [Obsolete("you stupid x7.5")]
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        
-        [Obsolete("you stupid x39")]
-        [SerializeField] private float damageTextLifetime = 1.0f;
-        
-        [Obsolete("you stupid x42")]
-        [SerializeField] private Sprite render;
-        
+
         private SpriteRenderer spriteRenderer;
         
         public string Name
@@ -53,29 +37,12 @@ namespace Units
         public Stat SpeedStat { get; private set; }
         public Stat KnockbackStat { get; private set; }
 
-        public bool Indestructible;
+        public bool Indestructible { get; set; }
 
-        [Obsolete("Use HealthStat instead")]
-        public Health Health { get; private set; }
-        
-        [Obsolete("Use KnockbackStat instead")]
-        public Knockback Knockback { get; private set; }
-        
         public Animator UnitAnimator { get; private set; }
-        public SpriteRenderer SpriteRenderer => spriteRenderer;
         public Color UnitColor => spriteRenderer.color;
         
         public TenetType Tenet => data.Tenet;
-        
-        [Obsolete("Use SpeedStat instead")]
-        public ValueStat Speed
-        {
-            get => data.Speed;
-            set => data.Speed = value;
-        }
-
-        [Obsolete("Use AttackStat instead")]
-        public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
         {
@@ -89,10 +56,6 @@ namespace Units
 
         public static Type DataType => typeof(T);
         
-        public Sprite Render => render;
-
-        [Obsolete]
-        public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
@@ -126,12 +89,6 @@ namespace Units
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
 
             UnitAnimator = GetComponentInChildren<Animator>();
-
-            if (nameText)
-                nameText.text = Name;
-            
-            if (healthText)
-                healthText.text = HealthStat.Value + " / " + HealthStat.BaseValue;
         }
 
         #region ValueChanging
@@ -162,23 +119,13 @@ namespace Units
             other.TakeDamage(damage);
         }
 
-        // TODO: Remove this function.
-        public void TakeDamageWithoutModifiers(int amount)
-        {
-            // commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
-            // int damageTaken = Health.TakeDamage(amount);
-            // commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
-        }
-
         public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
         public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
-        [Obsolete("Directly alter MovementPoints Value instead")]
-        public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
-        
         #endregion
+        
         #region UnitDeath
 
         /// <summary>
@@ -224,26 +171,6 @@ namespace Units
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
         
-        #endregion
-
-        #region Scene
-        
-        [Obsolete("you stupid")]
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-            
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-            
-            Invoke("HideDamageText", damageTextLifetime);
-        }
-
-        [Obsolete("you stupid x2")]
-        private void HideDamageText() => damageTextCanvas.enabled = false;
-
-        public void SetName() => nameText.text = Name;
-
         #endregion
 
         #region AnimationHandling
@@ -307,8 +234,6 @@ namespace Units
         /// Returns a list of all coordinates that are reachable from a given starting position
         /// within the given range.
         /// </summary>
-        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
-        /// <param name="range">The range from the starting tile using manhattan distance.</param>
         /// <returns>A list of the coordinates of reachable tiles.</returns>
         public List<Vector2Int> GetAllReachableTiles()
         {
@@ -427,7 +352,7 @@ namespace Units
             ));
             
             gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints(unit.MovementPoints.Value - manhattanDistance);
+            unit.MovementPoints.Value -= manhattanDistance;
             unit.ChangeAnimation(AnimationStates.Idle);
 
             /*Debug.Log(Mathf.Max(0,
@@ -464,7 +389,6 @@ namespace Units
             
             commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
             commandManager.ListenCommand<AbilityCommand>(OnAbility);
-            commandManager.ListenCommand<EnemyAttack>(OnEnemyAttack);
             commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
         }
 
@@ -474,7 +398,6 @@ namespace Units
             
             commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
             commandManager.UnlistenCommand<AbilityCommand>(OnAbility);
-            commandManager.UnlistenCommand<EnemyAttack>(OnEnemyAttack);
             commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
         }
 
@@ -486,25 +409,12 @@ namespace Units
             ChangeAnimation(AnimationStates.Casting);
         }
 
-        // TODO: Can be deleted once enemy abilities are implemented
-        private void OnEnemyAttack(EnemyAttack cmd)
-        {
-            if (!ReferenceEquals(cmd.Unit, this))
-                return;
-
-            ChangeAnimation(AnimationStates.Casting);
-        }
-
         private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
         
         #region TenetStatusEffects
 
         private TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
 
-        [Obsolete("Use TenetStatuses instead")]
-        public ICollection<TenetStatus> TenetStatusEffects =>
-            TenetStatusEffectsContainer.TenetStatusEffects;
-        
         public ICollection<TenetStatus> TenetStatuses =>
             TenetStatusEffectsContainer.TenetStatuses;
 
@@ -516,27 +426,15 @@ namespace Units
 
         public void ClearAllTenetStatus() =>
             TenetStatusEffectsContainer.ClearAllTenetStatus();
-        
-        [Obsolete("Use GetTenetStatusCount instead")]
-        public int GetTenetStatusEffectCount(TenetType tenetType) =>
-            TenetStatusEffectsContainer.GetTenetStatusEffectCount(tenetType);
 
         public int GetTenetStatusCount(TenetType tenetType) =>
             TenetStatusEffectsContainer.GetTenetStatusCount(tenetType);
 
-        [Obsolete("Use HasTenetStatus instead")]
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
-            TenetStatusEffectsContainer.HasTenetStatusEffect(tenetType, minimumStackCount);
-
         public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
             TenetStatusEffectsContainer.HasTenetStatus(tenetType, minimumStackCount);
         
-        [Obsolete("Use TryGetTenetStatus instead")]
         public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
             TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
-
-        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus) =>
-            TenetStatusEffectsContainer.TryGetTenetStatusEffect(tenetType, out tenetStatus);
 
         #endregion
     }

@@ -68,9 +68,7 @@ namespace Turn
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
 
         private CommandManager commandManager;
-        private PlayerManager playerManager;
         private UnitManager unitManager;
-        private EnemyManager enemyManager;
 
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
@@ -89,9 +87,7 @@ namespace Turn
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
-            playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
 
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
@@ -196,7 +192,6 @@ namespace Turn
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
             timelineNeedsUpdating = true;
-            SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
 
         /// <summary>
@@ -224,8 +219,6 @@ namespace Turn
             if (ActingEnemyUnit is null)
                 PhaseIndex = 0;
                 //enable button
-
-            SelectCurrentUnit();
         }
 
         /// <summary>
@@ -255,9 +248,6 @@ namespace Turn
             // TODO Add option for a draw
             if (!HasEnemyUnitInQueue())
             {
-                commandManager.ExecuteCommand(new GameEndedCommand(true));
-                // Debug.Log("YOU WIN!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
                 // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                 AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
 
@@ -268,10 +258,6 @@ namespace Turn
 
             if (!HasPlayerUnitInQueue())
             {
-                commandManager.ExecuteCommand(new GameEndedCommand(false));
-
-                // Debug.Log("YOU LOSE!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
                 // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
                 AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
 
@@ -347,7 +333,7 @@ namespace Turn
             
             commandManager.ExecuteCommand(new MeditatedCommand(ActingUnit));
             unitsMeditatedThisRound.Add(ActingUnit);
-            playerManager.Insight.Value += 1;
+            Insight.Value += 1;
             EndTurnManipulationPhase();
         }
 
@@ -406,7 +392,7 @@ namespace Turn
                 currentIndex += increment;
             }
 
-            playerManager.Insight.Value--;
+            Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new TurnManipulatedCommand(currentTurnQueue[startIndex],
                 currentTurnQueue[endIndex]));
@@ -496,17 +482,6 @@ namespace Turn
         #endregion
 
         #region Unit
-
-        /// <summary>
-        /// Selects the <c>CurrentUnit</c> if it is of type <c>PlayerUnit</c>.
-        /// </summary>
-        private void SelectCurrentUnit()
-        {
-            if (ActingUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) ActingUnit);
-            else
-                playerManager.DeselectUnit();
-        }
 
         /// <summary>
         /// Resets the necessary stats of all units at the end of a round.
