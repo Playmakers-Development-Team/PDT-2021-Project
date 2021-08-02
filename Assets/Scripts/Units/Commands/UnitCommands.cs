@@ -75,14 +75,21 @@ namespace Units.Commands
         
         public int Difference { get; }
         
+        public int MaxValue { get; }
+        
+        public int DisplayValue { get;}
         public int NewValue { get; }
 
-        public StatChangedCommand(IUnit unit, StatTypes type, int initialValue, int newValue) : base(unit)
+        public StatChangedCommand(IUnit unit, StatTypes type, int maxValue,int initialValue, int 
+        newValue) 
+        : base(unit)
         {
             StatType = type;
             InitialValue = initialValue;
             NewValue = newValue;
             Difference = newValue - initialValue;
+            DisplayValue = Math.Abs(Difference);
+            MaxValue = maxValue;
         }
     }
     
