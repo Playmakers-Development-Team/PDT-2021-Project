@@ -37,8 +37,9 @@ namespace UI.Game.Timeline
         {
             unitInfo = dialogue.GetInfo(unit);
             
-            image.texture = unitInfo.Render;
-            image.color = unitInfo.Color;
+            image.texture = unitInfo.TimelineCropInfo.Image;
+            image.color = unitInfo.TimelineCropInfo.Colour;
+            image.uvRect = unitInfo.TimelineCropInfo.UVRect;
         }
 
         internal void Destroy()

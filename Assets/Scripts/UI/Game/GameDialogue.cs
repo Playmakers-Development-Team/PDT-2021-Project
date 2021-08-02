@@ -229,12 +229,12 @@ namespace UI.Game
         [Serializable]
         internal class UnitInfo
         {
-            [SerializeField] private Texture2D render;
-            [SerializeField] private Color color;
+            [SerializeField] private CropInfo profileCropInfo;
+            [SerializeField] private CropInfo timelineCropInfo;
 
             
-            internal Texture2D Render => render;
-            internal Color Color => color;
+            internal CropInfo ProfileCropInfo => profileCropInfo;
+            internal CropInfo TimelineCropInfo => timelineCropInfo;
             
             internal IUnit Unit { get; private set; }
 

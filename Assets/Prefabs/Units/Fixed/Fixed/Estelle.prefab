@@ -180,6 +180,7 @@ MonoBehaviour:
       <BaseValue>k__BackingField: 0
     <KnockbackStat>k__BackingField:
       <BaseValue>k__BackingField: 1
+    <StartingTenets>k__BackingField: []
   nameText: {fileID: 0}
   healthText: {fileID: 0}
   damageTextCanvas: {fileID: 0}
@@ -199,7 +200,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitGridObject: {fileID: 6708204597060251326}
   info:
-    render: {fileID: 2800000, guid: 8ea64372d75fe9b4ea03779809e69fa6, type: 3}
+    profileCropInfo: {fileID: 11400000, guid: cb3f9b399009786479e1c89877b0e4c8, type: 2}
+    timelineCropInfo: {fileID: 11400000, guid: cb3f9b399009786479e1c89877b0e4c8, type: 2}
     color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &5889240807414798371
 GameObject:

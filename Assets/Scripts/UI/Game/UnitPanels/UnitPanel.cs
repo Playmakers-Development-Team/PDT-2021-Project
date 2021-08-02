@@ -59,8 +59,9 @@ namespace UI.Game.UnitPanels
                 return;
             
             // Render image
-            renderImage.texture = unitInfo.Render;
-            renderImage.color = unitInfo.Color;
+            renderImage.texture = unitInfo.ProfileCropInfo.Image;
+            renderImage.color = unitInfo.ProfileCropInfo.Colour;
+            renderImage.uvRect = unitInfo.ProfileCropInfo.UVRect;
             
             // Health bar
             healthImage.material.SetFloat(fillId, unitInfo.Unit.HealthStat.Value / (float) unitInfo.Unit.HealthStat.BaseValue);
