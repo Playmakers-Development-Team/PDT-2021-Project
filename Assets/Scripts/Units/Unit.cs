@@ -116,7 +116,7 @@ namespace Units
             
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
+            HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
@@ -190,8 +190,7 @@ namespace Units
                 return;
             
             if (Indestructible) return;
-            // Since we're about to remove the object, stop listening to the command
-            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+
             KillUnit();
         }
 
