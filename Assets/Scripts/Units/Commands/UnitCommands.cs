@@ -47,6 +47,7 @@ namespace Units.Commands
     /// <summary>
     /// Executed when a unit is no longer selected by the player.
     /// </summary>
+    [Obsolete]
     public class UnitDeselectedCommand : UnitCommand
     {
         public UnitDeselectedCommand(IUnit unit) : base(unit) {}
@@ -55,21 +56,16 @@ namespace Units.Commands
     /// <summary>
     /// Executed when a unit is selected by the player.
     /// </summary>
+    [Obsolete]
     public class UnitSelectedCommand : UnitCommand
     {
         public UnitSelectedCommand(IUnit unit) : base(unit) {}
     }
-    
-    /// <summary>
-    /// Executed when all player units are spawned and ready in the scene.
-    /// </summary>
-    public class PlayerUnitsReadyCommand : Command {}
 
     /// <summary>
-    /// Executed when all enemy units are spawned and ready in the scene.
+    /// Executed when all units of type T are spawned and ready in the scene.
     /// </summary>
-    public class EnemyUnitsReadyCommand : Command {}
-
+    public class UnitsReadyCommand<T> : Command where T : UnitData {}
 
     public class StatChangedCommand : UnitCommand
     {
@@ -198,4 +194,9 @@ namespace Units.Commands
     {
         public EnemyActionsCompletedCommand(IUnit unit) : base(unit) {}
     }
+
+    /// <summary>
+    /// Executed when a generic UnitManager is ready to accept IUnit spawns.
+    /// </summary>
+    public class UnitManagerReadyCommand<T> : Command where T : UnitData {}
 }

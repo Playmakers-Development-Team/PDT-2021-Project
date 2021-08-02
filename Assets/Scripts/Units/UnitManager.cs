@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Commands;
 using Grid;
+using Grid.GridObjects;
 using Managers;
 using Units.Commands;
 using Units.Enemies;
@@ -12,6 +14,7 @@ namespace Units
 {
     public class UnitManager : Manager
     {
+        [Obsolete]
         public IUnit SelectedUnit { get; private set; }
         
         protected CommandManager commandManager;
@@ -41,8 +44,8 @@ namespace Units
         private List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-            allUnits.AddRange(enemyManager.EnemyUnits);
-            allUnits.AddRange(playerManager.PlayerUnits);
+            allUnits.AddRange(enemyManager.Units);
+            allUnits.AddRange(playerManager.Units);
             return allUnits;
         }
 
@@ -178,5 +181,59 @@ namespace Units
         }
 
         #endregion
+    }
+
+    public abstract class UnitManager<T> : UnitManager where T : UnitData
+    {
+        private readonly List<IUnit> units = new List<IUnit>();
+
+        public IReadOnlyList<IUnit> Units => units.AsReadOnly();
+
+        public void ClearUnits() => units.Clear();
+        
+        public GridObject FindAdjacentPlayer(IUnit unit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(unit.Coordinate);
+
+            foreach (var adjacentGridObject in adjacentGridObjects)
+            {
+                if (adjacentGridObject.CompareTag("PlayerUnit"))
+                    return adjacentGridObject;
+            }
+
+            return null;
+        }
+
+        public IUnit Spawn(IUnit unit)
+        {
+            units.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
+        
+        /// <summary>
+        /// Removes a target <c>IUnit</c> from the <c>units</c> list.
+        /// </summary>
+        public void RemoveUnit(IUnit targetUnit) => units.Remove(targetUnit);
+        
+        /// <summary>
+        /// Adds a unit to the <c>units</c> list.
+        /// </summary>
+        public void AddUnit(IUnit targetUnit) => units.Add(targetUnit);
+        
+        /// <summary>
+        /// Spawns a unit and adds it to the <c>units</c> list.
+        /// </summary>
+        /// <param name="unitPrefab"></param>
+        /// <param name="gridPosition"></param>
+        /// <returns>The new <c>IUnit</c> that was added.</returns>
+        public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
+        {
+            IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
+            units.Add(newUnit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
+            return newUnit;
+        }
     }
 }

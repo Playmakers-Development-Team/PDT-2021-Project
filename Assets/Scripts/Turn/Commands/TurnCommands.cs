@@ -1,3 +1,4 @@
+using System;
 using Commands;
 using Units;
 using Units.Commands;
@@ -51,11 +52,20 @@ namespace Turn.Commands
         public MeditatedCommand(IUnit unit) : base(unit) {}
     }
 
-    // TODO: Will be replaced with NoRemainingUnitsCommand when World Map is merged.
+    [Obsolete]
     public class GameEndedCommand : Command
     {
         public bool DidPlayerWin { get; set; }
         public GameEndedCommand(bool didPlayerWin) => DidPlayerWin = didPlayerWin;
-        
     }
+    
+    /// <summary>
+    /// Executed when there are no enemy units left alive.
+    /// </summary>
+    public class NoRemainingEnemyUnitsCommand : Command {}
+    
+    /// <summary>
+    /// Executed when there are no player units left alive.
+    /// </summary>
+    public class NoRemainingPlayerUnitsCommand : Command {}
 }

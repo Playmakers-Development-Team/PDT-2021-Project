@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Units.Enemies
 {
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : UnitController<EnemyUnitData>
     {
         // Temporary debug buttons, likely to be removed later
         [SerializeField] private bool debugKillEnemyButton;
@@ -18,29 +18,42 @@ namespace Units.Enemies
 
         // TODO: Use set enemy start positions as opposed to random positions later
         private GridManager gridManager;
-        private EnemyManager enemyManager;
         private GameObject enemyPrefab;
 
-
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
+            #region GetManagers
+
             gridManager = ManagerLocator.Get<GridManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
+            unitManagerT = ManagerLocator.Get<EnemyManager>();
+            
+            #endregion
         }
 
+        // TODO: Removed for now, needs to be refactored.
         // NOTE: Uses Start() instead of Awake() so tilemap in GridController can set up
-        private void Start()
-        {
-            // TODO: Obtain the number of enemies, their tenets and starting positions
-            // Maybe do this through a level dictionary that contains these details?
-            // For now placeholders will be used
-
-            gridManager = ManagerLocator.Get<GridManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
-
-            // TODO: Replace with a GridReadyCommand listener
-            isSpawningEnemies = true;
-        }
+        // protected override void Start()
+        // {
+        //     if (totalEnemies <= 0)
+        //     {
+        //         base.Start();
+        //         return;
+        //     }
+        //     
+        //     // TODO: Is all of this still necessary?
+        //     // TODO: Obtain the number of enemies, their tenets and starting positions
+        //     // Maybe do this through a level dictionary that contains these details?
+        //     // For now placeholders will be used
+        //
+        //     // TODO: Replace with a GridReadyCommand listener
+        //     isSpawningEnemies = true;
+        //
+        //     unitManagerT.ClearUnits();
+        //
+        //     commandManager.ExecuteCommand(new UnitManagerReadyCommand<EnemyUnitData>());
+        // }
 
         private void Update()
         {
@@ -49,10 +62,10 @@ namespace Units.Enemies
             // spaces with enemies since they haven't been properly added to the grid yet)
             if (isSpawningEnemies)
             {
-                if (enemyManager.EnemyUnits.Count >= totalEnemies)
+                if (unitManagerT.Units.Count >= totalEnemies)
                 {
                     isSpawningEnemies = false;
-                    ManagerLocator.Get<CommandManager>().ExecuteCommand(new EnemyUnitsReadyCommand());
+                    commandManager.ExecuteCommand(new UnitsReadyCommand<EnemyUnitData>());
                 }
             }
         }
@@ -68,7 +81,7 @@ namespace Units.Enemies
 
         private void SpawnEnemy()
         {
-           IUnit enemyUnit = enemyManager.Spawn(enemyPrefab, gridManager
+           IUnit enemyUnit = unitManagerT.Spawn(enemyPrefab, gridManager
            .GetRandomUnoccupiedCoordinates());
 
            enemyUnit.Name = enemyUnit.RandomizeName();
@@ -80,8 +93,8 @@ namespace Units.Enemies
         // TODO: Refactor or remove.
         private void DebugKillEnemyFunction()
         {
-            if (enemyManager.EnemyUnits.Count > 0)
-                enemyManager.EnemyUnits[0].TakeDamageWithoutModifiers(1);
+            if (unitManagerT.Units.Count > 0)
+                unitManagerT.Units[0].TakeDamageWithoutModifiers(1);
 
             debugKillEnemyButton = false;
         }
@@ -89,9 +102,9 @@ namespace Units.Enemies
         // TODO: Refactor or remove.
         private void DebugDamagePlayerButton()
         {
-            foreach (var enemy in enemyManager.EnemyUnits)
+            foreach (var enemy in unitManagerT.Units)
             {
-                GridObject firstAdjacentPlayer = enemyManager.FindAdjacentPlayer(enemy);
+                GridObject firstAdjacentPlayer = unitManagerT.FindAdjacentPlayer(enemy);
                 if (firstAdjacentPlayer != null)
                 {
                     if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)

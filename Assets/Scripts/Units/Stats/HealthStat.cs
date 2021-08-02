@@ -10,10 +10,11 @@ namespace Units.Stats
     public class HealthStat : Stat
     {
         private readonly KillUnitCommand unitDeathCommand;
-        
-        public HealthStat(KillUnitCommand unitDeathCommand, IUnit unit, int baseValue, StatTypes
+        private Action OnUnitDeath;
+
+        public HealthStat(Action onUnitDeath, IUnit unit, int baseValue, StatTypes
                               statType) : base(unit, baseValue, statType) =>
-            this.unitDeathCommand = unitDeathCommand;
+            OnUnitDeath = onUnitDeath;
 
         public int TakeDamage(int amount)
         {
@@ -34,7 +35,7 @@ namespace Units.Stats
         private void CheckDeath()
         {
             if (Value <= 0)
-                ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
+                OnUnitDeath.Invoke();
         }
     }
 }

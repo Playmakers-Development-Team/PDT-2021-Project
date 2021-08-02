@@ -33,8 +33,32 @@ namespace Turn
         public int PhaseIndex { get; set; }
 
         public Stat Insight { get; set; }
+        
+        /// <summary>
+        /// The unit that is currently taking its turn. Returns null if no unit is taking its turn.
+        /// </summary>
+        public IUnit ActingUnit
+        {
+            get
+            {
+                if (currentTurnQueue.Count == 0)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
+                                     $"{nameof(currentTurnQueue)} is empty.");
+                    return null;
+                }
+                
+                if (CurrentTurnIndex < 0 || CurrentTurnIndex >= currentTurnQueue.Count)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
+                                     $"{nameof(CurrentTurnIndex)} is not valid.");
+                    return null;
+                }
+                
+                return currentTurnQueue[CurrentTurnIndex];
+            }
+        }
 
-        public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
@@ -184,6 +208,9 @@ namespace Turn
             CurrentTurnIndex++;
             TotalTurnCount++;
 
+            if (!CheckUnitsRemaining())
+                return;
+
             if (CurrentTurnIndex >= currentTurnQueue.Count)
                 NextRound();
 
@@ -210,26 +237,6 @@ namespace Turn
             RoundCount++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
 
-            // TODO Add option for a draw
-            if (!HasEnemyUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(true));
-                // Debug.Log("YOU WIN!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
-                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-            }
-
-            if (!HasPlayerUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(false));
-
-               // Debug.Log("YOU LOSE!");
-               // TODO Player wins. End the encounter somehow, probably inform the GameManager
-               // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-               AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-            }
-
             previousTurnQueue = currentTurnQueue;
             currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;   // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
             timelineNeedsUpdating = false;
@@ -241,6 +248,39 @@ namespace Turn
 
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
+        }
+
+        private bool CheckUnitsRemaining()
+        {
+            // TODO Add option for a draw
+            if (!HasEnemyUnitInQueue())
+            {
+                commandManager.ExecuteCommand(new GameEndedCommand(true));
+                // Debug.Log("YOU WIN!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingEnemyUnitsCommand());
+
+                return false;
+            }
+
+            if (!HasPlayerUnitInQueue())
+            {
+                commandManager.ExecuteCommand(new GameEndedCommand(false));
+
+                // Debug.Log("YOU LOSE!");
+                // TODO Player wins. End the encounter somehow, probably inform the GameManager
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
+
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

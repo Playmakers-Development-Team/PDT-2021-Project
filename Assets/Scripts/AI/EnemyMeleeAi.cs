@@ -17,7 +17,7 @@ namespace AI
         
         protected override async void DecideEnemyIntention()
         {
-            if (playerManager.PlayerUnits.Count <= 0)
+            if (playerManager.Units.Count <= 0)
             {
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;

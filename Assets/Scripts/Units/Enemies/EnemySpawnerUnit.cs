@@ -1,9 +1,4 @@
-using System.Collections.Generic;
 using Abilities;
-using Commands;
-using Managers;
-using Units;
-using Units.Commands;
 using TenetStatuses;
 using UnityEngine;
 
@@ -17,11 +12,10 @@ namespace Units.Enemies
 
         public Vector2Int UnitPosition;
 
-        protected override void Start()
+        private void Start()
         {            
-            base.Start();
             spawnUnit = SpawnPrefab.GetComponent<EnemyUnit>();  
-            HealthStat.BaseValue = Mathf.FloorToInt(((float)spawnUnit.GetBaseHealth())/2);
+            HealthStat.BaseValue = Mathf.FloorToInt((float) spawnUnit.GetBaseHealth() / 2);
             HealthStat.Reset();
             AddOrReplaceTenetStatus(TenetType.Pride, timer); //temp?
         }

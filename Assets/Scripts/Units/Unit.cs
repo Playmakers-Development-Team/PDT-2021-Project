@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
-using Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
@@ -88,24 +86,18 @@ namespace Units
                 commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
             }
         }
-        
-        [Obsolete("Use TenetStatuses instead")]
-        public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
-        public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
         public static Type DataType => typeof(T);
         
         public Sprite Render => render;
 
+        [Obsolete]
         public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
-
-        private const int maxTenetStatusEffectCount = 2;
-        private LinkedList<TenetStatus> tenetStatusEffectSlots = new LinkedList<TenetStatus>();
-
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
-        private CommandManager commandManager;
+
+        protected UnitManager<T> unitManagerT; 
         
         // TODO: Rename
         private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
@@ -119,50 +111,21 @@ namespace Units
             #region GetManagers
 
             playerManager = ManagerLocator.Get<PlayerManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             
             #endregion
             
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        }
-        
-        protected override void Start()
-        {
-            base.Start();
 
-            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
+            HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
-            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
-            
+            TenetStatusEffectsContainer.Initialise(data.StartingTenets);
+
             UnitAnimator = GetComponentInChildren<Animator>();
-            
-            #region ListenCommands
-
-            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
-            commandManager.ListenCommand<AbilityCommand>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.AbilityUser, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-            
-            // TODO: Can be deleted once enemy abilities are implemented
-            commandManager.ListenCommand<EnemyAttack>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.Unit, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-
-            #endregion
 
             if (nameText)
                 nameText.text = Name;
@@ -216,117 +179,6 @@ namespace Units
         public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
         
         #endregion
-
-        #region TenetStatusEffect
-
-        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
-        {
-            TenetStatus status = new TenetStatus(tenetType, stackCount);
-
-            if (status.IsEmpty)
-                return;
-
-            // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
-            {
-                TenetStatus newStatus = foundNode.Value + status;
-                // Remember make the added tenet the latest and last tenet in the list
-                tenetStatusEffectSlots.Remove(foundNode);
-                tenetStatusEffectSlots.AddLast(newStatus);
-            }
-            else
-            {
-                // When we are already utilizing all the slots
-                if (TenetStatuses.Count == maxTenetStatusEffectCount)
-                {
-                    // Remove the oldest status effect to make space for the new status effect
-                    tenetStatusEffectSlots.RemoveFirst();
-                }
-
-                tenetStatusEffectSlots.AddLast(status);
-            }
-        }
-
-        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue)
-        {
-            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    node.Value -= amount;
-
-                    if (node.Value.IsEmpty)
-                        tenetStatusEffectSlots.Remove(node);
-                    
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            return false;
-        }
-
-        public void ClearAllTenetStatus() => tenetStatusEffectSlots.Clear();
-
-        [Obsolete("Use TryGetTenetStatus instead")]
-        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
-            TryGetTenetStatusEffect(tenetType, out tenetStatus);
-
-        public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatus tenetStatus)
-        {
-            bool isFound = TryGetTenetStatusNode(tenetType,
-                out LinkedListNode<TenetStatus> foundNode);
-            tenetStatus = isFound ? foundNode.Value : default;
-            return isFound;
-        }
-
-        [Obsolete("Use GetTenetStatus instead")]
-        public int GetTenetStatusEffectCount(TenetType tenetType) =>
-            GetTenetStatusCount(tenetType);
-
-        public int GetTenetStatusCount(TenetType tenetType)
-        {
-            return HasTenetStatus(tenetType)
-                ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
-                : 0;
-        }
-
-        [Obsolete("Use HasTenetStatus instead")]
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
-            HasTenetStatus(tenetType, minimumStackCount);
-
-        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return tenetStatusEffectSlots.Any(s =>
-                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
-        }
-
-        private bool TryGetTenetStatusNode(TenetType tenetType,
-                                           out LinkedListNode<TenetStatus> foundNode)
-        {
-            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    foundNode = node;
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            foundNode = null;
-            return false;
-        }
-        
-        #endregion
-
         #region UnitDeath
 
         /// <summary>
@@ -338,8 +190,7 @@ namespace Units
                 return;
             
             if (Indestructible) return;
-            // Since we're about to remove the object, stop listening to the command
-            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+
             KillUnit();
         }
 
@@ -462,7 +313,7 @@ namespace Units
         public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
-            int range = (int) MovementPoints.Value;
+            int range = MovementPoints.Value;
             
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -598,10 +449,95 @@ namespace Units
                 "Github-Bot"
             };
             
-            int randomIndex = UnityEngine.Random.Range(0, names.Length - 1);
+            int randomIndex = Random.Range(0, names.Length - 1);
             return names[randomIndex];
         }
         
+        #endregion
+        
+        // TODO: Add to correct region
+        protected void Spawn() => unitManagerT.Spawn(this);
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.ListenCommand<AbilityCommand>(OnAbility);
+            commandManager.ListenCommand<EnemyAttack>(OnEnemyAttack);
+            commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.UnlistenCommand<AbilityCommand>(OnAbility);
+            commandManager.UnlistenCommand<EnemyAttack>(OnEnemyAttack);
+            commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        private void OnAbility(AbilityCommand cmd)
+        {
+            if (!ReferenceEquals(cmd.AbilityUser, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
+
+        // TODO: Can be deleted once enemy abilities are implemented
+        private void OnEnemyAttack(EnemyAttack cmd)
+        {
+            if (!ReferenceEquals(cmd.Unit, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
+
+        private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
+        
+        #region TenetStatusEffects
+
+        private TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
+
+        [Obsolete("Use TenetStatuses instead")]
+        public ICollection<TenetStatus> TenetStatusEffects =>
+            TenetStatusEffectsContainer.TenetStatusEffects;
+        
+        public ICollection<TenetStatus> TenetStatuses =>
+            TenetStatusEffectsContainer.TenetStatuses;
+
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1) =>
+            TenetStatusEffectsContainer.AddOrReplaceTenetStatus(tenetType, stackCount);
+
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue) =>
+            TenetStatusEffectsContainer.RemoveTenetStatus(tenetType, amount);
+
+        public void ClearAllTenetStatus() =>
+            TenetStatusEffectsContainer.ClearAllTenetStatus();
+        
+        [Obsolete("Use GetTenetStatusCount instead")]
+        public int GetTenetStatusEffectCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusEffectCount(tenetType);
+
+        public int GetTenetStatusCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusCount(tenetType);
+
+        [Obsolete("Use HasTenetStatus instead")]
+        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatusEffect(tenetType, minimumStackCount);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatus(tenetType, minimumStackCount);
+        
+        [Obsolete("Use TryGetTenetStatus instead")]
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
+
+        public bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatusEffect(tenetType, out tenetStatus);
+
         #endregion
     }
 }
