@@ -49,10 +49,18 @@ namespace Tests.Beacons.Base
         {
             // Very important that we remove the virtual devices, so that we don't accidentally
             // remove them again when we set up.
-            preExistingDevices ??= InputSystem.devices.ToArray();
-            foreach (var inputDevice in InputSystem.devices.ToArray())
+            //preExistingDevices ??= InputSystem.devices.ToArray();
+
+            if (mouse != null)
             {
-                InputSystem.RemoveDevice(inputDevice);
+                InputSystem.RemoveDevice(mouse);
+                mouse = null;
+            }
+            
+            if (keyboard != null)
+            {
+                InputSystem.RemoveDevice(keyboard);
+                keyboard = null;
             }
             
             foreach (InputDevice inputDevice in preExistingDevices)

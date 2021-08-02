@@ -8,7 +8,6 @@ namespace Tests.AutomatedTests
         public InputBeacon inputBeacon { get; set; }
         private void OnDestroy()
         {
-            Debug.Log("test");
             inputBeacon.RestoreRegularDevices();
         }
     }
