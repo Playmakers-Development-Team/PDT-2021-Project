@@ -14,11 +14,9 @@ namespace TenetStatuses
         public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
-        public void Initialise(IEnumerable<TenetStatus> startingTenets)
-        {
+        public void Initialise(IEnumerable<TenetStatus> startingTenets) =>
             tenetStatusEffectSlots = new LinkedList<TenetStatus>(startingTenets);
-        }
-        
+
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {
             TenetStatus status = new TenetStatus(tenetType, stackCount);
@@ -28,9 +26,7 @@ namespace TenetStatuses
 
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
-            {
                 foundNode.Value += status;
-            }
             else
             {
                 // When we are already utilizing all the slots
@@ -85,22 +81,18 @@ namespace TenetStatuses
         public int GetTenetStatusEffectCount(TenetType tenetType) =>
             GetTenetStatusCount(tenetType);
 
-        public int GetTenetStatusCount(TenetType tenetType)
-        {
-            return HasTenetStatus(tenetType)
+        public int GetTenetStatusCount(TenetType tenetType) =>
+            HasTenetStatus(tenetType)
                 ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
                 : 0;
-        }
 
         [Obsolete("Use HasTenetStatus instead")]
         public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
             HasTenetStatus(tenetType, minimumStackCount);
 
-        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return tenetStatusEffectSlots.Any(s =>
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
+            tenetStatusEffectSlots.Any(s =>
                 s.TenetType == tenetType && s.StackCount >= minimumStackCount);
-        }
 
         private bool TryGetTenetStatusNode(TenetType tenetType,
                                            out LinkedListNode<TenetStatus> foundNode)

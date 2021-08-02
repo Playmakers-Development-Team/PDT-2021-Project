@@ -20,7 +20,7 @@ namespace Game
             else
                 gameManager.CurrentEncounterData = encounterData;
 
-            Instantiate(encounterData.encounterPrefab);
+            Instantiate(encounterData.EncounterPrefab);
         }
     }
 }

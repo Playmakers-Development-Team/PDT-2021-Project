@@ -5,6 +5,6 @@ namespace Game
     [CreateAssetMenu]
     public class EncounterData : ScriptableObject
     {
-        public GameObject encounterPrefab;
+        [field: SerializeField] public GameObject EncounterPrefab { get; }
     }
 }
