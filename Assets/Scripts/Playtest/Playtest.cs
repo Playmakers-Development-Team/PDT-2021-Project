@@ -552,7 +552,7 @@ namespace Playtest
         private void UpdateRound()
         {
             data.RoundEntry = Environment.NewLine +
-                              "CURRENT INSIGHT: " + playerManager.Insight.Value +
+                              "CURRENT INSIGHT: " + turnManager.Insight.Value +
                               Environment.NewLine +
                               data.RoundEntry;
 

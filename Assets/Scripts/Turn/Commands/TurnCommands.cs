@@ -52,13 +52,6 @@ namespace Turn.Commands
         public MeditatedCommand(IUnit unit) : base(unit) {}
     }
 
-    [Obsolete]
-    public class GameEndedCommand : Command
-    {
-        public bool DidPlayerWin { get; set; }
-        public GameEndedCommand(bool didPlayerWin) => DidPlayerWin = didPlayerWin;
-    }
-    
     /// <summary>
     /// Executed when there are no enemy units left alive.
     /// </summary>

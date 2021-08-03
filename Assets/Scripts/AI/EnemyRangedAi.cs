@@ -51,6 +51,7 @@ namespace AI
                     await enemyManager.DoUnitAbility(enemyUnit, buffAbility, Vector2Int.zero);
             }
             
+            // TODO: Move to superclass.
             commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
 

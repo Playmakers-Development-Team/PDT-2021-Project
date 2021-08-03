@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace TenetStatuses
@@ -10,8 +9,6 @@ namespace TenetStatuses
         private LinkedList<TenetStatus> tenetStatusEffectSlots =
             new LinkedList<TenetStatus>();
         
-        [Obsolete("Use TenetStatuses instead")]
-        public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
         public void Initialise(IEnumerable<TenetStatus> startingTenets) =>
@@ -64,12 +61,7 @@ namespace TenetStatuses
 
         public void ClearAllTenetStatus() => tenetStatusEffectSlots.Clear();
 
-        [Obsolete("Use TryGetTenetStatus instead")]
-        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
-            TryGetTenetStatusEffect(tenetType, out tenetStatus);
-
-        public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatus tenetStatus)
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus)
         {
             bool isFound = TryGetTenetStatusNode(tenetType,
                 out LinkedListNode<TenetStatus> foundNode);
@@ -77,18 +69,10 @@ namespace TenetStatuses
             return isFound;
         }
 
-        [Obsolete("Use GetTenetStatus instead")]
-        public int GetTenetStatusEffectCount(TenetType tenetType) =>
-            GetTenetStatusCount(tenetType);
-
         public int GetTenetStatusCount(TenetType tenetType) =>
             HasTenetStatus(tenetType)
                 ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
                 : 0;
-
-        [Obsolete("Use HasTenetStatus instead")]
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
-            HasTenetStatus(tenetType, minimumStackCount);
 
         public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
             tenetStatusEffectSlots.Any(s =>

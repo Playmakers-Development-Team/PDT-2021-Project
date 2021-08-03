@@ -53,6 +53,7 @@ namespace AI
                 }
             }
             
+            // TODO: Move to superclass.
             commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
     }

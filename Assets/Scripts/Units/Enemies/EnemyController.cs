@@ -9,10 +9,6 @@ namespace Units.Enemies
 {
     public class EnemyController : UnitController<EnemyUnitData>
     {
-        // Temporary debug buttons, likely to be removed later
-        [SerializeField] private bool debugKillEnemyButton;
-        [SerializeField] private bool debugDamagePlayerButton;
-
         private bool isSpawningEnemies = false;
         private int totalEnemies = 0; // Max is 203 at the moment -FRANCISCO: CAN CONFIRM IT DOES CRASH ABOVE 203
 
@@ -70,15 +66,6 @@ namespace Units.Enemies
             }
         }
 
-        private void OnValidate()
-        {
-            if (debugKillEnemyButton)
-                DebugKillEnemyFunction();
-
-            if (debugDamagePlayerButton)
-                DebugDamagePlayerButton();
-        }
-
         private void SpawnEnemy()
         {
            IUnit enemyUnit = unitManagerT.Spawn(enemyPrefab, gridManager
@@ -88,37 +75,6 @@ namespace Units.Enemies
 
            // Debug.Log(enemyUnit.RandomizeName() + "RANDOMIZED");
            // Debug.Log(enemyUnit.Name);
-        }
-
-        // TODO: Refactor or remove.
-        private void DebugKillEnemyFunction()
-        {
-            if (unitManagerT.Units.Count > 0)
-                unitManagerT.Units[0].TakeDamageWithoutModifiers(1);
-
-            debugKillEnemyButton = false;
-        }
-
-        // TODO: Refactor or remove.
-        private void DebugDamagePlayerButton()
-        {
-            foreach (var enemy in unitManagerT.Units)
-            {
-                GridObject firstAdjacentPlayer = unitManagerT.FindAdjacentPlayer(enemy);
-                if (firstAdjacentPlayer != null)
-                {
-                    if (firstAdjacentPlayer is IUnit firstAdjacentPlayerUnit)
-                    {
-                        // TODO: Get proper damage formula here
-                        firstAdjacentPlayerUnit.TakeDamageWithoutModifiers(5);
-                        debugDamagePlayerButton = false;
-                        return;
-                    }
-                }
-            }
-
-            Debug.Log("No players adjacent to enemies found, no damage dealt");
-            debugDamagePlayerButton = false;
         }
     }
 }
