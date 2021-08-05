@@ -1,28 +1,18 @@
-using Commands;
 using Managers;
-using Units.Commands;
-using UnityEngine;
 
 namespace Units.Players
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : UnitController<PlayerUnitData>
     {
-        private CommandManager commandManager;
-
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             #region GetManagers
 
-            commandManager = ManagerLocator.Get<CommandManager>();
+            unitManagerT = ManagerLocator.Get<PlayerManager>();
 
             #endregion
-        }
-
-        private void Start()
-        {
-            // Process stuff about players here
-            
-            commandManager.ExecuteCommand(new PlayerUnitsReadyCommand());
         }
     }
 }

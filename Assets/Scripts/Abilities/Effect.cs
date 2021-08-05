@@ -72,8 +72,10 @@ namespace Abilities
 
             foreach (Effect effect in AllKeywordEffects)
             {
-                user.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
-                    effect.providingTenet.StackCount);
+                user.AddOrReplaceTenetStatus(
+                    effect.providingTenet.TenetType,
+                    effect.providingTenet.StackCount
+                );
             }
         }
 

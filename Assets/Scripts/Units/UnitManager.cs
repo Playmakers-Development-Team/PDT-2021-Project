@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Commands;
 using Grid;
+using Grid.GridObjects;
 using Managers;
 using Units.Commands;
 using Units.Enemies;
@@ -12,8 +13,6 @@ namespace Units
 {
     public class UnitManager : Manager
     {
-        public IUnit SelectedUnit { get; private set; }
-        
         protected CommandManager commandManager;
         private EnemyManager enemyManager;
         private PlayerManager playerManager;
@@ -41,15 +40,14 @@ namespace Units
         private List<IUnit> GetAllUnits()
         {
             List<IUnit> allUnits = new List<IUnit>();
-            allUnits.AddRange(enemyManager.EnemyUnits);
-            allUnits.AddRange(playerManager.PlayerUnits);
+            allUnits.AddRange(enemyManager.Units);
+            allUnits.AddRange(playerManager.Units);
             return allUnits;
         }
 
         /// <summary>
         /// Spawns a unit.
         /// </summary>
-        /// <param name="targetUnit"></param>
         public virtual IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
@@ -60,50 +58,13 @@ namespace Units
         /// <summary>
         /// Spawns a unit.
         /// </summary>
-        /// <param name="targetUnit"></param>
-        public virtual IUnit Spawn(string unitName, Vector2Int gridPosition)
+        public IUnit Spawn(string unitName, Vector2Int gridPosition)
         {
             commandManager.ExecuteCommand(new SpawningUnitCommand());
             IUnit unit = UnitUtility.Spawn(unitName, gridPosition);
             return unit;
         }
         
-        /// <summary>
-        /// Sets a unit as selected.
-        /// </summary>
-        /// <param name="unit"></param>
-        public void SelectUnit(IUnit unit)
-        {
-            if (unit is null)
-            {
-                Debug.LogWarning($"{nameof(UnitManager)}.{nameof(SelectUnit)} should not be " + 
-                    $"passed a null value. Use {nameof(UnitManager)}.{nameof(DeselectUnit)} instead.");
-                
-                DeselectUnit();
-                
-                return;
-            }
-
-            if (SelectedUnit == unit)
-                return;
-
-            SelectedUnit = unit;
-            commandManager.ExecuteCommand(new UnitSelectedCommand(SelectedUnit));
-        }
-
-        /// <summary>
-        /// Deselects the currently selected unit.
-        /// </summary>
-        public void DeselectUnit()
-        {
-            if (SelectedUnit is null)
-                return;
-            
-            Debug.Log(SelectedUnit + " deselected.");
-            commandManager.ExecuteCommand(new UnitDeselectedCommand(SelectedUnit));
-            SelectedUnit = null;
-        }
-
         #region Pathfinding
         
         public Dictionary<Vector2Int, int> GetDistanceToAllCells(Vector2Int startingCoordinate)
@@ -166,17 +127,68 @@ namespace Units
             }
             
             if (shortestDistance != int.MaxValue)
-            {
                 return closestTile;
-            }
-            else
-            {
-                Debug.LogWarning($"Could not find tile to move to, returning {reachableCoordinates[0]}");
-                return reachableCoordinates[0];
-            }
+            
+            Debug.LogWarning($"Could not find tile to move to, returning {reachableCoordinates[0]}");
+            return reachableCoordinates[0];
+            
             //Debug.Log("Chosen Tile Coordinate: "+closestTile);
         }
 
         #endregion
+    }
+
+    public abstract class UnitManager<T> : UnitManager where T : UnitData
+    {
+        private readonly List<IUnit> units = new List<IUnit>();
+
+        public IReadOnlyList<IUnit> Units => units.AsReadOnly();
+
+        public void ClearUnits() => units.Clear();
+        
+        public GridObject FindAdjacentPlayer(IUnit unit)
+        {
+            GridManager gridManager = ManagerLocator.Get<GridManager>();
+            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(unit.Coordinate);
+
+            foreach (var adjacentGridObject in adjacentGridObjects)
+            {
+                if (adjacentGridObject.CompareTag("PlayerUnit"))
+                    return adjacentGridObject;
+            }
+
+            return null;
+        }
+
+        public IUnit Spawn(IUnit unit)
+        {
+            units.Add(unit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
+            return unit;
+        }
+        
+        /// <summary>
+        /// Removes a target <c>IUnit</c> from the <c>units</c> list.
+        /// </summary>
+        public void RemoveUnit(IUnit targetUnit) => units.Remove(targetUnit);
+        
+        /// <summary>
+        /// Adds a unit to the <c>units</c> list.
+        /// </summary>
+        public void AddUnit(IUnit targetUnit) => units.Add(targetUnit);
+        
+        /// <summary>
+        /// Spawns a unit and adds it to the <c>units</c> list.
+        /// </summary>
+        /// <param name="unitPrefab"></param>
+        /// <param name="gridPosition"></param>
+        /// <returns>The new <c>IUnit</c> that was added.</returns>
+        public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
+        {
+            IUnit newUnit = base.Spawn(unitPrefab, gridPosition);
+            units.Add(newUnit);
+            commandManager.ExecuteCommand(new SpawnedUnitCommand(newUnit));
+            return newUnit;
+        }
     }
 }

@@ -18,14 +18,14 @@ MonoBehaviour:
   excludeUserFromTargets: 0
   speed: 0
   effects:
-  - name: Default, 1 Attack for the encounter
+  - name: Default, 1 Attack and 1 Attack for the encounter
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 0
+    attackValue: 1
     defenceForEncounter: 0
     attackForEncounter: 1
     providingTenet:

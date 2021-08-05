@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Commands;
 using Cysharp.Threading.Tasks;
+using Grid.Commands;
 using Grid.GridObjects;
 using Managers;
 using UnityEngine;
@@ -21,6 +23,15 @@ namespace Grid
         public Tilemap LevelTilemap { get; private set; }
         public Vector2Int LevelBounds { get; private set; }
         public BoundsInt LevelBoundsInt { get; private set; }
+
+        private CommandManager commandManager;
+
+        public override void ManagerStart()
+        {
+            base.ManagerStart();
+
+            commandManager = ManagerLocator.Get<CommandManager>();
+        }
 
         public void InitialiseGrid(Tilemap levelTilemap, Vector2Int levelBounds)
         {
@@ -50,6 +61,8 @@ namespace Grid
                     // }
                 }
             }
+            
+            commandManager.ExecuteCommand(new GridReadyCommand());
         }
         
         #region GETTERS
@@ -172,7 +185,7 @@ namespace Grid
             return new Vector2Int(
                 Mathf.Clamp(unbounded.x, LevelBoundsInt.xMin, LevelBoundsInt.xMax),
                 Mathf.Clamp(unbounded.y, LevelBoundsInt.xMin, LevelBoundsInt.xMax)
-                );
+            );
         }
 
         public Vector2 ConvertCoordinateToPosition(Vector2Int coordinate) => LevelTilemap.GetCellCenterWorld((Vector3Int) coordinate);
