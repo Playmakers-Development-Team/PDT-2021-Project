@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using TenetStatuses;
 using TMPro;
 using UI.Core;

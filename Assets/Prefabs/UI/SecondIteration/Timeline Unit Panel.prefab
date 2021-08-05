@@ -2670,9 +2670,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 151870346199134585}
-  - component: {fileID: 1589082181465920193}
   - component: {fileID: 2797767000116620836}
   - component: {fileID: 4799723836677265726}
+  - component: {fileID: 1914646469396321551}
   m_Layer: 5
   m_Name: Move
   m_TagString: Untagged
@@ -2700,30 +2700,6 @@ RectTransform:
   m_AnchoredPosition: {x: -23.75, y: 0}
   m_SizeDelta: {x: -47.5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1589082181465920193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5077001531400543448}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4c3232280cb60d488aa53218dd02114, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: {fileID: 4799723836677265726}
-  animator: {fileID: 2797767000116620836}
-  labelText: {fileID: 8313951644566140406}
-  backgroundImage: {fileID: 1583780290190522599}
-  borderImage: {fileID: 8095273743810745994}
-  backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
-  backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
-  borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
-  lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
-  darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  fill: 0
 --- !u!95 &2797767000116620836
 Animator:
   serializedVersion: 3
@@ -2756,6 +2732,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
+--- !u!114 &1914646469396321551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5077001531400543448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3fab373c1854b43ac3576c14979ec62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trigger: {fileID: 4799723836677265726}
+  animator: {fileID: 2797767000116620836}
+  labelText: {fileID: 8313951644566140406}
+  backgroundImage: {fileID: 1583780290190522599}
+  borderImage: {fileID: 8095273743810745994}
+  backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
+  backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
+  borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
+  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
+  darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
+  fill: 0
 --- !u!1 &5127293325505993152
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,6 +3802,9 @@ MonoBehaviour:
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
+  icon: {fileID: 4406805109889204200}
+  defaultSprite: {fileID: 21300000, guid: 61e9de4b650a0074ba519f6e7be9283c, type: 3}
+  activatedSprite: {fileID: 21300000, guid: 3296baa05804bf449b816835547f2295, type: 3}
 --- !u!1 &8209320354863962060
 GameObject:
   m_ObjectHideFlags: 0

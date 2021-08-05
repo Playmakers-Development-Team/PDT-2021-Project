@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +16,7 @@ namespace UI
         [SerializeField] private Vector2 centre = new Vector2(0.5f, 0.5f);
         [SerializeField] private float size;
         
-        internal CropInfo Generate(string path)
+        internal CropInfo Generate()
         {
             CropInfo info = ScriptableObject.CreateInstance<CropInfo>();
             info.Apply(rawImage.texture, rawImage.uvRect);
@@ -125,7 +124,7 @@ namespace UI
             GUI.enabled = isFileNameValid;
             if (GUILayout.Button("Save"))
             {
-                CropInfo info = t.Generate(path);
+                CropInfo info = t.Generate();
 
                 if (info != null)
                 {
