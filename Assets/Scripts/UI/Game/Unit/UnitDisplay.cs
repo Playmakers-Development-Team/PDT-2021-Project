@@ -124,7 +124,6 @@ namespace UI.Game.Unit
             
             await Task.Delay((int) damageTextDuration * 1000);
 
-            // BUG: See below...
             if (damageText == null)
                 return;
             
@@ -155,11 +154,6 @@ namespace UI.Game.Unit
             while (Time.time - start < duration)
             {
                 float t = (Time.time - start) / duration;
-                
-                // BUG: Null reference here, preventing with scuffed check...
-                // I think the IUnit can die while this async function runs, it should kill the function
-                //  by listening to dialogue.unitKilled but I don't know how best to do that right now.
-                // BUG: ALSO need to abort these if the unit is damaged again, or it'll wait for this to start...
                 
                 if (healthBarDifference == null)
                     return;

@@ -8,7 +8,15 @@ namespace UI.Game.Unit
     public class UnitUI : DialogueComponent<GameDialogue>
     {
         [SerializeField] private GameObject unitUIPrefab;
-        
+
+        private GridManager gridManager;
+
+        protected override void OnComponentAwake()
+        {
+            base.OnComponentAwake();
+            gridManager = ManagerLocator.Get<GridManager>();
+        }
+
         protected override void Subscribe()
         {
             dialogue.unitSpawned.AddListener(OnUnitSpawned);
@@ -21,8 +29,8 @@ namespace UI.Game.Unit
 
         private void OnUnitSpawned(GameDialogue.UnitInfo info)
         {
-            UnitDisplay ui = Instantiate(unitUIPrefab, info.Unit.transform).GetComponent<UnitDisplay>();
-            ui.transform.position = ManagerLocator.Get<GridManager>().ConvertCoordinateToPosition(info.Unit.Coordinate);
+            UnitDisplay ui = Instantiate(unitUIPrefab, gridManager.ConvertCoordinateToPosition(info.Unit.Coordinate), Quaternion.identity, transform).
+                GetComponent<UnitDisplay>();
             ui.Assign(info);
         }
     }
