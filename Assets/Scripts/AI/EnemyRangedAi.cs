@@ -20,13 +20,13 @@ namespace AI
         
         protected override async void DecideEnemyIntention()
         {
-            if (playerManager.PlayerUnits.Count <= 0)
+            if (playerManager.Units.Count <= 0)
             {
                 Debug.LogWarning("No players remain, enemy intention is to do nothing");
                 return;
             }
             
-            if (turnManager.RoundCount % SpecialMoveCount == 0) //EVEN TURNS
+            if (turnManager.RoundCount + 1 % SpecialMoveCount == 0) //EVEN TURNS
             {
                 if (ArePlayersClose())
                 {
@@ -51,6 +51,7 @@ namespace AI
                     await enemyManager.DoUnitAbility(enemyUnit, buffAbility, Vector2Int.zero);
             }
             
+            // TODO: Move to superclass.
             commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
 
@@ -60,7 +61,7 @@ namespace AI
         /// </summary>
         private bool ArePlayersClose()
         {
-            foreach (var playerUnit in playerManager.PlayerUnits)
+            foreach (var playerUnit in playerManager.Units)
             {
                 if (safeDistanceRange <= ManhattanDistance.GetManhattanDistance(
                     playerUnit.Coordinate, enemyUnit.Coordinate))
@@ -71,7 +72,7 @@ namespace AI
 
         /// <summary>
         /// Returns all players within <c>shootingRange</c> tiles of the enemy.
-        /// Assumes that all obstacles can be shot through
+        /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
         private List<IUnit> GetTargetsInRange(Ability abilityType) => abilityType.Shape
             .GetTargetsInAllDirections(enemyUnit.Coordinate)
@@ -97,7 +98,7 @@ namespace AI
         
         /// <summary>
         /// Returns true if a player is within <c>shootingRange</c> tiles of the enemy.
-        /// Assumes that all obstacles can be shot through
+        /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
         private async Task ShootPlayer(Ability abilityType)
         {

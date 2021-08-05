@@ -5,40 +5,16 @@ using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
 using Cysharp.Threading.Tasks;
-using Grid;
-using Grid.GridObjects;
 using Managers;
 using Units.Commands;
 using Units.Players;
-using Units.Stats;
 using UnityEngine;
 using Utilities;
 
 namespace Units.Enemies
 {
-    public class EnemyManager : UnitManager
+    public class EnemyManager : UnitManager<EnemyUnitData>
     {
-        /// <summary>
-        /// Holds all the enemy units currently in the level.
-        /// </summary>
-        private readonly List<IUnit> enemyUnits = new List<IUnit>();
-
-        /// <summary>
-        /// Returns all enemy units currently in the level.
-        /// </summary>
-        public IReadOnlyList<IUnit> EnemyUnits => enemyUnits.AsReadOnly();
-
-        /// <summary>
-        /// Clears all the enemies from the <c>enemyUnits</c> list.
-        /// </summary>
-        public void ClearEnemyUnits() => enemyUnits.Clear();
-
-        /// <summary>
-        /// Adds a unit to the <c>enemyUnits</c> list.
-        /// </summary>
-        public void AddUnit(IUnit targetUnit) => enemyUnits.Add(targetUnit);
-        
-        private GridManager gridManager;
         private PlayerManager playerManager;
         private UnitManager unitManager;
 
@@ -46,43 +22,34 @@ namespace Units.Enemies
         {
             base.ManagerStart();
             
-            gridManager = ManagerLocator.Get<GridManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
         }
 
-        /// <summary>
-        /// Spawns in an enemy unit and adds it the the <c>enemyUnits</c> list.
-        /// </summary>
-        /// <param name="unitPrefab"></param>
-        /// <param name="gridPosition"></param>
-        /// <returns>The new <c>IUnit</c> that was added.</returns>
-        public override IUnit Spawn(GameObject unitPrefab, Vector2Int gridPosition)
+        public async Task Spawner(EnemySpawnerUnit spawnUnit)
         {
-            IUnit unit = base.Spawn(unitPrefab, gridPosition);
-            enemyUnits.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            return unit;
+            // Get spawner stats
+            int damage = spawnUnit.HealthStat.BaseValue - spawnUnit.HealthStat.Value;
+            int curSpeed = spawnUnit.SpeedStat.Value;
+            Vector2Int unitPosition = spawnUnit.UnitPosition;
+
+            // Kill spawner
+            spawnUnit.TakeDamage(spawnUnit.HealthStat.Value + spawnUnit.DefenceStat.Value + 20);
+            await commandManager.WaitForCommand<KilledUnitCommand>();
+
+            // Spawn unit
+            GameObject spawnPrefab = spawnUnit.SpawnPrefab;
+            spawnPrefab.GetComponent<EnemyUnit>().HealthStat.BaseValue = 5;
+            EnemyUnit enemyUnit = (EnemyUnit)Spawn(spawnPrefab, unitPosition);
+            await commandManager.WaitForCommand<SpawnedUnitCommand>(); //IMPORTANT
+
+            // Apply spawner stats
+            enemyUnit.SetSpeed(curSpeed);
+            enemyUnit.TakeDamage(damage);
+
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(spawnUnit));
         }
         
-        public IUnit Spawn(EnemyUnit unit)
-        {
-            enemyUnits.Add(unit);
-            commandManager.ExecuteCommand(new SpawnedUnitCommand(unit));
-            return unit;
-        }
-
-        public void ClearUnits()
-        {
-            for (int i = enemyUnits.Count; i >= 0; i--)
-            {
-                if (enemyUnits[i] is null)
-                    enemyUnits.RemoveAt(i);
-            }
-        }
-        
-        public void RemoveUnit(IUnit targetUnit) => enemyUnits.Remove(targetUnit);
-
         #region ENEMY ACTIONS
         
         public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, Vector2 targetVector)
@@ -107,11 +74,21 @@ namespace Units.Enemies
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
             
+            if (enemyUnit.GetAllReachableTiles().Count <= 0 || targetPlayerUnit is null)
+                return;
+            
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
                     enemyUnit.MovementPoints.Value)
             );
+            
+            if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                return;
+            
+            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " +
+                      moveCommand.TargetCoords + " towards " + targetPlayerUnit + 
+                      " at " + targetPlayerUnit.Coordinate);
             
             commandManager.ExecuteCommand(moveCommand);
             await commandManager.WaitForCommand<EndMoveCommand>();
@@ -132,7 +109,7 @@ namespace Units.Enemies
             List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             Vector2Int targetTile = new Vector2Int();
 
-            if (reachableTiles.Count <= 0)
+            if (reachableTiles.Count <= 0 || targetPlayerUnit is null)
                 return;
 
             foreach (var reachableTile in reachableTiles)
@@ -151,6 +128,9 @@ namespace Units.Enemies
                     enemyUnit,
                     targetTile
                 );
+                
+                if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                    return;
                 
                 Debug.Log(enemyUnit.Name +
                           " ENEMY-TAR: Enemy is moving to "+targetTile+" to maintain a "
@@ -187,7 +167,7 @@ namespace Units.Enemies
             {
                 int tileDistance = 0;
                 
-                foreach (var playerUnit in playerManager.PlayerUnits)
+                foreach (var playerUnit in playerManager.Units)
                 {
                     tileDistance += ManhattanDistance.GetManhattanDistance(
                         reachableTile, playerUnit.Coordinate);
@@ -205,6 +185,9 @@ namespace Units.Enemies
                 targetTile
             );
             
+            if (moveCommand.TargetCoords == enemyUnit.Coordinate)
+                return;
+            
             Debug.Log(enemyUnit.Name +
                       " ENEMY-TAR: Enemy is moving away from players to " + targetTile);
             
@@ -219,22 +202,8 @@ namespace Units.Enemies
 
         #region ENEMY FINDING FUNCTIONS
 
-        public GridObject FindAdjacentPlayer(IUnit enemyUnit)
-        {
-            List<GridObject> adjacentGridObjects = gridManager.GetAdjacentGridObjects(enemyUnit.Coordinate);
-
-            foreach (var adjacentGridObject in adjacentGridObjects)
-            {
-                if (adjacentGridObject.CompareTag("PlayerUnit"))
-                    return adjacentGridObject;
-            }
-
-            return null;
-        }
-        
         private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
         {
-            //TODO: Find out why negative movement points are being passed in
             if (movementPoints <= 0)
             {
                 Debug.Log(enemyUnit.Name +
@@ -245,8 +214,7 @@ namespace Units.Enemies
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
-            List<Vector2Int> reachableTiles =
-                enemyUnit.GetAllReachableTiles();
+            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             // Add in the tile the enemy is on to reachableTiles so that GetClosestCoordinateFromList
             // can check if it's the closest tile to the target
             reachableTiles.Add(enemyUnit.Coordinate);
@@ -255,8 +223,6 @@ namespace Units.Enemies
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
 
             Vector2Int chosenTargetTile = unitManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
-
-            Debug.Log(enemyUnit.Name + " ENEMY-TAR: Enemy to move to " + chosenTargetTile + " towards " + targetUnit + " at " + targetUnit.Coordinate);
             return chosenTargetTile;
         }
 
@@ -264,7 +230,7 @@ namespace Units.Enemies
         {
             IUnit targetPlayerUnit;
 
-            List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.PlayerUnits);
+            List<IUnit> closestPlayers = GetClosestPlayers(enemyUnit, playerManager.Units);
             int closestPlayersCount = closestPlayers.Count;
 
             if (closestPlayersCount == 1)
@@ -286,8 +252,7 @@ namespace Units.Enemies
             }
             else
             {
-                Debug.LogWarning("WARNING: GetTargetPlayer() called but no players remain in" +
-                                 "PlayerManager.PlayerUnits. Please avoid calling this function");
+                Debug.Log(enemyUnit.Name + " used GetTargetPlayer() called but no players are reachable");
                 return null;
             }
 
@@ -303,18 +268,21 @@ namespace Units.Enemies
             
             foreach (var playerUnit in playerUnits)
             {
-                int playerDistanceToEnemy = distanceToAllCells[playerUnit.Coordinate];
+                if (distanceToAllCells.ContainsKey(playerUnit.Coordinate))
+                {
+                    int playerDistanceToEnemy = distanceToAllCells[playerUnit.Coordinate];
 
-                // If a new closest unit is found, assign a new closest unit
-                if (closestPlayerUnitDistance > playerDistanceToEnemy)
-                {
-                    closestPlayerUnits.Clear();
-                    closestPlayerUnitDistance = playerDistanceToEnemy;
-                    closestPlayerUnits.Add(playerUnit);
-                }
-                else if (closestPlayerUnitDistance == playerDistanceToEnemy)
-                {
-                    closestPlayerUnits.Add(playerUnit);
+                    // If a new closest unit is found, assign a new closest unit
+                    if (closestPlayerUnitDistance > playerDistanceToEnemy)
+                    {
+                        closestPlayerUnits.Clear();
+                        closestPlayerUnitDistance = playerDistanceToEnemy;
+                        closestPlayerUnits.Add(playerUnit);
+                    }
+                    else if (closestPlayerUnitDistance == playerDistanceToEnemy)
+                    {
+                        closestPlayerUnits.Add(playerUnit);
+                    }
                 }
             }
 

@@ -13,7 +13,7 @@ namespace UI.Game.Unit
         
         #region UIComponent
 
-        protected override void OnComponentStart()
+        protected override void Subscribe()
         {
             if (!(unitGridObject is IUnit unit))
                 return;
@@ -21,8 +21,6 @@ namespace UI.Game.Unit
             info.SetUnit(unit);
             dialogue.unitSpawned.Invoke(info);
         }
-
-        protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
         

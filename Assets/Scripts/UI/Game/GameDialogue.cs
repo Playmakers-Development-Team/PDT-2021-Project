@@ -157,9 +157,6 @@ namespace UI.Game
         {
             UnitInfo info = GetInfo(cmd.Unit);
 
-            if (info == null)
-                throw new Exception("ActingUnit was not in GameDialogue.units.");
-            
             turnStarted.Invoke(new TurnInfo(info));
         }
 
@@ -181,9 +178,6 @@ namespace UI.Game
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
             UnitInfo info = GetInfo(cmd.Unit);
-
-            if (info == null)
-                throw new Exception("Killed Unit was not in GameDialogue.units.");
 
             unitKilled.Invoke(info);
         }
@@ -210,8 +204,25 @@ namespace UI.Game
         
         #region Querying
 
-        internal UnitInfo GetInfo(IUnit unit) => units.Find(u => u.Unit == unit);
-        
+        internal UnitInfo GetInfo(IUnit unit)
+        {
+            if (units.Count == 0)
+            {
+                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
+                                    $"{nameof(GameDialogue)}.{nameof(units)} is empty.");
+            }
+
+            var unitInfo = units.Find(u => u.Unit == unit);
+                
+            if (unitInfo == null)
+            {
+                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
+                                    $"{unit} is not in {nameof(GameDialogue)}.{nameof(units)}.");
+            }
+
+            return unitInfo;
+        }
+
         #endregion
         
         
@@ -219,7 +230,7 @@ namespace UI.Game
 
         // TODO: Turn this into a struct, null comparison can be made on UnitInfo.Unit...
         [Serializable]
-        internal class UnitInfo
+        public class UnitInfo
         {
             [SerializeField] private CropInfo profileCropInfo;
             [SerializeField] private CropInfo timelineCropInfo;
@@ -228,7 +239,7 @@ namespace UI.Game
             internal CropInfo ProfileCropInfo => profileCropInfo;
             internal CropInfo TimelineCropInfo => timelineCropInfo;
             
-            internal IUnit Unit { get; private set; }
+            public IUnit Unit { get; private set; }
 
 
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;
@@ -253,6 +264,7 @@ namespace UI.Game
             // TODO: Same as OldValue, may be being used incorrectly.
             internal int BaseValue { get; }
             internal int Difference { get; }
+            internal int DisplayValue { get; }
             internal StatTypes StatType { get; }
 
             internal StatChangeInfo(StatChangedCommand cmd)
@@ -261,8 +273,9 @@ namespace UI.Game
                 Unit = cmd.Unit;
                 NewValue = cmd.NewValue;
                 OldValue = cmd.InitialValue;
-                BaseValue = cmd.InitialValue;
+                BaseValue = cmd.MaxValue;
                 Difference = cmd.Difference;
+                DisplayValue = cmd.DisplayValue;
             }
         }
 
@@ -270,7 +283,6 @@ namespace UI.Game
         {
             internal Vector2Int Destination { get; }
             internal UnitInfo UnitInfo { get; }
-
 
             public MoveInfo(Vector2Int destination, UnitInfo unitInfo)
             {
