@@ -155,6 +155,9 @@ namespace UI.Game
 
         private void OnStartTurn(StartTurnCommand cmd)
         {
+            if (cmd.Unit == null)
+                return;
+            
             UnitInfo info = GetInfo(cmd.Unit);
 
             turnStarted.Invoke(new TurnInfo(info));

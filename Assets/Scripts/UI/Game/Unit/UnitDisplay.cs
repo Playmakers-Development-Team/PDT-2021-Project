@@ -25,6 +25,9 @@ namespace UI.Game.Unit
 
         private RectTransform rectTransform;
         private bool moving;
+
+
+        internal GameDialogue.UnitInfo UnitInfo => unitInfo;
         
         
         #region MonoBehaviour
