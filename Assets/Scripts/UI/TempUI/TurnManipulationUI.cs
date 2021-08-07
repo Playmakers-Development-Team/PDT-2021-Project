@@ -49,7 +49,8 @@ namespace UI.TempUI
 
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                    (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().
@@ -68,7 +69,8 @@ namespace UI.TempUI
 
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().
