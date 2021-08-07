@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Success Through Adversity
+  m_EditorClassIdentifier: 
+  description: '[Speed: 1]
+
+    Deal 2 damage. Gain 1 Sorrow.
+
+    Catharsis 4 -
+    Deal 5 additional damage, gain 3 Defence.
+
+'
+  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+  excludeUserFromTargets: 1
+  speed: 1
+  targetEffects:
+  - name: Default, 2 Damage
+    effectOrder: 0
+    damageValue: 2
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  userEffects:
+  - name: Default, Provide 1 Sorrow
+    effectOrder: 1
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: 5 Attack and 3 Defence WITH Catharsis 4
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 3
+    attackValue: 5
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: a1746836bae41724d97191b43c1ed93b, type: 2}
