@@ -52,7 +52,6 @@ namespace UI.Game.Timeline
             if (turnManager.ActingPlayerUnit == null)
                 return;
             
-            // TODO: If anything else needs to know when this button is pressed, it'll need to be moved to an Event...
             dialogue.meditateConfirmed.Invoke(dialogue.GetInfo(turnManager.ActingPlayerUnit));
         }
 
@@ -89,7 +88,8 @@ namespace UI.Game.Timeline
                 GameObject obj = Instantiate(portraitPrefab, scrollRect.content);
                 TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
                 
-                portrait.Assign(unit);
+                GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
+                portrait.Assign(info);
                 portraits.Add(portrait);
             }
         }

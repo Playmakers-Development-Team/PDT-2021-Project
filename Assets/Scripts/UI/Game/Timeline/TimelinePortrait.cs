@@ -36,9 +36,9 @@ namespace UI.Game.Timeline
         
         #region Drawing
         
-        internal void Assign(IUnit unit)
+        internal void Assign(GameDialogue.UnitInfo unit)
         {
-            unitInfo = dialogue.GetInfo(unit);
+            unitInfo = unit;
             
             image.texture = unitInfo.TimelineCropInfo.Image;
             image.color = unitInfo.TimelineCropInfo.Colour;

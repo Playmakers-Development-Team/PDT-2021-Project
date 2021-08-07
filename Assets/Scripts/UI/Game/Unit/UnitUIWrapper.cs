@@ -19,11 +19,13 @@ namespace UI.Game.Unit
         
         #region UIComponent
 
-        protected override void Subscribe()
+        protected override void OnComponentAwake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
         }
+
+        protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
         

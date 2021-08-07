@@ -15,6 +15,8 @@ namespace UI.Game.Grid
 {
     public class GridUI : DialogueComponent<GameDialogue>
     {
+        [SerializeField] private LayerMask clickLayer;
+        
         [Header("Tile types")]
         
         [SerializeField] private TileBase defaultTile;
@@ -29,6 +31,7 @@ namespace UI.Game.Grid
         private GridManager gridManager;
         private TurnManager turnManager;
 
+        // TODO: This may need to be moved over to GameDialogue...
         private DisplayType displayType;
 
         private enum DisplayType
@@ -44,6 +47,26 @@ namespace UI.Game.Grid
         private void Start()
         {
             FillAll();
+        }
+
+        public void Update()
+        {
+            if (!Mouse.current.leftButton.wasPressedThisFrame || Camera.main == null)
+                return;
+            
+            Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+            Plane plane = new Plane(-Camera.main.transform.forward, transform.position);
+
+            if (!plane.Raycast(worldRay, out float distance) || Physics.Raycast(worldRay, clickLayer))
+                return;
+            
+            Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
+            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
+
+            if (!gridManager.IsInBounds(coordinate))
+                return;
+
+            TryMove(coordinate);
         }
         
         #endregion
@@ -81,26 +104,6 @@ namespace UI.Game.Grid
 
         
         #region Listeners
-
-        public void OnGridButtonPressed()
-        {
-            if (Camera.main == null)
-                return;
-            
-            Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            Plane plane = new Plane(-Camera.main.transform.forward, transform.position);
-            
-            if (!plane.Raycast(worldRay, out float distance))
-                return;
-            
-            Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
-            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
-
-            if (!gridManager.IsInBounds(coordinate))
-                return;
-
-            TryMove(coordinate);
-        }
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
