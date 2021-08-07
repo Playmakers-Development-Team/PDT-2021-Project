@@ -63,7 +63,7 @@ namespace Turn
         public IUnit RecentUnitDeath { get; private set; }
         
         //TODO: A better name for this, I am not really sure what it could be
-        public IUnit MostRecentUnitToTurnManipulate { get; set; }
+        public IEnumerable<IUnit> UnitsWhoTurnManipulatedThisRound { get; set; }
         
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
@@ -221,7 +221,13 @@ namespace Turn
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
 
             if (ActingEnemyUnit is null)
-                PhaseIndex = ActingUnit == MostRecentUnitToTurnManipulate ? TurnManipulationPhaseIndex + 1: 0;
+            {
+                foreach (IUnit unit in UnitsWhoTurnManipulatedThisRound.ToArray())
+                {
+                    PhaseIndex = unit == ActingUnit ? TurnManipulationPhaseIndex + 1 : 0;
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -241,7 +247,7 @@ namespace Turn
 
             unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
             unitsMeditatedThisRound.Clear();
-            MostRecentUnitToTurnManipulate = null;
+            UnitsWhoTurnManipulatedThisRound.ToList().Clear();
             
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
@@ -309,7 +315,9 @@ namespace Turn
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
 
-            MostRecentUnitToTurnManipulate = currentTurnQueue[CurrentTurnIndex];
+            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[CurrentTurnIndex]);
+            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[targetIndex]);
+
             ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
         }
@@ -325,7 +333,9 @@ namespace Turn
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
             
-            MostRecentUnitToTurnManipulate = currentTurnQueue[CurrentTurnIndex];
+            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[CurrentTurnIndex]);
+            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[targetIndex]);
+            
             ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
