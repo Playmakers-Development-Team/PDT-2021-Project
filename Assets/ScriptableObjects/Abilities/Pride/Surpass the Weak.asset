@@ -10,13 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Stay Ahead
+  m_Name: Surpass the Weak
   m_EditorClassIdentifier: 
-  description: "[Speed:2]\nDeal 2 damage\nGain 2 Defence.\nGain additional 2 Pride
-    if Independent.\n\u21AF User may Spend Passion to deal 3 extra damage"
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  description: '[Speed:-1]
+
+    Deal 2 damage.
+
+    User gains 1 Pride.
+
+    If Target
+    has Humility, it takes 5 additional damage.
+
+    If the user is Independent,
+    gain 3 attack before dealing damage.'
+  shape: {fileID: 0}
   excludeUserFromTargets: 1
-  speed: 2
+  speed: -1
   targetEffects:
   - name: Default, 2 Damage
     effectOrder: 0
@@ -32,26 +41,26 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Damage IF User Spend 1 Passion
+  - name: 5 Damage IF Target With 1 Humility
     effectOrder: 0
-    damageValue: 3
+    damageValue: 5
     directDamage: 0
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 2
+      tenetType: 0
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Spend 1 Passion
-      affectType: 0
+    - name: Target With 1 Humility
+      affectType: 1
       costType: 1
       tenetCost:
-        tenetCostType: 2
+        tenetCostType: 0
         count: 1
-        tenetType: 2
+        tenetType: 1
         tenetConstraint: 0
       tenetGroupCost:
         tenetTarget: 0
@@ -79,31 +88,17 @@ MonoBehaviour:
             tenetFilter: 0
     keywords: []
   userEffects:
-  - name: Default, 2 Defence
-    effectOrder: 0
+  - name: 3 Attack WITH Independent
+    effectOrder: 1
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
-    attackValue: 0
+    defenceValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: Provide 2 Pride WITH Independent
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 2
     bonuses: []
     costs: []
     keywords:
