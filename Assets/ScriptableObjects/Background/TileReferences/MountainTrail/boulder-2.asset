@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189c832e3cc34bafa2d88409b1b82d5f, type: 3}
+  m_Name: boulder-2
+  m_EditorClassIdentifier: 
+  line: {fileID: 11400000, guid: 618d4c47e7d17554184eb5eb9f37b622, type: 2}
+  colour: {fileID: 11400000, guid: bd3e49651e0ac924d8fc1cd5d23ed5cf, type: 2}
+  fill: {fileID: 11400000, guid: 1ec372ba4a36e5e44bcd5155516a7fcc, type: 2}
+  preview: {fileID: 11400000, guid: 5bf65764b92bd78418238b0aea67355b, type: 2}
