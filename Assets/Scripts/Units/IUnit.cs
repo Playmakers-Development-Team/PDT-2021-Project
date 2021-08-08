@@ -43,5 +43,7 @@ namespace Units
         void MoveUnit(StartMoveCommand startMoveCommand);
 
         string RandomizeName();
+
+        void SetTenets(ITenetBearer tenetBearer);
     }
 }

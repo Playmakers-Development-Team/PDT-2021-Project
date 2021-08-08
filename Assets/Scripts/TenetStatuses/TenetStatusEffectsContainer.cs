@@ -11,8 +11,18 @@ namespace TenetStatuses
         
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
+        public TenetStatusEffectsContainer() {}
+
+        public TenetStatusEffectsContainer(IEnumerable<TenetStatus> tenets) => Initialise(tenets);
+
         public void Initialise(IEnumerable<TenetStatus> startingTenets) =>
             tenetStatusEffectSlots = new LinkedList<TenetStatus>(startingTenets);
+
+        public void SetTenets(ITenetBearer tenetBearer)
+        {
+            Initialise(tenetStatusEffectSlots);
+            // Might want to call a command that tenets have changed here
+        }
 
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {
