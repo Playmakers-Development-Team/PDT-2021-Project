@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using Abilities;
 using Commands;
+using Units.Stats;
 
 namespace Units.Commands
 {
@@ -41,28 +45,65 @@ namespace Units.Commands
     }
     
     /// <summary>
-    /// Executed when a unit is no longer selected by the player.
+    /// Executed when all units of type T are spawned and ready in the scene.
     /// </summary>
-    public class UnitDeselectedCommand : UnitCommand
+    public class UnitsReadyCommand<T> : Command where T : UnitData {}
+
+    public class StatChangedCommand : UnitCommand
     {
-        public UnitDeselectedCommand(IUnit unit) : base(unit) {}
+        public StatTypes StatType { get; }
+        
+        public int InitialValue { get; }
+        
+        public int Difference { get; }
+        
+        public int MaxValue { get; }
+        
+        public int DisplayValue { get;}
+        public int NewValue { get; }
+
+        public StatChangedCommand(IUnit unit, StatTypes type, int maxValue,int initialValue, int 
+        newValue) 
+        : base(unit)
+        {
+            StatType = type;
+            InitialValue = initialValue;
+            NewValue = newValue;
+            Difference = newValue - initialValue;
+            DisplayValue = Math.Abs(Difference);
+            MaxValue = maxValue;
+        }
     }
-    
-    /// <summary>
-    /// Executed when a unit is selected by the player.
-    /// </summary>
-    public class UnitSelectedCommand : UnitCommand
-    {
-        public UnitSelectedCommand(IUnit unit) : base(unit) {}
-    }
-    
-    /// <summary>
-    /// Executed when all player units are spawned and ready in the scene.
-    /// </summary>
-    public class PlayerUnitsReadyCommand : Command {}
 
     /// <summary>
-    /// Executed when all enemy units are spawned and ready in the scene.
+    /// Executed when the abilities list of a unit is changed.
     /// </summary>
-    public class EnemyUnitsReadyCommand : Command {}
+    public class AbilitiesChangedCommand : UnitCommand
+    {
+        public List<Ability> Abilities { get; set; }
+        public AbilitiesChangedCommand(IUnit unit, List<Ability> Abilities) : base(unit) => this.Abilities = Abilities;
+    }
+
+    // TODO: Should be a more generic EndAnimationCommand.
+    /// <summary>
+    /// Executed when the an enemy unit casting animation has completed.
+    /// </summary>
+    public class EndUnitCastingCommand : UnitCommand
+    {
+        public EndUnitCastingCommand(IUnit unit) : base(unit) {}
+    }
+    
+    /// <summary>
+    /// Executed when all the enemy logic has been completed.
+    /// Hence, we may be free to proceed to the next turn
+    /// </summary>
+    public class EnemyActionsCompletedCommand : UnitCommand
+    {
+        public EnemyActionsCompletedCommand(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when a generic UnitManager is ready to accept IUnit spawns.
+    /// </summary>
+    public class UnitManagerReadyCommand<T> : Command where T : UnitData {}
 }

@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
+  m_Name: TestKeyword
+  m_EditorClassIdentifier: 
+  displayName: TEEEEST
+  isVisibleInGame: 1
+  description: Just another test keyword
+  effect:
+    name: Nothing IF User With Pride and User With Humility
+    damageValue: 0
+    defenceValue: 0
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    costs:
+    - name: User With Pride
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
+        tenetCostType: 0
+        tenetType: 0
+      testCost:
+        x: 0
+    - name: User With Humility
+      affectType: 0
+      costType: 0
+      tenetCost:
+        name: 
+        tenetCostType: 0
+        tenetType: 1
+      testCost:
+        x: 0
+    bonus:
+      tenetBonuses: []
+    keywords: []

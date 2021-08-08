@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: Give targets 3 Defense and 1 Humility
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
+  excludeUserFromTargets: 0
   targetEffects:
   - name: Default, 3 Defence and Provide 1 Humility
     damageValue: 0
@@ -24,5 +23,7 @@ MonoBehaviour:
     providingTenet:
       tenetType: 1
       stackCount: 1
+    bonuses: []
     costs: []
+    keywords: []
   userEffects: []

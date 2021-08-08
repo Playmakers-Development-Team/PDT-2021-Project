@@ -1,50 +1,46 @@
-using System;
 using System.Collections.Generic;
-using GridObjects;
 using Abilities;
-using StatusEffects;
+using Units.Commands;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine;
 
 namespace Units
 {
-    public interface IUnit : IDamageable, IKnockbackable
+    public interface IUnit : IStat, IAbilityUser
     {
+        GameObject gameObject { get; }
+        Transform transform { get; }
+
         public string Name { get; set; }
         public TenetType Tenet { get; }
-        public ValueStat MovementActionPoints { get; }
-        public ValueStat Speed { get; }
-        public ModifierStat Attack { get; }
+        
+        public Stat MovementPoints { get; }
+        
+        public Stat AttackStat { get; }
+        public Stat DefenceStat { get; }
+        public Stat SpeedStat { get; }
+
+        public Stat KnockbackStat { get; }
+        
+        //TODO: Change this to a loadout type.
         public List<Ability> Abilities { get; }
 
-        public Vector2Int Coordinate { get; }
+        public new Vector2Int Coordinate { get; }
 
-        GameObject gameObject { get; }
+        Color UnitColor { get; }
+
+        Animator UnitAnimator { get; }
+
+        void ChangeAnimation(AnimationStates animationStates);
+
+        void SetSpeed(int amount);
+
+        new void AddSpeed(int amount);
         
-        IEnumerable<TenetStatusEffect> TenetStatusEffects { get; }
+        List<Vector2Int> GetAllReachableTiles();
 
-        Type GetDataType();
-        
-        void TakeDamage(int amount);
-
-        void TakeKnockback(int amount);
-
-        void TakeDefence(int amount);
-        
-        void TakeAttack(int amount);
-
-        void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1);
-
-        bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue);
-
-        void ClearAllTenetStatusEffects();
-
-        public int GetTenetStatusEffectCount(TenetType tenetType);
-
-        bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1);
-
-        bool TryGetTenetStatusEffect(TenetType tenetType, out TenetStatusEffect tenetStatusEffect);
-
-        bool IsSelected();
+        void MoveUnit(StartMoveCommand startMoveCommand);
 
         string RandomizeName();
     }

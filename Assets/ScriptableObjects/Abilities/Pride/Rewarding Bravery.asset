@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Target gains 3 Attack, 1 Defense and 1 Pride\n \u21AF Target may
     Spend Humility to gain 3 Defense\n"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 3 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
@@ -25,17 +23,37 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    bonuses: []
     costs: []
-  - name: 3 Defence with Humility
+    keywords: []
+  - name: 3 Defence IF Target Spend 1 Humility
     damageValue: 0
     defenceValue: 3
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Target With Humility
+    - name: Target Spend 1 Humility
       affectType: 1
-      costType: 0
-      tenetType: 1
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 1
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
   userEffects: []

@@ -1,33 +1,52 @@
-﻿using System;
-using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Abilities;
-using GridObjects;
-using StatusEffects;
+using Units.Stats;
+using TenetStatuses;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Units
 {
     public abstract class UnitData
     {
-        public string name;
-        public TenetType tenet;
-        public ValueStat healthPoints;
-        public ValueStat movementActionPoints;
-        public ValueStat speed;
-        public ModifierStat dealDamageModifier;
-        public ModifierStat takeDamageModifier;
-        public ModifierStat takeKnockbackModifier;
-        public List<Ability> abilities;
-       
-      
-        public void Initialise()
+        [SerializeField] private string name;
+        [SerializeField] private TenetType tenet;
+
+        [FormerlySerializedAs("movementActionPoints")] [SerializeField]
+        private Stat movementPoints;
+
+        [SerializeField] private List<Ability> abilities;
+        
+        [field: SerializeField] public HealthStat HealthValue { get; set; }
+        [field: SerializeField] public Stat SpeedStat { get; set; }
+        [field: SerializeField] public Stat DefenceStat { get; set; }
+        [field: SerializeField] public Stat AttackStat { get; set; }
+        [field: SerializeField] public Stat KnockbackStat { get; set; }
+        
+        [field: SerializeField] public List<TenetStatus> StartingTenets { get; set; }
+        
+        public string Name
         {
-            healthPoints.Reset();
-            movementActionPoints.Reset();
-            speed.Reset();
-            dealDamageModifier.Reset();
-            takeDamageModifier.Reset();
-            takeKnockbackModifier.Reset();
+            get => name;
+            set => name = value;
+        }
+
+        public TenetType Tenet
+        {
+            get => tenet;
+            set => tenet = value;
+        }
+
+        public Stat MovementPoints
+        {
+            get => movementPoints;
+            set => movementPoints = value;
+        }
+
+        public List<Ability> Abilities
+        {
+            get => abilities;
+            set => abilities = value;
         }
     }
 }

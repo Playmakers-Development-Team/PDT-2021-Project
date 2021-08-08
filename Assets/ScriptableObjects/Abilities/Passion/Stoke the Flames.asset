@@ -15,8 +15,6 @@ MonoBehaviour:
   description: "Targets gains 2 Attack\n\u21AF Targets may Spend Passion to gain
     4 Attack\n\u21AF Targets with Pride may gain 2 Attack"
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
   targetEffects:
   - name: Default, 2 Attack
     damageValue: 0
@@ -25,29 +23,67 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs: []
-  - name: 4 Attack spend Passion
+    keywords: []
+  - name: 4 Attack IF Target Spend 1 Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 4
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Target Spend Passion
+    - name: Target Spend 1 Passion
       affectType: 1
-      costType: 2
-      tenetType: 2
-  - name: 2 Attack with Pride
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 2
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
+  - name: 2 Attack IF Target With 1 Pride
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Target With Pride
+    - name: Target With 1 Pride
       affectType: 1
-      costType: 0
-      tenetType: 0
+      costType: 1
+      tenetCost:
+        tenetCostType: 0
+        count: 1
+        tenetType: 0
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
   userEffects: []

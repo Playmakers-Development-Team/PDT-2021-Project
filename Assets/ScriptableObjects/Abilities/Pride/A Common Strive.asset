@@ -15,8 +15,7 @@ MonoBehaviour:
   description: "Targets Does 1 Attack and 1 Defense. \n\u21AF Targets may Spend Passion,
     gain 2 Attack.\n\u21AF Targets may Spend Humility, gain 2 Defense."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  knockback: 0
-  onlyHitUnits: 1
+  excludeUserFromTargets: 0
   targetEffects:
   - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
     damageValue: 0
@@ -25,29 +24,67 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 1
+    bonuses: []
     costs: []
-  - name: 2 Attack spend Passion
+    keywords: []
+  - name: 2 Attack IF Target Spend 1 Passion
     damageValue: 0
     defenceValue: 0
     attackValue: 2
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Spend Passion
-      affectType: 0
-      costType: 2
-      tenetType: 2
-  - name: 2 Defence spend Humility
+    - name: Target Spend 1 Passion
+      affectType: 1
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 2
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
+  - name: 2 Defence IF Target Spend 1 Humility
     damageValue: 0
     defenceValue: 2
     attackValue: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
+    bonuses: []
     costs:
-    - name: Spend Humility
-      affectType: 0
-      costType: 2
-      tenetType: 1
+    - name: Target Spend 1 Humility
+      affectType: 1
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 1
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
   userEffects: []

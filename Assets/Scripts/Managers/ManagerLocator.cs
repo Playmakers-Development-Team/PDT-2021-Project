@@ -12,10 +12,7 @@ namespace Managers
         
         public static ManagerLocator Current { get; private set; }
         
-        private ManagerLocator()
-        {
-            Debug.Log($"Initialized ManagerLocator.");
-        }
+        private ManagerLocator() {}
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize()
@@ -29,6 +26,9 @@ namespace Managers
             
             foreach (Type type in types)
             {
+                if (type.ContainsGenericParameters)
+                    continue;
+                
                 dynamic manager = Convert.ChangeType(Activator.CreateInstance(type), type);
                 Register(manager);
             }
@@ -44,7 +44,7 @@ namespace Managers
             if (!Current.managers.ContainsKey(key))
                 throw new Exception($"{key} not registered with {Current.GetType()}.Name");
 
-            return (T) Current.managers[key];
+            return Current.managers[key] as T;
         }
 
         public static void Register<T>(T service) where T : Manager
@@ -56,8 +56,6 @@ namespace Managers
                 Debug.Log($"Attempted to register service of type {key} which is already registered with the {Current.GetType().Name}.");
                 return;
             }
-
-            Debug.Log($"Registered {key}!");
             
             Current.managers.Add(key, service);
         }

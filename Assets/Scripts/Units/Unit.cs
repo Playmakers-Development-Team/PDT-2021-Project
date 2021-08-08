@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using GridObjects;
-using StatusEffects;
+using System.Threading.Tasks;
 using Abilities;
+using Abilities.Commands;
 using Cysharp.Threading.Tasks;
+using Grid.GridObjects;
+using Grid.Tiles;
 using Managers;
-using TMPro;
 using Units.Commands;
+using Units.Enemies;
+using Units.Players;
+using Units.Stats;
+using TenetStatuses;
 using UnityEngine;
+using Utilities;
 using Random = UnityEngine.Random;
 
 namespace Units
@@ -17,209 +22,131 @@ namespace Units
     {
         [SerializeField] protected T data;
 
+        private SpriteRenderer spriteRenderer;
+        
         public string Name
         {
-            get => data.name;
-            set => data.name = value;
+            get => data.Name;
+            set => data.Name = value;
         }
+        
+        public HealthStat HealthStat { get; private set; }
+        public Stat AttackStat { get; private set; }
+        public Stat DefenceStat { get; private set; }
+        public Stat MovementPoints { get; private set; }
+        public Stat SpeedStat { get; private set; }
+        public Stat KnockbackStat { get; private set; }
 
-        public TenetType Tenet => data.tenet;
-        public ValueStat MovementActionPoints => data.movementActionPoints;
-        public ValueStat Speed => data.speed;
-        public ModifierStat Attack => data.dealDamageModifier;
-        public List<Ability> Abilities => data.abilities;
+        public bool Indestructible { get; set; }
+
+        public Animator UnitAnimator { get; private set; }
+        public Color UnitColor => spriteRenderer.color;
+        
+        public TenetType Tenet => data.Tenet;
+
+        public List<Ability> Abilities
+        {
+            get => data.Abilities;
+            set
+            {
+                data.Abilities = value;
+                commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
+            }
+        }
 
         public static Type DataType => typeof(T);
-
-        public Type GetDataType() => DataType;
-
-        public int TenetStatusEffectCount => tenetStatusEffectSlots.Count;
-
-        public IEnumerable<TenetStatusEffect> TenetStatusEffects =>
-            tenetStatusEffectSlots.AsEnumerable();
-
-        private readonly LinkedList<TenetStatusEffect> tenetStatusEffectSlots =
-            new LinkedList<TenetStatusEffect>();
-
-        private const int maxTenetStatusEffectCount = 2;
-
-        public Health Health { get; private set; }
-        public Knockback Knockback { get; private set; }
-
-        [SerializeField] private TMP_Text nameText;
-        [SerializeField] private TMP_Text healthText;
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        [SerializeField] private float damageTextLifetime = 1.0f;
-
-        private TurnManager turnManager;
+        
+        private AnimationStates unitAnimationState;
+        
         private PlayerManager playerManager;
-        private GridManager gridManager;
-        private CommandManager commandManager;
 
-        protected override void Start()
+        protected UnitManager<T> unitManagerT; 
+        
+        // TODO: Rename
+        private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
+        private static readonly int frontAnimationParameter = Animator.StringToHash("front");
+        private static readonly int attackAnimationParameter = Animator.StringToHash("attack");
+
+        protected override void Awake()
         {
-            base.Start();
-
-            data.Initialise();
-            Health = new Health(new KillUnitCommand(this), data.healthPoints, data.takeDamageModifier);
+            base.Awake();
             
-            // TODO Are speeds are random or defined in UnitData?
-            Speed.Value += Random.Range(0, 101);
+            #region GetManagers
 
-            turnManager = ManagerLocator.Get<TurnManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
-            gridManager = ManagerLocator.Get<GridManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
+            
+            #endregion
+            
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
-            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
-            if (nameText)
-                nameText.text = Name;
-            
-               
-            if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
+            HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
+            StatTypes.Health);
+            DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
+            AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
+            SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
+            MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
+            KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
+            TenetStatusEffectsContainer.Initialise(data.StartingTenets);
+
+            UnitAnimator = GetComponentInChildren<Animator>();
         }
 
-        // TODO: Used for testing, can eventually be removed
-        private void Update()
-        {
+        #region ValueChanging
+        
+        public void TakeDefence(int amount) => DefenceStat.Value += amount;
+        
+        public void TakeAttack(int amount) => AttackStat.Value += amount;
 
-        }
-        
-        
-        
-        public void TakeDefence(int amount) => Health.Defence.Adder -= amount;
+        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
 
-        public void TakeAttack(int amount) => Attack.Adder += amount;
-        
+        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+
         public void TakeDamage(int amount)
         {
-            int damageTaken = Health.TakeDamage(amount);
+            if (amount <= 0)
+                return;
             
-            SpawnDamageText(damageTaken);
-            
-            if (healthText)
-                healthText.text = (Health.HealthPoints.Value + " / " + Health.HealthPoints.BaseValue);
-            
+            HealthStat.TakeDamage(amount);
         }
-
-        public void TakeKnockback(int amount) => Knockback.TakeKnockback(amount);
-
-        public void AddOrReplaceTenetStatusEffect(TenetType tenetType, int stackCount = 1)
+        
+        public void DealDamageTo(IAbilityUser other, int amount)
         {
-            TenetStatusEffect statusEffect = new TenetStatusEffect(tenetType, stackCount);
-
-            if (statusEffect.IsEmpty)
+            // Attack modifiers should only be applied when damage amount is non-zero
+            if (amount <= 0)
                 return;
 
-            // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusEffectNode(statusEffect.TenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode))
-            {
-                foundNode.Value += statusEffect;
-            }
-            else
-            {
-                // When we are already utilizing all the slots
-                if (TenetStatusEffectCount == maxTenetStatusEffectCount)
-                {
-                    // Remove the oldest status effect to make space for the new status effect
-                    tenetStatusEffectSlots.RemoveFirst();
-                }
-
-                tenetStatusEffectSlots.AddLast(statusEffect);
-            }
+            int damage = AttackStat.Value + amount;
+            other.TakeDamage(damage);
         }
 
-        public bool RemoveTenetStatusEffect(TenetType tenetType, int amount = int.MaxValue)
-        {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    node.Value -= amount;
-
-                    if (node.Value.IsEmpty)
-                        tenetStatusEffectSlots.Remove(node);
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            return false;
-        }
-
-        public void ClearAllTenetStatusEffects() => tenetStatusEffectSlots.Clear(); // just saw this and changed it to fit our style
+        public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
         
-        public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatusEffect tenetStatusEffect)
-        {
-            bool isFound = TryGetTenetStatusEffectNode(tenetType,
-                out LinkedListNode<TenetStatusEffect> foundNode);
-            tenetStatusEffect = isFound ? foundNode.Value : default;
-            return isFound;
-        }
-
-        public int GetTenetStatusEffectCount(TenetType tenetType)
-        {
-            return HasTenetStatusEffect(tenetType)
-                ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
-                : 0;
-        }
-
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return tenetStatusEffectSlots.Any(s =>
-                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
-        }
-
-        public bool IsSelected() => playerManager.SelectedUnit == (IUnit) this;
-
-        private bool TryGetTenetStatusEffectNode(TenetType tenetType,
-                                                 out LinkedListNode<TenetStatusEffect> foundNode)
-        {
-            LinkedListNode<TenetStatusEffect> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    foundNode = node;
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            foundNode = null;
-            return false;
-        }
+        public void SetSpeed(int amount) => SpeedStat.Value = amount;
+        public void AddSpeed(int amount) => SpeedStat.Value += amount;
+        
+        #endregion
+        
+        #region UnitDeath
 
         /// <summary>
         /// Makes it easier to debug with the command debugger window.
         /// </summary>
         private void OnKillUnitCommand(KillUnitCommand killUnitCommand)
         {
-            if (killUnitCommand.Unit == this)
-            {
-                // Since we're about to remove the object, stop listening to the command
-                commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
-                KillUnit();
-            }
+            if (!ReferenceEquals(killUnitCommand.Unit, this))
+                return;
+            
+            if (Indestructible) return;
+
+            KillUnit();
         }
 
         private async void KillUnit()
         {
             playerManager.WaitForDeath = true;
             Debug.Log($"Unit Killed: {name} : {Coordinate}");
-            gridManager.RemoveGridObject(Coordinate, this);
             await UniTask.Delay(playerManager.DeathDelay);
             playerManager.WaitForDeath = false;
-            Debug.Log($"This unit was cringe and died");
 
             commandManager.ExecuteCommand(new KillingUnitCommand(this));
             gridManager.RemoveGridObject(Coordinate, this);
@@ -233,7 +160,7 @@ namespace Units
                     ManagerLocator.Get<EnemyManager>().RemoveUnit(this);
                     break;
                 default:
-                    Debug.LogError("ERROR: Failed to kill " + gameObject + 
+                    Debug.LogError("ERROR: Failed to kill " + gameObject +
                                    " as it is an unidentified unit");
                     break;
             }
@@ -243,108 +170,272 @@ namespace Units
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
-
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-            
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-            
-            Invoke("HideDamageText", damageTextLifetime);
-        }
-
-        private void HideDamageText()
-        {
-            damageTextCanvas.enabled = false;
-        }
         
-          #region RandomizeNames
-        public string RandomizeName()
-        {
-            string newname = "";
-            int random = UnityEngine.Random.Range(1,25);
+        #endregion
 
-            switch (random)
+        #region AnimationHandling
+
+        public async void ChangeAnimation(AnimationStates animationStates) 
+        {
+            unitAnimationState = animationStates;
+
+            switch (unitAnimationState)
             {
-                case 1:
-                    newname="Agid";
+                case AnimationStates.Idle:
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
+                    spriteRenderer.flipX = false;
                     break;
-                case 2:
-                    newname="Jack";
+                
+                case AnimationStates.Down:
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
+                    spriteRenderer.flipX = false;
                     break;
-                case 3 :
-                    newname="Francisco";
+                
+                case AnimationStates.Up:
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
+                    spriteRenderer.flipX = true;
                     break;
-                case 4:
-                    newname="Kyle";
+                
+                case AnimationStates.Left:
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, true);
+                    spriteRenderer.flipX = true;
                     break;
-                case 5:
-                    newname="Jordan";
+                
+                case AnimationStates.Right:
+                    UnitAnimator.SetBool(movingAnimationParameter, true);
+                    UnitAnimator.SetBool(frontAnimationParameter, false);
+                    spriteRenderer.flipX = false;
                     break;
-                case 6:
-                    newname="Sam";
-                    break;
-                case 7:
-                    newname="Jake";
-                    break;
-                case 8:
-                    newname="William";
-                    break;
-                case 9:
-                    newname="Beatrice";
-                    break;
-                case 10:
-                    newname="Lachlan";
-                    break;
-                case 11:
-                    newname="Hugo";
-                    break;
-                case 12:
-                    newname="Habib";
-                    break;
-                case 13:
-                    newname="Christa";
-                    break;
-                case 14:
-                    newname="Roy";
-                    break;
-                case 15:
-                    newname="Nick";
-                    break;
-                case 16:
-                    newname="Eddie";
-                    break;
-                case 17:
-                    newname="Vivian";
-                    break;
-                case 18:
-                    newname="Ethan";
-                    break;
-                case 19:
-                    newname="Jaiden";
-                    break;
-                case 20:
-                    newname="Jaime";
-                    break;
-                case 21:
-                    newname="Leon";
-                    break;
-                case 22:
-                    newname="Groovy Bot";
-                    break;
-                case 23:
-                    newname="Clickup Bot";
-                    break;
-                case 24:
-                    newname = "Github-Bot";
+                
+                case AnimationStates.Casting:
+                    UnitAnimator.SetBool(movingAnimationParameter, false);
+                    UnitAnimator.SetTrigger(attackAnimationParameter);
+
+                    await Task.Delay((int) UnitAnimator.GetCurrentAnimatorStateInfo(0).length * 1000);
+
+                    commandManager.ExecuteCommand(new EndUnitCastingCommand(this));
                     break;
             }
-            return newname;
+        }
+
+        #endregion
+
+        #region Utility
+
+        public abstract bool IsSameTeamWith(IAbilityUser other);
+
+        #endregion
+        
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position
+        /// within the given range.
+        /// </summary>
+        /// <returns>A list of the coordinates of reachable tiles.</returns>
+        public List<Vector2Int> GetAllReachableTiles()
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            int range = MovementPoints.Value;
+            
+            List<Vector2Int> reachable = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+            string allegiance = "";
+
+            if (gridManager.tileDatas[startingCoordinate].GridObjects.Count > 0)
+            {
+                allegiance= gridManager.tileDatas[startingCoordinate].GridObjects[0].tag;
+            }
+            
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                if (distance > range)
+                {
+                    break;
+                }
+
+                // Add neighbours of node to queue
+                Pathfinding.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                    coordinateQueue, allegiance);
+
+                if (gridManager.GetGridObjectsByCoordinate(currentNode).Count == 0)
+                    reachable.Add(currentNode);
+
+                coordinateQueue.Dequeue();
+            }
+
+            return reachable;
+        }
+
+        public async void MoveUnit(StartMoveCommand moveCommand)
+        {
+            IUnit unit = this;
+            Vector2Int newCoordinate = moveCommand.TargetCoords;
+
+            TileData tileData = gridManager.GetTileDataByCoordinate(newCoordinate);
+            
+            if (tileData is null)
+            {
+                throw new Exception($"No tile data at coordinate {newCoordinate}. " +
+                                    "Failed to move unit");
+            }
+            
+            Vector2Int startingCoordinate = unit.Coordinate;
+            Vector2Int currentCoordinate = startingCoordinate;
+
+            // Check if tile is unoccupied
+            if (tileData.GridObjects.Count != 0)
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("Target tile is occupied.");
+                return;
+            }
+
+            // Check if tile is in range
+            if (!GetAllReachableTiles().Contains(newCoordinate) 
+                && unit.GetType() == typeof(PlayerUnit))
+            {
+                // TODO: Provide feedback to the player
+                Debug.Log("MANHATTTAN STUFF OUT OF RANGE" +
+                          ManhattanDistance.GetManhattanDistance(startingCoordinate,
+                              newCoordinate));
+
+                Debug.Log("Target tile out of range.");
+                return;
+            }
+
+            // TODO: Tween based on cell path
+            List<Vector2Int> movePath = Pathfinding.GetCellPath(currentCoordinate, newCoordinate, unit);
+
+            for (int i = 1; i < movePath.Count; i++)
+            {
+                unit.UnitAnimator.SetBool("moving", true);
+            
+                if (movePath[i].x > currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Right);
+                else if (movePath[i].y > currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Up);
+                else if (movePath[i].x < currentCoordinate.x)
+                    unit.ChangeAnimation(AnimationStates.Left);
+                else if (movePath[i].y < currentCoordinate.y)
+                    unit.ChangeAnimation(AnimationStates.Down);
+
+                await gridManager.MovementTween(unit.gameObject, 
+                    gridManager.ConvertCoordinateToPosition(currentCoordinate),
+                    gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
+                unit.gameObject.transform.position =
+                    gridManager.ConvertCoordinateToPosition(movePath[i]);
+                currentCoordinate = movePath[i];
+            }
+            
+            int manhattanDistance = Mathf.Max(0, ManhattanDistance.GetManhattanDistance(
+                startingCoordinate,
+                newCoordinate
+            ));
+            
+            gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
+            unit.MovementPoints.Value -= manhattanDistance;
+            unit.ChangeAnimation(AnimationStates.Idle);
+
+            /*Debug.Log(Mathf.Max(0,
+                ManhattanDistance.GetManhattanDistance(startingCoordinate, newCoordinate)));*/
+            
+            // Should be called when all the movement and tweening has been completed
+            commandManager.ExecuteCommand(new EndMoveCommand(moveCommand));
+        }
+
+        #region RandomizeNames
+        
+        public string RandomizeName()
+        {
+            string[] names =
+            {
+                "Agid", "Jack", "Francisco", "Kyle", "Jordan", "Sam", "Jake", "William",
+                "Beatrice", "Lachlan", "Hugo", "Habib", "Christa", "Roy", "Nick", "Eddie",
+                "Vivian", "Ethan", "Jaiden", "Jamie", "Leon", "Groovy Bot", "Clickup Bot",
+                "Github-Bot"
+            };
+            
+            int randomIndex = Random.Range(0, names.Length - 1);
+            return names[randomIndex];
         }
         
         #endregion
         
+        // TODO: Add to correct region
+        protected void Spawn() => unitManagerT.Spawn(this);
         
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.ListenCommand<AbilityCommand>(OnAbility);
+            commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.UnlistenCommand<AbilityCommand>(OnAbility);
+            commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        private void OnAbility(AbilityCommand cmd)
+        {
+            if (!ReferenceEquals(cmd.AbilityUser, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
+
+        private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
+        
+        #region TenetStatusEffects
+
+        private TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
+
+        public ICollection<TenetStatus> TenetStatuses =>
+            TenetStatusEffectsContainer.TenetStatuses;
+
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1) =>
+            TenetStatusEffectsContainer.AddOrReplaceTenetStatus(tenetType, stackCount);
+
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue) =>
+            TenetStatusEffectsContainer.RemoveTenetStatus(tenetType, amount);
+
+        public void ClearAllTenetStatus() =>
+            TenetStatusEffectsContainer.ClearAllTenetStatus();
+
+        public int GetTenetStatusCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusCount(tenetType);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatus(tenetType, minimumStackCount);
+        
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
+
+        #endregion
     }
 }
