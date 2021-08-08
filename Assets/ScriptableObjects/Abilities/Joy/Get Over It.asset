@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Get Over It
+  m_EditorClassIdentifier: 
+  description: '[Speed:2]
+
+    Grant target 1 Joy and 5 Attack
+
+    Repression 3
+    - Subtract 3 Attack and 3 Defense
+
+
+    [BELOW CURRENTLY DOESN''T WORK]
+
+    Spend
+    1 Apathy - Subtract 1 Joy from Target'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  excludeUserFromTargets: 1
+  speed: 2
+  targetEffects:
+  - name: Default, 5 Attack and Provide 1 Joy
+    effectOrder: 1
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 5
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: -3 Attack and -3 Defence WITH Repression 3
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: -3
+    attackValue: -3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 462456ad6c9e99393b92b86cea3c7536, type: 2}
+  userEffects: []

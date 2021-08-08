@@ -10,43 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Overwhelming Positivity
+  m_Name: Selfless Gifting
   m_EditorClassIdentifier: 
-  description: "[Speed:3]\nDeal 4 damage to a target. Gain one Joy, grant target
-    1Joy.  \nRepression 2 (Target and User) - Inflict 4 damage. "
-  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
+  description: '[Speed:0]
+
+    Grant target 3 attack, 3 defense. Grant self 1 Joy.'
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
-  speed: 3
+  speed: 0
   targetEffects:
-  - name: Default, 4 Damage and Provide 1 Joy
+  - name: Default, 3 Attack and 3 Defence
     effectOrder: 0
-    damageValue: 4
+    damageValue: 0
     directDamage: 0
-    defenceValue: 0
-    attackValue: 0
+    defenceValue: 3
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 4
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: 4 Damage WITH Repression2
-    effectOrder: 0
-    damageValue: 4
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 4
+      tenetType: 0
       stackCount: 0
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 99f17f0cc551fa84e9fed29be26701b5, type: 2}
+    keywords: []
   userEffects:
   - name: Default, Provide 1 Joy
     effectOrder: 0
@@ -62,9 +48,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 4 Damage WITH Repression2
+  - name: 3 Damage WITH Repression 2
     effectOrder: 0
-    damageValue: 4
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -76,4 +62,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 99f17f0cc551fa84e9fed29be26701b5, type: 2}
+    - {fileID: 11400000, guid: 20cb849d3c43e2d4e8925610b582d5f1, type: 2}
