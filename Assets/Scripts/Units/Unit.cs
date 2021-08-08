@@ -54,8 +54,6 @@ namespace Units
             }
         }
         
-        
-
         public static Type DataType => typeof(T);
         
         private AnimationStates unitAnimationState;

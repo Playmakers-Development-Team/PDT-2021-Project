@@ -62,9 +62,6 @@ namespace Turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
         
-        //TODO: A better name for this, I am not really sure what it could be
-        public IEnumerable<IUnit> UnitsWhoTurnManipulatedThisRound { get; set; }
-        
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
@@ -77,6 +74,7 @@ namespace Turn
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private List<IUnit> unitsTurnManipulatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
@@ -220,14 +218,7 @@ namespace Turn
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
 
-            if (ActingEnemyUnit is null)
-            {
-                foreach (IUnit unit in UnitsWhoTurnManipulatedThisRound.ToArray())
-                {
-                    PhaseIndex = unit == ActingUnit ? TurnManipulationPhaseIndex + 1 : 0;
-                    break;
-                }
-            }
+            PhaseIndex = 0;
         }
 
         /// <summary>
@@ -247,7 +238,7 @@ namespace Turn
 
             unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
             unitsMeditatedThisRound.Clear();
-            UnitsWhoTurnManipulatedThisRound.ToList().Clear();
+            unitsTurnManipulatedThisRound.Clear();
             
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
@@ -312,11 +303,17 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetBeforeCurrent(int targetIndex)
         {
+            if (!UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+                return;
+            }
+
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
 
-            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[CurrentTurnIndex]);
-            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[targetIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
 
             ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
@@ -330,20 +327,26 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
+            if (!UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+                return;
+            }
+
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
             
-            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[CurrentTurnIndex]);
-            UnitsWhoTurnManipulatedThisRound.ToList().Add(currentTurnQueue[targetIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
             
             ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
         public void Meditate()
         {
-            if (!(ActingUnit is PlayerUnit) || !UnitCanDoTurnManipulation(ActingUnit))
+            if (!UnitCanMeditate(ActingUnit))
             {
-                Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
+                Debug.LogWarning($"{ActingUnit} cannot meditate.");
                 return;
             }
             
@@ -477,10 +480,48 @@ namespace Turn
                                             !IsMovementPhase() &&
                                             !IsTurnManipulationPhase();
 
-        public bool UnitCanDoTurnManipulation(IUnit unit) =>
-            !unitsMeditatedLastRound.Contains(unit) &&
-            !unitsMeditatedThisRound.Contains(unit) &&
-            IsTurnManipulationPhase();
+        public bool UnitCanDoTurnManipulation(IUnit unit)
+        {
+            if (!UnitCanMeditate(unit))
+                return false;
+            
+            if (Insight.Value <= 0)
+            {
+                Debug.LogWarning($"Not enough insight.");
+                return false;
+            }
+
+            return true;
+        }
+        
+        public bool UnitCanMeditate(IUnit unit)
+        {
+            if (!(unit is PlayerUnit))
+            {
+                Debug.LogWarning($"{unit} is not a {nameof(PlayerUnit)}");
+                return false;
+            }
+            
+            if (unitsMeditatedLastRound.Contains(unit))
+            {
+                Debug.LogWarning($"{unit} meditated last round.");
+                return false;
+            }
+            
+            if (unitsMeditatedThisRound.Contains(unit) || unitsTurnManipulatedThisRound.Contains(unit))
+            {
+                Debug.LogWarning($"{unit} already turn manipulated this round.");
+                return false;
+            }
+            
+            if (!IsTurnManipulationPhase())
+            {
+                Debug.LogWarning($"{unit} is not in the turn manipulation phase.");
+                return false;
+            }
+
+            return true;
+        }
 
         // TODO: Make sure meditated units cannot be turn manipulated
         public bool UnitCanBeTurnManipulated(IUnit unit) =>
