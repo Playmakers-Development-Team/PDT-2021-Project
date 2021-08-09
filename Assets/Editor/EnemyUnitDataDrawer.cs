@@ -25,13 +25,21 @@ namespace Editor
                 {
                     IUnit iunit = (IUnit) property.serializedObject.targetObject;
                     CommandManager commandManager = ManagerLocator.Get<CommandManager>();
-                    commandManager.ExecuteCommand(
-                        new AttackChangeCommand(iunit, (int) iunit.Attack.BaseAdder));
-                    commandManager.ExecuteCommand(
-                        new MovementActionPointChangedCommand(iunit,
-                            iunit.MovementActionPoints.BaseValue));
-                    commandManager.ExecuteCommand(
-                        new SpeedChangedCommand(iunit, iunit.Speed.BaseValue));
+                    commandManager.ExecuteCommand(new StatChangedCommand(iunit,
+                        iunit.AttackStat.StatType, iunit.AttackStat.BaseValue,
+                        iunit.AttackStat.Value, iunit.AttackStat.Value));
+                    commandManager.ExecuteCommand(new StatChangedCommand(iunit,
+                        iunit.DefenceStat.StatType, iunit.DefenceStat.BaseValue,
+                        iunit.DefenceStat.Value, iunit.DefenceStat.Value));
+                    commandManager.ExecuteCommand(new StatChangedCommand(iunit,
+                        iunit.SpeedStat.StatType, iunit.SpeedStat.BaseValue,
+                        iunit.SpeedStat.Value, iunit.SpeedStat.Value));
+                    commandManager.ExecuteCommand(new StatChangedCommand(iunit,
+                        iunit.MovementPoints.StatType, iunit.MovementPoints.BaseValue,
+                        iunit.MovementPoints.Value, iunit.MovementPoints.Value));
+                    commandManager.ExecuteCommand(new StatChangedCommand(iunit,
+                        iunit.HealthStat.StatType, iunit.HealthStat.BaseValue,
+                        iunit.HealthStat.Value, iunit.HealthStat.Value));
                 }
                 else
                 {
