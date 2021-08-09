@@ -53,7 +53,7 @@ namespace Units
                 commandManager.ExecuteCommand(new AbilitiesChangedCommand(this, value));
             }
         }
-
+        
         public static Type DataType => typeof(T);
         
         private AnimationStates unitAnimationState;
