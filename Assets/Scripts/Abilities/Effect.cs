@@ -12,6 +12,10 @@ namespace Abilities
     public class Effect
     {
         [SerializeField, HideInInspector] private string name;
+        // Public for now to keep allow changing for backward compat
+        [SerializeField] public bool affectTargets = true;
+        // Public for now to keep allow changing for backward compat
+        [SerializeField] public bool affectUser;
         [Tooltip("Determine the order in which effects should be applied")]
         [SerializeField] private EffectOrder effectOrder;
         [SerializeField] private int damageValue;
@@ -68,8 +72,10 @@ namespace Abilities
 
             foreach (Effect effect in AllKeywordEffects)
             {
-                user.AddOrReplaceTenetStatus(effect.providingTenet.TenetType,
-                    effect.providingTenet.StackCount);
+                user.AddOrReplaceTenetStatus(
+                    effect.providingTenet.TenetType,
+                    effect.providingTenet.StackCount
+                );
             }
         }
 

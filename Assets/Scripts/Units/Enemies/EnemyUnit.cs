@@ -12,6 +12,8 @@ namespace Units.Enemies
 
         private List<Command> commandQueue = new List<Command>();
 
+        public int GetBaseHealth() => data.HealthValue.BaseValue;
+
         public void QueueCommand(Command command)
         {
             commandQueue.Add(command);
@@ -25,13 +27,15 @@ namespace Units.Enemies
             commandQueue.Clear();
         }   
         
-        protected override void Start()
+        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        
+        protected override void Awake()
         {
-            base.Start();
-            ManagerLocator.Get<EnemyManager>().Spawn(this);
+            base.Awake();
+
+            unitManagerT = ManagerLocator.Get<EnemyManager>();
+            
             //Name = RandomizeName();
         }
-
-        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
     }
 }

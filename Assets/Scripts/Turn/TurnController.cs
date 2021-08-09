@@ -2,6 +2,8 @@ using Commands;
 using Managers;
 using Units;
 using Units.Commands;
+using Units.Enemies;
+using Units.Players;
 using UnityEngine;
 
 namespace Turn
@@ -26,7 +28,7 @@ namespace Turn
             
             CommandManager commandManager = ManagerLocator.Get<CommandManager>();
 
-            commandManager.CatchCommand<PlayerUnitsReadyCommand, EnemyUnitsReadyCommand>(
+            commandManager.CatchCommand<UnitsReadyCommand<PlayerUnitData>, UnitsReadyCommand<EnemyUnitData>>(
                 (cmd1, cmd2) =>
                 {
                     SetupTurnQueue();

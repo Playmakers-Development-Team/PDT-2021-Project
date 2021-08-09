@@ -33,10 +33,35 @@ namespace Turn
         public int PhaseIndex { get; set; }
 
         public Stat Insight { get; set; }
+        
+        /// <summary>
+        /// The unit that is currently taking its turn. Returns null if no unit is taking its turn.
+        /// </summary>
+        public IUnit ActingUnit
+        {
+            get
+            {
+                if (currentTurnQueue.Count == 0)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
+                                     $"{nameof(currentTurnQueue)} is empty.");
+                    return null;
+                }
+                
+                if (CurrentTurnIndex < 0 || CurrentTurnIndex >= currentTurnQueue.Count)
+                {
+                    Debug.LogWarning($"{nameof(ActingUnit)} could not be accessed. " +
+                                     $"{nameof(CurrentTurnIndex)} is not valid.");
+                    return null;
+                }
+                
+                return currentTurnQueue[CurrentTurnIndex];
+            }
+        }
 
-        public IUnit ActingUnit => currentTurnQueue[CurrentTurnIndex]; // The unit that is currently taking its turn
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
         public IUnit RecentUnitDeath { get; private set; }
+        
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
@@ -44,13 +69,12 @@ namespace Turn
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
 
         private CommandManager commandManager;
-        private PlayerManager playerManager;
         private UnitManager unitManager;
-        private EnemyManager enemyManager;
 
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        private List<IUnit> unitsTurnManipulatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
         private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
@@ -65,9 +89,7 @@ namespace Turn
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
-            playerManager = ManagerLocator.Get<PlayerManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
-            enemyManager = ManagerLocator.Get<EnemyManager>();
 
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
@@ -172,7 +194,6 @@ namespace Turn
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
             timelineNeedsUpdating = true;
-            SelectCurrentUnit(); // Reselect the new current unit if the old current unit has died
         }
 
         /// <summary>
@@ -184,6 +205,9 @@ namespace Turn
             CurrentTurnIndex++;
             TotalTurnCount++;
 
+            if (!CheckUnitsRemaining())
+                return;
+
             if (CurrentTurnIndex >= currentTurnQueue.Count)
                 NextRound();
 
@@ -194,11 +218,7 @@ namespace Turn
         {
             commandManager.ExecuteCommand(new StartTurnCommand(ActingUnit));
 
-            if (ActingEnemyUnit is null)
-                PhaseIndex = 0;
-                //enable button
-
-            SelectCurrentUnit();
+            PhaseIndex = 0;
         }
 
         /// <summary>
@@ -210,26 +230,6 @@ namespace Turn
             RoundCount++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
 
-            // TODO Add option for a draw
-            if (!HasEnemyUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(true));
-                // Debug.Log("YOU WIN!");
-                // TODO Player wins. End the encounter somehow, probably inform the GameManager
-                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-            }
-
-            if (!HasPlayerUnitInQueue())
-            {
-                commandManager.ExecuteCommand(new GameEndedCommand(false));
-
-               // Debug.Log("YOU LOSE!");
-               // TODO Player wins. End the encounter somehow, probably inform the GameManager
-               // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
-               AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
-            }
-
             previousTurnQueue = currentTurnQueue;
             currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;   // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
             timelineNeedsUpdating = false;
@@ -238,9 +238,36 @@ namespace Turn
 
             unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
             unitsMeditatedThisRound.Clear();
-
+            unitsTurnManipulatedThisRound.Clear();
+            
             ResetUnitStatsAfterRound();
             commandManager.ExecuteCommand(new StartRoundCommand());
+        }
+
+        private bool CheckUnitsRemaining()
+        {
+            // TODO Add option for a draw
+            if (!HasEnemyUnitInQueue())
+            {
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingEnemyUnitsCommand());
+
+                return false;
+            }
+
+            if (!HasPlayerUnitInQueue())
+            {
+                // Sets the audio to out of combat version. TODO Move this to the GameManager or MusicManager
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+
+                commandManager.ExecuteCommand(new NoRemainingPlayerUnitsCommand());
+
+                return false;
+            }
+
+            return true;
         }
 
         #endregion
@@ -276,8 +303,17 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetBeforeCurrent(int targetIndex)
         {
+            if (!UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+                return;
+            }
+
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
+
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
 
             ShiftTurnQueue(CurrentTurnIndex, targetIndex);
             StartTurn();
@@ -291,23 +327,32 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void MoveTargetAfterCurrent(int targetIndex)
         {
+            if (!UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+                return;
+            }
+
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-
+            
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
+            
             ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
         public void Meditate()
         {
-            if (!(ActingUnit is PlayerUnit) || !UnitCanDoTurnManipulation(ActingUnit))
+            if (!UnitCanMeditate(ActingUnit))
             {
-                Debug.LogWarning($"{nameof(EnemyUnit)} cannot meditate.");
+                Debug.LogWarning($"{ActingUnit} cannot meditate.");
                 return;
             }
             
             commandManager.ExecuteCommand(new MeditatedCommand(ActingUnit));
             unitsMeditatedThisRound.Add(ActingUnit);
-            playerManager.Insight.Value += 1;
+            Insight.Value += 1;
             EndTurnManipulationPhase();
         }
 
@@ -338,7 +383,7 @@ namespace Turn
         /// </summary>
         public void AddNewUnitToTimeline(IUnit unit)
         {
-            currentTurnQueue.Add(unit);
+            if (!currentTurnQueue.Contains(unit)) currentTurnQueue.Add(unit);
             //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
             timelineNeedsUpdating = true;
         }
@@ -366,7 +411,7 @@ namespace Turn
                 currentIndex += increment;
             }
 
-            playerManager.Insight.Value--;
+            Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new TurnManipulatedCommand(currentTurnQueue[startIndex],
                 currentTurnQueue[endIndex]));
@@ -435,13 +480,61 @@ namespace Turn
                                             !IsMovementPhase() &&
                                             !IsTurnManipulationPhase();
 
-        public bool UnitCanDoTurnManipulation(IUnit unit) =>
-            !unitsMeditatedLastRound.Contains(unit) &&
-            !unitsMeditatedThisRound.Contains(unit) &&
-            IsTurnManipulationPhase();
+        public bool UnitCanDoTurnManipulation(IUnit unit)
+        {
+            if (!UnitCanMeditate(unit))
+                return false;
+            
+            if (Insight.Value <= 0)
+            {
+                Debug.LogWarning($"Not enough insight.");
+                return false;
+            }
+
+            return true;
+        }
+        
+        public bool UnitCanMeditate(IUnit unit)
+        {
+            if (!(unit is PlayerUnit))
+            {
+                Debug.LogWarning($"{unit} is not a {nameof(PlayerUnit)}");
+                return false;
+            }
+            
+            if (unitsMeditatedLastRound.Contains(unit))
+            {
+                Debug.LogWarning($"{unit} meditated last round.");
+                return false;
+            }
+            
+            if (unitsMeditatedThisRound.Contains(unit) || unitsTurnManipulatedThisRound.Contains(unit))
+            {
+                Debug.LogWarning($"{unit} already turn manipulated this round.");
+                return false;
+            }
+            
+            if (!IsTurnManipulationPhase())
+            {
+                Debug.LogWarning($"{unit} is not in the turn manipulation phase.");
+                return false;
+            }
+
+            return true;
+        }
 
         // TODO: Make sure meditated units cannot be turn manipulated
         public bool UnitCanBeTurnManipulated(IUnit unit) =>
+            !unitsMeditatedLastRound.Contains(unit) &&
+            !unitsMeditatedThisRound.Contains(unit);
+
+
+        /// <summary>
+        /// Determines whether the given unit is meditating or not
+        /// </summary>
+        /// <param name="unit"></param>
+        /// <returns></returns>
+        public bool UnitIsMeditated(IUnit unit) =>
             !unitsMeditatedLastRound.Contains(unit) &&
             !unitsMeditatedThisRound.Contains(unit);
 
@@ -456,17 +549,6 @@ namespace Turn
         #endregion
 
         #region Unit
-
-        /// <summary>
-        /// Selects the <c>CurrentUnit</c> if it is of type <c>PlayerUnit</c>.
-        /// </summary>
-        private void SelectCurrentUnit()
-        {
-            if (ActingUnit is PlayerUnit)
-                playerManager.SelectUnit((PlayerUnit) ActingUnit);
-            else
-                playerManager.DeselectUnit();
-        }
 
         /// <summary>
         /// Resets the necessary stats of all units at the end of a round.
