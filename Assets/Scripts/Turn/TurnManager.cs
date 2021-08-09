@@ -60,8 +60,7 @@ namespace Turn
         }
 
         public IUnit PreviousActingUnit => CurrentTurnIndex == 0 ? null : currentTurnQueue[CurrentTurnIndex - 1];
-        public IUnit RecentUnitDeath { get; private set; }
-        
+
         public IReadOnlyList<IUnit> CurrentTurnQueue => currentTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> NextTurnQueue => nextTurnQueue.AsReadOnly();
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
@@ -71,16 +70,16 @@ namespace Turn
         private CommandManager commandManager;
         private UnitManager unitManager;
 
+        private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
         private List<IUnit> previousTurnQueue = new List<IUnit>();
         private List<IUnit> currentTurnQueue = new List<IUnit>();
         private List<IUnit> nextTurnQueue = new List<IUnit>();
+        
         private List<IUnit> unitsTurnManipulatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedThisRound = new List<IUnit>();
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
-        private readonly List<IUnit> preMadeTurnQueue = new List<IUnit>();
 
         private bool randomizedSpeed = true;
-        private bool timelineNeedsUpdating;
 
         #endregion
 
@@ -92,7 +91,7 @@ namespace Turn
             unitManager = ManagerLocator.Get<UnitManager>();
 
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
-            commandManager.ListenCommand<SpawnedUnitCommand>(cmd => AddNewUnitToTimeline(cmd.Unit));
+            commandManager.ListenCommand<SpawnedUnitCommand>(cmd => UpdateNextTurnQueue());
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
             commandManager.ListenCommand<EndMoveCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
@@ -120,38 +119,16 @@ namespace Turn
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
-            if (newTurnPhases.Length != 3)
-            {
-                Debug.LogError("Could not set up turn queue. Turn phases list must contain" +
-                               " three elements.");
-                return;
-            }
-
-            for (int i = 0; i < 3; i++)
-            {
-                switch (newTurnPhases[i])
-                {
-                    case TurnPhases.TurnManipulation:
-                        TurnManipulationPhaseIndex = i;
-                        break;
-                    case TurnPhases.Movement:
-                        MovementPhaseIndex = i;
-                        break;
-                    case TurnPhases.Ability:
-                        AbilityPhaseIndex = i;
-                        break;
-                }
-            }
-
-            PhaseIndex = 0;
+            SetupTurnPhases(newTurnPhases);
+            
             RoundCount = 0;
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
-            previousTurnQueue = new List<IUnit>();
             Insight = new Stat(null, 0, StatTypes.Insight);
 
+            previousTurnQueue = new List<IUnit>();
+            currentTurnQueue = CreateTurnQueue();
             UpdateNextTurnQueue();
-            currentTurnQueue = nextTurnQueue;
 
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
             StartTurn();
@@ -175,26 +152,6 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the unit is not in the turn queue.</exception>
         private void RemoveUnitFromQueue(IUnit unit) =>
             RemoveUnitFromQueue(FindTurnIndexFromCurrentQueue(unit));
-
-        /// <summary>
-        /// Remove a unit completely from the current turn queue and future turn queues.
-        /// For situations such as when a unit is killed.
-        /// </summary>
-        /// <param name="targetIndex">The index of the unit to remove.</param>
-        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
-        private void RemoveUnitFromQueue(int targetIndex)
-        {
-            if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
-                throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
-
-            if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
-                CurrentTurnIndex--;
-
-            RecentUnitDeath = currentTurnQueue[targetIndex];
-            currentTurnQueue.RemoveAt(targetIndex);
-            UpdateNextTurnQueue();
-            timelineNeedsUpdating = true;
-        }
 
         /// <summary>
         /// Finish the current turn and end the round if this is the last turn.
@@ -230,10 +187,10 @@ namespace Turn
             RoundCount++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
 
-            previousTurnQueue = currentTurnQueue;
-            currentTurnQueue = timelineNeedsUpdating ? CreateTurnQueue() : nextTurnQueue;   // if a new unit was spawned, then new turn queue needs to be updated to accompany the new unit
-            timelineNeedsUpdating = false;
-            nextTurnQueue = CreateTurnQueue();
+            previousTurnQueue = new List<IUnit>(currentTurnQueue);
+            currentTurnQueue = CreateTurnQueue();
+            UpdateNextTurnQueue();
+
             CurrentTurnIndex = 0;
 
             unitsMeditatedLastRound = unitsMeditatedThisRound.ToList();
@@ -269,6 +226,67 @@ namespace Turn
 
             return true;
         }
+        
+        /// <summary>
+        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
+        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// </summary>
+        private List<IUnit> CreateTurnQueue()
+        {
+            if (!randomizedSpeed)
+            {
+                if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
+                    return preMadeTurnQueue;
+                
+                Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
+                                 $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
+                randomizedSpeed = true;
+            }
+
+            List<IUnit> turnQueue = new List<IUnit>();
+            turnQueue.AddRange(unitManager.AllUnits);
+            
+            // Sort units by speed in descending order
+            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
+            return turnQueue;
+        }
+
+        /// <summary>
+        /// Should be called whenever the number of units in the turn queue has been changed.
+        /// </summary>
+        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
+
+        /// <summary>
+        /// Adds a unit to the end of the current turn queue.
+        /// </summary>
+        [Obsolete]
+        public void AddNewUnitToTimeline(IUnit unit)
+        {
+            if (!currentTurnQueue.Contains(unit)) currentTurnQueue.Add(unit);
+        }
+
+        /// <summary>
+        /// Remove a unit completely from the current turn queue and future turn queues.
+        /// For situations such as when a unit is killed.
+        /// </summary>
+        /// <param name="targetIndex">The index of the unit to remove.</param>
+        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
+        private void RemoveUnitFromQueue(int targetIndex)
+        {
+            if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
+                throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
+
+            // BUG: Removing the first unit on its turn will skip the second unit's turn.
+            if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
+                CurrentTurnIndex--;
+
+            currentTurnQueue.RemoveAt(targetIndex);
+            UpdateNextTurnQueue();
+
+            // If the ActingUnit was removed, start the next unit's turn
+            if (targetIndex - 1 == CurrentTurnIndex)
+                NextTurn();
+        }
 
         #endregion
 
@@ -294,54 +312,7 @@ namespace Turn
         /// <param name="unit">Target unit</param>
         /// <returns>The turn index of the unit or -1 if not found.</returns>
         public int FindTurnIndexFromNextQueue(IUnit unit) => nextTurnQueue.FindIndex(u => u == unit);
-
-        /// <summary>
-        /// Move a unit right before the current unit. The moved unit will take a turn instantly
-        /// before continuing to the current unit.
-        /// </summary>
-        /// <param name="targetIndex">The index of the unit to be moved.</param>
-        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
-        public void MoveTargetBeforeCurrent(int targetIndex)
-        {
-            if (!UnitCanDoTurnManipulation(ActingUnit))
-            {
-                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
-                return;
-            }
-
-            if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
-                throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-
-            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
-            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
-
-            ShiftTurnQueue(CurrentTurnIndex, targetIndex);
-            StartTurn();
-        }
-
-        /// <summary>
-        /// Move a unit right after the current unit. The moved unit will take a turn after the
-        /// current unit.
-        /// </summary>
-        /// <param name="targetIndex">The index of the unit to be moved.</param>
-        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
-        public void MoveTargetAfterCurrent(int targetIndex)
-        {
-            if (!UnitCanDoTurnManipulation(ActingUnit))
-            {
-                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
-                return;
-            }
-
-            if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
-                throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-            
-            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
-            unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
-            
-            ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
-        }
-
+        
         public void Meditate()
         {
             if (!UnitCanMeditate(ActingUnit))
@@ -357,35 +328,26 @@ namespace Turn
         }
 
         /// <summary>
-        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
-        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// Move a unit right before the current unit. The moved unit will take a turn instantly
+        /// before continuing to the current unit.
         /// </summary>
-        private List<IUnit> CreateTurnQueue()
+        /// <param name="targetIndex">The index of the unit to be moved.</param>
+        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
+        public void MoveTargetBeforeCurrent(int targetIndex)
         {
-            if (!randomizedSpeed)
-                return preMadeTurnQueue;
-
-            List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(unitManager.AllUnits);
-            
-            // Sort units by speed in descending order
-            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
-            return turnQueue;
+            ShiftTurnQueue(CurrentTurnIndex, targetIndex);
+            StartTurn();
         }
 
         /// <summary>
-        /// Should be called whenever the number of units in the turn queue has been changed.
+        /// Move a unit right after the current unit. The moved unit will take a turn after the
+        /// current unit.
         /// </summary>
-        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
-
-        /// <summary>
-        /// Adds a new unit to the timeline and setting it to the end of the current turn queue
-        /// </summary>
-        public void AddNewUnitToTimeline(IUnit unit)
+        /// <param name="targetIndex">The index of the unit to be moved.</param>
+        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
+        public void MoveTargetAfterCurrent(int targetIndex)
         {
-            if (!currentTurnQueue.Contains(unit)) currentTurnQueue.Add(unit);
-            //nextTurnQueue.Add(unit);  // No purpose, since nextTurnQueue will be recalculated
-            timelineNeedsUpdating = true;
+            ShiftTurnQueue(CurrentTurnIndex + 1, targetIndex);
         }
 
         /// <summary>
@@ -395,8 +357,21 @@ namespace Turn
         /// <param name="startIndex">Shift everything starting from <c>startIndex</c>.
         /// The Unit in startIndex will not be shifted.</param>
         /// <param name="endIndex">Shift everything until <c>endIndex</c>.</param>
+        /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void ShiftTurnQueue(int startIndex, int endIndex)
         {
+            if (!UnitCanDoTurnManipulation(ActingUnit))
+            {
+                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+                return;
+            }
+
+            if (endIndex < 0 || endIndex >= CurrentTurnQueue.Count)
+                throw new IndexOutOfRangeException($"Could not move unit at index {endIndex}");
+
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
+            unitsTurnManipulatedThisRound.Add(currentTurnQueue[endIndex]);
+            
             if (startIndex == endIndex)
                 return;
 
@@ -561,6 +536,38 @@ namespace Turn
                 unit.AttackStat.Reset();
                 unit.DefenceStat.Reset();
             }
+        }
+        
+        #endregion
+        
+        #region Turn Phases
+        
+        private void SetupTurnPhases(TurnPhases[] newTurnPhases)
+        {
+            if (newTurnPhases.Length != 3)
+            {
+                Debug.LogError("Could not set up turn queue. Turn phases list must contain" +
+                               " three elements.");
+                return;
+            }
+            
+            for (int i = 0; i < 3; i++)
+            {
+                switch (newTurnPhases[i])
+                {
+                    case TurnPhases.TurnManipulation:
+                        TurnManipulationPhaseIndex = i;
+                        break;
+                    case TurnPhases.Movement:
+                        MovementPhaseIndex = i;
+                        break;
+                    case TurnPhases.Ability:
+                        AbilityPhaseIndex = i;
+                        break;
+                }
+            }
+
+            PhaseIndex = 0;
         }
 
         private void EndMovementPhase()
