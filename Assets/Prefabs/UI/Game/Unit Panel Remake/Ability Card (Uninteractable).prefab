@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5766478397726234728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,6 +127,7 @@ MonoBehaviour:
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
+  interactable: 0
 --- !u!114 &1741380082100635394
 MonoBehaviour:
   m_ObjectHideFlags: 0

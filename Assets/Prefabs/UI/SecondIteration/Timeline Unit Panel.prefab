@@ -2756,6 +2756,7 @@ MonoBehaviour:
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
+  interactable: 1
 --- !u!1 &5127293325505993152
 GameObject:
   m_ObjectHideFlags: 0
@@ -3802,6 +3803,7 @@ MonoBehaviour:
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
+  interactable: 1
   icon: {fileID: 4406805109889204200}
   defaultSprite: {fileID: 21300000, guid: 61e9de4b650a0074ba519f6e7be9283c, type: 3}
   activatedSprite: {fileID: 21300000, guid: 3296baa05804bf449b816835547f2295, type: 3}

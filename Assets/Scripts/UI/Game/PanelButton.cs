@@ -29,10 +29,13 @@ public class PanelButton : DialogueComponent<GameDialogue>
     [SerializeField] private TMP_FontAsset darkFont;
     
     [SerializeField, Range(0f, 1f)] private float fill;
+
+    [SerializeField] private bool interactable;
     
     private bool clicked;
     private bool animating;
-    
+    private bool wasInteractable;
+
     private static readonly int borderFillId = Animator.StringToHash("Fill");
     private static readonly int borderFadeId = Animator.StringToHash("Fade");
     private static readonly int fillId = Shader.PropertyToID("_Fill");
@@ -71,23 +74,29 @@ public class PanelButton : DialogueComponent<GameDialogue>
     {
         dialogue.buttonSelected.AddListener(OnButtonSelected);
         dialogue.turnStarted.AddListener(OnTurnStarted);
+        dialogue.promoted.AddListener(OnPromoted);
+        dialogue.demoted.AddListener(OnDemoted);
     }
 
     protected override void Unsubscribe()
     {
         dialogue.buttonSelected.RemoveListener(OnButtonSelected);
         dialogue.turnStarted.RemoveListener(OnTurnStarted);
+        dialogue.promoted.RemoveListener(OnPromoted);
+        dialogue.demoted.RemoveListener(OnDemoted);
     }
 
     protected override void OnComponentAwake()
     {
+        wasInteractable = interactable;
+        
         backgroundImage.material = Instantiate(backgroundImage.material);
         borderImage.material = Instantiate(borderImage.material);
         
         EventTrigger.Entry pointerEnter = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
         pointerEnter.callback.AddListener(info =>
         {
-            if (clicked)
+            if (clicked || !interactable)
                 return;
             
             backgroundImage.sprite = backgroundLight;
@@ -102,7 +111,7 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerExit = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
         pointerExit.callback.AddListener(info =>
         {
-            if (clicked)
+            if (clicked || !interactable)
                 return;
             
             backgroundImage.sprite = backgroundLight;
@@ -116,18 +125,22 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerClick = new EventTrigger.Entry {eventID = EventTriggerType.PointerClick};
         pointerClick.callback.AddListener(info =>
         {
+            if (!interactable)
+                return;
+            
             if (!clicked)
                 Selected();
             else
-            {
                 Deselected();
-            }
         });
         trigger.triggers.Add(pointerClick);
         
         EventTrigger.Entry pointerDown = new EventTrigger.Entry {eventID = EventTriggerType.PointerDown};
         pointerDown.callback.AddListener(info =>
         {
+            if (!interactable)
+                return;
+            
             backgroundImage.sprite = backgroundDark;
             borderImage.sprite = borderLight;
             labelText.font = lightFont;
@@ -178,6 +191,17 @@ public class PanelButton : DialogueComponent<GameDialogue>
         labelText.font = darkFont;
         
         OnDeselected();
+    }
+
+    private void OnDemoted()
+    {
+        wasInteractable = interactable;
+        interactable = false;
+    }
+
+    private void OnPromoted()
+    {
+        interactable = wasInteractable;
     }
 
     #endregion

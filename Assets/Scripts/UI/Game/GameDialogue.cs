@@ -38,7 +38,7 @@ namespace UI.Game
         internal readonly Event buttonSelected = new Event();
 
         internal readonly Event<bool> moveButtonPressed = new Event<bool>();
-        
+
         private CommandManager commandManager;
         private TurnManager turnManager;
         
