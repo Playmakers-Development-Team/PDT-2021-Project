@@ -40,6 +40,7 @@ namespace Editor
                     commandManager.ExecuteCommand(new StatChangedCommand(iunit,
                         iunit.HealthStat.StatType, iunit.HealthStat.BaseValue,
                         iunit.HealthStat.Value, iunit.HealthStat.Value));
+                    Debug.Log("D");
                 }
                 else
                 {
@@ -50,7 +51,7 @@ namespace Editor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return base.GetPropertyHeight(property, label) + 540;
+            return EditorGUIUtility.singleLineHeight * 35;
         }
     }
 }
