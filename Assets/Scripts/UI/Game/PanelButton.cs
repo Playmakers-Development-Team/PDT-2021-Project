@@ -30,7 +30,7 @@ public class PanelButton : DialogueComponent<GameDialogue>
     
     [SerializeField, Range(0f, 1f)] private float fill;
 
-    [SerializeField] private bool interactable;
+    [SerializeField] protected bool interactable;
     
     private bool clicked;
     private bool animating;
@@ -65,6 +65,19 @@ public class PanelButton : DialogueComponent<GameDialogue>
     {
         animating = false;
         borderImage.material.SetFloat(fillId, 0.0f);
+    }
+
+    protected void SetInteractable(bool state)
+    {
+        if (interactable)
+        {
+            wasInteractable = state;
+            interactable = state;
+        }
+        else
+        {
+            wasInteractable = state;
+        }
     }
 
 

@@ -44,13 +44,21 @@ namespace UI.Game
 
             turnManager.Meditate();
             dialogue.buttonSelected.Invoke();
+            
+            SetInteractable(false);
         }
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            // TODO: Add proper boolean once implemented...
-            bool unitIsMeditating = false;
-            icon.sprite = unitIsMeditating ? activatedSprite : defaultSprite;
+            if (turnManager.ActingUnit == null)
+                return;
+            
+            bool unitCanMeditate = turnManager.UnitCanBeTurnManipulated(turnManager.ActingUnit);
+            
+            interactable = unitCanMeditate;
+            icon.sprite = unitCanMeditate ? defaultSprite : activatedSprite;
+            
+            SetInteractable(unitCanMeditate);
         }
     }
 }
