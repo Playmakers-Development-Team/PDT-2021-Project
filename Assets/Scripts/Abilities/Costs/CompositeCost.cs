@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Parsing;
 using UnityEngine;
 
 namespace Abilities.Costs
@@ -34,25 +35,25 @@ namespace Abilities.Costs
                 $"Unsupported {nameof(CostType)} {costType} for {nameof(CompositeCost)}")
         };
 
-        public void ApplyAnyTargetCost(IAbilityUser target)
+        public void ApplyAnyTargetCost(IAbilityContext context, IAbilityUser target)
         {
             if (affectType == AffectType.Target && costType != CostType.None)
-                ChildCost.ApplyCost(target);
+                ChildCost.ApplyCost(context, target);
         }
 
-        public void ApplyAnyUserCost(IAbilityUser user)
+        public void ApplyAnyUserCost(IAbilityContext context, IAbilityUser user)
         {
             if (affectType == AffectType.User && costType != CostType.None)
-                ChildCost.ApplyCost(user);
+                ChildCost.ApplyCost(context, user);
         }
         
-        public bool MeetsRequirementsForUser(IAbilityUser user) =>
-            costType == CostType.None || affectType == AffectType.User && ChildCost.MeetsRequirements(user);
+        public bool MeetsRequirementsForUser(IAbilityContext context, IAbilityUser user) =>
+            costType == CostType.None || affectType == AffectType.User && ChildCost.MeetsRequirements(context, user);
 
-        public bool MeetsRequirementsForTarget(IAbilityUser target) =>
-            costType == CostType.None || affectType == AffectType.Target && ChildCost.MeetsRequirements(target);
+        public bool MeetsRequirementsForTarget(IAbilityContext context, IAbilityUser target) =>
+            costType == CostType.None || affectType == AffectType.Target && ChildCost.MeetsRequirements(context, target);
 
-        public bool MeetsRequirementsWith(IAbilityUser user, IAbilityUser target) =>
-            costType == CostType.None || ChildCost.MeetsRequirements(GetAffectedUser(user, target));
+        public bool MeetsRequirementsWith(IAbilityContext context, IAbilityUser user, IAbilityUser target) =>
+            costType == CostType.None || ChildCost.MeetsRequirements(context, GetAffectedUser(user, target));
     }
 }

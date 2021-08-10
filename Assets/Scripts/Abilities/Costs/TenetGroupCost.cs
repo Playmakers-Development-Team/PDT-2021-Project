@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Parsing;
 using TenetStatuses;
 using UnityEngine;
 using Utilities;
@@ -17,7 +18,7 @@ namespace Abilities.Costs
 
         public string DisplayName => $"{tenetCostType} {StringUtility.UppercaseToReadable(tenetTarget)} from any {count} of {tenetFilter.ToDisplayName()}";
 
-        public void ApplyCost(IAbilityUser user)
+        public void ApplyCost(IAbilityContext context, IAbilityUser user)
         {
             List<TenetType> allTypes = new List<TenetType>();
             
@@ -47,7 +48,7 @@ namespace Abilities.Costs
             }
         }
 
-        public bool MeetsRequirements(IAbilityUser user) => tenetTarget switch
+        public bool MeetsRequirements(IAbilityContext context, IAbilityUser user) => tenetTarget switch
         {
             TenetTarget.Newest => MatchSpecificTenet(user),
             TenetTarget.Oldest => MatchSpecificTenet(user),

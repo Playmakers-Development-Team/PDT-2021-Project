@@ -5,19 +5,21 @@ namespace Abilities.Parsing
 {
     internal class EffectParser
     {
-        private readonly IAbilityUser user;
+        private readonly IAbilityContext abilityContext;
         private readonly IReadOnlyList<Effect> effects;
 
-        public EffectParser(IAbilityUser user, EffectOrder effectOrder, IEnumerable<Effect> effects)
+        public IAbilityUser User => abilityContext.OriginalUser;
+
+        public EffectParser(IAbilityContext abilityContext, EffectOrder effectOrder, IEnumerable<Effect> effects)
         {
-            this.user = user;
             this.effects = effects
                 .Where(e => e.EffectOrder == effectOrder)
                 .ToList()
                 .AsReadOnly();
+            this.abilityContext = abilityContext;
         }
         
-        public void Process(IAbilityUser abilityUser)
+        public void Parse(IAbilityUser abilityUser)
         {
             int attack = CalculateValue(abilityUser, EffectValueType.Attack);
             int defence = CalculateValue(abilityUser, EffectValueType.Defence);
@@ -29,7 +31,7 @@ namespace Abilities.Parsing
             abilityUser.TakeAttack(attack);
             abilityUser.TakeDefence(defence);
             abilityUser.TakeDamage(directDamage);
-            user.DealDamageTo(abilityUser, damage);
+            User.DealDamageTo(abilityUser, damage);
                 
             abilityUser.TakeAttackForEncounter(attackForEncounter);
             abilityUser.TakeDefenceForEncounter(defenceForEncounter);
@@ -40,11 +42,11 @@ namespace Abilities.Parsing
                 
             foreach (Effect effect in effects)
             {
-                if (effect.CanBeUsedWith(user, abilityUser))
+                if (effect.CanBeUsedWith(abilityContext, User, abilityUser))
                     effect.ProvideTenet(abilityUser);
                 
-                if (effect.CanBeUsedForTarget(abilityUser))
-                    effect.ApplyCombinedCosts(user, true);
+                if (effect.CanBeUsedForTarget(abilityContext, abilityUser))
+                    effect.ApplyCombinedCosts(abilityContext, User, true);
             }
         }
 
@@ -52,7 +54,7 @@ namespace Abilities.Parsing
         /// Sum up all the values from each effect. Only count the effect if such effect can be used.
         /// </summary>
         private int CalculateValue(IAbilityUser target, EffectValueType valueType) =>
-            effects.Where(e => e.CanBeUsedWith(user, target))
-                .Sum(e => e.CalculateValue(user, target, valueType));
+            effects.Where(e => e.CanBeUsedWith(abilityContext, User, target))
+                .Sum(e => e.CalculateValue(abilityContext, target, valueType));
     }
 }

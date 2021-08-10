@@ -20,8 +20,12 @@ namespace TenetStatuses
 
         public void SetTenets(ITenetBearer tenetBearer)
         {
-            Initialise(tenetStatusEffectSlots);
-            // Might want to call a command that tenets have changed here
+            // We want to keep the existing object, so that other systems don't lose reference to it.
+            // To do that, we clear and add manually.
+            tenetStatusEffectSlots.Clear();
+
+            foreach (TenetStatus tenetStatus in tenetBearer.TenetStatuses)
+                tenetStatusEffectSlots.AddLast(tenetStatus);
         }
 
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)

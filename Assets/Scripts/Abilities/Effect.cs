@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Bonuses;
 using Abilities.Costs;
+using Abilities.Parsing;
 using TenetStatuses;
 using UnityEngine;
 
@@ -54,14 +55,14 @@ namespace Abilities
         public IEnumerable<Keyword> Keywords => keywords.Where(k => k != null);
         public EffectOrder EffectOrder => effectOrder;
 
-        public bool CanBeUsedWith(IAbilityUser user, IAbilityUser target) =>
-            AllCosts.All(c => c.MeetsRequirementsWith(user, target));
+        public bool CanBeUsedWith(IAbilityContext context, IAbilityUser user, IAbilityUser target) =>
+            AllCosts.All(c => c.MeetsRequirementsWith(context, user, target));
 
-        public bool CanBeUsedByUser(IAbilityUser user) =>
-            AllCosts.All(c => c.MeetsRequirementsForUser(user));
+        public bool CanBeUsedByUser(IAbilityContext context, IAbilityUser user) =>
+            AllCosts.All(c => c.MeetsRequirementsForUser(context, user));
         
-        public bool CanBeUsedForTarget(IAbilityUser target) =>
-            AllCosts.All(c => c.MeetsRequirementsForTarget(target));
+        public bool CanBeUsedForTarget(IAbilityContext context, IAbilityUser target) =>
+            AllCosts.All(c => c.MeetsRequirementsForTarget(context, target));
 
         /// <summary>
         /// Give the IAbilityUser any tenets that this effect gives.
@@ -84,10 +85,10 @@ namespace Abilities
         /// </summary>
         /// <param name="user">The IAbilityUser we are specifying</param>
         /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyCombinedCosts(IAbilityUser user, bool isTarget)
+        public void ApplyCombinedCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
         {
-            ApplyEffectCosts(user, isTarget);
-            ApplyKeywordCosts(user, isTarget);
+            ApplyEffectCosts(context, user, isTarget);
+            ApplyKeywordCosts(context, user, isTarget);
         }
 
         /// <summary>
@@ -95,14 +96,14 @@ namespace Abilities
         /// </summary>
         /// <param name="user">The IAbilityUser we are specifying</param>
         /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyEffectCosts(IAbilityUser user, bool isTarget)
+        public void ApplyEffectCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
         {
             foreach (WholeCost cost in costs)
             {
                 if (isTarget)
-                    cost.ApplyAnyTargetCost(user);
+                    cost.ApplyAnyTargetCost(context, user);
                 else
-                    cost.ApplyAnyUserCost(user);
+                    cost.ApplyAnyUserCost(context, user);
             }
         }
         /// <summary>
@@ -110,18 +111,18 @@ namespace Abilities
         /// </summary>
         /// <param name="user">The IAbilityUser we are specifying</param>
         /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyKeywordCosts(IAbilityUser user, bool isTarget)
+        public void ApplyKeywordCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
         {
             foreach (CompositeCost cost in KeywordsCosts)
             {
                 if (isTarget)
-                    cost.ApplyAnyTargetCost(user);
+                    cost.ApplyAnyTargetCost(context, user);
                 else
-                    cost.ApplyAnyUserCost(user);
+                    cost.ApplyAnyUserCost(context, user);
             }
         }
 
-        public int CalculateValue(IAbilityUser user, IAbilityUser target, EffectValueType valueType)
+        public int CalculateValue(IAbilityContext abilityContext, IAbilityUser target, EffectValueType valueType)
         {
             int value = valueType switch
             {
@@ -134,7 +135,8 @@ namespace Abilities
                 _ => throw new ArgumentOutOfRangeException(nameof(valueType), valueType, null)
             };
 
-            int bonusSum = AllBonuses.Sum(b => b.CalculateBonusMultiplier(user, target));
+            int bonusSum = AllBonuses
+                .Sum(b => b.CalculateBonusMultiplier(abilityContext, abilityContext.OriginalUser, target));
             value *= Mathf.Max(1, bonusSum);
 
             return value;

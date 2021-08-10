@@ -1,3 +1,5 @@
+using Abilities.Parsing;
+
 namespace Abilities.Costs
 {
     /// <summary>
@@ -5,8 +7,8 @@ namespace Abilities.Costs
     /// </summary>
     public interface ICost : IDisplayable
     {
-        void ApplyCost(IAbilityUser unit);
+        void ApplyCost(IAbilityContext context, IAbilityUser user);
 
-        bool MeetsRequirements(IAbilityUser user);
+        bool MeetsRequirements(IAbilityContext context, IAbilityUser abilityUser);
     }
 }

@@ -63,7 +63,8 @@ namespace Abilities
         public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
-            abilityParser.ProcessAll();
+            abilityParser.ParseAll();
+            abilityParser.ApplyChanges();
         }
         
         public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
@@ -79,6 +80,7 @@ namespace Abilities
         {
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();
+            abilityParser.ApplyChanges();
         }
 
         public void OnBeforeSerialize()

@@ -7,27 +7,31 @@ namespace Abilities.Parsing
 {
     internal class AbilityParser
     {
-        private readonly IAbilityUser user;
+        private readonly AbilityContextHandler abilityContextHandler;
+        private readonly IVirtualAbilityUser user;
         private readonly ICollection<Effect> targetEffects;
         private readonly ICollection<Effect> userEffects;
-        private readonly ICollection<IAbilityUser> targets;
+        private readonly ICollection<IVirtualAbilityUser> targets;
         
         public AbilityParser(IAbilityUser user, ICollection<Effect> effects, IEnumerable<IAbilityUser> targets)
         {
-            this.user = user;
+            this.user = user.CreateVirtualAbilityUser();
             this.targetEffects = effects
                 .Where(e => e.affectTargets)
                 .ToList();
             this.userEffects = effects
                 .Where(e => e.affectUser)
                 .ToList();
-            this.targets = targets.ToList();
+            this.targets = targets
+                .Select(t => t.CreateVirtualAbilityUser())
+                .ToList();
+            this.abilityContextHandler = new AbilityContextHandler(this.user, this.targets.Append(this.user));
         }
 
-        public void ProcessAll()
+        public void ParseAll()
         {
             foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
-                ProcessOrder(effectOrder);
+                ParseOrder(effectOrder);
         }
 
         public void UndoAll()
@@ -35,19 +39,24 @@ namespace Abilities.Parsing
             foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
                 UndoOrder(effectOrder);
         }
-        
-        private void ProcessOrder(EffectOrder effectOrder)
-        {
-            EffectParser userEffectsParser = new EffectParser(user, effectOrder, userEffects);
-            EffectParser targetEffectsParser = new EffectParser(user, effectOrder, targetEffects);
 
-            foreach (IAbilityUser target in targets)
+        public void ApplyChanges()
+        {
+            abilityContextHandler.ApplyChanges();
+        }
+
+        private void ParseOrder(EffectOrder effectOrder)
+        {
+            EffectParser userEffectsParser = new EffectParser(abilityContextHandler, effectOrder, userEffects);
+            EffectParser targetEffectsParser = new EffectParser(abilityContextHandler, effectOrder, targetEffects);
+
+            foreach (IVirtualAbilityUser target in targets)
             {
                 if (target != user)
-                    targetEffectsParser.Process(target);
+                    targetEffectsParser.Parse(target);
             }
             
-            userEffectsParser.Process(user);
+            userEffectsParser.Parse(user);
             ApplyUserCosts();
         }
         
@@ -62,9 +71,9 @@ namespace Abilities.Parsing
             
             foreach (Effect effect in userEffects)
             {
-                if (effect.CanBeUsedByUser(user))
+                if (effect.CanBeUsedByUser(abilityContextHandler, user))
                 {
-                    effect.ApplyEffectCosts(user, false);
+                    effect.ApplyEffectCosts(abilityContextHandler, user, false);
 
                     foreach (Keyword keyword in effect.Keywords)
                     {
@@ -72,7 +81,7 @@ namespace Abilities.Parsing
                         if (!visitedKeywords.Contains(keyword))
                         {
                             visitedKeywords.Add(keyword);
-                            keyword.Effect.ApplyCombinedCosts(user, false);
+                            keyword.Effect.ApplyCombinedCosts(abilityContextHandler, user, false);
                         }
                     }
                 }
