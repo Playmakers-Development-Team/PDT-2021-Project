@@ -1,4 +1,5 @@
 using System;
+using TenetStatuses;
 using Units.Enemies;
 using Units.Players;
 
@@ -22,5 +23,9 @@ namespace Tests.Constraints
 
         public static UnitCheckConstraint UnitEqualsHealth(int health) =>
             new UnitCheckConstraint(u => u.HealthStat.Value == health, $"HEALTH OR DMG WRONG. EXPECTED UNIT HEALTH: {health} ");
+
+        public static UnitCheckConstraint EqualsTenets(TenetStatus tenetStatus) =>
+            new UnitCheckConstraint(u => u.GetTenetStatusCount(tenetStatus.TenetType) == tenetStatus.StackCount, 
+                $"Did not find expected {tenetStatus.TenetType} of {tenetStatus.StackCount}!");
     }
 }

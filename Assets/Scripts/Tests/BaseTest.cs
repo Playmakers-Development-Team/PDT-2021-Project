@@ -50,5 +50,10 @@ namespace Tests
         {
             Time.timeScale = 1f;
         }
+
+        protected IEnumerator DelayForViewing()
+        {
+            yield return new WaitForSecondsRealtime(0.4f);
+        }
     }
 }
