@@ -15,13 +15,18 @@ MonoBehaviour:
   description: 
   shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
-  targetEffects: []
-  userEffects:
+  speed: 0
+  targetEffects:
   - name: 3 Damage Directly and 3 Attack IF User With 1 Pride
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
     damageValue: 3
     directDamage: 1
     defenceValue: 0
     attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -34,6 +39,12 @@ MonoBehaviour:
         tenetCostType: 0
         count: 1
         tenetType: 0
+        tenetConstraint: 0
+      tenetGroupCost:
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
         shape: {fileID: 0}
         countConstraint: 0
@@ -47,15 +58,27 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords: []
   - name: Default, Provide 2 Pride
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 2
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []
