@@ -97,6 +97,16 @@ namespace Tests.Beacons.Base
                         break;
                     case ScreenBeacon<T> screenBeacon:
                     {
+                        var movedState = new MouseState
+                        {
+                            position = screenBeacon.ScreenClickPosition
+                        };
+                        
+                        InputSystem.QueueStateEvent(Mouse, movedState);
+                        cursor.transform.position = screenBeacon.ScreenClickPosition;
+                        // Wait one frame after moving the mouse so it can be picked up by UI and such
+                        yield return null;
+                        
                         var pressState = new MouseState
                         {
                             position = screenBeacon.ScreenClickPosition
@@ -117,7 +127,6 @@ namespace Tests.Beacons.Base
                         // We need this to wait a frame, so we don't do stuff before it has time to
                         // process click
                         yield return null;
-                        cursor.transform.position = screenBeacon.ScreenClickPosition;
                         break;
                     }
                     default:
