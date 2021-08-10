@@ -10,38 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Testing Tenets
+  m_Name: Testing Damage
   m_EditorClassIdentifier: 
   description: '-- FOR AUTOMATED TESTING --
 
-    Give user 1 Pride and target 3 Sorrow
-
-'
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+    Deal 3 Damage, that''s it.....'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: "Target \u27A4 Default, Provide 3 Sorrow"
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 5
-      stackCount: 3
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "User \u27A4 Default, Provide 1 Pride"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -49,7 +31,7 @@ MonoBehaviour:
     attackForEncounter: 0
     providingTenet:
       tenetType: 0
-      stackCount: 1
+      stackCount: 0
     bonuses: []
     costs: []
     keywords: []

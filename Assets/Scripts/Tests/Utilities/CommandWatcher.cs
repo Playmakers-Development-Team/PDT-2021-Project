@@ -56,7 +56,7 @@ namespace Tests.Utilities
         }
 
         public IEnumerator WaitWithDefaultTimeout(string failMessage = null) =>
-            WaitWithTimeout(6, failMessage);
+            WaitWithTimeout(12, failMessage);
 
         public IEnumerator WaitWithTimeout(float seconds, string failMessage = null) => 
             WaitWithTimeout(TimeSpan.FromSeconds(seconds), failMessage);

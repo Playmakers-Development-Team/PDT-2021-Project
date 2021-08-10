@@ -69,5 +69,19 @@ namespace Tests.Utilities
             yield return commandWatcher.WaitWithDefaultTimeout();
             yield return WaitUnitTurn(beacon);
         }
+
+        public static void DoUnit<T>(T beacon, Action<IUnit> action) where T : Enum
+        {
+            if (Beacon.FindActive(beacon, out ILabelBeacon foundBeacon)
+                && foundBeacon is UnitBeacon unitBeacon)
+            {
+                IUnit unit = unitBeacon.GetComponent<IUnit>();
+                
+                if (unit == null)
+                    throw new ArgumentException($"Unit beacon {beacon} is not attached to an IUnit!");
+
+                action(unit);
+            }
+        }
     }
 }
