@@ -10,60 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Giving Serious Motivation
+  m_Name: Outburst
   m_EditorClassIdentifier: 
-  description: 'Give 3 Attack and 1 Passion
+  description: 'Deal 2 Damage
 
-    Kindled 2 - Give 1 extra Passion
+    Kindled 2 - Deal 2 extra damage
 
-    Kindled
-    4 - Give 3 Attack'
+    Kindled 4
+    - Deal 4 extra damage'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 2
   targetEffects:
-  - name: Default, 3 Attack and Provide 1 Passion
+  - name: Default, 2 Damage
     effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 3
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 2
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: Provide 1 Passion WITH Kindled 2
-    effectOrder: 0
-    damageValue: 0
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 2
-      stackCount: 1
+      tenetType: 0
+      stackCount: 0
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
-  - name: 4 Attack WITH Kindled 4 to Targets
+    keywords: []
+  - name: 2 Damage WITH Kindled 2 (User)
     effectOrder: 0
-    damageValue: 0
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
-    attackValue: 4
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 2
+      tenetType: 0
       stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 065ed2fc5868e9086a8aa24584e5cd34, type: 2}
+    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
+  - name: 4 Damage WITH Kindled 4 (User)
+    effectOrder: 0
+    damageValue: 4
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: bb9a22fa5778078b69c278f620873233, type: 2}
   userEffects: []

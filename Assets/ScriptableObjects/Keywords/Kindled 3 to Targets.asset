@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
-  m_Name: Kindled 3
+  m_Name: Kindled 3 to Targets
   m_EditorClassIdentifier: 
   displayName: Kindled
   isVisibleInGame: 1
   description: Give some effect when they have reached a certain total number of
     tenet stacks (counting all tenets)
   effect:
-    name: Nothing IF User With All from any 3 of Pride, Humility, Passion, Apathy,
+    name: Nothing IF Target With All from any 3 of Pride, Humility, Passion, Apathy,
       Joy, Sorrow
     effectOrder: 0
     damageValue: 0
@@ -31,9 +31,9 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With All from any 3 of Pride, Humility, Passion, Apathy, Joy, Sorrow
-      affectType: 0
-      forceUserCost: 0
+    - name: Target With All from any 3 of Pride, Humility, Passion, Apathy, Joy,
+        Sorrow
+      affectType: 1
       costType: 3
       tenetCost:
         tenetCostType: 0
@@ -53,7 +53,6 @@ MonoBehaviour:
         cost:
           name: 
           affectType: 0
-          forceUserCost: 0
           costType: 0
           tenetCost:
             tenetCostType: 0

@@ -12,33 +12,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Inspirational Talk
   m_EditorClassIdentifier: 
-  description: 'Targets gain 2 Attack
+  description: 'Give 1 Defence and 1 Passion
 
-    User and targets gains 1 Defense and 1
-    Passion
+    Kindled 2 - Give 3 Attack
 
 '
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 0
+  speed: -1
   targetEffects:
-  - name: Default, 2 Attack
-    damageValue: 0
-    defenceValue: 0
-    attackValue: 2
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
   - name: Default, 1 Defence and Provide 1 Passion
+    effectOrder: 0
     damageValue: 0
+    directDamage: 0
     defenceValue: 1
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 2
       stackCount: 1
     bonuses: []
     costs: []
     keywords: []
+  - name: 3 Attack WITH Kindled 2  to Targets
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 0f4f3d49b52758b97b8908c502ae7ebb, type: 2}
   userEffects: []

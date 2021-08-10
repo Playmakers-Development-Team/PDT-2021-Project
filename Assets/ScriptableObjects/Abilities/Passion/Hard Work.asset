@@ -12,14 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Hard Work
   m_EditorClassIdentifier: 
-  description: "Deal 2 damage\nDeal 1 Damage per Passion\n\u21AF User may deal 3
+  description: "Deal 2 damage\nDeal 1 Damage per Passion\n\u21AF User may deal 4
     extra damage with Pride\n"
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  excludeUserFromTargets: 1
+  speed: -1
   targetEffects:
   - name: Default, 2 Damage
+    effectOrder: 0
     damageValue: 2
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -27,9 +33,13 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 1 Damage BONUSED BY User Passion IF User Consume 1 Passion
+    effectOrder: 0
     damageValue: 1
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -39,6 +49,7 @@ MonoBehaviour:
       bonusType: 1
       tenetBonus:
         tenetType: 2
+        tenetConstraint: 0
       shapeBonus:
         shape: {fileID: 0}
         countConstraint: 0
@@ -51,6 +62,7 @@ MonoBehaviour:
           bonusType: 0
           tenetBonus:
             tenetType: 0
+            tenetConstraint: 0
     costs:
     - name: User Consume 1 Passion
       affectType: 0
@@ -59,6 +71,12 @@ MonoBehaviour:
         tenetCostType: 1
         count: 1
         tenetType: 2
+        tenetConstraint: 0
+      tenetGroupCost:
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
         shape: {fileID: 0}
         countConstraint: 0
@@ -72,11 +90,21 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords: []
   - name: 3 Damage IF User With 1 Pride
+    effectOrder: 0
     damageValue: 3
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
@@ -89,6 +117,12 @@ MonoBehaviour:
         tenetCostType: 0
         count: 1
         tenetType: 0
+        tenetConstraint: 0
+      tenetGroupCost:
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
         shape: {fileID: 0}
         countConstraint: 0
@@ -102,5 +136,11 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords: []
   userEffects: []
