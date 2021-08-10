@@ -36,7 +36,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 2 Damage WITH Kindled 2 (User)
+  - name: 2 Damage WITH Kindled 2 to User
     effectOrder: 0
     damageValue: 2
     directDamage: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
-  - name: 4 Damage WITH Kindled 4 (User)
+  - name: 4 Damage WITH Kindled 4 to User
     effectOrder: 0
     damageValue: 4
     directDamage: 0
