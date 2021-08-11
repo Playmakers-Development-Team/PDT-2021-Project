@@ -10,24 +10,58 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Testing Ability
+  m_Name: Testing Repression
   m_EditorClassIdentifier: 
   description: '-- FOR AUTOMATED TESTING --
 
-    Should deal 1 damage due to changing
-    stats'
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+    Deal 3 damage and gain 1 Joy
+
+    Take
+    4 damage with Repression 2 (when it has 2 or more Joy)'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: Default, 2 Damage and 1 Attack and 1 Defence
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
     directDamage: 0
-    defenceValue: 1
-    attackValue: 1
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 Default, Provide 1 Joy"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 1
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 4 Damage Directly WITH Repression 2"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 4
+    directDamage: 1
+    defenceValue: 0
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -35,21 +69,6 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs: []
-    keywords: []
-  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 1
-    attackValue: 1
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
+    keywords:
+    - {fileID: 11400000, guid: 20cb849d3c43e2d4e8925610b582d5f1, type: 2}
   userEffects: []

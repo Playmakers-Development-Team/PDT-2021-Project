@@ -10,24 +10,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Testing Ability
+  m_Name: Testing Ennui
   m_EditorClassIdentifier: 
   description: '-- FOR AUTOMATED TESTING --
 
-    Should deal 1 damage due to changing
-    stats'
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+    Gain 1 Apathy
+
+    Deal 6 damage
+    with Ennui 2 (the lastest tenet applied is all consumed when it is more than
+    2)'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: Default, 2 Damage and 1 Attack and 1 Defence
+  - name: "User \u27A4 Default, Provide 1 Apathy"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 1
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 3
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "Target \u27A4 6 Damage WITH Ennui 2"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 6
     directDamage: 0
-    defenceValue: 1
-    attackValue: 1
+    defenceValue: 0
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -35,21 +54,6 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs: []
-    keywords: []
-  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 1
-    attackValue: 1
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
+    keywords:
+    - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
   userEffects: []

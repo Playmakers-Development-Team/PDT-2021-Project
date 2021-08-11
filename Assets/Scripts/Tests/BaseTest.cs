@@ -7,6 +7,7 @@ using Grid;
 using Managers;
 using NUnit.Framework;
 using Tests.Beacons.Base;
+using Tests.Utilities;
 using Turn;
 using Turn.Commands;
 using UI.Core;
@@ -19,7 +20,10 @@ namespace Tests
 {
     public abstract class BaseTest : SceneTest
     {
+        private InputTester inputTester;
+        
         protected InputBeacon InputBeacon { get; } = new InputBeacon();
+        protected InputTester InputTester => inputTester ??= new InputTester(InputBeacon);
         
         // The Default testing scene is MainTest
         protected override string Scene => "MainTest";
@@ -49,6 +53,11 @@ namespace Tests
         protected void TestCleanup()
         {
             Time.timeScale = 1f;
+        }
+
+        protected IEnumerator DelayForViewing()
+        {
+            yield return new WaitForSecondsRealtime(0.4f);
         }
     }
 }

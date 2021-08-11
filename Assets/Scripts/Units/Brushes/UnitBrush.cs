@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Units.Brushes
 {
     [CreateAssetMenu]
-    [CustomGridBrush(false, true, true, "Unit Brush")]
+    [CustomGridBrush(false, true, false, "Unit Brush")]
     public class UnitBrush : PrefabBrush
     {
         private enum Units

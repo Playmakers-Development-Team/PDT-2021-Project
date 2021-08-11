@@ -17,7 +17,7 @@ namespace Abilities
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
-        [SerializeField] private bool excludeUserFromTargets = true;
+        [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
 
