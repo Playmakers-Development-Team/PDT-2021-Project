@@ -190,7 +190,7 @@ namespace Tests.AutomatedTests
             yield return InputTester.UnitUseAbility(UnitBeacons.Niles, 
                 UIBeacons.AbilityB, UnitBeacons.EnemyB);
             Assert.Beacon(UnitBeacons.EnemyB, Any.UnitEqualsHealth(4));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Apathy, 2)));
+            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Apathy, 3)));
             Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Sorrow, 0)));
         }
         
