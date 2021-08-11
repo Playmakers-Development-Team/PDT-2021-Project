@@ -56,13 +56,7 @@ namespace Abilities
         public EffectOrder EffectOrder => effectOrder;
 
         public bool CanBeUsedWith(IAbilityContext context, IAbilityUser user, IAbilityUser target) =>
-            AllCosts.All(c => c.MeetsRequirementsWith(context, user, target));
-
-        public bool CanBeUsedByUser(IAbilityContext context, IAbilityUser user) =>
-            AllCosts.All(c => c.MeetsRequirementsForUser(context, user));
-        
-        public bool CanBeUsedForTarget(IAbilityContext context, IAbilityUser target) =>
-            AllCosts.All(c => c.MeetsRequirementsForTarget(context, target));
+            AllCosts.All(c => c.MeetsRequirements(context, user, target));
 
         /// <summary>
         /// Give the IAbilityUser any tenets that this effect gives.
@@ -80,46 +74,16 @@ namespace Abilities
             }
         }
 
-        /// <summary>
-        /// Apply costs both from effects and keywords.
-        /// </summary>
-        /// <param name="user">The IAbilityUser we are specifying</param>
-        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyCombinedCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
+        public void ApplyTargetCosts(IAbilityContext context, IAbilityUser target)
         {
-            ApplyEffectCosts(context, user, isTarget);
-            ApplyKeywordCosts(context, user, isTarget);
+            foreach (CompositeCost cost in AllCosts)
+                cost.ApplyAnyTargetCost(context, target);
         }
-
-        /// <summary>
-        /// Apply all costs relating to this effect only. Does not include costs from keywords.
-        /// </summary>
-        /// <param name="user">The IAbilityUser we are specifying</param>
-        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyEffectCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
+        
+        public void ApplyUserCosts(IAbilityContext context, IAbilityUser user)
         {
-            foreach (WholeCost cost in costs)
-            {
-                if (isTarget)
-                    cost.ApplyAnyTargetCost(context, user);
-                else
-                    cost.ApplyAnyUserCost(context, user);
-            }
-        }
-        /// <summary>
-        /// Apply all costs from keywords.
-        /// </summary>
-        /// <param name="user">The IAbilityUser we are specifying</param>
-        /// <param name="isTarget">True if the costs should consider the IAbilityUser as a target</param>
-        public void ApplyKeywordCosts(IAbilityContext context, IAbilityUser user, bool isTarget)
-        {
-            foreach (CompositeCost cost in KeywordsCosts)
-            {
-                if (isTarget)
-                    cost.ApplyAnyTargetCost(context, user);
-                else
-                    cost.ApplyAnyUserCost(context, user);
-            }
+            foreach (CompositeCost cost in AllCosts)
+                cost.ApplyAnyUserCost(context, user);
         }
 
         public int CalculateValue(IAbilityContext abilityContext, IAbilityUser target, EffectValueType valueType)

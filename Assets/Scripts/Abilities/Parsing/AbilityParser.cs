@@ -57,35 +57,8 @@ namespace Abilities.Parsing
             }
             
             userEffectsParser.Parse(user);
-            ApplyUserCosts();
-        }
-        
-        /// <summary>
-        /// Apply all the costs from the effect affecting the user. This function needs to be applied
-        /// after effects are applied.
-        /// The same Keywords will then not be applied more than once.
-        /// </summary>
-        public void ApplyUserCosts()
-        {
-            HashSet<Keyword> visitedKeywords = new HashSet<Keyword>();
-            
-            foreach (Effect effect in userEffects)
-            {
-                if (effect.CanBeUsedByUser(abilityContextHandler, user))
-                {
-                    effect.ApplyEffectCosts(abilityContextHandler, user, false);
-
-                    foreach (Keyword keyword in effect.Keywords)
-                    {
-                        // The same keyword cost anywhere affecting the user will not be applied more than once.
-                        if (!visitedKeywords.Contains(keyword))
-                        {
-                            visitedKeywords.Add(keyword);
-                            keyword.Effect.ApplyCombinedCosts(abilityContextHandler, user, false);
-                        }
-                    }
-                }
-            }
+            userEffectsParser.ApplyUserCosts();
+            targetEffectsParser.ApplyUserCosts();
         }
 
         private void UndoOrder(EffectOrder effectOrder)

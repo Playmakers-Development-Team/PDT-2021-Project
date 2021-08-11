@@ -46,14 +46,8 @@ namespace Abilities.Costs
             if (affectType == AffectType.User && costType != CostType.None)
                 ChildCost.ApplyCost(context, user);
         }
-        
-        public bool MeetsRequirementsForUser(IAbilityContext context, IAbilityUser user) =>
-            costType == CostType.None || affectType == AffectType.User && ChildCost.MeetsRequirements(context, user);
 
-        public bool MeetsRequirementsForTarget(IAbilityContext context, IAbilityUser target) =>
-            costType == CostType.None || affectType == AffectType.Target && ChildCost.MeetsRequirements(context, target);
-
-        public bool MeetsRequirementsWith(IAbilityContext context, IAbilityUser user, IAbilityUser target) =>
+        public bool MeetsRequirements(IAbilityContext context, IAbilityUser user, IAbilityUser target) =>
             costType == CostType.None || ChildCost.MeetsRequirements(context, GetAffectedUser(user, target));
     }
 }

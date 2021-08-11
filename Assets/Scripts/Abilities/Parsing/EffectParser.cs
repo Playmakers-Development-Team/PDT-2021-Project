@@ -7,6 +7,7 @@ namespace Abilities.Parsing
     {
         private readonly IAbilityContext abilityContext;
         private readonly IReadOnlyList<Effect> effects;
+        private readonly HashSet<Effect> spentUserEffects = new HashSet<Effect>();
 
         public IAbilityUser User => abilityContext.OriginalUser;
 
@@ -19,22 +20,22 @@ namespace Abilities.Parsing
             this.abilityContext = abilityContext;
         }
         
-        public void Parse(IAbilityUser abilityUser)
+        public void Parse(IAbilityUser target)
         {
-            int attack = CalculateValue(abilityUser, EffectValueType.Attack);
-            int defence = CalculateValue(abilityUser, EffectValueType.Defence);
-            int damage = CalculateValue(abilityUser, EffectValueType.Damage);
-            int directDamage = CalculateValue(abilityUser, EffectValueType.DirectDamage);
-            int attackForEncounter = CalculateValue(abilityUser, EffectValueType.AttackForEncounter);
-            int defenceForEncounter = CalculateValue(abilityUser, EffectValueType.DefenceForEncounter);
+            int attack = CalculateValue(target, EffectValueType.Attack);
+            int defence = CalculateValue(target, EffectValueType.Defence);
+            int damage = CalculateValue(target, EffectValueType.Damage);
+            int directDamage = CalculateValue(target, EffectValueType.DirectDamage);
+            int attackForEncounter = CalculateValue(target, EffectValueType.AttackForEncounter);
+            int defenceForEncounter = CalculateValue(target, EffectValueType.DefenceForEncounter);
             
-            abilityUser.TakeAttack(attack);
-            abilityUser.TakeDefence(defence);
-            abilityUser.TakeDamage(directDamage);
-            User.DealDamageTo(abilityUser, damage);
+            target.TakeAttack(attack);
+            target.TakeDefence(defence);
+            target.TakeDamage(directDamage);
+            User.DealDamageTo(target, damage);
                 
-            abilityUser.TakeAttackForEncounter(attackForEncounter);
-            abilityUser.TakeDefenceForEncounter(defenceForEncounter);
+            target.TakeAttackForEncounter(attackForEncounter);
+            target.TakeDefenceForEncounter(defenceForEncounter);
 
             // Check if knockback is supported first, because currently it sometimes doesn't
             //if (target.Knockback != null)
@@ -42,12 +43,28 @@ namespace Abilities.Parsing
                 
             foreach (Effect effect in effects)
             {
-                if (effect.CanBeUsedWith(abilityContext, User, abilityUser))
-                    effect.ProvideTenet(abilityUser);
-                
-                if (effect.CanBeUsedForTarget(abilityContext, abilityUser))
-                    effect.ApplyCombinedCosts(abilityContext, User, true);
+                if (effect.CanBeUsedWith(abilityContext, User, target))
+                {
+                    effect.ProvideTenet(target);
+                    effect.ApplyTargetCosts(abilityContext, target);
+                    // Keep track of the effect, so that we can apply costs towards user later
+                    // We can't simply apply costs towards the user here because then it will be applied as many
+                    // as there are targets, rather it should only be applied once to the user.
+                    spentUserEffects.Add(effect);
+                }
             }
+        }
+
+        /// <summary>
+        /// <p>All user costs that has been parsed is applied.</p>
+        /// 
+        /// <p>We want to apply all costs towards the user only once, so do call this function right after
+        /// parsing all the targets.</p>
+        /// </summary>
+        public void ApplyUserCosts()
+        {
+            foreach (Effect effect in spentUserEffects)
+                effect.ApplyUserCosts(abilityContext, User);
         }
 
         /// <summary>

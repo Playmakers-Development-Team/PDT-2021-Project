@@ -66,11 +66,9 @@ namespace Abilities.Costs
                 : GetShapeTargets(context, user).Count() <= count;
 
         private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityContext context, IAbilityUser unit) =>
-            cost.MeetsRequirementsForUser(context, unit)
-                ? context.GetCachedUsersFromShape(unit.Coordinate, Vector2.zero, shape)
-                    .Where(target => MatchesShapeFilter(unit, target))
-                    .Where(target => cost.MeetsRequirementsForTarget(context, target))
-                : Enumerable.Empty<IAbilityUser>();
+            context.GetCachedUsersFromShape(unit.Coordinate, Vector2.zero, shape)
+                .Where(target => MatchesShapeFilter(unit, target))
+                .Where(target => cost.MeetsRequirements(context, unit, target));
 
         // TODO: Duplicate code, see ShapeBonus.MatchesShapeFilter
         private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)
