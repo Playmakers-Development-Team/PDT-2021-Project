@@ -254,7 +254,12 @@ namespace Turn
         /// <summary>
         /// Should be called whenever the number of units in the turn queue has been changed.
         /// </summary>
-        private void UpdateNextTurnQueue() => nextTurnQueue = CreateTurnQueue();
+        private void UpdateNextTurnQueue()
+        {
+            nextTurnQueue = CreateTurnQueue();
+            
+            commandManager.ExecuteCommand(new TurnQueueUpdatedCommand());
+        }
 
         /// <summary>
         /// Adds a unit to the end of the current turn queue.
@@ -388,6 +393,7 @@ namespace Turn
 
             Insight.Value--;
             currentTurnQueue[startIndex] = tempUnit;
+            commandManager.ExecuteCommand(new TurnQueueUpdatedCommand());
             commandManager.ExecuteCommand(new TurnManipulatedCommand(currentTurnQueue[startIndex],
                 currentTurnQueue[endIndex]));
             EndTurnManipulationPhase();
