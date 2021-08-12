@@ -135,7 +135,7 @@ namespace UI.Game.Unit
 
         private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)
         {
-            if (data.Difference <= 0)
+            if (data.Difference == 0)
                 return;
             
             float baseAmount = data.BaseValue;
