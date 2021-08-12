@@ -24,7 +24,13 @@ namespace Abilities.Costs
             
             if (tenetTarget == TenetTarget.All)
             {
-                allTypes.AddRange(GetMatchingTenets(user.TenetStatuses));
+                // var tenetTypes = GetMatchingTenets(user.TenetStatuses)
+                //     .Select(t => t.TenetType);
+                // allTypes.AddRange(tenetTypes);
+                
+                // Spend or Consume on this is not implemented and is not needed.
+                // It might take a while to come up with a reasonable outcome/implementation for this.
+                Debug.LogWarning("Cannot spend or consume targeting all tenets!");
             }
             else
             {
@@ -52,9 +58,7 @@ namespace Abilities.Costs
         {
             TenetTarget.Newest => MatchSpecificTenet(user),
             TenetTarget.Oldest => MatchSpecificTenet(user),
-            TenetTarget.FirstToLast => MatchAnyTenets(user),
-            TenetTarget.LastToFirst => MatchAnyTenets(user),
-            TenetTarget.All => MatchAnyTenets(user),
+            TenetTarget.All => MatchAllTenets(user),
             _ => throw new ArgumentOutOfRangeException(nameof(TenetTarget), tenetTarget, null)
         };
 
@@ -69,13 +73,11 @@ namespace Abilities.Costs
                    && user.GetTenetStatusCount(tenetType.Value) >= count;
         }
 
-        private bool MatchAnyTenets(IAbilityUser user) => 
-            GetMatchingTenets(user.TenetStatuses).Count() >= count;
-
-        private IEnumerable<TenetType> GetMatchingTenets(IEnumerable<TenetStatus> tenets) =>
-            tenets
-                .Select(t => t.TenetType)
-                .Where(t => tenetFilter.IsTenetInMask(t));
+        private bool MatchAllTenets(IAbilityUser user) =>
+            GetMatchingTenets(user.TenetStatuses).Sum(t => t.StackCount) >= count;
+        
+        private IEnumerable<TenetStatus> GetMatchingTenets(IEnumerable<TenetStatus> tenets) =>
+            tenets.Where(t => tenetFilter.IsTenetInMask(t.TenetType));
         
         public void OnBeforeSerialize()
         {
