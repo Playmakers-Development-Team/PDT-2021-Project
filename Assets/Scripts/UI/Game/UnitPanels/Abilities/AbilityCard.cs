@@ -1,9 +1,14 @@
 ﻿using Abilities;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Abilities
 {
     public class AbilityCard : PanelButton
     {
+        [SerializeField] private Image tenetIcon;
+        
+        
         internal Ability Ability { get; private set; }
 
         
