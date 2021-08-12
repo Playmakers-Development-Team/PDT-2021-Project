@@ -51,33 +51,27 @@ namespace Abilities
         private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
-        public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        internal void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
             user.AddSpeed(speed);
-            UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
-        }
-
-        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
-            UseForTargets(user, targets.AsEnumerable());
-        
-        public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
-        {
+            var targets = shape.GetTargets(originCoordinate, targetVector);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
             abilityParser.ApplyChanges();
         }
         
-        public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        public IEnumerable<IVirtualAbilityUser> ProjectAbilityUsers(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        {
+            var targets = shape.GetTargets(originCoordinate, targetVector);
+            AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
+            abilityParser.ParseAll();
+            return abilityParser.Targets.Prepend(abilityParser.User);
+        }
+        
+        internal void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
         {
             user.AddSpeed(-speed);
-            UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
-        }
-
-        public void UndoForTargets(IAbilityUser user, params GridObject[] targets) =>
-            UndoForTargets(user, targets.AsEnumerable());
-        
-        public void UndoForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
-        {
+            var targets = shape.GetTargets(originCoordinate, targetVector);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();
             abilityParser.ApplyChanges();

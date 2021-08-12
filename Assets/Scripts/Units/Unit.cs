@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
@@ -471,6 +472,21 @@ namespace Units
 
         public void SetTenets(ITenetBearer tenetBearer) =>
             TenetStatusEffectsContainer.SetTenets(tenetBearer);
+
+        #endregion
+        
+        #region Abilities
+        
+        public AbilityCommand UseAbility(Ability ability, Vector2 targetVector)
+        {
+            AbilityCommand abilityCommand = new AbilityCommand(this, targetVector, ability);
+            commandManager.ExecuteCommand(abilityCommand);
+            return abilityCommand;
+        }
+        
+        public IEnumerable<VirtualUnit> ProjectAbility(Ability ability, Vector2 targetVector) =>
+            ability.ProjectAbilityUsers(this, Coordinate, targetVector)
+                .OfType<VirtualUnit>();
 
         #endregion
     }

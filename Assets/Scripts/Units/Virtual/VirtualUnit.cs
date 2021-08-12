@@ -14,7 +14,8 @@ namespace Units.Virtual
     /// <p>This class utilises the builder pattern for convenience.
     /// <see href="https://www.geeksforgeeks.org/builder-design-pattern/"/></p>
     /// <p>Also utilises Lazy pattern for the stats so that we save on heap space allocation
-    /// which in theory will save performance and memory.</p>
+    /// which in theory will save performance and memory. This is assuming that it this object
+    /// is created and destroyed often without changing most of the stats.</p>
     /// </summary>
     public class VirtualUnit : IVirtualAbilityUser
     {
@@ -31,29 +32,29 @@ namespace Units.Virtual
         private VirtualStat movementPoints;
         private ITenetBearer tenetBearer;
 
-        // All the stats are Lazy, so that we save on memory and performance
-        private VirtualStat Attack => attack ??= new VirtualStat(Unit.AttackStat);
-        private VirtualStat Defence => defence ??= new VirtualStat(Unit.DefenceStat);
-        private VirtualStat Health => health ??= new VirtualStat(Unit.HealthStat);
-        private VirtualStat Knockback => knockback ??= new VirtualStat(Unit.KnockbackStat);
-        private VirtualStat Speed => speed ??= new VirtualStat(Unit.SpeedStat);
-        private VirtualStat MovementPoints => movementPoints ??= new VirtualStat(Unit.MovementPoints);
+        // All the stats are Lazy, so that we save on memory and performance when processing/parsing
+        public VirtualStat Attack => attack ??= new VirtualStat(Unit.AttackStat);
+        public VirtualStat Defence => defence ??= new VirtualStat(Unit.DefenceStat);
+        public VirtualStat Health => health ??= new VirtualStat(Unit.HealthStat);
+        public VirtualStat Knockback => knockback ??= new VirtualStat(Unit.KnockbackStat);
+        public VirtualStat Speed => speed ??= new VirtualStat(Unit.SpeedStat);
+        public VirtualStat MovementPoints => movementPoints ??= new VirtualStat(Unit.MovementPoints);
         public ITenetBearer TenetBearer => tenetBearer ??= new TenetStatusEffectsContainer(Unit.TenetStatuses);
 
         internal VirtualUnit(IUnit unit) => Unit = unit;
-        
-        public void TakeDefence(int amount) => Defence.ValueOffset += amount;
 
-        public void TakeAttack(int amount) => Attack.ValueOffset += amount;
+        public void TakeDefence(int amount) => Defence.ValueDelta += amount;
 
-        public void TakeAttackForEncounter(int amount) => Attack.BaseValueOffset += amount;
+        public void TakeAttack(int amount) => Attack.ValueDelta += amount;
 
-        public void TakeDefenceForEncounter(int amount) => Defence.BaseValueOffset += amount;
+        public void TakeAttackForEncounter(int amount) => Attack.BaseValueDelta += amount;
+
+        public void TakeDefenceForEncounter(int amount) => Defence.BaseValueDelta += amount;
 
         public void TakeDamage(int amount)
         {
             if (amount > 0)
-                Health.ValueOffset -= amount;
+                Health.ValueDelta -= amount;
         }
 
         public void DealDamageTo(IAbilityUser other, int amount)
@@ -66,9 +67,9 @@ namespace Units.Virtual
             }
         }
 
-        public void TakeKnockback(int amount) => Knockback.ValueOffset += amount;
+        public void TakeKnockback(int amount) => Knockback.ValueDelta += amount;
 
-        public void AddSpeed(int amount) => Speed.ValueOffset += amount;
+        public void AddSpeed(int amount) => Speed.ValueDelta += amount;
 
         public bool IsSameTeamWith(IAbilityUser other) =>
             other is IVirtualAbilityUser virtualAbilityUser
@@ -122,7 +123,7 @@ namespace Units.Virtual
                 MovementPoints.SetValues();
             
             if (health != null)
-                Unit.HealthStat.TakeDamage(-Health.ValueOffset);
+                Unit.HealthStat.TakeDamage(-Health.ValueDelta);
             
             if (tenetBearer != null)
                 Unit.SetTenets(TenetBearer);

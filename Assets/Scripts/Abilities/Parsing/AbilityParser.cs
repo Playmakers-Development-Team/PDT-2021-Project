@@ -12,6 +12,9 @@ namespace Abilities.Parsing
         private readonly ICollection<Effect> targetEffects;
         private readonly ICollection<Effect> userEffects;
         private readonly ICollection<IVirtualAbilityUser> targets;
+
+        public IVirtualAbilityUser User => user;
+        public ICollection<IVirtualAbilityUser> Targets => targets;
         
         private static readonly EffectOrder[] order =
         {

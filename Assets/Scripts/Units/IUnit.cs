@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Abilities;
+using Abilities.Commands;
 using Units.Commands;
 using Units.Stats;
 using TenetStatuses;
+using Units.Virtual;
 using UnityEngine;
 
 namespace Units
@@ -45,5 +47,25 @@ namespace Units
         string RandomizeName();
 
         void SetTenets(ITenetBearer tenetBearer);
+
+        /// <summary>
+        /// <p>Use an ability</p>
+        ///
+        /// <p>This will use the <c>AbilityCommand</c></p>
+        /// </summary>
+        /// <param name="ability">The Ability to be used</param>
+        /// <param name="targetVector">Direction to use to ability towards</param>
+        /// <returns><c>AbilityCommand</c> which might be helpful later</returns>
+        AbilityCommand UseAbility(Ability ability, Vector2 targetVector);
+
+        /// <summary>
+        /// <p>Tries to use an ability and simulate the result of its effects</p>
+        ///
+        /// <p>Note: This function only catches affected IUnits ONLY</p>
+        /// </summary>
+        /// <param name="ability">The Ability to be used</param>
+        /// <param name="targetVector">Direction to use to ability towards</param>
+        /// <returns>All units that are affected</returns>
+        IEnumerable<VirtualUnit> ProjectAbility(Ability ability, Vector2 targetVector);
     }
 }

@@ -6,23 +6,42 @@ namespace Units.Virtual
     {
         private readonly Stat stat;
         
-        public int BaseValueOffset { get; set; }
+        /// <summary>
+        /// The change that is added on top of the base value.
+        /// </summary>
+        public int BaseValueDelta { get; set; }
         
-        public int ValueOffset { get; set; }
+        /// <summary>
+        /// The change that is added on top of the value.
+        /// </summary>
+        public int ValueDelta { get; set; }
 
-        public int TotalValue => stat.Value + ValueOffset;
+        /// <summary>
+        /// The final value after the change is applied.
+        /// </summary>
+        public int TotalValue => stat.Value + ValueDelta;
 
-        public int TotalBaseValue => stat.BaseValue + BaseValueOffset;
+        /// <summary>
+        /// The final base value after the change is applied.
+        /// </summary>
+        public int TotalBaseValue => stat.BaseValue + BaseValueDelta;
 
         public VirtualStat(Stat stat) => this.stat = stat;
 
+        /// <summary>
+        /// Apply the change in values into the stat. The deltas are reset to 0 after they are applied.
+        /// </summary>
         public void SetValues()
         {
-            if (BaseValueOffset != 0)
-                stat.BaseValue += BaseValueOffset;
+            if (BaseValueDelta != 0)
+                stat.BaseValue += BaseValueDelta;
 
-            if (ValueOffset != 0)
-                stat.Value += ValueOffset;
+            if (ValueDelta != 0)
+                stat.Value += ValueDelta;
+            
+            // We should clear the delta after we apply the changes
+            BaseValueDelta = 0;
+            ValueDelta = 0;
         }
     }
 }
