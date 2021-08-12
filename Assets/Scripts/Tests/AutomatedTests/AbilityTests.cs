@@ -122,7 +122,7 @@ namespace Tests.AutomatedTests
         }
         
         [UnityTest, Order(10)] 
-        [Timeout(24000)]
+        [Timeout(28000)]
         public IEnumerator KindledMechanic()
         {
             yield return PrepareAndActivateScene();
@@ -130,31 +130,31 @@ namespace Tests.AutomatedTests
             // Gain a Passion tenet, should do no damage since we only have 1 tenet in total
             yield return InputTester.UnitUseAbility(UnitBeacons.Helena, 
                 UIBeacons.AbilityB, UnitBeacons.EnemyB);
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 1)));
             Assert.Beacon(UnitBeacons.EnemyB, Any.UnitEqualsHealth(10));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 1)));
-            
+
             // Only deal 3 damage when it has more than 1 tenets in total
             yield return InputTester.UnitUseAbility(UnitBeacons.Helena, 
                 UIBeacons.AbilityB, UnitBeacons.EnemyB);
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 2)));
             Assert.Beacon(UnitBeacons.EnemyB, Any.UnitEqualsHealth(7));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 2)));
-            
+
             // Remove all tenets of a unit
             TurnTester.DoUnit(UnitBeacons.Helena, u => u.ClearAllTenetStatus());
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 0)));
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 0)));
             
             // Gain a Joy tenet, the ability also deals 3 damage
             yield return InputTester.UnitUseAbility(UnitBeacons.Helena, 
                 UIBeacons.AbilityC, UnitBeacons.EnemyB);
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Joy, 1)));
             Assert.Beacon(UnitBeacons.EnemyB, Any.UnitEqualsHealth(4));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Joy, 1)));
-            
+
             // Only deal 3 damage when it has more than 1 tenets in total
             yield return InputTester.UnitUseAbility(UnitBeacons.Helena, 
                 UIBeacons.AbilityB, UnitBeacons.EnemyB);
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Joy, 1)));
+            Assert.Beacon(UnitBeacons.Helena, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 1)));
             Assert.Beacon(UnitBeacons.EnemyB, Any.UnitEqualsHealth(1));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Joy, 1)));
-            Assert.Beacon(UnitBeacons.Niles, Any.EqualsTenets(new TenetStatus(TenetType.Passion, 1)));
         }
         
         [UnityTest, Order(10)] 
