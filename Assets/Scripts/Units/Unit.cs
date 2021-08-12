@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
+using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
@@ -477,15 +478,15 @@ namespace Units
         
         #region Abilities
         
-        public AbilityCommand UseAbility(Ability ability, Vector2 targetVector)
+        public AbilityCommand UseAbility(Ability ability, ShapeDirection direction)
         {
-            AbilityCommand abilityCommand = new AbilityCommand(this, targetVector, ability);
+            AbilityCommand abilityCommand = new AbilityCommand(this, direction, ability);
             commandManager.ExecuteCommand(abilityCommand);
             return abilityCommand;
         }
         
-        public IEnumerable<VirtualUnit> ProjectAbility(Ability ability, Vector2 targetVector) =>
-            ability.ProjectAbilityUsers(this, Coordinate, targetVector)
+        public IEnumerable<VirtualUnit> ProjectAbility(Ability ability, ShapeDirection direction) =>
+            ability.ProjectAbilityUsers(this, Coordinate, direction)
                 .OfType<VirtualUnit>();
 
         #endregion

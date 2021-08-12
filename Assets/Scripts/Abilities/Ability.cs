@@ -51,27 +51,27 @@ namespace Abilities
         private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
-        internal void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        internal void Use(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
             user.AddSpeed(speed);
-            var targets = shape.GetTargets(originCoordinate, targetVector);
+            var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
             abilityParser.ApplyChanges();
         }
         
-        public IEnumerable<IVirtualAbilityUser> ProjectAbilityUsers(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        public IEnumerable<IVirtualAbilityUser> ProjectAbilityUsers(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
-            var targets = shape.GetTargets(originCoordinate, targetVector);
+            var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
             return abilityParser.Targets.Prepend(abilityParser.User);
         }
         
-        internal void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        internal void Undo(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
             user.AddSpeed(-speed);
-            var targets = shape.GetTargets(originCoordinate, targetVector);
+            var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();
             abilityParser.ApplyChanges();
