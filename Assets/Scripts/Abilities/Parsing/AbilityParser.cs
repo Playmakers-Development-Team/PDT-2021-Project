@@ -13,6 +13,13 @@ namespace Abilities.Parsing
         private readonly ICollection<Effect> userEffects;
         private readonly ICollection<IVirtualAbilityUser> targets;
         
+        private static readonly EffectOrder[] order =
+        {
+            EffectOrder.Early,
+            EffectOrder.Regular,
+            EffectOrder.Late
+        };
+
         public AbilityParser(IAbilityUser user, ICollection<Effect> effects, IEnumerable<IAbilityUser> targets)
         {
             this.user = user.CreateVirtualAbilityUser();
@@ -30,13 +37,13 @@ namespace Abilities.Parsing
 
         public void ParseAll()
         {
-            foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
+            foreach (EffectOrder effectOrder in order)
                 ParseOrder(effectOrder);
         }
 
         public void UndoAll()
         {
-            foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
+            foreach (EffectOrder effectOrder in order)
                 UndoOrder(effectOrder);
         }
 
