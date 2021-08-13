@@ -69,26 +69,6 @@ namespace UI.Game.Grid
             TryMove(coordinate);
         }
         
-        public void Update()
-        {
-            if (!Mouse.current.leftButton.wasPressedThisFrame || Camera.main == null)
-                return;
-            
-            Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-            Plane plane = new Plane(-Camera.main.transform.forward, transform.position);
-
-            if (!plane.Raycast(worldRay, out float distance) || Physics.Raycast(worldRay, clickLayer))
-                return;
-            
-            Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
-            Vector2Int coordinate = gridManager.ConvertPositionToCoordinate(worldPosition);
-
-            if (!gridManager.IsInBounds(coordinate))
-                return;
-
-            TryMove(coordinate);
-        }
-        
         #endregion
         
         
