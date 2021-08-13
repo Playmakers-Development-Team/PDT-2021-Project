@@ -18,9 +18,12 @@ MonoBehaviour:
     Also provide 1 passion to user.'
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
+  speed: 0
   targetEffects:
   - name: 3 Damage IF User Spend Newest from any 2 of Pride, Humility, Passion, Apathy,
       Sorrow
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 3
     directDamage: 0
@@ -66,8 +69,9 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  userEffects:
   - name: Default, Provide 1 Passion
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 2
     damageValue: 0
     directDamage: 0
@@ -81,3 +85,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []
