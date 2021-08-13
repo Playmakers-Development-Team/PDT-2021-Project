@@ -79,29 +79,33 @@ namespace Abilities
 
         public void OnBeforeSerialize()
         {
-            // cache array, prevent modification exceptions
-            var userEffectsCopy = userEffects.ToArray();
-
-            if (!excludeUserFromTargets)
+            // May be null when we are just creating the object
+            if (userEffects != null)
             {
-                foreach (Effect targetEffect in effects)
-                    targetEffect.affectUser = true;
+                // cache array, prevent modification exceptions
+                var userEffectsCopy = userEffects.ToArray();
 
-                excludeUserFromTargets = true;
-            }
+                if (!excludeUserFromTargets)
+                {
+                    foreach (Effect targetEffect in effects)
+                        targetEffect.affectUser = true;
 
-            foreach (Effect userEffect in userEffectsCopy)
-            {
-                userEffects.Remove(userEffect);
-                userEffect.affectTargets = false;
-                userEffect.affectUser = true;
-                effects.Add(userEffect);
-            }
-            
+                    excludeUserFromTargets = true;
+                }
+
+                foreach (Effect userEffect in userEffectsCopy)
+                {
+                    userEffects.Remove(userEffect);
+                    userEffect.affectTargets = false;
+                    userEffect.affectUser = true;
+                    effects.Add(userEffect);
+                }
+                
 #if UNITY_EDITOR
-            if (userEffectsCopy.Length > 0)
-                UnityEditor.EditorUtility.SetDirty(this);
+                if (userEffectsCopy.Length > 0)
+                    UnityEditor.EditorUtility.SetDirty(this);
 #endif
+            }
         }
 
         public void OnAfterDeserialize() {}
