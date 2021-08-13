@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Abilities.Commands;
 using Grid.GridObjects;
 using Managers;
 using TenetStatuses;
-using Turn;
 using Turn.Commands;
 using Units;
 using UnityEngine;
@@ -15,25 +15,7 @@ namespace Playtest
     public static class DataProcessing
     {
         private static readonly UnitManager unitManager = ManagerLocator.Get<UnitManager>();
-        private static readonly TurnManager turnManager = ManagerLocator.Get<TurnManager>();
 
-        private struct TemplateUnit
-        {
-            public int Amount { get; set; }
-
-            public List<IUnit> Units { get; set; }
-
-            public override string ToString()
-            {
-                string temp = "";
-                
-                foreach (IUnit unit in Units)
-                    temp += unit.Name + " ";
-
-                return temp + $"| {Amount}";
-            }
-        }
-        
         public static string BattleOutcome(PlaytestData data)
         {
             int endHealthPool = 0;
@@ -72,11 +54,11 @@ namespace Playtest
 
         private static string UnitStatString(IUnit unit) =>
             unit.Name +
-            " HP: " + unit.HealthStat.Value +
-            " ATK: " + unit.AttackStat.Value +
-            " DEF: " + unit.DefenceStat.Value +
-            " MP: " + unit.MovementPoints.Value +
-            " SPD: " + unit.SpeedStat.Value;
+            " HP: " + unit.HealthStat +
+            " ATK: " + unit.AttackStat +
+            " DEF: " + unit.DefenceStat +
+            " MP: " + unit.MovementPoints +
+            " SPD: " + unit.SpeedStat;
 
         private static string TenetStatusString(TenetStatus tenetStatus) =>
             tenetStatus.TenetType + " " + tenetStatus.StackCount;
@@ -90,7 +72,7 @@ namespace Playtest
         {
             var timeSpan = TimeSpan.FromSeconds(duration);
             
-            return $"{timeSpan.TotalMinutes:00}:{timeSpan.Seconds:00}";
+            return $"{timeSpan.TotalHours:00}:{timeSpan.TotalMinutes:00}:{timeSpan.Seconds:00}";
         }
 
         private static string AbilityString(KeyValuePair<Ability, int> ability) =>
@@ -112,83 +94,112 @@ namespace Playtest
             return $"{tenet1} {tenet2}";
         }
         
-        public static string FarthestMovedUnits(PlaytestData data)
-        {
+        public static string FarthestMovedUnits(PlaytestData data) =>
+            AllUnitsWithPropertyValue(
+                data,
+                int.Parse(MaxUnitMovementDistance(data)),
+                u => u.DistanceMoved,
+                "cells"
+            );
+        
+        public static string MaxUnitMovementDistance(PlaytestData data) =>
+            FindHeuristicProperty(
+                data,
+                Enumerable.Max,
+                u => u.DistanceMoved
+            ).ToString();
 
-            var farthestMovedUnits = new TemplateUnit();
+        public static string LeastTimesMovedUnits(PlaytestData data) =>
+            AllUnitsWithPropertyValue(
+                data,
+                int.Parse(MinUnitMovements(data)),
+                u => u.TimesMoved,
+                "times"
+            );
+        
+        public static string MinUnitMovements(PlaytestData data) =>
+            FindHeuristicProperty(
+                data,
+                Enumerable.Min,
+                u => u.TimesMoved
+            ).ToString();
+
+        public static string MostTimesMovedUnits(PlaytestData data) =>
+            AllUnitsWithPropertyValue(
+                data,
+                int.Parse(MaxUnitMovements(data)),
+                u => u.TimesMoved,
+                "times"
+            );
+        
+        public static string MaxUnitMovements(PlaytestData data) =>
+            FindHeuristicProperty(
+                data,
+                Enumerable.Max,
+                u => u.TimesMoved
+            ).ToString();
+
+        public static string MostTurnManipulatedUnits(PlaytestData data) =>
+            AllUnitsWithPropertyValue(
+                data,
+                int.Parse(MaxUnitTurnManipulations(data)),
+                u => u.TimesTurnManipulated,
+                "times"
+            );
+
+        public static string MaxUnitTurnManipulations(PlaytestData data) =>
+            FindHeuristicProperty(
+                data,
+                Enumerable.Max,
+                u => u.TimesTurnManipulated
+            ).ToString();
+
+        private static string AllUnitsWithPropertyValue(
+            PlaytestData data,
+            int propertyValue,
+            Func<PlaytestUnitData, int> propertyAccessor,
+            string amountSuffix
+        )
+        {
+            if (data.Units.Count == 0)
+                return "";
             
-            // TODO: Repeated code. Will throw InvalidOperationException if Units is empty.
-            farthestMovedUnits.Amount = data.Units.Max(u => u.DistanceMoved);
-            farthestMovedUnits.Units = data.Units
-                .Where(u => u.DistanceMoved == farthestMovedUnits.Amount)
+            var units = data.Units
+                .Where(u => propertyAccessor(u) == propertyValue)
                 .Select(u => u.Unit)
                 .ToList();
             
-            return farthestMovedUnits + " cells";
+            return $"{UnitListString(units)} | {propertyValue} {amountSuffix}";
         }
+        
+        private static int FindHeuristicProperty(
+            PlaytestData data,
+            Func<IEnumerable<PlaytestUnitData>, Func<PlaytestUnitData, int>, int> heuristic,
+            Func<PlaytestUnitData, int> propertyAccessor
+        ) =>
+            heuristic(data.Units, propertyAccessor);
 
-        public static string LeastTimesMovedUnits(PlaytestData data)
-        {
-
-            var leastTimesMovedUnits = new TemplateUnit();
-            
-            // TODO: Repeated code. Will throw InvalidOperationException if Units is empty.
-            leastTimesMovedUnits.Amount = data.Units.Min(u => u.DistanceMoved);
-            leastTimesMovedUnits.Units = data.Units
-                .Where(u => u.DistanceMoved == leastTimesMovedUnits.Amount)
-                .Select(u => u.Unit)
-                .ToList();
-            
-            return leastTimesMovedUnits + " times";
-        }
-
-        public static string MostTimesMovedUnits(PlaytestData data)
-        {
-            var mostTimesMovedUnits = new TemplateUnit();
-            
-            // TODO: Repeated code. Will throw InvalidOperationException if Units is empty.
-            mostTimesMovedUnits.Amount = data.Units.Max(u => u.TimesMoved);
-            mostTimesMovedUnits.Units = data.Units
-                .Where(u => u.TimesMoved == mostTimesMovedUnits.Amount)
-                .Select(u => u.Unit)
-                .ToList();
-            
-            return mostTimesMovedUnits + " times";
-        }
-
-        public static string MostTurnManipulatedUnits(PlaytestData data)
-        {
-            var mostTurnManipulatedUnits = new TemplateUnit();
-            
-            // TODO: Repeated code. Will throw InvalidOperationException if Units is empty.
-            mostTurnManipulatedUnits.Amount = data.Units.Max(u => u.TimesTurnManipulated);
-            mostTurnManipulatedUnits.Units = data.Units
-                .Where(u => u.TimesTurnManipulated == mostTurnManipulatedUnits.Amount)
-                .Select(u => u.Unit)
-                .ToList();
-            
-            return mostTurnManipulatedUnits + " times";
-        }
+        private static string UnitListString(List<IUnit> units) => string.Join(", ", units.Select(u => u.Name));
 
         public static string StrAverageTimesForTurns(PlaytestData data)
         {
-            // TODO: Repeated code.
-            float averageTimeForTurns = data.TimeForTurns.Values.AsQueryable().Average();
-            string strAverageTimesForTurns = DurationString(averageTimeForTurns);
+            if (data.TimeForTurns.Count == 0)
+                return "N/A";
             
-            return strAverageTimesForTurns;
+            float averageTimeForTurns = data.TimeForTurns.Values.AsQueryable().Average();
+            return DurationString(averageTimeForTurns);
         }
 
         public static string StrAverageTimeForRounds(PlaytestData data)
         {
-            // TODO: Repeated code.
+            if (data.Rounds.Count == 0)
+                return "N/A";
+            
             float averageTimeForRounds = data.Rounds.Average(r => r.Time);
-            string strAverageTimeForRounds = DurationString(averageTimeForRounds);
-
-            return strAverageTimeForRounds;
+            return DurationString(averageTimeForRounds);
         }
         
-        // TODO: Test.
+        // TODO: Can this be refactored to use AllUnitsWithHeuristicProperty?
         public static string UpdateAbilityUsage(PlaytestData data)
         {
             var orderByDescending = data.Abilities.OrderByDescending(key => key
@@ -197,7 +208,7 @@ namespace Playtest
             var output = "Most used ability is ";
             
             foreach (var ability in orderByDescending)
-                output += DataProcessing.AbilityString(ability) + Environment.NewLine;
+                output += AbilityString(ability) + Environment.NewLine;
 
             return output;
         }
@@ -231,31 +242,13 @@ namespace Playtest
             return output;
         }
 
-        public static string RoundEntry(PlaytestRoundData data)
-        {
-            var output = "";
-
-            output += Environment.NewLine +
-                      "CURRENT INSIGHT: " + turnManager.Insight.Value +
-                      Environment.NewLine;
-
-
-            output += Environment.NewLine + "Abilities used in this round were: ";
-
-            foreach (Ability ability in data.AbilitiesUsed)
-                output += Environment.NewLine + ability.name;
-
-            return output;
-        }
-        
-        public static string AbilityRoundAction(Ability ability, Vector2Int originCoord, Vector2 targetVector,
-                                          IAbilityUser abilityUser)
+        public static string AbilityRoundAction(AbilityCommand cmd)
         {
             var output = "";
             string targetNames = "";
             
-            GridObject[] targets = ability.Shape.
-                GetTargets(originCoord, targetVector).
+            GridObject[] targets = cmd.Ability.Shape.
+                GetTargets(cmd.OriginCoordinate, cmd.TargetVector).
                 AsEnumerable().
                 ToArray();
 
@@ -270,7 +263,7 @@ namespace Playtest
                 }
             }
 
-            output += $"{abilityUser.Name} casted {ability.name} at {targetNames}";
+            output += $"{cmd.AbilityUser.Name} casted {cmd.Ability.name} at {targetNames}";
 
             // TODO: Add the effect of the ability to each affected unit here.
 
@@ -279,22 +272,16 @@ namespace Playtest
             return output;
         }
 
-        public static string TurnManipulatedRoundAction(IUnit unit, IUnit targetUnit)
-        {
-            return $"{unit} turn manipulated with {targetUnit}" + 
-                               Environment.NewLine;
-        }
-        
-        public static string MovementRoundAction(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord)
-        {
-            return $"{unit.Name} moved from {startCoord} " +
-                $"to {targetCoord}" + Environment.NewLine;
-        }
+        public static string TurnManipulatedRoundAction(IUnit unit, IUnit targetUnit) =>
+            $"{unit} turn manipulated with {targetUnit}" + 
+            Environment.NewLine;
 
-        public static string MeditateRoundAction(MeditatedCommand cmd)
-        {
-            return $"{cmd.Unit} meditated" + Environment.NewLine;
-        }
+        public static string MovementRoundAction(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord) =>
+            $"{unit.Name} moved from {startCoord} " +
+            $"to {targetCoord}" + Environment.NewLine;
+
+        public static string MeditateRoundAction(MeditatedCommand cmd) =>
+            $"{cmd.Unit} meditated" + Environment.NewLine;
 
         public static string InitialUnits(PlaytestData data)
         {
@@ -312,7 +299,27 @@ namespace Playtest
 
         public static string EndRoundEntry(PlaytestRoundData roundData)
         {
-            throw new NotImplementedException();
+            var output = "";
+            
+            // Units
+            output += roundData.RoundUnits + Environment.NewLine;
+
+            // Insight
+            output += Environment.NewLine +
+                      "CURRENT INSIGHT: " + roundData.CurrentInsight +
+                      Environment.NewLine;
+            
+            // Round Actions
+            foreach (var roundAction in roundData.RoundActions)
+                output += roundAction.RoundAction + Environment.NewLine;
+            
+            // Abilities
+            output += Environment.NewLine + "Abilities used in this round were: ";
+
+            foreach (Ability ability in roundData.AbilitiesUsed)
+                output += Environment.NewLine + ability.name;
+            
+            return output;
         }
     }
 }

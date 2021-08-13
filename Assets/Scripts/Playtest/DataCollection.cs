@@ -16,17 +16,18 @@ namespace Playtest
 {
     public class DataCollection
     {
-        private CommandManager commandManager;
-        private PlaytestData data;
-        private TurnManager turnManager;
-        private UnitManager unitManager;
+        private readonly CommandManager commandManager;
+        private readonly TurnManager turnManager;
+        private readonly UnitManager unitManager;
+        
+        public PlaytestData Data { get; set; }
 
         public DataCollection(PlaytestData data)
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             unitManager = ManagerLocator.Get<UnitManager>();
-            this.data = data;
+            Data = data;
         }
         
         public void OnEnable()
@@ -47,120 +48,117 @@ namespace Playtest
 
         public void OnPrepareRound(PrepareRoundCommand cmd, float roundDuration)
         {
-            data.CurrentRound.Time = roundDuration;
+            Data.CurrentRound.Time = roundDuration;
+            Data.CurrentRound.RoundUnits = DataProcessing.RoundUnits();
+            Data.CurrentRound.CurrentInsight = turnManager.Insight.Value;
             
-            data.Rounds.Add(new PlaytestRoundData(
-                turnManager.Insight.Value,
-                DataProcessing.RoundUnits()
-            ));
+            Data.Rounds.Add(new PlaytestRoundData());
         }
 
         private void TurnManipulated(IUnit unit, IUnit targetUnit)
         {
-            data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.TurnManipulatedRoundAction(unit, targetUnit)));
+            Data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.TurnManipulatedRoundAction(unit, targetUnit)));
 
-            // TODO: Repeated code. See UpdateMoveUsage.
-            var playtestUnitData = data.Units.Find(u => u.Unit == unit);
+            var unitData = GetUnitData(unit);
 
-            if (playtestUnitData != null)
-            {
-                playtestUnitData.TimesTurnManipulated++;
-            }
-            else
-            {
-                // TODO: Make this more verbose.
-                Debug.LogWarning("Turn manipulating unit not found in playtest data.");
-            }
+            unitData.TimesTurnManipulated++;
         }
 
         private void UpdateMoveUsage(IUnit unit, Vector2Int startCoord, Vector2Int targetCoord)
         {
-            data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.MovementRoundAction(unit, startCoord, targetCoord)));
+            Data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.MovementRoundAction(unit, startCoord, targetCoord)));
             
             int distance = ManhattanDistance.GetManhattanDistance(startCoord, targetCoord);
 
-            // TODO: Repeated code. See TurnManipulated.
-            var playtestUnitData = data.Units.Find(u => u.Unit == unit);
+            var unitData = GetUnitData(unit);
 
-            if (playtestUnitData != null)
-            {
-                playtestUnitData.TimesMoved++;
-                playtestUnitData.DistanceMoved += distance;
-            }
-            else
-            {
-                // TODO: Make this more verbose.
-                Debug.LogWarning("Moving unit not found in playtest data.");
-            }
+            unitData.TimesMoved++;
+            unitData.DistanceMoved += distance;
+        }
+
+        private PlaytestUnitData GetUnitData(IUnit unit)
+        {
+            var unitData = Data.Units.Find(u => u.Unit == unit);
+
+            if (unitData != null)
+                return unitData;
+            
+            unitData = new PlaytestUnitData(unit, true);
+            Data.Units.Add(unitData);
+
+            return unitData;
         }
 
         private void OnAbility(AbilityCommand cmd)
         {
-            data.CurrentRound.AbilitiesUsed.Add(cmd.Ability);
+            Data.CurrentRound.AbilitiesUsed.Add(cmd.Ability);
 
-            if (data.Abilities.ContainsKey(cmd.Ability))
-                data.Abilities[cmd.Ability]++;
+            if (Data.Abilities.ContainsKey(cmd.Ability))
+                Data.Abilities[cmd.Ability]++;
             else
-                data.Abilities.Add(cmd.Ability,1);
+                Data.Abilities.Add(cmd.Ability, 1);
             
-            data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.AbilityRoundAction(cmd.Ability, cmd.OriginCoordinate, cmd.TargetVector, cmd.AbilityUser)));
+            Data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(
+                DataProcessing.AbilityRoundAction(cmd)
+            ));
         }
 
         public void OnEndTurn(EndTurnCommand cmd, float turnDuration)
         {
-            // TODO: Pretty sure this is being stored in TurnManager already.
-            data.TurnCount++;
+            Data.TurnCount++;
             
-            data.TimeForTurns.Add(data.TurnCount, turnDuration);
+            Data.TimeForTurns.Add(Data.TurnCount, turnDuration);
         }
         
         private void OnStartMove(StartMoveCommand cmd) => UpdateMoveUsage(cmd.Unit, cmd.StartCoords, cmd.TargetCoords);
 
         private void OnTurnManipulated(TurnManipulatedCommand cmd)
         {
-            data.AmountOfTurnsManipulated++;
+            Data.AmountOfTurnsManipulated++;
             TurnManipulated(cmd.Unit, cmd.TargetUnit);
         }
 
         private void OnMeditated(MeditatedCommand cmd)
         {
-            data.MeditateAmount++;
+            Data.MeditateAmount++;
             
-            data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.MeditateRoundAction(cmd)));
+            Data.CurrentRound.RoundActions.Add(new PlaytestRoundActionData(DataProcessing.MeditateRoundAction(cmd)));
         }
 
         public void EndGame(bool playerWin, float encounterDuration)
         {
-            data.EncounterDuration = encounterDuration;
+            Data.EncounterDuration = encounterDuration;
             
-            data.EndStateUnits = DataProcessing.EndStateUnits();
+            Data.EndStateUnits = DataProcessing.EndStateUnits();
 
-            data.PlayerWin = playerWin;
+            Data.PlayerWin = playerWin;
         }
 
         public void InitialiseStats()
         {
-            data.ActiveScene = SceneManager.GetActiveScene().name;
+            Data.ActiveScene = SceneManager.GetActiveScene().name;
         
             foreach (var unit in unitManager.AllUnits)
             {
                 switch (unit)
                 {
                     case PlayerUnit pUnit:
-                        data.PlayerHealthPool += pUnit.HealthStat.Value;
+                        Data.PlayerHealthPool += pUnit.HealthStat.Value;
                         break;
                     case EnemyUnit eUnit:
-                        data.EnemyHealthPool += eUnit.HealthStat.Value;
+                        Data.EnemyHealthPool += eUnit.HealthStat.Value;
                         break;
                 }
 
-                data.Units.Add(new PlaytestUnitData(unit, true));
+                Data.Units.Add(new PlaytestUnitData(unit, true));
             }
             
             foreach (var unit in turnManager.CurrentTurnQueue)
-                data.InitialUnitOrder += unit.Name + Environment.NewLine;
+                Data.InitialUnitOrder += unit.Name + Environment.NewLine;
 
-            data.InitialUnits = DataProcessing.InitialUnits(data);
+            Data.InitialUnits = DataProcessing.InitialUnits(Data);
+
+            Data.Rounds.Add(new PlaytestRoundData());
         }
     }
 }

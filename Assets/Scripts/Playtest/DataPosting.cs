@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
-using Managers;
-using Units;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,56 +8,52 @@ namespace Playtest
 {
     public static class DataPosting
     {
-        #region UnitIntialise
-        
-        // TODO: Implement.
-        // private TemplateUnit mostDamageDealtUnits = new TemplateUnit();
-        // private TemplateUnit leastDamageDealtUnits = new TemplateUnit();
-        // private TemplateUnit mostDamageTakenUnits = new TemplateUnit();
-        // private TemplateUnit leastDamageTakenUnits = new TemplateUnit();
-        
-        #endregion
-
-        private class Entry
+        private class Field
         {
-            public string Field { get; set; }
-            public string Data { get; set; }
+            public string Name { get; }
+            public string ID { get; }
+            public Func<PlaytestData, string> Process { get; }
 
-            public Entry(string field, string data)
+            public Field(string name, string id, Func<PlaytestData, string> process)
             {
-                Field = field;
-                Data = data;
+                Name = name;
+                ID = id;
+                Process = process;
             }
         }
-        
-        private static List<Entry> Entries { get; } = new List<Entry>();
 
         #region EntryFields
 
-        private const string levelPlayedField = "entry.295363220";
-        private const string initialUnitStatField = "entry.512851580";
-        private const string initialTimelineField = "entry.887732368";
-        private const string endUnitStatField = "entry.682653089";
-        private const string endAbilityUsageField = "entry.225796238";
-        private const string amountOfTimesTurnManipulatedField = "entry.1916883487";
-        private const string totalTimesMeditatedField = "entry.1342463486";
-        private const string whichTeamWonField = "entry.1541678721";
-        private const string unitsThatTookTheMostDamageField = "entry.1698034145";
-        private const string unitsThatTookTheLeastDamageField = "entry.987243088";
-        private const string unitsThatDealtTheMostDamageField = "entry.2144379506";
-        private const string unitsThatDealtTheLeastDamageField = "entry.2086514507";
-        private const string unitsThatTurnManipulatedTheMostField = "entry.1814874951";
-        private const string unitsThatMovedTheMostField = "entry.892339909";
-        private const string unitsThatMovedTheLeastField = "entry.92297117";
-        private const string unitsThatMovedTheFarthestField = "entry.601566501";
-        private const string averageTimeTakenPerRoundField = "entry.216162399";
-        private const string averageTimeTakenPerTurnField = "entry.102012017";
-        private const string totalPlaytimeField = "entry.13297372";
-        private const string totalInsightGainedField = "entry.521626075";
-
-        private static readonly string[] roundFields =
+        private static readonly List<Field> fields = new List<Field>
         {
-            "N/A",
+            new Field("levelPlayed", "entry.295363220", data => data.ActiveScene),
+            new Field("initialUnitStat", "entry.512851580", data => data.InitialUnits),
+            new Field("initialTimeline", "entry.887732368", data => data.InitialUnitOrder),
+            new Field("endUnitStat", "entry.682653089", data => data.EndStateUnits),
+            new Field("endAbilityUsage", "entry.225796238", DataProcessing.UpdateAbilityUsage),
+            new Field("amountOfTimesTurnManipulated", "entry.1916883487", data => data.AmountOfTurnsManipulated.ToString()),
+            new Field("totalTimesMeditated", "entry.1342463486", data => data.MeditateAmount.ToString()),
+            new Field("whichTeamWon", "entry.1541678721", DataProcessing.BattleOutcome),
+            new Field("unitsThatTookTheMostDamage", "entry.1698034145", data => "Not yet implemented."),
+            new Field("unitsThatTookTheLeastDamage", "entry.987243088", data => "Not yet implemented."),
+            new Field("unitsThatDealtTheMostDamage", "entry.2144379506", data => "Not yet implemented."),
+            new Field("unitsThatDealtTheLeastDamage", "entry.2086514507", data => "Not yet implemented."),
+            new Field("unitsThatTurnManipulatedTheMost", "entry.1814874951", DataProcessing.MostTurnManipulatedUnits),
+            new Field("maxUnitTurnManipulations", "entry.1032794462", DataProcessing.MaxUnitTurnManipulations),
+            new Field("unitsThatMovedTheMost", "entry.892339909", DataProcessing.MostTimesMovedUnits),
+            new Field("maxUnitMovements", "entry.1458945870", DataProcessing.MaxUnitMovements),
+            new Field("unitsThatMovedTheLeast", "entry.92297117", DataProcessing.LeastTimesMovedUnits),
+            new Field("minUnitMovements", "entry.1645540812", DataProcessing.MinUnitMovements),
+            new Field("unitsThatMovedTheFarthest", "entry.601566501", DataProcessing.FarthestMovedUnits),
+            new Field("maxUnitMovementDistance", "entry.1604345157", DataProcessing.MaxUnitMovementDistance),
+            new Field("averageTimeTakenPerRound", "entry.216162399", DataProcessing.StrAverageTimeForRounds),
+            new Field("averageTimeTakenPerTurn", "entry.102012017", DataProcessing.StrAverageTimesForTurns),
+            new Field("totalPlaytime", "entry.13297372", DataProcessing.TotalPlaytime),
+            new Field("totalInsightGained", "entry.521626075", data => "Not yet implemented."),
+        };
+
+        private static readonly string[] roundFieldsIDs =
+        {
             "entry.1697534877","entry.1217979400","entry.1049741033","entry.957301180","entry.225039077",
             "entry.225796238","entry.1733593626","entry.1822572691","entry.1416126283","entry.1255273599",
             "entry.1343072204","entry.1950527946","entry.11679908","entry.1792358652","entry.1020408910",
@@ -75,13 +68,19 @@ namespace Playtest
         
         #region PostData
 
-        public static async void PostAll()
+        public static async void PostAll(PlaytestData data)
         {
             WWWForm form = new WWWForm();
             
-            foreach (Entry entry in Entries)
-                form.AddField(entry.Field, entry.Data);
-            
+            foreach (Field field in fields)
+                form.AddField(field.ID, field.Process(data));
+
+            for (var i = 0; i < data.Rounds.Count; i++)
+            {
+                var roundField = roundFieldsIDs[i];
+                form.AddField(roundField, DataProcessing.EndRoundEntry(data.Rounds[i]));
+            }
+
             UnityWebRequest www = UnityWebRequest.Post(url, form);
             await www.SendWebRequest();
         }
@@ -95,39 +94,5 @@ namespace Playtest
         }
         
         #endregion
-
-        public static void InitialiseStatsEntries(PlaytestData data)
-        {
-            AddEntry(levelPlayedField, data.ActiveScene);
-            AddEntry(initialUnitStatField, data.InitialUnits);
-            AddEntry(initialTimelineField, data.InitialUnitOrder);
-        }
-
-        public static void EndGameEntries(PlaytestData data)
-        {
-            AddEntry(totalPlaytimeField, DataProcessing.TotalPlaytime(data));
-            AddEntry(averageTimeTakenPerRoundField, DataProcessing.StrAverageTimeForRounds(data));
-            AddEntry(averageTimeTakenPerTurnField, DataProcessing.StrAverageTimesForTurns(data));
-            AddEntry(unitsThatTurnManipulatedTheMostField, DataProcessing.MostTurnManipulatedUnits(data));
-            AddEntry(unitsThatMovedTheMostField, DataProcessing.MostTimesMovedUnits(data));
-            AddEntry(unitsThatMovedTheFarthestField, DataProcessing.FarthestMovedUnits(data));
-            AddEntry(unitsThatMovedTheLeastField, DataProcessing.LeastTimesMovedUnits(data));
-            AddEntry(whichTeamWonField, DataProcessing.BattleOutcome(data));
-            AddEntry(endUnitStatField, data.EndStateUnits);
-            AddEntry(initialTimelineField, data.RoundCount.ToString());
-            AddEntry(amountOfTimesTurnManipulatedField, data.AmountOfTurnsManipulated.ToString());
-            AddEntry(totalTimesMeditatedField, data.MeditateAmount.ToString());
-            AddEntry(endAbilityUsageField, DataProcessing.UpdateAbilityUsage(data));
-
-            foreach (var roundData in data.Rounds)
-            {
-                AddEntry(roundFields[data.RoundCount], DataProcessing.EndRoundEntry(roundData));
-            }
-        }
-        
-        private static void AddEntry(string field, string data)
-        {
-            Entries.Add(new Entry(field, data));
-        }
     }
 }

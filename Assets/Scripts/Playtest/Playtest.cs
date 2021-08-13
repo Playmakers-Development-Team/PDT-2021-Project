@@ -18,7 +18,6 @@ namespace Playtest
 
         #endregion
         
-        // TODO: Timer stuff should be moved to another class.
         private Timer roundTimer;
         private Timer turnTimer;
         private Timer encounterTimer;
@@ -31,16 +30,15 @@ namespace Playtest
                 return;
             
             commandManager = ManagerLocator.Get<CommandManager>();
+            
+            collection = new DataCollection(data);
         }
 
         private void OnEnable()
         {
             if (!Application.isPlaying)
-            {
-                DataPosting.PostAll();
                 return;
-            }
-            
+           
             commandManager.ListenCommand<TurnQueueCreatedCommand>(OnTurnQueueCreated);
             commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(OnNoRemainingEnemyUnits);
             commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(OnNoRemainingPlayerUnits);
@@ -49,6 +47,24 @@ namespace Playtest
 
             collection.OnEnable();
         }
+
+        private void OnDisable()
+        {
+            if (!Application.isPlaying)
+                return;
+            
+            DataPosting.PostAll(data);
+            
+            commandManager.UnlistenCommand<TurnQueueCreatedCommand>(OnTurnQueueCreated);
+            commandManager.UnlistenCommand<NoRemainingEnemyUnitsCommand>(OnNoRemainingEnemyUnits);
+            commandManager.UnlistenCommand<NoRemainingPlayerUnitsCommand>(OnNoRemainingPlayerUnits);
+            commandManager.UnlistenCommand<PrepareRoundCommand>(OnPrepareRound);
+            commandManager.UnlistenCommand<EndTurnCommand>(OnEndTurn);
+
+            collection.OnDisable();
+        }
+
+        #endregion
 
         private void OnEndTurn(EndTurnCommand cmd)
         {
@@ -62,19 +78,6 @@ namespace Playtest
             roundTimer.Reset();
         }
 
-        private void OnDisable()
-        {
-            commandManager.UnlistenCommand<TurnQueueCreatedCommand>(OnTurnQueueCreated);
-            commandManager.UnlistenCommand<NoRemainingEnemyUnitsCommand>(OnNoRemainingEnemyUnits);
-            commandManager.UnlistenCommand<NoRemainingPlayerUnitsCommand>(OnNoRemainingPlayerUnits);
-            commandManager.UnlistenCommand<PrepareRoundCommand>(OnPrepareRound);
-            commandManager.UnlistenCommand<EndTurnCommand>(OnEndTurn);
-
-            collection.OnDisable();
-        }
-
-        #endregion
-
         private void OnTurnQueueCreated(TurnQueueCreatedCommand cmd) => InitialiseStats();
 
         private void OnNoRemainingEnemyUnits(NoRemainingEnemyUnitsCommand cmd) => EndGame(true);
@@ -83,7 +86,6 @@ namespace Playtest
 
         private void InitialiseStats()
         {
-            // TODO: Could we pass the active state into these constructors?
             roundTimer = gameObject.AddComponent<Timer>();
             turnTimer = gameObject.AddComponent<Timer>();
             encounterTimer = gameObject.AddComponent<Timer>();
@@ -92,13 +94,11 @@ namespace Playtest
             turnTimer.StartTimer();
             encounterTimer.StartTimer();
             
-            collection = new DataCollection(data);
-            
             data = ScriptableObject.CreateInstance<PlaytestData>();
 
-            collection.InitialiseStats();
+            collection.Data = data;
 
-            DataPosting.InitialiseStatsEntries(data);
+            collection.InitialiseStats();
         }
 
         /// <summary>
@@ -111,8 +111,6 @@ namespace Playtest
             encounterTimer.StopTimer();
             
             collection.EndGame(playerWin, encounterTimer.Elapsed);
-
-            DataPosting.EndGameEntries(data);
         }
     }
 }
