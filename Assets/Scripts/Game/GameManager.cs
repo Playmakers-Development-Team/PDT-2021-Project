@@ -25,7 +25,11 @@ namespace Game
         }
 
         // TODO: Replace with a scene transition manager
-        private void ChangeScene(int buildIndex) => SceneManager.LoadScene(buildIndex);
+        private static void ChangeScene(int buildIndex) =>
+            SceneManager.LoadScene(buildIndex);
+
+        private static void ChangeScene(SceneReference sceneReference) =>
+            SceneManager.LoadScene(sceneReference);
 
         public void LoadEncounter(EncounterData encounterData)
         {
@@ -34,9 +38,8 @@ namespace Game
             commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EncounterLost());
             
             CurrentEncounterData = encounterData;
-            
-            // TODO: Magic number
-            ChangeScene(2);
+
+            ChangeScene(encounterData.encounterScene);
         }
 
         public void LoadMap()
