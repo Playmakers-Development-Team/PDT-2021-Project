@@ -16,11 +16,12 @@ MonoBehaviour:
 
     Instantly kills the user'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
-  excludeUserFromTargets: 0
+  excludeUserFromTargets: 1
   speed: 0
-  targetEffects: []
-  userEffects:
+  effects:
   - name: Default, 99 Damage Directly
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 99
     directDamage: 1
@@ -34,3 +35,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []

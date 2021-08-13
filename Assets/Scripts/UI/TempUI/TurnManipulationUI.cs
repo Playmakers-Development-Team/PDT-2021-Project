@@ -41,15 +41,13 @@ namespace UI.TempUI
         // BUG: Not working
         public void ManipulateBefore()
         {
-            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                turnManager.Insight.Value <= 0)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
                 return;
-
-            Debug.Log($"CURRENT INDEX {turnManager.PhaseIndex}");
-
+            
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                    (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().
@@ -62,13 +60,13 @@ namespace UI.TempUI
         // TODO: Update timeline UI
         public void ManipulateAfter()
         {
-            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                turnManager.Insight.Value <= 0)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
                 return;
-
+            
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().

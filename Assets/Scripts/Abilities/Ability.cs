@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Parsing;
 using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Abilities
 {
     [Serializable]
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
-    public class Ability : ScriptableObject
+    public class Ability : ScriptableObject, ISerializationCallbackReceiver
     {
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
-        [SerializeField] private bool excludeUserFromTargets = true;
+        [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
 
-        [SerializeField] private Effect[] targetEffects;
-        [SerializeField] private Effect[] userEffects;
+        [FormerlySerializedAs("targetEffects")]
+        [SerializeField] private List<Effect> effects;
+        // We're not using this anymore, but we are supporting backwards compat so keep it here
+        [HideInInspector, SerializeField] private List<Effect> userEffects;
 
         /// <summary>
         /// A complete description of the ability.
@@ -44,7 +48,7 @@ namespace Abilities
         /// </summary>
         public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
 
-        private IEnumerable<Keyword> TargetKeywords => targetEffects.SelectMany(e => e.Keywords);
+        private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
         public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
@@ -58,109 +62,8 @@ namespace Abilities
         
         public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
-            UseForTargetsWithOrder(user, targets, EffectOrder.Early);
-            UseForTargetsWithOrder(user, targets, EffectOrder.Regular);
-            UseForTargetsWithOrder(user, targets, EffectOrder.Late);
-        }
-
-        private void UseForTargetsWithOrder(IAbilityUser user, IEnumerable<GridObject> targets,
-                                            EffectOrder effectOrder)
-        {
-            IEnumerable<GridObject> finalTargets = excludeUserFromTargets
-                ? targets.Where(u => !ReferenceEquals(user, u))
-                : targets;
-            UseEffectsOnTargetsWithOrder(user, targetEffects, effectOrder, finalTargets);
-
-            // It can be assumed that IAbilityUser can be converted to GridObject.
-            if (user is GridObject userGridObject)
-                UseEffectsOnTargetsWithOrder(user, userEffects, effectOrder, userGridObject);
-            
-            // All the user specific costs should be done afterwards. This is so that
-            // Keyword costs can be applied only ever once without impacting the execution order.
-            ApplyEffectsUserCosts(user, targetEffects.Concat(userEffects), effectOrder);
-        }
-
-        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, Effect[] effects,
-                                                  EffectOrder effectOrder, params GridObject[] targets) =>
-            UseEffectsOnTargetsWithOrder(user, effects, effectOrder, targets.AsEnumerable());
-
-        private void UseEffectsOnTargetsWithOrder(IAbilityUser user, IEnumerable<Effect> effects, 
-                                                 EffectOrder effectOrder,
-                                                 IEnumerable<GridObject> targets)
-        {
-            Effect[] effectsWithOrder = effects
-                .Where(e => e.EffectOrder == effectOrder)
-                .ToArray();
-            
-            foreach (GridObject target in targets.ToArray())
-            {
-                if (target is IAbilityUser targetUnit)
-                {
-                    int attack = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Attack);
-                    int defence = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Defence);
-                    int damage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.Damage);
-                    int directDamage = CalculateValue(user, targetUnit, effectsWithOrder, EffectValueType.DirectDamage);
-                    int attackForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
-                        EffectValueType.AttackForEncounter);
-                    int defenceForEncounter = CalculateValue(user, targetUnit, effectsWithOrder,
-                        EffectValueType.DefenceForEncounter);
-                
-                    targetUnit.TakeAttack(attack);
-                    targetUnit.TakeDefence(defence);
-                    targetUnit.TakeDamage(directDamage);
-                    user.DealDamageTo(targetUnit, damage);
-                    
-                    targetUnit.TakeAttackForEncounter(attackForEncounter);
-                    targetUnit.TakeDefenceForEncounter(defenceForEncounter);
-
-                    // Check if knockback is supported first, because currently it sometimes doesn't
-                    //if (targetUnit.Knockback != null)
-                    //targetUnit.TakeKnockback(knockback);
-                    
-                    foreach (Effect effect in effectsWithOrder)
-                    {
-                        if (effect.CanBeUsedWith(user, targetUnit))
-                            effect.ProvideTenet(targetUnit);
-                        
-                        if (effect.CanBeUsedForTarget(targetUnit))
-                            effect.ApplyCombinedCosts(user, true);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Apply all the costs from the effect affecting the user. This function needs to be applied
-        /// after use effects.
-        /// The same Keywords will not be applied more than once.
-        /// </summary>
-        // Programmer NOTE: We can make this more organised but for now, we need something up and running
-        // quickly and this works
-        private void ApplyEffectsUserCosts(IAbilityUser user, IEnumerable<Effect> allEffects, 
-                                           EffectOrder effectOrder)
-        {
-            Effect[] effectsWithOrder = allEffects
-                .Where(e => e.EffectOrder == effectOrder)
-                .ToArray();
-            HashSet<Keyword> visitedKeywords = new HashSet<Keyword>();
-            
-            foreach (Effect effect in effectsWithOrder)
-            {
-                if (effect.CanBeUsedByUser(user))
-                {
-                    effect.ApplyEffectCosts(user, false);
-
-                    foreach (Keyword keyword in effect.Keywords)
-                    {
-                        // The same keyword cost anywhere affecting the user will not be applied more than once.
-                        if (!visitedKeywords.Contains(keyword))
-                        {
-                            visitedKeywords.Add(keyword);
-                            keyword.Effect.ApplyCombinedCosts(user, false);
-                        }
-                    }
-                }
-            }
+            AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
+            abilityParser.ProcessAll();
         }
         
         public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
@@ -169,30 +72,42 @@ namespace Abilities
             UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
         }
 
-        public void UndoForTargets(IAbilityUser user, params GridObject[] targets) => UndoForTargets(user, targets.AsEnumerable());
+        public void UndoForTargets(IAbilityUser user, params GridObject[] targets) =>
+            UndoForTargets(user, targets.AsEnumerable());
         
         public void UndoForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
         {
-            UndoEffectsForTargets(user, targetEffects, targets);
-            
-            // It can be assumed that IAbilityUser can be converted to GridObject.
-            if (user is GridObject userGridObject)
-                UndoEffectsForTargets(user, userEffects, userGridObject);
+            AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
+            abilityParser.UndoAll();
         }
 
-        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, params GridObject[] targets) =>
-            UndoEffectsForTargets(user, effects, targets.AsEnumerable());
-
-        private void UndoEffectsForTargets(IAbilityUser user, Effect[] effects, IEnumerable<GridObject> targets)
+        public void OnBeforeSerialize()
         {
-            // TODO
+            // cache array, prevent modification exceptions
+            var userEffectsCopy = userEffects.ToArray();
+
+            if (!excludeUserFromTargets)
+            {
+                foreach (Effect targetEffect in effects)
+                    targetEffect.affectUser = true;
+
+                excludeUserFromTargets = true;
+            }
+
+            foreach (Effect userEffect in userEffectsCopy)
+            {
+                userEffects.Remove(userEffect);
+                userEffect.affectTargets = false;
+                userEffect.affectUser = true;
+                effects.Add(userEffect);
+            }
+            
+#if UNITY_EDITOR
+            if (userEffectsCopy.Length > 0)
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
         }
 
-        /// <summary>
-        /// Sum up all the values from each effect. Only count the effect if such effect can be used.
-        /// </summary>
-        private int CalculateValue(IAbilityUser user, IAbilityUser target, Effect[] effects, EffectValueType valueType) =>
-            effects.Where(e => e.CanBeUsedWith(user, target))
-                .Sum(e => e.CalculateValue(user, target, valueType));
+        public void OnAfterDeserialize() {}
     }
 }
