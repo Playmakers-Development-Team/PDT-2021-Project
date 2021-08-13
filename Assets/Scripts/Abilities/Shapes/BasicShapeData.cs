@@ -77,7 +77,9 @@ namespace Abilities.Shapes
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             IEnumerable<Vector2Int> coordinates =
                 GetAffectedCoordinates(originCoordinate, direction);
-            return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
+            return coordinates
+                .Where(c => gridManager.IsInBounds(c))
+                .SelectMany(gridManager.GetGridObjectsByCoordinate);
         }
         
         [Obsolete]
