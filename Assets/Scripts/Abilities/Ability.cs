@@ -35,7 +35,7 @@ namespace Abilities
         /// </summary>
         public IShape Shape => shape;        
         /// <summary>
-        /// A complete description of the ability.
+        /// The speed which will be added on top of Abilities
         /// </summary>
         public int Speed => speed;
         /// <summary>
