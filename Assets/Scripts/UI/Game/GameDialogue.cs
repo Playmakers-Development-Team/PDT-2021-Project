@@ -152,7 +152,7 @@ namespace UI.Game
             
             UnitInfo info = GetInfo(cmd.Unit);
 
-            turnStarted.Invoke(new TurnInfo(info));
+            turnStarted.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
         }
 
         private void OnStartMove(StartMoveCommand cmd)
@@ -243,11 +243,13 @@ namespace UI.Game
         internal readonly struct TurnInfo
         {
             internal UnitInfo CurrentUnit { get; }
+            internal bool IsPlayer { get; }
 
 
-            public TurnInfo(UnitInfo currentUnit)
+            public TurnInfo(UnitInfo currentUnit, bool isPlayer)
             {
                 CurrentUnit = currentUnit;
+                IsPlayer = isPlayer;
             }
         }
         

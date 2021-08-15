@@ -77,6 +77,7 @@ public class PanelButton : DialogueComponent<GameDialogue>
         else
         {
             wasInteractable = state;
+            interactable = state;
         }
     }
 

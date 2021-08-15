@@ -50,9 +50,11 @@ namespace UI.Game
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            if (turnManager.ActingUnit == null)
-                return;
+            SetInteractable(info.IsPlayer);
             
+            if (!info.IsPlayer || turnManager.ActingUnit == null)
+                return;
+
             bool unitCanMeditate = turnManager.UnitCanBeTurnManipulated(turnManager.ActingUnit);
             
             interactable = unitCanMeditate;
