@@ -17,6 +17,7 @@ Shader "UI/Fillable"
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
         
         _Fill ("Fill", Range(0, 1)) = 1
+        _DividerColor ("Divider Colour", Color) = (1, 1, 1, 1)
     }
 
     SubShader
@@ -83,7 +84,9 @@ Shader "UI/Fillable"
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
+        
             float _Fill;
+            float4 _DividerColor;
 
             v2f vert(appdata_t v)
             {
@@ -104,10 +107,14 @@ Shader "UI/Fillable"
                 half4 color = (tex2D(_MainTex, IN.texcoord) + _TextureSampleAdd) * IN.color;
                 half4 gradient_sample = tex2D(_GradientTex, IN.texcoord);
 
+                float fill = 1.0 - _Fill;
+                
 				float t = 1.0 - gradient_sample.r;
 				t = lerp(0.001, 0.999, t);
-
-                half gradient = step(1.0 - _Fill, t);
+                //return float4(t, t, t, 1);
+                float divider_value = 1.0 - smoothstep(fill - 0.01, fill, t - 0.02);
+                
+                half gradient = step(fill, t);
                 color.a *= gradient;
 
                 #ifdef UNITY_UI_CLIP_RECT
@@ -118,7 +125,7 @@ Shader "UI/Fillable"
                 clip (color.a - 0.001);
                 #endif
 
-                return color;
+                return lerp(color, _DividerColor, color.a * _DividerColor.a * divider_value);
             }
         ENDCG
         }
