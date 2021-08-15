@@ -19,6 +19,11 @@ namespace UI.Game.UnitPanels.Abilities
         protected override void OnDeselected() => dialogue.abilityDeselected.Invoke(Ability);
 
         #endregion
+        
+        
+        #region Listeners
+        
+        #endregion
 
 
         #region Drawing
@@ -31,6 +36,15 @@ namespace UI.Game.UnitPanels.Abilities
         
         internal void Destroy() => DestroyImmediate(gameObject);
         
+        #endregion
+        
+        
+        #region PanelButton
+
+        protected override void OnHoverEnter() => dialogue.abilityHoverEnter.Invoke(this);
+
+        protected override void OnHoverExit() => dialogue.abilityHoverExit.Invoke(this);
+
         #endregion
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Abilities;
-using Abilities.Commands;
 using Commands;
 using Managers;
 using Turn;
 using Turn.Commands;
 using UI.Core;
+using UI.Game.UnitPanels.Abilities;
 using Units;
 using Units.Commands;
 using Units.Stats;
@@ -28,6 +28,8 @@ namespace UI.Game
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
+        internal readonly Event<AbilityCard> abilityHoverEnter = new Event<AbilityCard>();
+        internal readonly Event<AbilityCard> abilityHoverExit = new Event<AbilityCard>();
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
         internal readonly Event abilityConfirmed = new Event();
         
@@ -50,8 +52,6 @@ namespace UI.Game
         internal Ability SelectedAbility { get; private set; }
         
         internal Vector2 AbilityDirection { get; private set; }
-
-        private bool IsAbilitySelected => SelectedAbility != null;
         
         
         #region MonoBehaviour Events
@@ -103,18 +103,10 @@ namespace UI.Game
             {
                 SelectedAbility = null;
             });
-            
+
             abilityRotated.AddListener(direction =>
             {
                 AbilityDirection = direction;
-            });
-            
-            abilityConfirmed.AddListener(() =>
-            {
-                if (turnManager.ActingPlayerUnit == null || !IsAbilitySelected)
-                    return;
-
-                commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit, AbilityDirection, SelectedAbility));
             });
             
             turnStarted.AddListener(info =>

@@ -109,6 +109,8 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerEnter = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
         pointerEnter.callback.AddListener(info =>
         {
+            OnHoverEnter();
+            
             if (clicked || !interactable)
                 return;
             
@@ -124,6 +126,8 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventTrigger.Entry pointerExit = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
         pointerExit.callback.AddListener(info =>
         {
+            OnHoverExit();
+            
             if (clicked || !interactable)
                 return;
             
@@ -225,6 +229,10 @@ public class PanelButton : DialogueComponent<GameDialogue>
     protected virtual void OnSelected() {}
 
     protected virtual void OnDeselected() {}
-    
+
+    protected virtual void OnHoverEnter() {}
+
+    protected virtual void OnHoverExit() {}
+
     #endregion
 }
