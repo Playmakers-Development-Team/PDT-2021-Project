@@ -18,7 +18,8 @@ namespace Units
 
         private void Update()
         {
-            if(!Application.isPlaying){
+            if (!Application.isPlaying)
+            {
                 if (transform.hasChanged && levelTilemap != null)
                 {
                     coordinate =
@@ -27,6 +28,7 @@ namespace Units
                 }
             }
         }
+
         protected  void OnValidate()
         {
             if (!autoSetTilemap || levelTilemap != null)
@@ -35,6 +37,7 @@ namespace Units
             if (go != null)
                 levelTilemap = go.GetComponent<Tilemap>();
         }
+
         private void OnDrawGizmos()
         {
             Gizmos.color = new Color(0.4f,0.7f,0.45f);
