@@ -286,6 +286,58 @@ namespace Units
             return reachable;
         }
 
+        /// <summary>
+        /// Returns a list of all coordinates that are in range but occupied by another
+        /// unit/obstacle. Does not include it's own tile.
+        /// </summary>
+        /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
+        public List<Vector2Int> GetReachableOccupiedTiles()
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            int range = MovementPoints.Value;
+            
+            List<Vector2Int> reachableOccupiedTiles = new List<Vector2Int>();
+            Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
+            Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
+
+            // Add the starting coordinate to the queue
+            coordinateQueue.Enqueue(startingCoordinate);
+            int distance = 0;
+            visited.Add(startingCoordinate, distance);
+
+            // Loop until all nodes are processed
+            while (coordinateQueue.Count > 0)
+            {
+                Vector2Int currentNode = coordinateQueue.Peek();
+                distance = visited[currentNode];
+
+                if (distance > range)
+                {
+                    break;
+                }
+
+                // Add neighbours of node to queue
+                Pathfinding.VisitNode(currentNode + CardinalDirection.North.ToVector2Int(), visited, distance,
+                    coordinateQueue, String.Empty);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.East.ToVector2Int(), visited, distance,
+                    coordinateQueue, String.Empty);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.South.ToVector2Int(), visited, distance,
+                    coordinateQueue, String.Empty);
+                Pathfinding.VisitNode(currentNode + CardinalDirection.West.ToVector2Int(), visited, distance,
+                    coordinateQueue, String.Empty);
+
+                if (gridManager.GetGridObjectsByCoordinate(currentNode).Count > 0)
+                    reachableOccupiedTiles.Add(currentNode);
+
+                coordinateQueue.Dequeue();
+            }
+
+            // Remove it's own occupied tile
+            reachableOccupiedTiles.Remove(startingCoordinate);
+            
+            return reachableOccupiedTiles;
+        }
+
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
             IUnit unit = this;

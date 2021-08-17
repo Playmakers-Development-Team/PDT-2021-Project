@@ -155,6 +155,10 @@ namespace UI.Game.Grid
                 Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                
+                Vector2Int[] occupiedCoordinates = turnManager.ActingUnit.GetReachableOccupiedTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                
+                Fill(new GridSelection(occupiedCoordinates, GridSelectionType.Invalid));
             }
         }
 
