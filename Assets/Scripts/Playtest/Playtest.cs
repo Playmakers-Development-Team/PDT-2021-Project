@@ -8,6 +8,10 @@ namespace Playtest
     [ExecuteAlways]
     public class Playtest : MonoBehaviour
     {
+
+        [Tooltip("Determines whether or not it will record the data from the game")]
+        [SerializeField] private bool canRecordPlaytestData;
+        
         [SerializeField] private PlaytestData data;
         
         private DataCollection collection;
@@ -26,7 +30,7 @@ namespace Playtest
 
         private void Awake()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || !canRecordPlaytestData)
                 return;
             
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -50,6 +54,10 @@ namespace Playtest
 
         private void OnDisable()
         {
+            
+            if (!canRecordPlaytestData)
+                return;
+
             if (!Application.isPlaying)
                 return;
             
