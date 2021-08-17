@@ -1,8 +1,8 @@
 ﻿using UI.Core;
 
-namespace UI.Game.UnitPanels.Abilities
+namespace UI.AbilityLoadout
 {
-    public class CharacterCard : DialogueComponent<GameDialogue>
+    public class CharacterCard : DialogueComponent<AbilityLoadoutDialogue>
     {
         protected override void Subscribe()
         {

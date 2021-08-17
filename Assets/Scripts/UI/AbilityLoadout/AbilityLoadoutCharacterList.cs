@@ -5,9 +5,9 @@ using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Game.UnitPanels.Abilities
+namespace UI.AbilityLoadout
 {
-    public class AbilityLoadoutCharacterList : DialogueComponent<GameDialogue>
+    public class AbilityLoadoutCharacterList : DialogueComponent<AbilityLoadoutDialogue>
     {
         [SerializeField] private GameObject characterCardPrefab;
         [SerializeField] private List<CharacterCard> cards;
