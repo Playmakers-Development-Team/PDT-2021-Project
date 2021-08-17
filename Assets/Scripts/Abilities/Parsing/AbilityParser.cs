@@ -50,10 +50,7 @@ namespace Abilities.Parsing
                 UndoOrder(effectOrder);
         }
 
-        public void ApplyChanges()
-        {
-            abilityContextHandler.ApplyChanges();
-        }
+        public void ApplyChanges() => abilityContextHandler.ApplyChanges();
 
         private void ParseOrder(EffectOrder effectOrder)
         {
