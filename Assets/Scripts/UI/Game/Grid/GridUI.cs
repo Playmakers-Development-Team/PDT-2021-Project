@@ -26,6 +26,7 @@ namespace UI.Game.Grid
         [Header("Required Components")]
         
         [SerializeField] private Tilemap tilemap;
+        [SerializeField] private LineRenderer selectedLineRenderer;
         
         private GridManager gridManager;
         private TurnManager turnManager;
@@ -148,6 +149,8 @@ namespace UI.Game.Grid
                     ToArray();
                 
                 Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                
+                //Outline(new GridSelection(coordinates, GridSelectionType.Valid));
             }
             else if (turnManager.ActingUnit.MovementPoints.Value > 0)
             {
@@ -162,6 +165,33 @@ namespace UI.Game.Grid
             }
         }
 
+        private void Outline(GridSelection selection)
+        {
+            Vector2Int[] tilePositions = new Vector2Int[4];
+            
+            // Get the max and min x and y values for the line renderer corners
+            IOrderedEnumerable<Vector2Int> tileCoordinates = selection.Spaces.OrderByDescending(v => v.x);
+            
+            tilePositions[0] = tileCoordinates.First();
+            tilePositions[2] = tileCoordinates.Last();
+            
+            tileCoordinates = selection.Spaces.OrderByDescending(v => v.y);
+            
+            tilePositions[1] = tileCoordinates.First();
+            tilePositions[3] = tileCoordinates.Last();
+
+            // Convert coordinates to Vector3 for the line renderer
+            Vector3[] lineRendererPositions = new Vector3[4];
+
+            for (int i = 0; i < tilePositions.Length; ++i)
+            {
+                lineRendererPositions[i] = new Vector3(tilePositions[i].x, tilePositions[i].y, 0);
+            }
+            
+            // Set the line renderer positions
+            selectedLineRenderer.SetPositions(lineRendererPositions);
+        }
+        
         private void Fill(GridSelection selection)
         {
             TileBase tile = GetTile(selection.Type);
