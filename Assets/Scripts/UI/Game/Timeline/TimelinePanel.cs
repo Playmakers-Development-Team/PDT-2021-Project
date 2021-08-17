@@ -30,11 +30,14 @@ namespace UI.Game.Timeline
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
+            dialogue.turnManipulated.AddListener(OnTurnManipulated);
         }
         
         protected override void Unsubscribe()
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
+            dialogue.turnManipulated.RemoveListener(OnTurnManipulated);
+
         }
         
         #endregion
@@ -46,6 +49,8 @@ namespace UI.Game.Timeline
         {
             UpdatePortraits();
         }
+
+        private void OnTurnManipulated(GameDialogue.TurnInfo info) => UpdatePortraits();
 
         public void OnDelayButtonPressed()
         {

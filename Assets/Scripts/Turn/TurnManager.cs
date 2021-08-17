@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
+using Grid.GridObjects;
 using Managers;
 using Turn.Commands;
 using Units;
@@ -311,7 +312,7 @@ namespace Turn
 
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {targetIndex}");
-
+            
             unitsTurnManipulatedThisRound.Add(currentTurnQueue[CurrentTurnIndex]);
             unitsTurnManipulatedThisRound.Add(currentTurnQueue[targetIndex]);
 
