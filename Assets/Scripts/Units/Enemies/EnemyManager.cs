@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
+using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Managers;
 using Units.Commands;
@@ -28,11 +29,9 @@ namespace Units.Enemies
 
         #region ENEMY ACTIONS
         
-        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, Vector2 targetVector)
+        public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, ShapeDirection shapeDirection)
         {
-            Quaternion quaternionTempFix = Quaternion.AngleAxis(45, Vector3.forward);
-
-            commandManager.ExecuteCommand(new AbilityCommand(enemyUnit, quaternionTempFix * targetVector, ability));
+            commandManager.ExecuteCommand(new AbilityCommand(enemyUnit, shapeDirection, ability));
 
             Debug.Log(enemyUnit.Name +
                       " ENEMY-ABL: Enemy is using ability " + ability);
@@ -44,7 +43,7 @@ namespace Units.Enemies
         }
         
         public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, IUnit targetUnit) =>
-            await DoUnitAbility(enemyUnit, ability, targetUnit.Coordinate - enemyUnit.Coordinate);
+            await DoUnitAbility(enemyUnit, ability, ShapeDirection.Towards(enemyUnit, targetUnit));
 
         public async Task MoveUnitToTarget(EnemyUnit enemyUnit)
         {

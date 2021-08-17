@@ -11,8 +11,22 @@ namespace TenetStatuses
         
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
+        public TenetStatusEffectsContainer() {}
+
+        public TenetStatusEffectsContainer(IEnumerable<TenetStatus> tenets) => Initialise(tenets);
+
         public void Initialise(IEnumerable<TenetStatus> startingTenets) =>
             tenetStatusEffectSlots = new LinkedList<TenetStatus>(startingTenets);
+
+        public void SetTenets(ITenetBearer tenetBearer)
+        {
+            // We want to keep the existing object, so that other systems don't lose reference to it.
+            // To do that, we clear and add manually.
+            tenetStatusEffectSlots.Clear();
+
+            foreach (TenetStatus tenetStatus in tenetBearer.TenetStatuses)
+                tenetStatusEffectSlots.AddLast(tenetStatus);
+        }
 
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {

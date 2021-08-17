@@ -1,4 +1,5 @@
 using Abilities;
+using Abilities.Shapes;
 using Units;
 using Units.Commands;
 using UnityEngine;
@@ -49,7 +50,7 @@ namespace AI
                             adjacentPlayerUnit);
                     else if (buffAbility != null)
                         await enemyManager.DoUnitAbility(enemyUnit, buffAbility,
-                            Vector2Int.zero);
+                            ShapeDirection.None);
                 }
             }
             
