@@ -13,7 +13,7 @@ namespace Turn
         [SerializeField] private TurnManager.TurnPhases[] turnPhases;
         
         [Tooltip("The global turn phase for every player unit")]
-        [SerializeField] private GridObject[] preMadeTimeline;
+        [SerializeField] private GameObject[] preMadeTimeline;
         
         [SerializeField] private bool isTimelineRandomised;
        
