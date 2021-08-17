@@ -3,8 +3,6 @@ using Commands;
 using Managers;
 using Turn;
 using Turn.Commands;
-using Units;
-using Units.Players;
 using UnityEngine;
 
 namespace UI.TempUI
@@ -14,33 +12,25 @@ namespace UI.TempUI
     {
         public GameObject turnManipulateButton;
         [SerializeField] private Transform parent;
-        [SerializeField] private TurnController turnController;
-
-        private PlayerManager playerManager;
 
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
         private List<GameObject> allButtons = new List<GameObject>();
-
-        private List<IUnit> currentUnits = new List<IUnit>();
 
         private void Awake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
-            playerManager = ManagerLocator.Get<PlayerManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
-        private void Start()
-        {
-            turnController = GameObject.FindGameObjectWithTag("TurnController").
-                GetComponent<TurnController>();
+        private void OnEnable() =>
+            commandManager.ListenCommand<TurnManipulatedCommand>(OnTurnManipulated);
 
-            ManagerLocator.Get<CommandManager>().
-                ListenCommand<TurnManipulatedCommand>(cmd =>
-                {
-                    DestroyButtons();
-                });
-        }
+        private void OnDisable() =>
+            commandManager.UnlistenCommand<TurnManipulatedCommand>(OnTurnManipulated);
+
+        private void OnTurnManipulated(TurnManipulatedCommand cmd) => DestroyButtons();
 
         private void DestroyButtons()
         {
@@ -51,14 +41,13 @@ namespace UI.TempUI
         public void ManipulateBefore()
         {
             if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                playerManager.Insight.Value <= 0)
+                turnManager.Insight.Value <= 0)
                 return;
-
-            Debug.Log($"CURRENT INDEX {turnManager.PhaseIndex}");
-
+            
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                    (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().
@@ -71,13 +60,13 @@ namespace UI.TempUI
         // TODO: Update timeline UI
         public void ManipulateAfter()
         {
-            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                playerManager.Insight.Value <= 0)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
                 return;
-
+            
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
-                if (i > turnManager.CurrentTurnIndex)
+                if (i > turnManager.CurrentTurnIndex && turnManager.UnitCanBeTurnManipulated
+                (turnManager.CurrentTurnQueue[i]))
                 {
                     GameObject temp = Instantiate(turnManipulateButton, parent);
                     temp.GetComponent<TurnManipulateTargetUI>().

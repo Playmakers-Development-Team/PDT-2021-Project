@@ -141,7 +141,6 @@ namespace Playtest
             data.TimeForRounds.Clear();
             data.TimeForTurns.Clear();
             data.AbilitiesUsedInARound.Clear();
-            
 
             data.TurnManipulationData = "";
             data.UnitsMoved.Clear();
@@ -163,10 +162,14 @@ namespace Playtest
                         break;
                 }
 
-                data.InitialUnits = data.InitialUnits +  unit.Name + " HP: " +unit.HealthStat
-                                        .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
-                                    unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value 
-                                    + " CORD: " + unit.Coordinate +
+                // TODO: Repeated code. See Playtest.EndGame and Playtest.UpdateRound
+                data.InitialUnits = data.InitialUnits + unit.Name +
+                                    " HP: " + unit.HealthStat.Value +
+                                    " ATK: " + unit.AttackStat.Value +
+                                    " DEF: " + unit.DefenceStat.Value +
+                                    " MP: " + unit.MovementPoints.Value +
+                                    " SPD: " + unit.SpeedStat.Value +
+                                    " CORD: " + unit.Coordinate +
                                     Environment.NewLine;
             }
             
@@ -188,9 +191,9 @@ namespace Playtest
             data.Entries.Add(new Tuple<string,string>(data.InitialUnitOrder,initialTimelineField));
 
             #endregion
-            
         }
 
+        // TODO: Break up long function.
         /// <summary>
         /// All data that is processed during the game will be calculated in this function
         /// </summary>
@@ -208,8 +211,7 @@ namespace Playtest
             List<IUnit> tempUnitsMovedLeast = new List<IUnit>();
             int curLeastUnitMoved = MaxValue;
 
-
-            int EndHealthPool = 0;
+            int endHealthPool = 0;
             
             canTimeOverall = false;
             canTimeTurns = false;
@@ -218,12 +220,16 @@ namespace Playtest
             foreach (IUnit unit in unitManager.AllUnits)
             {
 
-                EndHealthPool += unit.HealthStat.Value;
+                endHealthPool += unit.HealthStat.Value;
                 
-                data.EndStateUnits = data.EndStateUnits +  unit.Name + " HP: " +unit.HealthStat
-                                        .Value + " ATK: " + unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value + " MP: " +
-                                    unit.MovementPoints.Value + " SPD: " + unit.SpeedStat.Value +
-                                    Environment.NewLine;
+                // TODO: Repeated code. See Playtest.InitialiseStats and Playtest.UpdateRound
+                data.EndStateUnits = data.EndStateUnits +  unit.Name +
+                                     " HP: " + unit.HealthStat.Value +
+                                     " ATK: " + unit.AttackStat.Value +
+                                     " DEF: " + unit.DefenceStat.Value +
+                                     " MP: " + unit.MovementPoints.Value +
+                                     " SPD: " + unit.SpeedStat.Value + 
+                                     Environment.NewLine;
             }
 
             #region TurnManipulationEndGame
@@ -316,12 +322,12 @@ namespace Playtest
             if (playerWin)
             {
                 data.BattleOutcome = " Victory";
-                percentage = (float)EndHealthPool / data.PlayerHealthPool * 100;
+                percentage = (float)endHealthPool / data.PlayerHealthPool * 100;
             }
             else
             {
                 data.BattleOutcome = " Defeat";
-                percentage = (float)EndHealthPool / data.EnemyHealthPool * 100;
+                percentage = (float)endHealthPool / data.EnemyHealthPool * 100;
             }
 
             if (percentage > 75)
@@ -347,14 +353,17 @@ namespace Playtest
             averageTimeForRounds = Queryable.Average(data.TimeForRounds.Values.AsQueryable());
             averageTimeForTurns = Queryable.Average(data.TimeForTurns.Values.AsQueryable());
 
+            // TODO: Repeated code. Turn into a function.
             var tsOne = TimeSpan.FromSeconds(averageTimeForRounds);
             strAverageTimeForRounds =
                 string.Format("{0:00}:{1:00}", tsOne.TotalMinutes, tsOne.Seconds);
 
+            // TODO: Repeated code. Turn into a function.
             var tsTwo = TimeSpan.FromSeconds(averageTimeForTurns);
             strAverageTimesForTurns =
                 string.Format("{0:00}:{1:00}", tsTwo.TotalMinutes, tsTwo.Seconds);
             
+            // TODO: Repeated code. Turn into a function.
             var tsThree = TimeSpan.FromSeconds(data.OverallTime);
             strOverallTime =
                 string.Format("{0:00}:{1:00}", tsThree.TotalMinutes, tsThree.Seconds);
@@ -406,8 +415,6 @@ namespace Playtest
         {
             if (!Application.isPlaying || !canRecordPlaytestData)
                 return;
-
-          
             
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
@@ -438,11 +445,11 @@ namespace Playtest
                 PostAll(data.Entries);
                 return;
             }
-
             
-            
+            // TODO: Move ListenCommand calls to Awake. 
             commandManager.ListenCommand<TurnQueueCreatedCommand>(cmd => InitialiseStats());
-            commandManager.ListenCommand<GameEndedCommand>(cmd => EndGame(cmd.DidPlayerWin));
+            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EndGame(true));
+            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EndGame(false));
             commandManager.ListenCommand<TurnManipulatedCommand>(cmd => data.AmountOfTurnsManipulated++);
             
             commandManager.ListenCommand<MeditatedCommand>(cmd =>
@@ -502,14 +509,12 @@ namespace Playtest
             data.TimeForTurns.Add(data.TurnCount,data.TurnTimer);
             data.TurnTimer = 0;
             canTimeTurns = true;
-
         }
 
         private void UpdateAbility(Ability ability, Vector2Int originCoord, Vector2 targetVector,
          IAbilityUser abilityUser)
         {
             string targetNames = "";
-            bool flag = true;
                 
             data.AbilitiesUsedInARound.Add(ability);
             
@@ -537,7 +542,7 @@ namespace Playtest
             data.RoundEntry +=
                 $"{abilityUser.Name} casted {ability.name} at {targetNames}";
 
-            //TODO: Add the effect of the ability to each affected unit here.
+            // TODO: Add the effect of the ability to each affected unit here.
                 
             data.RoundEntry += Environment.NewLine;
         }
@@ -551,67 +556,70 @@ namespace Playtest
                 data.UnitsTurnManipulated.Add(unit, 1);
             else
                 data.UnitsTurnManipulated[unit]++;
-            
         }
 
         private void UpdateRound()
         {
-               data.RoundEntry = Environment.NewLine + "CURRENT INSIGHT: " +  playerManager.Insight
-                .Value + 
-                Environment.NewLine + data.RoundEntry;
+            data.RoundEntry = Environment.NewLine +
+                              "CURRENT INSIGHT: " + turnManager.Insight.Value +
+                              Environment.NewLine +
+                              data.RoundEntry;
 
-                data.RoundCount++;
-                
-                foreach (IUnit unit in unitManager.AllUnits)
+            data.RoundCount++;
+
+            foreach (IUnit unit in unitManager.AllUnits)
+            {
+                string tenet1 = "";
+                string tenet2 = "";
+
+                if (unit.TenetStatuses.AsEnumerable().ToArray().Length > 1)
                 {
-                    string tenet1 = "";
-                    string tenet2 = "";
+                    // TODO: Repeated code. Turn into a function.
+                    tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
 
-                    if (unit.TenetStatuses.AsEnumerable().ToArray().Length > 1)
-                    {
-                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType+ " "
-                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
-                        
-                        tenet2 = unit.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
-                                 + unit.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
-                    }
-                    else if (unit.TenetStatuses.AsEnumerable().ToArray().Length == 1)
-                    {
-                        tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
-                                 + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
-                    }
-
-                    data.RoundEntry = unit.Name + " HP: " + unit.HealthStat.Value + " ATK: " +
-                                      unit.AttackStat.Value + " DEF: " + unit.DefenceStat.Value +
-                                      " MP: " + unit.MovementPoints.Value + " SPD: " +
-                                      unit.SpeedStat.Value +
-                                      $" {tenet1} {tenet2} {Environment.NewLine} {data.RoundEntry} ";
+                    // TODO: Repeated code. Turn into a function.
+                    tenet2 = unit.TenetStatuses.AsEnumerable().ToArray()[1].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[1].StackCount;
+                }
+                else if (unit.TenetStatuses.AsEnumerable().ToArray().Length == 1)
+                {
+                    // TODO: Repeated code. Turn into a function.
+                    tenet1 = unit.TenetStatuses.AsEnumerable().ToArray()[0].TenetType + " "
+                        + unit.TenetStatuses.AsEnumerable().ToArray()[0].StackCount;
                 }
 
+                // TODO: Repeated code. See Playtest.EndGame and Playtest.InitialiseStats
+                data.RoundEntry = unit.Name +
+                                  " HP: " + unit.HealthStat.Value +
+                                  " ATK: " + unit.AttackStat.Value +
+                                  " DEF: " + unit.DefenceStat.Value +
+                                  " MP: " + unit.MovementPoints.Value +
+                                  " SPD: " + unit.SpeedStat.Value +
+                                  $" {tenet1} {tenet2} {Environment.NewLine} {data.RoundEntry} ";
+            }
 
-                canTimeRounds = false;
-                data.TimeForRounds.Add(data.RoundCount,data.RoundTimer);
-                data.RoundTimer = 0;
-                canTimeRounds = true;
+            canTimeRounds = false;
+            data.TimeForRounds.Add(data.RoundCount, data.RoundTimer);
+            data.RoundTimer = 0;
+            canTimeRounds = true;
 
-                data.RoundEntry += Environment.NewLine + $"Abilities used in this round were: ";
+            data.RoundEntry += Environment.NewLine + "Abilities used in this round were: ";
 
-                foreach (Ability ability in data.AbilitiesUsedInARound)
-                    data.RoundEntry += Environment.NewLine + ability.name;
-                
-                data.AbilitiesUsedInARound.Clear();
+            foreach (Ability ability in data.AbilitiesUsedInARound)
+                data.RoundEntry += Environment.NewLine + ability.name;
+
+            data.AbilitiesUsedInARound.Clear();
         }
         
         private void UpdateAbilityUsage()
         {
-
             int max = data.Abilities.Max(x => x.Value);
             KeyValuePair<Ability, int> favouriteAbility = new KeyValuePair<Ability, int>();
             
             foreach (KeyValuePair<Ability, int> ability in data.Abilities.OrderByDescending(key => key
             .Value))
             {
-                
                 if (ability.Value == max && favouriteAbility.Key is null)
                 {
                     favouriteAbility = ability;
@@ -626,7 +634,7 @@ namespace Playtest
                     $"{ability.Key.name} | {ability.Value}" + Environment.NewLine;
             }  
             
-            data.Entries.Add(new Tuple<string, string>(data.AbilityUsage,endAbilityUsagefield));
+            data.Entries.Add(new Tuple<string, string>(data.AbilityUsage, endAbilityUsagefield));
         }
 
         #endregion

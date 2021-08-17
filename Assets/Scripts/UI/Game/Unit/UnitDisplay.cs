@@ -119,7 +119,7 @@ namespace UI.Game.Unit
 
         private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
         {
-            damageText.text = data.Difference.ToString();
+            damageText.text = data.DisplayValue.ToString();
             damageText.enabled = true;
             
             await Task.Delay((int) damageTextDuration * 1000);

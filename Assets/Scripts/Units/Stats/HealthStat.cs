@@ -1,7 +1,4 @@
 ﻿using System;
-using Commands;
-using Managers;
-using Units.Commands;
 using UnityEngine;
 
 namespace Units.Stats
@@ -9,24 +6,17 @@ namespace Units.Stats
     [Serializable]
     public class HealthStat : Stat
     {
-        private readonly KillUnitCommand unitDeathCommand;
-        
-        public int Value { get; set; }
+        private Action onUnitDeath;
 
-        public HealthStat(KillUnitCommand unitDeathCommand, IUnit unit, int baseValue, StatTypes
-                              statType) : base(unit, baseValue, statType)
-        {
-            this.unitDeathCommand = unitDeathCommand;
-            Value = baseValue;
-        }
-    
-        
+        public HealthStat(Action onUnitDeath, IUnit unit, int baseValue, StatTypes
+                              statType) : base(unit, baseValue, statType) =>
+            this.onUnitDeath = onUnitDeath;
+
         public int TakeDamage(int amount)
         {
             int initialDamageTaken = amount - unit.DefenceStat.Value;
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
-            commandManager.ExecuteCommand(new StatChangedCommand(unit, StatTypes.Health, Value,
-                Value - calculatedDamageTaken));
+            
             Value -= calculatedDamageTaken;
             CheckDeath();
             return calculatedDamageTaken;
@@ -34,8 +24,6 @@ namespace Units.Stats
         
         public int HealDamage(int amount)
         {
-            commandManager.ExecuteCommand(new StatChangedCommand(unit, StatTypes.Health, Value,
-                Value + amount));
             Value += amount;
             return amount;
         }
@@ -43,7 +31,7 @@ namespace Units.Stats
         private void CheckDeath()
         {
             if (Value <= 0)
-                ManagerLocator.Get<CommandManager>().ExecuteCommand(unitDeathCommand);
+                onUnitDeath.Invoke();
         }
     }
 }

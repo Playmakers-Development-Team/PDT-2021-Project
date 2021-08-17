@@ -17,6 +17,9 @@ namespace Abilities.Editor
             
             if (EditorGUI.EndChangeCheck())
             {
+                SerializedProperty affectTargetProperty = property.FindPropertyRelative("affectTargets");
+                SerializedProperty affectUserProperty = property.FindPropertyRelative("affectUser");
+                
                 SerializedProperty damageProperty = property.FindPropertyRelative("damageValue");
                 SerializedProperty directDamageProperty = property.FindPropertyRelative("directDamage");
                 SerializedProperty attackProperty = property.FindPropertyRelative("attackValue");
@@ -44,10 +47,29 @@ namespace Abilities.Editor
                                  || attackForEncounterProperty.intValue != 0
                                  || defenceForEncounterProperty.intValue != 0;
                 
+                // Affect types
+                bool affectUser = affectUserProperty.boolValue;
+                bool affectTarget = affectTargetProperty.boolValue;
+                List<string> affects = new List<string>();
+                
+                if (affectUser)
+                    affects.Add("User");
+                
+                if (affectTarget)
+                    affects.Add("Target");
+
+                if (affectUser || affectTarget)
+                    nameProperty.stringValue += string.Join(" and ", affects.ToArray());
+                else
+                    nameProperty.stringValue += "Disabled";
+
+                nameProperty.stringValue += " ➤ ";
+                
+                // If there is no conditions, it should say default
                 if (costsProperty.arraySize == 0 && keywordsProperty.arraySize == 0)
                     nameProperty.stringValue += "Default, ";
-                
-                    // Damage and defence
+
+                // Damage and defence
                 if (hasValues)
                 {
                     string directDamageString = directDamageProperty.boolValue ? " Directly" : string.Empty;
