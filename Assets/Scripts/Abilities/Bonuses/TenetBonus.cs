@@ -1,4 +1,5 @@
 using System;
+using Abilities.Parsing;
 using TenetStatuses;
 using UnityEngine;
 using Utilities;
@@ -22,7 +23,7 @@ namespace Abilities.Bonuses
             }
         }
 
-        public int CalculateBonusMultiplier(IAbilityUser user) =>
+        public int CalculateBonusMultiplier(IAbilityContext context, IAbilityUser user) =>
             tenetConstraint.Satisfies(user, tenetType) ? user.GetTenetStatusCount(tenetType) : 0;
     }
 }

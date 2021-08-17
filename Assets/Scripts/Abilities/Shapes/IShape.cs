@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid.GridObjects;
 using UnityEngine;
@@ -37,14 +38,27 @@ namespace Abilities.Shapes
         /// Get all the cells within this shape. May be empty if this shape is not an AoE.
         /// </summary>
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, 
+                                                                 ShapeDirection direction);
+        
+        [Obsolete("Use GetHighlightedCoordinates(Vector2Int, ShapeDirection)")]
+        public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, 
                                                                  Vector2 directionVector);
 
         /// <summary>
         /// Get all targets that would be affected by this shape.
         /// </summary>
         /// <param name="originCoordinate">The position where this shape is used from, typically the unit position</param>
-        /// <param name="directionVector">The direction which this shape is used, for players, this would be the (mouse position - unit position)</param>
+        /// <param name="direction">The direction which this shape is used</param>
         /// <returns>All targets that are affected</returns>
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, ShapeDirection direction);
+        
+        [Obsolete("Use GetTargets(Vector2Int, ShapeDirection)")]
         public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector);
+
+        /// <summary>
+        /// Gets all possible targets from a position to all possible directions. Might be useful for AI things.
+        /// </summary>
+        /// <param name="originCoordinate">The position where this shape is used from, typically the unit position</param>
+        public IEnumerable<GridObject> GetTargetsInAllDirections(Vector2Int originCoordinate);
     }
 }

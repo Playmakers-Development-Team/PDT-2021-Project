@@ -57,22 +57,46 @@ namespace Abilities.Shapes
         /// are hit.
         /// </summary>
         /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
-        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
+        /// <param name="direction">The vector relative to the unit in which the ability should be aimed towards.</param>
+        public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate,
+                                                                 ShapeDirection direction) =>
+            GetAffectedCoordinates(originCoordinate, direction);
+
+        [Obsolete]
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate,
                                                                  Vector2 directionVector) =>
-            GetAffectedCoordinates(originCoordinate, directionVector);
+            GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(directionVector));
 
         /// <summary>
         /// Retrieve units that are hit by this shape.
         /// </summary>
         /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
-        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
-        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector)
+        /// <param name="direction">The vector relative to the unit in which the ability should be aimed towards.</param>
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, ShapeDirection direction)
         {
             GridManager gridManager = ManagerLocator.Get<GridManager>();
             IEnumerable<Vector2Int> coordinates =
-                GetAffectedCoordinates(originCoordinate, directionVector);
-            return coordinates.SelectMany(gridManager.GetGridObjectsByCoordinate);
+                GetAffectedCoordinates(originCoordinate, direction);
+            return coordinates
+                .Where(c => gridManager.IsInBounds(c))
+                .SelectMany(gridManager.GetGridObjectsByCoordinate);
+        }
+        
+        [Obsolete]
+        public IEnumerable<GridObject> GetTargets(Vector2Int originCoordinate, Vector2 directionVector) => 
+            GetTargets(originCoordinate, ShapeDirection.FromIsometric(directionVector));
+
+        public IEnumerable<GridObject> GetTargetsInAllDirections(Vector2Int originCoordinate)
+        {
+            var targets = Enumerable.Empty<GridObject>();
+
+            foreach (OrdinalDirection direction in Enum.GetValues(typeof(OrdinalDirection)))
+            {
+                ShapeDirection shapeDirection = ShapeDirection.FromOrdinalDirection(direction);
+                targets = targets.Concat(GetTargets(originCoordinate, shapeDirection));
+            }
+
+            return targets;
         }
 
         /// <summary>
@@ -80,20 +104,15 @@ namespace Abilities.Shapes
         /// parts. 
         /// </summary>
         /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
-        /// <param name="directionVector">The vector relative to the unit in which the ability should be aimed towards.</param>
+        /// <param name="shapeDirection">The vector relative to the unit in which the ability should be aimed towards.</param>
         private IEnumerable<Vector2Int> GetAffectedCoordinates(Vector2Int originCoordinate, 
-                                                               Vector2 directionVector)
+                                                               ShapeDirection shapeDirection)
         {
-            // We want to rotate the direction vector 45 degrees because we need to go to the 
-            // isometric grid space.
-            Vector2 isometricDirectionVector =
-                Quaternion.AngleAxis(-45f, Vector3.forward) * directionVector;
-            
             // We want to convert to cardinal direction first because we don't want to get the ordinal
             // directions e.g NorthEast. Only return the cardinal directions based on the vector.
             OrdinalDirection direction = IsDiagonalShape
-                ? OrdinalDirectionUtility.From(Vector2.zero, isometricDirectionVector)
-                : CardinalDirectionUtility.From(Vector2.zero, isometricDirectionVector).ToOrdinalDirection();
+                ? shapeDirection.OrdinalDirection
+                : shapeDirection.CardinalDirection.ToOrdinalDirection();
 
             IEnumerable<Vector2Int> affectedCoordinates = shapeParts
                 .Where(shapePart => shapePart.CannotBeDirected 

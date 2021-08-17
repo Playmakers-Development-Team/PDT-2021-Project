@@ -1,3 +1,5 @@
+using Abilities.Parsing;
+
 namespace Abilities.Bonuses
 {
     /// <summary>
@@ -5,6 +7,6 @@ namespace Abilities.Bonuses
     /// </summary>
     public interface IBonus : IDisplayable
     {
-        int CalculateBonusMultiplier(IAbilityUser user);
+        int CalculateBonusMultiplier(IAbilityContext context, IAbilityUser user);
     }
 }

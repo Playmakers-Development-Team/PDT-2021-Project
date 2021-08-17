@@ -3,6 +3,7 @@ using System.Collections;
 using Commands;
 using Managers;
 using Units.Commands;
+using Units.Players;
 using UnityEngine;
 
 namespace Units
@@ -21,8 +22,8 @@ namespace Units
             commandManager = ManagerLocator.Get<CommandManager>();
             
             // We're testing specific listening and un-listening functions from the command manager
-            commandManager.ListenCommand(typeof(PlayerUnitsReadyCommand), SomeFunction);
-            commandManager.UnlistenCommand(typeof(PlayerUnitsReadyCommand), SomeFunction);
+            commandManager.ListenCommand(typeof(UnitsReadyCommand<PlayerUnitData>), SomeFunction);
+            commandManager.UnlistenCommand(typeof(UnitsReadyCommand<PlayerUnitData>), SomeFunction);
 
             // We're testing the yieldable/awaitable functions
             SomeAsyncFunction();

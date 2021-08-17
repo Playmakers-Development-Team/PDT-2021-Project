@@ -4,42 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
-using Commands;
+using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
 using Managers;
-using TMPro;
 using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using Units.Stats;
 using TenetStatuses;
+using Units.Virtual;
 using UnityEngine;
 using Utilities;
 using Random = UnityEngine.Random;
 
 namespace Units
 {
+    [RequireComponent(typeof(SnapToGrid))]
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
-        
-        [Obsolete("you stupid x3")]
-        [SerializeField] private TMP_Text nameText;
-        
-        [Obsolete("you stupid x5")]
-        [SerializeField] private TMP_Text healthText;
-        
-        [Obsolete("you stupid x7.5")]
-        [SerializeField] private Canvas damageTextCanvas; // MUST BE ASSIGNED IN PREFAB INSPECTOR
-        
-        [Obsolete("you stupid x39")]
-        [SerializeField] private float damageTextLifetime = 1.0f;
-        
-        [Obsolete("you stupid x42")]
-        [SerializeField] private Sprite render;
-        
+
         private SpriteRenderer spriteRenderer;
         
         public string Name
@@ -55,27 +41,12 @@ namespace Units
         public Stat SpeedStat { get; private set; }
         public Stat KnockbackStat { get; private set; }
 
-        [Obsolete("Use HealthStat instead")]
-        public Health Health { get; private set; }
-        
-        [Obsolete("Use KnockbackStat instead")]
-        public Knockback Knockback { get; private set; }
-        
+        public bool Indestructible { get; set; }
+
         public Animator UnitAnimator { get; private set; }
-        public SpriteRenderer SpriteRenderer => spriteRenderer;
         public Color UnitColor => spriteRenderer.color;
         
         public TenetType Tenet => data.Tenet;
-        
-        [Obsolete("Use SpeedStat instead")]
-        public ValueStat Speed
-        {
-            get => data.Speed;
-            set => data.Speed = value;
-        }
-
-        [Obsolete("Use AttackStat instead")]
-        public ModifierStat Attack => data.Attack;
 
         public List<Ability> Abilities
         {
@@ -87,23 +58,13 @@ namespace Units
             }
         }
         
-        [Obsolete("Use TenetStatuses instead")]
-        public ICollection<TenetStatus> TenetStatusEffects => TenetStatuses;
-        public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
-
         public static Type DataType => typeof(T);
         
-        public Sprite Render => render;
-
-        public bool IsSelected => ReferenceEquals(playerManager.SelectedUnit, this);
-
-        private const int maxTenetStatusEffectCount = 2;
-        private LinkedList<TenetStatus> tenetStatusEffectSlots = new LinkedList<TenetStatus>();
-
         private AnimationStates unitAnimationState;
         
         private PlayerManager playerManager;
-        private CommandManager commandManager;
+
+        protected UnitManager<T> unitManagerT; 
         
         // TODO: Rename
         private static readonly int movingAnimationParameter = Animator.StringToHash("moving");
@@ -117,214 +78,90 @@ namespace Units
             #region GetManagers
 
             playerManager = ManagerLocator.Get<PlayerManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             
             #endregion
             
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        }
-        
-        protected override void Start()
-        {
-            base.Start();
 
-            HealthStat = new HealthStat(new KillUnitCommand(this),this,data.HealthValue.BaseValue, 
+            HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
             SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
-            tenetStatusEffectSlots = new LinkedList<TenetStatus>(data.StartingTenets);
-            
+            TenetStatusEffectsContainer.Initialise(data.StartingTenets);
+
             UnitAnimator = GetComponentInChildren<Animator>();
-            
-            #region ListenCommands
-
-            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
-            
-            commandManager.ListenCommand<AbilityCommand>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.AbilityUser, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-            
-            // TODO: Can be deleted once enemy abilities are implemented
-            commandManager.ListenCommand<EnemyAttack>(cmd =>
-            {
-                if (!ReferenceEquals(cmd.Unit, this))
-                    return;
-                
-                ChangeAnimation(AnimationStates.Casting);
-            });
-
-            #endregion
-
-            if (nameText)
-                nameText.text = Name;
-            
-            if (healthText)
-                healthText.text = HealthStat.Value + " / " + HealthStat.BaseValue;
         }
 
         #region ValueChanging
         
-        public void TakeDefence(int amount) => DefenceStat.Value += amount;
-        
-        public void TakeAttack(int amount) => AttackStat.Value += amount;
+        public void TakeDefence(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDefence(amount);
+            virtualUnit.ApplyChanges();
+        }
 
-        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
+        public void TakeAttack(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeAttack(amount);
+            virtualUnit.ApplyChanges();
+        }
 
-        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+        public void TakeAttackForEncounter(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeAttackForEncounter(amount);
+            virtualUnit.ApplyChanges();
+        }
+
+        public void TakeDefenceForEncounter(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDefenceForEncounter(amount);
+            virtualUnit.ApplyChanges();
+        }
 
         public void TakeDamage(int amount)
         {
-            if (amount <= 0)
-                return;
-            
-            HealthStat.TakeDamage(amount);
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDamage(amount);
+            virtualUnit.ApplyChanges();
         }
-        
+
         public void DealDamageTo(IAbilityUser other, int amount)
         {
-            // Attack modifiers should only be applied when damage amount is non-zero
-            if (amount <= 0)
-                return;
+            IVirtualAbilityUser to = other.CreateVirtualAbilityUser();
+            IVirtualAbilityUser from = CreateVirtualAbilityUser();
 
-            int damage = AttackStat.Value + amount;
-            other.TakeDamage(damage);
+            from.DealDamageTo(to, amount);
+            from.ApplyChanges();
+            to.ApplyChanges();
         }
 
-        // TODO: Remove this function.
-        public void TakeDamageWithoutModifiers(int amount)
+        public void TakeKnockback(int amount)
         {
-            // commandManager.ExecuteCommand(new TakeRawDamageCommand(this, amount));
-            // int damageTaken = Health.TakeDamage(amount);
-            // commandManager.ExecuteCommand(new TakeTotalDamageCommand(this, damageTaken));
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeKnockback(amount);
+            virtualUnit.ApplyChanges();
         }
 
-        public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
-        
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
-        public void AddSpeed(int amount) => SpeedStat.Value += amount;
         
-        [Obsolete("Directly alter MovementPoints Value instead")]
-        public void SetMovementActionPoints(int amount) => MovementPoints.Value = amount;
-        
-        #endregion
-
-        #region TenetStatusEffect
-
-        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
+        public void AddSpeed(int amount)
         {
-            TenetStatus status = new TenetStatus(tenetType, stackCount);
-
-            if (status.IsEmpty)
-                return;
-
-            // Try to add on top of an existing tenet type
-            if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
-            {
-                TenetStatus newStatus = foundNode.Value + status;
-                // Remember make the added tenet the latest and last tenet in the list
-                tenetStatusEffectSlots.Remove(foundNode);
-                tenetStatusEffectSlots.AddLast(newStatus);
-            }
-            else
-            {
-                // When we are already utilizing all the slots
-                if (TenetStatuses.Count == maxTenetStatusEffectCount)
-                {
-                    // Remove the oldest status effect to make space for the new status effect
-                    tenetStatusEffectSlots.RemoveFirst();
-                }
-
-                tenetStatusEffectSlots.AddLast(status);
-            }
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeKnockback(amount);
+            virtualUnit.ApplyChanges();
         }
 
-        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue)
-        {
-            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    node.Value -= amount;
-
-                    if (node.Value.IsEmpty)
-                        tenetStatusEffectSlots.Remove(node);
-                    
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            return false;
-        }
-
-        public void ClearAllTenetStatus() => tenetStatusEffectSlots.Clear();
-
-        [Obsolete("Use TryGetTenetStatus instead")]
-        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
-            TryGetTenetStatusEffect(tenetType, out tenetStatus);
-
-        public bool TryGetTenetStatusEffect(TenetType tenetType,
-                                            out TenetStatus tenetStatus)
-        {
-            bool isFound = TryGetTenetStatusNode(tenetType,
-                out LinkedListNode<TenetStatus> foundNode);
-            tenetStatus = isFound ? foundNode.Value : default;
-            return isFound;
-        }
-
-        [Obsolete("Use GetTenetStatus instead")]
-        public int GetTenetStatusEffectCount(TenetType tenetType) =>
-            GetTenetStatusCount(tenetType);
-
-        public int GetTenetStatusCount(TenetType tenetType)
-        {
-            return HasTenetStatus(tenetType)
-                ? tenetStatusEffectSlots.Where(s => s.TenetType == tenetType).Sum(s => s.StackCount)
-                : 0;
-        }
-
-        [Obsolete("Use HasTenetStatus instead")]
-        public bool HasTenetStatusEffect(TenetType tenetType, int minimumStackCount = 1) =>
-            HasTenetStatus(tenetType, minimumStackCount);
-
-        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1)
-        {
-            return tenetStatusEffectSlots.Any(s =>
-                s.TenetType == tenetType && s.StackCount >= minimumStackCount);
-        }
-
-        private bool TryGetTenetStatusNode(TenetType tenetType,
-                                           out LinkedListNode<TenetStatus> foundNode)
-        {
-            LinkedListNode<TenetStatus> node = tenetStatusEffectSlots.First;
-
-            while (node != null)
-            {
-                if (node.Value.TenetType == tenetType)
-                {
-                    foundNode = node;
-                    return true;
-                }
-
-                node = node.Next;
-            }
-
-            foundNode = null;
-            return false;
-        }
+        public IVirtualAbilityUser CreateVirtualAbilityUser() => new VirtualUnit(this);
         
         #endregion
-
+        
         #region UnitDeath
 
         /// <summary>
@@ -335,8 +172,8 @@ namespace Units
             if (!ReferenceEquals(killUnitCommand.Unit, this))
                 return;
             
-            // Since we're about to remove the object, stop listening to the command
-            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            if (Indestructible) return;
+
             KillUnit();
         }
 
@@ -370,26 +207,6 @@ namespace Units
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
         
-        #endregion
-
-        #region Scene
-        
-        [Obsolete("you stupid")]
-        private void SpawnDamageText(int damageAmount)
-        {
-            damageTextCanvas.enabled = true;
-            
-            damageTextCanvas.GetComponentInChildren<TMP_Text>().text =
-                damageAmount.ToString();
-            
-            Invoke("HideDamageText", damageTextLifetime);
-        }
-
-        [Obsolete("you stupid x2")]
-        private void HideDamageText() => damageTextCanvas.enabled = false;
-
-        public void SetName() => nameText.text = Name;
-
         #endregion
 
         #region AnimationHandling
@@ -453,13 +270,11 @@ namespace Units
         /// Returns a list of all coordinates that are reachable from a given starting position
         /// within the given range.
         /// </summary>
-        /// <param name="startingCoordinate">The coordinate to begin the search from.</param>
-        /// <param name="range">The range from the starting tile using manhattan distance.</param>
         /// <returns>A list of the coordinates of reachable tiles.</returns>
         public List<Vector2Int> GetAllReachableTiles()
         {
             Vector2Int startingCoordinate = Coordinate;
-            int range = (int) MovementPoints.Value;
+            int range = MovementPoints.Value;
             
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -573,7 +388,7 @@ namespace Units
             ));
             
             gridManager.MoveGridObject(startingCoordinate, newCoordinate, (GridObject) unit);
-            unit.SetMovementActionPoints(unit.MovementPoints.Value - manhattanDistance);
+            unit.MovementPoints.Value -= manhattanDistance;
             unit.ChangeAnimation(AnimationStates.Idle);
 
             /*Debug.Log(Mathf.Max(0,
@@ -595,10 +410,86 @@ namespace Units
                 "Github-Bot"
             };
             
-            int randomIndex = UnityEngine.Random.Range(0, names.Length - 1);
+            int randomIndex = Random.Range(0, names.Length - 1);
             return names[randomIndex];
         }
         
+        #endregion
+        
+        // TODO: Add to correct region
+        protected void Spawn() => unitManagerT.Spawn(this);
+        
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            
+            commandManager.ListenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.ListenCommand<AbilityCommand>(OnAbility);
+            commandManager.ListenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            
+            commandManager.UnlistenCommand<KillUnitCommand>(OnKillUnitCommand);
+            commandManager.UnlistenCommand<AbilityCommand>(OnAbility);
+            commandManager.UnlistenCommand<UnitManagerReadyCommand<T>>(OnUnitManagerReady);
+        }
+
+        private void OnAbility(AbilityCommand cmd)
+        {
+            if (!ReferenceEquals(cmd.AbilityUser, this))
+                return;
+
+            ChangeAnimation(AnimationStates.Casting);
+        }
+
+        private void OnUnitManagerReady(UnitManagerReadyCommand<T> cmd) => Spawn();
+        
+        #region TenetStatusEffects
+
+        private TenetStatusEffectsContainer TenetStatusEffectsContainer { get; } = new TenetStatusEffectsContainer();
+
+        public ICollection<TenetStatus> TenetStatuses =>
+            TenetStatusEffectsContainer.TenetStatuses;
+
+        public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1) =>
+            TenetStatusEffectsContainer.AddOrReplaceTenetStatus(tenetType, stackCount);
+
+        public bool RemoveTenetStatus(TenetType tenetType, int amount = int.MaxValue) =>
+            TenetStatusEffectsContainer.RemoveTenetStatus(tenetType, amount);
+
+        public void ClearAllTenetStatus() =>
+            TenetStatusEffectsContainer.ClearAllTenetStatus();
+
+        public int GetTenetStatusCount(TenetType tenetType) =>
+            TenetStatusEffectsContainer.GetTenetStatusCount(tenetType);
+
+        public bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1) =>
+            TenetStatusEffectsContainer.HasTenetStatus(tenetType, minimumStackCount);
+        
+        public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
+            TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
+
+        public void SetTenets(ITenetBearer tenetBearer) =>
+            TenetStatusEffectsContainer.SetTenets(tenetBearer);
+
+        #endregion
+        
+        #region Abilities
+        
+        public AbilityCommand UseAbility(Ability ability, ShapeDirection direction)
+        {
+            AbilityCommand abilityCommand = new AbilityCommand(this, direction, ability);
+            commandManager.ExecuteCommand(abilityCommand);
+            return abilityCommand;
+        }
+        
+        public IEnumerable<VirtualUnit> ProjectAbility(Ability ability, ShapeDirection direction) =>
+            ability.ProjectAbilityUsers(this, Coordinate, direction)
+                .OfType<VirtualUnit>();
+
         #endregion
     }
 }

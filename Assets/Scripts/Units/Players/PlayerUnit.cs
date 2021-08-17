@@ -6,13 +6,14 @@ namespace Units.Players
     public class PlayerUnit : Unit<PlayerUnitData>
     {
         public Ability CurrentlySelectedAbility { get; set; }
-        
-        protected override void Start()
-        {
-            base.Start();
-            ManagerLocator.Get<PlayerManager>().Spawn(this);
-        }
 
         public override bool IsSameTeamWith(IAbilityUser other) => other is PlayerUnit;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            unitManagerT = ManagerLocator.Get<PlayerManager>();
+        }
     }
 }

@@ -1,12 +1,8 @@
+using System;
 using Managers;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
-#if UNITY_EDITOR
-
-#endif
-
 
 namespace Grid
 {
@@ -17,10 +13,10 @@ namespace Grid
 
         private GridManager gridManager;
 
-        
-        private void Awake()
+        private void Awake() => gridManager = ManagerLocator.Get<GridManager>();
+
+        private void Start()
         {
-            gridManager = ManagerLocator.Get<GridManager>();
             gridManager.InitialiseGrid(levelTilemap, levelBounds);
             
             TestingGetGridObjectsByCoordinate(0);

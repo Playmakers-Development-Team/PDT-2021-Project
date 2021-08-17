@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Commands;
 using Managers;
 using Units.Commands;
@@ -17,9 +16,9 @@ namespace Units.Stats
             {
                 commandManager.ExecuteCommand(new StatChangedCommand(
                     unit,
-                    StatType,
+                    StatType,BaseValue,
                     this.value,
-                    this.value + value
+                    value
                 ));
                 
                 this.value = value;
@@ -45,5 +44,7 @@ namespace Units.Stats
         }
 
         public void Reset() => Value = BaseValue;
+
+        public override string ToString() => $"{Value}/{BaseValue}";
     }
 }

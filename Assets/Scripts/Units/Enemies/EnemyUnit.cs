@@ -3,17 +3,16 @@ using Abilities;
 using Commands;
 using Managers;
 using Units.Players;
-using UnityEngine;
 
 namespace Units.Enemies
 {
     public class EnemyUnit : Unit<EnemyUnitData>
     {
-        public EnemyType EnemyType { get; private set; }
-        
         public PlayerUnit Target;
 
         private List<Command> commandQueue = new List<Command>();
+
+        public int GetBaseHealth() => data.HealthValue.BaseValue;
 
         public void QueueCommand(Command command)
         {
@@ -28,13 +27,15 @@ namespace Units.Enemies
             commandQueue.Clear();
         }   
         
-        protected override void Start()
+        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        
+        protected override void Awake()
         {
-            base.Start();
-            ManagerLocator.Get<EnemyManager>().Spawn(this);
+            base.Awake();
+
+            unitManagerT = ManagerLocator.Get<EnemyManager>();
+            
             //Name = RandomizeName();
         }
-
-        public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
     }
 }
