@@ -21,6 +21,7 @@ using Random = UnityEngine.Random;
 
 namespace Units
 {
+    [RequireComponent(typeof(SnapToGrid))]
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;

@@ -32,6 +32,9 @@ namespace UI.Game
         internal readonly Event abilityConfirmed = new Event();
         
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
+        
+        internal readonly Event<TurnInfo> turnManipulated = new Event<TurnInfo>();
+
 
         internal readonly Event<UnitInfo> delayConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
@@ -119,6 +122,7 @@ namespace UI.Game
                 abilityDeselected.Invoke(SelectedAbility);
             });
             
+            
             delayConfirmed.AddListener(info =>
             {
                 commandManager.ExecuteCommand(new EndTurnCommand(info.Unit));
@@ -138,6 +142,7 @@ namespace UI.Game
             commandManager.ListenCommand((Action<EndMoveCommand>) OnEndMove);
             commandManager.ListenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.ListenCommand((Action<KilledUnitCommand>) OnUnitKilled);
+            commandManager.ListenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
         }
 
         private void OnDisable()
@@ -148,6 +153,8 @@ namespace UI.Game
             commandManager.UnlistenCommand((Action<EndMoveCommand>) OnEndMove);
             commandManager.UnlistenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
+            commandManager.UnlistenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
+
         }
         
         #endregion
@@ -160,6 +167,16 @@ namespace UI.Game
             UnitInfo info = GetInfo(cmd.Unit);
 
             turnStarted.Invoke(new TurnInfo(info));
+        }
+
+        private void OnTurnManipulated(TurnManipulatedCommand cmd)
+        {
+            UnitInfo info = GetInfo(cmd.Unit);
+
+            if (info == null)
+                throw new Exception("ActingUnit was not in GameDialogue.units.");
+            
+            turnManipulated.Invoke(new TurnInfo(info));
         }
 
         private void OnStartMove(StartMoveCommand cmd)

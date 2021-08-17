@@ -22,7 +22,11 @@ namespace Units.Virtual
         public IUnit Unit { get; }
         public IAbilityUser RealAbilityUser => Unit;
         public Vector2Int Coordinate => Unit.Coordinate;
-        public string Name => Unit.Name;
+        public string Name
+        {
+            get => Unit.Name;
+            set => Unit.Name = value;
+        }
 
         private VirtualStat attack;
         private VirtualStat defence;

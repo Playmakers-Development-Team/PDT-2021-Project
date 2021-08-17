@@ -10,7 +10,7 @@ namespace Abilities
     {
         public Vector2Int Coordinate { get; }
         
-        public string Name { get; }
+        public string Name { get; set; }
 
         void AddSpeed(int amount);
 

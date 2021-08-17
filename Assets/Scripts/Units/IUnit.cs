@@ -15,16 +15,7 @@ namespace Units
         GameObject gameObject { get; }
         Transform transform { get; }
 
-        public string Name { get; set; }
         public TenetType Tenet { get; }
-        
-        public Stat MovementPoints { get; }
-        
-        public Stat AttackStat { get; }
-        public Stat DefenceStat { get; }
-        public Stat SpeedStat { get; }
-
-        public Stat KnockbackStat { get; }
         
         //TODO: Change this to a loadout type.
         public List<Ability> Abilities { get; }
