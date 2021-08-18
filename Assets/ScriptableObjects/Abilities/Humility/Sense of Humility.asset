@@ -19,10 +19,12 @@ MonoBehaviour:
     User gains
     2 Defense and 1 Humility.'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  excludeUserFromTargets: 0
+  excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  effects:
   - name: Default, 3 Defence and Provide 1 Humility
+    affectTargets: 1
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -36,8 +38,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: Default, 2 Defence and Provide 1 Humility
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -51,3 +54,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []

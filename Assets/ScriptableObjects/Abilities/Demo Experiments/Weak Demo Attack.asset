@@ -17,8 +17,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  effects:
   - name: Default, 1 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 1
     directDamage: 0
@@ -32,8 +34,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: 3 Attack IF User With 1 Passion
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 1
     damageValue: 0
     directDamage: 0
@@ -79,3 +82,4 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  userEffects: []

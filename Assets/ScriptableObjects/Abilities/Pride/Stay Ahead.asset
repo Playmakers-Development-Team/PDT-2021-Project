@@ -17,8 +17,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 2
-  targetEffects:
+  effects:
   - name: Default, 2 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0
@@ -33,6 +35,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Damage IF User Spend 1 Passion
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 3
     directDamage: 0
@@ -78,8 +82,9 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  userEffects:
   - name: Default, 2 Defence
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -94,6 +99,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: Provide 2 Pride WITH Independent
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -108,3 +115,4 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
+  userEffects: []

@@ -19,9 +19,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: -3
-  targetEffects: []
-  userEffects:
+  effects:
   - name: Default, 4 Defence
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -36,6 +37,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Defence IF User With 1 Apathy
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -81,3 +84,4 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  userEffects: []

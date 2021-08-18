@@ -16,10 +16,12 @@ MonoBehaviour:
     may Spend Passion, gain 2 Attack.\n\u21AF Targets may Spend Humility, gain 2
     Defense."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
-  excludeUserFromTargets: 0
+  excludeUserFromTargets: 1
   speed: 1
-  targetEffects:
-  - name: Default, 1 Attack and 1 Defence and Provide 1 Pride
+  effects:
+  - name: "User and Target \u27A4 Default, 1 Attack and 1 Defence and Provide 1 Pride"
+    affectTargets: 1
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -33,7 +35,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 2 Attack IF Target Spend 1 Passion
+  - name: "User and Target \u27A4 2 Attack IF Target Spend 1 Passion"
+    affectTargets: 1
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -79,7 +83,9 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: 2 Defence IF Target Spend 1 Humility
+  - name: "User and Target \u27A4 2 Defence IF Target Spend 1 Humility"
+    affectTargets: 1
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0

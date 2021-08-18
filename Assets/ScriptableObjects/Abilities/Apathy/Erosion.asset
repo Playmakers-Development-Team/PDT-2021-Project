@@ -21,8 +21,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: -2
-  targetEffects:
+  effects:
   - name: Default, 6 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 6
     directDamage: 0
@@ -36,8 +38,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: 3 Damage Directly WITH Ennui 2
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 3
     directDamage: 1
@@ -53,6 +56,8 @@ MonoBehaviour:
     keywords:
     - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
   - name: Default, Provide 1 Apathy
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 2
     damageValue: 0
     directDamage: 0
@@ -66,3 +71,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  userEffects: []

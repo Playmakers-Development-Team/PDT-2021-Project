@@ -18,8 +18,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  effects:
   - name: Default, 2 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0
@@ -33,8 +35,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: Default, Provide 1 Sorrow
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -49,6 +52,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Attack for the encounter WITH Catharsis 3
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 2
     damageValue: 0
     directDamage: 0
@@ -64,6 +69,8 @@ MonoBehaviour:
     keywords:
     - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
   - name: 2 Attack IF User Spend 1 Passion
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 1
     damageValue: 0
     directDamage: 0
@@ -109,3 +116,4 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  userEffects: []
