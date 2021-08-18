@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
+using Abilities;
 using Commands;
 using Game.Commands;
 using Managers;
 using Turn.Commands;
 using UI.Core;
+using Units;
 using UnityEngine;
 using Event = UI.Core.Event;
 
@@ -17,7 +20,7 @@ namespace UI.AbilityLoadout
         
         private CommandManager commandManager;
 
-        [SerializeField] private Canvas characterSelectPanel;
+        [SerializeField] private Canvas unitSelectPanel;
         [SerializeField] private Canvas abilitySelectPanel;
 
         #region Monobehaviour Events
@@ -30,14 +33,14 @@ namespace UI.AbilityLoadout
             // Listen to Events
             panelSwap.AddListener(currentPanel =>
             {
-                if (currentPanel == AbilityLoadoutPanelType.CharacterSelect)
+                if (currentPanel == AbilityLoadoutPanelType.UnitSelect)
                 {
-                    characterSelectPanel.enabled = true;
+                    unitSelectPanel.enabled = true;
                     abilitySelectPanel.enabled = false;
                 }
                 else
                 {
-                    characterSelectPanel.enabled = false;
+                    unitSelectPanel.enabled = false;
                     abilitySelectPanel.enabled = true;
                 }
             });
@@ -45,7 +48,7 @@ namespace UI.AbilityLoadout
             encounterStart.AddListener(() =>
             {
                 Debug.Log("DRAFT AT START: APPEAR HERE");
-                panelSwap.Invoke(AbilityLoadoutPanelType.CharacterSelect);
+                panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
             });
             
             encounterWon.AddListener(() =>
@@ -94,6 +97,22 @@ namespace UI.AbilityLoadout
         protected override void OnDemote()
         {
             canvasGroup.interactable = false;
+        }
+        
+        #endregion
+        
+        #region Structs
+        
+        [Serializable]
+        public class UnitInfo
+        {
+            [SerializeField] private Sprite render;
+            
+            internal Sprite Render => render;
+
+            public IUnit Unit { get; private set; }
+            
+            internal void SetUnit(IUnit newUnit) => Unit = newUnit;
         }
         
         #endregion

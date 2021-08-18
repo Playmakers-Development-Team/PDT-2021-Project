@@ -5,7 +5,7 @@ namespace UI.AbilityLoadout
     /// </summary>
     public enum AbilityLoadoutPanelType
     {
-        CharacterSelect,
+        UnitSelect,
         AbilitySelect
     }
 }

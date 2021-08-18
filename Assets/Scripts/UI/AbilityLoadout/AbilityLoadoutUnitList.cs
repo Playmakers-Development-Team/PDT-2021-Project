@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 namespace UI.AbilityLoadout
 {
-    public class AbilityLoadoutCharacterList : DialogueComponent<AbilityLoadoutDialogue>
+    public class AbilityLoadoutUnitList : DialogueComponent<AbilityLoadoutDialogue>
     {
-        [SerializeField] private GameObject characterCardPrefab;
-        [SerializeField] private List<CharacterCard> cards;
+        [SerializeField] private GameObject unitCardPrefab;
+        [SerializeField] private List<UnitCard> cards;
 
         private ScrollRect scrollView;
         
@@ -29,15 +29,19 @@ namespace UI.AbilityLoadout
         }
 
         #endregion
-        
+
         #region Drawing
         
-        internal void Redraw()
+        internal void Redraw(List<AbilityLoadoutDialogue.UnitInfo> units)
         {
-            if (playerManager.Units == null)
-                return;
-            
-            Debug.Log("There are "+playerManager.Units.Count+" player units");
+            // Instantiate new UnitCards
+            foreach (AbilityLoadoutDialogue.UnitInfo unit in units)
+            {
+                UnitCard newCard = Instantiate(unitCardPrefab, scrollView.content).GetComponent<UnitCard>();
+                newCard.Assign(unit);
+
+                cards.Add(newCard);
+            }
         }
         
         #endregion
