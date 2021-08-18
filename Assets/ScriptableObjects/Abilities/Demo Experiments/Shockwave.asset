@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Demo Shockwave
+  m_Name: Shockwave
   m_EditorClassIdentifier: 
   description: 'Deals 2 damage
 
@@ -18,8 +18,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  effects:
   - name: Default, 2 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0

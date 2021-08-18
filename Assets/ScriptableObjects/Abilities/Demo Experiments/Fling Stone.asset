@@ -10,22 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: DemoAOE Ability
+  m_Name: Fling Stone
   m_EditorClassIdentifier: 
-  description: 'Big AoE. Deal 1 damage
-
-    Deal 3 extra damage by spending Passion.
-
-'
-  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
+  description: "Deals 3 damage at long range. \nSpend Apathy, deal 4 extra damage. "
+  shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: Default, 2 Damage
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -37,14 +33,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack IF User Spend 1 Passion
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
+  - name: "Target \u27A4 4 Damage IF User Spend 1 Apathy"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 2
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
-    attackValue: 3
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -52,13 +48,13 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Spend 1 Passion
+    - name: User Spend 1 Apathy
       affectType: 0
       costType: 1
       tenetCost:
         tenetCostType: 2
         count: 1
-        tenetType: 2
+        tenetType: 3
         tenetConstraint: 0
       tenetGroupCost:
         tenetTarget: 0

@@ -10,24 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: DemoDEFBuff
+  m_Name: Pep Talk
   m_EditorClassIdentifier: 
-  description: 'Gives all targets in a 2 tile range 2 defense. '
-  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+  description: 'Grant adjacent units 3 attack and 1 passion. '
+  shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
-  - name: Default, 2 Defence
+  effects:
+  - name: Default, 3 Attack and Provide 1 Passion
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
-    attackValue: 0
+    defenceValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 2
+      stackCount: 1
     bonuses: []
     costs: []
     keywords: []
