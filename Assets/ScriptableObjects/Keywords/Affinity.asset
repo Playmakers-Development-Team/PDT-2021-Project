@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Affinity
   isVisibleInGame: 1
-  description: 
+  description: Have an effect when not directly next to any allies
   effect:
     name: Nothing IF User finds At Least 1 Same Team in Adjacent Shape
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0

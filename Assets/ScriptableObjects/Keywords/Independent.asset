@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Independent
   isVisibleInGame: 1
-  description: 
+  description: Have an effect when there are no allies in a 1 tile range
   effect:
-    name: Nothing IF User finds At Most 0 Same Team in Adjacent Shape
+    name: "Target \u27A4 Nothing IF User finds At Most 0 Same Team in 3x3 Surrounding
+      Shape"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -29,7 +32,7 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User finds At Most 0 Same Team in Adjacent Shape
+    - name: User finds At Most 0 Same Team in 3x3 Surrounding Shape
       affectType: 0
       costType: 2
       tenetCost:
@@ -37,8 +40,13 @@ MonoBehaviour:
         count: 1
         tenetType: 0
         tenetConstraint: 0
+      tenetGroupCost:
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
-        shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
+        shape: {fileID: 11400000, guid: 0fa25ce7eee052580b13ef055dc3ea95, type: 2}
         countConstraint: 1
         count: 0
         shapeFilter: 1
@@ -51,4 +59,9 @@ MonoBehaviour:
             count: 1
             tenetType: 0
             tenetConstraint: 0
+          tenetGroupCost:
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords: []
