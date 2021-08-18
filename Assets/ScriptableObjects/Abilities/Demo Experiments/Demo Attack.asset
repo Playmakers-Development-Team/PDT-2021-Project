@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Demo Attack
   m_EditorClassIdentifier: 
-  description: 'A basic, test attack. Does 3 damage to a single enemy. If you have
-    Apathy, does 3 extra damage. '
+  description: "Deals 3 damage \nIf you have Apathy, does 3 extra damage"
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 0
