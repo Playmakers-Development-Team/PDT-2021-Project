@@ -290,7 +290,7 @@ namespace Turn
             UpdateNextTurnQueue();
 
             // If the ActingUnit was removed, start the next unit's turn
-            if (targetIndex - 1 == CurrentTurnIndex)
+            if (targetIndex == CurrentTurnIndex)
                 NextTurn();
         }
 
