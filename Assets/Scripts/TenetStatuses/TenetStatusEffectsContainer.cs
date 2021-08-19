@@ -37,7 +37,12 @@ namespace TenetStatuses
 
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
+            {
                 foundNode.Value += status;
+                // Reorder the list to reflect the last tenet applied to be at the back of the list
+                tenetStatusEffectSlots.Remove(foundNode);
+                tenetStatusEffectSlots.AddLast(foundNode);
+            }
             else
             {
                 // When we are already utilizing all the slots
