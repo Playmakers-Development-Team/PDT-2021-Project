@@ -12,16 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Discard Thought+
   m_EditorClassIdentifier: 
-  description: "Provides 1 Apathy and 3 defense.  \nAffinity - Gain 1 Humility and
-    1 extra defence if adjacent to an ally"
-  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
+  description: "Give 2 Defence\nIf the user has ENNUI 2, deal 3 damage instead \nUser
+    gains 3 Defence and 1 Apathy"
+  shape: {fileID: 11400000, guid: 0fa25ce7eee052580b13ef055dc3ea95, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: Default, 3 Defence and Provide 1 Apathy
+  - name: "Target \u27A4 Default, 2 Defence"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 2
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 1
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "Target \u27A4 3 Damage WITH Ennui 2"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 3
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 1
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
+  - name: "User \u27A4 Default, 3 Defence and Provide 1 Apathy"
     affectTargets: 0
     affectUser: 1
-    effectOrder: 0
+    effectOrder: 2
     damageValue: 0
     directDamage: 0
     defenceValue: 3
@@ -34,21 +67,4 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 1 Defence and Provide 1 Humility WITH Affinity
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 1
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 1
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
   userEffects: []

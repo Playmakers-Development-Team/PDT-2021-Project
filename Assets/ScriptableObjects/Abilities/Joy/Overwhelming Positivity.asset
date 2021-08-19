@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Overwhelming Positivity
   m_EditorClassIdentifier: 
-  description: "[Speed:3]\nDeal 4 damage to a target. Gain one Joy, grant target
-    1Joy.  \nRepression 2 (Target and User) - Inflict 4 damage. "
+  description: '[Speed:3] Deal 4 damage. Give and gain 1 Joy
+
+    User or target
+    take 4 damage with Repression 2'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 3

@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Close Off
+  m_Name: Curtain Drape+
   m_EditorClassIdentifier: 
-  description: "[Speed: -1] \nGain 2 Defence and 1 Sorrow\nCatharsis 2 - Gain 2 Attack
-    that lasts the entire encounter"
-  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
+  description: 'Give 2 Defence in 3 tile line
+
+    Targets with AFFINITY gain 2 more
+    Defence'
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: "User \u27A4 Default, 2 Defence and Provide 1 Sorrow"
-    affectTargets: 0
-    affectUser: 1
+  - name: "Target \u27A4 Default, 2 Defence"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -29,26 +31,26 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 5
-      stackCount: 1
+      tenetType: 0
+      stackCount: 0
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 2 Attack for the encounter WITH Catharsis 2"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 2
+  - name: "Target \u27A4 2 Defence WITH Affinity"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 2
     attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 2
+    attackForEncounter: 0
     providingTenet:
-      tenetType: 5
+      tenetType: 0
       stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 243aae2bfdc19e3b297431e500545dfd, type: 2}
+    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
   userEffects: []

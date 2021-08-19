@@ -18,8 +18,10 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  effects:
   - name: Default, 3 Attack and 3 Defence
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -33,8 +35,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: Default, Provide 1 Joy
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -49,6 +52,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Damage WITH Repression 2
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 3
     directDamage: 0
@@ -63,3 +68,4 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 20cb849d3c43e2d4e8925610b582d5f1, type: 2}
+  userEffects: []
