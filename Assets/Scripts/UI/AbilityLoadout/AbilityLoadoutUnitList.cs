@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Managers;
 using UI.Core;
-using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,8 +11,6 @@ namespace UI.AbilityLoadout
         [SerializeField] private List<UnitCard> cards;
 
         private ScrollRect scrollView;
-        
-        private PlayerManager playerManager;
 
         #region UIComponent
         
@@ -25,7 +21,6 @@ namespace UI.AbilityLoadout
         protected override void OnComponentAwake()
         {
             TryGetComponent(out scrollView);
-            playerManager = ManagerLocator.Get<PlayerManager>();
         }
 
         #endregion
@@ -38,7 +33,7 @@ namespace UI.AbilityLoadout
             foreach (AbilityLoadoutDialogue.UnitInfo unit in units)
             {
                 UnitCard newCard = Instantiate(unitCardPrefab, scrollView.content).GetComponent<UnitCard>();
-                newCard.Assign(unit);
+                newCard.Redraw(unit);
 
                 cards.Add(newCard);
             }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Abilities;
 using UI.Core;
-using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,8 +8,9 @@ namespace UI.AbilityLoadout
 {
     public class UnitCard : DialogueComponent<AbilityLoadoutDialogue>
     {
-        [SerializeField] private Sprite render;
-        [SerializeField] private List<Ability> unitAbilities = new List<Ability>();
+        [SerializeField] protected Image render;
+        [SerializeField] protected List<Image> abilityRender = new List<Image>();
+        [SerializeField] private List<Ability> abilities = new List<Ability>();
 
         #region UIComponent
         
@@ -31,10 +31,10 @@ namespace UI.AbilityLoadout
         
         #region Drawing
         
-        internal void Assign(AbilityLoadoutDialogue.UnitInfo unit)
+        internal void Redraw(AbilityLoadoutDialogue.UnitInfo unit)
         {
-            render = unit.Render;
-            unitAbilities = unit.Unit.Abilities;
+            render.sprite = unit.Render;
+            abilities = unit.Unit.Abilities;
         }
 
         #endregion
