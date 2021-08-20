@@ -1,6 +1,7 @@
 ﻿using Managers;
 using TMPro;
 using Turn;
+using UI.Core;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,8 +41,11 @@ namespace UI.TempUI
                 turnManager.MoveTargetBeforeCurrent(turnManager.FindTurnIndexFromCurrentQueue
                 (unit));
             else
+            {
                 turnManager.MoveTargetAfterCurrent(turnManager.FindTurnIndexFromCurrentQueue
                     (unit));
+            }
+                
         }
         
         
