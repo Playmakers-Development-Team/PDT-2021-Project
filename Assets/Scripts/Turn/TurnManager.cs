@@ -464,9 +464,18 @@ namespace Turn
 
         public bool UnitCanDoTurnManipulation(IUnit unit)
         {
-            if (!UnitCanMeditate(unit))
+            if (!(unit is PlayerUnit))
+            {
+                Debug.LogWarning($"{unit} is not a {nameof(PlayerUnit)}");
                 return false;
+            }
             
+            if (unitsMeditatedThisRound.Contains(unit) || unitsTurnManipulatedThisRound.Contains(unit))
+            {
+                Debug.LogWarning($"{unit } already turn manipulated this round.");
+                return false;
+            }
+
             if (Insight.Value <= 0)
             {
                 Debug.LogWarning($"Not enough insight.");
