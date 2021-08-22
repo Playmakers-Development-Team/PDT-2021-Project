@@ -63,6 +63,8 @@ namespace Grid
             }
             
             commandManager.ExecuteCommand(new GridReadyCommand());
+            
+            commandManager.ExecuteCommand(new GridObjectsReadyCommand());
         }
         
         #region GETTERS

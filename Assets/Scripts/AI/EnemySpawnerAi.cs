@@ -8,18 +8,17 @@ namespace AI
     {
         protected override async void DecideEnemyIntention()
         {
-            if(enemyUnit is EnemySpawnerUnit enemySpawnerUnit)
-            {
-                if(enemySpawnerUnit.Turn()) enemyManager.Spawner(enemySpawnerUnit);
-                // TODO: Move to superclass. Always executed.
-                else commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
-            }
-            else 
-            {
+            // TODO: Why is this check not being done in the other AI classes?
+            if (!(enemyUnit is EnemySpawnerUnit enemySpawnerUnit))
                 Debug.LogWarning("enemyspawnerai only works with enemyspawnerunit, dumbass");
-                // TODO: Move to superclass. Always executed.
-                commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
+            else
+            {
+                if (enemySpawnerUnit.Turn())
+                    await enemySpawnerUnit.Spawner();
             }
+
+            // TODO: Move to superclass.
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
     }
 }
