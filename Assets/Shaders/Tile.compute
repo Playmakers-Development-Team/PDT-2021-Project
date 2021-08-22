@@ -1,16 +1,37 @@
-#pragma kernel fill
-
 RWTexture2D<float4> output;
-sampler2D input;
 
+sampler2D _line;
+sampler2D _colour;
+
+float4 line_colour;
+
+#pragma kernel fill
 [numthreads(8,8,1)]
 void fill (const uint3 id : SV_DispatchThreadID)
 {
     int2 resolution;
     output.GetDimensions(resolution.x, resolution.y);
-
     const float2 uv = id.xy / (resolution - 1.0);
-    const float4 samp = tex2Dlod(input, float4(uv, 0, 0));
+    
+    const float4 samp = tex2Dlod(_colour, float4(uv, 0, 0));
     
     output[id.xy] = float4(1, 1, 1, samp.a);
+}
+
+#pragma kernel preview
+[numthreads(8, 8, 1)]
+void preview (const uint3 id : SV_DispatchThreadID)
+{
+    int2 resolution;
+    output.GetDimensions(resolution.x, resolution.y);
+    const float2 uv = id.xy / (resolution - 1.0);
+
+    const float4 line_sample = tex2Dlod(_line, float4(uv, 0, 0));
+    const float4 line_value = line_sample.r * line_sample.a * line_colour;
+    const float4 colour_value = tex2Dlod(_colour, float4(uv, 0, 0));
+
+    const float output_alpha = line_value.a + colour_value.a * (1.0 - line_value.a);
+    const float3 output_colour = (line_value.rgb * line_value.a + colour_value.rgb * colour_value.a * (1.0 - line_value.a)) / output_alpha;
+
+    output[id.xy] = float4(pow(abs(output_colour), 1.0 / 2.2), output_alpha);
 }

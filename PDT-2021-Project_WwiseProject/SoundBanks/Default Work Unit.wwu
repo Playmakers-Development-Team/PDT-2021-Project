@@ -16,6 +16,17 @@
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
 				</SoundBank>
+				<SoundBank Name="Placeholder" ID="{D5D7A619-F6DE-4B49-8839-80CAAA1D38AE}">
+					<ObjectInclusionList>
+						<ObjectRef Name="Play_Niles_Attack" ID="{966B5C72-AA99-45E3-8F15-7572D2265F1A}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="In_Combat" ID="{43A14AEE-4F7B-467F-895D-1630731482C6}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_Marie_Attack" ID="{D1E441FC-A66F-4A34-8652-F9D3217F8BFE}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Play_Mountain_Trail_Theme" ID="{9F56617C-A450-4AFD-8A5E-BD1AF41805E4}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Out_Of_Combat" ID="{CC1AAC98-15A2-4DB5-A60C-FA1E5B0769E7}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
 			</ChildrenList>
 		</WorkUnit>
 	</SoundBanks>

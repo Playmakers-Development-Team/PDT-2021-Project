@@ -1,0 +1,21 @@
+Event	ID	Name			Wwise Object Path	Notes
+	822824111	Play_Marie_Attack			\Player_Unit\Play_Marie_Attack	
+	1713481986	Play_Niles_Attack			\Player_Unit\Play_Niles_Attack	
+	2116791127	In_Combat			\Music\In_Combat	
+	3162566204	Out_Of_Combat			\Music\Out_Of_Combat	
+	3399001768	Play_Mountain_Trail_Theme			\Music\Play_Mountain_Trail_Theme	
+
+State Group	ID	Name			Wwise Object Path	Notes
+	1071758680	CombatState			\Default Work Unit\CombatState	
+
+State	ID	Name	State Group			Notes
+	748895195	None	CombatState			
+	2116791127	In_Combat	CombatState			
+	3162566204	Out_Of_Combat	CombatState			
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	12654765	Mountain-Trail_Ambience	C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Mac\SFX\Mountain-Trail_Ambience_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Mountain Trail\Out Of Combat\Mountain-Trail_Ambience\Mountain-Trail_Ambience		44027028
+	460477972	Niles_Attack-01v2	C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Mac\SFX\Niles_Attack-01v2_10C4C929.wem		\Actor-Mixer Hierarchy\J-Niles\Niles_Attack-01v2		462912
+	588934760	MountainTrail_70bpm_6_8_L96M	C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Mac\SFX\MountainTrail_70bpm_6_8_L96M_V2_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Mountain Trail\Combat\Mountain-Trail_70bpm6-8_L96M\MountainTrail_70bpm_6_8_L96M		44027108
+	849732774	Marie_Attack-01	C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Mac\SFX\Marie_Attack-01_10C4C929.wem		\Actor-Mixer Hierarchy\J-Marie\Marie_Attack-01		249920
+

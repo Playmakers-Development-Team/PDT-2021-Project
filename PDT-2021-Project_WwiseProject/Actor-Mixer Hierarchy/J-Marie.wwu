@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{3DD48015-FAC5-4D0A-907B-632DAF420123}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="J-Marie" ID="{3DD48015-FAC5-4D0A-907B-632DAF420123}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Marie_Attack-01" ID="{280BADB6-9687-4F43-A59A-877A9DB18CDA}" ShortID="792492634">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="SFX Bus" ID="{E6F7F0E0-29D3-4FA4-94B8-BFCB461DF33C}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Marie_Attack-01" ID="{15B900E2-E5DA-4BE4-83BE-122C98F78A04}">
+							<Language>SFX</Language>
+							<AudioFile>Marie_Attack-01.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="849732774"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Marie_Attack-01" ID="{15B900E2-E5DA-4BE4-83BE-122C98F78A04}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

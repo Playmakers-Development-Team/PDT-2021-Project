@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Rewarding Bravery
+  m_EditorClassIdentifier: 
+  description: "Target gains 3 Attack, 1 Defense and 1 Pride\n \u21AF Target may
+    Spend Humility to gain 3 Defense\n"
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  targetEffects:
+  - name: Default, 3 Attack and 1 Defence and Provide 1 Pride
+    damageValue: 0
+    defenceValue: 1
+    attackValue: 3
+    providingTenet:
+      tenetType: 0
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: 3 Defence IF Target Spend 1 Humility
+    damageValue: 0
+    defenceValue: 3
+    attackValue: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs:
+    - name: Target Spend 1 Humility
+      affectType: 1
+      costType: 1
+      tenetCost:
+        tenetCostType: 2
+        count: 1
+        tenetType: 1
+      shapeCost:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+    keywords: []
+  userEffects: []
