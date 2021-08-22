@@ -4,6 +4,7 @@ using Abilities;
 using Commands;
 using Game.Commands;
 using Managers;
+using Turn.Commands;
 using UI.AbilityLoadout.Unit;
 using UI.Core;
 using Units;
@@ -17,7 +18,7 @@ namespace UI.AbilityLoadout
     {
         internal readonly Event<AbilityLoadoutPanelType> panelSwap = new Event<AbilityLoadoutPanelType>();
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
-        internal readonly Event encounterWon = new Event();
+        internal readonly Event noEnemiesRemaining = new Event();
         
         private CommandManager commandManager;
 
@@ -50,7 +51,7 @@ namespace UI.AbilityLoadout
                     units.Add(info);
             });
 
-            encounterWon.AddListener(() =>
+            noEnemiesRemaining.AddListener(() =>
             {
                 // TODO: Change to appear after the player selects this option
                 panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
@@ -59,12 +60,12 @@ namespace UI.AbilityLoadout
 
         private void OnEnable()
         {
-            commandManager.ListenCommand((Action<EncounterWonCommand>) OnEncounterWon);
+            commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
         }
 
         private void OnDisable()
         {
-            commandManager.UnlistenCommand((Action<EncounterWonCommand>) OnEncounterWon);
+            commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
         }
 
         #endregion
@@ -97,9 +98,9 @@ namespace UI.AbilityLoadout
         
         #region Command Listeners
 
-        private void OnEncounterWon(EncounterWonCommand cmd)
+        private void OnNoEnemiesRemaining(NoRemainingEnemyUnitsCommand cmd)
         {
-            encounterWon.Invoke();
+            noEnemiesRemaining.Invoke();
         }
         
         #endregion

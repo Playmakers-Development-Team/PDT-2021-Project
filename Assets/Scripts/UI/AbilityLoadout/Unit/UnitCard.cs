@@ -31,10 +31,13 @@ namespace UI.AbilityLoadout.Unit
         
         #region Drawing
         
-        internal void Redraw(AbilityLoadoutDialogue.UnitInfo unit)
+        internal void Redraw(AbilityLoadoutDialogue.UnitInfo unitInfo)
         {
-            renderImage.texture = unit.ProfileCropInfo.Image;
-            abilities = unit.Unit.Abilities;
+            if (unitInfo == null)
+                return;
+            
+            renderImage.texture = unitInfo.ProfileCropInfo.Image;
+            abilities = unitInfo.Unit.Abilities;
         }
 
         #endregion
