@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Abilities;
 using Commands;
 using Game.Commands;
@@ -21,7 +20,6 @@ namespace UI.AbilityLoadout
         internal readonly Event encounterWon = new Event();
         
         private CommandManager commandManager;
-        private PlayerManager playerManager;
 
         [SerializeField] private Canvas unitSelectPanel;
         [SerializeField] private Canvas abilitySelectPanel;
@@ -35,7 +33,10 @@ namespace UI.AbilityLoadout
         {
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
-            playerManager = ManagerLocator.Get<PlayerManager>();
+            
+            // Hide Panels
+            unitSelectPanel.enabled = false;
+            abilitySelectPanel.enabled = false;
 
             // Listen to Events
             panelSwap.AddListener(currentPanel =>
@@ -45,22 +46,20 @@ namespace UI.AbilityLoadout
             
             unitSpawned.AddListener(info =>
             {
-                if (playerManager.Units.Contains(info.Unit))
+                if (info.Unit is PlayerUnit)
                     units.Add(info);
             });
 
             encounterWon.AddListener(() =>
             {
-                Debug.Log("DRAFT AT END: APPEAR HERE");
+                // TODO: Change to appear after the player selects this option
+                panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
             });
         }
 
         private void OnEnable()
         {
             commandManager.ListenCommand((Action<EncounterWonCommand>) OnEncounterWon);
-            
-            // Open the starting panel
-            panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
         }
 
         private void OnDisable()
@@ -149,9 +148,9 @@ namespace UI.AbilityLoadout
         [Serializable]
         public class UnitInfo
         {
-            [SerializeField] private Sprite render;
+            [SerializeField] private CropInfo profileCropInfo;
             
-            internal Sprite Render => render;
+            internal CropInfo ProfileCropInfo => profileCropInfo;
 
             public IUnit Unit { get; private set; }
             

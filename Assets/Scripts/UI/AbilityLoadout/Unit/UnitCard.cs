@@ -8,7 +8,7 @@ namespace UI.AbilityLoadout.Unit
 {
     public class UnitCard : DialogueComponent<AbilityLoadoutDialogue>
     {
-        [SerializeField] protected Image render;
+        [SerializeField] protected RawImage renderImage;
         [SerializeField] protected List<Image> abilityRender = new List<Image>();
         [SerializeField] private List<Ability> abilities = new List<Ability>();
 
@@ -33,7 +33,7 @@ namespace UI.AbilityLoadout.Unit
         
         internal void Redraw(AbilityLoadoutDialogue.UnitInfo unit)
         {
-            render.sprite = unit.Render;
+            renderImage.texture = unit.ProfileCropInfo.Image;
             abilities = unit.Unit.Abilities;
         }
 
