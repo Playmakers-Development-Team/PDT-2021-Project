@@ -5,6 +5,7 @@ using Abilities.Parsing;
 using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
+using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,6 +21,7 @@ namespace Abilities
         [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
+        [SerializeField] private TenetType representedTenet;
 
         [FormerlySerializedAs("targetEffects")]
         [SerializeField] private List<Effect> effects;
@@ -33,11 +35,15 @@ namespace Abilities
         /// <summary>
         /// Describes what and how the ability can hit units.
         /// </summary>
-        public IShape Shape => shape;        
+        public IShape Shape => shape;
         /// <summary>
         /// The speed which will be added on top of Abilities
         /// </summary>
         public int Speed => speed;
+        /// <summary>
+        /// The tenet that this ability represents. This would be shown in the UI.
+        /// </summary>
+        public TenetType RepresentedTenet => representedTenet;
         /// <summary>
         /// All keywords used by this ability regardless whether they should be shown to
         /// the player or not.

@@ -21,11 +21,11 @@ namespace Units
             #endregion
         }
 
-        private void OnEnable() => commandManager.ListenCommand<GridReadyCommand>(OnGridReady);
+        private void OnEnable() => commandManager.ListenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
 
-        private void OnDisable() => commandManager.UnlistenCommand<GridReadyCommand>(OnGridReady);
+        private void OnDisable() => commandManager.UnlistenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
 
-        private void OnGridReady(GridReadyCommand obj)
+        private void OnGridObjectsReady(GridObjectsReadyCommand cmd)
         {
             unitManagerT.ClearUnits();
             
