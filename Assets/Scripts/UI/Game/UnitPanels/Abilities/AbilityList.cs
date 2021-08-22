@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Abilities;
+using TMPro;
 using UI.Core;
 using Units;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Abilities
 {
@@ -11,19 +11,53 @@ namespace UI.Game.UnitPanels.Abilities
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private List<AbilityCard> cards;
-
-        private ScrollRect scrollView;
+        
+        [SerializeField] protected GameObject tooltipPanel;
+        [SerializeField] protected TextMeshProUGUI tooltipDescription;
         
         
         #region UIComponent
-        
-        protected override void Subscribe() {}
 
-        protected override void Unsubscribe() {}
-        
-        protected override void OnComponentAwake()
+        protected override void OnComponentStart()
         {
-            TryGetComponent(out scrollView);
+            tooltipPanel.SetActive(false);
+        }
+
+        protected override void Subscribe()
+        {
+            dialogue.abilityHoverEnter.AddListener(OnAbilityHoverEnter);
+            dialogue.abilityHoverExit.AddListener(OnAbilityHoverExit);
+        }
+
+        protected override void Unsubscribe()
+        {
+            dialogue.abilityHoverEnter.RemoveListener(OnAbilityHoverEnter);
+            dialogue.abilityHoverExit.RemoveListener(OnAbilityHoverExit);
+        }
+
+        #endregion
+        
+        
+        #region Listeners
+
+        private void OnAbilityHoverEnter(AbilityCard card)
+        {
+            if (!cards.Contains(card))
+                return;
+
+            tooltipPanel.SetActive(true);
+            tooltipDescription.text = card.Ability.Description + "\n\n";
+
+            foreach (Keyword keyword in card.Ability.AllKeywords)
+                tooltipDescription.text += $"{keyword.DisplayName}: {keyword.Description}\n\n";
+        }
+
+        private void OnAbilityHoverExit(AbilityCard card)
+        {
+            if (!cards.Contains(card))
+                return;
+
+            tooltipPanel.SetActive(false);
         }
 
         #endregion
@@ -49,7 +83,7 @@ namespace UI.Game.UnitPanels.Abilities
                 if (cards.Find(card => card.Ability == ability))
                     continue;
 
-                AbilityCard newCard = Instantiate(cardPrefab, scrollView.content).GetComponent<AbilityCard>();
+                AbilityCard newCard = Instantiate(cardPrefab, transform).GetComponent<AbilityCard>();
                 newCard.Assign(ability);
 
                 cards.Add(newCard);

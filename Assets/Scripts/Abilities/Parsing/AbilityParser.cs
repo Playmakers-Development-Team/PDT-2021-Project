@@ -7,76 +7,65 @@ namespace Abilities.Parsing
 {
     internal class AbilityParser
     {
-        private readonly IAbilityUser user;
+        private readonly AbilityContextHandler abilityContextHandler;
+        private readonly IVirtualAbilityUser user;
         private readonly ICollection<Effect> targetEffects;
         private readonly ICollection<Effect> userEffects;
-        private readonly ICollection<IAbilityUser> targets;
+        private readonly ICollection<IVirtualAbilityUser> targets;
+
+        public IVirtualAbilityUser User => user;
+        public ICollection<IVirtualAbilityUser> Targets => targets;
         
+        private static readonly EffectOrder[] order =
+        {
+            EffectOrder.Early,
+            EffectOrder.Regular,
+            EffectOrder.Late
+        };
+
         public AbilityParser(IAbilityUser user, ICollection<Effect> effects, IEnumerable<IAbilityUser> targets)
         {
-            this.user = user;
+            this.user = user.CreateVirtualAbilityUser();
             this.targetEffects = effects
                 .Where(e => e.affectTargets)
                 .ToList();
             this.userEffects = effects
                 .Where(e => e.affectUser)
                 .ToList();
-            this.targets = targets.ToList();
+            this.targets = targets
+                .Select(t => t.CreateVirtualAbilityUser())
+                .ToList();
+            this.abilityContextHandler = new AbilityContextHandler(this.user, this.targets.Append(this.user));
         }
 
-        public void ProcessAll()
+        public void ParseAll()
         {
-            foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
-                ProcessOrder(effectOrder);
+            foreach (EffectOrder effectOrder in order)
+                ParseOrder(effectOrder);
         }
 
         public void UndoAll()
         {
-            foreach (EffectOrder effectOrder in Enum.GetValues(typeof(EffectOrder)))
+            foreach (EffectOrder effectOrder in order)
                 UndoOrder(effectOrder);
         }
-        
-        private void ProcessOrder(EffectOrder effectOrder)
-        {
-            EffectParser userEffectsParser = new EffectParser(user, effectOrder, userEffects);
-            EffectParser targetEffectsParser = new EffectParser(user, effectOrder, targetEffects);
 
-            foreach (IAbilityUser target in targets)
+        public void ApplyChanges() => abilityContextHandler.ApplyChanges();
+
+        private void ParseOrder(EffectOrder effectOrder)
+        {
+            EffectParser userEffectsParser = new EffectParser(abilityContextHandler, effectOrder, userEffects);
+            EffectParser targetEffectsParser = new EffectParser(abilityContextHandler, effectOrder, targetEffects);
+
+            foreach (IVirtualAbilityUser target in targets)
             {
                 if (target != user)
-                    targetEffectsParser.Process(target);
+                    targetEffectsParser.Parse(target);
             }
             
-            userEffectsParser.Process(user);
-            ApplyUserCosts();
-        }
-        
-        /// <summary>
-        /// Apply all the costs from the effect affecting the user. This function needs to be applied
-        /// after effects are applied.
-        /// The same Keywords will then not be applied more than once.
-        /// </summary>
-        public void ApplyUserCosts()
-        {
-            HashSet<Keyword> visitedKeywords = new HashSet<Keyword>();
-            
-            foreach (Effect effect in userEffects)
-            {
-                if (effect.CanBeUsedByUser(user))
-                {
-                    effect.ApplyEffectCosts(user, false);
-
-                    foreach (Keyword keyword in effect.Keywords)
-                    {
-                        // The same keyword cost anywhere affecting the user will not be applied more than once.
-                        if (!visitedKeywords.Contains(keyword))
-                        {
-                            visitedKeywords.Add(keyword);
-                            keyword.Effect.ApplyCombinedCosts(user, false);
-                        }
-                    }
-                }
-            }
+            userEffectsParser.Parse(user);
+            userEffectsParser.ApplyUserCosts();
+            targetEffectsParser.ApplyUserCosts();
         }
 
         private void UndoOrder(EffectOrder effectOrder)

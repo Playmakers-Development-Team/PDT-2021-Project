@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Abilities.Parsing;
 using TenetStatuses;
 using UnityEngine;
 using Utilities;
@@ -34,7 +35,7 @@ namespace Abilities.Costs
             }
         }
 
-        public void ApplyCost(IAbilityUser unit)
+        public void ApplyCost(IAbilityContext context, IAbilityUser unit)
         {
             switch (TenetCostType)
             {
@@ -47,7 +48,7 @@ namespace Abilities.Costs
             }
         }
         
-        public bool MeetsRequirements(IAbilityUser user) => 
+        public bool MeetsRequirements(IAbilityContext context, IAbilityUser user) => 
             tenetConstraint.Satisfies(user, tenetType) && user.GetTenetStatusCount(tenetType) >= count;
 
         public void OnBeforeSerialize()

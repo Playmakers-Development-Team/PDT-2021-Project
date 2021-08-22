@@ -1,14 +1,14 @@
-﻿using TenetStatuses;
-using TMPro;
+﻿using TMPro;
 using UI.Core;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Stats
 {
     public class TenetStatCard : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private TextMeshProUGUI labelText;
         [SerializeField] private TextMeshProUGUI valueText;
+        [SerializeField] private Image tenetImage;
         
         
         #region UIComponent
@@ -22,21 +22,20 @@ namespace UI.Game.UnitPanels.Stats
         
         #region Drawing
         
-        public void Apply(TenetType tenet, int value)
+        internal void Apply(Sprite icon, int value)
         {
-            string label = tenet switch
-            {
-                TenetType.Pride => "PR",
-                TenetType.Humility => "H",
-                TenetType.Passion => "PS",
-                TenetType.Apathy => "A",
-                TenetType.Joy => "J",
-                TenetType.Sorrow => "S",
-                _ => "ERR"
-            };
-
-            labelText.text = label;
             valueText.text = value.ToString();
+            tenetImage.sprite = icon;
+        }
+
+        internal void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        internal void Hide()
+        {
+            gameObject.SetActive(false);
         }
         
         #endregion

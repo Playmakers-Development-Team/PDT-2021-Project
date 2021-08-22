@@ -58,7 +58,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelBounds: {x: 7, y: 7}
-  gridOffset: {x: 0, y: 0}
   levelTilemap: {fileID: 5511968119123735622}
 --- !u!1 &5511968119123735643
 GameObject:
@@ -73,7 +72,7 @@ GameObject:
   - component: {fileID: 5511968119123735641}
   m_Layer: 0
   m_Name: LevelTilemap
-  m_TagString: Untagged
+  m_TagString: LevelTilemap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

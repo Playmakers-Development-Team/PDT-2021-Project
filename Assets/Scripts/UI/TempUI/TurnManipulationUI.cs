@@ -15,7 +15,7 @@ namespace UI.TempUI
 
         private TurnManager turnManager;
         private CommandManager commandManager;
-
+        private bool canPressManipulate = true;
         private List<GameObject> allButtons = new List<GameObject>();
 
         private void Awake()
@@ -34,15 +34,25 @@ namespace UI.TempUI
 
         private void DestroyButtons()
         {
+            canPressManipulate = true;
+            
             foreach (var button in allButtons)
                 Destroy(button);
         }
 
-        // BUG: Not working
         public void ManipulateBefore()
         {
-            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
+                turnManager.Insight.Value <= 0)
                 return;
+            
+            if (!canPressManipulate)
+            {
+                Debug.LogWarning("You are already manipulating turns!");
+                return;
+            }
+
+            canPressManipulate = false;
             
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
@@ -62,6 +72,14 @@ namespace UI.TempUI
         {
             if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
                 return;
+            
+            if (!canPressManipulate)
+            {
+                Debug.LogWarning("You are already manipulating turns!");
+                return;
+            }
+
+            canPressManipulate = false;
             
             for (int i = 0; i < turnManager.CurrentTurnQueue.Count; i++)
             {
