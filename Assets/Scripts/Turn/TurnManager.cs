@@ -282,16 +282,19 @@ namespace Turn
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
 
-            // BUG: Removing the first unit on its turn will skip the second unit's turn.
-            if (targetIndex <= CurrentTurnIndex && PreviousActingUnit != null)
-                CurrentTurnIndex--;
-
             currentTurnQueue.RemoveAt(targetIndex);
             UpdateNextTurnQueue();
 
-            // If the ActingUnit was removed, start the next unit's turn
-            if (targetIndex == CurrentTurnIndex)
+            if (targetIndex < CurrentTurnIndex)
+                CurrentTurnIndex--;
+            else if (targetIndex == CurrentTurnIndex)
+            {
+                // If the ActingUnit was removed, start the next unit's turn
+                // Note that this will temporarily make targetIndex = -1
+                CurrentTurnIndex--;
+                
                 NextTurn();
+            }
         }
 
         #endregion
