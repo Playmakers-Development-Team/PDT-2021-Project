@@ -3,6 +3,7 @@ using System.Collections;
 using E7.Minefield;
 using Managers;
 using NUnit.Framework;
+using Tests.Beacons;
 using Tests.Beacons.Base;
 using Tests.Constraints;
 using Turn;
@@ -27,7 +28,7 @@ namespace Tests.Utilities
         {
             yield return TurnTester.WaitUnitTurn(unitBeacon);
             TestContext.WriteLine($"Test - Moving {unitBeacon} to target {targetBeacon}");
-            yield return inputBeacon.ClickLeft(unitBeacon);
+            yield return inputBeacon.ClickLeft(UIBeacons.Move);
             // Wait for a while here so tester can see the move visualisation if need be
             yield return new WaitForSecondsRealtime(0.1f);
             yield return inputBeacon.ClickLeft(targetBeacon);

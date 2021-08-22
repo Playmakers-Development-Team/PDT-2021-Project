@@ -1,10 +1,11 @@
-﻿using Grid;
+﻿using Abilities.Commands;
+using Commands;
+using Grid;
 using Managers;
 using Turn;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Utilities;
 
 namespace UI.Game
 {
@@ -12,6 +13,7 @@ namespace UI.Game
     {
         private GridManager gridManager;
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
 
         #region MonoBehaviour
@@ -19,7 +21,13 @@ namespace UI.Game
         private void Update()
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
-                dialogue.abilityConfirmed.Invoke();
+            {
+                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null)
+                    return;
+
+                commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit,
+                    dialogue.AbilityDirection, dialogue.SelectedAbility));
+            }
 
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 dialogue.unitDeselected.Invoke();
@@ -52,6 +60,7 @@ namespace UI.Game
         {
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
         
         #endregion

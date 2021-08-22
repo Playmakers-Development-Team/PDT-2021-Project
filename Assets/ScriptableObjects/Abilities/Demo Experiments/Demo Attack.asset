@@ -18,7 +18,7 @@ MonoBehaviour:
   excludeUserFromTargets: 1
   speed: 0
   effects:
-  - name: Default, 3 Damage
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -34,7 +34,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack IF User With 1 Apathy
+  - name: "User \u27A4 3 Attack IF User With 1 Apathy"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
