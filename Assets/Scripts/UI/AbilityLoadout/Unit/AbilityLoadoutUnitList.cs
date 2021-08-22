@@ -3,7 +3,7 @@ using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout
+namespace UI.AbilityLoadout.Unit
 {
     public class AbilityLoadoutUnitList : DialogueComponent<AbilityLoadoutDialogue>
     {
