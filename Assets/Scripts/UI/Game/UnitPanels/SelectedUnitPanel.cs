@@ -17,6 +17,7 @@ namespace UI.Game.UnitPanels
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.unitSelected.AddListener(OnUnitSelected);
             dialogue.unitDeselected.AddListener(OnUnitDeselected);
+            dialogue.modeChanged.AddListener(OnModeChanged);
         }
 
         protected override void Unsubscribe()
@@ -24,6 +25,7 @@ namespace UI.Game.UnitPanels
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.unitSelected.RemoveListener(OnUnitSelected);
             dialogue.unitDeselected.RemoveListener(OnUnitDeselected);
+            dialogue.modeChanged.RemoveListener(OnModeChanged);
         }
 
         protected override void OnComponentAwake()
@@ -55,6 +57,14 @@ namespace UI.Game.UnitPanels
         private void OnUnitDeselected()
         {
             unitInfo = null;
+            Hide();
+        }
+
+        private void OnModeChanged(GameDialogue.Mode mode)
+        {
+            if (mode == GameDialogue.Mode.Default)
+                return;
+
             Hide();
         }
 
