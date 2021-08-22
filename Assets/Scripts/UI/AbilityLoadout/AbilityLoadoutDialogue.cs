@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Abilities;
 using Commands;
 using Game.Commands;
 using Managers;
-using Turn.Commands;
 using UI.Core;
 using Units;
 using Units.Players;
@@ -16,6 +16,7 @@ namespace UI.AbilityLoadout
     public class AbilityLoadoutDialogue : Dialogue
     {
         internal readonly Event<AbilityLoadoutPanelType> panelSwap = new Event<AbilityLoadoutPanelType>();
+        internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event encounterWon = new Event();
         
         private CommandManager commandManager;
@@ -40,19 +41,25 @@ namespace UI.AbilityLoadout
             {
                 OnSwitchPanel(currentPanel);
             });
+            
+            unitSpawned.AddListener(info =>
+            {
+                if (playerManager.Units.Contains(info.Unit))
+                    units.Add(info);
+            });
 
             encounterWon.AddListener(() =>
             {
                 Debug.Log("DRAFT AT END: APPEAR HERE");
             });
-            
-            // Open the starting panel
-            panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
         }
 
         private void OnEnable()
         {
             commandManager.ListenCommand((Action<EncounterWonCommand>) OnEncounterWon);
+            
+            // Open the starting panel
+            panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
         }
 
         private void OnDisable()
@@ -76,8 +83,7 @@ namespace UI.AbilityLoadout
         {
             unitSelectPanel.enabled = true;
             abilitySelectPanel.enabled = false;
-
-            OnAssignUnits(playerManager.Units);
+            
             abilityLoadoutUnitList.Redraw(units);
         }
         
@@ -87,16 +93,6 @@ namespace UI.AbilityLoadout
             abilitySelectPanel.enabled = true;
         }
 
-        private void OnAssignUnits(IReadOnlyList<IUnit> playerUnits)
-        {
-            units.Clear();
-
-            foreach (var playerUnit in playerUnits)
-            {
-                units.Add(GetInfo(playerUnit));
-            }
-        }
-        
         #endregion
         
         #region Command Listeners

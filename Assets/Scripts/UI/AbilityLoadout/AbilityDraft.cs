@@ -17,7 +17,7 @@ namespace UI.AbilityLoadout
         
         protected override void OnComponentStart()
         {
-            Instantiate(AbilityLoadoutDialogue);
+            Instantiate(AbilityLoadoutDialogue, transform.parent);
         }
 
         protected override void Subscribe() {}
