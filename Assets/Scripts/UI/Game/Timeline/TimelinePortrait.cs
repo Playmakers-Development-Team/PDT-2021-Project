@@ -7,9 +7,11 @@ namespace UI.Game.Timeline
 {
     public class TimelinePortrait : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private Image image;
+        [SerializeField] private RawImage image;
 
         private GameDialogue.UnitInfo unitInfo;
+        
+        
         public GameDialogue.UnitInfo UnitInfo => unitInfo;
         
         
@@ -34,12 +36,13 @@ namespace UI.Game.Timeline
         
         #region Drawing
         
-        internal void Assign(IUnit unit)
+        internal void Assign(GameDialogue.UnitInfo unit)
         {
-            unitInfo = dialogue.GetInfo(unit);
+            unitInfo = unit;
             
-            image.sprite = unitInfo.Render;
-            image.color = unitInfo.Color;
+            image.texture = unitInfo.TimelineCropInfo.Image;
+            image.color = unitInfo.TimelineCropInfo.Colour;
+            image.uvRect = unitInfo.TimelineCropInfo.UVRect;
         }
 
         internal void Destroy()
