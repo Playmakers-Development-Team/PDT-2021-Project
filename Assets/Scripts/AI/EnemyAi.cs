@@ -27,10 +27,12 @@ namespace AI
             commandManager = ManagerLocator.Get<CommandManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
-            
-            commandManager.ListenCommand<StartTurnCommand>(StartTurn);
         }
-        
+
+        private void OnEnable() => commandManager.ListenCommand<StartTurnCommand>(StartTurn);
+
+        private void OnDisable() => commandManager.UnlistenCommand<StartTurnCommand>(StartTurn);
+
         public void StartTurn(StartTurnCommand startTurnCommand)
         {
             if(ReferenceEquals(startTurnCommand.Unit, enemyUnit))

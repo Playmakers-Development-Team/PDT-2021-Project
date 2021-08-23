@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f9a095da9a42e99f6906027b30c9c3, type: 3}
   m_Name: Set 1
   m_EditorClassIdentifier: 
-  <EncounterPrefab>k__BackingField: {fileID: 9127055961915890759, guid: ccd62c48615598f42ab2a1b3c1fc8bc5, type: 3}
+  encounterScene:
+    sceneAsset: {fileID: 102900000, guid: 011cd13583cb8b998a5dd741eb0f94cb, type: 3}
+    scenePath: Assets/Scenes/Developer/AllKeywordsTest.unity
