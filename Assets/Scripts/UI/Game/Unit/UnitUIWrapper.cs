@@ -35,7 +35,10 @@ namespace UI.Game.Unit
 
         protected override void Subscribe() {}
 
-        protected override void Unsubscribe() {}
+        protected override void Unsubscribe()
+        {
+            commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
+        }
         
         #endregion
         
@@ -45,6 +48,10 @@ namespace UI.Game.Unit
         private void OnGridReady(GridReadyCommand cmd)
         {
             info.SetUnit(unit);
+            
+            if (dialogue == null)
+                return;
+            
             dialogue.unitSpawned.Invoke(info);
         }
         

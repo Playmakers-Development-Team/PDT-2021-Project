@@ -4,12 +4,8 @@ namespace UI
 {
     public class Loader : MonoBehaviour
     {
-        [SerializeField] private GameObject[] dialogues;
+        [SerializeField] private GameObject dialogue;
 
-        private void Awake()
-        {
-            foreach (GameObject dialogue in dialogues)
-                Instantiate(dialogue, transform);
-        }
+        private void Awake() => Instantiate(dialogue, transform);
     }
 }
