@@ -51,7 +51,9 @@ namespace Commands.Editor
                 var commandTypes = assembly.GetTypes()
                     .Where(t => t.IsSubclassOf(typeof(Command)))
                     .ToList();
-                
+
+                commandTypes.Sort((x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal));
+
                 if (commandTypes.Count > 0)
                 {
                     assemblyCommandTypes.Add(assembly, commandTypes);
