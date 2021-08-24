@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Independent
   isVisibleInGame: 1
-  description: Have an effect when there are no allies in a 1 tile range
+  description: Have an effect when there are no allies in a 3x3 around the character
   effect:
     name: "Target \u27A4 Nothing IF User finds At Most 0 Same Team in 3x3 Surrounding
       Shape"

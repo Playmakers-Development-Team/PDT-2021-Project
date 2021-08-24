@@ -19,6 +19,8 @@ MonoBehaviour:
   effect:
     name: Nothing IF User Consume Newest from any 2 of Pride, Humility, Passion,
       Joy, Sorrow
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -33,7 +35,6 @@ MonoBehaviour:
     costs:
     - name: User Consume Newest from any 2 of Pride, Humility, Passion, Joy, Sorrow
       affectType: 0
-      forceUserCost: 0
       costType: 3
       tenetCost:
         tenetCostType: 0
@@ -53,7 +54,6 @@ MonoBehaviour:
         cost:
           name: 
           affectType: 0
-          forceUserCost: 0
           costType: 0
           tenetCost:
             tenetCostType: 0

@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Speed:3] Deal 4 damage. Give and gain 1 Joy
 
-    User or target
-    take 4 damage with Repression 2'
+    Repression 2 on
+    User or Target - Take 3 damage'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 3
+  representedTenet: 0
   effects:
-  - name: Default, 4 Damage and Provide 1 Joy
+  - name: "Target \u27A4 Default, 4 Damage and Provide 1 Joy"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -36,11 +37,11 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 4 Damage WITH Repression2
+  - name: "Target \u27A4 3 Damage WITH Repression2"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 4
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -53,7 +54,7 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 99f17f0cc551fa84e9fed29be26701b5, type: 2}
-  - name: Default, Provide 1 Joy
+  - name: "User \u27A4 Default, Provide 1 Joy"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
@@ -69,11 +70,11 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 4 Damage WITH Repression2
+  - name: "User \u27A4 3 Damage WITH Repression2"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 4
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
