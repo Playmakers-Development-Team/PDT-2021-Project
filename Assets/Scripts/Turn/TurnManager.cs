@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Managers;
 using Turn.Commands;
@@ -242,8 +243,9 @@ namespace Turn
                 randomizedSpeed = false;
                 
                 // REMEMBER: To make a copy, so that turn manipulation does not change it
+                // Also, make sure to filter out units that are already killed
                 if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
-                    return new List<IUnit>(preMadeTurnQueue);
+                    return new List<IUnit>(preMadeTurnQueue.Where(u => u != null && u.gameObject.activeInHierarchy));
                 
                 Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
                                  $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
@@ -312,7 +314,7 @@ namespace Turn
             UpdateNextTurnQueue();
 
             // If the ActingUnit was removed, start the next unit's turn
-            if (targetIndex - 1 == CurrentTurnIndex)
+            if (targetIndex == CurrentTurnIndex)
                 NextTurn();
         }
 
@@ -622,7 +624,7 @@ namespace Turn
                 commandManager.ExecuteCommand(new EndTurnCommand(ActingUnit));
         }
 
-        private void EndAbilityPhase()
+        private async void EndAbilityPhase()
         {
             if (IsAbilityPhase())
                 PhaseIndex = AbilityPhaseIndex + 1;
@@ -630,7 +632,11 @@ namespace Turn
                 Debug.LogWarning("Ability was done out of phase.");
 
             if (LastPhaseHasEnded())
+            {
+                // We might want to wait for player death to finish before moving on
+                await UniTask.WaitWhile(() => ManagerLocator.Get<PlayerManager>().WaitForDeath);
                 commandManager.ExecuteCommand(new EndTurnCommand(ActingUnit));
+            }
         }
 
         private void EndTurnManipulationPhase()
