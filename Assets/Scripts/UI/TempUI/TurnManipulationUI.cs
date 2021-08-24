@@ -42,8 +42,7 @@ namespace UI.TempUI
 
         public void ManipulateBefore()
         {
-            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit) ||
-                turnManager.Insight.Value <= 0)
+            if (!turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit))
                 return;
             
             if (!canPressManipulate)

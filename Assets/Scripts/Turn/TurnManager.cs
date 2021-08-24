@@ -186,6 +186,8 @@ namespace Turn
         private void NextRound()
         {
             RoundCount++;
+            // Gain 1 Insight
+            Insight.Value++;
             commandManager.ExecuteCommand(new PrepareRoundCommand());
 
             previousTurnQueue = new List<IUnit>(currentTurnQueue);
@@ -236,8 +238,12 @@ namespace Turn
         {
             if (!randomizedSpeed)
             {
+                // only randomize the first time
+                randomizedSpeed = false;
+                
+                // REMEMBER: To make a copy, so that turn manipulation does not change it
                 if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
-                    return preMadeTurnQueue;
+                    return new List<IUnit>(preMadeTurnQueue);
                 
                 Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
                                  $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
@@ -249,6 +255,22 @@ namespace Turn
             
             // Sort units by speed in descending order
             turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
+
+            IUnit firstUnit = turnQueue.FirstOrDefault();
+            
+            // Player always start first
+            if (firstUnit is PlayerUnit)
+            {
+                IUnit earliestPlayerUnit = turnQueue.FirstOrDefault(u => u is PlayerUnit);
+
+                // Does a player exist in turn queue?
+                if (earliestPlayerUnit != null)
+                {
+                    turnQueue.Remove(earliestPlayerUnit);
+                    turnQueue.Insert(0, earliestPlayerUnit);
+                }
+            }
+
             return turnQueue;
         }
 
@@ -321,6 +343,9 @@ namespace Turn
         
         public void Meditate()
         {
+            // For now, remove meditate functionality for play testing
+            return;
+            
             if (!UnitCanMeditate(ActingUnit))
             {
                 Debug.LogWarning($"{ActingUnit} cannot meditate.");
@@ -392,7 +417,7 @@ namespace Turn
                 currentIndex += increment;
             }
 
-            Insight.Value--;
+            Insight.Value -= 2;
             currentTurnQueue[startIndex] = tempUnit;
             commandManager.ExecuteCommand(new TurnQueueUpdatedCommand());
             commandManager.ExecuteCommand(new TurnManipulatedCommand(currentTurnQueue[startIndex],
@@ -476,7 +501,7 @@ namespace Turn
                 return false;
             }
 
-            if (Insight.Value <= 0)
+            if (Insight.Value < 2)
             {
                 Debug.LogWarning($"Not enough insight.");
                 return false;
