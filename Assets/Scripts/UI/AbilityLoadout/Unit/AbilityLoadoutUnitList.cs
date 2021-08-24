@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +30,17 @@ namespace UI.AbilityLoadout.Unit
         
         internal void Redraw(List<AbilityLoadoutDialogue.UnitInfo> units)
         {
-            // Instantiate new UnitCards
+            // STEP 1. Destroy UnitCards in cards that no longer exist.
+            for (int i = cards.Count - 1; i >= 0; i--)
+            {
+                if (units.Contains(cards[i].unitInfo))
+                {
+                    Destroy(cards[i].gameObject);
+                    cards.RemoveAt(i);
+                }
+            }
+
+            // STEP 2. Instantiate new UnitCards for new units.
             foreach (AbilityLoadoutDialogue.UnitInfo unit in units)
             {
                 UnitCard newCard = Instantiate(unitCardPrefab, scrollView.content).GetComponent<UnitCard>();

@@ -19,8 +19,10 @@ namespace UI.AbilityLoadout
         internal readonly Event<AbilityLoadoutPanelType> panelSwap = new Event<AbilityLoadoutPanelType>();
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event noEnemiesRemaining = new Event();
+        internal readonly Event abilitySwap = new Event();
         
         private CommandManager commandManager;
+        private UIManager uiManager;
 
         [SerializeField] private Canvas unitSelectPanel;
         [SerializeField] private Canvas abilitySelectPanel;
@@ -34,6 +36,7 @@ namespace UI.AbilityLoadout
         {
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
+            uiManager = ManagerLocator.Get<UIManager>();
             
             // Hide Panels
             unitSelectPanel.enabled = false;
@@ -53,6 +56,8 @@ namespace UI.AbilityLoadout
 
             noEnemiesRemaining.AddListener(() =>
             {
+                uiManager.Add(this);
+                
                 // TODO: Change to appear after the player selects this option
                 panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
             });
@@ -101,6 +106,12 @@ namespace UI.AbilityLoadout
         private void OnNoEnemiesRemaining(NoRemainingEnemyUnitsCommand cmd)
         {
             noEnemiesRemaining.Invoke();
+        }
+        
+        //TODO: Add in ability swap command
+        private void OnAbilitySwap()
+        {
+            abilitySwap.Invoke();
         }
         
         #endregion
