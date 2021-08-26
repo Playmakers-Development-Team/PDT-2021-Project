@@ -11,7 +11,6 @@ namespace UI.AbilityLoadout.Unit
         protected internal AbilityLoadoutDialogue.UnitInfo unitInfo;
         
         [SerializeField] protected RawImage renderImage;
-        [SerializeField] protected List<Image> abilityRender = new List<Image>();
 
         #region UIComponent
         
@@ -40,13 +39,10 @@ namespace UI.AbilityLoadout.Unit
             if (unitInfo == null)
                 return;
             
+            // Render image
             renderImage.texture = unitInfo.ProfileCropInfo.Image;
-            
-            // Assign ability images
-            for (int i = 0; i < unitInfo.AbilityInfo.Count; ++i)
-            {
-                abilityRender[i].sprite = unitInfo.AbilityInfo[i].Render;
-            }
+            renderImage.color = unitInfo.ProfileCropInfo.Colour;
+            renderImage.uvRect = unitInfo.ProfileCropInfo.UVRect;
         }
 
         #endregion

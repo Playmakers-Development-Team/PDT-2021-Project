@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,19 +8,32 @@ namespace UI.AbilityLoadout.Unit
     public class AbilityLoadoutUnitList : DialogueComponent<AbilityLoadoutDialogue>
     {
         [SerializeField] private GameObject unitCardPrefab;
-        [SerializeField] private List<UnitCard> cards;
+        [SerializeField] private GameObject unitAbilityCardPrefab;
+        
+        [SerializeField] private List<UnitCard> unitCards;
+        [SerializeField] private List<UnitAbilitiesCard> abilitiesCards;
 
-        private ScrollRect scrollView;
+        [SerializeField] private ScrollRect unitScrollView;
+        [SerializeField] private ScrollRect abilityScrollView;
 
         #region UIComponent
         
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
-        
+
         protected override void OnComponentAwake()
         {
-            TryGetComponent(out scrollView);
+            unitScrollView.onValueChanged.AddListener(UpdateAbilityScroll);
+        }
+
+        #endregion
+
+        #region Scroll Linking
+
+        private void UpdateAbilityScroll(Vector2 arg0)
+        {
+            abilityScrollView.horizontalNormalizedPosition = unitScrollView.horizontalNormalizedPosition;
         }
 
         #endregion
@@ -30,23 +42,31 @@ namespace UI.AbilityLoadout.Unit
         
         internal void Redraw(List<AbilityLoadoutDialogue.UnitInfo> units)
         {
-            // STEP 1. Destroy UnitCards in cards that no longer exist.
-            for (int i = cards.Count - 1; i >= 0; i--)
+            // STEP 1. Destroy UnitCards and UnitAbilityCards that no longer exist.
+            for (int i = unitCards.Count - 1; i >= 0; i--)
             {
-                if (units.Contains(cards[i].unitInfo))
+                if (units.Contains(unitCards[i].unitInfo))
                 {
-                    Destroy(cards[i].gameObject);
-                    cards.RemoveAt(i);
+                    Destroy(unitCards[i].gameObject);
+                    Destroy(abilitiesCards[i].gameObject);
+                    
+                    unitCards.RemoveAt(i);
+                    abilitiesCards.RemoveAt(i);
                 }
             }
 
-            // STEP 2. Instantiate new UnitCards for new units.
+            // STEP 2. Instantiate new UnitCards and UnitAbilityCards for new units.
             foreach (AbilityLoadoutDialogue.UnitInfo unit in units)
             {
-                UnitCard newCard = Instantiate(unitCardPrefab, scrollView.content).GetComponent<UnitCard>();
+                UnitCard newCard = Instantiate(unitCardPrefab, unitScrollView.content).GetComponent<UnitCard>();
                 newCard.Redraw(unit);
 
-                cards.Add(newCard);
+                unitCards.Add(newCard);
+                
+                UnitAbilitiesCard abilityCard = Instantiate(unitAbilityCardPrefab, abilityScrollView.content).GetComponent<UnitAbilitiesCard>();
+                abilityCard.Redraw(unit.AbilityInfo);
+
+                abilitiesCards.Add(abilityCard);
             }
         }
         
