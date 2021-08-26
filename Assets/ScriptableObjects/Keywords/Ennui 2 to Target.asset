@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Removes the entire stack of the last tenet applied excluding Apathy.
     Additional effects activate if at least a certain amount of tenets were removed.
   effect:
-    name: "Target \u27A4 Nothing IF Target Consume Newest from any 2 of Pride, Humility,
+    name: "Target \u27A4 Nothing IF User Consume Newest from any 2 of Pride, Humility,
       Passion, Joy, Sorrow"
     affectTargets: 1
     affectUser: 0
@@ -37,16 +37,19 @@ MonoBehaviour:
       affectType: 1
       costType: 3
       tenetCost:
+        forceApplyCost: 0
         tenetCostType: 0
         count: 1
         tenetType: 0
         tenetConstraint: 0
       tenetGroupCost:
+        forceApplyCost: 1
         tenetTarget: 3
         tenetCostType: 1
         count: 2
         tenetFilter: 55
       shapeCost:
+        forceApplyCost: 0
         shape: {fileID: 0}
         countConstraint: 0
         count: 0
@@ -56,11 +59,13 @@ MonoBehaviour:
           affectType: 0
           costType: 0
           tenetCost:
+            forceApplyCost: 0
             tenetCostType: 0
             count: 1
             tenetType: 0
             tenetConstraint: 0
           tenetGroupCost:
+            forceApplyCost: 0
             tenetTarget: 0
             tenetCostType: 0
             count: 1
