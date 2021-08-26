@@ -696,7 +696,8 @@ namespace Turn
             unitsTurnManipulatedThisRound.Clear();
             unitsMeditatedThisRound.Clear();
             unitsMeditatedLastRound.Clear();
-            Insight.Value = 0;
+            // TODO: Repeated code. See SetupTurnQueue.
+            Insight = new Stat(null, 0, StatTypes.Insight);
             CurrentTurnIndex = 0;
             TotalTurnCount = 0;
             RoundCount = 0;
