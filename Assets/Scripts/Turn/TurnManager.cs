@@ -4,7 +4,6 @@ using System.Linq;
 using Abilities.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
-using Grid.GridObjects;
 using Managers;
 using Turn.Commands;
 using Units;
@@ -687,5 +686,24 @@ namespace Turn
         }
 
         #endregion
+
+        public void Reset()
+        {
+            preMadeTurnQueue.Clear();
+            previousTurnQueue.Clear();
+            currentTurnQueue.Clear();
+            nextTurnQueue.Clear();
+            unitsTurnManipulatedThisRound.Clear();
+            unitsMeditatedThisRound.Clear();
+            unitsMeditatedLastRound.Clear();
+            Insight.Value = 0;
+            CurrentTurnIndex = 0;
+            TotalTurnCount = 0;
+            RoundCount = 0;
+            TurnManipulationPhaseIndex = 0;
+            MovementPhaseIndex = 0;
+            AbilityPhaseIndex = 0;
+            PhaseIndex = 0;
+        }
     }
 }
