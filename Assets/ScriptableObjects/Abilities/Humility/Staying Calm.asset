@@ -17,7 +17,7 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  representedTenet: 0
+  representedTenet: 1
   effects:
   - name: Default, 1 Defence
     affectTargets: 1
@@ -54,16 +54,19 @@ MonoBehaviour:
       affectType: 1
       costType: 1
       tenetCost:
+        forceApplyCost: 0
         tenetCostType: 2
         count: 1
         tenetType: 1
         tenetConstraint: 0
       tenetGroupCost:
+        forceApplyCost: 0
         tenetTarget: 0
         tenetCostType: 0
         count: 1
         tenetFilter: 0
       shapeCost:
+        forceApplyCost: 0
         shape: {fileID: 0}
         countConstraint: 0
         count: 0
@@ -73,11 +76,13 @@ MonoBehaviour:
           affectType: 0
           costType: 0
           tenetCost:
+            forceApplyCost: 0
             tenetCostType: 0
             count: 1
             tenetType: 0
             tenetConstraint: 0
           tenetGroupCost:
+            forceApplyCost: 0
             tenetTarget: 0
             tenetCostType: 0
             count: 1
