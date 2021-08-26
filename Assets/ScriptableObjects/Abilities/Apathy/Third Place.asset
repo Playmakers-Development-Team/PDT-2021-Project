@@ -12,17 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Third Place
   m_EditorClassIdentifier: 
-  description: '[Speed:3]
-
-    Applies 3 defense to surrounding targets.
-
-    Spend
-    1 Apathy - Grant targets 3 attack. '
+  description: "[Extremely Fast Ability]\nApplies 3 defense to surrounding targets.\n>Spend
+    1 Apathy - Grant targets 3 attack. \nENNUI 3 - Grant 3 Defence."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 3
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, 3 Defence
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -37,6 +36,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Attack IF User Spend 1 Apathy
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -82,4 +83,21 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  - name: "Target \u27A4 3 Defence WITH Ennui 3 to Target"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 3
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 9093bcbc9e5c4606494772a9a7cbdbb8, type: 2}
   userEffects: []

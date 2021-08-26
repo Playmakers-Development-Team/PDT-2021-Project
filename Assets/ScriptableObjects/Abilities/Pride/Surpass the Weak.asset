@@ -12,20 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Surpass the Weak
   m_EditorClassIdentifier: 
-  description: '[Speed:-1]
+  description: '[Slow Ability]
 
-    Deal 2 damage.
+    Deal 2 damage and User gains 1 Pride.
 
-    User gains 1 Pride.
+    >If
+    Target has Humility, it takes 5 additional damage.
 
-    If Target
-    has Humility, it takes 5 additional damage.
-
-    If the user is Independent,
-    gain 3 attack before dealing damage.'
+'
   shape: {fileID: 0}
   excludeUserFromTargets: 1
   speed: -1
+  representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
@@ -91,21 +89,4 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: "User \u27A4 3 Attack WITH Independent"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 1
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 3
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
   userEffects: []

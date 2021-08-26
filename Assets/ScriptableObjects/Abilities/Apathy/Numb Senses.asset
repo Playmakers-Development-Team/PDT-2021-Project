@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Numb Senses
   m_EditorClassIdentifier: 
-  description: '[Speed: -2]
+  description: '[Very Slow Ability]
 
-    Applies 2 defence to target.
-
-    Apply 1 Apathy.
+    Applies 2 Defence and 1 Apathy to target.
 
 
     [ABILITY
@@ -24,8 +22,11 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: -2
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, Nothing BONUSED BY Target Pride
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0

@@ -12,17 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Group Hug
   m_EditorClassIdentifier: 
-  description: '[Speed:2]
+  description: '[Very Fast Ability]
 
     Grant all targets 2 Defence
 
-    With Humility, grant
-    all targets 3 Additional Defense'
+    >Grant
+    all targets 3 Additional Defense with Humility'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 2
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, 2 Defence
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -37,6 +40,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Defence IF User With 1 Humility
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
