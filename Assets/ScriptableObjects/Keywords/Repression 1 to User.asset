@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
-  m_Name: Ennui 3
+  m_Name: Repression 1 to User
   m_EditorClassIdentifier: 
-  displayName: Ennui
+  displayName: Repression
   isVisibleInGame: 1
-  description: Removes the entire stack of the last tenet applied excluding Apathy.
-    Additional effects activate if at least a certain amount of tenets were removed.
+  description: 'Give a negative effect when a certain number of Joy stacks is met
+
+'
   effect:
-    name: Nothing IF User Consume Newest from any 3 of Pride, Humility, Passion,
-      Joy, Sorrow
+    name: Nothing IF User Consume 1 Joy
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -33,19 +33,19 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Consume Newest from any 3 of Pride, Humility, Passion, Joy, Sorrow
+    - name: User Consume 1 Joy
       affectType: 0
-      costType: 3
+      costType: 1
       tenetCost:
-        tenetCostType: 0
+        tenetCostType: 1
         count: 1
-        tenetType: 0
+        tenetType: 4
         tenetConstraint: 0
       tenetGroupCost:
-        tenetTarget: 3
-        tenetCostType: 1
-        count: 3
-        tenetFilter: 55
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
       shapeCost:
         shape: {fileID: 0}
         countConstraint: 0

@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
-  m_Name: Catharsis 2
+  m_Name: Repression 2 to Target
   m_EditorClassIdentifier: 
-  displayName: Catharsis
+  displayName: Repression
   isVisibleInGame: 1
-  description: Give powerful buffs if a certain number of Sorrow stacks is met.
+  description: 'Give a negative effect when a certain number of Joy stacks is met
+
+'
   effect:
-    name: Nothing IF User Consume 2 Sorrow
+    name: "Target \u27A4 Nothing IF Target Consume 2 Joy"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -29,14 +33,13 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Consume 2 Sorrow
-      affectType: 0
-      forceUserCost: 0
+    - name: Target Consume 2 Joy
+      affectType: 1
       costType: 1
       tenetCost:
         tenetCostType: 1
         count: 2
-        tenetType: 5
+        tenetType: 4
         tenetConstraint: 0
       tenetGroupCost:
         tenetTarget: 0
@@ -51,7 +54,6 @@ MonoBehaviour:
         cost:
           name: 
           affectType: 0
-          forceUserCost: 0
           costType: 0
           tenetCost:
             tenetCostType: 0

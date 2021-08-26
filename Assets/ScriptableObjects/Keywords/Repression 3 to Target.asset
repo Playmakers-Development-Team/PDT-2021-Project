@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
-  m_Name: Repression 3
+  m_Name: Repression 3 to Target
   m_EditorClassIdentifier: 
   displayName: Repression
   isVisibleInGame: 1
@@ -18,7 +18,7 @@ MonoBehaviour:
 
 '
   effect:
-    name: Nothing IF User Consume 2 Joy
+    name: "Target \u27A4 Nothing IF Target Consume 3 Joy"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Consume 2 Joy
-      affectType: 0
+    - name: Target Consume 3 Joy
+      affectType: 1
       costType: 1
       tenetCost:
         tenetCostType: 1

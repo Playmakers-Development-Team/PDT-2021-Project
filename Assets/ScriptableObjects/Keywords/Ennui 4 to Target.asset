@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
-  m_Name: Ennui 1
+  m_Name: Ennui 4 to Target
   m_EditorClassIdentifier: 
   displayName: Ennui
   isVisibleInGame: 1
   description: Removes the entire stack of the last tenet applied excluding Apathy.
     Additional effects activate if at least a certain amount of tenets were removed.
   effect:
-    name: Nothing IF User Consume Newest from any 1 of Pride, Humility, Passion,
-      Joy, Sorrow
+    name: "Target \u27A4 Nothing IF Target Consume Newest from any 4 of Pride, Humility,
+      Passion, Joy, Sorrow"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -33,8 +33,8 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Consume Newest from any 1 of Pride, Humility, Passion, Joy, Sorrow
-      affectType: 0
+    - name: Target Consume Newest from any 4 of Pride, Humility, Passion, Joy, Sorrow
+      affectType: 1
       costType: 3
       tenetCost:
         tenetCostType: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
       tenetGroupCost:
         tenetTarget: 3
         tenetCostType: 1
-        count: 1
+        count: 4
         tenetFilter: 55
       shapeCost:
         shape: {fileID: 0}
