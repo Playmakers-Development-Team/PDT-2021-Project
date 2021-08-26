@@ -4,12 +4,14 @@ using Abilities;
 using Commands;
 using Game.Commands;
 using Managers;
+using TenetStatuses;
 using Turn.Commands;
 using UI.AbilityLoadout.Unit;
 using UI.Core;
 using Units;
 using Units.Players;
 using UnityEngine;
+using UnityEngine.UI;
 using Event = UI.Core.Event;
 
 namespace UI.AbilityLoadout
@@ -29,6 +31,7 @@ namespace UI.AbilityLoadout
         [SerializeField] protected AbilityLoadoutUnitList abilityLoadoutUnitList;
         
         private readonly List<UnitInfo> units = new List<UnitInfo>();
+        public List<Sprite> abilityImages = new List<Sprite>();
 
         #region Monobehaviour Events
 
@@ -133,24 +136,38 @@ namespace UI.AbilityLoadout
         #endregion
         
         #region Querying
-
-        internal UnitInfo GetInfo(IUnit unit)
+        
+        // TODO: Move into it's own thing later on
+        internal AbilityInfo GetInfo(Ability ability)
         {
-            if (units.Count == 0)
+            AbilityInfo abilityInfo = new AbilityInfo();
+            abilityInfo.Ability = ability;
+            
+            switch (ability.RepresentedTenet)
             {
-                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
-                                    $"{nameof(AbilityLoadoutDialogue)}.{nameof(units)} is empty.");
+                case TenetType.Apathy:
+                    abilityInfo.Render = abilityImages[0];
+                    break;
+                case TenetType.Humility:
+                    abilityInfo.Render = abilityImages[1];
+                    break;
+                case TenetType.Joy:
+                    abilityInfo.Render = abilityImages[2];
+                    break;
+                case TenetType.Passion:
+                    abilityInfo.Render = abilityImages[3];
+                    break;
+                case TenetType.Pride:
+                    abilityInfo.Render = abilityImages[4];
+                    break;
+                case TenetType.Sorrow:
+                    abilityInfo.Render = abilityImages[5];
+                    break;
+                default:
+                    throw new Exception($"Could not get {nameof(AbilityInfo)} for {ability}.");
             }
-
-            var unitInfo = units.Find(u => u.Unit == unit);
-                
-            if (unitInfo == null)
-            {
-                throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
-                                    $"{unit} is not in {nameof(AbilityLoadoutDialogue)}.{nameof(units)}.");
-            }
-
-            return unitInfo;
+            
+            return abilityInfo;
         }
 
         #endregion
@@ -161,12 +178,15 @@ namespace UI.AbilityLoadout
         public class UnitInfo
         {
             [SerializeField] private CropInfo profileCropInfo;
+            [SerializeField] private List<AbilityInfo> abilityInfo;
             
             internal CropInfo ProfileCropInfo => profileCropInfo;
 
             public IUnit Unit { get; private set; }
+            public List<AbilityInfo> AbilityInfo { get; private set; }
             
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;
+            internal void SetAbilityInfo(List<AbilityInfo> newAbilityInfo) => AbilityInfo = newAbilityInfo;
         }
         
         [Serializable]
@@ -174,9 +194,13 @@ namespace UI.AbilityLoadout
         {
             [SerializeField] private Sprite render;
             
-            internal Sprite Render => render;
+            internal Sprite Render
+            {
+                get => render;
+                set => render = value;
+            }
 
-            public Ability Ability { get; private set; }
+            public Ability Ability { get; internal set; }
             
             internal void SetAbility(Ability newUnit) => Ability = newUnit;
         }

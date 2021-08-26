@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Commands;
 using Grid.Commands;
 using Grid.GridObjects;
@@ -36,7 +37,17 @@ namespace UI.AbilityLoadout.Unit
         {
             if (!(unitGridObject is IUnit unit))
                 return;
+
+            // Assign abilities
+            List<AbilityLoadoutDialogue.AbilityInfo> abilityInfo = new List<AbilityLoadoutDialogue.AbilityInfo>();
+            for (int i = 0; i < unit.Abilities.Count; ++i)
+            {
+                abilityInfo.Add(dialogue.GetInfo(unit.Abilities[i]));
+            }
             
+            info.SetAbilityInfo(abilityInfo);
+
+            // Assign unit
             info.SetUnit(unit);
             dialogue.unitSpawned.Invoke(info);
         }
