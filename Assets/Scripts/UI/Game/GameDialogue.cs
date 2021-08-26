@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Abilities;
-using Abilities.Commands;
 using Commands;
 using Managers;
 using Turn;
 using Turn.Commands;
 using UI.Core;
+using UI.Game.UnitPanels.Abilities;
 using Units;
 using Units.Commands;
 using Units.Stats;
@@ -28,6 +28,8 @@ namespace UI.Game
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
+        internal readonly Event<AbilityCard> abilityHoverEnter = new Event<AbilityCard>();
+        internal readonly Event<AbilityCard> abilityHoverExit = new Event<AbilityCard>();
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
         internal readonly Event abilityConfirmed = new Event();
         
@@ -36,9 +38,12 @@ namespace UI.Game
         internal readonly Event<TurnInfo> turnManipulated = new Event<TurnInfo>();
 
 
-        internal readonly Event<UnitInfo> delayConfirmed = new Event<UnitInfo>();
+        internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
-        
+        internal readonly Event buttonSelected = new Event();
+
+        internal readonly Event<bool> moveButtonPressed = new Event<bool>();
+
         private CommandManager commandManager;
         private TurnManager turnManager;
         
@@ -50,8 +55,6 @@ namespace UI.Game
         internal Ability SelectedAbility { get; private set; }
         
         internal Vector2 AbilityDirection { get; private set; }
-
-        private bool IsAbilitySelected => SelectedAbility != null;
         
         
         #region MonoBehaviour Events
@@ -103,31 +106,17 @@ namespace UI.Game
             {
                 SelectedAbility = null;
             });
-            
+
             abilityRotated.AddListener(direction =>
             {
                 AbilityDirection = direction;
-            });
-            
-            abilityConfirmed.AddListener(() =>
-            {
-                if (turnManager.ActingPlayerUnit == null || !IsAbilitySelected)
-                    return;
-
-                commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit, AbilityDirection, SelectedAbility));
             });
             
             turnStarted.AddListener(info =>
             {
                 abilityDeselected.Invoke(SelectedAbility);
             });
-            
-            
-            delayConfirmed.AddListener(info =>
-            {
-                commandManager.ExecuteCommand(new EndTurnCommand(info.Unit));
-            });
-            
+
             moveConfirmed.AddListener(info =>
             {
                 commandManager.ExecuteCommand(new StartMoveCommand(info.UnitInfo.Unit, info.Destination));
@@ -164,9 +153,12 @@ namespace UI.Game
 
         private void OnStartTurn(StartTurnCommand cmd)
         {
+            if (cmd.Unit == null)
+                return;
+            
             UnitInfo info = GetInfo(cmd.Unit);
 
-            turnStarted.Invoke(new TurnInfo(info));
+            turnStarted.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
         }
 
         private void OnTurnManipulated(TurnManipulatedCommand cmd)
@@ -176,7 +168,7 @@ namespace UI.Game
             if (info == null)
                 throw new Exception("ActingUnit was not in GameDialogue.units.");
             
-            turnManipulated.Invoke(new TurnInfo(info));
+            turnManipulated.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
         }
 
         private void OnStartMove(StartMoveCommand cmd)
@@ -251,12 +243,12 @@ namespace UI.Game
         [Serializable]
         public class UnitInfo
         {
-            [SerializeField] private Sprite render;
-            [SerializeField] private Color color;
+            [SerializeField] private CropInfo profileCropInfo;
+            [SerializeField] private CropInfo timelineCropInfo;
 
             
-            internal Sprite Render => render;
-            internal Color Color => color;
+            internal CropInfo ProfileCropInfo => profileCropInfo;
+            internal CropInfo TimelineCropInfo => timelineCropInfo;
             
             public IUnit Unit { get; private set; }
 
@@ -267,11 +259,13 @@ namespace UI.Game
         internal readonly struct TurnInfo
         {
             internal UnitInfo CurrentUnit { get; }
+            internal bool IsPlayer { get; }
 
 
-            public TurnInfo(UnitInfo currentUnit)
+            public TurnInfo(UnitInfo currentUnit, bool isPlayer)
             {
                 CurrentUnit = currentUnit;
+                IsPlayer = isPlayer;
             }
         }
         

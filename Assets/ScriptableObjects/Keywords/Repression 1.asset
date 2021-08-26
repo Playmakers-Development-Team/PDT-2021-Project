@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Repression
   isVisibleInGame: 1
-  description: Give a negative effect when a certain number of Joy stacks is met.
-    Abilities with repression would have powerful effects that have repression act
-    as a recoil.
+  description: 'Give a negative effect when a certain number of Joy stacks is met
+
+'
   effect:
     name: Nothing IF User Consume 1 Joy
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -33,7 +35,6 @@ MonoBehaviour:
     costs:
     - name: User Consume 1 Joy
       affectType: 0
-      forceUserCost: 0
       costType: 1
       tenetCost:
         tenetCostType: 1
@@ -53,7 +54,6 @@ MonoBehaviour:
         cost:
           name: 
           affectType: 0
-          forceUserCost: 0
           costType: 0
           tenetCost:
             tenetCostType: 0
