@@ -36,6 +36,39 @@ namespace Editor
                     marginTop = 10
                 }
             });
+            
+            rootVisualElement.Add(new Button(OnFixMusicClicked)
+            {
+                text = "Fix Music",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+        }
+
+        private void OnFixMusicClicked()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            GameObject wiseGlobal = GameObject.Find("WwiseGlobal");
+
+            if (wiseGlobal != null)
+            {
+                foreach (AkEvent akEvent in wiseGlobal.GetComponents<AkEvent>())
+                    DestroyImmediate(akEvent);
+                
+                DestroyImmediate(wiseGlobal.GetComponent<AkBank>());
+                DestroyImmediate(wiseGlobal.GetComponent<AkGameObj>());
+            }
+
+            if (!GameObject.Find("Music"))
+            {
+                var musicPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Audio/Music.prefab");
+                PrefabUtility.InstantiatePrefab(musicPrefab);
+            }
         }
 
         private void OnFixSceneClicked()
