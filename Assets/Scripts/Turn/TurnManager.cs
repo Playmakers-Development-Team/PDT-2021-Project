@@ -94,6 +94,11 @@ namespace Turn
 
             commandManager.ListenCommand<EndTurnCommand>(cmd => NextTurn());
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => UpdateNextTurnQueue());
+            commandManager.ListenCommand<StatChangedCommand>(cmd =>
+            {
+                if (cmd.StatType == StatTypes.Speed)
+                    UpdateNextTurnQueue();
+            });
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
             commandManager.ListenCommand<EndMoveCommand>(cmd => {
                 // TODO: Will be the same for enemy units once they start using abilities
@@ -116,12 +121,36 @@ namespace Turn
         #region Turn Queue Manipulation
 
         /// <summary>
+        /// Assign a turn speed for all the units that exist
+        /// </summary>
+        private void CalculateUnitSpeeds()
+        {
+            // Completely randomize the order
+            List<IUnit> units = unitManager.AllUnits
+                .OrderBy(u => UnityEngine.Random.Range(0, 1000))
+                .ToList();
+
+            // Make player unit always be first
+            if (!(units.First() is PlayerUnit))
+            {
+                IUnit earliestPlayerUnit = units.First(u => u is PlayerUnit);
+                units.Remove(earliestPlayerUnit);
+                units.Insert(0, earliestPlayerUnit);
+            }
+            
+            // Finally, set the speed according to the index
+            for (int i = 0; i < units.Count; i++)
+                units[i].SetSpeed(i);
+        }
+
+        /// <summary>
         /// Create a turn queue based on existing player and enemy units.
         /// Should be called after the level is loaded and all the units are ready.
         /// </summary>
         public void SetupTurnQueue(TurnPhases[] newTurnPhases)
         {
             SetupTurnPhases(newTurnPhases);
+            CalculateUnitSpeeds();
             
             RoundCount = 0;
             TotalTurnCount = 0;
@@ -258,20 +287,20 @@ namespace Turn
             // Sort units by speed in descending order
             turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
 
-            IUnit firstUnit = turnQueue.FirstOrDefault();
+            // IUnit firstUnit = turnQueue.FirstOrDefault();
             
             // Player always start first
-            if (firstUnit is PlayerUnit)
-            {
-                IUnit earliestPlayerUnit = turnQueue.FirstOrDefault(u => u is PlayerUnit);
-
-                // Does a player exist in turn queue?
-                if (earliestPlayerUnit != null)
-                {
-                    turnQueue.Remove(earliestPlayerUnit);
-                    turnQueue.Insert(0, earliestPlayerUnit);
-                }
-            }
+            // if (firstUnit is PlayerUnit)
+            // {
+            //     IUnit earliestPlayerUnit = turnQueue.FirstOrDefault(u => u is PlayerUnit);
+            //
+            //     // Does a player exist in turn queue?
+            //     if (earliestPlayerUnit != null)
+            //     {
+            //         turnQueue.Remove(earliestPlayerUnit);
+            //         turnQueue.Insert(0, earliestPlayerUnit);
+            //     }
+            // }
 
             return turnQueue;
         }
