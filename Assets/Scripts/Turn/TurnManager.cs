@@ -84,6 +84,7 @@ namespace Turn
         private List<IUnit> unitsMeditatedLastRound = new List<IUnit>();
 
         private bool randomizedSpeed = true;
+        private bool ignoreSpeedSetting = false;
 
         #endregion
 
@@ -98,8 +99,27 @@ namespace Turn
             commandManager.ListenCommand<SpawnedUnitCommand>(cmd => UpdateNextTurnQueue());
             commandManager.ListenCommand<StatChangedCommand>(cmd =>
             {
-                if (cmd.StatType == StatTypes.Speed)
+                if (cmd.StatType == StatTypes.Speed && !ignoreSpeedSetting)
+                {
+                    // TODO clean this all this temporary code up
+                    ignoreSpeedSetting = true;
+                    bool isMovingUpQueue = cmd.Difference < 0;
+
+                    List<IUnit> units = unitManager.AllUnits
+                        .Where(u => u != cmd.Unit)
+                        .Where(u => isMovingUpQueue 
+                            ? u.SpeedStat.Value >= cmd.NewValue
+                            : u.SpeedStat.Value <= cmd.NewValue)
+                        .ToList();
+            
+                    foreach (var unit in units)
+                    {
+                        unit.AddSpeed(isMovingUpQueue ? 1 : -1);
+                    }
+
+                    ignoreSpeedSetting = false;
                     UpdateNextTurnQueue();
+                }
             });
             commandManager.ListenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
             commandManager.ListenCommand<EndMoveCommand>(cmd => {
@@ -143,10 +163,32 @@ namespace Turn
                 units.Remove(earliestPlayerUnit);
                 units.Insert(0, earliestPlayerUnit);
             }
+
+            ignoreSpeedSetting = true;
             
             // Finally, set the speed according to the index
             for (int i = 0; i < units.Count; i++)
                 units[i].SetSpeed(i);
+
+            ignoreSpeedSetting = false;
+            UpdateNextTurnQueue();
+        }
+        
+        // This is sorta a hack
+        private void SyncUnitSpeedAndIndexFromCurrentQueue()
+        {
+            ignoreSpeedSetting = true;
+            
+            foreach (IUnit unit in unitManager.AllUnits)
+            {
+                int index = FindTurnIndexFromCurrentQueue(unit);
+                // Earlier in the turn queue means higher speed
+                int speed = (currentTurnQueue.Count - 1) - index;
+                unit.SetSpeed(speed);
+            }
+
+            ignoreSpeedSetting = false;
+            UpdateNextTurnQueue();
         }
 
         /// <summary>
@@ -165,7 +207,11 @@ namespace Turn
 
             previousTurnQueue = new List<IUnit>();
             currentTurnQueue = CreateTurnQueue();
+            SyncUnitSpeedAndIndexFromCurrentQueue();
             UpdateNextTurnQueue();
+            
+            // only set the premade timeline once the first time, follow speed stat afterwards
+            randomizedSpeed = true;
 
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
             StartTurn();
@@ -228,6 +274,7 @@ namespace Turn
 
             previousTurnQueue = new List<IUnit>(currentTurnQueue);
             currentTurnQueue = CreateTurnQueue();
+            SyncUnitSpeedAndIndexFromCurrentQueue();
             UpdateNextTurnQueue();
 
             CurrentTurnIndex = 0;
@@ -274,9 +321,6 @@ namespace Turn
         {
             if (!randomizedSpeed)
             {
-                // only randomize the first time
-                randomizedSpeed = false;
-                
                 // REMEMBER: To make a copy, so that turn manipulation does not change it
                 // Also, make sure to filter out units that are already killed
                 if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
