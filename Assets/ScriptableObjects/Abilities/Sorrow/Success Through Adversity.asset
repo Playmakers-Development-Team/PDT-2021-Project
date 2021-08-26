@@ -12,19 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Success Through Adversity
   m_EditorClassIdentifier: 
-  description: '[Speed: 1]
+  description: '[Fast Ability]
 
     Deal 2 damage. Gain 1 Sorrow.
 
-    Catharsis 4 -
-    Deal 5 additional damage, gain 3 Defence.
+    CATHARSIS
+    4 - Deal 5 additional damage, gain 3 Defence.
 
 '
   shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
   speed: 1
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, 2 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0
@@ -38,8 +41,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  userEffects:
   - name: Default, Provide 1 Sorrow
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 1
     damageValue: 0
     directDamage: 0
@@ -54,6 +58,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 5 Attack and 3 Defence WITH Catharsis 4
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -68,3 +74,4 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: a1746836bae41724d97191b43c1ed93b, type: 2}
+  userEffects: []

@@ -12,19 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Self Determination
   m_EditorClassIdentifier: 
-  description: 'Deal 2 damage and gain 1 Passion
+  description: '[Fast Ability]
 
-    Deal 3 extra damage with Pride
+    Deal 2 damage and gain 1 Passion
 
-    Kindled
+    KINDLED
     2 - Gain 1 more Passion and 2 more Defence
 
 '
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 1
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, 2 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0
@@ -38,54 +41,9 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Damage IF User Spend 1 Pride
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs:
-    - name: User Spend 1 Pride
-      affectType: 0
-      costType: 1
-      tenetCost:
-        tenetCostType: 2
-        count: 1
-        tenetType: 0
-        tenetConstraint: 0
-      tenetGroupCost:
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
-  userEffects:
   - name: Default, Provide 1 Passion
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -100,6 +58,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 2 Defence and Provide 1 Passion WITH Kindled 2 to User
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -114,3 +74,4 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
+  userEffects: []

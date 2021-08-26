@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Blast Off+
   m_EditorClassIdentifier: 
-  description: 'Big Area of effect attack. Does 2 damage base, add 3 damage by spending
-    Passion.
+  description: '[Very Slow Ability]
+
+    Big Area of effect attack. Does 2 damage
+    base, add 3 damage by spending Passion.
 
     Give targets 1 Sorrow
 
 '
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
+  speed: -2
+  representedTenet: 0
   effects:
   - name: Default, 2 Damage and Provide 1 Sorrow
     affectTargets: 1
