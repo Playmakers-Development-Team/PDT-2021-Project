@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336639fbb74a4db4a4e42a8b5afbccf9, type: 3}
   m_Name: Beta Map
   m_EditorClassIdentifier: 
+  mapScene:
+    sceneAsset: {fileID: 102900000, guid: 2be3c22164babb020b8a7bd13fbcc68b, type: 3}
+    scenePath: Assets/Scenes/Design/Playtest Beta Map.unity
   encounterNodes:
   - encounterData: {fileID: 11400000, guid: 7d87cc51017229acda08a16a68d14e58, type: 2}
     connectedEncounters:
