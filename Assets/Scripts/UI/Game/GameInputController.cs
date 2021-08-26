@@ -22,7 +22,7 @@ namespace UI.Game
         {
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
-                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null)
+                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null || !turnManager.IsAbilityPhase())
                     return;
 
                 commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit,
