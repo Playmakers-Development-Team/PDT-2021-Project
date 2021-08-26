@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Managers;
 using Turn;
 using UI.Core;
@@ -75,7 +76,7 @@ namespace UI.Game.Timeline
             
             CreatePortraits(currentTurnQueue);
             CreateDivider();
-            CreatePortraits(turnManager.NextTurnQueue);
+            CreatePortraits(turnManager.NextTurnQueue.Where(u => !currentTurnQueue.Contains(u)));
         }
 
         private void ClearPortraits()
