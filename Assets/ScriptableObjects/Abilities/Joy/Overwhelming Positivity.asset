@@ -37,7 +37,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 3 Damage WITH Repression 2 to User"
+  - name: "Target \u27A4 3 Damage WITH Repression 2 to Target"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 20cb849d3c43e2d4e8925610b582d5f1, type: 2}
+    - {fileID: 11400000, guid: 689384322b6fb85279e8c462ab20a16e, type: 2}
   - name: "User \u27A4 Default, Provide 1 Joy"
     affectTargets: 0
     affectUser: 1

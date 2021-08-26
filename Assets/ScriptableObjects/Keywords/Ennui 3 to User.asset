@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
   m_Name: Ennui 3 to User
   m_EditorClassIdentifier: 
-  displayName: Ennui
+  displayName: Ennui 3
   isVisibleInGame: 1
-  description: Removes the entire stack of the last tenet applied excluding Apathy.
-    Additional effects activate if at least a certain amount of tenets were removed.
+  description: Consumes all of the last tenet applied excluding Apathy. Activate
+    an effect if at least 3 stacks is consumed.
   effect:
     name: "Target \u27A4 Nothing IF User Consume Newest from any 2 of Pride, Humility,
       Passion, Joy, Sorrow"

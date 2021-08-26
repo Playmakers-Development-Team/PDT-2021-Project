@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
   m_Name: Catharsis 4 to Target
   m_EditorClassIdentifier: 
-  displayName: Catharsis
+  displayName: Catharsis 4
   isVisibleInGame: 1
-  description: Give powerful buffs if a certain number of Sorrow stacks is met.
+  description: Activate a powerful effect when holding at least 4 Sorrow, then remove
+    all Sorrow.
   effect:
     name: "Target \u27A4 Nothing IF Target Consume 4 Sorrow"
     affectTargets: 1
@@ -35,16 +36,19 @@ MonoBehaviour:
       affectType: 1
       costType: 1
       tenetCost:
+        forceApplyCost: 0
         tenetCostType: 1
         count: 4
         tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
+        forceApplyCost: 0
         tenetTarget: 0
         tenetCostType: 0
         count: 1
         tenetFilter: 0
       shapeCost:
+        forceApplyCost: 0
         shape: {fileID: 0}
         countConstraint: 0
         count: 0
@@ -54,11 +58,13 @@ MonoBehaviour:
           affectType: 0
           costType: 0
           tenetCost:
+            forceApplyCost: 0
             tenetCostType: 0
             count: 1
             tenetType: 0
             tenetConstraint: 0
           tenetGroupCost:
+            forceApplyCost: 0
             tenetTarget: 0
             tenetCostType: 0
             count: 1
