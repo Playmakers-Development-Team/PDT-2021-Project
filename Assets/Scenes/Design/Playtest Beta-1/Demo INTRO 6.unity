@@ -2776,11 +2776,11 @@ PrefabInstance:
     - target: {fileID: 6708204597060251326, guid: 1345f202ca2f5194c80b819141c1d516, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 742a6b5ebbdbdb44cbc39758888263ab, type: 2}
+      objectReference: {fileID: 11400000, guid: 9cdef02563ed7364e8517376ef2ce814, type: 2}
     - target: {fileID: 6708204597060251326, guid: 1345f202ca2f5194c80b819141c1d516, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 78c11c4e7fa68d643920e39bd6401f40, type: 2}
+      objectReference: {fileID: 11400000, guid: 18ca67628fd9ca74ba20f3d69b8eea6c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1345f202ca2f5194c80b819141c1d516, type: 3}
 --- !u!1 &1153220014 stripped
@@ -2851,15 +2851,15 @@ PrefabInstance:
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 2d41febde8fe5464c823272b2a8d133f, type: 2}
+      objectReference: {fileID: 11400000, guid: 9bf979799fda9b74197b783dd41d1647, type: 2}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: dd6598f6d895ca5468ef632089b367f6, type: 2}
+      objectReference: {fileID: 11400000, guid: 5b696d7d7795b5746b15393306e4fa0e, type: 2}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 47aeeac0f4a3b9b448eb85ce49168a8d, type: 2}
+      objectReference: {fileID: 11400000, guid: 20ff65b71f7c82641a1741467aaa67a7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
 --- !u!1 &1217457877 stripped
@@ -8869,7 +8869,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1691017666
 PrefabInstance:

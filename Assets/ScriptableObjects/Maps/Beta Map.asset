@@ -58,12 +58,23 @@ MonoBehaviour:
     startingNode: 0
   - encounterData: {fileID: 11400000, guid: 6fb2a83e1ad7309e997735aa6fb41c01, type: 2}
     connectedEncounters:
+    - {fileID: 11400000, guid: 39f892af203a75c0d8d24ef6ac010bdc, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 9d95718d461c88ec3be95d7af38887d5, type: 2}
+    connectedEncounters:
     - {fileID: 11400000, guid: 7315e0ad55a79477eb5ae1bc3f6dab11, type: 2}
     startingNode: 0
   - encounterData: {fileID: 11400000, guid: 7315e0ad55a79477eb5ae1bc3f6dab11, type: 2}
     connectedEncounters:
     - {fileID: 11400000, guid: eff00ce1bd3be1ec6b160cc0f75c0fda, type: 2}
     startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 39f892af203a75c0d8d24ef6ac010bdc, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: b17a8c78cb63e1ff6a3f16b67cdcd279, type: 2}
+    startingNode: 0
   - encounterData: {fileID: 11400000, guid: eff00ce1bd3be1ec6b160cc0f75c0fda, type: 2}
+    connectedEncounters: []
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: b17a8c78cb63e1ff6a3f16b67cdcd279, type: 2}
     connectedEncounters: []
     startingNode: 0
