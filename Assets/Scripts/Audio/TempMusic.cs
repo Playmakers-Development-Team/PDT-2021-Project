@@ -22,8 +22,10 @@ namespace Audio
 
         private void ChangeMusic(Scene scene, LoadSceneMode loadSceneMode)
         {
-            AkSoundEngine.SetState("CombatState",
-                scene.name == "Playtest Beta Map" ? "Out_Of_Combat" : "In_Combat");
+            if (scene.name == "Playtest Beta Map" || scene.name == "Map Test")
+                AkSoundEngine.SetState("CombatState", "Out_Of_Combat");
+            else
+                AkSoundEngine.SetState("CombatState", "In_Combat");
         }
     }
 }
