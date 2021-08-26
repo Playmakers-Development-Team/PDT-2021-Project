@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using UI.AbilityLoadout.Abilities;
+using UI.AbilityLoadout.Unit;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Unit
+namespace UI.AbilityLoadout.Panel_Scripts
 {
-    public class AbilityLoadoutUnitList : DialogueComponent<AbilityLoadoutDialogue>
+    public class AbilityLoadoutUnitPanel : DialogueComponent<AbilityLoadoutDialogue>
     {
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject unitAbilityCardPrefab;

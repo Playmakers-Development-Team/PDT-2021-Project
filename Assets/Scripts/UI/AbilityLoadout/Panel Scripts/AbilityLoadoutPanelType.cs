@@ -1,4 +1,4 @@
-namespace UI.AbilityLoadout
+namespace UI.AbilityLoadout.Panel_Scripts
 {
     /// <summary>
     /// Enum for each of the tile variants required for rendering backgrounds.

@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using Abilities;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Unit
+namespace UI.AbilityLoadout.Abilities
 {
     public class UnitAbilitiesCard : DialogueComponent<AbilityLoadoutDialogue>
     {

@@ -60,7 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSelectPanel: {fileID: 1106926236349439529}
   abilitySelectPanel: {fileID: 4856606846227675085}
-  abilityLoadoutUnitList: {fileID: 9153771416057584424}
+  abilityLoadoutUnitPanel: {fileID: 9153771416057584424}
+  abilityLoadoutSelectionPanel: {fileID: 933578008020640400}
   abilityImages:
   - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
@@ -175,6 +176,17 @@ Canvas:
   m_CorrespondingSourceObject: {fileID: 6709641043172175542, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
   m_PrefabInstance: {fileID: 2196433679101319547}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &933578008020640400 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1337552097325235179, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+  m_PrefabInstance: {fileID: 2196433679101319547}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57a756c47536a654096a457281906407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7080042314409731546
 PrefabInstance:
   m_ObjectHideFlags: 0

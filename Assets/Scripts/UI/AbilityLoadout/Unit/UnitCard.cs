@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Abilities;
+using UI.AbilityLoadout.Panel_Scripts;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ namespace UI.AbilityLoadout.Unit
         
         public void OnPressed()
         {
-            dialogue.panelSwap.Invoke(AbilityLoadoutPanelType.AbilitySelect);
+            dialogue.showAbilitySelectPanel.Invoke(unitInfo);
         }
         
         #endregion

@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using Abilities;
 using Commands;
-using Game.Commands;
 using Managers;
 using TenetStatuses;
 using Turn.Commands;
-using UI.AbilityLoadout.Unit;
+using UI.AbilityLoadout.Panel_Scripts;
 using UI.Core;
 using Units;
 using Units.Players;
 using UnityEngine;
-using UnityEngine.UI;
 using Event = UI.Core.Event;
 
 namespace UI.AbilityLoadout
 {
     public class AbilityLoadoutDialogue : Dialogue
     {
-        internal readonly Event<AbilityLoadoutPanelType> panelSwap = new Event<AbilityLoadoutPanelType>();
+        internal readonly Event showUnitSelectPanel = new Event();
+        internal readonly Event<UnitInfo> showAbilitySelectPanel = new Event<UnitInfo>();
+        
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event noEnemiesRemaining = new Event();
         internal readonly Event abilitySwap = new Event();
@@ -28,7 +28,8 @@ namespace UI.AbilityLoadout
 
         [SerializeField] private Canvas unitSelectPanel;
         [SerializeField] private Canvas abilitySelectPanel;
-        [SerializeField] protected AbilityLoadoutUnitList abilityLoadoutUnitList;
+        [SerializeField] protected AbilityLoadoutUnitPanel abilityLoadoutUnitPanel;
+        [SerializeField] protected AbilityLoadoutSelectionPanel abilityLoadoutSelectionPanel;
         
         private readonly List<UnitInfo> units = new List<UnitInfo>();
         public List<Sprite> abilityImages = new List<Sprite>();
@@ -46,9 +47,14 @@ namespace UI.AbilityLoadout
             abilitySelectPanel.enabled = false;
 
             // Listen to Events
-            panelSwap.AddListener(currentPanel =>
+            showUnitSelectPanel.AddListener(() =>
             {
-                OnSwitchPanel(currentPanel);
+                OnUnitSelectPanel();
+            });
+            
+            showAbilitySelectPanel.AddListener(unitInfo =>
+            {
+                OnAbilitySelectPanel(unitInfo);
             });
             
             unitSpawned.AddListener(info =>
@@ -62,7 +68,7 @@ namespace UI.AbilityLoadout
                 uiManager.Add(this);
                 
                 // TODO: Change to appear after the player selects this option
-                panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
+                showUnitSelectPanel.Invoke();
             });
         }
 
@@ -80,26 +86,20 @@ namespace UI.AbilityLoadout
         
         #region Panel Switching
 
-        private void OnSwitchPanel(AbilityLoadoutPanelType currentPanel)
-        {
-            if (currentPanel == AbilityLoadoutPanelType.UnitSelect)
-                OnUnitSelectPanel();
-            else
-                OnAbilitySelectPanel();
-        }
-        
         private void OnUnitSelectPanel()
         {
             unitSelectPanel.enabled = true;
             abilitySelectPanel.enabled = false;
             
-            abilityLoadoutUnitList.Redraw(units);
+            abilityLoadoutUnitPanel.Redraw(units);
         }
         
-        private void OnAbilitySelectPanel()
+        private void OnAbilitySelectPanel(UnitInfo unitInfo)
         {
             unitSelectPanel.enabled = false;
             abilitySelectPanel.enabled = true;
+            
+            abilityLoadoutSelectionPanel.Redraw(unitInfo);
         }
 
         #endregion

@@ -1,3 +1,4 @@
+using UI.AbilityLoadout.Panel_Scripts;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,7 +38,7 @@ namespace UI.AbilityLoadout
         
         public void OnPressed()
         {
-            dialogue.panelSwap.Invoke(AbilityLoadoutPanelType.UnitSelect);
+            dialogue.showUnitSelectPanel.Invoke();
         }
         
         #endregion
