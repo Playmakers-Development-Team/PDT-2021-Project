@@ -18,8 +18,11 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  representedTenet: 5
+  effects:
   - name: Default, 1 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 1
     directDamage: 0
@@ -34,6 +37,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 6 Damage IF User Spend 1 Sorrow
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 6
     directDamage: 0

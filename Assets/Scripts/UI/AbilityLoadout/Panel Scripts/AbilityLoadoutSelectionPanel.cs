@@ -11,6 +11,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
     {
         [SerializeField] private UnitCard unitCard;
         [SerializeField] private UnitAbilitiesCard abilitiesCard;
+        [SerializeField] private NewAbilityOptions newAbilityOptions;
 
         #region UIComponent
         
@@ -26,6 +27,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             unitCard.Redraw(unit);
             abilitiesCard.Redraw(unit.AbilityInfo);
+            newAbilityOptions.Redraw(unit.Unit.Tenet);
         }
         
         #endregion

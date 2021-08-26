@@ -17,8 +17,11 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
-  - name: Default, 3 Attack and Provide 1 Passion
+  representedTenet: 2
+  effects:
+  - name: "Target \u27A4 Default, 3 Attack and Provide 1 Passion"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -33,6 +36,8 @@ MonoBehaviour:
     costs: []
     keywords: []
   - name: 3 Defence IF Target Spend 1 Humility
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
