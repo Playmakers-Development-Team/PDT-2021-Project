@@ -130,10 +130,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
-    - target: {fileID: -7540669148004731161, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
-      propertyPath: specialMoveCount
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_Name
       value: Enemy 2
@@ -142,6 +138,10 @@ PrefabInstance:
       propertyPath: data.name
       value: Enemy 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4959289167267801454, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 5638836853045114003, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -2194,10 +2194,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
-    - target: {fileID: -7540669148004731161, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
-      propertyPath: specialMoveCount
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_Name
       value: Enemy 1
@@ -2210,6 +2206,10 @@ PrefabInstance:
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 4959289167267801454, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 5638836853045114003, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -2478,10 +2478,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
-    - target: {fileID: -7540669148004731161, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
-      propertyPath: specialMoveCount
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2640585567817604240, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_Name
       value: Enemy 3
@@ -2494,6 +2490,10 @@ PrefabInstance:
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 4959289167267801454, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 5638836853045114003, guid: d4b3da0fda2f7d248b73f5c782c1d30c, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -8431,6 +8431,11 @@ PrefabInstance:
 --- !u!4 &1375121745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5511968119123735640, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
+  m_PrefabInstance: {fileID: 1375121744}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1839735485 &1375121746 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 5511968119123735622, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
   m_PrefabInstance: {fileID: 1375121744}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1465155120
