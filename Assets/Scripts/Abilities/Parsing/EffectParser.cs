@@ -44,14 +44,14 @@ namespace Abilities.Parsing
             foreach (Effect effect in effects)
             {
                 if (effect.CanBeUsedWith(abilityContext, User, target))
-                {
                     effect.ProvideTenet(target);
-                    effect.ApplyTargetCosts(abilityContext, target);
-                    // Keep track of the effect, so that we can apply costs towards user later
-                    // We can't simply apply costs towards the user here because then it will be applied as many
-                    // as there are targets, rather it should only be applied once to the user.
-                    spentUserEffects.Add(effect);
-                }
+
+                effect.ApplyTargetCosts(abilityContext, target);
+                
+                // Keep track of the effect, so that we can apply costs towards user later
+                // We can't simply apply costs towards the user here because then it will be applied as many
+                // as there are targets, rather it should only be applied once to the user.
+                spentUserEffects.Add(effect);
             }
         }
 
