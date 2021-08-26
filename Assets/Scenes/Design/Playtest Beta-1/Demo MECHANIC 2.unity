@@ -469,7 +469,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[0]
@@ -479,6 +479,10 @@ PrefabInstance:
       propertyPath: data.abilities.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 24f2be989b06533b384069766e834e32, type: 2}
+    - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
+      propertyPath: data.abilities.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 47aeeac0f4a3b9b448eb85ce49168a8d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
 --- !u!1 &380209864 stripped
@@ -8291,7 +8295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: isTimelineRandomised
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.size
@@ -8687,7 +8691,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1691017666
 PrefabInstance:
@@ -8714,7 +8718,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765858, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765858, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_AnchorMax.x

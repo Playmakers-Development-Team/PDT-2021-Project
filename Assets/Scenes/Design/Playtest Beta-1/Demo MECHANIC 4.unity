@@ -461,7 +461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708204597060251326, guid: 2efb9d73b724c3c44a35ff72abb0e643, type: 3}
       propertyPath: data.abilities.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6708204597060251326, guid: 2efb9d73b724c3c44a35ff72abb0e643, type: 3}
       propertyPath: data.abilities.Array.data[0]
@@ -470,7 +470,11 @@ PrefabInstance:
     - target: {fileID: 6708204597060251326, guid: 2efb9d73b724c3c44a35ff72abb0e643, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: a54069f8d01c435f9b7b70866ca2859c, type: 2}
+      objectReference: {fileID: 11400000, guid: 11a8f8c91e80a43419a47a55f00d73fd, type: 2}
+    - target: {fileID: 6708204597060251326, guid: 2efb9d73b724c3c44a35ff72abb0e643, type: 3}
+      propertyPath: data.abilities.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 47bff51ee8e6a4fc18c9c5dcd87d746f, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2efb9d73b724c3c44a35ff72abb0e643, type: 3}
 --- !u!1 &427401215 stripped
@@ -2259,15 +2263,15 @@ PrefabInstance:
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 2d41febde8fe5464c823272b2a8d133f, type: 2}
+      objectReference: {fileID: 11400000, guid: c4c36db68e154bb4b8ff4b24cb077ce8, type: 2}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 24f2be989b06533b384069766e834e32, type: 2}
+      objectReference: {fileID: 11400000, guid: 2d41febde8fe5464c823272b2a8d133f, type: 2}
     - target: {fileID: 6708204597060251326, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
       propertyPath: data.abilities.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: c4c36db68e154bb4b8ff4b24cb077ce8, type: 2}
+      objectReference: {fileID: 11400000, guid: 24f2be989b06533b384069766e834e32, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc400f18069f4684ca45afac5d8e4979, type: 3}
 --- !u!1 &903146930 stripped
@@ -8716,7 +8720,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1691017666
 PrefabInstance:
@@ -8743,7 +8747,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765858, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765858, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_AnchorMax.x
