@@ -1,4 +1,5 @@
-﻿using Commands;
+﻿using System.Linq;
+using Commands;
 using Managers;
 using Turn.Commands;
 using Units.Players;
@@ -31,15 +32,16 @@ namespace Tests.Beacons.Components
 
         private void AddBeacons()
         {
-            var buttons = GetComponentsInChildren<Button>();
+            // TODO: There's probably a better way to do this
+            var buttons = GetComponentsInChildren<Transform>().Where(t => t.parent == transform).ToList();
 
-            for (int i = 0; i < buttons.Length; i++)
+            for (int i = 0; i < buttons.Count; i++)
             {
                 var beacon = buttons[i].gameObject.GetComponent<UIBeacon>();
                 
                 if (beacon == null)
                     beacon = buttons[i].gameObject.AddComponent<UIBeacon>();
-
+            
                 beacon.label = (UIBeacons) i;
             }
         }

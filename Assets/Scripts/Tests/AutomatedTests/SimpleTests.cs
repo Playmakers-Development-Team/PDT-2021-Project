@@ -55,12 +55,7 @@ namespace Tests.AutomatedTests
 
         private IEnumerator MoveEstelle()
         {
-            yield return Beacon.WaitUntil(UnitBeacons.Estelle, Any.ActingUnit);
-            yield return InputBeacon.ClickLeft(UnitBeacons.Estelle);
-            // Wait for a while here so tester can see the move visualisation if need be
-            yield return new WaitForSecondsRealtime(0.3f);
-            yield return InputBeacon.ClickLeft(GridBeacons.A);
-            yield return Beacon.WaitUntil(GridBeacons.A, Any.PlayerUnit);
+            yield return InputTester.MoveUnitTo(UnitBeacons.Estelle, GridBeacons.A);
         }
 
         #endregion

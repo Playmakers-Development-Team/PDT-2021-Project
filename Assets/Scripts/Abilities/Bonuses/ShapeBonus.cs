@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Parsing;
 using Abilities.Shapes;
 using UnityEngine;
 using Utilities;
@@ -38,16 +39,16 @@ namespace Abilities.Bonuses
             }
         }
 
-        public int CalculateBonusMultiplier(IAbilityUser user)
+        public int CalculateBonusMultiplier(IAbilityContext context, IAbilityUser user)
         {
             if (shape == null)
                 return 0;
 
-            var targets = GetValidShapeTargets(user).ToArray();
+            var targets = GetValidShapeTargets(context, user).ToArray();
 
             int baseBonus = bonusByCount ? targets.Length : 0;
             int childBonus = targets.Length > 0
-                ? targets.Sum(u => bonus.CalculateBonusMultiplier(user, u))
+                ? targets.Sum(u => bonus.CalculateBonusMultiplier(context, user, u))
                 : 0;
 
             return baseBonus + childBonus;
@@ -57,11 +58,9 @@ namespace Abilities.Bonuses
         // TODO: If ShapeCountConstraint.AtLeast and there are less than the required amount, returns no targets.
         // TODO: If ShapeCountConstraint.AtMost and there are more than that the required amount, returns the max amount of targets.
         // TODO: Also, needs to be tested.
-        private IEnumerable<IAbilityUser> GetValidShapeTargets(IAbilityUser user)
+        private IEnumerable<IAbilityUser> GetValidShapeTargets(IAbilityContext context, IAbilityUser user)
         {
-            var targets = shape
-                .GetTargets(user.Coordinate, Vector2.zero)
-                .OfType<IAbilityUser>()
+            var targets = context.GetCachedUsersFromShape(user.Coordinate, Vector2.zero, shape)
                 .Where(u => MatchesShapeFilter(user, u))
                 .ToArray();
 
