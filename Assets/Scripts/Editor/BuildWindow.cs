@@ -131,11 +131,15 @@ namespace Editor
 
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
             buildPlayerOptions.scenes = GetRequiredScenes(mapData).ToArray();
-            buildPlayerOptions.locationPathName = $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
             buildPlayerOptions.target = buildTarget;
+            buildPlayerOptions.locationPathName = $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
             buildPlayerOptions.options = developmentBuild 
                 ? BuildOptions.Development | BuildOptions.AllowDebugging 
                 : BuildOptions.None;
+
+            // The output is not in .exe for windows. We need to make sure that happens
+            if (buildTarget == BuildTarget.StandaloneWindows64)
+                buildPlayerOptions.locationPathName += ".exe";
 
             BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
             BuildSummary summary = report.summary;
