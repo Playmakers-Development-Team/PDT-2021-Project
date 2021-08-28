@@ -166,12 +166,11 @@ namespace Turn
 
             ignoreSpeedSetting = true;
             
-            // Finally, set the speed according to the index
+            // Finally, set the speed according to the index, faster speed means earlier in the queue
             for (int i = 0; i < units.Count; i++)
-                units[i].SetSpeed(i);
+                units[i].SetSpeed(units.Count - i - 1);
 
             ignoreSpeedSetting = false;
-            UpdateNextTurnQueue();
         }
         
         // This is sorta a hack
