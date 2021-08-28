@@ -14,20 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Very Fast Ability]
 
-    Deal 4 damage. Give and gain 1 Joy
+    Deal 6 damage. Give and gain 1 Joy
 
     REPRESSION
-    2 on User or Target - Take 3 damage'
+    2 on User or Target - Take 2 damage'
   shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
   excludeUserFromTargets: 1
   speed: 2
   representedTenet: 4
   effects:
-  - name: "Target \u27A4 Default, 4 Damage and Provide 1 Joy"
+  - name: "Target \u27A4 Default, 6 Damage and Provide 1 Joy"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 4
+    damageValue: 6
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -39,12 +39,12 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 3 Damage WITH Repression 2 to Target"
+  - name: "Target \u27A4 2 Damage Directly WITH Repression 2 to Target"
     affectTargets: 1
     affectUser: 0
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
+    effectOrder: 2
+    damageValue: 2
+    directDamage: 1
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
@@ -72,12 +72,12 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Damage WITH Repression 2 to User"
+  - name: "User \u27A4 2 Damage Directly WITH Repression 2 to User"
     affectTargets: 0
     affectUser: 1
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
+    effectOrder: 2
+    damageValue: 2
+    directDamage: 1
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
