@@ -41,20 +41,30 @@ namespace UI.Game
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
         internal readonly Event buttonSelected = new Event();
-
-        internal readonly Event<bool> moveButtonPressed = new Event<bool>();
+        
+        internal readonly Event<Mode> modeChanged = new Event<Mode>();
 
         private CommandManager commandManager;
         private TurnManager turnManager;
         
         private readonly List<UnitInfo> units = new List<UnitInfo>();
-
-
+        
+        
         internal UnitInfo SelectedUnit { get; private set; }
         
         internal Ability SelectedAbility { get; private set; }
         
         internal Vector2 AbilityDirection { get; private set; }
+        
+        internal Mode DisplayMode { get; private set; }
+        
+        
+        internal enum Mode
+        {
+            Default,
+            Aiming,
+            Moving
+        }
         
         
         #region MonoBehaviour Events
@@ -120,6 +130,11 @@ namespace UI.Game
             moveConfirmed.AddListener(info =>
             {
                 commandManager.ExecuteCommand(new StartMoveCommand(info.UnitInfo.Unit, info.Destination));
+            });
+            
+            modeChanged.AddListener(mode =>
+            {
+                DisplayMode = mode;
             });
         }
 

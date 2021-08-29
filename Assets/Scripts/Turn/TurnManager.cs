@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Commands;
 using Commands;
 using Grid.GridObjects;
 using Managers;
@@ -67,6 +68,8 @@ namespace Turn
         public IReadOnlyList<IUnit> PreviousTurnQueue => previousTurnQueue.AsReadOnly();
         public PlayerUnit ActingPlayerUnit => GetActingPlayerUnit();
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
+        // This is sort of a temporary fix for preventing abilities to be used twice in one turn
+        public bool CanUseAbility { get; private set; } = true;
 
         private CommandManager commandManager;
         private UnitManager unitManager;
@@ -101,10 +104,14 @@ namespace Turn
             });
 
             commandManager.ListenCommand<EndUnitCastingCommand>(cmd => {
+                CanUseAbility = true;
+                
                 // TODO: Will be the same for enemy units once they start using abilities
                 if (cmd.Unit is PlayerUnit)
                     EndAbilityPhase();
             });
+            
+            commandManager.ListenCommand<AbilityCommand>(cmd => CanUseAbility = false);
 
             commandManager.ListenCommand<EnemyActionsCompletedCommand>(cmd =>
                 commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));

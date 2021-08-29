@@ -11,9 +11,9 @@ namespace UI.Game.Unit
 {
     public class UnitUIWrapper : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private GridObject unitGridObject;
         [SerializeField] private GameDialogue.UnitInfo info;
 
+        private IUnit unit;
         private CommandManager commandManager;
         
         
@@ -21,13 +21,24 @@ namespace UI.Game.Unit
 
         protected override void OnComponentAwake()
         {
+            unit = GetComponentInParent<IUnit>();
+
+            if (unit == null)
+            {
+                Debug.LogError("Did not find IUnit on any parent GameObjects.");
+                return;
+            }
+            
             commandManager = ManagerLocator.Get<CommandManager>();
             commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
         }
 
         protected override void Subscribe() {}
 
-        protected override void Unsubscribe() {}
+        protected override void Unsubscribe()
+        {
+            commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
+        }
         
         #endregion
         
@@ -36,10 +47,11 @@ namespace UI.Game.Unit
 
         private void OnGridReady(GridReadyCommand cmd)
         {
-            if (!(unitGridObject is IUnit unit))
+            info.SetUnit(unit);
+            
+            if (dialogue == null)
                 return;
             
-            info.SetUnit(unit);
             dialogue.unitSpawned.Invoke(info);
         }
         

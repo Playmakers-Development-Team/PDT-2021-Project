@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Grid;
@@ -31,17 +30,7 @@ namespace UI.Game.Grid
         private GridManager gridManager;
         private TurnManager turnManager;
 
-        // TODO: This may need to be moved over to GameDialogue...
-        private DisplayType displayType;
 
-        private enum DisplayType
-        {
-            Default,
-            Ability,
-            Move
-        }
-        
-        
         #region MonoBehaviour
 
         private void Start()
@@ -82,22 +71,20 @@ namespace UI.Game.Grid
 
         protected override void Subscribe()
         {
-            dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.abilitySelected.AddListener(OnAbilitySelected);
             dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
             dialogue.abilityRotated.AddListener(OnAbilityRotated);
             dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
-            dialogue.moveButtonPressed.AddListener(OnMoveButtonPressed);
+            dialogue.modeChanged.AddListener(OnModeChanged);
         }
 
         protected override void Unsubscribe()
         {
-            dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.abilitySelected.RemoveListener(OnAbilitySelected);
             dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
             dialogue.abilityRotated.RemoveListener(OnAbilityRotated);
             dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
-            dialogue.moveButtonPressed.RemoveListener(OnMoveButtonPressed);
+            dialogue.modeChanged.RemoveListener(OnModeChanged);
         }
         
         #endregion
@@ -105,42 +92,32 @@ namespace UI.Game.Grid
         
         #region Listeners
 
-        private void OnTurnStarted(GameDialogue.TurnInfo info)
-        {
-            displayType = DisplayType.Default;
-            
-        }
-
         private void OnAbilitySelected(Ability ability)
         {
-            displayType = DisplayType.Ability;
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Aiming);
             UpdateGrid();
         }
 
         private void OnAbilityDeselected(Ability ability)
         {
-            displayType = DisplayType.Default;
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
             UpdateGrid();
         }
 
         private void OnAbilityRotated(Vector2 direction)
         {
-            if (displayType == DisplayType.Ability)
+            if (dialogue.DisplayMode == GameDialogue.Mode.Aiming)
                 UpdateGrid();
         }
 
         private void OnAbilityConfirmed()
         {
-            displayType = DisplayType.Default;
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
             UpdateGrid();
         }
 
-        private void OnMoveButtonPressed(bool selected)
+        private void OnModeChanged(GameDialogue.Mode mode)
         {
-            if (turnManager.ActingPlayerUnit == null)
-                return;
-            
-            displayType = selected ? DisplayType.Move : DisplayType.Default;
             UpdateGrid();
         }
         
@@ -156,9 +133,9 @@ namespace UI.Game.Grid
             FillAll();
 
             Vector2Int[] coordinates;
-            switch (displayType)
+            switch (dialogue.DisplayMode)
             {
-                case DisplayType.Ability when dialogue.SelectedAbility != null:
+                case GameDialogue.Mode.Aiming when dialogue.SelectedAbility != null:
                     coordinates = dialogue.SelectedAbility.Shape.
                         GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).
                         Where(vec => gridManager.IsInBounds(vec)).ToArray();
@@ -166,7 +143,7 @@ namespace UI.Game.Grid
                     Fill(new GridSelection(coordinates, GridSelectionType.Valid));
                     break;
                 
-                case DisplayType.Move when turnManager.ActingUnit.MovementPoints.Value > 0:
+                case GameDialogue.Mode.Moving when turnManager.ActingUnit.MovementPoints.Value > 0:
                     coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
 
                     Fill(new GridSelection(coordinates, GridSelectionType.Valid));
@@ -217,7 +194,7 @@ namespace UI.Game.Grid
         // TODO: This would probably be better being in InputController...
         private void TryMove(Vector2Int destination)
         {
-            if (displayType != DisplayType.Move)
+            if (dialogue.DisplayMode != GameDialogue.Mode.Moving)
                 return;
 
             PlayerUnit playerUnit = turnManager.ActingPlayerUnit;
