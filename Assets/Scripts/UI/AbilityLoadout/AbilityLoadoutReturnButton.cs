@@ -1,8 +1,6 @@
-using UI.AbilityLoadout.Panel_Scripts;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
-using Event = UI.Core.Event;
 
 namespace UI.AbilityLoadout
 {

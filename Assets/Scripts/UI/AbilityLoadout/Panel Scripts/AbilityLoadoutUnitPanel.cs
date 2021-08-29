@@ -44,17 +44,14 @@ namespace UI.AbilityLoadout.Panel_Scripts
         
         internal void Redraw(List<AbilityLoadoutDialogue.UnitInfo> units)
         {
-            // STEP 1. Destroy UnitCards and UnitAbilityCards that no longer exist.
+            // STEP 1. Destroy UnitCards and UnitAbilityCards
             for (int i = unitCards.Count - 1; i >= 0; i--)
             {
-                if (units.Contains(unitCards[i].unitInfo))
-                {
-                    Destroy(unitCards[i].gameObject);
-                    Destroy(abilitiesCards[i].gameObject);
+                Destroy(unitCards[i].gameObject);
+                Destroy(abilitiesCards[i].gameObject);
                     
-                    unitCards.RemoveAt(i);
-                    abilitiesCards.RemoveAt(i);
-                }
+                unitCards.RemoveAt(i);
+                abilitiesCards.RemoveAt(i);
             }
 
             // STEP 2. Instantiate new UnitCards and UnitAbilityCards for new units.

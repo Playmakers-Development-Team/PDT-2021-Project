@@ -5,6 +5,7 @@ using Commands;
 using Managers;
 using TenetStatuses;
 using Turn.Commands;
+using UI.AbilityLoadout.Abilities;
 using UI.AbilityLoadout.Panel_Scripts;
 using UI.Core;
 using Units;
@@ -96,10 +97,14 @@ namespace UI.AbilityLoadout
         
         private void OnAbilitySelectPanel(UnitInfo unitInfo)
         {
-            unitSelectPanel.enabled = false;
             abilitySelectPanel.enabled = true;
             
-            abilityLoadoutSelectionPanel.Redraw(unitInfo);
+            // Clear the units so only the selected unit is shown
+            units.Clear();
+            units.Add(unitInfo);
+            
+            abilityLoadoutUnitPanel.Redraw(units);
+            abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet);
         }
 
         #endregion
