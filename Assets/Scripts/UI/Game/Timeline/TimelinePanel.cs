@@ -73,13 +73,14 @@ namespace UI.Game.Timeline
 
             List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
             int startIndex = turnManager.CurrentTurnIndex;
-            currentTurnQueue.RemoveRange(0, startIndex);
+            //currentTurnQueue.RemoveRange(0, startIndex);
             
             CreateInsightButton();
+            CreatePortraits(currentTurnQueue, startIndex);
             
-            CreatePortraits(currentTurnQueue);
-            CreateDivider();
-            CreatePortraits(turnManager.NextTurnQueue);
+            // CreatePortraits(currentTurnQueue);
+            // CreateDivider();
+            // CreatePortraits(turnManager.NextTurnQueue);
         }
 
         private void ClearPortraits()
@@ -101,6 +102,41 @@ namespace UI.Game.Timeline
                 portrait.Assign(info);
                 portraits.Add(portrait);
             }
+        }
+        
+        private void CreatePortraits(List<IUnit> units, int startIndex)
+        {
+            int index = startIndex;
+            int count = 0;
+
+            while (count < timelineLength)
+            {
+                if (index > units.Count - 1)
+                {
+                    CreateDivider();
+                    count++;
+                    if (count >= timelineLength)
+                    {
+                        break;
+                    }
+                    while (index > units.Count - 1)
+                        index = index - units.Count;
+                }
+                CreatePortrait(units[index]);
+
+                index++;
+                count++;
+            }
+        }
+        
+        private void CreatePortrait(IUnit unit)
+        {
+            GameObject obj = Instantiate(portraitPrefab, scrollRect.content);
+            TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
+                
+            GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
+            portrait.Assign(info);
+            portraits.Add(portrait);
         }
 
         private void CreateDivider()
