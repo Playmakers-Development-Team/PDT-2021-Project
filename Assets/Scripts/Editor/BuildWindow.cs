@@ -132,7 +132,9 @@ namespace Editor
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
             buildPlayerOptions.scenes = GetRequiredScenes(mapData).ToArray();
             buildPlayerOptions.target = buildTarget;
-            buildPlayerOptions.locationPathName = $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
+            buildPlayerOptions.locationPathName = buildTarget == BuildTarget.StandaloneOSX
+                ? $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher"
+                : $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
             buildPlayerOptions.options = developmentBuild 
                 ? BuildOptions.Development | BuildOptions.AllowDebugging 
                 : BuildOptions.None;
