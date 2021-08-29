@@ -11,6 +11,7 @@ using Units.Enemies;
 using Units.Players;
 using Units.Stats;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Turn
 {
@@ -110,6 +111,27 @@ namespace Turn
                 commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));
         }
 
+        public void OnDisable()
+        {
+            commandManager.UnlistenCommand<EndTurnCommand>(cmd => NextTurn());
+            commandManager.UnlistenCommand<SpawnedUnitCommand>(cmd => UpdateNextTurnQueue());
+            commandManager.UnlistenCommand<KilledUnitCommand>(cmd => RemoveUnitFromQueue(cmd.Unit));
+            commandManager.UnlistenCommand<EndMoveCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndMovementPhase();
+            });
+
+            commandManager.UnlistenCommand<EndUnitCastingCommand>(cmd => {
+                // TODO: Will be the same for enemy units once they start using abilities
+                if (cmd.Unit is PlayerUnit)
+                    EndAbilityPhase();
+            });
+
+            commandManager.UnlistenCommand<EnemyActionsCompletedCommand>(cmd =>
+                commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));
+        }
+
         #endregion
 
         #region Turn Queue Manipulation
@@ -128,9 +150,8 @@ namespace Turn
             Insight = new Stat(null, 0, StatTypes.Insight);
 
             previousTurnQueue = new List<IUnit>();
-            currentTurnQueue = CreateTurnQueue();
+            currentTurnQueue = CreateInitalTurnQueue();
             UpdateNextTurnQueue();
-
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
             StartTurn();
         }
@@ -232,21 +253,73 @@ namespace Turn
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
         /// </summary>
-        private List<IUnit> CreateTurnQueue()
+        private List<IUnit> CreateInitalTurnQueue()
         {
             if (!randomizedSpeed)
             {
-                if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
-                    return preMadeTurnQueue;
                 
-                Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
-                                 $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
-                randomizedSpeed = true;
+                    for (int i = 0; i < preMadeTurnQueue.Count; i++)
+                        preMadeTurnQueue[i].SetBaseSpeed(i + 1);
+                    
+                    
+                    return preMadeTurnQueue;
             }
 
             List<IUnit> turnQueue = new List<IUnit>();
-            turnQueue.AddRange(unitManager.AllUnits);
             
+            Debug.Log(preMadeTurnQueue.Count + "COUNT 1" + unitManager.AllUnits.Count + "COUNT 2");
+
+            //Get random player unit
+            int rand = UnityEngine.Random.Range(0, ManagerLocator.Get<PlayerManager>().Units.Count - 1);
+            IUnit playerUnit = ManagerLocator.Get<PlayerManager>().Units[rand];
+
+
+            foreach (IUnit unit in unitManager.AllUnits)
+            {
+                if (unit != playerUnit)
+                    turnQueue.Add(unit);
+            }
+
+            for (int i = 0; i < turnQueue.Count - 1; i++)
+            {
+                int j = UnityEngine.Random.Range(i, turnQueue.Count);
+                IUnit temp = turnQueue[i];
+                turnQueue[i] = turnQueue[j];
+                turnQueue[j] = temp;
+            }
+                
+            for (int i = 0; i < turnQueue.Count; i++)
+                turnQueue[i].SetBaseSpeed(i + 1);
+            
+            
+            playerUnit.SetBaseSpeed(unitManager.AllUnits.Count);
+            turnQueue.Add(playerUnit);
+             
+            turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
+            
+            return turnQueue;
+        }
+
+        
+        /// <summary>
+        /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
+        /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
+        /// </summary>
+        private List<IUnit> CreateTurnQueue()
+        {
+            // if (!randomizedSpeed)
+            // {
+            //     if (preMadeTurnQueue.Count >= unitManager.AllUnits.Count)
+            //         return preMadeTurnQueue;
+            //     
+            //     Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
+            //                      $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
+            //     randomizedSpeed = true;
+            // }
+
+            List<IUnit> turnQueue = new List<IUnit>();
+            turnQueue.AddRange(unitManager.AllUnits);
+
             // Sort units by speed in descending order
             turnQueue.Sort((x, y) => y.SpeedStat.Value.CompareTo(x.SpeedStat.Value));
             return turnQueue;

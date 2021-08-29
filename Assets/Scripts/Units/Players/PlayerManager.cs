@@ -7,6 +7,12 @@ namespace Units.Players
     {
         public bool WaitForDeath { get; set; }
         
-        public int DeathDelay { get; } = 1000;
+        public int DeathDelay
+        {
+            get => 2000;
+            private set => DeathDelay = value;
+        }
+        
+        
     }
 }

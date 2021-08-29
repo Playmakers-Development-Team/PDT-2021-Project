@@ -41,22 +41,37 @@ namespace Turn
         /// </summary>
         private void SetupTurnQueue()
         {
+
+          
+            
             if (preMadeTimeline.Length < unitManager.AllUnits.Count)
             {
                 isTimelineRandomised = true;
                 Debug.Log("Timeline was not filled or completed, automatically setting it to randomised");
             }
-        
+
+            if (!isTimelineRandomised)
+            {
+                foreach (GameObject gameObject in preMadeTimeline)
+                {
+
+                    if (gameObject.GetComponent<IUnit>() is null)
+                    {
+                        Debug.LogError(
+                            $"WARNING: {gameObject.name} is not an IUnit the game will not run! Please remove the unit or make it an IUnit");
+                        UnityEditor.EditorApplication.isPlaying = false;
+                    }
+                }
+            }
+
             if (isTimelineRandomised)
                 turnManager.SetupTurnQueue(turnPhases);
             else 
                 turnManager.SetupTurnQueue(preMadeTimeline,turnPhases);
         }
 
-        // TODO: Can be removed once proper UI is in place
-        public void Meditate()
-        {
-            turnManager.Meditate();
-        }
+        // TODO: Can be removed once proper UI is in place.
+         public void Meditate() => turnManager.Meditate();
+        
     }
 }

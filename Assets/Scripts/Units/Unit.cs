@@ -87,7 +87,7 @@ namespace Units
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
-            SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
+            SpeedStat = new Stat(this, 0, StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
@@ -151,6 +151,13 @@ namespace Units
 
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
         
+        public void SetBaseSpeed(int amount)
+        { 
+            SpeedStat.BaseValue = amount;
+            SpeedStat.Value = SpeedStat.BaseValue;
+            Debug.Log(SpeedStat.Value + "SPEED STAT");
+        }
+
         public void AddSpeed(int amount)
         {
             IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();

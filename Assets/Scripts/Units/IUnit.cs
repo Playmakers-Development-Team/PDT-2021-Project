@@ -37,6 +37,8 @@ namespace Units
         void MoveUnit(StartMoveCommand startMoveCommand);
 
         string RandomizeName();
+        
+        void SetBaseSpeed(int amount);
 
         void SetTenets(ITenetBearer tenetBearer);
 
@@ -59,5 +61,7 @@ namespace Units
         /// <param name="direction">Direction to use to ability towards</param>
         /// <returns>All units that are affected</returns>
         IEnumerable<VirtualUnit> ProjectAbility(Ability ability, ShapeDirection direction);
+
+       
     }
 }
