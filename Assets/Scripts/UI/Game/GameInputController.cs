@@ -20,11 +20,8 @@ namespace UI.Game
         
         private void Update()
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.rightButton.wasPressedThisFrame && turnManager.ActingPlayerUnit != null && dialogue.SelectedAbility != null)
             {
-                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null)
-                    return;
-
                 commandManager.ExecuteCommand(new AbilityCommand(turnManager.ActingPlayerUnit,
                     dialogue.AbilityDirection, dialogue.SelectedAbility));
             }

@@ -73,6 +73,6 @@ namespace UI.Core
         /// </summary>
         /// <typeparam name="T">The type of <see cref="Dialogue"/> to search for.</typeparam>
         /// <returns>Returns the first instance of <c>T</c> in the stack, starting from the top.</returns>
-        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d.GetType().IsAssignableFrom(typeof(T))) as T;
+        internal T GetDialogue<T>() where T : Dialogue => dialogues.Find(d => d is T) as T;
     }
 }
