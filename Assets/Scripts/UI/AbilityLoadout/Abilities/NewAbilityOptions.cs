@@ -11,13 +11,17 @@ namespace UI.AbilityLoadout.Abilities
 {
     public class NewAbilityOptions : DialogueComponent<AbilityLoadoutDialogue>
     {
+        [SerializeField] private Image selectedAbilityImage;
+        [SerializeField] private Vector3 selectedOffset;
+        
         [SerializeField] private AbilityPool abilityPool;
         
         private TenetType tenetType;
         
         private List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
         
-        [SerializeField] protected List<Image> abilityRenders = new List<Image>();
+        [SerializeField] protected List<Button> abilityButtons = new List<Button>();
+        private List<Image> abilityRenders = new List<Image>();
         private List<TextMeshProUGUI> abilityNames = new List<TextMeshProUGUI>();
         
         #region UIComponent
@@ -28,9 +32,28 @@ namespace UI.AbilityLoadout.Abilities
 
         protected override void OnComponentAwake()
         {
-            foreach (var ability in abilityRenders)
+            foreach (var ability in abilityButtons)
             {
+                abilityRenders.Add(ability.GetComponentInChildren<Image>());
                 abilityNames.Add(ability.GetComponentInChildren<TextMeshProUGUI>());
+            }
+        }
+
+        #endregion
+
+        #region Listeners
+
+        public void OnPressed(GameObject selectedAbilityButton)
+        {
+            if (selectedAbilityImage.enabled && 
+                selectedAbilityImage.gameObject.transform.position == selectedAbilityButton.transform.position + selectedOffset)
+            {
+                selectedAbilityImage.enabled = false;
+            }
+            else
+            {
+                selectedAbilityImage.enabled = true;
+                selectedAbilityImage.gameObject.transform.position = selectedAbilityButton.transform.position + selectedOffset;
             }
         }
 
