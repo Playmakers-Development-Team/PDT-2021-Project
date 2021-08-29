@@ -103,8 +103,11 @@ namespace UI.AbilityLoadout
             units.Clear();
             units.Add(unitInfo);
             
+            // Redraw the 1 ability, unit and new unit abilities
             abilityLoadoutUnitPanel.Redraw(units);
             abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet);
+
+            abilityLoadoutUnitPanel.EnableAbilityButtons(unitInfo);
         }
 
         #endregion

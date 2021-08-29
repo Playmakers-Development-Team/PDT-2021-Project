@@ -8,9 +8,7 @@ namespace UI.AbilityLoadout.Abilities
     public class UnitAbilitiesCard : DialogueComponent<AbilityLoadoutDialogue>
     {
         protected internal List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos;
-        
-        [SerializeField] private bool IsInteractable = false;
-        
+
         [SerializeField] private Image selectedAbilityImage;
         [SerializeField] private Vector3 selectedOffset;
         
@@ -23,12 +21,7 @@ namespace UI.AbilityLoadout.Abilities
         protected override void OnComponentAwake()
         {
             foreach (var abilityButton in abilityButtons)
-            {
                 abilityRenders.Add(abilityButton.GetComponent<Image>());
-
-                if (IsInteractable)
-                    abilityButton.enabled = true;
-            }
         }
 
         protected override void Subscribe() {}
@@ -41,21 +34,28 @@ namespace UI.AbilityLoadout.Abilities
         
         public void OnPressed(GameObject selectedAbilityButton)
         {
-            if (IsInteractable)
+            if (selectedAbilityImage.enabled && 
+                selectedAbilityImage.gameObject.transform.position == selectedAbilityButton.transform.position + selectedOffset)
             {
-                if (selectedAbilityImage.enabled && 
-                    selectedAbilityImage.gameObject.transform.position == selectedAbilityButton.transform.position + selectedOffset)
-                {
-                    selectedAbilityImage.enabled = false;
-                }
-                else
-                {
-                    selectedAbilityImage.enabled = true;
-                    selectedAbilityImage.gameObject.transform.position = selectedAbilityButton.transform.position + selectedOffset;
-                }
+                selectedAbilityImage.enabled = false;
+            }
+            else
+            {
+                selectedAbilityImage.enabled = true;
+                selectedAbilityImage.gameObject.transform.position = selectedAbilityButton.transform.position + selectedOffset;
             }
         }
         
+        #endregion
+
+        #region Utility Functions
+
+        public void EnableAbilityButtons()
+        {
+            foreach (var abilityButton in abilityButtons)
+                abilityButton.enabled = true;
+        }
+
         #endregion
 
         #region Drawing

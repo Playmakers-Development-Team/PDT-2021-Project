@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UI.AbilityLoadout.Abilities;
 using UI.AbilityLoadout.Unit;
 using UI.Core;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,11 +32,21 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         #endregion
 
-        #region Scroll Linking
+        #region Utility Functions
 
         private void UpdateAbilityScroll(Vector2 arg0)
         {
             abilityScrollView.horizontalNormalizedPosition = unitScrollView.horizontalNormalizedPosition;
+        }
+
+        public void EnableAbilityButtons(AbilityLoadoutDialogue.UnitInfo unitInfo)
+        {
+            foreach (var abilityCard in abilitiesCards)
+            {
+                if (unitInfo.AbilityInfo == abilityCard.abilityInfos)
+                    abilityCard.EnableAbilityButtons();
+            }
+            
         }
 
         #endregion
