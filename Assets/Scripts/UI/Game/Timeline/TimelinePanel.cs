@@ -14,6 +14,8 @@ namespace UI.Game.Timeline
         
         [SerializeField] private GameObject portraitPrefab;
         [SerializeField] private GameObject dividerPrefab;
+        [SerializeField] private GameObject insightButtonPrefab;
+        [SerializeField] private int timelineLength = 8;
         
         private TurnManager turnManager;
 
@@ -73,6 +75,8 @@ namespace UI.Game.Timeline
             int startIndex = turnManager.CurrentTurnIndex;
             currentTurnQueue.RemoveRange(0, startIndex);
             
+            CreateInsightButton();
+            
             CreatePortraits(currentTurnQueue);
             CreateDivider();
             CreatePortraits(turnManager.NextTurnQueue);
@@ -102,6 +106,14 @@ namespace UI.Game.Timeline
         private void CreateDivider()
         {
             GameObject obj = Instantiate(dividerPrefab, scrollRect.content);
+            TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
+
+            portraits.Add(portrait);
+        }
+        
+        private void CreateInsightButton()
+        {
+            GameObject obj = Instantiate(insightButtonPrefab, scrollRect.content);
             TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
 
             portraits.Add(portrait);
