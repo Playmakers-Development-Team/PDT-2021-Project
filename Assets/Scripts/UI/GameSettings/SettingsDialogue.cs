@@ -1,6 +1,6 @@
 ﻿using UI.Core;
 
-namespace UI.Settings
+namespace UI.GameSettings
 {
     public class SettingsDialogue : Dialogue
     {

@@ -3,7 +3,7 @@ using Managers;
 using UI.Core;
 using UnityEngine;
 
-namespace UI.Settings.Volume
+namespace UI.GameSettings.Volume
 {
     public class VolumeSettingSlider : DialogueComponent<SettingsDialogue>
     {
