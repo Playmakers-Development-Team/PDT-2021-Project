@@ -26,7 +26,7 @@ namespace Units
     {
         [SerializeField] protected T data;
 
-        private SpriteRenderer spriteRenderer;
+        private protected SpriteRenderer spriteRenderer;
         
         public string Name
         {
@@ -211,7 +211,7 @@ namespace Units
 
         #region AnimationHandling
 
-        public async void ChangeAnimation(AnimationStates animationStates) 
+        public virtual async void ChangeAnimation(AnimationStates animationStates) 
         {
             unitAnimationState = animationStates;
 
