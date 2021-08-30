@@ -255,19 +255,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5684013115940618029}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 345128778953250600}
-        m_TargetAssemblyTypeName: UI.Settings.OpenButton, UISystem
-        m_MethodName: OnPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &345128778953250600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,3 +269,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialoguePrefab: {fileID: 5671358522360235967, guid: 7de55730dbcec5149bd5d23c57ca3ae6, type: 3}
+  button: {fileID: 4826792391429503174}

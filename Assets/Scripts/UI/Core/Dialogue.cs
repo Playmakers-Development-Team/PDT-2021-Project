@@ -24,6 +24,9 @@ namespace UI.Core
             manager = ManagerLocator.Get<UIManager>();
             canvasGroup = GetComponent<CanvasGroup>();
             
+            foreach (Canvas canvas in GetComponentsInChildren<Canvas>())
+                canvas.worldCamera = Camera.main;
+
             OnAwake();
             
             manager.Add(this);

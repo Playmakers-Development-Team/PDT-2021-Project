@@ -74,8 +74,8 @@ namespace Background.Editor
             
             EditorGUILayout.BeginHorizontal();
 
-            lineTexture = TextureField("Line Texture", lineTexture);
             colourTexture = TextureField("Colour Texture", colourTexture);
+            lineTexture = TextureField("Line Texture", lineTexture);
             
             EditorGUILayout.EndHorizontal();
 
@@ -232,7 +232,7 @@ namespace Background.Editor
             TextureImporterSettings settings = new TextureImporterSettings();
             
             importer.textureType = TextureImporterType.Sprite;
-            importer.spritePixelsPerUnit = 1024;
+            importer.spritePixelsPerUnit = 512;
             importer.spritePivot = 
                 new Vector2(0.5f, 0.25f * ((float) texture.width / texture.height));
             
