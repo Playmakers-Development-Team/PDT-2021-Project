@@ -34,6 +34,8 @@ namespace Turn
                 {
                     SetupTurnQueue();
                 });
+            
+            turnManager.Reset();
         }
 
         /// <summary>
