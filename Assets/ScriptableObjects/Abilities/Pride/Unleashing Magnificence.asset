@@ -12,82 +12,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Unleashing Magnificence
   m_EditorClassIdentifier: 
-  description: 'Does 1 base Damage.
+  description: '[Extremely Fast Ability]
 
-    6 Damage spend Pride.
+    Deals 2 damage
 
-    2 Damage with
-    Passion.'
+    Deals 5 extra damage
+    if user is INDEPENDENT'
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
-  targetEffects:
-  - name: Default, 1 Damage
-    damageValue: 1
+  excludeUserFromTargets: 1
+  speed: 3
+  representedTenet: 0
+  effects:
+  - name: "Target \u27A4 Default, 2 Damage"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 2
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     bonuses: []
     costs: []
     keywords: []
-  - name: 6 Damage IF User Spend 1 Pride
-    damageValue: 6
+  - name: "Target \u27A4 5 Damage WITH Independent"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 5
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User Spend 1 Pride
-      affectType: 0
-      costType: 1
-      tenetCost:
-        tenetCostType: 2
-        count: 1
-        tenetType: 0
-      shapeCost:
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-    keywords: []
-  - name: 2 Damage IF User With 1 Passion
-    damageValue: 2
-    defenceValue: 0
-    attackValue: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs:
-    - name: User With 1 Passion
-      affectType: 0
-      costType: 1
-      tenetCost:
-        tenetCostType: 0
-        count: 1
-        tenetType: 2
-      shapeCost:
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-    keywords: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
   userEffects: []

@@ -118,6 +118,8 @@ namespace Tests.AutomatedTests
                 // We need move the cursor away for some reason so that the button click will be registered 
                 yield return InputBeacon.ClickLeft(GridBeacons.A);
             }
+
+            yield return DelayForViewing();
         }
         
         [UnityTest] 

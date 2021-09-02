@@ -10,7 +10,7 @@ namespace Background.Tiles
     /// <summary>
     /// Substitutes tiles for the specified <see cref="TileType"/> variant.
     /// </summary>
-    [CustomGridBrush(true, false, false, "Colour Brush")]
+    [CustomGridBrush(true, false, false, "Substitute Brush")]
     public class SubstituteBrush : GridBrushBase
     {
         [SerializeField] private TileType type;

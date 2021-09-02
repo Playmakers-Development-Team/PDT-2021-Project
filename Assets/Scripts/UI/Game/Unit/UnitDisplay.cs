@@ -9,6 +9,10 @@ namespace UI.Game.Unit
 {
     public class UnitDisplay : DialogueComponent<GameDialogue>
     {
+        [Header("Button")]
+        
+        [SerializeField] private Button button;
+        
         [Header("Damage Text")]
         
         [SerializeField] private TextMeshProUGUI damageText;
@@ -20,6 +24,7 @@ namespace UI.Game.Unit
         [SerializeField] private Image healthBarDifference;
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
+        
 
         private GameDialogue.UnitInfo unitInfo;
 
@@ -73,11 +78,16 @@ namespace UI.Game.Unit
         
         public void OnClick()
         {
+            if (dialogue.DisplayMode != GameDialogue.Mode.Default)
+                return;
+            
             dialogue.unitSelected.Invoke(unitInfo);
         }
 
         private void OnStartedMove(GameDialogue.MoveInfo info)
         {
+            button.enabled = false;
+            
             if (info.UnitInfo.Unit != unitInfo.Unit)
                 return;
 
@@ -86,6 +96,8 @@ namespace UI.Game.Unit
 
         private void OnEndedMove(GameDialogue.UnitInfo info)
         {
+            button.enabled = true;
+            
             if (info.Unit != unitInfo.Unit)
                 return;
 
