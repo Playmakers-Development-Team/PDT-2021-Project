@@ -11,8 +11,22 @@ namespace TenetStatuses
         
         public ICollection<TenetStatus> TenetStatuses => tenetStatusEffectSlots;
 
+        public TenetStatusEffectsContainer() {}
+
+        public TenetStatusEffectsContainer(IEnumerable<TenetStatus> tenets) => Initialise(tenets);
+
         public void Initialise(IEnumerable<TenetStatus> startingTenets) =>
             tenetStatusEffectSlots = new LinkedList<TenetStatus>(startingTenets);
+
+        public void SetTenets(ITenetBearer tenetBearer)
+        {
+            // We want to keep the existing object, so that other systems don't lose reference to it.
+            // To do that, we clear and add manually.
+            tenetStatusEffectSlots.Clear();
+
+            foreach (TenetStatus tenetStatus in tenetBearer.TenetStatuses)
+                tenetStatusEffectSlots.AddLast(tenetStatus);
+        }
 
         public void AddOrReplaceTenetStatus(TenetType tenetType, int stackCount = 1)
         {
@@ -23,7 +37,12 @@ namespace TenetStatuses
 
             // Try to add on top of an existing tenet type
             if (TryGetTenetStatusNode(status.TenetType, out LinkedListNode<TenetStatus> foundNode))
+            {
                 foundNode.Value += status;
+                // Reorder the list to reflect the last tenet applied to be at the back of the list
+                tenetStatusEffectSlots.Remove(foundNode);
+                tenetStatusEffectSlots.AddLast(foundNode);
+            }
             else
             {
                 // When we are already utilizing all the slots

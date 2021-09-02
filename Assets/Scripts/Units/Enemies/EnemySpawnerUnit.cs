@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using Abilities;
 using TenetStatuses;
+using Units.Commands;
 using UnityEngine;
 
 namespace Units.Enemies
@@ -9,8 +11,6 @@ namespace Units.Enemies
         [SerializeField] private int timer = 5;
         public GameObject SpawnPrefab;
         private EnemyUnit spawnUnit;
-
-        public Vector2Int UnitPosition;
 
         private void Start()
         {            
@@ -23,15 +23,37 @@ namespace Units.Enemies
         public bool Turn()
         {
             RemoveTenetStatus(TenetType.Pride, 1); //temp?
-            if(--timer == 0)
+            if (--timer == 0)
             {
                 Indestructible = false;
-                UnitPosition = gridManager.ConvertPositionToCoordinate(transform.position);
                 return true;
             }
             return false;
         }
 
         public override bool IsSameTeamWith(IAbilityUser other) => other is EnemyUnit;
+        
+        public async Task Spawner()
+        {
+            // Get spawner stats
+            int damage = HealthStat.BaseValue - HealthStat.Value;
+            int curSpeed = SpeedStat.Value;
+
+            // Kill spawner
+            TakeDamage(HealthStat.Value + DefenceStat.Value + 20);
+            await commandManager.WaitForCommand<KilledUnitCommand>();
+
+            // Spawn unit
+            GameObject spawnPrefab = SpawnPrefab;
+            spawnPrefab.GetComponent<EnemyUnit>().HealthStat.BaseValue = 5;
+            var spawnedUnit = unitManagerT.Spawn(spawnPrefab, Coordinate);
+            await commandManager.WaitForCommand<SpawnedUnitCommand>(); //IMPORTANT
+
+            // Apply spawner stats
+            // BUG: Setting speed too late, needs to be set before spawning so that the unit can be
+            // BUG: placed correctly on the timeline.
+            spawnedUnit.SetSpeed(curSpeed);
+            spawnedUnit.TakeDamage(damage);
+        }
     }
 }

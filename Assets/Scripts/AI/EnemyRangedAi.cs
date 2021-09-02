@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
+using Abilities.Shapes;
 using Units;
 using Units.Commands;
 using Units.Players;
@@ -48,7 +49,7 @@ namespace AI
                 if (GetTargetsInRange(rangedAttackAbility).Count > 0)
                     await ShootPlayer(rangedAttackAbility);
                 else
-                    await enemyManager.DoUnitAbility(enemyUnit, buffAbility, Vector2Int.zero);
+                    await enemyManager.DoUnitAbility(enemyUnit, buffAbility, ShapeDirection.None);
             }
             
             // TODO: Move to superclass.

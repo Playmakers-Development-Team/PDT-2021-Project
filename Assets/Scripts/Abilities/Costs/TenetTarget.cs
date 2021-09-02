@@ -22,12 +22,6 @@ namespace Abilities.Costs
                 TenetTarget.Oldest => user.TenetStatuses.Count > 0
                     ? user.TenetStatuses.First().TenetType
                     : (TenetType?) null,
-                TenetTarget.LastToFirst => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.Last().TenetType
-                    : (TenetType?) null,
-                TenetTarget.FirstToLast => user.TenetStatuses.Count > 0
-                    ? user.TenetStatuses.First().TenetType
-                    : (TenetType?) null,
                 _ => null
             };
         }

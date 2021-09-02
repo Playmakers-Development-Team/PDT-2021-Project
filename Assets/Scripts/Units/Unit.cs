@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
+using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
@@ -12,6 +14,7 @@ using Units.Enemies;
 using Units.Players;
 using Units.Stats;
 using TenetStatuses;
+using Units.Virtual;
 using UnityEngine;
 using Utilities;
 using Random = UnityEngine.Random;
@@ -84,7 +87,7 @@ namespace Units
             StatTypes.Health);
             DefenceStat = new Stat(this, data.DefenceStat.BaseValue, StatTypes.Defence);
             AttackStat = new Stat(this, data.AttackStat.BaseValue, StatTypes.Attack);
-            SpeedStat = new Stat(this, Random.Range(0,101), StatTypes.Speed);
+            SpeedStat = new Stat(this, Random.Range(0,10), StatTypes.Speed);
             MovementPoints = new Stat(this, data.MovementPoints.BaseValue, StatTypes.MovementPoints);
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
@@ -94,36 +97,68 @@ namespace Units
 
         #region ValueChanging
         
-        public void TakeDefence(int amount) => DefenceStat.Value += amount;
-        
-        public void TakeAttack(int amount) => AttackStat.Value += amount;
+        public void TakeDefence(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDefence(amount);
+            virtualUnit.ApplyChanges();
+        }
 
-        public void TakeAttackForEncounter(int amount) => AttackStat.BaseValue += amount;
+        public void TakeAttack(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeAttack(amount);
+            virtualUnit.ApplyChanges();
+        }
 
-        public void TakeDefenceForEncounter(int amount) => DefenceStat.BaseValue += amount;
+        public void TakeAttackForEncounter(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeAttackForEncounter(amount);
+            virtualUnit.ApplyChanges();
+        }
+
+        public void TakeDefenceForEncounter(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDefenceForEncounter(amount);
+            virtualUnit.ApplyChanges();
+        }
 
         public void TakeDamage(int amount)
         {
-            if (amount <= 0)
-                return;
-            
-            HealthStat.TakeDamage(amount);
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeDamage(amount);
+            virtualUnit.ApplyChanges();
         }
-        
+
         public void DealDamageTo(IAbilityUser other, int amount)
         {
-            // Attack modifiers should only be applied when damage amount is non-zero
-            if (amount <= 0)
-                return;
+            IVirtualAbilityUser to = other.CreateVirtualAbilityUser();
+            IVirtualAbilityUser from = CreateVirtualAbilityUser();
 
-            int damage = AttackStat.Value + amount;
-            other.TakeDamage(damage);
+            from.DealDamageTo(to, amount);
+            from.ApplyChanges();
+            to.ApplyChanges();
         }
 
-        public void TakeKnockback(int amount) => KnockbackStat.Value += amount;
-        
+        public void TakeKnockback(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.TakeKnockback(amount);
+            virtualUnit.ApplyChanges();
+        }
+
         public void SetSpeed(int amount) => SpeedStat.Value = amount;
-        public void AddSpeed(int amount) => SpeedStat.Value += amount;
+        
+        public void AddSpeed(int amount)
+        {
+            IVirtualAbilityUser virtualUnit = CreateVirtualAbilityUser();
+            virtualUnit.AddSpeed(amount);
+            virtualUnit.ApplyChanges();
+        }
+
+        public IVirtualAbilityUser CreateVirtualAbilityUser() => new VirtualUnit(this);
         
         #endregion
         
@@ -488,6 +523,24 @@ namespace Units
         
         public bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus) =>
             TenetStatusEffectsContainer.TryGetTenetStatus(tenetType, out tenetStatus);
+
+        public void SetTenets(ITenetBearer tenetBearer) =>
+            TenetStatusEffectsContainer.SetTenets(tenetBearer);
+
+        #endregion
+        
+        #region Abilities
+        
+        public AbilityCommand UseAbility(Ability ability, ShapeDirection direction)
+        {
+            AbilityCommand abilityCommand = new AbilityCommand(this, direction, ability);
+            commandManager.ExecuteCommand(abilityCommand);
+            return abilityCommand;
+        }
+        
+        public IEnumerable<VirtualUnit> ProjectAbility(Ability ability, ShapeDirection direction) =>
+            ability.ProjectAbilityUsers(this, Coordinate, direction)
+                .OfType<VirtualUnit>();
 
         #endregion
     }

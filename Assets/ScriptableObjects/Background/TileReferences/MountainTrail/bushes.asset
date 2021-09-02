@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189c832e3cc34bafa2d88409b1b82d5f, type: 3}
+  m_Name: bushes
+  m_EditorClassIdentifier: 
+  line: {fileID: 11400000, guid: 4de476b5d4a014f4587b9ae2505ad1e5, type: 2}
+  colour: {fileID: 11400000, guid: 069de3647ebba41468860feec78018a6, type: 2}
+  fill: {fileID: 11400000, guid: 8c398e9620d24f54995e64e6649609b0, type: 2}
+  preview: {fileID: 11400000, guid: 9656134699d6f0a42adc79a838942f5d, type: 2}

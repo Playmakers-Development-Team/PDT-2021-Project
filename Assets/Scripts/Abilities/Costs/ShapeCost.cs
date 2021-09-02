@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Abilities.Parsing;
 using Abilities.Shapes;
 using UnityEngine;
 using Utilities;
@@ -11,6 +12,10 @@ namespace Abilities.Costs
     [Serializable]
     public class ShapeCost : ICost
     {
+        // Ideally, we want this in CompositeCost. But that's difficult to do and we need something that works right now.
+        [Tooltip("Cost is always applied regardless of whether or not it meets the requirement")]
+        [SerializeField] private bool forceApplyCost;
+        
         [SerializeField] private BasicShapeData shape;
         [SerializeField] private ShapeCountConstraint countConstraint;
         [SerializeField, Min(0)] private int count;
@@ -37,40 +42,40 @@ namespace Abilities.Costs
             }
         }
 
-        public void ApplyCost(IAbilityUser unit)
+        public void ApplyCost(IAbilityContext context, IAbilityUser unit)
         {
+            if (!forceApplyCost && !MeetsRequirements(context, unit))
+                return;
+            
             // Keep in an array here to prevent potential modification exceptions
             IAbilityUser[] targets = countConstraint switch
             {
                 // In case there are more units than the count, we want to randomise the order and
                 // pick the count amount
-                ShapeCountConstraint.AtLeast => GetShapeTargets(unit)
+                ShapeCountConstraint.AtLeast => GetShapeTargets(context, unit)
                     .OrderBy(left => UnityEngine.Random.Range(int.MinValue, int.MaxValue))
                     .Take(count)
                     .ToArray(),
-                ShapeCountConstraint.AtMost => GetShapeTargets(unit).ToArray(),
+                ShapeCountConstraint.AtMost => GetShapeTargets(context, unit).ToArray(),
                 _ => throw new ArgumentOutOfRangeException(
                     $"Unsupported {nameof(ShapeCountConstraint)} {countConstraint}")
             };
             
             foreach (IAbilityUser target in targets)
-                cost.ApplyAnyTargetCost(target);
+                cost.ApplyAnyTargetCost(context, target);
             
-            cost.ApplyAnyUserCost(unit);
+            cost.ApplyAnyUserCost(context, unit);
         }
 
-        public bool MeetsRequirements(IAbilityUser user) =>
+        public bool MeetsRequirements(IAbilityContext context, IAbilityUser user) =>
             countConstraint == ShapeCountConstraint.AtLeast
-                ? GetShapeTargets(user).Count() >= count
-                : GetShapeTargets(user).Count() <= count;
+                ? GetShapeTargets(context, user).Count() >= count
+                : GetShapeTargets(context, user).Count() <= count;
 
-        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityUser unit) =>
-            cost.MeetsRequirementsForUser(unit)
-                ? shape.GetTargets(unit.Coordinate, Vector2.zero)
-                    .OfType<IAbilityUser>()
-                    .Where(target => MatchesShapeFilter(unit, target))
-                    .Where(target => cost.MeetsRequirementsForTarget(target))
-                : Enumerable.Empty<IAbilityUser>();
+        private IEnumerable<IAbilityUser> GetShapeTargets(IAbilityContext context, IAbilityUser unit) =>
+            context.GetCachedUsersFromShape(unit.Coordinate, Vector2.zero, shape)
+                .Where(target => MatchesShapeFilter(unit, target))
+                .Where(target => cost.MeetsRequirements(context, unit, target));
 
         // TODO: Duplicate code, see ShapeBonus.MatchesShapeFilter
         private bool MatchesShapeFilter(IAbilityUser user, IAbilityUser target)

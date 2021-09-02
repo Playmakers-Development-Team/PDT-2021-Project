@@ -9,6 +9,10 @@ namespace UI.Game.Unit
 {
     public class UnitDisplay : DialogueComponent<GameDialogue>
     {
+        [Header("Button")]
+        
+        [SerializeField] private Button button;
+        
         [Header("Damage Text")]
         
         [SerializeField] private TextMeshProUGUI damageText;
@@ -20,11 +24,15 @@ namespace UI.Game.Unit
         [SerializeField] private Image healthBarDifference;
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
+        
 
         private GameDialogue.UnitInfo unitInfo;
 
         private RectTransform rectTransform;
         private bool moving;
+
+
+        internal GameDialogue.UnitInfo UnitInfo => unitInfo;
         
         
         #region MonoBehaviour
@@ -70,11 +78,16 @@ namespace UI.Game.Unit
         
         public void OnClick()
         {
+            if (dialogue.DisplayMode != GameDialogue.Mode.Default)
+                return;
+            
             dialogue.unitSelected.Invoke(unitInfo);
         }
 
         private void OnStartedMove(GameDialogue.MoveInfo info)
         {
+            button.enabled = false;
+            
             if (info.UnitInfo.Unit != unitInfo.Unit)
                 return;
 
@@ -83,6 +96,8 @@ namespace UI.Game.Unit
 
         private void OnEndedMove(GameDialogue.UnitInfo info)
         {
+            button.enabled = true;
+            
             if (info.Unit != unitInfo.Unit)
                 return;
 
@@ -124,7 +139,6 @@ namespace UI.Game.Unit
             
             await Task.Delay((int) damageTextDuration * 1000);
 
-            // BUG: See below...
             if (damageText == null)
                 return;
             
@@ -133,7 +147,7 @@ namespace UI.Game.Unit
 
         private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)
         {
-            if (data.Difference <= 0)
+            if (data.Difference == 0)
                 return;
             
             float baseAmount = data.BaseValue;
@@ -155,11 +169,6 @@ namespace UI.Game.Unit
             while (Time.time - start < duration)
             {
                 float t = (Time.time - start) / duration;
-                
-                // BUG: Null reference here, preventing with scuffed check...
-                // I think the IUnit can die while this async function runs, it should kill the function
-                //  by listening to dialogue.unitKilled but I don't know how best to do that right now.
-                // BUG: ALSO need to abort these if the unit is damaged again, or it'll wait for this to start...
                 
                 if (healthBarDifference == null)
                     return;

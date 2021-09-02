@@ -1,4 +1,5 @@
 using Commands;
+using Grid.GridObjects;
 using Managers;
 using Units;
 using Units.Commands;
@@ -33,6 +34,8 @@ namespace Turn
                 {
                     SetupTurnQueue();
                 });
+            
+            turnManager.Reset();
         }
 
         /// <summary>

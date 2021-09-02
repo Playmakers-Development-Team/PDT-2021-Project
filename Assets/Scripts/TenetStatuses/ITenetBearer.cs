@@ -17,5 +17,7 @@ namespace TenetStatuses
         bool HasTenetStatus(TenetType tenetType, int minimumStackCount = 1);
 
         bool TryGetTenetStatus(TenetType tenetType, out TenetStatus tenetStatus);
+
+        void SetTenets(ITenetBearer tenetBearer);
     }
 }

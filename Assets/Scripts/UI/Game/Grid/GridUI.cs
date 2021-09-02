@@ -30,15 +30,15 @@ namespace UI.Game.Grid
         
         private GridManager gridManager;
         private TurnManager turnManager;
-        
-        
+
+
         #region MonoBehaviour
 
         private void Start()
         {
             FillAll();
         }
-        
+
         public void Update()
         {
             if (!Mouse.current.leftButton.wasPressedThisFrame || Camera.main == null)
@@ -72,20 +72,20 @@ namespace UI.Game.Grid
 
         protected override void Subscribe()
         {
-            dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.abilitySelected.AddListener(OnAbilitySelected);
             dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
             dialogue.abilityRotated.AddListener(OnAbilityRotated);
             dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
+            dialogue.modeChanged.AddListener(OnModeChanged);
         }
 
         protected override void Unsubscribe()
         {
-            dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.abilitySelected.RemoveListener(OnAbilitySelected);
             dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
             dialogue.abilityRotated.RemoveListener(OnAbilityRotated);
             dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
+            dialogue.modeChanged.RemoveListener(OnModeChanged);
         }
         
         #endregion
@@ -93,40 +93,33 @@ namespace UI.Game.Grid
         
         #region Listeners
 
-        private void OnTurnStarted(GameDialogue.TurnInfo info)
-        {
-            if (info.CurrentUnit.Unit is PlayerUnit)
-                UpdateGrid();
-            else
-                FillAll();
-        }
-
         private void OnAbilitySelected(Ability ability)
         {
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Aiming);
             UpdateGrid();
         }
 
         private void OnAbilityDeselected(Ability ability)
         {
-            // TODO: Remove once UpdateGrid checks if an IUnit is moving...
-            if (ability == null)
-                return;
-            
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
             UpdateGrid();
         }
 
         private void OnAbilityRotated(Vector2 direction)
         {
-            // TODO: Remove once UpdateGrid checks if an IUnit is moving...
-            if (dialogue.SelectedAbility == null)
-                return;
-            
-            UpdateGrid();
+            if (dialogue.DisplayMode == GameDialogue.Mode.Aiming)
+                UpdateGrid();
         }
 
         private void OnAbilityConfirmed()
         {
-            FillAll();
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
+            UpdateGrid();
+        }
+
+        private void OnModeChanged(GameDialogue.Mode mode)
+        {
+            UpdateGrid();
         }
         
         #endregion
@@ -139,29 +132,23 @@ namespace UI.Game.Grid
             // TODO: Add IUnit.IsMoving check whenever that's implemented...
             
             FillAll();
-            
-            // Draw the tiles in range of the selected ability or draw the tile in range of movement
-            if (dialogue.SelectedAbility != null)
+
+            Vector2Int[] coordinates;
+            switch (dialogue.DisplayMode)
             {
-                // TODO: Remove Where() when BasicShapeData.GetAffectedCoordinates() only returns in-bounds coordinates...
-                Vector2Int[] coordinates = dialogue.SelectedAbility.Shape.
-                    GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).Where(vec => gridManager.IsInBounds(vec)).
-                    ToArray();
+                case GameDialogue.Mode.Aiming when dialogue.SelectedAbility != null:
+                    coordinates = dialogue.SelectedAbility.Shape.
+                        GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).
+                        Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                    
+                    Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                    break;
                 
-                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
-                
-                //Outline(new GridSelection(coordinates, GridSelectionType.Valid));
-            }
-            else if (turnManager.ActingUnit.MovementPoints.Value > 0)
-            {
-                // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
-                Vector2Int[] coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
-                
-                Fill(new GridSelection(coordinates, GridSelectionType.Valid));
-                
-                Vector2Int[] occupiedCoordinates = turnManager.ActingUnit.GetReachableOccupiedTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
-                
-                Fill(new GridSelection(occupiedCoordinates, GridSelectionType.Invalid));
+                case GameDialogue.Mode.Moving when turnManager.ActingUnit.MovementPoints.Value > 0:
+                    coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
+
+                    Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                    break;
             }
         }
 
@@ -232,11 +219,14 @@ namespace UI.Game.Grid
         
         #region Movement
         
+        // TODO: This would probably be better being in InputController...
         private void TryMove(Vector2Int destination)
         {
-            if (!(turnManager.ActingUnit is PlayerUnit playerUnit) || !turnManager.IsMovementPhase())
+            if (dialogue.DisplayMode != GameDialogue.Mode.Moving)
                 return;
 
+            PlayerUnit playerUnit = turnManager.ActingPlayerUnit;
+            
             // TODO: Remove Where() when GetAffectedCoordinates() returns only in-bounds coordinates...
             List<Vector2Int> inRange = playerUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToList();
             
@@ -244,6 +234,8 @@ namespace UI.Game.Grid
                 return;
             
             dialogue.moveConfirmed.Invoke(new GameDialogue.MoveInfo(destination, dialogue.GetInfo(playerUnit)));
+            dialogue.buttonSelected.Invoke();
+            
             FillAll();
         }
         

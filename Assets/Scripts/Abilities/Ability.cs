@@ -5,6 +5,7 @@ using Abilities.Parsing;
 using Abilities.Shapes;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
+using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -20,6 +21,7 @@ namespace Abilities
         [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
+        [SerializeField] private TenetType representedTenet;
 
         [FormerlySerializedAs("targetEffects")]
         [SerializeField] private List<Effect> effects;
@@ -33,79 +35,91 @@ namespace Abilities
         /// <summary>
         /// Describes what and how the ability can hit units.
         /// </summary>
-        public IShape Shape => shape;        
+        public IShape Shape => shape;
         /// <summary>
-        /// A complete description of the ability.
+        /// The speed which will be added on top of Abilities
         /// </summary>
         public int Speed => speed;
+        /// <summary>
+        /// The tenet that this ability represents. This would be shown in the UI.
+        /// </summary>
+        public TenetType RepresentedTenet => representedTenet;
+        /// <summary>
+        /// All keywords that should be shown in game which is used by this ability.
+        /// Keywords with the same display names are not shown more than once.
+        /// </summary>
+        public IEnumerable<Keyword> AllKeywords => AllDefinedKeywords
+            .Where(k => k.IsVisibleInGame)
+            .GroupBy(k => k.DisplayName)
+            .Select(group => group.First());
         /// <summary>
         /// All keywords used by this ability regardless whether they should be shown to
         /// the player or not.
         /// </summary>
-        public IEnumerable<Keyword> AllKeywords => TargetKeywords.Concat(UserKeywords);
-        /// <summary>
-        /// All keywords that should be shown in game which is used by this ability.
-        /// </summary>
-        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
+        [Obsolete("Use AllKeywords")]
+        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords;
+        /// All keywords used by this ability regardless whether they should be shown to
+        /// the player or not.
+        public IEnumerable<Keyword> AllDefinedKeywords => TargetKeywords.Concat(UserKeywords);
 
         private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);
 
-        public void Use(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        internal void Use(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
             user.AddSpeed(speed);
-            UseForTargets(user, shape.GetTargets(originCoordinate, targetVector));
-        }
-
-        public void UseForTargets(IAbilityUser user, params GridObject[] targets) => 
-            UseForTargets(user, targets.AsEnumerable());
-        
-        public void UseForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
-        {
+            var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
-            abilityParser.ProcessAll();
+            abilityParser.ParseAll();
+            abilityParser.ApplyChanges();
         }
         
-        public void Undo(IAbilityUser user, Vector2Int originCoordinate, Vector2 targetVector)
+        public IEnumerable<IVirtualAbilityUser> ProjectAbilityUsers(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
+        {
+            var targets = shape.GetTargets(originCoordinate, direction);
+            AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
+            abilityParser.ParseAll();
+            return abilityParser.Targets.Prepend(abilityParser.User);
+        }
+        
+        internal void Undo(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
             user.AddSpeed(-speed);
-            UndoForTargets(user, shape.GetTargets(originCoordinate, targetVector));
-        }
-
-        public void UndoForTargets(IAbilityUser user, params GridObject[] targets) =>
-            UndoForTargets(user, targets.AsEnumerable());
-        
-        public void UndoForTargets(IAbilityUser user, IEnumerable<GridObject> targets)
-        {
+            var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();
+            abilityParser.ApplyChanges();
         }
 
         public void OnBeforeSerialize()
         {
-            // cache array, prevent modification exceptions
-            var userEffectsCopy = userEffects.ToArray();
-
-            if (!excludeUserFromTargets)
+            // May be null when we are just creating the object
+            if (userEffects != null)
             {
-                foreach (Effect targetEffect in effects)
-                    targetEffect.affectUser = true;
+                // cache array, prevent modification exceptions
+                var userEffectsCopy = userEffects.ToArray();
 
-                excludeUserFromTargets = true;
-            }
+                if (!excludeUserFromTargets)
+                {
+                    foreach (Effect targetEffect in effects)
+                        targetEffect.affectUser = true;
 
-            foreach (Effect userEffect in userEffectsCopy)
-            {
-                userEffects.Remove(userEffect);
-                userEffect.affectTargets = false;
-                userEffect.affectUser = true;
-                effects.Add(userEffect);
-            }
-            
+                    excludeUserFromTargets = true;
+                }
+
+                foreach (Effect userEffect in userEffectsCopy)
+                {
+                    userEffects.Remove(userEffect);
+                    userEffect.affectTargets = false;
+                    userEffect.affectUser = true;
+                    effects.Add(userEffect);
+                }
+                
 #if UNITY_EDITOR
-            if (userEffectsCopy.Length > 0)
-                UnityEditor.EditorUtility.SetDirty(this);
+                if (userEffectsCopy.Length > 0)
+                    UnityEditor.EditorUtility.SetDirty(this);
 #endif
+            }
         }
 
         public void OnAfterDeserialize() {}

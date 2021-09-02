@@ -61,4 +61,9 @@ namespace Turn.Commands
     /// Executed when there are no player units left alive.
     /// </summary>
     public class NoRemainingPlayerUnitsCommand : Command {}
+
+    /// <summary>
+    /// Executed when a turn queue is updated.
+    /// </summary>
+    public class TurnQueueUpdatedCommand : Command {}
 }

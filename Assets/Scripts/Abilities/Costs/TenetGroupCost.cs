@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities.Parsing;
 using TenetStatuses;
 using UnityEngine;
 using Utilities;
@@ -10,6 +11,10 @@ namespace Abilities.Costs
     [Serializable]
     public class TenetGroupCost : ICost, ISerializationCallbackReceiver
     {
+        // Ideally, we want this in CompositeCost. But that's difficult to do and we need something that works right now.
+        [Tooltip("Cost is always applied regardless of whether or not it meets the requirement")]
+        [SerializeField] private bool forceApplyCost;
+
         [SerializeField] private TenetTarget tenetTarget;
         [SerializeField] private TenetCostType tenetCostType;
         [SerializeField, Min(1)] private int count = 1;
@@ -17,13 +22,22 @@ namespace Abilities.Costs
 
         public string DisplayName => $"{tenetCostType} {StringUtility.UppercaseToReadable(tenetTarget)} from any {count} of {tenetFilter.ToDisplayName()}";
 
-        public void ApplyCost(IAbilityUser user)
+        public void ApplyCost(IAbilityContext context, IAbilityUser user)
         {
+            if (!forceApplyCost && !MeetsRequirements(context, user))
+                return;
+            
             List<TenetType> allTypes = new List<TenetType>();
             
             if (tenetTarget == TenetTarget.All)
             {
-                allTypes.AddRange(GetMatchingTenets(user.TenetStatuses));
+                // var tenetTypes = GetMatchingTenets(user.TenetStatuses)
+                //     .Select(t => t.TenetType);
+                // allTypes.AddRange(tenetTypes);
+                
+                // Spend or Consume on this is not implemented and is not needed.
+                // It might take a while to come up with a reasonable outcome/implementation for this.
+                Debug.LogWarning("Cannot spend or consume targeting all tenets!");
             }
             else
             {
@@ -47,13 +61,11 @@ namespace Abilities.Costs
             }
         }
 
-        public bool MeetsRequirements(IAbilityUser user) => tenetTarget switch
+        public bool MeetsRequirements(IAbilityContext context, IAbilityUser user) => tenetTarget switch
         {
             TenetTarget.Newest => MatchSpecificTenet(user),
             TenetTarget.Oldest => MatchSpecificTenet(user),
-            TenetTarget.FirstToLast => MatchAnyTenets(user),
-            TenetTarget.LastToFirst => MatchAnyTenets(user),
-            TenetTarget.All => MatchAnyTenets(user),
+            TenetTarget.All => MatchAllTenets(user),
             _ => throw new ArgumentOutOfRangeException(nameof(TenetTarget), tenetTarget, null)
         };
 
@@ -68,13 +80,11 @@ namespace Abilities.Costs
                    && user.GetTenetStatusCount(tenetType.Value) >= count;
         }
 
-        private bool MatchAnyTenets(IAbilityUser user) => 
-            GetMatchingTenets(user.TenetStatuses).Count() >= count;
-
-        private IEnumerable<TenetType> GetMatchingTenets(IEnumerable<TenetStatus> tenets) =>
-            tenets
-                .Select(t => t.TenetType)
-                .Where(t => tenetFilter.IsTenetInMask(t));
+        private bool MatchAllTenets(IAbilityUser user) =>
+            GetMatchingTenets(user.TenetStatuses).Sum(t => t.StackCount) >= count;
+        
+        private IEnumerable<TenetStatus> GetMatchingTenets(IEnumerable<TenetStatus> tenets) =>
+            tenets.Where(t => tenetFilter.IsTenetInMask(t.TenetType));
         
         public void OnBeforeSerialize()
         {

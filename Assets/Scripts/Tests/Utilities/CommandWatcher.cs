@@ -55,6 +55,9 @@ namespace Tests.Utilities
             yield return new WaitUntil(() => task.Value.Status.IsCompleted());
         }
 
+        public IEnumerator WaitWithDefaultTimeout(string failMessage = null) =>
+            WaitWithTimeout(12, failMessage);
+
         public IEnumerator WaitWithTimeout(float seconds, string failMessage = null) => 
             WaitWithTimeout(TimeSpan.FromSeconds(seconds), failMessage);
 
