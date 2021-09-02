@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 591563304003242143}
   - component: {fileID: 7068379517129078417}
   - component: {fileID: 6237635461972298730}
+  - component: {fileID: 5074325416315990280}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: EnemyUnit
@@ -129,7 +130,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3211234922025711274}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.53, y: 0.16536954, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7356984096423941700}
@@ -172,7 +173,6 @@ MonoBehaviour:
   Target: {fileID: 0}
   timer: 3
   SpawnPrefab: {fileID: 2640585567817604240, guid: bbf8156f6d2045b4d906e8a2876bcdff, type: 3}
-  UnitPosition: {x: 0, y: 0}
 --- !u!114 &7068379517129078417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467200e646184857ba5f63f360d4e884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitGridObject: {fileID: 591563304003242143}
   info:
     profileCropInfo: {fileID: 11400000, guid: 2f30651a195066242b890d549d1f0f64, type: 2}
     timelineCropInfo: {fileID: 11400000, guid: 2f30651a195066242b890d549d1f0f64, type: 2}
@@ -202,6 +201,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SpecialMoveCount>k__BackingField: 0
+--- !u!114 &5074325416315990280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211234922025711274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110c333121b44419a5b92eb58df8fc70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoSetTilemap: 1
+  levelTilemap: {fileID: 0}
+  coordinate: {x: 0, y: 0}
 --- !u!1 &4865050141736692184
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +241,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4865050141736692184}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.53, y: -0.16536954, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.59999996, y: 0.29999998, z: 0}
   m_Children: []
   m_Father: {fileID: 5076836118822117033}
