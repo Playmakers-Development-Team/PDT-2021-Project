@@ -156,7 +156,10 @@ namespace UI.Game.Grid
         {
             TileBase tile = GetTile(selection.Type);
             foreach (Vector2Int coordinate in selection.Spaces)
-                tilemap.SetTile((Vector3Int) coordinate, tile);
+            {
+                if (gridManager.GetGridObjectsByCoordinate(coordinate).All(g => g is IUnit))
+                    tilemap.SetTile((Vector3Int) coordinate, tile);
+            }
         }
         
         private void FillAll(GridSelectionType type = GridSelectionType.Default)
