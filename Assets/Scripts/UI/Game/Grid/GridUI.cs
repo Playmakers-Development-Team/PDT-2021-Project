@@ -5,6 +5,7 @@ using Grid;
 using Managers;
 using Turn;
 using UI.Core;
+using Units;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -167,7 +168,8 @@ namespace UI.Game.Grid
             {
                 for (int y = b.yMin; y <= b.yMax; y++)
                 {
-                    coordinates.Add(new Vector2Int(x, y));
+                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int(x, y)).All(g => g is IUnit))
+                        coordinates.Add(new Vector2Int(x, y));
                 }
             }
             
