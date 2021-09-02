@@ -1,18 +1,17 @@
-using Background.Pipeline;
 using UnityEditor;
 using UnityEngine;
 
-namespace Background.Editor
+namespace UI.Editor
 {
     public class SettingsWindow : EditorWindow
     {
         private UnityEditor.Editor editor;
         
-        [MenuItem("Window/Background/Settings")]
+        [MenuItem("Window/UI/Settings")]
         private static void ShowWindow()
         {
             SettingsWindow window = GetWindow<SettingsWindow>();
-            window.titleContent = new GUIContent("Background Settings",
+            window.titleContent = new GUIContent("UI Settings",
                 EditorGUIUtility.IconContent("SettingsIcon").image);
             window.Show();
         }

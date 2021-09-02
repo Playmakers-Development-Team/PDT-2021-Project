@@ -64,7 +64,7 @@ namespace UI
     }
     
     [CustomEditor(typeof(CropGenerator))]
-    public class CropGeneratorEditor : Editor
+    public class CropGeneratorEditor : UnityEditor.Editor
     {
         private SerializedProperty rawImage;
         private SerializedProperty maskImage;
