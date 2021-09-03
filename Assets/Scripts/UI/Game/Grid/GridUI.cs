@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using Grid;
@@ -17,6 +18,10 @@ namespace UI.Game.Grid
     public class GridUI : DialogueComponent<GameDialogue>
     {
         [SerializeField] private LayerMask clickLayer;
+
+        // The following values are used to show mouse the position when selecting a movement tile
+        private bool EnableMouseHover = false;
+        private Vector2Int hoveredCoordinate;
         
         [Header("Tile types")]
         
@@ -42,13 +47,15 @@ namespace UI.Game.Grid
 
         public void Update()
         {
-            if (!Mouse.current.leftButton.wasPressedThisFrame || Camera.main == null)
+            if (!Mouse.current.leftButton.wasPressedThisFrame && !EnableMouseHover
+                || Camera.main == null)
                 return;
             
             Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
             Plane plane = new Plane(-Camera.main.transform.forward, transform.position);
 
-            if (!plane.Raycast(worldRay, out float distance) || Physics.Raycast(worldRay, clickLayer))
+            if (!plane.Raycast(worldRay, out float distance) ||
+                Physics.Raycast(worldRay, clickLayer))
                 return;
             
             Vector2 worldPosition = worldRay.origin + worldRay.direction * distance;
@@ -57,7 +64,14 @@ namespace UI.Game.Grid
             if (!gridManager.IsInBounds(coordinate))
                 return;
 
-            TryMove(coordinate);
+            if (EnableMouseHover)
+            {
+                hoveredCoordinate = coordinate;
+                UpdateGrid();
+            }
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+                TryMove(coordinate);
         }
         
         #endregion
@@ -142,13 +156,13 @@ namespace UI.Game.Grid
                         GetPossibleCoordinates(turnManager.ActingUnit.Coordinate).
                         Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     
-                    Fill(new GridSelection(possibleCoordinates, GridSelectionType.Selected));
+                    Fill(new GridSelection(possibleCoordinates, GridSelectionType.Valid));
                     
                     coordinates = dialogue.SelectedAbility.Shape.
                         GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).
                         Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     
-                    Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                    Fill(new GridSelection(coordinates, GridSelectionType.Selected));
                     
                     break;
                 
@@ -160,7 +174,12 @@ namespace UI.Game.Grid
                     //Fill in the blocked coordinates with GridSelectionType.Invalid
                     Vector2Int[] occupiedCoordinates = turnManager.ActingUnit.GetReachableOccupiedTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     Fill(new GridSelection(occupiedCoordinates, GridSelectionType.Invalid));
-                    
+
+                    EnableMouseHover = true;
+
+                    if (coordinates.Contains(hoveredCoordinate))
+                        Fill(new GridSelection(hoveredCoordinate, GridSelectionType.Selected));
+
                     break;
             }
         }
@@ -222,6 +241,8 @@ namespace UI.Game.Grid
             
             if (!inRange.Contains(destination))
                 return;
+
+            EnableMouseHover = false;
             
             dialogue.moveConfirmed.Invoke(new GameDialogue.MoveInfo(destination, dialogue.GetInfo(playerUnit)));
             dialogue.buttonSelected.Invoke();
