@@ -2,6 +2,7 @@
 using System.Linq;
 using Abilities;
 using Grid;
+using Grid.GridObjects;
 using Managers;
 using Turn;
 using UI.Core;
@@ -141,15 +142,22 @@ namespace UI.Game.Grid
                         Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     
                     Fill(new GridSelection(coordinates, GridSelectionType.Valid));
+                    
+                    Vector2Int[] possibleCoordinates = dialogue.SelectedAbility.Shape.
+                        GetPossibleCoordinates(turnManager.ActingUnit.Coordinate).
+                        Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                    
+                    Fill(new GridSelection(possibleCoordinates, GridSelectionType.Selected));
+                    
                     break;
                 
                 case GameDialogue.Mode.Moving when turnManager.ActingUnit.MovementPoints.Value > 0:
+                    // Fill in the movable coordinates with GridSelectionType.Valid
                     coordinates = turnManager.ActingUnit.GetAllReachableTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
-
                     Fill(new GridSelection(coordinates, GridSelectionType.Valid));
                     
+                    //Fill in the blocked coordinates with GridSelectionType.Invalid
                     Vector2Int[] occupiedCoordinates = turnManager.ActingUnit.GetReachableOccupiedTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
-                
                     Fill(new GridSelection(occupiedCoordinates, GridSelectionType.Invalid));
                     
                     break;

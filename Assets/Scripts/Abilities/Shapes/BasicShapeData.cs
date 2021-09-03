@@ -186,5 +186,26 @@ namespace Abilities.Shapes
 
             return affectedCoordinates;
         }
+
+        /// <summary>
+        /// Get all world space coordinates that can be targeted by this shape based on the shape
+        /// parts. 
+        /// </summary>
+        /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
+        public List<Vector2Int> GetPossibleCoordinates(Vector2Int originCoordinate)
+        {
+            List<Vector2Int> northCoordinates = GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.up)).ToList();
+            List<Vector2Int> eastCoordinates = GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.right)).ToList();
+            List<Vector2Int> southCoordinates = GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.down)).ToList();
+            List<Vector2Int> westCoordinates = GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.left)).ToList();
+
+            List<Vector2Int> possibleCoordinates = new List<Vector2Int>();
+            possibleCoordinates.AddRange(northCoordinates);
+            possibleCoordinates.AddRange(eastCoordinates);
+            possibleCoordinates.AddRange(southCoordinates);
+            possibleCoordinates.AddRange(westCoordinates);
+
+            return possibleCoordinates;
+        }
     }
 }
