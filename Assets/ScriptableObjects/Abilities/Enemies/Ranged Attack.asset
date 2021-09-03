@@ -16,11 +16,13 @@ MonoBehaviour:
     cardinal (NESW) or ordinal (NE, NW, SE, SW) direction. The range of the attack
     is dependant on the LineOfSight range (e.g. A player 2 tiles NE can be hit with
     a range of 2).
-  shape: {fileID: 11400000, guid: 55cddb5125685c64f92359dfd92bb1c6, type: 2}
+  shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
-  - name: Default, 2 Damage
+  effects:
+  - name: "Target \u27A4 Default, 2 Damage"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 2
     directDamage: 0

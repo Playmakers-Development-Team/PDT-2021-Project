@@ -11,6 +11,10 @@ namespace Abilities.Costs
     [Serializable]
     public class TenetGroupCost : ICost, ISerializationCallbackReceiver
     {
+        // Ideally, we want this in CompositeCost. But that's difficult to do and we need something that works right now.
+        [Tooltip("Cost is always applied regardless of whether or not it meets the requirement")]
+        [SerializeField] private bool forceApplyCost;
+
         [SerializeField] private TenetTarget tenetTarget;
         [SerializeField] private TenetCostType tenetCostType;
         [SerializeField, Min(1)] private int count = 1;
@@ -20,6 +24,9 @@ namespace Abilities.Costs
 
         public void ApplyCost(IAbilityContext context, IAbilityUser user)
         {
+            if (!forceApplyCost && !MeetsRequirements(context, user))
+                return;
+            
             List<TenetType> allTypes = new List<TenetType>();
             
             if (tenetTarget == TenetTarget.All)

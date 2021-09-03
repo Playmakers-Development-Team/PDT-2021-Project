@@ -196,7 +196,7 @@ GameObject:
   - component: {fileID: 4867198168489326303}
   - component: {fileID: -1575615520848126805}
   - component: {fileID: -7540669148004731161}
-  - component: {fileID: 4404443286861965568}
+  - component: {fileID: 4959289167267801454}
   m_Layer: 0
   m_Name: Enemy Melee
   m_TagString: EnemyUnit
@@ -284,9 +284,9 @@ MonoBehaviour:
   meleeAttackAbility: {fileID: 11400000, guid: 3369e02bbc3677d4c92e11d599922ad1, type: 2}
   buffAbility: {fileID: 11400000, guid: 528d0c3989a04fc44b124a6a49f88607, type: 2}
   actionDelay: 1.5
-  specialMoveCount: 3
+  specialMoveCount: 0
   specialMoveOffset: 1
---- !u!114 &4404443286861965568
+--- !u!114 &4959289167267801454
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -300,4 +300,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSetTilemap: 1
   levelTilemap: {fileID: 0}
-  coordinate: {x: 0, y: 0}
+  coordinate: {x: -3, y: -3}
