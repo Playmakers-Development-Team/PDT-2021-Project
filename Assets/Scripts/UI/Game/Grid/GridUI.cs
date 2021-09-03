@@ -6,6 +6,7 @@ using Grid.GridObjects;
 using Managers;
 using Turn;
 using UI.Core;
+using Units;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -168,7 +169,10 @@ namespace UI.Game.Grid
         {
             TileBase tile = GetTile(selection.Type);
             foreach (Vector2Int coordinate in selection.Spaces)
-                tilemap.SetTile((Vector3Int) coordinate, tile);
+            {
+                if (gridManager.GetGridObjectsByCoordinate(coordinate).All(g => g is IUnit))
+                    tilemap.SetTile((Vector3Int) coordinate, tile);
+            }
         }
         
         private void FillAll(GridSelectionType type = GridSelectionType.Default)
@@ -180,7 +184,8 @@ namespace UI.Game.Grid
             {
                 for (int y = b.yMin; y <= b.yMax; y++)
                 {
-                    coordinates.Add(new Vector2Int(x, y));
+                    if (gridManager.GetGridObjectsByCoordinate(new Vector2Int(x, y)).All(g => g is IUnit))
+                        coordinates.Add(new Vector2Int(x, y));
                 }
             }
             
