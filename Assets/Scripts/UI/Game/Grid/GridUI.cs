@@ -137,17 +137,17 @@ namespace UI.Game.Grid
             switch (dialogue.DisplayMode)
             {
                 case GameDialogue.Mode.Aiming when dialogue.SelectedAbility != null:
-                    coordinates = dialogue.SelectedAbility.Shape.
-                        GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).
-                        Where(vec => gridManager.IsInBounds(vec)).ToArray();
-                    
-                    Fill(new GridSelection(coordinates, GridSelectionType.Valid));
-                    
                     Vector2Int[] possibleCoordinates = dialogue.SelectedAbility.Shape.
                         GetPossibleCoordinates(turnManager.ActingUnit.Coordinate).
                         Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     
                     Fill(new GridSelection(possibleCoordinates, GridSelectionType.Selected));
+                    
+                    coordinates = dialogue.SelectedAbility.Shape.
+                        GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate, dialogue.AbilityDirection).
+                        Where(vec => gridManager.IsInBounds(vec)).ToArray();
+                    
+                    Fill(new GridSelection(coordinates, GridSelectionType.Valid));
                     
                     break;
                 
