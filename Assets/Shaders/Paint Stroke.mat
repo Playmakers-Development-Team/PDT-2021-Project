@@ -45,10 +45,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _DisplacementStrength: 0.5
-    - _NoiseStrength: 0.5
+    - _EndTaper: 0.262
+    - _NoiseStrength: 0
     - _NoiseStrength1: 0.5
     - _NoiseStrength2: 0.5
     - _PaperStrength: 0.5
+    - _StartTaper: 0.919
+    - _TaperAmount: 0.5
     m_Colors:
     - _Albedo: {r: 1, g: 0.674681, b: 0, a: 0.6666667}
   m_BuildTextureStacks: []
