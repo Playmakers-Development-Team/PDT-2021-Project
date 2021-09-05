@@ -1,5 +1,6 @@
 ﻿using UI.Core;
 using Units;
+using Units.Enemies;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ namespace UI.Game.Timeline
     public class TimelinePortrait : DialogueComponent<GameDialogue>
     {
         [SerializeField] private RawImage image;
+        [SerializeField] private Sprite enemyBackground;
 
         private GameDialogue.UnitInfo unitInfo;
         
@@ -39,6 +41,11 @@ namespace UI.Game.Timeline
         internal void Assign(GameDialogue.UnitInfo unit)
         {
             unitInfo = unit;
+            if (unit.Unit.GetType().Equals(typeof(EnemyUnit)))
+            {
+                GetComponent<Image>().sprite = enemyBackground;
+            }
+            
             
             image.texture = unitInfo.TimelineCropInfo.Image;
             image.color = unitInfo.TimelineCropInfo.Colour;
