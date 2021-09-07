@@ -28,8 +28,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
+        m_Scale: {x: 1, y: 0.15}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex1:
         m_Texture: {fileID: 2800000, guid: 205fec6608d12ba49b3d2abac40b8163, type: 3}
@@ -45,13 +45,18 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _DisplacementStrength: 0.5
-    - _EndTaper: 0.262
-    - _NoiseStrength: 0
+    - _EndExponent: 2
+    - _EndTaper: 0.06
+    - _EndTaperSize: 0.114
+    - _NoiseStrength: 0.3
     - _NoiseStrength1: 0.5
     - _NoiseStrength2: 0.5
     - _PaperStrength: 0.5
-    - _StartTaper: 0.919
+    - _StartExponent: 0
+    - _StartTaper: 0.95
+    - _StartTaperSize: 0.429
     - _TaperAmount: 0.5
     m_Colors:
-    - _Albedo: {r: 1, g: 0.674681, b: 0, a: 0.6666667}
+    - _Albedo: {r: 0.42625272, g: 0.3972499, b: 0.745283, a: 1}
+    - _Line: {r: 0.2627451, g: 0.24313727, b: 0.6862745, a: 1}
   m_BuildTextureStacks: []
