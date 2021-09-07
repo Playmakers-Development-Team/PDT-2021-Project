@@ -277,6 +277,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 545605560}
     m_Modifications:
+    - target: {fileID: 234206475871496283, guid: df3fd9623c946a74e8488ca01a5540a7, type: 3}
+      propertyPath: field of view
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 234206475871496286, guid: df3fd9623c946a74e8488ca01a5540a7, type: 3}
       propertyPath: m_Name
       value: Game Camera
@@ -5844,6 +5848,10 @@ PrefabInstance:
     - target: {fileID: 5638836853045114003, guid: b77d9b28fca9190429640283fc3f9eba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9199745368815240114, guid: b77d9b28fca9190429640283fc3f9eba, type: 3}
+      propertyPath: m_FlipX
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b77d9b28fca9190429640283fc3f9eba, type: 3}
