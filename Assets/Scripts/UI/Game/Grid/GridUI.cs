@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Commands;
 using Grid;
+using Grid.Commands;
 using Managers;
 using Turn;
 using UI.Core;
@@ -30,14 +32,10 @@ namespace UI.Game.Grid
         
         private GridManager gridManager;
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
 
         #region MonoBehaviour
-
-        private void Start()
-        {
-            FillAll();
-        }
 
         public void Update()
         {
@@ -68,6 +66,19 @@ namespace UI.Game.Grid
         {
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
+        }
+        
+        protected override void OnComponentEnabled()
+        {
+            base.OnComponentEnabled();
+            commandManager.ListenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
+        }
+
+        protected override void OnComponentDisabled()
+        {
+            base.OnComponentDisabled();
+            commandManager.ListenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
         }
 
         protected override void Subscribe()
@@ -127,6 +138,8 @@ namespace UI.Game.Grid
         
         #region Drawing
         
+        private void OnGridObjectsReady(GridObjectsReadyCommand cmd) => FillAll();
+
         private void UpdateGrid()
         {
             // TODO: Add IUnit.IsMoving check whenever that's implemented...
