@@ -84,7 +84,7 @@ Shader "VFX/Paint Stroke"
                 // Displace UV coordinates.
                 float2 noise_value = float2(
 					tex2D(_NoiseTex, float2(0, i.noise_uv.y)).r,
-					tex2D(_NoiseTex, float2(i.noise_uv.x * _Aspect, 0)).r
+					tex2D(_NoiseTex, float2(i.noise_uv.x, 0)).r
 				);
 
                 float2 displacement;
@@ -95,8 +95,8 @@ Shader "VFX/Paint Stroke"
 
                 float alpha = max(edge_mask.x, edge_mask.y) > 1 ? 0 : 1;
 
-                // Apply value smoothing.
-                float2 smooth_min = float2(1.0 - _LineWeight / _Aspect, 1.0 - _LineWeight);
+                // Apply value smoothing, UV DISPLACEMENT SHOULD GO HERE
+                float2 smooth_min = float2(1.0 - _LineWeight / _Aspect, 1.0 - _LineWeight) - displacement;
                 float2 smooth_max = lerp(smooth_min, 1.0, _LineSharpness);
                 
                 edge_mask = smoothstep(smooth_min, smooth_max, edge_mask);
