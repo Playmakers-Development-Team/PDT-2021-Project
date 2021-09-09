@@ -70,6 +70,7 @@ namespace Turn
         public EnemyUnit ActingEnemyUnit => GetActingEnemyUnit();
         // This is sort of a temporary fix for preventing abilities to be used twice in one turn
         public bool CanUseAbility { get; private set; } = true;
+        public bool AbilitySpeedEnabled { get; set; } = false;
 
         private CommandManager commandManager;
         private UnitManager unitManager;
@@ -209,8 +210,9 @@ namespace Turn
             SyncUnitSpeedAndIndexFromCurrentQueue();
             UpdateNextTurnQueue();
             
-            // only set the premade timeline once the first time, follow speed stat afterwards
-            randomizedSpeed = true;
+            // If ability speed is enabled, only use the premade timeline for the first round.
+            if (AbilitySpeedEnabled)
+                randomizedSpeed = true;
 
             commandManager.ExecuteCommand(new TurnQueueCreatedCommand());
             StartTurn();
@@ -327,7 +329,6 @@ namespace Turn
                 
                 Debug.LogWarning("Premade queue was not completed. Switching to speed order." +
                                  $"Expected {unitManager.AllUnits.Count} units, found {preMadeTurnQueue.Count}.");
-                randomizedSpeed = true;
             }
 
             List<IUnit> turnQueue = new List<IUnit>();
