@@ -45,11 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef00e93578d4efeb8506e4531bcd790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clickLayer:
+    serializedVersion: 2
+    m_Bits: 0
   defaultTile: {fileID: 11400000, guid: 9c6965a19c54fea4887f02ec9642fe94, type: 2}
   validTile: {fileID: 11400000, guid: bcc862c008ef86d488e4dd87a979da31, type: 2}
   invalidTile: {fileID: 11400000, guid: 8511eabb5005c4248b9d731289dc60e6, type: 2}
   selectedTile: {fileID: 11400000, guid: d54d77375a8807a48aa57c04d6da9b43, type: 2}
   tilemap: {fileID: 9091031311659349673}
+  selectedLineRenderer: {fileID: 0}
 --- !u!1 &9091031311613332642
 GameObject:
   m_ObjectHideFlags: 0
