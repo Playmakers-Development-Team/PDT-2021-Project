@@ -6,7 +6,12 @@ Shader "VFX/Paint Stroke"
         _Line ("Line Colour", Color) = (1, 1, 1, 1)
         
         _NoiseTex ("Noise Texture", 2D) = "white" {}
-        _NoiseStrength ("Noise Strength", Range(0, 1)) = 0.5
+        
+        _LineWeight ("Line Weight", Range(0, 1))  = 0.1
+        _LineSharpness ("Line Sharpness", Range(0, 1))  = 0.1
+        
+        _ParallelDisplacement ("Parallel Displacement", Range(0, 1))  = 0.1
+        _PerpendicularDisplacement ("Perpendicular Displacement", Range(0, 1))  = 0.1
     }
     SubShader
     {
@@ -49,7 +54,15 @@ Shader "VFX/Paint Stroke"
             // Noise Texture
             sampler2D _NoiseTex;
             float4 _NoiseTex_ST;
-            float _NoiseStrength;
+
+			float _Aspect;
+
+            float _LineWidth;
+            float _LineWeight;
+            float _LineSharpness;
+
+            float _ParallelDisplacement;
+            float _PerpendicularDisplacement;
 
 
             // Programs
@@ -64,38 +77,33 @@ Shader "VFX/Paint Stroke"
 
             fixed4 frag (v2f i) : SV_Target
             {
-                /*float start_taper_value = (i.uv.x - _StartTaper) / (max(1.0 - _StartTaper, 0.0001));
-                start_taper_value = saturate(start_taper_value);
-                    
-                start_taper_value = sqrt(pow(start_taper_value, 2) + pow(smoothstep(_StartTaperSize * 2 - 1, 1.0, abs(i.uv.y  * 2 - 1)), 2));
-                start_taper_value = saturate(start_taper_value);
+                // Store uv coordinates in 1 -> 0 -> 1 range.
+                float2 edge_mask = i.uv * 2 - 1;
+                edge_mask = abs(edge_mask);
+
+                // Displace UV coordinates.
+                float2 noise_value = float2(
+					tex2D(_NoiseTex, float2(0, i.noise_uv.y)).r,
+					tex2D(_NoiseTex, float2(i.noise_uv.x * _Aspect, 0)).r
+				);
+
+                float2 displacement;
+                displacement.x = saturate(noise_value.x + lerp(-1, 1, _ParallelDisplacement));
+                displacement.y = saturate(noise_value.y + lerp(-1, 1, _PerpendicularDisplacement));
+
+                edge_mask += displacement;
+
+                float alpha = max(edge_mask.x, edge_mask.y) > 1 ? 0 : 1;
+
+                // Apply value smoothing.
+                float2 smooth_min = float2(1.0 - _LineWeight / _Aspect, 1.0 - _LineWeight);
+                float2 smooth_max = lerp(smooth_min, 1.0, _LineSharpness);
                 
-                float end_taper_value = 1.0 - saturate(i.uv.x / max(0.0001, _EndTaper));
-                end_taper_value = sqrt(pow(end_taper_value, 2) + pow(smoothstep(_EndTaperSize, 1.0, abs(i.uv.y  * 2 - 1)), 2));
-
-                end_taper_value = sqrt(pow(end_taper_value, 2) + pow(smoothstep(_EndTaperSize * 2 - 1, 1.0, abs(i.uv.y  * 2 - 1)), 2));
-                end_taper_value = saturate(end_taper_value);
+                edge_mask = smoothstep(smooth_min, smooth_max, edge_mask);
                 
-
-                float taper_value = i.uv.x > 0.5 ? start_taper_value : end_taper_value;*/
-
+                float edge_value = max(edge_mask.x, edge_mask.y);
                 
-                float4 noise_sample = tex2D(_NoiseTex, i.noise_uv);
-                float y_deviation = noise_sample.r;
-                y_deviation *= max(0.001, 0.5 * _NoiseStrength);
-
-                float alpha = 0.5 - abs(0.5 - i.uv.x) - y_deviation;
-                alpha = smoothstep(0, 0.05, saturate(alpha));
-
-                float outline_mask = alpha;
-                outline_mask = smoothstep(0.5, 0.54, outline_mask);
-
-                float y = abs(i.uv.y * 2.0 - 1.0);
-                outline_mask = min(outline_mask, 1.0 - smoothstep(0.8, 0.81, y));
-
-                float3 colour = lerp(_Line.rgb, _Albedo.rgb, outline_mask);
-                
-                return float4(colour, smoothstep(0, .1, alpha));
+                return float4(lerp(_Albedo, _Line, edge_value).rgb, alpha);
             }
             ENDCG
         }

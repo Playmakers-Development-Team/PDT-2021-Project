@@ -16,6 +16,8 @@ namespace VFX
 
         private float previous;
         private static readonly int attackId = Animator.StringToHash("attack");
+        private static readonly int noiseTexId = Shader.PropertyToID("_NoiseTex");
+        private static readonly int lengthId = Shader.PropertyToID("_Aspect");
 
         private void Start()
         {
@@ -66,11 +68,25 @@ namespace VFX
 
             lineRenderer.positionCount = resolution;
             lineRenderer.SetPositions(positions);
-
-            if (!Application.isPlaying)
-                return;
             
-            lineRenderer.material.SetTextureOffset("_NoiseTex", new Vector2(0, Random.value));
+            float length = 0;
+            for (int i = 1; i < lineRenderer.positionCount; i++)
+            {
+                length += Vector3.Distance(lineRenderer.GetPosition(i),
+                    lineRenderer.GetPosition(i - 1));
+            }
+            length /= lineRenderer.widthMultiplier;
+
+            if (Application.isPlaying)
+            {
+                lineRenderer.material.SetFloat(lengthId, length);
+                lineRenderer.material.SetTextureOffset(noiseTexId, new Vector2(Random.value, Random.value));
+            }
+            else
+            {
+                lineRenderer.sharedMaterial.SetFloat(lengthId, length);
+                lineRenderer.sharedMaterial.SetTextureOffset(noiseTexId, new Vector2(Random.value, Random.value));
+            }
         }
         
         private static Vector3 CatmullRom(IReadOnlyList<Anchor> anchors, float t)
