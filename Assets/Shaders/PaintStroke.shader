@@ -12,6 +12,8 @@ Shader "VFX/Paint Stroke"
         
         _ParallelDisplacement ("Parallel Displacement", Range(0, 1))  = 0.1
         _PerpendicularDisplacement ("Perpendicular Displacement", Range(0, 1))  = 0.1
+        
+        _Cull ("Cull", Range(-1, 1))  = 0        
     }
     SubShader
     {
@@ -63,6 +65,8 @@ Shader "VFX/Paint Stroke"
 
             float _ParallelDisplacement;
             float _PerpendicularDisplacement;
+            
+            float _Cull;
 
 
             // Programs
@@ -78,7 +82,7 @@ Shader "VFX/Paint Stroke"
             fixed4 frag (v2f i) : SV_Target
             {
                 // Store uv coordinates in 1 -> 0 -> 1 range.
-                float2 edge_mask = i.uv * 2 - 1;
+                float2 edge_mask = float2((i.uv.x - _Cull) * 2 - 1, i.uv.y * 2 - 1);
                 edge_mask = abs(edge_mask);
 
                 // Displace UV coordinates.
@@ -95,14 +99,13 @@ Shader "VFX/Paint Stroke"
 
                 float alpha = max(edge_mask.x, edge_mask.y) > 1 ? 0 : 1;
 
-                // Apply value smoothing, UV DISPLACEMENT SHOULD GO HERE
+                // Apply value smoothing.
                 float2 smooth_min = float2(1.0 - _LineWeight / _Aspect, 1.0 - _LineWeight) - displacement;
                 float2 smooth_max = lerp(smooth_min, 1.0, _LineSharpness);
                 
                 edge_mask = smoothstep(smooth_min, smooth_max, edge_mask);
                 
-                float edge_value = max(edge_mask.x, edge_mask.y);
-                
+                float edge_value = max(edge_mask.x, edge_mask.y);                
                 return float4(lerp(_Albedo, _Line, edge_value).rgb, alpha);
             }
             ENDCG
