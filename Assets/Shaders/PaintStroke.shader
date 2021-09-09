@@ -105,8 +105,9 @@ Shader "VFX/Paint Stroke"
                 
                 edge_mask = smoothstep(smooth_min, smooth_max, edge_mask);
                 
-                float edge_value = max(edge_mask.x, edge_mask.y);                
-                return float4(lerp(_Albedo, _Line, edge_value).rgb, alpha);
+                float edge_value = max(edge_mask.x, edge_mask.y);
+                float4 color = lerp(_Albedo, _Line, edge_value);
+                return float4(color.rgb, alpha * color.a);
             }
             ENDCG
         }
