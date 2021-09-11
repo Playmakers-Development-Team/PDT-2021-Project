@@ -142,7 +142,8 @@ namespace Turn
             commandManager.ListenCommand<EnemyActionsCompletedCommand>(cmd =>
                 commandManager.ExecuteCommand(new EndTurnCommand(cmd.Unit)));
         }
-
+        
+        
         #endregion
 
         #region Turn Queue Manipulation
