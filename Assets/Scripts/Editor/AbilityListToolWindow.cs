@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace Editor
 {
-    public class AbilityListTool : EditorWindow
+    public class AbilityListToolWindow : EditorWindow
     {
         private Label abilityCountText;
 
@@ -27,7 +27,7 @@ namespace Editor
 
         private Label abilityFilteredCountText;
 
-        public AbilityListTool()
+        public AbilityListToolWindow()
         {
             pathFilter = defaultPathFilter.ToArray();
         }
@@ -35,7 +35,7 @@ namespace Editor
         [MenuItem("Window/Ability List Tool")]
         private static void ShowWindow()
         {
-            var window = GetWindow<AbilityListTool>();
+            var window = GetWindow<AbilityListToolWindow>();
             window.minSize = new Vector2(500, 560);
             window.titleContent = new GUIContent("Ability List Tool");
             window.Show();
