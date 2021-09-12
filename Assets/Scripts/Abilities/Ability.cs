@@ -67,7 +67,7 @@ namespace Abilities
 
         internal void Use(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
-            user.AddSpeed(speed);
+            // user.AddSpeed(speed);
             var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
@@ -84,7 +84,7 @@ namespace Abilities
         
         internal void Undo(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
-            user.AddSpeed(-speed);
+            // user.AddSpeed(-speed);
             var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();
