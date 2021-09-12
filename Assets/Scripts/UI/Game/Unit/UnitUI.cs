@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿ using System.Collections.Generic;
 using Grid;
 using Managers;
 using UI.Core;
@@ -11,7 +11,7 @@ namespace UI.Game.Unit
         [SerializeField] private GameObject unitUIPrefab;
 
         private GridManager gridManager;
-        private List<UnitDisplay> displays = new List<UnitDisplay>();
+        private readonly List<UnitDisplay> displays = new List<UnitDisplay>();
 
         protected override void OnComponentAwake()
         {
@@ -21,9 +21,11 @@ namespace UI.Game.Unit
 
         protected override void OnComponentStart()
         {
-            base.OnComponentStart();
             foreach (UnitDisplay display in displays)
-                display.transform.position = gridManager.ConvertCoordinateToPosition(display.UnitInfo.Unit.Coordinate);
+            {
+                display.transform.position =
+                    gridManager.ConvertCoordinateToPosition(display.UnitInfo.Unit.Coordinate);
+            }
         }
 
         protected override void Subscribe()
