@@ -7,6 +7,7 @@ using Turn;
 using UI.Core;
 using Units.Stats;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Game.Unit
@@ -15,7 +16,7 @@ namespace UI.Game.Unit
     {
         [Header("Button")]
         
-        [SerializeField] private Button button;
+        [SerializeField] private EventTrigger eventTrigger;
         
         [Header("Damage Text")]
         
@@ -23,6 +24,10 @@ namespace UI.Game.Unit
         [SerializeField] private float damageTextDuration;
         
         [Header("Health Bar")]
+        
+        [SerializeField] private Image healthBarContainer;
+        [SerializeField] private Color hoverHealthColour;
+        [SerializeField] private Color defaultHealthColour;
         
         [SerializeField] private Image healthBarCurrent;
         [SerializeField] private Image healthBarDifference;
@@ -42,8 +47,8 @@ namespace UI.Game.Unit
         
         [SerializeField] private Animator indicatorAnimator;
         [SerializeField] private Image indicatorImage;
-        [SerializeField] private Color defaultColour;
-        [SerializeField] private Color selectedColour;
+        [SerializeField] private Color defaultIndicatorColour;
+        [SerializeField] private Color selectedIndicatorColour;
 
 
         private GameDialogue.UnitInfo unitInfo;
@@ -121,9 +126,20 @@ namespace UI.Game.Unit
             dialogue.unitSelected.Invoke(unitInfo);
         }
 
+        public void OnHoverEnter()
+        {
+            healthBarContainer.color = hoverHealthColour;
+        }
+
+        public void OnHoverExit()
+        {
+            healthBarContainer.color = defaultHealthColour;
+        }
+
         private void OnStartedMove(GameDialogue.MoveInfo info)
         {
-            button.enabled = false;
+            OnHoverExit();
+            eventTrigger.enabled = false;
             
             if (info.UnitInfo.Unit != unitInfo.Unit)
                 return;
@@ -133,7 +149,7 @@ namespace UI.Game.Unit
 
         private void OnEndedMove(GameDialogue.UnitInfo info)
         {
-            button.enabled = true;
+            eventTrigger.enabled = true;
             
             if (info.Unit != unitInfo.Unit)
                 return;
@@ -177,7 +193,7 @@ namespace UI.Game.Unit
             UpdateStatDisplays();
 
             if (info.CurrentUnitInfo.Unit == unitInfo.Unit)
-                indicatorImage.color = defaultColour;
+                indicatorImage.color = defaultIndicatorColour;
         }
 
         private void OnUnitSelected(GameDialogue.UnitInfo info)
@@ -191,12 +207,12 @@ namespace UI.Game.Unit
                 {attackDisplay, defenceDisplay, primaryTenetDisplay, secondaryTenetDisplay};
             indicatorAnimator.SetBool(raisedId, displays.Count(d => d.gameObject.activeInHierarchy) > 0);
             
-            indicatorImage.color = selectedColour;
+            indicatorImage.color = selectedIndicatorColour;
         }
 
         private void OnUnitDeselected()
         {
-            indicatorImage.color = defaultColour;
+            indicatorImage.color = defaultIndicatorColour;
             
             if (turnManager.ActingUnit != unitInfo.Unit)
                 indicatorImage.gameObject.SetActive(false);
