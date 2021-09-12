@@ -52,8 +52,9 @@ MonoBehaviour:
   validTile: {fileID: 11400000, guid: bcc862c008ef86d488e4dd87a979da31, type: 2}
   invalidTile: {fileID: 11400000, guid: 8511eabb5005c4248b9d731289dc60e6, type: 2}
   selectedTile: {fileID: 11400000, guid: d54d77375a8807a48aa57c04d6da9b43, type: 2}
+  maskAlpha: 0.2
+  fadeDuration: 0.2
   tilemap: {fileID: 9091031311659349673}
-  selectedLineRenderer: {fileID: 0}
 --- !u!1 &9091031311613332642
 GameObject:
   m_ObjectHideFlags: 0

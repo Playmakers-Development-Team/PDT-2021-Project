@@ -186,6 +186,11 @@ namespace UI.Game.Unit
                 return;
 
             indicatorImage.gameObject.SetActive(true);
+            
+            StatDisplay[] displays =
+                {attackDisplay, defenceDisplay, primaryTenetDisplay, secondaryTenetDisplay};
+            indicatorAnimator.SetBool(raisedId, displays.Count(d => d.gameObject.activeInHierarchy) > 0);
+            
             indicatorImage.color = selectedColour;
         }
 

@@ -4,14 +4,17 @@ using Abilities;
 using Commands;
 using Grid;
 using Grid.Commands;
+using Grid.GridObjects;
 using Managers;
 using Turn;
 using UI.Core;
 using Units;
 using Units.Players;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
+using Task = System.Threading.Tasks.Task;
 
 namespace UI.Game.Grid
 {
@@ -30,7 +33,13 @@ namespace UI.Game.Grid
         [SerializeField] private TileBase invalidTile;
         [SerializeField] private TileBase selectedTile;
         
-        [Header("Required Components")]
+        [Header("Masking")]
+        
+        [SerializeField] private Color defaultColour;
+        [SerializeField] private Color maskColour;
+        [SerializeField] private float fadeDuration;
+        
+        [Header("Component References")]
         
         [SerializeField] private Tilemap tilemap;
         
@@ -144,6 +153,8 @@ namespace UI.Game.Grid
         private void OnModeChanged(GameDialogue.Mode mode)
         {
             UpdateGrid();
+
+            FadeObstacles(mode);
         }
         
         #endregion
@@ -232,6 +243,41 @@ namespace UI.Game.Grid
                 GridSelectionType.Selected => selectedTile,
                 _ => null
             };
+        }
+
+        private void FadeObstacles(GameDialogue.Mode mode)
+        {
+            BoundsInt b = gridManager.LevelBoundsInt;
+            
+            for (int x = b.xMin; x <= b.xMax; x++)
+            {
+                for (int y = b.yMin; y <= b.yMax; y++)
+                {
+                    GridObject[] objs = gridManager.GetGridObjectsByCoordinate(new Vector2Int(x, y)).ToArray();
+                    foreach (GridObject obj in objs)
+                    {
+                        if (!(obj is Obstacle obstacle) || !obstacle.Renderer)
+                            continue;
+                        
+                        Color colour = mode == GameDialogue.Mode.Default ? defaultColour : maskColour;
+
+                        FadeObstacle(obstacle, colour);
+                    }
+                }
+            }
+        }
+
+        private async void FadeObstacle(Obstacle obstacle, Color colour)
+        {
+            Color startColour = obstacle.Renderer.material.color;
+            float startTime = Time.time;
+
+            while (Time.time <= startTime + fadeDuration)
+            {
+                float t = (Time.time - startTime) / fadeDuration;
+                obstacle.Renderer.material.color = Color.Lerp(startColour, colour, t);
+                await Task.Yield();
+            }
         }
         
         #endregion
