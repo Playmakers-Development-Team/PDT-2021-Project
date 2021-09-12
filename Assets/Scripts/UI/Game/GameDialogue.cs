@@ -26,7 +26,6 @@ namespace UI.Game
         internal readonly Event<UnitInfo> endedMove = new Event<UnitInfo>();
         
         internal readonly Event<StatChangeInfo> unitStatChanged = new Event<StatChangeInfo>();
-        internal readonly Event<TenetChangeInfo> unitTenetChanged = new Event<TenetChangeInfo>();
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
@@ -318,28 +317,6 @@ namespace UI.Game
                 Destination = destination;
                 UnitInfo = unitInfo;
             }
-        }
-        
-        internal readonly struct TenetChangeInfo
-        {
-            internal IUnit Unit { get; }
-            internal int NewValue { get; }
-            internal int OldValue { get; }
-            internal int BaseValue { get; }
-            internal int Difference { get; }
-            internal int DisplayValue { get; }
-            internal TenetType  TenetType { get; }
-
-            // internal TenetChangeInfo(StatChangedCommand cmd)
-            // {
-            //     TenetType = cmd.StatType;
-            //     Unit = cmd.Unit;
-            //     NewValue = cmd.NewValue;
-            //     OldValue = cmd.InitialValue;
-            //     BaseValue = cmd.MaxValue;
-            //     Difference = cmd.Difference;
-            //     DisplayValue = cmd.DisplayValue;
-            // }
         }
         
         #endregion

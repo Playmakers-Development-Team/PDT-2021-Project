@@ -59,38 +59,38 @@ namespace UI
         #endregion
 
         
-        public static Sprite AttackIcon => instance.attackIcon;
+        public static Sprite AttackIcon => Instance.attackIcon;
         
-        public static Sprite DefenceIcon => instance.defenceIcon;
+        public static Sprite DefenceIcon => Instance.defenceIcon;
 
         public static Sprite GetTenetIcon(TenetType tenet)
         {
             return tenet switch
             {
-                TenetType.Pride => instance.prideIcon,
-                TenetType.Humility => instance.humilityIcon,
-                TenetType.Passion => instance.passionIcon,
-                TenetType.Apathy => instance.apathyIcon,
-                TenetType.Joy => instance.joyIcon,
-                TenetType.Sorrow => instance.sorrowIcon,
+                TenetType.Pride => Instance.prideIcon,
+                TenetType.Humility => Instance.humilityIcon,
+                TenetType.Passion => Instance.passionIcon,
+                TenetType.Apathy => Instance.apathyIcon,
+                TenetType.Joy => Instance.joyIcon,
+                TenetType.Sorrow => Instance.sorrowIcon,
                 _ => null
             };
         }
         
-        public static Color AttackColor => instance.attackColour;
+        public static Color AttackColor => Instance.attackColour;
         
-        public static Color DefenceColor => instance.defenceColour;
+        public static Color DefenceColor => Instance.defenceColour;
         
         public static Color GetTenetColour(TenetType tenet)
         {
             return tenet switch
             {
-                TenetType.Pride => instance.prideColour,
-                TenetType.Humility => instance.humilityColour,
-                TenetType.Passion => instance.passionColour,
-                TenetType.Apathy => instance.apathyColour,
-                TenetType.Joy => instance.joyColour,
-                TenetType.Sorrow => instance.sorrowColour,
+                TenetType.Pride => Instance.prideColour,
+                TenetType.Humility => Instance.humilityColour,
+                TenetType.Passion => Instance.passionColour,
+                TenetType.Apathy => Instance.apathyColour,
+                TenetType.Joy => Instance.joyColour,
+                TenetType.Sorrow => Instance.sorrowColour,
                 _ => Color.black
             };
         }

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using TenetStatuses;
 using TMPro;
 using UI.Core;
 using Units.Stats;
@@ -69,8 +70,8 @@ namespace UI.Game.Unit
         protected override void OnComponentStart()
         {
             healthBarCurrent.material = Instantiate(healthBarCurrent.material);
-            
-            PositionStatDisplays();
+
+            UpdateStatDisplays();
         }
 
         protected override void Subscribe()
@@ -79,7 +80,7 @@ namespace UI.Game.Unit
             dialogue.endedMove.AddListener(OnEndedMove);
             dialogue.unitStatChanged.AddListener(OnUnitStatChanged);
             dialogue.unitKilled.AddListener(OnUnitKilled);
-            dialogue.unitTenetChanged.AddListener(OnUnitTenetChanged);
+            dialogue.turnStarted.AddListener(OnTurnStarted);
         }
 
         protected override void Unsubscribe()
@@ -88,7 +89,7 @@ namespace UI.Game.Unit
             dialogue.endedMove.RemoveListener(OnEndedMove);
             dialogue.unitStatChanged.RemoveListener(OnUnitStatChanged);
             dialogue.unitKilled.RemoveListener(OnUnitKilled);
-            dialogue.unitTenetChanged.RemoveListener(OnUnitTenetChanged);
+            dialogue.turnStarted.RemoveListener(OnTurnStarted);
         }
 
         #endregion
@@ -126,6 +127,9 @@ namespace UI.Game.Unit
         
         private void OnUnitStatChanged(GameDialogue.StatChangeInfo info)
         {
+            if (info.Unit != unitInfo.Unit)
+                return;
+            
             switch (info.StatType)
             {
                 case StatTypes.Health:
@@ -134,9 +138,11 @@ namespace UI.Game.Unit
                     break;
                 
                 case StatTypes.Attack:
+                    // UpdateStatDisplays();
                     break;
                 
                 case StatTypes.Defence:
+                    // UpdateStatDisplays();
                     break;
             }
         }
@@ -149,11 +155,9 @@ namespace UI.Game.Unit
             Destroy(gameObject);
         }
 
-        private void OnUnitTenetChanged(GameDialogue.TenetChangeInfo info)
+        private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            // TODO: Implement...
-
-            PositionStatDisplays();
+            UpdateStatDisplays();
         }
         
         #endregion
@@ -215,20 +219,76 @@ namespace UI.Game.Unit
             // healthBarDifference.fillAmount = 0.0f;
         }
 
-        private void PositionStatDisplays()
+        private void UpdateStatDisplays()
         {
-            Vector3[] corners = new Vector3[4];
-            statArea.GetWorldCorners(corners);
+            if (unitInfo.Unit.AttackStat.Value == 0)
+            {
+                attackDisplay.gameObject.SetActive(false);
+            }
+            else
+            {
+                attackDisplay.gameObject.SetActive(true);
+                attackDisplay.Assign(unitInfo.Unit.AttackStat.Value);
+            }
+            
+            if (unitInfo.Unit.DefenceStat.Value == 0)
+            {
+                defenceDisplay.gameObject.SetActive(false);
+            }
+            else
+            {
+                defenceDisplay.gameObject.SetActive(true);
+                defenceDisplay.Assign(unitInfo.Unit.DefenceStat.Value);
+            }
 
+            TenetStatus[] statuses = unitInfo.Unit.TenetStatuses.ToArray();
+
+            if (statuses.Length > 0 && !statuses[0].IsEmpty)
+            {
+                primaryTenetDisplay.gameObject.SetActive(true);
+                primaryTenetDisplay.Assign(statuses[0].StackCount);
+                primaryTenetDisplay.SetTenet(statuses[0].TenetType);
+            }
+            else
+            {
+                primaryTenetDisplay.gameObject.SetActive(false);
+            }
+
+            if (statuses.Length > 1 && !statuses[1].IsEmpty)
+            {
+                secondaryTenetDisplay.gameObject.SetActive(true);
+                secondaryTenetDisplay.Assign(statuses[1].StackCount);
+                secondaryTenetDisplay.SetTenet(statuses[1].TenetType);
+            }
+            else
+            {
+                secondaryTenetDisplay.gameObject.SetActive(false);
+            }
+            
+            RepositionStatDisplays();
+        }
+        
+        private void RepositionStatDisplays()
+        {
             StatDisplay[] displays =
                 {attackDisplay, defenceDisplay, primaryTenetDisplay, secondaryTenetDisplay};
 
-            StatDisplay[] activeDisplays = displays.Where(d => d.gameObject.activeInHierarchy).ToArray();
-
+            StatDisplay[] activeDisplays =
+                displays.Where(d => d.gameObject.activeInHierarchy).ToArray();
+            
+            Vector3[] corners = new Vector3[4];
+            statArea.GetWorldCorners(corners);
+            
+            Vector3 start =
+                Vector3.Lerp(corners[1], corners[3], 1.0f / (activeDisplays.Length + 1.0f));
+            
+            Vector3 end =
+                Vector3.Lerp(corners[3], corners[1], 1.0f / (activeDisplays.Length + 1.0f));
+            
             for (int i = 0; i < activeDisplays.Length; i++)
             {
-                float t = i / (activeDisplays.Length - 1.0f);
-                Vector3 target = Vector3.Lerp(corners[1], corners[3], t);
+                float t = activeDisplays.Length == 1 ? 0.0f : i / (activeDisplays.Length - 1.0f);
+                Vector3 target = Vector3.Lerp(start, end, t);
 
                 activeDisplays[i].transform.position = target;
             }
