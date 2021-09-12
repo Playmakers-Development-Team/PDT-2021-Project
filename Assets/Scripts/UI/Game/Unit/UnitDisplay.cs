@@ -128,6 +128,9 @@ namespace UI.Game.Unit
 
         public void OnHoverEnter()
         {
+            if (dialogue.DisplayMode != GameDialogue.Mode.Default)
+                return;
+            
             healthBarContainer.color = hoverHealthColour;
         }
 
