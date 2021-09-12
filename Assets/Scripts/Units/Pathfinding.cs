@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Grid;
 using Managers;
@@ -54,8 +55,10 @@ namespace Units
             if (tileDatas.ContainsKey(node))
             {
                 // Check node is empty or matches allegiance
+                // OR ignore the check if allegiance is empty
                 if (tileDatas[node].GridObjects.Count == 0 ||
-                    allegiance.Equals(tileDatas[node].GridObjects[0].tag))
+                    allegiance.Equals(tileDatas[node].GridObjects[0].tag) ||
+                    IgnoreAllegiance(allegiance))
                 {
                     // Check node has not already been visited
                     if (!visited.ContainsKey(node))
@@ -66,6 +69,19 @@ namespace Units
                     }
                 }
             }
+        }
+        
+        /// <summary>
+        /// Used to determine if the Unit allegiance matters in the VisitNode scenario. If allegiance
+        /// does not matter, than occupied tiles will be returned through VisitNode.
+        /// </summary>
+        /// <param name="allegiance"></param>
+        /// <returns>True if allegiance is empty, false if it is not</returns>
+        private static bool IgnoreAllegiance(string allegiance)
+        {
+            if (allegiance.Equals(String.Empty))
+                return true;
+            return false;
         }
 
         public static void VisitDistanceToAllNode(Vector2Int node, Dictionary<Vector2Int, int> visited, int distance,

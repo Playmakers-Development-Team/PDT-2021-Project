@@ -27,7 +27,7 @@ namespace UI.Core
             foreach (Canvas canvas in GetComponentsInChildren<Canvas>())
                 canvas.worldCamera = Camera.main;
 
-            OnAwake();
+            OnDialogueAwake();
             
             manager.Add(this);
         }
@@ -60,13 +60,26 @@ namespace UI.Core
             closed.Invoke();
         }
 
-        internal virtual void OnAwake() {}
+        
+        /// <summary>
+        /// Called during the MonoBehaviour Awake stage.
+        /// </summary>
+        protected virtual void OnDialogueAwake() {}
 
 
+        /// <summary>
+        /// Called when a Dialogue is closed by the <see cref="UIManager"/>.
+        /// </summary>
         protected abstract void OnClose();
 
+        /// <summary>
+        /// Called when this Dialogue is moved to the top of the Dialogue stack.
+        /// </summary>
         protected abstract void OnPromote();
 
+        /// <summary>
+        /// Called when this Dialogue is moved off the top of the Dialogue stack.
+        /// </summary>
         protected abstract void OnDemote();
         
         #endregion

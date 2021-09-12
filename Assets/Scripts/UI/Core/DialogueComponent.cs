@@ -62,16 +62,34 @@ namespace UI.Core
             Subscribe();
         }
         
+        /// <summary>
+        /// Use instead of the MonoBehaviour Awake function.
+        /// </summary>
         protected virtual void OnComponentAwake() {}
 
+        /// <summary>
+        /// Use instead of the MonoBehaviour OnEnable function.
+        /// </summary>
         protected virtual void OnComponentEnabled() {}
 
+        /// <summary>
+        /// Use instead of the MonoBehaviour OnDisable function.
+        /// </summary>
         protected virtual void OnComponentDisabled() {}
 
+        /// <summary>
+        /// Use instead of the MonoBehaviour Start function.
+        /// </summary>
         protected virtual void OnComponentStart() {}
 
+        /// <summary>
+        /// Subscribing to <see cref="Event"/>s should be done here. 
+        /// </summary>
         protected abstract void Subscribe();
 
+        /// <summary>
+        /// Unsubscribing from <see cref="Event"/>s should be done here.
+        /// </summary>
         protected abstract void Unsubscribe();
         
         #endregion
