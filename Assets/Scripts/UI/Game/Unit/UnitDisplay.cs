@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UI.Core;
 using Units.Stats;
@@ -24,7 +25,16 @@ namespace UI.Game.Unit
         [SerializeField] private Image healthBarDifference;
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
+
+        [Header("Stat Cards")]
         
+        [SerializeField] private RectTransform statArea;
+
+        [SerializeField] private StatDisplay attackDisplay;
+        [SerializeField] private StatDisplay defenceDisplay;
+        [SerializeField] private TenetDisplay primaryTenetDisplay;
+        [SerializeField] private TenetDisplay secondaryTenetDisplay;
+
 
         private GameDialogue.UnitInfo unitInfo;
 
@@ -59,22 +69,26 @@ namespace UI.Game.Unit
         protected override void OnComponentStart()
         {
             healthBarCurrent.material = Instantiate(healthBarCurrent.material);
+            
+            PositionStatDisplays();
         }
 
         protected override void Subscribe()
         {
             dialogue.startedMove.AddListener(OnStartedMove);
             dialogue.endedMove.AddListener(OnEndedMove);
-            dialogue.unitDamaged.AddListener(OnTakeDamage);
+            dialogue.unitStatChanged.AddListener(OnUnitStatChanged);
             dialogue.unitKilled.AddListener(OnUnitKilled);
+            dialogue.unitTenetChanged.AddListener(OnUnitTenetChanged);
         }
 
         protected override void Unsubscribe()
         {
             dialogue.startedMove.RemoveListener(OnStartedMove);
             dialogue.endedMove.RemoveListener(OnEndedMove);
-            dialogue.unitDamaged.RemoveListener(OnTakeDamage);
+            dialogue.unitStatChanged.RemoveListener(OnUnitStatChanged);
             dialogue.unitKilled.RemoveListener(OnUnitKilled);
+            dialogue.unitTenetChanged.RemoveListener(OnUnitTenetChanged);
         }
 
         #endregion
@@ -110,13 +124,21 @@ namespace UI.Game.Unit
             moving = false;
         }
         
-        private void OnTakeDamage(GameDialogue.StatChangeInfo info)
+        private void OnUnitStatChanged(GameDialogue.StatChangeInfo info)
         {
-            if (info.Unit != unitInfo.Unit || info.StatType != StatTypes.Health)
-                return;
-            
-            UpdateDamageText(info);
-            UpdateHealthBar(info);
+            switch (info.StatType)
+            {
+                case StatTypes.Health:
+                    UpdateDamageText(info);
+                    UpdateHealthBar(info);
+                    break;
+                
+                case StatTypes.Attack:
+                    break;
+                
+                case StatTypes.Defence:
+                    break;
+            }
         }
 
         private void OnUnitKilled(GameDialogue.UnitInfo info)
@@ -125,6 +147,13 @@ namespace UI.Game.Unit
                 return;
 
             Destroy(gameObject);
+        }
+
+        private void OnUnitTenetChanged(GameDialogue.TenetChangeInfo info)
+        {
+            // TODO: Implement...
+
+            PositionStatDisplays();
         }
         
         #endregion
@@ -184,6 +213,25 @@ namespace UI.Game.Unit
             }
 
             // healthBarDifference.fillAmount = 0.0f;
+        }
+
+        private void PositionStatDisplays()
+        {
+            Vector3[] corners = new Vector3[4];
+            statArea.GetWorldCorners(corners);
+
+            StatDisplay[] displays =
+                {attackDisplay, defenceDisplay, primaryTenetDisplay, secondaryTenetDisplay};
+
+            StatDisplay[] activeDisplays = displays.Where(d => d.gameObject.activeInHierarchy).ToArray();
+
+            for (int i = 0; i < activeDisplays.Length; i++)
+            {
+                float t = i / (activeDisplays.Length - 1.0f);
+                Vector3 target = Vector3.Lerp(corners[1], corners[3], t);
+
+                activeDisplays[i].transform.position = target;
+            }
         }
         
         #endregion

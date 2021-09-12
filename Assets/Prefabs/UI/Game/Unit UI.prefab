@@ -162,7 +162,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.2000122}
+  m_AnchoredPosition: {x: 0, y: 0.2}
   m_SizeDelta: {x: 0, y: 0.2}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1630996841050022349
@@ -1040,6 +1040,11 @@ MonoBehaviour:
   healthBarDifference: {fileID: 0}
   differenceDuration: 5
   differenceDelay: 1
+  statArea: {fileID: 6337014776154073847}
+  attackDisplay: {fileID: 6868130527256105629}
+  defenceDisplay: {fileID: 4969331829657581122}
+  primaryTenetDisplay: {fileID: 5091045170449978900}
+  secondaryTenetDisplay: {fileID: 5273863579618515623}
 --- !u!1 &5928354559438326894
 GameObject:
   m_ObjectHideFlags: 0
