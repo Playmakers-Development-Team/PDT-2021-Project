@@ -173,8 +173,11 @@ namespace UI.Game.Unit
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            indicatorAnimator.gameObject.SetActive(info.CurrentUnit.Unit == unitInfo.Unit);
+            indicatorAnimator.gameObject.SetActive(info.CurrentUnitInfo.Unit == unitInfo.Unit);
             UpdateStatDisplays();
+
+            if (info.CurrentUnitInfo.Unit == unitInfo.Unit)
+                indicatorImage.color = defaultColour;
         }
 
         private void OnUnitSelected(GameDialogue.UnitInfo info)

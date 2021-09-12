@@ -274,13 +274,13 @@ namespace UI.Game
 
         internal readonly struct TurnInfo
         {
-            internal UnitInfo CurrentUnit { get; }
+            internal UnitInfo CurrentUnitInfo { get; }
             internal bool IsPlayer { get; }
 
 
-            public TurnInfo(UnitInfo currentUnit, bool isPlayer)
+            public TurnInfo(UnitInfo currentUnitInfo, bool isPlayer)
             {
-                CurrentUnit = currentUnit;
+                CurrentUnitInfo = currentUnitInfo;
                 IsPlayer = isPlayer;
             }
         }
