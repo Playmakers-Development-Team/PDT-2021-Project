@@ -36,12 +36,17 @@ namespace UI.Game.Unit
         [SerializeField] private TenetDisplay primaryTenetDisplay;
         [SerializeField] private TenetDisplay secondaryTenetDisplay;
 
+        [Header("Indicator")]
+        
+        [SerializeField] private Animator indicatorAnimator;
+
 
         private GameDialogue.UnitInfo unitInfo;
 
         private RectTransform rectTransform;
         private bool moving;
         private static readonly int fillId = Shader.PropertyToID("_Fill");
+        private static readonly int raisedId = Animator.StringToHash("raised");
 
 
         internal GameDialogue.UnitInfo UnitInfo => unitInfo;
@@ -157,6 +162,7 @@ namespace UI.Game.Unit
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
+            indicatorAnimator.gameObject.SetActive(info.CurrentUnit.Unit == unitInfo.Unit);
             UpdateStatDisplays();
         }
         
@@ -292,6 +298,8 @@ namespace UI.Game.Unit
 
                 activeDisplays[i].transform.position = target;
             }
+            
+            indicatorAnimator.SetBool(raisedId, activeDisplays.Length > 0);
         }
         
         #endregion
