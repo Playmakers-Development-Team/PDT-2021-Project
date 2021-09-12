@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Managers;
 using TenetStatuses;
 using TMPro;
+using Turn;
 using UI.Core;
 using Units.Stats;
 using UnityEngine;
@@ -39,9 +41,13 @@ namespace UI.Game.Unit
         [Header("Indicator")]
         
         [SerializeField] private Animator indicatorAnimator;
+        [SerializeField] private Image indicatorImage;
+        [SerializeField] private Color defaultColour;
+        [SerializeField] private Color selectedColour;
 
 
         private GameDialogue.UnitInfo unitInfo;
+        private TurnManager turnManager;
 
         private RectTransform rectTransform;
         private bool moving;
@@ -70,6 +76,7 @@ namespace UI.Game.Unit
         protected override void OnComponentAwake()
         {
             TryGetComponent(out rectTransform);
+            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
         protected override void OnComponentStart()
@@ -86,6 +93,8 @@ namespace UI.Game.Unit
             dialogue.unitStatChanged.AddListener(OnUnitStatChanged);
             dialogue.unitKilled.AddListener(OnUnitKilled);
             dialogue.turnStarted.AddListener(OnTurnStarted);
+            dialogue.unitSelected.AddListener(OnUnitSelected);
+            dialogue.unitDeselected.AddListener(OnUnitDeselected);
         }
 
         protected override void Unsubscribe()
@@ -95,6 +104,8 @@ namespace UI.Game.Unit
             dialogue.unitStatChanged.RemoveListener(OnUnitStatChanged);
             dialogue.unitKilled.RemoveListener(OnUnitKilled);
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
+            dialogue.unitSelected.RemoveListener(OnUnitSelected);
+            dialogue.unitDeselected.RemoveListener(OnUnitDeselected);
         }
 
         #endregion
@@ -164,6 +175,23 @@ namespace UI.Game.Unit
         {
             indicatorAnimator.gameObject.SetActive(info.CurrentUnit.Unit == unitInfo.Unit);
             UpdateStatDisplays();
+        }
+
+        private void OnUnitSelected(GameDialogue.UnitInfo info)
+        {
+            if (info.Unit != unitInfo.Unit || turnManager.ActingUnit == unitInfo.Unit)
+                return;
+
+            indicatorImage.gameObject.SetActive(true);
+            indicatorImage.color = selectedColour;
+        }
+
+        private void OnUnitDeselected()
+        {
+            indicatorImage.color = defaultColour;
+            
+            if (turnManager.ActingUnit != unitInfo.Unit)
+                indicatorImage.gameObject.SetActive(false);
         }
         
         #endregion
