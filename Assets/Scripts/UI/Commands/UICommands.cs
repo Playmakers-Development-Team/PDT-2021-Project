@@ -1,3 +1,5 @@
+using Commands;
+using UI.AbilityLoadout.Abilities;
 using Units;
 using Units.Commands;
 
@@ -9,5 +11,18 @@ namespace UI.Commands
     public class UIUnitSelectedCommand : UnitCommand
     {
         public UIUnitSelectedCommand(IUnit unit) : base(unit) {}
+    }
+
+    /// <summary>
+    /// Executed when an ability button is clicked for new ability selection
+    /// </summary>
+    public class AbilitySelectedCommand : Command
+    {
+        public AbilityButton AbilityButton { get; }
+
+        protected internal AbilitySelectedCommand(AbilityButton abilityButton)
+        {
+            AbilityButton = abilityButton;
+        }
     }
 }

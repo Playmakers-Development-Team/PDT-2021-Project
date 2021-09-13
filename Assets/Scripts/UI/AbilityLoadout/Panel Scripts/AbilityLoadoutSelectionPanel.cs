@@ -1,74 +1,114 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
-using Cysharp.Threading.Tasks.Triggers;
+using Commands;
+using Managers;
 using TenetStatuses;
-using TMPro;
+using Turn.Commands;
+using UI.AbilityLoadout.Abilities;
+using UI.Commands;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI.AbilityLoadout.Panel_Scripts
 {
     public class AbilityLoadoutSelectionPanel : DialogueComponent<AbilityLoadoutDialogue>
     {
+        // Placeholder selection sprite and sprite offset
         [SerializeField] private Image selectedAbilityImage;
         [SerializeField] private Vector3 selectedOffset;
         
+        // Used to identify the currently selected new ability
+        internal readonly Event<AbilityButton> abilityButtonPress = new Event<AbilityButton>();
+        private AbilityButton currentSelectedAbility;
+        
+        // Holds data for all abilities, used to obtain new abilities
         [SerializeField] private AbilityPool abilityPool;
         
+        // Attributes of the selected unit
         private TenetType tenetType;
         private List<AbilityLoadoutDialogue.AbilityInfo> currentAbilityInfos;
+        
+        // Holds the info for the new abilities
         private List<AbilityLoadoutDialogue.AbilityInfo> newAbilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
         
-        [SerializeField] protected List<Button> abilityButtons = new List<Button>();
-        private List<Image> abilityRenders = new List<Image>();
-        private List<TextMeshProUGUI> abilityNames = new List<TextMeshProUGUI>();
-        private List<TextMeshProUGUI> abilityDescriptions = new List<TextMeshProUGUI>();
-        
+        // References to the new ability buttons scripts
+        [SerializeField] private List<AbilityButton> abilityButtons = new List<AbilityButton>();
+
+        private CommandManager commandManager;
+
         #region UIComponent
         
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
+        
+        #endregion
+
+        #region Monobehaviour Functions
 
         protected override void OnComponentAwake()
         {
-            foreach (var ability in abilityButtons)
+            // Assign Managers
+            commandManager = ManagerLocator.Get<CommandManager>();
+            
+            // Listeners
+            abilityButtonPress.AddListener(abilityButton =>
             {
-                // Get reference to ability renders
-                abilityRenders.Add(ability.GetComponentInChildren<Image>());
+                OnAbilityButtonPress(abilityButton);
+            });
 
-                // Get reference to ability names and descriptions
-                List<TextMeshProUGUI> abilityTexts = new List<TextMeshProUGUI>();
-                abilityTexts.AddRange(ability.GetComponentsInChildren<TextMeshProUGUI>());
-
-                foreach (var abilityText in abilityTexts)
-                {
-                    if(abilityText.text.Equals("ABILITY NAME"))
-                        abilityNames.Add(abilityText);
-                    else
-                        abilityDescriptions.Add(abilityText);
-                }
+            foreach (var abilityButton in abilityButtons)
+            {
+                abilityButton.AbilityButtonAwake();
             }
+        }
+        
+        private void OnEnable()
+        {
+            commandManager.ListenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
+        }
+        
+        private void OnDisable()
+        {
+            commandManager.UnlistenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
         #endregion
-
+        
         #region Listeners
 
-        // This is for the yellow circle that shows an ability is selected
-        public void OnPressed(GameObject selectedAbilityButton)
+        private void OnAbilitySelect(AbilitySelectedCommand cmd)
         {
-            if (selectedAbilityImage.enabled && 
-                selectedAbilityImage.gameObject.transform.position == selectedAbilityButton.transform.position + selectedOffset)
+            abilityButtonPress.Invoke(cmd.AbilityButton);
+        }
+
+        private void OnAbilityButtonPress(AbilityButton abilityButton)
+        {
+            Debug.LogWarning("TEST");
+            if (currentSelectedAbility == abilityButton)
             {
+                // Make no ability selected
+                currentSelectedAbility = null;
+                
+                // Turn Off Visual Placeholder
                 selectedAbilityImage.enabled = false;
             }
             else
             {
+                // Deselect the old ability
+                currentSelectedAbility.Deselect();
+                
+                // Select the new ability
+                currentSelectedAbility = abilityButton;
+                currentSelectedAbility.MakeSelected();
+
+                // Visual Placeholder
                 selectedAbilityImage.enabled = true;
-                selectedAbilityImage.gameObject.transform.position = selectedAbilityButton.transform.position + selectedOffset;
+                selectedAbilityImage.gameObject.transform.position = abilityButton.transform.position + selectedOffset;
             }
         }
 
@@ -86,9 +126,10 @@ namespace UI.AbilityLoadout.Panel_Scripts
             // Assign ability images
             for (int i = 0; i < newAbilityInfos.Count; ++i)
             {
-                abilityRenders[i].sprite = newAbilityInfos[i].Render;
-                abilityNames[i].text = newAbilityInfos[i].Ability.name;
-                abilityDescriptions[i].text = newAbilityInfos[i].Ability.Description;
+                abilityButtons[i].Redraw(
+                    newAbilityInfos[i].Render,
+                    newAbilityInfos[i].Ability.name,
+                    newAbilityInfos[i].Ability.Description);
             }
         }
         

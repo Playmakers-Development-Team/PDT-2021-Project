@@ -716,6 +716,7 @@ GameObject:
   - component: {fileID: 4244839882761225683}
   - component: {fileID: 1864757668945282756}
   - component: {fileID: 2816279158820609964}
+  - component: {fileID: 753999017111549900}
   m_Layer: 5
   m_Name: New Ability 3
   m_TagString: Untagged
@@ -826,19 +827,30 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3013589127380859624}
-        m_TargetAssemblyTypeName: UI.AbilityLoadout.Panel_Scripts.AbilityLoadoutSelectionPanel,
-          UISystem
+      - m_Target: {fileID: 753999017111549900}
+        m_TargetAssemblyTypeName: UI.AbilityLoadout.Abilities.AbilityButton, UISystem
         m_MethodName: OnPressed
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 4836344383495430967}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &753999017111549900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4836344383495430967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5115553801198927866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,9 +1274,9 @@ MonoBehaviour:
   selectedOffset: {x: 2, y: -2, z: 0}
   abilityPool: {fileID: 11400000, guid: d91dc7ebe45588c4ebfe6d3641f677e2, type: 2}
   abilityButtons:
-  - {fileID: 8257651509127020571}
-  - {fileID: 426579233556245413}
-  - {fileID: 2816279158820609964}
+  - {fileID: 5845062451918515888}
+  - {fileID: 1027551038619413138}
+  - {fileID: 753999017111549900}
 --- !u!1 &6709641043971118674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,6 +1669,7 @@ GameObject:
   - component: {fileID: 5224793176834592074}
   - component: {fileID: 1775165968984234711}
   - component: {fileID: 8257651509127020571}
+  - component: {fileID: 5845062451918515888}
   m_Layer: 5
   m_Name: New Ability 1
   m_TagString: Untagged
@@ -1767,19 +1780,30 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3013589127380859624}
-        m_TargetAssemblyTypeName: UI.AbilityLoadout.Panel_Scripts.AbilityLoadoutSelectionPanel,
-          UISystem
+      - m_Target: {fileID: 5845062451918515888}
+        m_TargetAssemblyTypeName: UI.AbilityLoadout.Abilities.AbilityButton, UISystem
         m_MethodName: OnPressed
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 9128564020281612573}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5845062451918515888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9128564020281612573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9222334328988120221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,6 +1816,7 @@ GameObject:
   - component: {fileID: 3438967775576063310}
   - component: {fileID: 6519934488897828151}
   - component: {fileID: 426579233556245413}
+  - component: {fileID: 1027551038619413138}
   m_Layer: 5
   m_Name: New Ability 2
   m_TagString: Untagged
@@ -1902,16 +1927,27 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3013589127380859624}
-        m_TargetAssemblyTypeName: UI.AbilityLoadout.Panel_Scripts.AbilityLoadoutSelectionPanel,
-          UISystem
+      - m_Target: {fileID: 1027551038619413138}
+        m_TargetAssemblyTypeName: UI.AbilityLoadout.Abilities.AbilityButton, UISystem
         m_MethodName: OnPressed
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 9222334328988120221}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1027551038619413138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9222334328988120221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
