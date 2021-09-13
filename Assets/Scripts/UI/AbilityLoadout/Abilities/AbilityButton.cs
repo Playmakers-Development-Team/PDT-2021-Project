@@ -15,9 +15,9 @@ namespace UI.AbilityLoadout.Abilities
         [SerializeField] private bool isNewAbility = false;
         
         private Button button;
-        private Image abilityRender;
-        private TextMeshProUGUI abilityName;
-        private TextMeshProUGUI abilityDescription;
+        public Image AbilityRender { get; private set; }
+        public TextMeshProUGUI AbilityName { get; private set; }
+        public TextMeshProUGUI AbilityDescription { get; private set; }
 
         private CommandManager commandManager;
         
@@ -32,7 +32,7 @@ namespace UI.AbilityLoadout.Abilities
             commandManager = ManagerLocator.Get<CommandManager>();
             
             // Get reference to ability render
-            abilityRender = GetComponentInChildren<Image>();
+            AbilityRender = GetComponentInChildren<Image>();
 
             // Get reference to ability name and description
             List<TextMeshProUGUI> abilityTexts = new List<TextMeshProUGUI>();
@@ -41,9 +41,9 @@ namespace UI.AbilityLoadout.Abilities
             foreach (var abilityText in abilityTexts)
             {
                 if (abilityText.text.Equals("ABILITY NAME"))
-                    abilityName = abilityText;
+                    AbilityName = abilityText;
                 else
-                    abilityDescription = abilityText;
+                    AbilityDescription = abilityText;
             }
         }
         
@@ -54,15 +54,15 @@ namespace UI.AbilityLoadout.Abilities
         // Render only version (current abilities)
         public void Redraw(Sprite render)
         {
-            abilityRender.sprite = render;
+            AbilityRender.sprite = render;
         }
         
         // Full info version (new abilities)
         public void Redraw(Sprite render, string name, string description)
         {
-            abilityRender.sprite = render;
-            abilityName.text = name;
-            abilityDescription.text = description;
+            AbilityRender.sprite = render;
+            AbilityName.text = name;
+            AbilityDescription.text = description;
         }
 
         #endregion

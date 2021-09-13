@@ -32,6 +32,8 @@ namespace UI.AbilityLoadout
 
         [SerializeField] private Canvas unitSelectCanvas;
         [SerializeField] private Canvas abilitySelectCanvas;
+        [SerializeField] private AbilityDetailsPanel oldAbilityDetailsPanel;
+        [SerializeField] private AbilityDetailsPanel newAbilityDetailsPanel;
         [SerializeField] protected UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
         
@@ -77,12 +79,16 @@ namespace UI.AbilityLoadout
             
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
             {
-                // If it's a new ability selected, select it on the abilitySelectCanvasScript
-                // If it's a current ability selected
-                if(AbilitySelectedCommand.IsNewAbility)
+                if (AbilitySelectedCommand.IsNewAbility)
+                {
                     abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
+                    newAbilityDetailsPanel.Redraw(AbilitySelectedCommand.AbilityButton);
+                }
                 else
+                {
                     unitSelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
+                    oldAbilityDetailsPanel.Redraw(AbilitySelectedCommand.AbilityButton);
+                }
             });
         }
 

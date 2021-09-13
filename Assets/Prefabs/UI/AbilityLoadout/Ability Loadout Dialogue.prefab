@@ -60,6 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSelectCanvas: {fileID: 1106926236349439529}
   abilitySelectCanvas: {fileID: 4856606846227675085}
+  oldAbilityDetailsPanel: {fileID: 7061580486522734583}
+  newAbilityDetailsPanel: {fileID: 1700398648147595513}
   unitSelectCanvasScript: {fileID: 9153771416057584424}
   abilitySelectCanvasScript: {fileID: 4010780455514809235}
   abilityImages:
@@ -185,6 +187,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebe66f0d204bd5e41b61dd442bf37f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7061580486522734583 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9188621709254418060, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+  m_PrefabInstance: {fileID: 2196433679101319547}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae246fbc8e25004aa2ab08617a05bda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1700398648147595513 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 712214448805087618, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+  m_PrefabInstance: {fileID: 2196433679101319547}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eae246fbc8e25004aa2ab08617a05bda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7080042314409731546
