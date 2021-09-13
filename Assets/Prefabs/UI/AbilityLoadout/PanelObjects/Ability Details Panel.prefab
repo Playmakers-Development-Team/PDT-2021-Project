@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2480006250031331777}
   - component: {fileID: 3376312041944874068}
   m_Layer: 5
-  m_Name: Old Ability Description
+  m_Name: Ability Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -188,7 +188,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   abilityRender: {fileID: 4549084482252745274}
-  abilityName: {fileID: 6229494893281200824}
   abilityDescription: {fileID: 3376312041944874068}
 --- !u!1 &5456921393517401707
 GameObject:
@@ -203,7 +202,7 @@ GameObject:
   - component: {fileID: 4549084482252745274}
   - component: {fileID: 6298089246734003073}
   m_Layer: 5
-  m_Name: Old Ability Tenet
+  m_Name: Ability Tenet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,7 +290,7 @@ GameObject:
   - component: {fileID: 3264426792715248990}
   - component: {fileID: 6229494893281200824}
   m_Layer: 5
-  m_Name: Old Ability Name
+  m_Name: Ability Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -425,7 +424,7 @@ GameObject:
   - component: {fileID: 480176609244862648}
   - component: {fileID: 2328298300637077313}
   m_Layer: 5
-  m_Name: Old Ability Backdrop
+  m_Name: Backdrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

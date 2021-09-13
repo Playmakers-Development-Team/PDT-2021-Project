@@ -4,6 +4,7 @@ using Abilities;
 using TenetStatuses;
 using UI.AbilityLoadout.Abilities;
 using UI.Core;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -96,6 +97,18 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         #region Utility Functions
 
+        public void AddSelectedAbility(IUnit unit)
+        {
+            foreach (var abilityInfo in newAbilityInfos)
+            {
+                if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
+                {
+                    unit.Abilities.Add(abilityInfo.Ability);
+                    break;
+                }
+            }
+        }
+        
         private List<AbilityLoadoutDialogue.AbilityInfo> GetAbilities(int numberOfAbilities, TenetType tenetType)
         {
             List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();

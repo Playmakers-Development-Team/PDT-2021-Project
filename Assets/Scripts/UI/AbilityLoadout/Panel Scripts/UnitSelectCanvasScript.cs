@@ -12,7 +12,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject unitAbilityCardPrefab;
         
-        [SerializeField] private List<UnitCard> unitCards;
+        public List<UnitCard> unitCards;
         [SerializeField] private List<UnitAbilitiesCard> abilitiesCards;
 
         [SerializeField] private ScrollRect unitScrollView;
@@ -40,11 +40,17 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             abilitiesCards[0].OnAbilityButtonPress(abilityButton);
         }
-
+        
         #endregion
 
         #region Utility Functions
 
+        // Same assumption stated previously for OnAbilityButtonPress applies here
+        public void RemoveSelectedAbility()
+        {
+            abilitiesCards[0].RemoveSelectedAbility(unitCards[0].unitInfo.Unit);
+        }
+        
         private void UpdateAbilityScroll(Vector2 arg0)
         {
             abilityScrollView.horizontalNormalizedPosition = unitScrollView.horizontalNormalizedPosition;

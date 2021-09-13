@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UI.Core;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,6 +70,18 @@ namespace UI.AbilityLoadout.Abilities
         #endregion
 
         #region Utility Functions
+        
+        public void RemoveSelectedAbility(IUnit unit)
+        {
+            foreach (var ability in unit.Abilities)
+            {
+                if (ability.name.Equals(currentSelectedAbility.AbilityName))
+                {
+                    unit.Abilities.Remove(ability);
+                    break;
+                }
+            }
+        }
 
         public void EnableAbilityButtons()
         {

@@ -97,7 +97,7 @@ namespace UI.AbilityLoadout
 
             drawOldAbilityDetails.AddListener(AbilityButton => 
             {
-                oldAbilityDetailsPanel.Redraw(AbilityButton);;
+                oldAbilityDetailsPanel.Redraw(AbilityButton);
             });
             
             drawNewAbilityDetails.AddListener(AbilityButton => 
@@ -114,7 +114,21 @@ namespace UI.AbilityLoadout
             {
                 newAbilityDetailsPanel.ClearValues();
             });
-    }
+            
+            abilitySwap.AddListener(() =>
+            {
+                // Skip ability swap if there is an empty old or new ability
+                if (oldAbilityDetailsPanel.abilityName.text.Equals("") || 
+                    newAbilityDetailsPanel.abilityName.text.Equals(""))
+                    return;
+                
+                unitSelectCanvasScript.RemoveSelectedAbility();
+                
+                // Assumption that only 1 unit is in unitCards during ability swap
+                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].unitInfo.Unit);
+            });
+            
+        }
 
         private void OnEnable()
         {
@@ -167,12 +181,6 @@ namespace UI.AbilityLoadout
         private void OnNoEnemiesRemaining(NoRemainingEnemyUnitsCommand cmd)
         {
             noEnemiesRemaining.Invoke();
-        }
-        
-        //TODO: Add in ability swap command
-        private void OnAbilitySwap()
-        {
-            abilitySwap.Invoke();
         }
         
         #endregion

@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 5335252783670019727}
   - component: {fileID: 4791585664769338830}
   - component: {fileID: 7816718674654758790}
-  - component: {fileID: 8989166918279478699}
+  - component: {fileID: 5588280978336198257}
   m_Layer: 5
   m_Name: Continue Button
   m_TagString: Untagged
@@ -547,8 +547,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8989166918279478699}
-        m_TargetAssemblyTypeName: UI.General.CloseButton, UISystem
+      - m_Target: {fileID: 5588280978336198257}
+        m_TargetAssemblyTypeName: UI.AbilityLoadout.AbilitySwapButton, UISystem
         m_MethodName: OnPressed
         m_Mode: 1
         m_Arguments:
@@ -559,7 +559,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8989166918279478699
+--- !u!114 &5588280978336198257
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -568,7 +568,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2890539493111819007}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d6e2d8edcc54544b7044ae84a7cbfe9, type: 3}
+  m_Script: {fileID: 11500000, guid: 42eca0029df84e2419e8d0fba9a4fbae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4221883471883122621

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UI.Core;
 using UnityEngine;
@@ -8,8 +9,9 @@ namespace UI.AbilityLoadout.Abilities
     public class AbilityDetailsPanel : DialogueComponent<AbilityLoadoutDialogue>
     {
         [SerializeField] private Image abilityRender;
-        [SerializeField] private TextMeshProUGUI abilityName;
-        [SerializeField] private TextMeshProUGUI abilityDescription;
+        
+        public TextMeshProUGUI abilityName { get; private set; }
+        private TextMeshProUGUI abilityDescription;
         
         #region UIComponent
         
@@ -19,6 +21,18 @@ namespace UI.AbilityLoadout.Abilities
         
         protected override void OnComponentAwake()
         {
+            // Get reference to ability name and description
+            List<TextMeshProUGUI> abilityTexts = new List<TextMeshProUGUI>();
+            abilityTexts.AddRange(GetComponentsInChildren<TextMeshProUGUI>());
+
+            foreach (var abilityText in abilityTexts)
+            {
+                if (abilityText.text.Equals("ABILITY NAME"))
+                    abilityName = abilityText;
+                else
+                    abilityDescription = abilityText;
+            }
+            
             ClearValues();
         }
 
