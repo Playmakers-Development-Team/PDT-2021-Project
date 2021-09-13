@@ -18,6 +18,9 @@ namespace Turn
         [SerializeField] private GameObject[] preMadeTimeline;
         
         [SerializeField] private bool isTimelineRandomised;
+        [Tooltip("If ability speed is enabled, the pre made timeline will only be used for the" +
+                 "first round. Disabling ability speed can be useful for testing purposes.")]
+        [SerializeField] private bool disableAbilitySpeed;
        
         private TurnManager turnManager;
         private UnitManager unitManager;
@@ -43,6 +46,8 @@ namespace Turn
         /// </summary>
         private void SetupTurnQueue()
         {
+            turnManager.AbilitySpeedEnabled = !disableAbilitySpeed;
+            
             if (preMadeTimeline.Length < unitManager.AllUnits.Count)
             {
                 isTimelineRandomised = true;

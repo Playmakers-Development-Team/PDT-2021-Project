@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -3957392175462956367, guid: 59f7b2c02c669bc4bada398f8b704ac6, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1}
@@ -212,7 +212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2640585567817604240}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7938972848241867902}
@@ -265,7 +265,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 467200e646184857ba5f63f360d4e884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitGridObject: {fileID: 4867198168489326303}
   info:
     profileCropInfo: {fileID: 11400000, guid: 56056f592c613844bb7967c3509bf54b, type: 2}
     timelineCropInfo: {fileID: 11400000, guid: 56056f592c613844bb7967c3509bf54b, type: 2}
