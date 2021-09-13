@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Cysharp.Threading.Tasks.Triggers;
 using TenetStatuses;
 using TMPro;
 using UI.Core;
@@ -23,6 +24,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         [SerializeField] protected List<Button> abilityButtons = new List<Button>();
         private List<Image> abilityRenders = new List<Image>();
         private List<TextMeshProUGUI> abilityNames = new List<TextMeshProUGUI>();
+        private List<TextMeshProUGUI> abilityDescriptions = new List<TextMeshProUGUI>();
         
         #region UIComponent
         
@@ -34,8 +36,20 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             foreach (var ability in abilityButtons)
             {
+                // Get reference to ability renders
                 abilityRenders.Add(ability.GetComponentInChildren<Image>());
-                abilityNames.Add(ability.GetComponentInChildren<TextMeshProUGUI>());
+
+                // Get reference to ability names and descriptions
+                List<TextMeshProUGUI> abilityTexts = new List<TextMeshProUGUI>();
+                abilityTexts.AddRange(ability.GetComponentsInChildren<TextMeshProUGUI>());
+
+                foreach (var abilityText in abilityTexts)
+                {
+                    if(abilityText.text.Equals("ABILITY NAME"))
+                        abilityNames.Add(abilityText);
+                    else
+                        abilityDescriptions.Add(abilityText);
+                }
             }
         }
 
@@ -43,6 +57,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         #region Listeners
 
+        // This is for the yellow circle that shows an ability is selected
         public void OnPressed(GameObject selectedAbilityButton)
         {
             if (selectedAbilityImage.enabled && 
@@ -72,6 +87,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
             {
                 abilityRenders[i].sprite = abilityInfos[i].Render;
                 abilityNames[i].text = abilityInfos[i].Ability.name;
+                abilityDescriptions[i].text = abilityInfos[i].Ability.Description;
             }
         }
         
