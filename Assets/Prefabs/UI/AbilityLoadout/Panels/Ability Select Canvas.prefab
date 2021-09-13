@@ -851,6 +851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isNewAbility: 1
 --- !u!1 &5115553801198927866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,7 +1172,7 @@ GameObject:
   - component: {fileID: 6709641043172175540}
   - component: {fileID: 3013589127380859624}
   m_Layer: 5
-  m_Name: Ability Loadout Selection Panel
+  m_Name: Ability Select Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1804,6 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isNewAbility: 1
 --- !u!1 &9222334328988120221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,3 +1953,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bd5704ee062aa349afde322c69be456, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isNewAbility: 1

@@ -11,6 +11,10 @@ namespace UI.AbilityLoadout.Abilities
 {
     public class AbilityButton : DialogueComponent<AbilityLoadoutDialogue>
     {
+        // Must be set to true if it's one of the new abilities to choose from
+        [SerializeField] private bool isNewAbility = false;
+        
+        private Button button;
         private Image abilityRender;
         private TextMeshProUGUI abilityName;
         private TextMeshProUGUI abilityDescription;
@@ -23,7 +27,6 @@ namespace UI.AbilityLoadout.Abilities
 
         protected override void Unsubscribe() {}
         
-        // Performs it's own awake to avoid race conditions
         protected override void OnComponentAwake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -48,6 +51,13 @@ namespace UI.AbilityLoadout.Abilities
 
         #region Drawing
 
+        // Render only version (current abilities)
+        public void Redraw(Sprite render)
+        {
+            abilityRender.sprite = render;
+        }
+        
+        // Full info version (new abilities)
         public void Redraw(Sprite render, string name, string description)
         {
             abilityRender.sprite = render;
@@ -61,7 +71,7 @@ namespace UI.AbilityLoadout.Abilities
         
         public void OnPressed()
         {
-            commandManager.ExecuteCommand(new AbilitySelectedCommand(this));
+            commandManager.ExecuteCommand(new AbilitySelectedCommand(this, isNewAbility));
         }
 
         #endregion

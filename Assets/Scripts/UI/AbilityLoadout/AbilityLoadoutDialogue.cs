@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Abilities;
 using Commands;
 using Managers;
@@ -24,7 +25,7 @@ namespace UI.AbilityLoadout
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event noEnemiesRemaining = new Event();
         internal readonly Event abilitySwap = new Event();
-        internal readonly Event<AbilityButton> abilityButtonPress = new Event<AbilityButton>();
+        internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
         
         private CommandManager commandManager;
         private UIManager uiManager;
@@ -74,9 +75,14 @@ namespace UI.AbilityLoadout
                 showUnitSelectPanel.Invoke();
             });
             
-            abilityButtonPress.AddListener(abilityButton =>
+            abilityButtonPress.AddListener(AbilitySelectedCommand =>
             {
-                abilitySelectCanvasScript.OnAbilityButtonPress(abilityButton);
+                // If it's a new ability selected, select it on the abilitySelectCanvasScript
+                // If it's a current ability selected
+                if(AbilitySelectedCommand.IsNewAbility)
+                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
+                else
+                    unitSelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
             });
         }
 
@@ -121,7 +127,7 @@ namespace UI.AbilityLoadout
         
         private void OnAbilitySelect(AbilitySelectedCommand cmd)
         {
-            abilityButtonPress.Invoke(cmd.AbilityButton);
+            abilityButtonPress.Invoke(cmd);
         }
 
         #endregion

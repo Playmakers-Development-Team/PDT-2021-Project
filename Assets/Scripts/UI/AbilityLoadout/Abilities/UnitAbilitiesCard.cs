@@ -7,42 +7,60 @@ namespace UI.AbilityLoadout.Abilities
 {
     public class UnitAbilitiesCard : DialogueComponent<AbilityLoadoutDialogue>
     {
-        protected internal List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos;
-
+        // Placeholder selection sprite and sprite offset
         [SerializeField] private Image selectedAbilityImage;
         [SerializeField] private Vector3 selectedOffset;
         
-        [SerializeField] protected List<Button> abilityButtons = new List<Button>();
-        private List<Image> abilityRenders = new List<Image>();
+        // Used to identify the currently selected ability
+        private AbilityButton currentSelectedAbility;
         
+        // Stores the data for the current list of abilities
+        protected internal List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos;
+        
+        // References the ability button scripts
+        [SerializeField] protected List<AbilityButton> abilityButtons = new List<AbilityButton>();
+        private List<Button> unityAbilityButtons = new List<Button>();
 
         #region UIComponent
-
-        protected override void OnComponentAwake()
-        {
-            foreach (var abilityButton in abilityButtons)
-                abilityRenders.Add(abilityButton.GetComponent<Image>());
-        }
 
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
         
+        protected override void OnComponentAwake()
+        {
+            // Assign unity buttons from scripts
+            foreach (var abilityButton in abilityButtons)
+                unityAbilityButtons.Add(abilityButton.GetComponent<Button>());
+        }
+        
         #endregion
         
         #region Listeners
         
-        public void OnPressed(GameObject selectedAbilityButton)
+        public void OnAbilityButtonPress(AbilityButton abilityButton)
         {
-            if (selectedAbilityImage.enabled && 
-                selectedAbilityImage.gameObject.transform.position == selectedAbilityButton.transform.position + selectedOffset)
+            if (currentSelectedAbility == abilityButton)
             {
+                // Make no ability selected
+                currentSelectedAbility = null;
+                
+                // Turn Off Visual Placeholder
                 selectedAbilityImage.enabled = false;
             }
             else
             {
+                // Deselect the old ability (if there was one)
+                if(currentSelectedAbility != null)
+                    currentSelectedAbility.Deselect();
+                
+                // Select the new ability
+                currentSelectedAbility = abilityButton;
+                currentSelectedAbility.MakeSelected();
+
+                // Visual Placeholder
                 selectedAbilityImage.enabled = true;
-                selectedAbilityImage.gameObject.transform.position = selectedAbilityButton.transform.position + selectedOffset;
+                selectedAbilityImage.gameObject.transform.position = abilityButton.transform.position + selectedOffset;
             }
         }
         
@@ -52,8 +70,8 @@ namespace UI.AbilityLoadout.Abilities
 
         public void EnableAbilityButtons()
         {
-            foreach (var abilityButton in abilityButtons)
-                abilityButton.enabled = true;
+            foreach (var unityAbilityButton in unityAbilityButtons)
+                unityAbilityButton.enabled = true;
         }
 
         #endregion
@@ -71,7 +89,7 @@ namespace UI.AbilityLoadout.Abilities
             // Assign ability images
             for (int i = 0; i < abilityInfos.Count; ++i)
             {
-                abilityRenders[i].sprite = abilityInfos[i].Render;
+                abilityButtons[i].Redraw(abilityInfos[i].Render);
             }
         }
 

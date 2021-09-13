@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UI.AbilityLoadout.Abilities;
 using UI.AbilityLoadout.Unit;
 using UI.Core;
-using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,6 +27,18 @@ namespace UI.AbilityLoadout.Panel_Scripts
         protected override void OnComponentAwake()
         {
             unitScrollView.onValueChanged.AddListener(UpdateAbilityScroll);
+        }
+
+        #endregion
+
+        #region Listeners
+
+        // Assumption is that the ability card will always be the first in the list
+        // since this function will only be called when there is only 1 unit on screen
+        // (ability buttons shouldn't be interactable otherwise)
+        public void OnAbilityButtonPress(AbilityButton abilityButton)
+        {
+            abilitiesCards[0].OnAbilityButtonPress(abilityButton);
         }
 
         #endregion

@@ -19,10 +19,12 @@ namespace UI.Commands
     public class AbilitySelectedCommand : Command
     {
         public AbilityButton AbilityButton { get; }
+        public bool IsNewAbility { get; }
 
-        protected internal AbilitySelectedCommand(AbilityButton abilityButton)
+        protected internal AbilitySelectedCommand(AbilityButton abilityButton, bool isNewAbility)
         {
             AbilityButton = abilityButton;
+            IsNewAbility = isNewAbility;
         }
     }
 }

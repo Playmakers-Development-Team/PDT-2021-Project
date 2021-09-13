@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Abilities;
-using UI.AbilityLoadout.Panel_Scripts;
-using UI.Core;
+﻿using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
