@@ -45,7 +45,7 @@ namespace UI.AbilityLoadout
 
         #region Monobehaviour Events
 
-        internal override void OnAwake()
+        protected override void OnDialogueAwake()
         {
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();

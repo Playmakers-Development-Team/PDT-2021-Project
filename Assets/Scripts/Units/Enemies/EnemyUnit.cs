@@ -37,5 +37,14 @@ namespace Units.Enemies
             
             //Name = RandomizeName();
         }
+
+        public override void ChangeAnimation(AnimationStates animationStates)
+        {
+            base.ChangeAnimation(animationStates);
+            
+            // Flip enemy sprite in the idle position
+            if (animationStates == AnimationStates.Idle)
+                spriteRenderer.flipX = true;
+        }
     }
 }

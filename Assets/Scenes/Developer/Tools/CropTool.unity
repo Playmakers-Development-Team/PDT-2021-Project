@@ -385,13 +385,13 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: f5cbb6bd4cbf4ce41abcebd92859a23a, type: 3}
+  m_Texture: {fileID: 2800000, guid: de00ae8798d4a074eadaeacb3948e2e3, type: 3}
   m_UVRect:
     serializedVersion: 2
-    x: 0.16999999
-    y: 0.43
-    width: 0.6
-    height: 0.6
+    x: 0.255
+    y: 0.445
+    width: 0.63
+    height: 0.63
 --- !u!222 &1233931184
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -431,10 +431,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rawImage: {fileID: 1233931183}
   maskImage: {fileID: 1917537043}
-  image: {fileID: 2800000, guid: f5cbb6bd4cbf4ce41abcebd92859a23a, type: 3}
+  image: {fileID: 2800000, guid: de00ae8798d4a074eadaeacb3948e2e3, type: 3}
   mask: {fileID: 0}
-  centre: {x: 0.47, y: 0.73}
-  size: 0.6
+  centre: {x: 0.57, y: 0.76}
+  size: 0.63
 --- !u!4 &1507199366
 Transform:
   m_ObjectHideFlags: 0

@@ -45,14 +45,22 @@ namespace Abilities
         /// </summary>
         public TenetType RepresentedTenet => representedTenet;
         /// <summary>
+        /// All keywords that should be shown in game which is used by this ability.
+        /// Keywords with the same display names are not shown more than once.
+        /// </summary>
+        public IEnumerable<Keyword> AllKeywords => AllDefinedKeywords
+            .Where(k => k.IsVisibleInGame)
+            .GroupBy(k => k.DisplayName)
+            .Select(group => group.First());
+        /// <summary>
         /// All keywords used by this ability regardless whether they should be shown to
         /// the player or not.
         /// </summary>
-        public IEnumerable<Keyword> AllKeywords => TargetKeywords.Concat(UserKeywords);
-        /// <summary>
-        /// All keywords that should be shown in game which is used by this ability.
-        /// </summary>
-        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords.Where(k => k.IsVisibleInGame);
+        [Obsolete("Use AllKeywords")]
+        public IEnumerable<Keyword> AllVisibleKeywords => AllKeywords;
+        /// All keywords used by this ability regardless whether they should be shown to
+        /// the player or not.
+        public IEnumerable<Keyword> AllDefinedKeywords => TargetKeywords.Concat(UserKeywords);
 
         private IEnumerable<Keyword> TargetKeywords => effects.SelectMany(e => e.Keywords);
         private IEnumerable<Keyword> UserKeywords => userEffects.SelectMany(e => e.Keywords);

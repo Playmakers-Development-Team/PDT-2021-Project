@@ -3,7 +3,7 @@
 namespace UI.Core
 {
     /// <summary>
-    /// Generic encapsulated unity event for UI system usage.
+    /// Generic encapsulated UnityEvent for UI system usage.
     /// </summary>
     /// <typeparam name="T">Event parameter type.</typeparam>
     public class Event<T>
@@ -25,7 +25,7 @@ namespace UI.Core
     
 
     /// <summary>
-    /// Encapsulated unity event for UI system usage.
+    /// Encapsulated UnityEvent for UI system usage.
     /// </summary>
     public class Event
     {

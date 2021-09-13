@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 336639fbb74a4db4a4e42a8b5afbccf9, type: 3}
+  m_Name: Beta Map
+  m_EditorClassIdentifier: 
+  mapScene:
+    sceneAsset: {fileID: 102900000, guid: 2be3c22164babb020b8a7bd13fbcc68b, type: 3}
+    scenePath: Assets/Scenes/Design/Playtest Beta Map.unity
+  encounterNodes:
+  - encounterData: {fileID: 11400000, guid: 7d87cc51017229acda08a16a68d14e58, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 83f2fe46fac402b3dbbcbc0fc351e05a, type: 2}
+    startingNode: 1
+  - encounterData: {fileID: 11400000, guid: 83f2fe46fac402b3dbbcbc0fc351e05a, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 53f56046eac72de90852e7bfaadd26f3, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 53f56046eac72de90852e7bfaadd26f3, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: cc4948218bb014fba9d72ded19ec7e0e, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: cc4948218bb014fba9d72ded19ec7e0e, type: 2}
+    connectedEncounters: []
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 906c90e51839a25069757a2f76d5cae0, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: e0bc450274e1fc1aea8d85b9979b25d3, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: e0bc450274e1fc1aea8d85b9979b25d3, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: ca4d0f3175c9d10499df93bd00ca3877, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: ca4d0f3175c9d10499df93bd00ca3877, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: f93e13395f268cd5aa6ca058cc225808, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: f93e13395f268cd5aa6ca058cc225808, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 31000f2904555fcf884b36d12ce02b5c, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 31000f2904555fcf884b36d12ce02b5c, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 4d6cc791f81252f6aaa0188817182aa1, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 4d6cc791f81252f6aaa0188817182aa1, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: be87c321226e0b048814495e47bd7ea0, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: be87c321226e0b048814495e47bd7ea0, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 6fb2a83e1ad7309e997735aa6fb41c01, type: 2}
+    - {fileID: 11400000, guid: 9d95718d461c88ec3be95d7af38887d5, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 6fb2a83e1ad7309e997735aa6fb41c01, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 39f892af203a75c0d8d24ef6ac010bdc, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 9d95718d461c88ec3be95d7af38887d5, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 7315e0ad55a79477eb5ae1bc3f6dab11, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 7315e0ad55a79477eb5ae1bc3f6dab11, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: eff00ce1bd3be1ec6b160cc0f75c0fda, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 39f892af203a75c0d8d24ef6ac010bdc, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: b17a8c78cb63e1ff6a3f16b67cdcd279, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: eff00ce1bd3be1ec6b160cc0f75c0fda, type: 2}
+    connectedEncounters: []
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: b17a8c78cb63e1ff6a3f16b67cdcd279, type: 2}
+    connectedEncounters: []
+    startingNode: 0
