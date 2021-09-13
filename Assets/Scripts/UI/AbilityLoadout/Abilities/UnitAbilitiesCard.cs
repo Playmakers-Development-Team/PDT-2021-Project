@@ -42,6 +42,8 @@ namespace UI.AbilityLoadout.Abilities
         {
             if (currentSelectedAbility == abilityButton)
             {
+                currentSelectedAbility.Deselect();
+                
                 // Make no ability selected
                 currentSelectedAbility = null;
                 

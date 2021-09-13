@@ -78,6 +78,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4159737346357006174}
     m_Modifications:
+    - target: {fileID: 3757171816278250022, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -230
+      objectReference: {fileID: 0}
+    - target: {fileID: 3757171816278250022, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774631829695038760, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 4774631829695038760, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 320
+      objectReference: {fileID: 0}
     - target: {fileID: 6709641043172175543, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -165,6 +181,10 @@ PrefabInstance:
     - target: {fileID: 6709641043172175563, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
       propertyPath: m_Name
       value: Ability Select Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7935672825329946568, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 313
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}

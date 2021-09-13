@@ -46,6 +46,8 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             if (currentSelectedAbility == abilityButton)
             {
+                currentSelectedAbility.Deselect();
+                
                 // Make no ability selected
                 currentSelectedAbility = null;
                 

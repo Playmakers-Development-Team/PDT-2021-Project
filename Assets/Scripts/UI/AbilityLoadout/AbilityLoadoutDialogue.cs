@@ -24,6 +24,10 @@ namespace UI.AbilityLoadout
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event noEnemiesRemaining = new Event();
         internal readonly Event abilitySwap = new Event();
+        internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
+        internal readonly Event<AbilityButton> drawNewAbilityDetails = new Event<AbilityButton>();
+        internal readonly Event clearOldAbilityDetails = new Event();
+        internal readonly Event clearNewAbilityDetails = new Event();
         internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
         
         private CommandManager commandManager;
@@ -46,7 +50,7 @@ namespace UI.AbilityLoadout
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             uiManager = ManagerLocator.Get<UIManager>();
-            
+
             // Hide Panels
             unitSelectCanvas.enabled = false;
             abilitySelectCanvas.enabled = false;
@@ -56,12 +60,12 @@ namespace UI.AbilityLoadout
             {
                 OnUnitSelectPanel();
             });
-            
+
             showAbilitySelectPanel.AddListener(unitInfo =>
             {
                 OnAbilitySelectPanel(unitInfo);
             });
-            
+
             unitSpawned.AddListener(info =>
             {
                 if (info.Unit is PlayerUnit)
@@ -71,25 +75,46 @@ namespace UI.AbilityLoadout
             noEnemiesRemaining.AddListener(() =>
             {
                 uiManager.Add(this);
-                
+
                 // TODO: Change to appear after the player selects this option
                 showUnitSelectPanel.Invoke();
             });
-            
+
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
             {
                 if (AbilitySelectedCommand.IsNewAbility)
                 {
-                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
-                    newAbilityDetailsPanel.Redraw(AbilitySelectedCommand.AbilityButton);
+                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.
+                        AbilityButton);
                 }
                 else
                 {
-                    unitSelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.AbilityButton);
-                    oldAbilityDetailsPanel.Redraw(AbilitySelectedCommand.AbilityButton);
+                    unitSelectCanvasScript.OnAbilityButtonPress(
+                        AbilitySelectedCommand.AbilityButton);
+                    
                 }
             });
-        }
+
+            drawOldAbilityDetails.AddListener(AbilityButton => 
+            {
+                oldAbilityDetailsPanel.Redraw(AbilityButton);;
+            });
+            
+            drawNewAbilityDetails.AddListener(AbilityButton => 
+            {
+                newAbilityDetailsPanel.Redraw(AbilityButton);
+            });
+            
+            clearOldAbilityDetails.AddListener(() => 
+            {
+                oldAbilityDetailsPanel.ClearValues();
+            });
+            
+            clearNewAbilityDetails.AddListener(() => 
+            {
+                newAbilityDetailsPanel.ClearValues();
+            });
+    }
 
         private void OnEnable()
         {

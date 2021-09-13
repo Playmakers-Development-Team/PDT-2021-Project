@@ -19,7 +19,7 @@ namespace UI.AbilityLoadout.Abilities
         
         protected override void OnComponentAwake()
         {
-            HideValues();
+            ClearValues();
         }
 
         #endregion
@@ -32,7 +32,7 @@ namespace UI.AbilityLoadout.Abilities
             
             if (abilityButton.AbilityName == null)
             {
-                HideValues();
+                ClearValues();
                 abilityName.text = "OPEN SLOT";
             }
             else
@@ -47,7 +47,7 @@ namespace UI.AbilityLoadout.Abilities
 
         #region Utility Functions
 
-        private void HideValues()
+        public void ClearValues()
         {
             abilityRender.enabled = false;
             abilityName.text = "";

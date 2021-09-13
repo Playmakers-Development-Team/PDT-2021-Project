@@ -84,12 +84,18 @@ namespace UI.AbilityLoadout.Abilities
         
         public void MakeSelected()
         {
-            // Insert selected visual stuff here
+            if (isNewAbility)
+                dialogue.drawNewAbilityDetails.Invoke(this);
+            else
+                dialogue.drawOldAbilityDetails.Invoke(this);
         }
         
         public void Deselect()
         {
-            // Remove selected visual stuff here
+            if (isNewAbility)
+                dialogue.clearNewAbilityDetails.Invoke();
+            else
+                dialogue.clearOldAbilityDetails.Invoke();
         }
         
         #endregion
