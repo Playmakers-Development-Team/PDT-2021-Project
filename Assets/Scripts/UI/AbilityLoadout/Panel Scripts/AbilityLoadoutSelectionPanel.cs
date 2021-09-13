@@ -18,8 +18,8 @@ namespace UI.AbilityLoadout.Panel_Scripts
         [SerializeField] private AbilityPool abilityPool;
         
         private TenetType tenetType;
-        
-        private List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
+        private List<AbilityLoadoutDialogue.AbilityInfo> currentAbilityInfos;
+        private List<AbilityLoadoutDialogue.AbilityInfo> newAbilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
         
         [SerializeField] protected List<Button> abilityButtons = new List<Button>();
         private List<Image> abilityRenders = new List<Image>();
@@ -76,18 +76,19 @@ namespace UI.AbilityLoadout.Panel_Scripts
         
         #region Drawing
         
-        internal void Redraw(TenetType newTenetType)
+        internal void Redraw(TenetType newTenetType, List<AbilityLoadoutDialogue.AbilityInfo> oldAbilityInfos)
         {
             tenetType = newTenetType;
+            currentAbilityInfos = oldAbilityInfos;
 
-            abilityInfos = GetRandomAbilities(3, tenetType);
+            newAbilityInfos = GetAbilities(3, tenetType);
             
             // Assign ability images
-            for (int i = 0; i < abilityInfos.Count; ++i)
+            for (int i = 0; i < newAbilityInfos.Count; ++i)
             {
-                abilityRenders[i].sprite = abilityInfos[i].Render;
-                abilityNames[i].text = abilityInfos[i].Ability.name;
-                abilityDescriptions[i].text = abilityInfos[i].Ability.Description;
+                abilityRenders[i].sprite = newAbilityInfos[i].Render;
+                abilityNames[i].text = newAbilityInfos[i].Ability.name;
+                abilityDescriptions[i].text = newAbilityInfos[i].Ability.Description;
             }
         }
         
@@ -95,22 +96,63 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         #region Utility Functions
 
-        private List<AbilityLoadoutDialogue.AbilityInfo> GetRandomAbilities(int numberOfAbilities, TenetType tenetType)
+        private List<AbilityLoadoutDialogue.AbilityInfo> GetAbilities(int numberOfAbilities, TenetType tenetType)
         {
             List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
 
-            List<Ability> selectedAbilities = abilityPool.PickAbilitiesByTenet(tenetType).ToList();
-            
+            List<Ability> selectedAbilities = RandomiseAbilityOrder(abilityPool.PickAbilitiesByTenet(tenetType).ToList());
+
             for (int i = 0; i < selectedAbilities.Count; ++i)
             {
-                abilityInfos.Add(dialogue.GetInfo(selectedAbilities[i]));
+                AbilityLoadoutDialogue.AbilityInfo newAbility =
+                    dialogue.GetInfo(selectedAbilities[i]);
+                
+                // Skip the current iteration if the character already owns the ability
+                if(currentAbilityInfos.Contains(newAbility))
+                    continue;
+                
+                abilityInfos.Add(newAbility);
                 
                 numberOfAbilities--;
                 if (numberOfAbilities <= 0)
                     break;
             }
 
+            if (numberOfAbilities > 0)
+            {
+                Debug.LogWarning("Not enough NEW abilities supplied to the ability pool " +
+                                 "for the Tenet type "+tenetType+". This may result in some " +
+                                 "repeated abilities");
+                
+                for (int i = 0; i < selectedAbilities.Count; ++i)
+                {
+                    AbilityLoadoutDialogue.AbilityInfo newAbility =
+                        dialogue.GetInfo(selectedAbilities[i]);
+
+                    abilityInfos.Add(newAbility);
+                
+                    numberOfAbilities--;
+                    if (numberOfAbilities <= 0)
+                        break;
+                }
+            }
+            
             return abilityInfos;
+        }
+
+        private List<Ability> RandomiseAbilityOrder(List<Ability> abilityList)
+        {
+            var count = abilityList.Count;
+            var last = count - 1;
+            for (var i = 0; i < last; ++i)
+            {
+                var rand = Random.Range(i, count);
+                var temp = abilityList[i];
+                abilityList[i] = abilityList[rand];
+                abilityList[rand] = temp;
+            }
+
+            return abilityList;
         }
 
         #endregion

@@ -105,7 +105,7 @@ namespace UI.AbilityLoadout
             
             // Redraw the 1 ability, unit and new unit abilities
             abilityLoadoutUnitPanel.Redraw(units);
-            abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet);
+            abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
 
             abilityLoadoutUnitPanel.EnableAbilityButtons(unitInfo);
         }
