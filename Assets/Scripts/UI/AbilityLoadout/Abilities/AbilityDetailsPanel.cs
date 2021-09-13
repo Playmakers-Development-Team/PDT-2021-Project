@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using TMPro;
 using UI.Core;
 using UnityEngine;
@@ -39,8 +38,8 @@ namespace UI.AbilityLoadout.Abilities
             else
             {
                 abilityRender.sprite = abilityButton.AbilityRender.sprite;
-                abilityName.text = abilityButton.AbilityName.text;
-                abilityDescription.text = abilityButton.AbilityDescription.text;
+                abilityName.text = abilityButton.AbilityName;
+                abilityDescription.text = abilityButton.AbilityDescription;
             }
         }
 

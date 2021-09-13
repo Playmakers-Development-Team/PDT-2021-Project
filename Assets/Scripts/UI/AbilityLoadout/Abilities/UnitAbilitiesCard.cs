@@ -89,7 +89,10 @@ namespace UI.AbilityLoadout.Abilities
             // Assign ability images
             for (int i = 0; i < abilityInfos.Count; ++i)
             {
-                abilityButtons[i].Redraw(abilityInfos[i].Render);
+                abilityButtons[i].Redraw(abilityInfos[i].Render,
+                    abilityInfos[i].Ability.name,
+                    abilityInfos[i].Ability.Description,
+                    true);
             }
         }
 

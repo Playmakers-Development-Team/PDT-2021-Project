@@ -1,13 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
-using Commands;
-using Managers;
 using TenetStatuses;
-using Turn.Commands;
 using UI.AbilityLoadout.Abilities;
-using UI.Commands;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -90,7 +85,8 @@ namespace UI.AbilityLoadout.Panel_Scripts
                 abilityButtons[i].Redraw(
                     newAbilityInfos[i].Render,
                     newAbilityInfos[i].Ability.name,
-                    newAbilityInfos[i].Ability.Description);
+                    newAbilityInfos[i].Ability.Description,
+                    false);
             }
         }
         

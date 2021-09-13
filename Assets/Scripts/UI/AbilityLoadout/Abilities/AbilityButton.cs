@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Commands;
 using Managers;
@@ -14,10 +15,13 @@ namespace UI.AbilityLoadout.Abilities
         // Must be set to true if it's one of the new abilities to choose from
         [SerializeField] private bool isNewAbility = false;
         
-        private Button button;
         public Image AbilityRender { get; private set; }
-        public TextMeshProUGUI AbilityName { get; private set; }
-        public TextMeshProUGUI AbilityDescription { get; private set; }
+        public String AbilityName { get; private set; }
+        public String AbilityDescription { get; private set; }
+        
+        private Button button;
+        private TextMeshProUGUI abilityNameText;
+        private TextMeshProUGUI abilityDescriptionText;
 
         private CommandManager commandManager;
         
@@ -41,28 +45,28 @@ namespace UI.AbilityLoadout.Abilities
             foreach (var abilityText in abilityTexts)
             {
                 if (abilityText.text.Equals("ABILITY NAME"))
-                    AbilityName = abilityText;
+                    abilityNameText = abilityText;
                 else
-                    AbilityDescription = abilityText;
+                    abilityDescriptionText = abilityText;
             }
         }
         
         #endregion
 
         #region Drawing
-
-        // Render only version (current abilities)
-        public void Redraw(Sprite render)
-        {
-            AbilityRender.sprite = render;
-        }
         
-        // Full info version (new abilities)
-        public void Redraw(Sprite render, string name, string description)
+        public void Redraw(Sprite render, string name, string description, bool renderOnly)
         {
             AbilityRender.sprite = render;
-            AbilityName.text = name;
-            AbilityDescription.text = description;
+            AbilityName = name;
+            AbilityDescription = description;
+            
+            // Used for the ability icons the player already has
+            if (renderOnly)
+                return;
+
+            abilityNameText.text = AbilityName;
+            abilityDescriptionText.text = AbilityDescription;
         }
 
         #endregion
