@@ -22,7 +22,6 @@ namespace UI.AbilityLoadout.Panel_Scripts
         [SerializeField] private Vector3 selectedOffset;
         
         // Used to identify the currently selected new ability
-        internal readonly Event<AbilityButton> abilityButtonPress = new Event<AbilityButton>();
         private AbilityButton currentSelectedAbility;
         
         // Holds data for all abilities, used to obtain new abilities
@@ -38,8 +37,6 @@ namespace UI.AbilityLoadout.Panel_Scripts
         // References to the new ability buttons scripts
         [SerializeField] private List<AbilityButton> abilityButtons = new List<AbilityButton>();
 
-        private CommandManager commandManager;
-
         #region UIComponent
         
         protected override void Subscribe() {}
@@ -52,41 +49,17 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         protected override void OnComponentAwake()
         {
-            // Assign Managers
-            commandManager = ManagerLocator.Get<CommandManager>();
-            
-            // Listeners
-            abilityButtonPress.AddListener(abilityButton =>
-            {
-                OnAbilityButtonPress(abilityButton);
-            });
-
             foreach (var abilityButton in abilityButtons)
             {
                 abilityButton.AbilityButtonAwake();
             }
-        }
-        
-        private void OnEnable()
-        {
-            commandManager.ListenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
-        }
-        
-        private void OnDisable()
-        {
-            commandManager.UnlistenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
         #endregion
         
         #region Listeners
 
-        private void OnAbilitySelect(AbilitySelectedCommand cmd)
-        {
-            abilityButtonPress.Invoke(cmd.AbilityButton);
-        }
-
-        private void OnAbilityButtonPress(AbilityButton abilityButton)
+        public void OnAbilityButtonPress(AbilityButton abilityButton)
         {
             Debug.LogWarning("TEST");
             if (currentSelectedAbility == abilityButton)

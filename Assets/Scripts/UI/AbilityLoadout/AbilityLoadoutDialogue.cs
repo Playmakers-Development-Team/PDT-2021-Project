@@ -7,6 +7,7 @@ using TenetStatuses;
 using Turn.Commands;
 using UI.AbilityLoadout.Abilities;
 using UI.AbilityLoadout.Panel_Scripts;
+using UI.Commands;
 using UI.Core;
 using Units;
 using Units.Players;
@@ -23,6 +24,7 @@ namespace UI.AbilityLoadout
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event noEnemiesRemaining = new Event();
         internal readonly Event abilitySwap = new Event();
+        internal readonly Event<AbilityButton> abilityButtonPress = new Event<AbilityButton>();
         
         private CommandManager commandManager;
         private UIManager uiManager;
@@ -71,16 +73,23 @@ namespace UI.AbilityLoadout
                 // TODO: Change to appear after the player selects this option
                 showUnitSelectPanel.Invoke();
             });
+            
+            abilityButtonPress.AddListener(abilityButton =>
+            {
+                abilityLoadoutSelectionPanel.OnAbilityButtonPress(abilityButton);
+            });
         }
 
         private void OnEnable()
         {
             commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
+            commandManager.ListenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
         private void OnDisable()
         {
             commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
+            commandManager.UnlistenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
         #endregion
@@ -108,6 +117,11 @@ namespace UI.AbilityLoadout
             abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
 
             abilityLoadoutUnitPanel.EnableAbilityButtons(unitInfo);
+        }
+        
+        private void OnAbilitySelect(AbilitySelectedCommand cmd)
+        {
+            abilityButtonPress.Invoke(cmd.AbilityButton);
         }
 
         #endregion
