@@ -24,7 +24,7 @@ namespace UI.AbilityLoadout.Abilities
         protected override void Unsubscribe() {}
         
         // Performs it's own awake to avoid race conditions
-        public void AbilityButtonAwake()
+        protected override void OnComponentAwake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             

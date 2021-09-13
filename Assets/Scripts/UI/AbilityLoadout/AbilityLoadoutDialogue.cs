@@ -29,10 +29,10 @@ namespace UI.AbilityLoadout
         private CommandManager commandManager;
         private UIManager uiManager;
 
-        [SerializeField] private Canvas unitSelectPanel;
-        [SerializeField] private Canvas abilitySelectPanel;
-        [SerializeField] protected AbilityLoadoutUnitPanel abilityLoadoutUnitPanel;
-        [SerializeField] protected AbilityLoadoutSelectionPanel abilityLoadoutSelectionPanel;
+        [SerializeField] private Canvas unitSelectCanvas;
+        [SerializeField] private Canvas abilitySelectCanvas;
+        [SerializeField] protected UnitSelectCanvasScript unitSelectCanvasScript;
+        [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
         
         private readonly List<UnitInfo> units = new List<UnitInfo>();
         public List<Sprite> abilityImages = new List<Sprite>();
@@ -46,8 +46,8 @@ namespace UI.AbilityLoadout
             uiManager = ManagerLocator.Get<UIManager>();
             
             // Hide Panels
-            unitSelectPanel.enabled = false;
-            abilitySelectPanel.enabled = false;
+            unitSelectCanvas.enabled = false;
+            abilitySelectCanvas.enabled = false;
 
             // Listen to Events
             showUnitSelectPanel.AddListener(() =>
@@ -76,7 +76,7 @@ namespace UI.AbilityLoadout
             
             abilityButtonPress.AddListener(abilityButton =>
             {
-                abilityLoadoutSelectionPanel.OnAbilityButtonPress(abilityButton);
+                abilitySelectCanvasScript.OnAbilityButtonPress(abilityButton);
             });
         }
 
@@ -98,25 +98,25 @@ namespace UI.AbilityLoadout
 
         private void OnUnitSelectPanel()
         {
-            unitSelectPanel.enabled = true;
-            abilitySelectPanel.enabled = false;
+            unitSelectCanvas.enabled = true;
+            abilitySelectCanvas.enabled = false;
             
-            abilityLoadoutUnitPanel.Redraw(units);
+            unitSelectCanvasScript.Redraw(units);
         }
         
         private void OnAbilitySelectPanel(UnitInfo unitInfo)
         {
-            abilitySelectPanel.enabled = true;
+            abilitySelectCanvas.enabled = true;
             
             // Clear the units so only the selected unit is shown
             units.Clear();
             units.Add(unitInfo);
             
             // Redraw the 1 ability, unit and new unit abilities
-            abilityLoadoutUnitPanel.Redraw(units);
-            abilityLoadoutSelectionPanel.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
+            unitSelectCanvasScript.Redraw(units);
+            abilitySelectCanvasScript.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
 
-            abilityLoadoutUnitPanel.EnableAbilityButtons(unitInfo);
+            unitSelectCanvasScript.EnableAbilityButtons(unitInfo);
         }
         
         private void OnAbilitySelect(AbilitySelectedCommand cmd)

@@ -15,7 +15,7 @@ using Random = UnityEngine.Random;
 
 namespace UI.AbilityLoadout.Panel_Scripts
 {
-    public class AbilityLoadoutSelectionPanel : DialogueComponent<AbilityLoadoutDialogue>
+    public class AbilitySelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
         // Placeholder selection sprite and sprite offset
         [SerializeField] private Image selectedAbilityImage;
@@ -44,24 +44,11 @@ namespace UI.AbilityLoadout.Panel_Scripts
         protected override void Unsubscribe() {}
         
         #endregion
-
-        #region Monobehaviour Functions
-
-        protected override void OnComponentAwake()
-        {
-            foreach (var abilityButton in abilityButtons)
-            {
-                abilityButton.AbilityButtonAwake();
-            }
-        }
-
-        #endregion
         
         #region Listeners
 
         public void OnAbilityButtonPress(AbilityButton abilityButton)
         {
-            Debug.LogWarning("TEST");
             if (currentSelectedAbility == abilityButton)
             {
                 // Make no ability selected
@@ -72,8 +59,9 @@ namespace UI.AbilityLoadout.Panel_Scripts
             }
             else
             {
-                // Deselect the old ability
-                currentSelectedAbility.Deselect();
+                // Deselect the old ability (if there was one)
+                if(currentSelectedAbility != null)
+                    currentSelectedAbility.Deselect();
                 
                 // Select the new ability
                 currentSelectedAbility = abilityButton;

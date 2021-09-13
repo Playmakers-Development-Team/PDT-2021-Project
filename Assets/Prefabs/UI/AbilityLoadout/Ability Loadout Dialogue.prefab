@@ -58,10 +58,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ee9ab0de3f01c4ab8cd5f4f506eedb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitSelectPanel: {fileID: 1106926236349439529}
-  abilitySelectPanel: {fileID: 4856606846227675085}
-  abilityLoadoutUnitPanel: {fileID: 9153771416057584424}
-  abilityLoadoutSelectionPanel: {fileID: 4010780455514809235}
+  unitSelectCanvas: {fileID: 1106926236349439529}
+  abilitySelectCanvas: {fileID: 4856606846227675085}
+  unitSelectCanvasScript: {fileID: 9153771416057584424}
+  abilitySelectCanvasScript: {fileID: 4010780455514809235}
   abilityImages:
   - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
@@ -162,7 +162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6709641043172175563, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
       propertyPath: m_Name
-      value: Ability Loadout Selection Panel
+      value: Ability Select Canvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
@@ -316,7 +316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7862664228888083454, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_Name
-      value: Ability Loadout Unit Panel
+      value: Unit Select Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 8167849229976839242, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_Value

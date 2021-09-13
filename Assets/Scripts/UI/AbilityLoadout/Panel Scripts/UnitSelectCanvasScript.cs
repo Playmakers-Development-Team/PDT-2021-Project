@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.AbilityLoadout.Panel_Scripts
 {
-    public class AbilityLoadoutUnitPanel : DialogueComponent<AbilityLoadoutDialogue>
+    public class UnitSelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject unitAbilityCardPrefab;
