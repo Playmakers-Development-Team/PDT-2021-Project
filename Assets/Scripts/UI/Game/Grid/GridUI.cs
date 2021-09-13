@@ -21,9 +21,13 @@ namespace UI.Game.Grid
     public class GridUI : DialogueComponent<GameDialogue>
     {
         [SerializeField] private LayerMask clickLayer;
+        
+        [Header("Line of Sight Indicator")]
+        
+        [SerializeField] private LineRenderer line;
 
         // The following values are used to show mouse the position when selecting a movement tile
-        private bool EnableMouseHover = false;
+        private bool enableMouseHover;
         private Vector2Int hoveredCoordinate;
         
         [Header("Tile types")]
@@ -52,7 +56,7 @@ namespace UI.Game.Grid
 
         public void Update()
         {
-            if (!Mouse.current.leftButton.wasPressedThisFrame && !EnableMouseHover
+            if (!Mouse.current.leftButton.wasPressedThisFrame && !enableMouseHover
                 || Camera.main == null)
                 return;
             
@@ -69,7 +73,7 @@ namespace UI.Game.Grid
             if (!gridManager.IsInBounds(coordinate))
                 return;
 
-            if (EnableMouseHover)
+            if (enableMouseHover)
             {
                 hoveredCoordinate = coordinate;
                 UpdateGrid();
@@ -130,18 +134,24 @@ namespace UI.Game.Grid
         {
             dialogue.modeChanged.Invoke(GameDialogue.Mode.Aiming);
             UpdateGrid();
+            UpdateLOSIndicator();
         }
 
         private void OnAbilityDeselected(Ability ability)
         {
             dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
             UpdateGrid();
+            UpdateLOSIndicator();
         }
 
         private void OnAbilityRotated(Vector2 direction)
         {
-            if (dialogue.DisplayMode == GameDialogue.Mode.Aiming)
-                UpdateGrid();
+            if (dialogue.DisplayMode != GameDialogue.Mode.Aiming)
+                return;
+            
+            
+            UpdateGrid();
+            UpdateLOSIndicator();
         }
 
         private void OnAbilityConfirmed()
@@ -197,13 +207,43 @@ namespace UI.Game.Grid
                     Vector2Int[] occupiedCoordinates = turnManager.ActingUnit.GetReachableOccupiedTiles().Where(vec => gridManager.IsInBounds(vec)).ToArray();
                     Fill(new GridSelection(occupiedCoordinates, GridSelectionType.Invalid));
 
-                    EnableMouseHover = true;
+                    enableMouseHover = true;
 
                     if (coordinates.Contains(hoveredCoordinate))
                         Fill(new GridSelection(hoveredCoordinate, GridSelectionType.Selected));
 
                     break;
             }
+        }
+
+        private void UpdateLOSIndicator()
+        {
+            if (dialogue.SelectedAbility == null)
+            {
+                line.positionCount = 0;
+                return;
+            }
+            
+            Vector2Int[] coordinates = dialogue.SelectedAbility.Shape.
+                GetHighlightedCoordinates(turnManager.ActingUnit.Coordinate,
+                    dialogue.AbilityDirection).Where(v => gridManager.IsInBounds(v)).ToArray();
+
+            if (!dialogue.SelectedAbility.Shape.ShouldShowLine || coordinates.Length == 0 ||
+                !gridManager.GetGridObjectsByCoordinate(coordinates[0]).All(g => g is IUnit))
+            {
+                line.positionCount = 0;
+                return;
+            }
+
+            // TODO: Implement...
+
+            Vector2Int coordinate = coordinates[0];
+            line.positionCount = 2;
+            line.SetPositions(
+            new Vector3[] {
+                gridManager.ConvertCoordinateToPosition(coordinate),
+                gridManager.ConvertCoordinateToPosition(turnManager.ActingUnit.Coordinate)
+            });
         }
 
         private void Fill(GridSelection selection)
@@ -299,7 +339,7 @@ namespace UI.Game.Grid
             if (!inRange.Contains(destination))
                 return;
 
-            EnableMouseHover = false;
+            enableMouseHover = false;
             
             dialogue.moveConfirmed.Invoke(new GameDialogue.MoveInfo(destination, dialogue.GetInfo(playerUnit)));
             dialogue.buttonSelected.Invoke();
