@@ -1,18 +1,16 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
-namespace VFX
+namespace Abilities.VFX
 {
     [RequireComponent(typeof(LineRenderer), typeof(Animator)), ExecuteInEditMode]
     public class Stroke : MonoBehaviour
     {
         [Header("Curve Parameters")]
         
-        [SerializeField] private int positionCount;
-        [SerializeField, Range(0f, 1f)] private float perpendicularDeviationLimit;
-        [SerializeField, Range(0f, 1f)] private float parallelDeviationLimit;
+        [SerializeField] private int positionCount = 20;
+        [SerializeField, Range(0f, 1f)] private float perpendicularDeviationLimit = 0.5f;
+        [SerializeField, Range(0f, 1f)] private float parallelDeviationLimit = 0.3f;
 
         [Header("Component References")]
         
@@ -104,28 +102,5 @@ namespace VFX
         {
             lineRenderer.positionCount = 0;
         }
-        
-        
-        #region REMOVE
-        
-        [Header("Testing Parameters")]
-        
-        [SerializeField] private float delay;
-        [SerializeField] private Animator unitAnimator;
-        
-        private static readonly int attackId = Animator.StringToHash("attack");
-        
-        private void Update()
-        {
-            if (!Keyboard.current.spaceKey.wasPressedThisFrame)
-                return;
-
-            unitAnimator.SetTrigger(attackId);
-            
-            CancelInvoke(nameof(Generate));
-            Invoke(nameof(Generate), delay);
-        }
-        
-        #endregion
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VFX
+namespace Abilities.VFX
 {
     public static class CurveMaths
     {
