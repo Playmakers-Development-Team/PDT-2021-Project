@@ -48,6 +48,18 @@ namespace Editor
                     marginTop = 10
                 }
             });
+            
+            rootVisualElement.Add(new Button(OnFixPinkBackground)
+            {
+                text = "Fix background being Pink",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
         }
 
         private void OnFixMusicClicked()
@@ -79,6 +91,27 @@ namespace Editor
             ReplaceAllUnits();
             
             Debug.Log("Scene fixing Successful!");
+        }
+
+        private void OnFixPinkBackground()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+
+            GameObject updatedGridObjectPrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Background/Mountain Trail Grid.prefab");
+            
+            
+            GameObject backgroundGameObject = GameObject.Find("--- BACKGROUND SYSTEM ---");
+            UnityEngine.Grid gridObject = backgroundGameObject.GetComponentInChildren<UnityEngine.Grid>();
+
+            if (gridObject == null || gridObject.name != "Mountain Trail Grid")
+            {
+                if (gridObject != null)
+                    Undo.DestroyObjectImmediate(gridObject.gameObject);
+                GameObject updatedGridObject = (GameObject)PrefabUtility
+                    .InstantiatePrefab(updatedGridObjectPrefab, backgroundGameObject.transform);
+                Undo.RecordObject(updatedGridObject, "Add in updated grid background");
+            }
         }
 
         private void ReplaceGameDialogue()

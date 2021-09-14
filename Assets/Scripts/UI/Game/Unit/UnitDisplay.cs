@@ -30,6 +30,7 @@ namespace UI.Game.Unit
 
         private RectTransform rectTransform;
         private bool moving;
+        private static readonly int fillId = Shader.PropertyToID("_Fill");
 
 
         internal GameDialogue.UnitInfo UnitInfo => unitInfo;
@@ -53,6 +54,11 @@ namespace UI.Game.Unit
         protected override void OnComponentAwake()
         {
             TryGetComponent(out rectTransform);
+        }
+
+        protected override void OnComponentStart()
+        {
+            healthBarCurrent.material = Instantiate(healthBarCurrent.material);
         }
 
         protected override void Subscribe()
@@ -157,14 +163,14 @@ namespace UI.Game.Unit
             
             float tOld = oldAmount / baseAmount;
             float tCurrent = currentAmount / baseAmount;
-            
-            healthBarCurrent.fillAmount = tCurrent;
-            healthBarDifference.fillAmount = tOld;
+
+            healthBarCurrent.material.SetFloat(fillId, tCurrent);
+            // healthBarDifference.material.SetFloat(fillId, tOld);
             
             await Task.Delay((int) (differenceDelay * 1000));
 
             float start = Time.time;
-            float duration = (healthBarDifference.fillAmount - healthBarCurrent.fillAmount) * differenceDuration;
+            float duration = (tOld - tCurrent) * differenceDuration;
 
             while (Time.time - start < duration)
             {
@@ -173,11 +179,11 @@ namespace UI.Game.Unit
                 if (healthBarDifference == null)
                     return;
                     
-                healthBarDifference.fillAmount = Mathf.Lerp(tOld, tCurrent, t);
+                // healthBarDifference.fillAmount = Mathf.Lerp(tOld, tCurrent, t);
                 await Task.Yield();
             }
 
-            healthBarDifference.fillAmount = 0.0f;
+            // healthBarDifference.fillAmount = 0.0f;
         }
         
         #endregion

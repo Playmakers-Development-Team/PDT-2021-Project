@@ -8,10 +8,10 @@ namespace Background.Editor
     {
         private UnityEditor.Editor editor;
         
-        [MenuItem("Window/Background/Settings Window")]
+        [MenuItem("Window/Background/Settings")]
         private static void ShowWindow()
         {
-            var window = GetWindow<SettingsWindow>();
+            SettingsWindow window = GetWindow<SettingsWindow>();
             window.titleContent = new GUIContent("Background Settings",
                 EditorGUIUtility.IconContent("SettingsIcon").image);
             window.Show();
