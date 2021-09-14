@@ -2,13 +2,15 @@
 using Grid;
 using Managers;
 using UI.Core;
-using UnityEngine;
+ using Units.Players;
+ using UnityEngine;
 
 namespace UI.Game.Unit
 {
     public class UnitUI : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private GameObject unitUIPrefab;
+        [SerializeField] private GameObject playerUIPrefab;
+        [SerializeField] private GameObject enemyUIPrefab;
 
         private GridManager gridManager;
         private readonly List<UnitDisplay> displays = new List<UnitDisplay>();
@@ -42,8 +44,9 @@ namespace UI.Game.Unit
 
         private void OnUnitSpawned(GameDialogue.UnitInfo info)
         {
-            UnitDisplay ui = Instantiate(unitUIPrefab, transform).
-                GetComponent<UnitDisplay>();
+            UnitDisplay ui =
+                Instantiate(info.Unit is PlayerUnit ? playerUIPrefab : enemyUIPrefab, transform).
+                    GetComponent<UnitDisplay>();
             
             ui.Assign(info);
             displays.Add(ui);

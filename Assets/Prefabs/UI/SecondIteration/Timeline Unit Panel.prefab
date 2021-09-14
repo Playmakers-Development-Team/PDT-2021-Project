@@ -3739,7 +3739,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderImage: {fileID: 2081048629032112435}
-  healthImage: {fileID: 4269423531111291776}
   currentHealthText: {fileID: 7093961067559882269}
   baseHealthText: {fileID: 6699845836201353269}
   attackCard: {fileID: 3484413960888583446}
@@ -3747,12 +3746,15 @@ MonoBehaviour:
   primaryTenetCard: {fileID: 3069672328739789833}
   secondaryTenetCard: {fileID: 1532979895759113262}
   abilityCards: {fileID: 7402960356309783765}
-  passion: {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
-  apathy: {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
-  pride: {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
-  humility: {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
-  joy: {fileID: -6336197928699787124, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
-  sorrow: {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  healthFillImage: {fileID: 4269423531111291776}
+  healthBackgroundImage: {fileID: 1501614516810852072}
+  healthBorderImage: {fileID: 6407544989182851072}
+  playerFillColour: {r: 0.7921569, g: 0.23529412, b: 0.25490198, a: 1}
+  playerBackgroundColour: {r: 0.49411765, g: 0.09803922, b: 0.11372549, a: 1}
+  playerBorderColour: {r: 0.22745098, g: 0, b: 0.007843138, a: 1}
+  enemyFillColour: {r: 0.8235294, g: 0.7921569, b: 0.9137255, a: 1}
+  enemyBackgroundColour: {r: 0.40392157, g: 0.32941177, b: 0.6862745, a: 1}
+  enemyBorderColour: {r: 0.16862746, g: 0.019607844, b: 0.32941177, a: 1}
 --- !u!1 &7804232779521842859
 GameObject:
   m_ObjectHideFlags: 0
