@@ -162,24 +162,11 @@ namespace UI.Game.Unit
         
         private void OnUnitStatChanged(GameDialogue.StatChangeInfo info)
         {
-            if (info.Unit != unitInfo.Unit)
+            if (info.Unit != unitInfo.Unit || info.StatType != StatTypes.Health)
                 return;
             
-            switch (info.StatType)
-            {
-                case StatTypes.Health:
-                    UpdateDamageText(info);
-                    UpdateHealthBar(info);
-                    break;
-                
-                case StatTypes.Attack:
-                    // UpdateStatDisplays();
-                    break;
-                
-                case StatTypes.Defence:
-                    // UpdateStatDisplays();
-                    break;
-            }
+            UpdateDamageText(info);
+            UpdateHealthBar(info);
         }
 
         private void OnUnitKilled(GameDialogue.UnitInfo info)
