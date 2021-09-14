@@ -1004,7 +1004,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5704961542752533427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,9 +1037,9 @@ MonoBehaviour:
   eventTrigger: {fileID: 4179008971675876672}
   damageText: {fileID: 1187588767876965920}
   damageTextDuration: 1
-  healthBarContainer: {fileID: 5758780830514323697}
-  hoverHealthColour: {r: 1, g: 1, b: 1, a: 1}
-  defaultHealthColour: {r: 0.22745098, g: 0, b: 0.007843138, a: 1}
+  healthBarContainer: {fileID: 5888240482655125705}
+  hoverHealthColour: {r: 0.9433962, g: 0.37793007, b: 0.36044857, a: 1}
+  defaultHealthColour: {r: 0.79215693, g: 0.23529413, b: 0.24705884, a: 1}
   healthBarCurrent: {fileID: 5888240482655125705}
   healthBarDifference: {fileID: 0}
   differenceDuration: 5
