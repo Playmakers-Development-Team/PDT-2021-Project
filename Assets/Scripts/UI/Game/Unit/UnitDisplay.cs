@@ -122,8 +122,16 @@ namespace UI.Game.Unit
         {
             if (dialogue.DisplayMode != GameDialogue.Mode.Default)
                 return;
-            
-            dialogue.unitSelected.Invoke(unitInfo);
+
+            if (turnManager.ActingUnit == unitInfo.Unit || dialogue.SelectedUnit != null &&
+                dialogue.SelectedUnit.Unit == unitInfo.Unit)
+            {
+                dialogue.unitDeselected.Invoke();
+            }
+            else
+            {
+                dialogue.unitSelected.Invoke(unitInfo);
+            }
         }
 
         public void OnHoverEnter()
