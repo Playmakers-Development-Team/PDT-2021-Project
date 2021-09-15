@@ -314,6 +314,9 @@ namespace UI.Game.Grid
 
             while (Time.time <= startTime + fadeDuration)
             {
+                if (!Application.isPlaying)
+                    return;
+                
                 float t = (Time.time - startTime) / fadeDuration;
                 obstacle.Renderer.material.color = Color.Lerp(startColour, colour, t);
                 await Task.Yield();
