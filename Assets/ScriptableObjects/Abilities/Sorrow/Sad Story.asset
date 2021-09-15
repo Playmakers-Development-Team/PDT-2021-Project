@@ -10,39 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Stay Ahead
+  m_Name: Sad Story
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
-
-    Deal 2 damage
-
-    Gain 2 Defence.
-
-    >When
-    User is INDEPENDENT, gain 2 Pride'
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  description: "[Slow Ability]\nGrant user and adjacent targets 1 Sorrow. \nUser
+    gains 2 Defense. \nTarget gains 2 Attack."
+  shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  representedTenet: 0
+  speed: -1
+  representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
+  - name: "User and Target \u27A4 Default, Provide 1 Sorrow"
     affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 2
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: Provide 2 Pride WITH Independent
-    affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
@@ -52,12 +30,27 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 2
+      tenetType: 5
+      stackCount: 1
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
+    keywords: []
+  - name: "Target \u27A4 Default, 2 Attack"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 2
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
   - name: "User \u27A4 Default, 2 Defence"
     affectTargets: 0
     affectUser: 1
@@ -69,7 +62,7 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
+      tenetType: 5
       stackCount: 0
     bonuses: []
     costs: []
