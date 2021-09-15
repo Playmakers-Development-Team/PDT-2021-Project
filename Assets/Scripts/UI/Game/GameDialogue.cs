@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Abilities;
 using Commands;
 using Managers;
+using TenetStatuses;
 using Turn;
 using Turn.Commands;
 using UI.Core;
@@ -24,7 +25,7 @@ namespace UI.Game
         internal readonly Event<MoveInfo> startedMove = new Event<MoveInfo>();
         internal readonly Event<UnitInfo> endedMove = new Event<UnitInfo>();
         
-        internal readonly Event<StatChangeInfo> unitDamaged = new Event<StatChangeInfo>();
+        internal readonly Event<StatChangeInfo> unitStatChanged = new Event<StatChangeInfo>();
         
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
@@ -69,7 +70,7 @@ namespace UI.Game
         
         #region MonoBehaviour Events
 
-        internal override void OnAwake()
+        protected override void OnDialogueAwake()
         {
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -198,7 +199,7 @@ namespace UI.Game
 
         private void OnUnitDamaged(StatChangedCommand cmd)
         {
-            unitDamaged.Invoke(new StatChangeInfo(cmd));
+            unitStatChanged.Invoke(new StatChangeInfo(cmd));
         }
         
         private void OnUnitKilled(KilledUnitCommand cmd)
@@ -273,13 +274,13 @@ namespace UI.Game
 
         internal readonly struct TurnInfo
         {
-            internal UnitInfo CurrentUnit { get; }
+            internal UnitInfo CurrentUnitInfo { get; }
             internal bool IsPlayer { get; }
 
 
-            public TurnInfo(UnitInfo currentUnit, bool isPlayer)
+            public TurnInfo(UnitInfo currentUnitInfo, bool isPlayer)
             {
-                CurrentUnit = currentUnit;
+                CurrentUnitInfo = currentUnitInfo;
                 IsPlayer = isPlayer;
             }
         }
@@ -289,11 +290,10 @@ namespace UI.Game
             internal IUnit Unit { get; }
             internal int NewValue { get; }
             internal int OldValue { get; }
-            // TODO: Same as OldValue, may be being used incorrectly.
             internal int BaseValue { get; }
             internal int Difference { get; }
             internal int DisplayValue { get; }
-            internal StatTypes StatType { get; }
+            internal StatTypes  StatType { get; }
 
             internal StatChangeInfo(StatChangedCommand cmd)
             {
