@@ -22,11 +22,12 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  representedTenet: 0
   effects:
   - name: "User \u27A4 Default, Provide 1 Apathy"
     affectTargets: 0
     affectUser: 1
-    effectOrder: 1
+    effectOrder: 2
     damageValue: 0
     directDamage: 0
     defenceValue: 0
