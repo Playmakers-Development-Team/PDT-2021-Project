@@ -20,7 +20,7 @@ namespace UI.Game
         
         private void Update()
         {
-            if (Mouse.current.rightButton.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)
+            if ((Mouse.current.rightButton.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame) && dialogue.DisplayMode == GameDialogue.Mode.Aiming)
             {
                 if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null || !turnManager.CanUseAbility)
                     return;
