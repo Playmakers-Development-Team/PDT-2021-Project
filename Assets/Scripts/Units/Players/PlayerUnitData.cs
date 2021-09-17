@@ -5,6 +5,10 @@ namespace Units.Players
     [Serializable]
     public class PlayerUnitData : UnitData
     {
-        // Put player-specific stats here
+        public PlayerUnitData(PlayerUnitData data)
+        {
+            // TODO: The rest of the stats.
+            Abilities = data.Abilities;
+        }
     }
 }
