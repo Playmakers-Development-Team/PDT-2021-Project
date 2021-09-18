@@ -21,7 +21,7 @@
         
         private void OnTurnStarted(GameDialogue.TurnInfo turnInfo)
         {
-            unitInfo = turnInfo.CurrentUnit;
+            unitInfo = turnInfo.CurrentUnitInfo;
             Redraw();
         }
         

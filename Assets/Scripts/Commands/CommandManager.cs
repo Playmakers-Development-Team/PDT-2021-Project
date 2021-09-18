@@ -68,6 +68,18 @@ namespace Commands
         public Type GetCommandType(string name) =>
             commandTypes.ContainsKey(name) ? commandTypes[name] : null;
 
+        public async UniTask ExecuteAndAwaitFinish(Command command)
+        {
+            if (!command.CanCommandFinish)
+                throw new ArgumentException($"Command {command} is not awaitable!");
+
+            bool commandCaught = false;
+            RegisterCatchListener(new Action(() => commandCaught = true), new [] {command.FinishedCommandType});
+            ExecuteCommand(command);
+
+            await UniTask.WaitUntil(() => commandCaught);
+        }
+
         /// <summary>
         /// Execute the given command. Anything listening to this type of command would be notified.
         ///
@@ -555,12 +567,13 @@ namespace Commands
             where T5 : Command => 
             UniTask.ToCoroutine(() => WaitForCommand(filter));
 
-        private void RegisterCatchListener(Delegate action)
+        private void RegisterCatchListener(Delegate action) => 
+            RegisterCatchListener(action, action.GetType().GetGenericArguments());
+
+        private void RegisterCatchListener(Delegate action, Type[] commandTypes)
         {
             if (caughtCommands.ContainsKey(action))
                 return;
-            
-            Type[] commandTypes = action.GetType().GetGenericArguments();
 
             foreach (Type commandType in commandTypes)
             {
