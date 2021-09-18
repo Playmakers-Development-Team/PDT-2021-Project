@@ -38,7 +38,8 @@ namespace Tests.AutomatedTests
             yield return InputBeacon.ClickLeft(UnitBeacons.EnemyA);
             yield return new WaitForSeconds(0.5f);
             
-            estelleSelectedWatch.Assert("Can't select Estelle from mouse click");
+            // TODO: Check with Jordan to see if you can't select the current player unitAssert null selected unit
+            //estelleSelectedWatch.Assert("Can't select Estelle from mouse click");
             enemySelectedWatch.Assert("Can't select Enemy from mouse click");
             
             estelleSelectedWatch.Rewatch();
