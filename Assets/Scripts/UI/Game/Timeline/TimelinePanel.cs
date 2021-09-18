@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Managers;
+using TMPro;
 using Turn;
 using UI.Core;
 using Units;
@@ -72,7 +73,6 @@ namespace UI.Game.Timeline
 
             List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
             int startIndex = turnManager.CurrentTurnIndex;
-            int roundcount = turnManager.RoundCount;
             //currentTurnQueue.RemoveRange(0, startIndex);
 
             CreateInsightButton();
@@ -107,25 +107,25 @@ namespace UI.Game.Timeline
 
         private void CreatePortraits(List<IUnit> units, int startIndex)
         {
-            int index = startIndex;
             int count = 0;
+            int roundcount = turnManager.RoundCount + 1;
 
             while (count < timelineLength)
             {
-                if (index > units.Count - 1)
+                if (startIndex > units.Count - 1)
                 {
-                    CreateDivider();
+                    CreateDivider(roundcount++);
                     count++;
                     if (count >= timelineLength)
                         break;
 
-                    while (index > units.Count - 1)
-                        index = index - units.Count;
+                    while (startIndex > units.Count - 1)
+                        startIndex = startIndex - units.Count;
                 }
 
-                CreatePortrait(units[index]);
+                CreatePortrait(units[startIndex]);
 
-                index++;
+                startIndex++;
                 count++;
             }
         }
@@ -140,9 +140,10 @@ namespace UI.Game.Timeline
             portraits.Add(portrait);
         }
 
-        private void CreateDivider()
+        private void CreateDivider(int round)
         {
             GameObject obj = Instantiate(dividerPrefab, scrollRect.content);
+            obj.GetComponentInChildren<TextMeshProUGUI>().text = round.ToString();
             TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
 
             portraits.Add(portrait);
