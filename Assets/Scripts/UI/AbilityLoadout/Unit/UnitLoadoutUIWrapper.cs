@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Commands;
-using Grid.Commands;
 using Grid.GridObjects;
 using Managers;
+using UI.Commands;
 using UI.Core;
 using Units;
 using UnityEngine;
@@ -22,7 +22,7 @@ namespace UI.AbilityLoadout.Unit
         protected override void OnComponentAwake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.CatchCommand((Action<GridObjectsReadyCommand>) OnGridObjectsReady);
+            commandManager.CatchCommand((Action<AbilityLoadoutReadyCommand>) OnAbilityLoadoutReady);
         }
         
         protected override void Subscribe() {}
@@ -33,7 +33,7 @@ namespace UI.AbilityLoadout.Unit
         
         #region Listeners
 
-        private void OnGridObjectsReady(GridObjectsReadyCommand cmd)
+        private void OnAbilityLoadoutReady(AbilityLoadoutReadyCommand cmd)
         {
             if (!(unitGridObject is IUnit unit))
                 return;

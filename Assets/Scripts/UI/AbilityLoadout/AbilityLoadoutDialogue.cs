@@ -22,7 +22,6 @@ namespace UI.AbilityLoadout
         internal readonly Event<UnitInfo> showAbilitySelectPanel = new Event<UnitInfo>();
         
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
-        internal readonly Event noEnemiesRemaining = new Event();
         internal readonly Event abilitySwap = new Event();
         internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
         internal readonly Event<AbilityButton> drawNewAbilityDetails = new Event<AbilityButton>();
@@ -50,6 +49,9 @@ namespace UI.AbilityLoadout
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             uiManager = ManagerLocator.Get<UIManager>();
+            
+            // Add to UI manager and show starting panel
+            uiManager.Add(this);
 
             // Hide Panels
             unitSelectCanvas.enabled = false;
@@ -71,15 +73,7 @@ namespace UI.AbilityLoadout
                 if (info.Unit is PlayerUnit)
                     units.Add(info);
             });
-
-            noEnemiesRemaining.AddListener(() =>
-            {
-                uiManager.Add(this);
-
-                // TODO: Change to appear after the player selects this option
-                showUnitSelectPanel.Invoke();
-            });
-
+            
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
             {
                 if (AbilitySelectedCommand.IsNewAbility)
@@ -128,17 +122,21 @@ namespace UI.AbilityLoadout
                 abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].unitInfo.Unit);
             });
             
+            // Execute ready command to inform UnitLoadoutUIWrapper
+            commandManager.ExecuteCommand(new AbilityLoadoutReadyCommand());
+            
+            // Show the unit select panel after the AbilityLoadoutReadyCommand
+            // so that unit data from UnitLoadoutUIWrapper can be retrieved
+            showUnitSelectPanel.Invoke();
         }
 
         private void OnEnable()
         {
-            commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
             commandManager.ListenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
         private void OnDisable()
         {
-            commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoEnemiesRemaining);
             commandManager.UnlistenCommand((Action<AbilitySelectedCommand>) OnAbilitySelect);
         }
 
@@ -174,15 +172,6 @@ namespace UI.AbilityLoadout
             abilityButtonPress.Invoke(cmd);
         }
 
-        #endregion
-        
-        #region Command Listeners
-
-        private void OnNoEnemiesRemaining(NoRemainingEnemyUnitsCommand cmd)
-        {
-            noEnemiesRemaining.Invoke();
-        }
-        
         #endregion
 
         #region Dialogue

@@ -12,6 +12,17 @@ namespace UI.Commands
     {
         public UIUnitSelectedCommand(IUnit unit) : base(unit) {}
     }
+    
+    /// <summary>
+    /// Executed when an the ability loadout dialogue appears
+    /// </summary>
+    public class SpawnAbilityLoadoutUICommand : Command {}
+
+    /// <summary>
+    /// Executed when an the ability loadout dialogue is ready
+    /// i.e. when Awake() finishes in AbilityLoadoutDialogue
+    /// </summary>
+    public class AbilityLoadoutReadyCommand : Command {}
 
     /// <summary>
     /// Executed when an ability button is clicked for new ability selection
