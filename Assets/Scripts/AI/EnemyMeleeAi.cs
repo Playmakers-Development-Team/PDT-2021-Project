@@ -19,12 +19,6 @@ namespace AI
         
         protected override async UniTask DecideEnemyIntention()
         {
-            if (playerManager.Units.Count <= 0)
-            {
-                Debug.LogWarning("No players remain, enemy intention is to do nothing");
-                return;
-            }
-
             if (specialMoveCount != 0 &&
                 (turnManager.RoundCount + specialMoveOffset) % specialMoveCount == 0)
             {

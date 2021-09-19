@@ -37,6 +37,12 @@ namespace AI
 
         public async void StartTurn(StartTurnCommand startTurnCommand)
         {
+            if (playerManager.Units.Count <= 0)
+            {
+                Debug.LogWarning("No players remain, enemy intention is to do nothing");
+                return;
+            }
+            
             if(ReferenceEquals(startTurnCommand.Unit, enemyUnit))
                 await DecideEnemyIntention();
             

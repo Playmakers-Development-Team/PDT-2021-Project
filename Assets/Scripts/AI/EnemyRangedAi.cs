@@ -22,12 +22,6 @@ namespace AI
         
         protected override async UniTask DecideEnemyIntention()
         {
-            if (playerManager.Units.Count <= 0)
-            {
-                Debug.LogWarning("No players remain, enemy intention is to do nothing");
-                return;
-            }
-            
             if (turnManager.RoundCount + 1 % SpecialMoveCount == 0) //EVEN TURNS
             {
                 if (ArePlayersClose())
@@ -99,7 +93,7 @@ namespace AI
         /// Returns true if a player is within <c>shootingRange</c> tiles of the enemy.
         /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
-        private async Task ShootPlayer(Ability abilityType)
+        private async UniTask ShootPlayer(Ability abilityType)
         {
             await enemyManager.DoUnitAbility(enemyUnit, abilityType, GetTargetUnit(abilityType));
         }
