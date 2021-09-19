@@ -4,6 +4,7 @@ using Game.Commands;
 using Game.Map;
 using Managers;
 using Turn.Commands;
+using Units.Players;
 using UnityEngine.SceneManagement;
 
 namespace Game
@@ -12,6 +13,7 @@ namespace Game
     {
         private CommandManager commandManager;
         private BackgroundManager backgroundManager;
+        private PlayerManager playerManager;
 
         public EncounterData CurrentEncounterData { get; set; }
         public MapData CurrentMapData { get; set; }
@@ -20,6 +22,7 @@ namespace Game
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             backgroundManager = ManagerLocator.Get<BackgroundManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
         }
@@ -50,6 +53,9 @@ namespace Game
         
         private void EncounterLost()
         {
+            // TODO: Exporting data here is temporary, should probably delete any saved data.
+            playerManager.ExportData();
+            
             // TODO: Go back to the main menu?
             LoadMap();
             
@@ -58,6 +64,8 @@ namespace Game
 
         private void EncounterWon()
         {
+            playerManager.ExportData();
+            
             LoadMap();
 
             CurrentMapData.EncounterCompleted(CurrentEncounterData);

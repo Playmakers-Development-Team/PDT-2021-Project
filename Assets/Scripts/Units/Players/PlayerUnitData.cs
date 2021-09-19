@@ -7,7 +7,8 @@ namespace Units.Players
     {
         public PlayerUnitData(PlayerUnitData data)
         {
-            // TODO: The rest of the stats.
+            Name = data.Name;
+            HealthValue = data.HealthValue;
             Abilities = data.Abilities;
         }
     }
