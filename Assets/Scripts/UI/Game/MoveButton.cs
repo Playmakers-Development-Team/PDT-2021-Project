@@ -33,13 +33,14 @@ namespace UI.Game
         protected override void OnSelected()
         {
             dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
+            
             if (turnManager.ActingPlayerUnit != null && turnManager.IsMovementPhase())
-                dialogue.moveButtonPressed.Invoke(true);
+                dialogue.modeChanged.Invoke(GameDialogue.Mode.Moving);
         }
 
         protected override void OnDeselected()
         {
-            dialogue.moveButtonPressed.Invoke(false);
+            dialogue.modeChanged.Invoke(GameDialogue.Mode.Default);
         }
     }
 }

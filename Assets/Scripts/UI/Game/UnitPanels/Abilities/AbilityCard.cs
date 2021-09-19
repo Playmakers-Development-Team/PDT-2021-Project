@@ -1,4 +1,5 @@
-﻿using Abilities;
+﻿using System.Collections.Generic;
+using Abilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,8 @@ namespace UI.Game.UnitPanels.Abilities
     public class AbilityCard : PanelButton
     {
         [SerializeField] private Image tenetIcon;
+        // TODO: Remove this and replace with global reference...
+        [SerializeField] private List<Sprite> tenetIcons;
         
         
         internal Ability Ability { get; private set; }
@@ -32,6 +35,7 @@ namespace UI.Game.UnitPanels.Abilities
         {
             Ability = ability;
             labelText.text = ability.name;
+            tenetIcon.sprite = tenetIcons[(int) ability.RepresentedTenet];
         }
         
         internal void Destroy() => DestroyImmediate(gameObject);

@@ -2,7 +2,7 @@
 
 namespace UI
 {
-    internal class CropInfo : ScriptableObject
+    public class CropInfo : ScriptableObject
     {
         [SerializeField] private Texture image;
         [SerializeField] private Rect uvRect = new Rect(0, 0, 1, 1);
@@ -14,7 +14,7 @@ namespace UI
         internal Color Colour => colour;
         
         
-        internal void Apply(Texture newImage, Rect newRect)
+        public void Apply(Texture newImage, Rect newRect)
         {
             image = newImage;
             uvRect = newRect;

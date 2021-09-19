@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Selfless Gifting
+  m_EditorClassIdentifier: 
+  description: '[Neutral Ability]
+
+    Grant target 3 attack, 3 defense. Grant self
+    1 Joy.
+
+    Remove 1 Joy by spending Humility [CURRENTLY DOES NOT WORK]
+
+    REPRESSION
+    2 - Subtract 2 Attack and 2 Defence from target
+
+'
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  excludeUserFromTargets: 1
+  speed: 0
+  representedTenet: 4
+  effects:
+  - name: Default, 3 Attack and 3 Defence
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 3
+    attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: Default, Provide 1 Joy
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 3 Damage WITH Repression 2 to User"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 3
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 4
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 20cb849d3c43e2d4e8925610b582d5f1, type: 2}
+  userEffects: []

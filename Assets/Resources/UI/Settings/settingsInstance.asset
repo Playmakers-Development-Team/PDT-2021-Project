@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62be4a3c0ec541c9931c970b03d7725e, type: 3}
+  m_Name: settingsInstance
+  m_EditorClassIdentifier: 
+  attackIcon: {fileID: 21300000, guid: 872dcb7d4a6ddd243a36256a49d6c859, type: 3}
+  defenceIcon: {fileID: 21300000, guid: 7980afdf0857c0b4c86dcb3e83c5a854, type: 3}
+  passionIcon: {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  apathyIcon: {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  prideIcon: {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  humilityIcon: {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  joyIcon: {fileID: -6336197928699787124, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  sorrowIcon: {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  attackColour: {r: 0.39215687, g: 0, b: 0, a: 1}
+  defenceColour: {r: 0.015686275, g: 0.050980393, b: 0.31764707, a: 1}
+  passionColour: {r: 0.57758063, g: 0.015208514, b: 0.022173883, a: 1}
+  apathyColour: {r: 0.056128494, g: 0.048171833, b: 0.42869055, a: 1}
+  prideColour: {r: 0.035601325, g: 0.10946172, b: 0.025186857, a: 1}
+  humilityColour: {r: 0.77582246, g: 0.16202943, b: 0.013702081, a: 1}
+  joyColour: {r: 0.70110214, g: 0.12743773, b: 0.12743773, a: 1}
+  sorrowColour: {r: 0.009134057, g: 0.13286836, b: 0.2581829, a: 1}
