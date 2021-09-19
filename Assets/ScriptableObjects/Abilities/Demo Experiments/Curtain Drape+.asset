@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Fast Ability]
 
-    Give 2 Defence in 3 tile line
+    Give 3 Defence in 3 tile line
 
     Targets with
-    AFFINITY gain 2 more Defence'
+    AFFINITY gain 2 more Defence and 1 Humility'
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 1
   representedTenet: 1
   effects:
-  - name: "Target \u27A4 Default, 2 Defence"
+  - name: "Target \u27A4 Default, 3 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 2 Defence WITH Affinity"
+  - name: "Target \u27A4 2 Defence and Provide 1 Humility WITH Affinity"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -50,8 +50,8 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 1
+      stackCount: 1
     bonuses: []
     costs: []
     keywords:

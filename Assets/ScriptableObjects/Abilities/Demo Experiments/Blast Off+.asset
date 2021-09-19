@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Very Slow Ability]
 
-    Big Area of effect attack. Does 2 damage
-    base, add 3 damage by spending Passion.
+    Big AoE. Deal 2 damage.
 
-    Give targets 1 Sorrow
+    Deal 3 extra
+    damage per stack of Passion.
 
 '
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
@@ -25,7 +25,7 @@ MonoBehaviour:
   speed: -2
   representedTenet: 2
   effects:
-  - name: Default, 2 Damage and Provide 1 Sorrow
+  - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -36,15 +36,15 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 5
-      stackCount: 1
+      tenetType: 2
+      stackCount: 0
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack IF User Spend 1 Passion
+  - name: "User \u27A4 3 Attack BONUSED BY User Passion IF User Consume 1 Passion"
     affectTargets: 0
     affectUser: 1
-    effectOrder: 1
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
@@ -54,14 +54,33 @@ MonoBehaviour:
     providingTenet:
       tenetType: 0
       stackCount: 0
-    bonuses: []
+    bonuses:
+    - name: User Passion
+      affectType: 0
+      bonusType: 1
+      tenetBonus:
+        tenetType: 2
+        tenetConstraint: 0
+      shapeBonus:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        bonusByCount: 0
+        bonus:
+          name: 
+          affectType: 0
+          bonusType: 0
+          tenetBonus:
+            tenetType: 0
+            tenetConstraint: 0
     costs:
-    - name: User Spend 1 Passion
+    - name: User Consume 1 Passion
       affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 2
+        tenetCostType: 1
         count: 1
         tenetType: 2
         tenetConstraint: 0

@@ -14,39 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Slow Ability]
 
-    Give 2 Defence
+    Give 3 Defence and 1 Passion
 
-    KINDLED 2 - Give 2 Attack
-    and 1 more Defence'
+    KINDLED 2 -
+    Give 5 Attack'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: -1
   representedTenet: 2
   effects:
-  - name: Default, 2 Defence
+  - name: "Target \u27A4 Default, 3 Defence and Provide 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 2
+      stackCount: 1
     bonuses: []
     costs: []
     keywords: []
-  - name: "User and Target \u27A4 2 Attack WITH Kindled 2 to Targets"
+  - name: "User and Target \u27A4 5 Attack WITH Kindled 2 to Target"
     affectTargets: 1
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 2
+    attackValue: 5
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
