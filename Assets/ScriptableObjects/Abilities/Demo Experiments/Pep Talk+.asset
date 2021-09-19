@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Pep Talk+
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nGrant adjacent units 3 attack and 1 passion. \nIf
+  description: "[Slow Ability]\nGrant adjacent units 4 attack and 1 passion. \nIf
     they have Humility, spend it to gain 3 defence"
   shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
   speed: -1
   representedTenet: 2
   effects:
-  - name: Default, 3 Attack and Provide 1 Passion
+  - name: "Target \u27A4 Default, 4 Attack and Provide 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 3
+    attackValue: 4
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
