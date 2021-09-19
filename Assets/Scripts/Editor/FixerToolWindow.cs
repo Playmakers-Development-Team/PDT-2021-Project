@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AI;
@@ -25,6 +26,18 @@ namespace Editor
 
         private void CreateGUI()
         {
+            rootVisualElement.Add(new Button(OnFixUnitStructure)
+            {
+                text = "Fix to new Unit Prefab Structure",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+            
             rootVisualElement.Add(new Button(OnFixSceneClicked)
             {
                 text = "Fix Scene",
@@ -83,6 +96,12 @@ namespace Editor
             }
         }
 
+        private void OnFixUnitStructure()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            ReplaceAllUnits(false);
+        }
+
         private void OnFixSceneClicked()
         {
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
@@ -138,33 +157,51 @@ namespace Editor
             }
         }
 
-        private void ReplaceAllUnits()
+        private void ReplaceAllUnits(bool keepParent = true)
         {
+            // Change the path here.
+            const string pathToReplaceWith = "Assets/Prefabs/Units/Fixed/Fixed/";
             var units = GameObject.FindObjectsOfType<GridObject>();
 
             foreach (var gridObject in units)
             {
+                if (!PrefabUtility.IsAnyPrefabInstanceRoot(gridObject.gameObject))
+                {
+                    Debug.LogWarning($"Skipping {gridObject.name}, it doesn't need to be replaced");
+                    continue;
+                }
+                
                 IUnit oldIUnit = gridObject.GetComponent<IUnit>();
                 EnemyMeleeAi oldMeleeAi = gridObject.GetComponent<EnemyMeleeAi>();
                 EnemyRangedAi oldRangedAi = gridObject.GetComponent<EnemyRangedAi>();
                 
                 string oldPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gridObject.gameObject);
-                const string fixedPath = "Assets/Prefabs/Units/Fixed/Fixed/";
 
                 // Check if we need to fix it
-                if (!oldPath.Contains(fixedPath))
+                if (!oldPath.Contains(pathToReplaceWith))
                 {
-                    string newPath = oldPath.Replace("Assets/Prefabs/Units/", fixedPath);
+                    string prefabFileName = Path.GetFileName(oldPath);
+                    string newPath = pathToReplaceWith + prefabFileName;
                     GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
+                    GameObject newGameObject;
+
+                    if (keepParent)
+                    {
+                        newGameObject = (GameObject) PrefabUtility.InstantiatePrefab(newPrefab, gridObject.transform.parent);
+                    }
+                    else
+                    {
+                        newGameObject = (GameObject) PrefabUtility.InstantiatePrefab(newPrefab);
+                    }
+
+                    Undo.RegisterCreatedObjectUndo(newGameObject, $"Fixed {newGameObject.name}");
+                    GridObject newGridObject = newGameObject.GetComponentInChildren<GridObject>();
+                    IUnit newIUnit = newGameObject.GetComponentInChildren<IUnit>();
+                    EnemyMeleeAi newMeleeAi = newGameObject.GetComponentInChildren<EnemyMeleeAi>();
+                    EnemyRangedAi newRangedAi = newGameObject.GetComponentInChildren<EnemyRangedAi>();
                 
-                    GameObject newGridObject = (GameObject) PrefabUtility
-                        .InstantiatePrefab(newPrefab, gridObject.transform.parent);
-                    IUnit newIUnit = newGridObject.GetComponent<IUnit>();
-                    EnemyMeleeAi newMeleeAi = newGridObject.GetComponent<EnemyMeleeAi>();
-                    EnemyRangedAi newRangedAi = newGridObject.GetComponent<EnemyRangedAi>();
-                
-                    newGridObject.transform.position = gridObject.transform.position;
-                    newGridObject.name = gridObject.name;
+                    newGameObject.transform.position = gridObject.transform.position;
+                    newGameObject.name = gridObject.name;
 
                     if (oldIUnit != null && newIUnit != null)
                     {
@@ -181,9 +218,9 @@ namespace Editor
                     if (oldRangedAi != null)
                         EditorUtility.CopySerialized(oldRangedAi, newRangedAi);
 
-                    ReplaceGridObjectInTurn(gridObject, newGridObject.GetComponent<GridObject>());
+                    ReplaceGridObjectInTurn(gridObject, newGridObject);
                     // Replace it
-                    DestroyImmediate(gridObject.gameObject);
+                    Undo.DestroyObjectImmediate(gridObject.gameObject);
                 }
             }
         }
