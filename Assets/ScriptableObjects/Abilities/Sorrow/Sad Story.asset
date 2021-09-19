@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Sad Story
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nGrant user and adjacent targets 1 Sorrow. \nUser
-    gains 2 Defense. \nTarget gains 2 Attack."
+  description: '[Slow Ability]
+
+    Give user and adjacent targets 1 Sorrow. and
+    2 Defence.
+
+    User gains 2 Defense. '
   shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
   speed: -1

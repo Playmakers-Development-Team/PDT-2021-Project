@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: All Out Attack
   m_EditorClassIdentifier: 
-  description: "[Extremely Slow Ability]\nGive target 1 Attack\n>Give 1 Attack when
+  description: "[Extremely Slow Ability]\nGive targets 3 Attack\n>Give 3 Attack when
     spending Passion \n>Give 4 Attack with KINDLED 2\n"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: -3
   representedTenet: 2
   effects:
-  - name: Default, 1 Attack
+  - name: "Target \u27A4 Default, 3 Attack"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 1
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -35,14 +35,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 1 Attack IF Target Spend 1 Passion
+  - name: "Target \u27A4 3 Attack IF Target Spend 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 1
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
