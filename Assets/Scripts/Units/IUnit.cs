@@ -60,5 +60,22 @@ namespace Units
         /// <param name="direction">Direction to use to ability towards</param>
         /// <returns>All units that are affected</returns>
         IEnumerable<VirtualUnit> ProjectAbility(Ability ability, ShapeDirection direction);
+
+        /// <summary>
+        /// <p>Upgrade an ability that is on existing unit. The ability will then be replaced with the
+        /// upgraded ability.</p>
+        ///
+        /// <p>Will throw errors if the ability cannot be upgraded or you are trying to upgrade an ability
+        /// that the unit does not have.</p>
+        /// </summary>
+        void UpgradeAbility(Ability existingAbility);
+
+        /// <summary>
+        /// <p>Upgrade an ability that is on existing unit. The ability will then be replaced with the
+        /// upgraded ability.</p>
+        ///
+        /// <p>Will throw errors if the ability cannot be upgraded.</p>
+        /// </summary>
+        void UpgradeAbility(int index);
     }
 }

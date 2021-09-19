@@ -542,6 +542,29 @@ namespace Units
             ability.ProjectAbilityUsers(this, Coordinate, direction)
                 .OfType<VirtualUnit>();
 
+        public void UpgradeAbility(Ability existingAbility)
+        {
+            int index = Abilities.IndexOf(existingAbility);
+
+            if (index == -1)
+            {
+                throw new ArgumentException(
+                    $"Cannot upgrade ability {existingAbility.name} because {name} is not holding it!");
+            }
+            
+            UpgradeAbility(index);
+        }
+
+        public void UpgradeAbility(int index)
+        {
+            Ability ability = Abilities[index];
+
+            if (ability.UpgradedAbility == null)
+                Debug.LogError($"Cannot upgrade {ability.name}, it does not have an upgrade option!");
+            else
+                data.Abilities[index] = ability.UpgradedAbility;
+        }
+
         #endregion
     }
 }

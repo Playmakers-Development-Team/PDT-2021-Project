@@ -17,6 +17,8 @@ namespace Abilities
     {
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
+        [Tooltip("Is there an ability that this one can be upgraded to? Otherwise keep it's okay to keep empty/None")]
+        [SerializeField] private Ability upgradedAbility;
         [SerializeField] private BasicShapeData shape;
         [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
@@ -32,6 +34,10 @@ namespace Abilities
         /// A complete description of the ability.
         /// </summary>
         public string Description => description;
+        /// <summary>
+        /// The ability that this ability can upgrade into. MAY BE NULL if this ability can't be upgraded.
+        /// </summary>
+        public Ability UpgradedAbility => upgradedAbility;
         /// <summary>
         /// Describes what and how the ability can hit units.
         /// </summary>
