@@ -19,6 +19,9 @@ namespace AI
         [SerializeField] private Ability rangedAttackAbility;
         [SerializeField] private Ability secondRangedAttackAbility;
         [SerializeField] private Ability buffAbility;
+
+        [Header("Additional Options")]
+        [SerializeField] private bool onlyMoveInOneAxis;
         
         protected override async UniTask DecideEnemyIntention()
         {
@@ -39,12 +42,31 @@ namespace AI
             }
             else //ODD TURNS
             {
-                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange);
+                await MoveToTarget();
 
                 if (GetTargetsInRange(rangedAttackAbility).Count > 0)
                     await ShootPlayer(rangedAttackAbility);
                 else
                     await enemyManager.DoUnitAbility(enemyUnit, buffAbility, ShapeDirection.None);
+            }
+        }
+
+        /// <summary>
+        /// Move closer towards a target
+        /// </summary>
+        private async UniTask MoveToTarget()
+        {
+            if (onlyMoveInOneAxis)
+            {
+                List<Vector2Int> allowedTiles = enemyUnit.GetReachableOccupiedTiles()
+                    .Where(coor => coor.x == enemyUnit.Coordinate.x || coor.y == enemyUnit.Coordinate.y)
+                    .ToList();
+
+                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange, allowedTiles);
+            }
+            else
+            {
+                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange);
             }
         }
 

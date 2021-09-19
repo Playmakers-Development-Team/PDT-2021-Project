@@ -71,17 +71,20 @@ namespace Units.Enemies
             while (playerManager.WaitForDeath)
                 await UniTask.Yield();
         }
+
+        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget)
+        {
+            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
+            await MoveToTargetRange(enemyUnit, distanceFromTarget, reachableTiles);
+        }
         
         /// <summary>
         /// Similar to MoveUnitToTarget, but aims for tiles that are <c>distanceFromTarget</c>
         /// away from the target
         /// </summary>
-        /// <param name="enemyUnit"></param>
-        /// <param name="distanceFromTarget"></param>
-        public async Task MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget)
+        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget, ICollection<Vector2Int> reachableTiles)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
-            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             Vector2Int targetTile = new Vector2Int();
 
             if (reachableTiles.Count <= 0 || targetPlayerUnit is null)
