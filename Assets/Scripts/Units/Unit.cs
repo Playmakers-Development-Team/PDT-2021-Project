@@ -21,7 +21,6 @@ using Random = UnityEngine.Random;
 
 namespace Units
 {
-    [RequireComponent(typeof(SnapToGrid))]
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
@@ -81,7 +80,7 @@ namespace Units
             
             #endregion
             
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer = transform.parent.GetComponentInChildren<SpriteRenderer>();
 
             HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
             StatTypes.Health);
@@ -92,7 +91,7 @@ namespace Units
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
 
-            UnitAnimator = GetComponentInChildren<Animator>();
+            UnitAnimator = transform.parent.GetComponentInChildren<Animator>();
         }
 
         #region ValueChanging
@@ -202,7 +201,7 @@ namespace Units
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
-            gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
@@ -426,10 +425,10 @@ namespace Units
                 else if (movePath[i].y < currentCoordinate.y)
                     unit.ChangeAnimation(AnimationStates.Down);
 
-                await gridManager.MovementTween(unit.gameObject, 
+                await gridManager.MovementTween(unit.transform.parent.gameObject, 
                     gridManager.ConvertCoordinateToPosition(currentCoordinate),
                     gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
-                unit.gameObject.transform.position =
+                unit.transform.parent.position =
                     gridManager.ConvertCoordinateToPosition(movePath[i]);
                 currentCoordinate = movePath[i];
             }
