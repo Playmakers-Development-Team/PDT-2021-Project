@@ -1189,11 +1189,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1237177469292192013, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: m_Name
-      value: Spawner
+      value: Melee Spawner
       objectReference: {fileID: 0}
     - target: {fileID: 1237177469292192013, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1753354605258846050, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: coordinate.x
@@ -1209,11 +1209,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6012211374007815528, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6012211374007815528, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6012211374007815528, guid: 6f652d2d166affa408c67167cda0ea30, type: 3}
       propertyPath: m_LocalPosition.z
