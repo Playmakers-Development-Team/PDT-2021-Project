@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Shapes;
+using Cysharp.Threading.Tasks;
 using Units;
 using Units.Commands;
 using Units.Players;
@@ -19,7 +20,7 @@ namespace AI
         [SerializeField] private Ability secondRangedAttackAbility;
         [SerializeField] private Ability buffAbility;
         
-        protected override async void DecideEnemyIntention()
+        protected override async UniTask DecideEnemyIntention()
         {
             if (playerManager.Units.Count <= 0)
             {
@@ -51,9 +52,6 @@ namespace AI
                 else
                     await enemyManager.DoUnitAbility(enemyUnit, buffAbility, ShapeDirection.None);
             }
-            
-            // TODO: Move to superclass.
-            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
 
         /// <summary>

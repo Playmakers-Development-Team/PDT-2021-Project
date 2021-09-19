@@ -1,7 +1,9 @@
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using Turn;
 using Turn.Commands;
+using Units.Commands;
 using Units.Enemies;
 using Units.Players;
 using UnityEngine;
@@ -33,12 +35,14 @@ namespace AI
 
         private void OnDisable() => commandManager.UnlistenCommand<StartTurnCommand>(StartTurn);
 
-        public void StartTurn(StartTurnCommand startTurnCommand)
+        public async void StartTurn(StartTurnCommand startTurnCommand)
         {
             if(ReferenceEquals(startTurnCommand.Unit, enemyUnit))
-                DecideEnemyIntention();
+                await DecideEnemyIntention();
+            
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
 
-        protected abstract void DecideEnemyIntention();
+        protected abstract UniTask DecideEnemyIntention();
     }
 }
