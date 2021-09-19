@@ -1,17 +1,19 @@
-﻿using System.Collections.Generic;
+﻿ using System.Collections.Generic;
 using Grid;
 using Managers;
 using UI.Core;
-using UnityEngine;
+ using Units.Players;
+ using UnityEngine;
 
 namespace UI.Game.Unit
 {
     public class UnitUI : DialogueComponent<GameDialogue>
     {
-        [SerializeField] private GameObject unitUIPrefab;
+        [SerializeField] private GameObject playerUIPrefab;
+        [SerializeField] private GameObject enemyUIPrefab;
 
         private GridManager gridManager;
-        private List<UnitDisplay> displays = new List<UnitDisplay>();
+        private readonly List<UnitDisplay> displays = new List<UnitDisplay>();
 
         protected override void OnComponentAwake()
         {
@@ -21,9 +23,11 @@ namespace UI.Game.Unit
 
         protected override void OnComponentStart()
         {
-            base.OnComponentStart();
             foreach (UnitDisplay display in displays)
-                display.transform.position = gridManager.ConvertCoordinateToPosition(display.UnitInfo.Unit.Coordinate);
+            {
+                display.transform.position =
+                    gridManager.ConvertCoordinateToPosition(display.UnitInfo.Unit.Coordinate);
+            }
         }
 
         protected override void Subscribe()
@@ -40,8 +44,9 @@ namespace UI.Game.Unit
 
         private void OnUnitSpawned(GameDialogue.UnitInfo info)
         {
-            UnitDisplay ui = Instantiate(unitUIPrefab, transform).
-                GetComponent<UnitDisplay>();
+            UnitDisplay ui =
+                Instantiate(info.Unit is PlayerUnit ? playerUIPrefab : enemyUIPrefab, transform).
+                    GetComponent<UnitDisplay>();
             
             ui.Assign(info);
             displays.Add(ui);

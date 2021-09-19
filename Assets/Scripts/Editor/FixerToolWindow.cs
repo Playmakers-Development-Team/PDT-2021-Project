@@ -36,6 +36,51 @@ namespace Editor
                     marginTop = 10
                 }
             });
+            
+            rootVisualElement.Add(new Button(OnFixMusicClicked)
+            {
+                text = "Fix Music",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+            
+            rootVisualElement.Add(new Button(OnFixPinkBackground)
+            {
+                text = "Fix background being Pink",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+        }
+
+        private void OnFixMusicClicked()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            GameObject wiseGlobal = GameObject.Find("WwiseGlobal");
+
+            if (wiseGlobal != null)
+            {
+                foreach (AkEvent akEvent in wiseGlobal.GetComponents<AkEvent>())
+                    DestroyImmediate(akEvent);
+                
+                DestroyImmediate(wiseGlobal.GetComponent<AkBank>());
+                DestroyImmediate(wiseGlobal.GetComponent<AkGameObj>());
+            }
+
+            if (!GameObject.Find("Music"))
+            {
+                var musicPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Audio/Music.prefab");
+                PrefabUtility.InstantiatePrefab(musicPrefab);
+            }
         }
 
         private void OnFixSceneClicked()
@@ -46,6 +91,27 @@ namespace Editor
             ReplaceAllUnits();
             
             Debug.Log("Scene fixing Successful!");
+        }
+
+        private void OnFixPinkBackground()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+
+            GameObject updatedGridObjectPrefab =
+                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Background/Mountain Trail Grid.prefab");
+            
+            
+            GameObject backgroundGameObject = GameObject.Find("--- BACKGROUND SYSTEM ---");
+            UnityEngine.Grid gridObject = backgroundGameObject.GetComponentInChildren<UnityEngine.Grid>();
+
+            if (gridObject == null || gridObject.name != "Mountain Trail Grid")
+            {
+                if (gridObject != null)
+                    Undo.DestroyObjectImmediate(gridObject.gameObject);
+                GameObject updatedGridObject = (GameObject)PrefabUtility
+                    .InstantiatePrefab(updatedGridObjectPrefab, backgroundGameObject.transform);
+                Undo.RecordObject(updatedGridObject, "Add in updated grid background");
+            }
         }
 
         private void ReplaceGameDialogue()

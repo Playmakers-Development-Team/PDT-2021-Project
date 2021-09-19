@@ -19,5 +19,12 @@ namespace UI.Game.Grid
             this.spaces = spaces;
             this.type = type;
         }
+        
+        public GridSelection(Vector2Int space, GridSelectionType type)
+        {
+            spaces = new Vector2Int[1];
+            spaces[0] = space;
+            this.type = type;
+        }
     }
 }
