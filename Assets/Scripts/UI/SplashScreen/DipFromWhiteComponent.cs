@@ -13,6 +13,8 @@ namespace UI.SplashScreen
         [SerializeField] private Animator animator;
         [SerializeField] private Image image;
 
+        private bool animationCompleted = false;
+
         #region UIComponent
 
         protected override void Subscribe() {}
@@ -33,14 +35,18 @@ namespace UI.SplashScreen
 
         private async UniTask StartAnimation()
         {
+            
             await UniTask.Delay(timeTillFade);
-            animator.enabled = true;
+            
+            if (!animationCompleted)
+                animator.enabled = true;
         }
 
         public void CompleteAnimation()
         {
             animator.enabled = false;
-            image.color = new Color(255, 255, 255, 255);
+            image.color = new Color(255, 255, 255, 0);
+            animationCompleted = true;
         }
 
         #endregion
@@ -49,7 +55,7 @@ namespace UI.SplashScreen
 
         public bool IsAnimationPlaying()
         {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 || animationCompleted)
                 return false;
 
             return true;
