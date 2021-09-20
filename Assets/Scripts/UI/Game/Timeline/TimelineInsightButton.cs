@@ -1,4 +1,3 @@
-using System;
 using Managers;
 using TMPro;
 using Turn;
@@ -11,19 +10,27 @@ namespace UI.Game.Timeline
     [RequireComponent(typeof(Button))]
     public class TimelineInsightButton : DialogueComponent<GameDialogue>
     {
-
-        
         [SerializeField] private Button btn;
         [SerializeField] private TextMeshProUGUI text;
         private TurnManager turnManager;
-        
-        
+
+        #region Drawing
+
+        internal void Destroy()
+        {
+            DestroyImmediate(gameObject);
+        }
+
+        #endregion
+
+
         #region UIComponent
-        
+
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
         }
+
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
@@ -35,15 +42,14 @@ namespace UI.Game.Timeline
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.meditateConfirmed.RemoveListener(MeditateConfirmed);
         }
-        
+
         #endregion
-        
+
 
         #region Listeners
-        
+
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            
             EnableBtn(info);
             UpdateText();
         }
@@ -52,10 +58,10 @@ namespace UI.Game.Timeline
         {
             UpdateText();
         }
-        
+
         #endregion
 
-        #region Functionality
+        #region FunctionalityS
 
         public void OnClick()
         {
@@ -69,16 +75,6 @@ namespace UI.Game.Timeline
 
         private void UpdateText() => text.text = turnManager.Insight.Value.ToString();
 
-        #endregion
-        
-        #region Drawing
-        
-
-        internal void Destroy()
-        {
-            DestroyImmediate(gameObject);
-        }
-        
         #endregion
     }
 }

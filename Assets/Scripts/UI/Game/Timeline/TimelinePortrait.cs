@@ -11,30 +11,32 @@ namespace UI.Game.Timeline
     {
         [SerializeField] private RawImage image;
         [SerializeField] private Sprite enemyBackground;
-        [SerializeField]private Button btn;
+        [SerializeField] private Button btn;
 
         private GameDialogue.UnitInfo unitInfo;
-        
+
         public GameDialogue.UnitInfo UnitInfo => unitInfo;
-        
-        
+
+
         #region UIComponent
 
         protected override void Subscribe()
         {
             dialogue.unitSelected.AddListener(SelectUnit);
+            dialogue.unitDeselected.AddListener(DeselectUnit);
         }
 
         protected override void Unsubscribe()
         {
             dialogue.unitSelected.RemoveListener(SelectUnit);
+            dialogue.unitDeselected.RemoveListener(DeselectUnit);
         }
-        
+
         #endregion
-        
+
 
         #region Listeners
-        
+
         public void OnClick()
         {
             dialogue.unitSelected.Invoke(unitInfo);
@@ -42,13 +44,18 @@ namespace UI.Game.Timeline
 
         private void SelectUnit(GameDialogue.UnitInfo info)
         {
-            btn.interactable = !(info == unitInfo) ;
+            btn.interactable = !(info == unitInfo);
         }
-        
+
+        private void DeselectUnit()
+        {
+            btn.interactable = true;
+        }
+
         #endregion
-        
+
         #region Drawing
-        
+
         internal void Assign(GameDialogue.UnitInfo unit)
         {
             unitInfo = unit;
@@ -56,8 +63,8 @@ namespace UI.Game.Timeline
             {
                 GetComponent<Image>().sprite = enemyBackground;
             }
-            
-            
+
+
             image.texture = unitInfo.TimelineCropInfo.Image;
             image.color = unitInfo.TimelineCropInfo.Colour;
             image.uvRect = unitInfo.TimelineCropInfo.UVRect;
@@ -67,7 +74,7 @@ namespace UI.Game.Timeline
         {
             DestroyImmediate(gameObject);
         }
-        
+
         #endregion
     }
 }

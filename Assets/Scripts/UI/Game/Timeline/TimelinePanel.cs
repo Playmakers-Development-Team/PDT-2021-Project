@@ -28,7 +28,6 @@ namespace UI.Game.Timeline
 
         protected override void OnComponentAwake()
         {
-            
             turnManager = ManagerLocator.Get<TurnManager>();
         }
 
@@ -76,18 +75,15 @@ namespace UI.Game.Timeline
             List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
             int startIndex = turnManager.CurrentTurnIndex;
             //currentTurnQueue.RemoveRange(0, startIndex);
-            if(drawInsightBtn)
+            if (drawInsightBtn)
                 CreateInsightButton();
-            
+
             CreatePortraits(currentTurnQueue, startIndex);
-            
-            
-            
         }
 
         private void maintainSelectedThroughTurns()
         {
-            if(dialogue.SelectedUnit != null)
+            if (dialogue.SelectedUnit != null)
                 dialogue.unitSelected.Invoke(dialogue.SelectedUnit);
         }
 
@@ -160,7 +156,8 @@ namespace UI.Game.Timeline
         {
             GameObject obj = Instantiate(insightButtonPrefab, scrollRect.content);
             TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
-            obj.GetComponentInChildren<TextMeshProUGUI>().text = turnManager.Insight.Value.ToString();
+            obj.GetComponentInChildren<TextMeshProUGUI>().text =
+                turnManager.Insight.Value.ToString();
 
             portraits.Add(portrait);
         }
