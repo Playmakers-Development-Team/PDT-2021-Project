@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: -20, y: 11}
-  m_SizeDelta: {x: -280, y: 70}
+  m_SizeDelta: {x: -250, y: 70}
   m_Pivot: {x: 1, y: 1}
 --- !u!222 &7728263409376061509
 CanvasRenderer:
@@ -442,7 +442,7 @@ MonoBehaviour:
   portraitPrefab: {fileID: 1069042980032773539, guid: e2d6cae7782fc5e4dad12aa944953f60, type: 3}
   dividerPrefab: {fileID: 1789053312244162028, guid: 81614539140db674e95bc05ec61d4a6a, type: 3}
   insightButtonPrefab: {fileID: 1569788653794262997, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
-  timelineLength: 8
+  timelineLength: 9
   drawInsightBtn: 0
 --- !u!1 &6881319126922021532
 GameObject:
@@ -953,7 +953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 316025502372874549, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 231
+      value: 196
       objectReference: {fileID: 0}
     - target: {fileID: 316025502372874549, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
       propertyPath: m_AnchoredPosition.y
