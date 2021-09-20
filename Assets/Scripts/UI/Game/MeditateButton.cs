@@ -38,11 +38,12 @@ namespace UI.Game
         protected override void OnSelected()
         {
             dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
+            turnManager.Meditate();
             dialogue.meditateConfirmed.Invoke(dialogue.SelectedUnit);
 
             icon.sprite = activatedSprite;
 
-            turnManager.Meditate();
+            
             dialogue.buttonSelected.Invoke();
             
             SetInteractable(false);

@@ -6,22 +6,29 @@ using UnityEngine.UI;
 
 namespace UI.Game.Timeline
 {
+    [RequireComponent(typeof(Button))]
     public class TimelinePortrait : DialogueComponent<GameDialogue>
     {
         [SerializeField] private RawImage image;
         [SerializeField] private Sprite enemyBackground;
+        [SerializeField]private Button btn;
 
         private GameDialogue.UnitInfo unitInfo;
-        
         
         public GameDialogue.UnitInfo UnitInfo => unitInfo;
         
         
         #region UIComponent
 
-        protected override void Subscribe() {}
+        protected override void Subscribe()
+        {
+            dialogue.unitSelected.AddListener(SelectUnit);
+        }
 
-        protected override void Unsubscribe() {}
+        protected override void Unsubscribe()
+        {
+            dialogue.unitSelected.RemoveListener(SelectUnit);
+        }
         
         #endregion
         
@@ -32,9 +39,13 @@ namespace UI.Game.Timeline
         {
             dialogue.unitSelected.Invoke(unitInfo);
         }
+
+        private void SelectUnit(GameDialogue.UnitInfo info)
+        {
+            btn.interactable = !(info == unitInfo) ;
+        }
         
         #endregion
-        
         
         #region Drawing
         
