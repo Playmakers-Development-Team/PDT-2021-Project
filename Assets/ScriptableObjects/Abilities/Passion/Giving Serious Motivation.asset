@@ -12,16 +12,67 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Giving Serious Motivation
   m_EditorClassIdentifier: 
-  description: "Targets gain 3 Attack\n User and targets gains 1 Defense and 1 Passion\n"
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
-  targetEffects:
-  - name: Default, 3 Attack and 1 Defence and Provide 1 Passion
+  description: '[Very Slow Ability]
+
+    Give 3 Attack and 1 Passion
+
+    >Target
+    gains 1 Passion with KINDLED 2
+
+    >Target gains 3 Attack with KINDLED 4'
+  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
+  excludeUserFromTargets: 1
+  speed: -2
+  representedTenet: 2
+  effects:
+  - name: Default, 3 Attack and Provide 1 Passion
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
     damageValue: 0
-    defenceValue: 1
+    directDamage: 0
+    defenceValue: 0
     attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
     providingTenet:
       tenetType: 2
       stackCount: 1
     bonuses: []
     costs: []
+    keywords: []
+  - name: Provide 1 Passion WITH Kindled 2 to User
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
+  - name: 4 Attack WITH Kindled 4 to Targets
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 4
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 065ed2fc5868e9086a8aa24584e5cd34, type: 2}
   userEffects: []

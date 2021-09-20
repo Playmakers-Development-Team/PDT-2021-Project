@@ -85,7 +85,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5766478397726234728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +128,14 @@ MonoBehaviour:
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
   interactable: 1
-  tenetIcon: {fileID: 0}
+  tenetIcon: {fileID: 1629591155634061321}
+  tenetIcons:
+  - {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -6336197928699787124, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
 --- !u!114 &1741380082100635394
 MonoBehaviour:
   m_ObjectHideFlags: 0

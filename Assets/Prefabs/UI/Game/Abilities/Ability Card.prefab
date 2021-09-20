@@ -61,11 +61,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9fd60845f9e42a0b5afaed6dd9ecab7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 4082777033464399372}
-  titleText: {fileID: 6525824023751323883}
-  descriptionText: {fileID: 642316792954198052}
-  defaultText: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  selectedText: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
+  trigger: {fileID: 0}
+  animator: {fileID: 0}
+  labelText: {fileID: 0}
+  backgroundImage: {fileID: 0}
+  borderImage: {fileID: 0}
+  backgroundLight: {fileID: 0}
+  backgroundDark: {fileID: 0}
+  borderLight: {fileID: 0}
+  borderDark: {fileID: 0}
+  lightFont: {fileID: 0}
+  darkFont: {fileID: 0}
+  fill: 0
+  interactable: 0
+  tenetIcon: {fileID: 0}
+  tenetIcons:
+  - {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -6336197928699787124, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
 --- !u!1 &3903912211570433048
 GameObject:
   m_ObjectHideFlags: 0

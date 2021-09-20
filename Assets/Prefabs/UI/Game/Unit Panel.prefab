@@ -1686,8 +1686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830df6ea8b294527a735237b7f0c8848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: {fileID: 3558099439459866401}
   valueText: {fileID: 191621994894173518}
+  tenetImage: {fileID: 0}
 --- !u!1 &6001111732044643866
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,7 +1739,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d840ed982b4ecebe66b5d644b3bd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: {fileID: 6949477160422154309}
   valueText: {fileID: 5564571877686921750}
 --- !u!1 &6145150815088636445
 GameObject:
@@ -1903,8 +1902,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830df6ea8b294527a735237b7f0c8848, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: {fileID: 7307310363593350965}
   valueText: {fileID: 3312585769523068018}
+  tenetImage: {fileID: 0}
 --- !u!1 &6634835352053135163
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,6 +2585,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 2179686843941615531, guid: 678ffe683b2b2bd4abc18e711a1020d1, type: 3}
   cards: []
+  tooltipPanel: {fileID: 0}
+  tooltipDescription: {fileID: 0}
 --- !u!1 &8746666828620427589
 GameObject:
   m_ObjectHideFlags: 0
@@ -2905,5 +2906,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d840ed982b4ecebe66b5d644b3bd36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  labelText: {fileID: 7700834481989170550}
   valueText: {fileID: 6739077647746664776}

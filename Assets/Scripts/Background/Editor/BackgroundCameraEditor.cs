@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Background.Editor
 {
-    [CustomEditor(typeof(BackgroundCamera))]
+    [CustomEditor(typeof(BackgroundCamera)), CanEditMultipleObjects]
     public class BackgroundCameraEditor : UnityEditor.Editor
     {
         private SerializedProperty overrideProperty;

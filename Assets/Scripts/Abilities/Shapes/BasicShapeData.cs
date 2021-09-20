@@ -186,5 +186,26 @@ namespace Abilities.Shapes
 
             return affectedCoordinates;
         }
+
+        /// <summary>
+        /// Get all world space coordinates that can be targeted by this shape based on the shape
+        /// parts. 
+        /// </summary>
+        /// <param name="originCoordinate">The starting point of the shape, usually the Unit position.</param>
+        public List<Vector2Int> GetPossibleCoordinates(Vector2Int originCoordinate)
+        {
+            List<Vector2Int> possibleCoordinates = new List<Vector2Int>();
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromOrthogonal(Vector2.up)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromOrthogonal(Vector2.right)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromOrthogonal(Vector2.down)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromOrthogonal(Vector2.left)).ToList());
+            
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.up)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.right)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.down)).ToList());
+            possibleCoordinates.AddRange(GetAffectedCoordinates(originCoordinate, ShapeDirection.FromIsometric(Vector2.left)).ToList());
+
+            return possibleCoordinates;
+        }
     }
 }

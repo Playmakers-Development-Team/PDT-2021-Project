@@ -43,6 +43,8 @@ namespace Abilities.Shapes
         [Obsolete("Use GetHighlightedCoordinates(Vector2Int, ShapeDirection)")]
         public IEnumerable<Vector2Int> GetHighlightedCoordinates(Vector2Int originCoordinate, 
                                                                  Vector2 directionVector);
+        
+        public List<Vector2Int> GetPossibleCoordinates(Vector2Int originCoordinate);
 
         /// <summary>
         /// Get all targets that would be affected by this shape.

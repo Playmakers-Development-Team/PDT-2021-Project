@@ -7,6 +7,7 @@ namespace Game.Map
     [CreateAssetMenu]
     public class MapData : ScriptableObject
     {
+        public SceneReference mapScene;
         public List<EncounterNode> encounterNodes;
         
         public void Initialise() =>
