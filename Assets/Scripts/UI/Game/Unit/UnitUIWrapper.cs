@@ -5,6 +5,7 @@ using Grid.GridObjects;
 using Managers;
 using UI.Core;
 using Units;
+using Units.Commands;
 using UnityEngine;
 
 namespace UI.Game.Unit
@@ -15,7 +16,9 @@ namespace UI.Game.Unit
 
         private IUnit unit;
         private CommandManager commandManager;
-        
+
+
+        private bool startingUnit = false;
         
         #region UIComponent
 
@@ -31,13 +34,20 @@ namespace UI.Game.Unit
             
             commandManager = ManagerLocator.Get<CommandManager>();
             commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
+            commandManager.CatchCommand((Action<SpawnedUnitCommand>) OnUnitSpawn);
+
+            
         }
 
-        protected override void Subscribe() {}
+        protected override void Subscribe()
+        {
+        }
 
         protected override void Unsubscribe()
         {
             commandManager.CatchCommand((Action<GridReadyCommand>) OnGridReady);
+            commandManager.CatchCommand((Action<SpawnedUnitCommand>) OnUnitSpawn);
+
         }
         
         #endregion
@@ -47,6 +57,23 @@ namespace UI.Game.Unit
 
         private void OnGridReady(GridReadyCommand cmd)
         {
+
+            startingUnit = true;
+            
+            info.SetUnit(unit);
+            
+            if (dialogue == null)
+                return;
+            
+            dialogue.unitSpawned.Invoke(info);
+        }
+        
+        private void OnUnitSpawn(SpawnedUnitCommand cmd)
+        {
+
+            if (startingUnit)
+                return;
+            
             info.SetUnit(unit);
             
             if (dialogue == null)

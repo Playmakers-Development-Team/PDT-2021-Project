@@ -49,7 +49,7 @@ namespace UI.Game
         private TurnManager turnManager;
         
         private readonly List<UnitInfo> units = new List<UnitInfo>();
-        
+
         
         internal UnitInfo SelectedUnit { get; private set; }
         
@@ -79,7 +79,7 @@ namespace UI.Game
             // Listen to Events
             unitSpawned.AddListener(info =>
             {
-                units.Add(info);
+                units.Add(info); 
             });
             
             unitKilled.AddListener(info =>
@@ -159,7 +159,6 @@ namespace UI.Game
             commandManager.UnlistenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
             commandManager.UnlistenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
-
         }
         
         #endregion
@@ -270,7 +269,11 @@ namespace UI.Game
 
 
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;
+            
+            
         }
+        
+        
 
         internal readonly struct TurnInfo
         {

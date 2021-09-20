@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Abilities;
+using Managers;
 using TenetStatuses;
 using Units.Commands;
 using UnityEngine;
@@ -47,13 +48,14 @@ namespace Units.Enemies
             GameObject spawnPrefab = SpawnPrefab;
             spawnPrefab.GetComponent<EnemyUnit>().HealthStat.BaseValue = 5;
             var spawnedUnit = unitManagerT.Spawn(spawnPrefab, Coordinate);
+            spawnedUnit.SetSpeed(curSpeed - 1);
+            spawnedUnit.TakeDamage(damage);
             await commandManager.WaitForCommand<SpawnedUnitCommand>(); //IMPORTANT
-
-            // Apply spawner stats
+            unitManagerT.AddUnit(spawnedUnit);
+            // Apply spawner stats  
             // BUG: Setting speed too late, needs to be set before spawning so that the unit can be
             // BUG: placed correctly on the timeline.
-            spawnedUnit.SetSpeed(curSpeed);
-            spawnedUnit.TakeDamage(damage);
+
         }
     }
 }
