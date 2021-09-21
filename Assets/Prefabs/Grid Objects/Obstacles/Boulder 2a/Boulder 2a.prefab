@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7917514001545178903}
   - component: {fileID: 2426746101112556873}
   m_Layer: 0
-  m_Name: Boulder 2
+  m_Name: Boulder 2a
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8467942092676399553}
-  - {fileID: 8584519746294377455}
+  - {fileID: 3904298429547701969}
+  - {fileID: 8026879717257723941}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,7 +48,7 @@ MonoBehaviour:
   autoSetTilemap: 1
   levelTilemap: {fileID: 0}
   coordinate: {x: 0, y: 0}
---- !u!1001 &1419994258419568894
+--- !u!1001 &5773090850883057646
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -57,7 +57,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5252396758644681134, guid: a0d176297c047df428c643d7c238bc8a, type: 3}
       propertyPath: m_Name
-      value: Boulder 2 Graphics
+      value: Boulder 2a Graphics
       objectReference: {fileID: 0}
     - target: {fileID: 7363659405113381183, guid: a0d176297c047df428c643d7c238bc8a, type: 3}
       propertyPath: m_RootOrder
@@ -105,12 +105,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0d176297c047df428c643d7c238bc8a, type: 3}
---- !u!4 &8467942092676399553 stripped
+--- !u!4 &3904298429547701969 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7363659405113381183, guid: a0d176297c047df428c643d7c238bc8a, type: 3}
-  m_PrefabInstance: {fileID: 1419994258419568894}
+  m_PrefabInstance: {fileID: 5773090850883057646}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &8285238063282512796
+--- !u!1001 &7691153887170086998
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -163,12 +163,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7857638798702936879, guid: fda21a1af522d924aa664bd405e6d508, type: 3}
       propertyPath: m_Name
-      value: Boulder 2 Logic
+      value: Boulder 2a Logic
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fda21a1af522d924aa664bd405e6d508, type: 3}
---- !u!4 &8584519746294377455 stripped
+--- !u!4 &8026879717257723941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 421441874453858419, guid: fda21a1af522d924aa664bd405e6d508, type: 3}
-  m_PrefabInstance: {fileID: 8285238063282512796}
+  m_PrefabInstance: {fileID: 7691153887170086998}
   m_PrefabAsset: {fileID: 0}
