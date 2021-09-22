@@ -160,7 +160,7 @@ namespace Editor
         private void ReplaceAllUnits(bool keepParent = true)
         {
             // Change the path here.
-            const string pathToReplaceWith = "Assets/Prefabs/Units/Fixed/Fixed/";
+            const string baseGridObjectsPath = "Assets/Prefabs/Grid Objects";
             var units = GameObject.FindObjectsOfType<GridObject>();
 
             foreach (var gridObject in units)
@@ -172,17 +172,55 @@ namespace Editor
                 }
                 
                 IUnit oldIUnit = gridObject.GetComponent<IUnit>();
+                Obstacle oldObstacle = gridObject.GetComponent<Obstacle>();
+                PlayerUnit oldPlayerUnit = gridObject.GetComponent<PlayerUnit>();
+                EnemyUnit oldEnemyUnit = gridObject.GetComponent<EnemyUnit>();
                 EnemyMeleeAi oldMeleeAi = gridObject.GetComponent<EnemyMeleeAi>();
                 EnemyRangedAi oldRangedAi = gridObject.GetComponent<EnemyRangedAi>();
+                EnemySpawnerAi oldEnemySpawnerAi = gridObject.GetComponent<EnemySpawnerAi>();
                 
                 string oldPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gridObject.gameObject);
+                
+                string prefabFileName = Path.GetFileName(oldPath);
+                string prefabFileNameWithoutExtension = prefabFileName.Replace(".prefab", "");
+                string newPath;
+                string filePath;
+
+                if (oldPlayerUnit != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Player Units/{prefabFileNameWithoutExtension}/";
+                    filePath = newPath + prefabFileName;
+                }
+                else if (oldMeleeAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Mouscle/";
+                    filePath = newPath + "Mouscle.prefab";
+                }
+                else if (oldRangedAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Stag of Grief/";
+                    filePath = newPath + "Stag of Grief.prefab";
+                }
+                else if (oldEnemySpawnerAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Melee Spawner/";
+                    filePath = newPath + "Melee Spawner.prefab";
+                }
+                else if (oldObstacle != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Obstacles/Boulder 2a/";
+                    filePath = newPath + "Boulder 2a.prefab";
+                }
+                else
+                {
+                    Debug.LogWarning($"Cannot replace grid object {gridObject.name}, no equivalent prefab found!");
+                    continue;
+                }
 
                 // Check if we need to fix it
-                if (!oldPath.Contains(pathToReplaceWith))
+                if (!oldPath.Contains(newPath))
                 {
-                    string prefabFileName = Path.GetFileName(oldPath);
-                    string newPath = pathToReplaceWith + prefabFileName;
-                    GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
+                    GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
                     GameObject newGameObject;
 
                     if (keepParent)
@@ -194,7 +232,7 @@ namespace Editor
                         newGameObject = (GameObject) PrefabUtility.InstantiatePrefab(newPrefab);
                     }
 
-                    Undo.RegisterCreatedObjectUndo(newGameObject, $"Fixed {newGameObject.name}");
+                    // Undo.RegisterCreatedObjectUndo(newGameObject, $"Fixed {newGameObject.name}");
                     GridObject newGridObject = newGameObject.GetComponentInChildren<GridObject>();
                     IUnit newIUnit = newGameObject.GetComponentInChildren<IUnit>();
                     EnemyMeleeAi newMeleeAi = newGameObject.GetComponentInChildren<EnemyMeleeAi>();
@@ -205,10 +243,10 @@ namespace Editor
 
                     if (oldIUnit != null && newIUnit != null)
                     {
-                        if (oldIUnit is PlayerUnit oldPlayerUnit && newIUnit is PlayerUnit newPlayerUnit)
+                        if (newIUnit is PlayerUnit newPlayerUnit)
                             EditorUtility.CopySerialized(oldPlayerUnit, newPlayerUnit);
 
-                        if (oldIUnit is EnemyUnit oldEnemyUnit && newIUnit is EnemyUnit newEnemyUnit)
+                        if (newIUnit is EnemyUnit newEnemyUnit)
                             EditorUtility.CopySerialized(oldEnemyUnit, newEnemyUnit);
                     }
 
@@ -220,7 +258,7 @@ namespace Editor
 
                     ReplaceGridObjectInTurn(gridObject, newGridObject);
                     // Replace it
-                    Undo.DestroyObjectImmediate(gridObject.gameObject);
+                    DestroyImmediate(gridObject.gameObject);
                 }
             }
         }
