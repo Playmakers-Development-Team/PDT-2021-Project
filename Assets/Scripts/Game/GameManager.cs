@@ -112,7 +112,7 @@ namespace Game
         public async UniTask LoadEncounterAsync(EncounterData encounterData, bool forceChangeScene = true)
         {
             Debug.Log($"Load asynchronously next encounter {encounterData.name}");
-            SceneReference nextScene = PullValidEncounterScene(encounterData);
+            SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
             CurrentEncounterData = encounterData;
             await LoadEncounterSceneAsync(nextScene, forceChangeScene);
         }
@@ -125,7 +125,7 @@ namespace Game
         public void LoadEncounter(EncounterData encounterData, bool forceChangeScene = true)
         {
             Debug.Log($"Load next encounter {encounterData.name}");
-            SceneReference nextScene = PullValidEncounterScene(encounterData);
+            SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
             CurrentEncounterData = encounterData;
             LoadEncounterScene(nextScene, forceChangeScene);
         }
@@ -148,7 +148,7 @@ namespace Game
                 await ChangeSceneAsync(nextScene);
         }
 
-        private SceneReference PullValidEncounterScene(EncounterData encounterData)
+        private SceneReference PullValidEncounterScene(EncounterData encounterData, bool forceChangeScene = true)
         {
             var currentScene = SceneManager.GetActiveScene().path;
 
@@ -156,7 +156,7 @@ namespace Game
             {
                 SceneReference onlyScene = encounterData.PullEncounterScene();
 
-                if (currentScene == onlyScene)
+                if (currentScene == onlyScene && forceChangeScene)
                 {
                     throw new Exception(
                         $"We cannot go to another scene since the next encounter {encounterData.name} only has one scene, and it is the current scene!");
