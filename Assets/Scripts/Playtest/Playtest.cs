@@ -44,7 +44,7 @@ namespace Playtest
 
         private void OnEnable()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || !canRecordPlaytestData)
                 return;
            
             commandManager.ListenCommand<TurnQueueCreatedCommand>(OnTurnQueueCreated);
