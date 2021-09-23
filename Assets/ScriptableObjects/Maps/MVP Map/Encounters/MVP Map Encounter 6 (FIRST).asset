@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24f9a095da9a42e99f6906027b30c9c3, type: 3}
-  m_Name: MVP Map Encounter 5 (INTRO)
+  m_Name: MVP Map Encounter 6 (FIRST)
   m_EditorClassIdentifier: 
   encounterScene:
-    sceneAsset: {fileID: 102900000, guid: 9bdbdd124a67590ebb76d8334819aa8d, type: 3}
-    scenePath: Assets/Scenes/Design/Playtest MVP-1/INTRO/INTRO 7a.unity
-  levelPool: {fileID: 0}
+    sceneAsset: {fileID: 0}
+    scenePath: 
+  levelPool: {fileID: 11400000, guid: e0af55187dff3875ca689c6f2fa3de06, type: 2}

@@ -236,10 +236,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 626789158}
     m_Modifications:
     - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
-      propertyPath: abilityPickupPool
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
       propertyPath: persistentUnitData
       value: 0
       objectReference: {fileID: 0}
@@ -986,6 +982,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Loader
       objectReference: {fileID: 0}
+    - target: {fileID: 8300312957143157284, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
+      propertyPath: abilityLoadoutDialogue
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
 --- !u!4 &1028560614 stripped
@@ -993,6 +993,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6419465001682721050, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
   m_PrefabInstance: {fileID: 1028560613}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1028560615 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7195098752907857375, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
+  m_PrefabInstance: {fileID: 1028560613}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1028560616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028560615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a512d0c953b486dbd9ad369531b6bdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 2
 --- !u!1001 &1037755928
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1397,6 +1415,10 @@ PrefabInstance:
     - target: {fileID: 5753839982009922166, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: m_Name
       value: TurnController
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
+      propertyPath: disableAbilitySpeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: isTimelineRandomised
