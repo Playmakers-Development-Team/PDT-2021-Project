@@ -24,11 +24,10 @@ namespace UI.Game.Unit
 
         protected override void OnComponentAwake()
         {
-            unit = GetComponentInParent<IUnit>();
-
+            unit = transform.parent.GetComponentInChildren<IUnit>();
             if (unit == null)
             {
-                Debug.LogError("Did not find IUnit on any parent GameObjects.");
+                Debug.LogError("Could not find IUnit among parent Transform's children.");
                 return;
             }
             
