@@ -4,8 +4,13 @@ namespace Grid.GridObjects
 {
     public class Obstacle : GridObject
     {
-        [SerializeField] protected new Renderer renderer;
+        public Renderer Renderer { get; private set; }
         
-        public Renderer Renderer => renderer;
+        protected override void Awake()
+        {
+            base.Awake();
+
+            Renderer = transform.parent.GetComponentInChildren<Renderer>();
+        }
     }
 }
