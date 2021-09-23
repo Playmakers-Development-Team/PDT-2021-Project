@@ -53,7 +53,9 @@ namespace UI
         
         private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
         {
-            LoadObject(abilityLoadoutDialogue);
+            // Some levels may not have the ability loadout
+            if (abilityLoadoutDialogue)
+                LoadObject(abilityLoadoutDialogue);
         }
 
         #endregion
