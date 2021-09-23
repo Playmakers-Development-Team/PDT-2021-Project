@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 336639fbb74a4db4a4e42a8b5afbccf9, type: 3}
+  m_Name: MVP Map
+  m_EditorClassIdentifier: 
+  mapScene:
+    sceneAsset: {fileID: 0}
+    scenePath: 
+  encounterNodes:
+  - encounterData: {fileID: 11400000, guid: cc10470746e83e891939593758ee750c, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: bce93d4bd050d011c8d4b766bf58202b, type: 2}
+    startingNode: 1
+  - encounterData: {fileID: 11400000, guid: bce93d4bd050d011c8d4b766bf58202b, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: d3f5ce5bcf2b169b2bf43d55fa596ad6, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: d3f5ce5bcf2b169b2bf43d55fa596ad6, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 7609e5b0dc033584ab40c75b60d4daaf, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 7609e5b0dc033584ab40c75b60d4daaf, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 0fd86dea26cee0f8598fe2c4b74ea675, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 0fd86dea26cee0f8598fe2c4b74ea675, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 4e84757f69e84992ea41e4482f231a78, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 4e84757f69e84992ea41e4482f231a78, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 658478a7b19179bbeae1867662d26c38, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 658478a7b19179bbeae1867662d26c38, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: bef83155fd4050808846919d75ef4331, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: bef83155fd4050808846919d75ef4331, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 886f14eed8fd8e233af9a6553f98b6bd, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 886f14eed8fd8e233af9a6553f98b6bd, type: 2}
+    connectedEncounters: []
+    startingNode: 0
