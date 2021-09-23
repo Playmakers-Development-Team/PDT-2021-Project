@@ -24,50 +24,48 @@ namespace UI.Game
         internal readonly Event unitDeselected = new Event();
         internal readonly Event<MoveInfo> startedMove = new Event<MoveInfo>();
         internal readonly Event<UnitInfo> endedMove = new Event<UnitInfo>();
-        
+
         internal readonly Event<StatChangeInfo> unitStatChanged = new Event<StatChangeInfo>();
-        
+
         internal readonly Event<Ability> abilitySelected = new Event<Ability>();
         internal readonly Event<Ability> abilityDeselected = new Event<Ability>();
         internal readonly Event<AbilityCard> abilityHoverEnter = new Event<AbilityCard>();
         internal readonly Event<AbilityCard> abilityHoverExit = new Event<AbilityCard>();
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
         internal readonly Event abilityConfirmed = new Event();
-        
+
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
-        
+
         internal readonly Event<TurnInfo> turnManipulated = new Event<TurnInfo>();
 
 
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
         internal readonly Event buttonSelected = new Event();
-        
+
         internal readonly Event<Mode> modeChanged = new Event<Mode>();
 
         private CommandManager commandManager;
         private TurnManager turnManager;
-        
+
         private readonly List<UnitInfo> units = new List<UnitInfo>();
-        
-        
+
+
         internal UnitInfo SelectedUnit { get; private set; }
-        
+
         internal Ability SelectedAbility { get; private set; }
-        
+
         internal Vector2 AbilityDirection { get; private set; }
-        
+
         internal Mode DisplayMode { get; private set; }
-        
-        
+
+
         internal enum Mode
         {
-            Default,
-            Aiming,
-            Moving
+            Default, Aiming, Moving
         }
-        
-        
+
+
         #region MonoBehaviour Events
 
         protected override void OnDialogueAwake()
@@ -81,38 +79,38 @@ namespace UI.Game
             {
                 units.Add(info);
             });
-            
+
             unitKilled.AddListener(info =>
             {
                 if (SelectedUnit == info)
                     unitDeselected.Invoke();
-                
+
                 units.Remove(info);
             });
-            
+
             unitSelected.AddListener(unit =>
             {
                 bool changed = SelectedUnit != unit;
-                
+
                 if (changed)
                     unitDeselected.Invoke();
-                
+
                 SelectedUnit = unit;
             });
-            
+
             unitDeselected.AddListener(() =>
             {
                 SelectedUnit = null;
             });
-            
+
             abilitySelected.AddListener(ability =>
             {
                 if (SelectedAbility != null)
                     abilityDeselected.Invoke(SelectedAbility);
-                
+
                 SelectedAbility = ability;
             });
-            
+
             abilityDeselected.AddListener(ability =>
             {
                 SelectedAbility = null;
@@ -122,7 +120,7 @@ namespace UI.Game
             {
                 AbilityDirection = direction;
             });
-            
+
             turnStarted.AddListener(info =>
             {
                 abilityDeselected.Invoke(SelectedAbility);
@@ -130,9 +128,10 @@ namespace UI.Game
 
             moveConfirmed.AddListener(info =>
             {
-                commandManager.ExecuteCommand(new StartMoveCommand(info.UnitInfo.Unit, info.Destination));
+                commandManager.ExecuteCommand(new StartMoveCommand(info.UnitInfo.Unit,
+                    info.Destination));
             });
-            
+
             modeChanged.AddListener(mode =>
             {
                 DisplayMode = mode;
@@ -159,9 +158,8 @@ namespace UI.Game
             commandManager.UnlistenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
             commandManager.UnlistenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
-
         }
-        
+
         #endregion
 
 
@@ -171,7 +169,7 @@ namespace UI.Game
         {
             if (cmd.Unit == null)
                 return;
-            
+
             UnitInfo info = GetInfo(cmd.Unit);
 
             turnStarted.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
@@ -183,7 +181,7 @@ namespace UI.Game
 
             if (info == null)
                 throw new Exception("ActingUnit was not in GameDialogue.units.");
-            
+
             turnManipulated.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
         }
 
@@ -201,14 +199,14 @@ namespace UI.Game
         {
             unitStatChanged.Invoke(new StatChangeInfo(cmd));
         }
-        
+
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
             UnitInfo info = GetInfo(cmd.Unit);
 
             unitKilled.Invoke(info);
         }
-        
+
         #endregion
 
 
@@ -225,10 +223,10 @@ namespace UI.Game
         {
             canvasGroup.interactable = false;
         }
-        
+
         #endregion
-        
-        
+
+
         #region Querying
 
         internal UnitInfo GetInfo(IUnit unit)
@@ -240,7 +238,7 @@ namespace UI.Game
             }
 
             var unitInfo = units.Find(u => u.Unit == unit);
-                
+
             if (unitInfo == null)
             {
                 throw new Exception($"Could not get {nameof(UnitInfo)} for {unit}. " +
@@ -251,8 +249,8 @@ namespace UI.Game
         }
 
         #endregion
-        
-        
+
+
         #region Structs
 
         // TODO: Turn this into a struct, null comparison can be made on UnitInfo.Unit...
@@ -262,10 +260,10 @@ namespace UI.Game
             [SerializeField] private CropInfo profileCropInfo;
             [SerializeField] private CropInfo timelineCropInfo;
 
-            
+
             internal CropInfo ProfileCropInfo => profileCropInfo;
             internal CropInfo TimelineCropInfo => timelineCropInfo;
-            
+
             public IUnit Unit { get; private set; }
 
 
@@ -284,7 +282,7 @@ namespace UI.Game
                 IsPlayer = isPlayer;
             }
         }
-        
+
         internal readonly struct StatChangeInfo
         {
             internal IUnit Unit { get; }
@@ -293,7 +291,7 @@ namespace UI.Game
             internal int BaseValue { get; }
             internal int Difference { get; }
             internal int DisplayValue { get; }
-            internal StatTypes  StatType { get; }
+            internal StatTypes StatType { get; }
 
             internal StatChangeInfo(StatChangedCommand cmd)
             {
@@ -318,7 +316,7 @@ namespace UI.Game
                 UnitInfo = unitInfo;
             }
         }
-        
+
         #endregion
     }
 }
