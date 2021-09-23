@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Very Fast Ability]
 
-    Deal 2 Damage
+    Deal 4 Damage
 
     KINDLED 2 - Deal +2 damage
 
@@ -25,11 +25,11 @@ MonoBehaviour:
   speed: 2
   representedTenet: 2
   effects:
-  - name: Default, 2 Damage
+  - name: "Target \u27A4 Default, 4 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
     attackValue: 0

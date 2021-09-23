@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Reach Rapture
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nGrant all targets 4 Defense when Joy is spent. \nDeal
-    2 damage to all targets."
+  description: "[Slow Ability]\nGrant all targets 4 Defense when the User spends
+    Joy. \nDeal 2 damage to all targets."
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: -1
@@ -88,4 +88,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  visualEffects: {fileID: 0}
   userEffects: []

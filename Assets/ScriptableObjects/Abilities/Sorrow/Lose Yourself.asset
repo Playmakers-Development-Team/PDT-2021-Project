@@ -19,7 +19,7 @@ MonoBehaviour:
     If
     have Sorrow, gain additional Sorrow
 
-    CATHARSIS 5 - Remove all Sorrow'
+    CATHARSIS 4 - Remove all Sorrow'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: -2
@@ -94,7 +94,7 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: Nothing IF User Consume 5 Sorrow
+  - name: "User \u27A4 Nothing WITH Catharsis 4 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 2
@@ -108,44 +108,8 @@ MonoBehaviour:
       tenetType: 5
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User Consume 5 Sorrow
-      affectType: 0
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 1
-        count: 5
-        tenetType: 5
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: a1746836bae41724d97191b43c1ed93b, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Slack Off
   m_EditorClassIdentifier: 
   description: "[Extremely Slow Ability]\nGain 4 Defence. \n>Gain 3 additional Defence
-    with Apathy"
+    with Sorrow"
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: -3
@@ -35,7 +35,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Defence IF User With 1 Apathy
+  - name: "User \u27A4 3 Defence IF User With 1 Sorrow"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
@@ -50,14 +50,14 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With 1 Apathy
+    - name: User With 1 Sorrow
       affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 0
         count: 1
-        tenetType: 3
+        tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0

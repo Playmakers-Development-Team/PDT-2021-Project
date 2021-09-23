@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Slow Ability]
 
-    Give 2 Attack
+    Give 2 Attack.
 
-    Give 4 extra Attack to targets
-    that can spend Passion
+    Give extra 5 Attack to targets
+    that can spend Passion.
 
 '
-  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: -1
   representedTenet: 2
   effects:
-  - name: Default, 2 Attack
+  - name: "Target \u27A4 Default, 2 Attack"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -41,14 +41,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 4 Attack IF Target Spend 1 Passion
+  - name: "Target \u27A4 5 Attack IF Target Spend 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 4
+    attackValue: 5
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:

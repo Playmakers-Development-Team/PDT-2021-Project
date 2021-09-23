@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Fast Ability]
 
-    Deal 2 damage. Gain 1 Sorrow.
+    Deal 3 damage. Gain 1 Sorrow.
 
     CATHARSIS
-    4 - Deal 5 additional damage, gain 3 Defence.
+    3 - Deal 6 additional damage, gain 3 Defence.
 
 '
   shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
@@ -25,11 +25,11 @@ MonoBehaviour:
   speed: 1
   representedTenet: 5
   effects:
-  - name: Default, 2 Damage
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -57,14 +57,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 5 Attack and 3 Defence WITH Catharsis 4
+  - name: "User \u27A4 6 Damage and 3 Defence WITH Catharsis 3 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 0
+    damageValue: 6
     directDamage: 0
     defenceValue: 3
-    attackValue: 5
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -73,6 +73,6 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: a1746836bae41724d97191b43c1ed93b, type: 2}
+    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []
