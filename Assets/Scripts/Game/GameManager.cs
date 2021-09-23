@@ -6,6 +6,8 @@ using Game.Map;
 using Managers;
 using Turn.Commands;
 using UnityEngine;
+using Turn;
+using Units.Players;
 using UnityEngine.SceneManagement;
 
 namespace Game
@@ -14,14 +16,24 @@ namespace Game
     {
         private CommandManager commandManager;
         private BackgroundManager backgroundManager;
+        private PlayerManager playerManager;
+        private TurnManager turnManager;
 
         public EncounterData CurrentEncounterData { get; set; }
         public MapData CurrentMapData { get; set; }
+
+        /// <summary>
+        /// False if the encounter was loaded directly in the editor. Used to make sure we only
+        /// return to the map scene if that's where we came from.
+        /// </summary>
+        private bool encounterLoadedFromMap = false;
 
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
             backgroundManager = ManagerLocator.Get<BackgroundManager>();
+            playerManager = ManagerLocator.Get<PlayerManager>();
+            turnManager = ManagerLocator.Get<TurnManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
         }
@@ -53,6 +65,7 @@ namespace Game
             {
                 LoadEncounter(encounterData, false);
                 await commandManager.WaitForCommand<EndEncounterCommand>();
+                EncounterEnded();
 
                 if (encounterNode.ConnectedNodes.Count > 0)
                 {
@@ -107,8 +120,7 @@ namespace Game
 
         private void LoadEncounterScene(SceneReference nextScene, bool forceChangeScene = true)
         {
-            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EncounterWon());
-            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EncounterLost());
+            encounterLoadedFromMap = true;
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 ChangeScene(nextScene);
@@ -116,9 +128,7 @@ namespace Game
         
         private async UniTask LoadEncounterSceneAsync(SceneReference nextScene, bool forceChangeScene = true)
         {
-            // Only listen to the end of an encounter if it was loaded from the map scene
-            commandManager.ListenCommand<NoRemainingEnemyUnitsCommand>(cmd => EncounterWon());
-            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(cmd => EncounterLost());
+            encounterLoadedFromMap = true;
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 await ChangeSceneAsync(nextScene);
@@ -132,19 +142,44 @@ namespace Game
         
         private void EncounterLost()
         {
+            // TODO: Exporting data here is temporary, should probably delete any saved data.
+            playerManager.ExportData();
+            
             // TODO: Go back to the main menu?
-            LoadMap();
+            // LoadMap();
             
             commandManager.ExecuteCommand(new EncounterLostCommand());
         }
 
         private void EncounterWon()
         {
-            LoadMap();
+            playerManager.ExportData();
+            
+            // LoadMap();
 
             CurrentMapData.EncounterCompleted(CurrentEncounterData);
             
             commandManager.ExecuteCommand(new EncounterWonCommand());
+        }
+
+        private void EncounterEnded()
+        {
+            // if (!encounterLoadedFromMap)
+            //     return;
+
+            if (turnManager.HasPlayerUnitInQueue())
+                EncounterWon();
+            else 
+                EncounterLost();
+        }
+
+        public void SetEndEncounterToLoadMap()
+        {
+            commandManager.ListenCommand<EndEncounterCommand>((cmd) =>
+            {
+                EncounterEnded();
+                LoadMap();
+            });
         }
     }
 }
