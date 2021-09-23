@@ -9,6 +9,7 @@ using Grid.GridObjects;
 using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Abilities
 {
@@ -92,8 +93,10 @@ namespace Abilities
                     continue;
                 
                 Vector2 targetPos = target.transform.position;
-                
-                Stroke strokeEffect = Instantiate(vfx).GetComponent<Stroke>();
+                Vector2 startPos = Vector2.up + targetPos;
+
+                Stroke strokeEffect = Instantiate(vfx, startPos, Quaternion.identity)
+                    .GetComponent<Stroke>();
                 strokeEffect.Execute(targetPos);
             }
         }
