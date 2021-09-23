@@ -15,5 +15,13 @@ namespace Units.Players
 
             unitManagerT = ManagerLocator.Get<PlayerManager>();
         }
+
+        public PlayerUnitData ExportData() => new PlayerUnitData(data);
+
+        public void ImportData(PlayerUnitData playerUnitData)
+        {
+            HealthStat = playerUnitData.HealthValue;
+            Abilities = playerUnitData.Abilities;
+        }
     }
 }
