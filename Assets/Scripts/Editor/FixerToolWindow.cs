@@ -4,6 +4,7 @@ using System.Reflection;
 using AI;
 using Grid.GridObjects;
 using Turn;
+using UI.Game;
 using Units;
 using Units.Enemies;
 using Units.Players;
@@ -26,6 +27,19 @@ namespace Editor
 
         private void CreateGUI()
         {
+            rootVisualElement.Add(new Button(OnFixSceneClicked)
+            {
+                text = "APPLY EVERY FIX WITH THE SCENE",
+                style =
+                {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    marginBottom = 50,
+                    marginLeft = 30,
+                    marginRight = 30,
+                    marginTop = 20,
+                }
+            });
+            
             rootVisualElement.Add(new Button(OnFixUnitStructure)
             {
                 text = "Fix to new Unit Prefab Structure",
@@ -38,9 +52,9 @@ namespace Editor
                 }
             });
             
-            rootVisualElement.Add(new Button(OnFixSceneClicked)
+            rootVisualElement.Add(new Button(OnFixToGameLoader)
             {
-                text = "Fix Scene",
+                text = "Fix Game Dialogue to Game Loader",
                 style =
                 {
                     marginBottom = 10,
@@ -49,7 +63,7 @@ namespace Editor
                     marginTop = 10
                 }
             });
-            
+
             rootVisualElement.Add(new Button(OnFixMusicClicked)
             {
                 text = "Fix Music",
@@ -99,15 +113,27 @@ namespace Editor
         private void OnFixUnitStructure()
         {
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-            ReplaceAllUnits(false);
+            ReplaceAllUnits();
+            
+            Debug.Log("Unit fixing Successful!");
+        }
+
+        private void OnFixToGameLoader()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            ReplaceGameDialogue();
+            
+            Debug.Log("Game loader fixing Successful!");
         }
 
         private void OnFixSceneClicked()
         {
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             
-            ReplaceGameDialogue();
-            ReplaceAllUnits();
+            OnFixToGameLoader();
+            OnFixUnitStructure();
+            OnFixPinkBackground();
+            OnFixMusicClicked();
             
             Debug.Log("Scene fixing Successful!");
         }
@@ -135,25 +161,25 @@ namespace Editor
 
         private void ReplaceGameDialogue()
         {
-            string fixedName = "Game Dialogue (Second Iteration)";
+            string fixedName = "Game Loader";
             
             if (!GameObject.Find(fixedName))
             {
-                GameObject oldDialogue = GameObject.Find("Game Dialogue");
+                GameDialogue oldDialogue = GameObject.FindObjectOfType<GameDialogue>();
                 GameObject updatedPrefab = AssetDatabase
-                    .LoadAssetAtPath<GameObject>($"Assets/Prefabs/UI/SecondIteration/{fixedName}.prefab");
+                    .LoadAssetAtPath<GameObject>($"Assets/Prefabs/UI/Game Loader.prefab");
             
                 string updatedPrefabStatus = updatedPrefab != null ? "FOUND" : "NOT FOUND";
                 Debug.Log($"Game Dialogue {updatedPrefabStatus}");
                 GameObject newDialogue = (GameObject) PrefabUtility.InstantiatePrefab(updatedPrefab, oldDialogue.transform.parent);
-                DestroyImmediate(oldDialogue);
+                DestroyImmediate(oldDialogue.gameObject);
 
-                var gridCanvas = newDialogue.transform.Find("Grid UI/Canvas").GetComponent<Canvas>();
-                var unitsCanvas = newDialogue.transform.Find("Units Canvas").GetComponent<Canvas>();
-
-                Camera mainCamera = Camera.main;
-                gridCanvas.worldCamera = mainCamera;
-                unitsCanvas.worldCamera = mainCamera;
+                // var gridCanvas = newDialogue.transform.Find("Grid UI/Canvas").GetComponent<Canvas>();
+                // var unitsCanvas = newDialogue.transform.Find("Units Canvas").GetComponent<Canvas>();
+                //
+                // Camera mainCamera = Camera.main;
+                // gridCanvas.worldCamera = mainCamera;
+                // unitsCanvas.worldCamera = mainCamera;
             }
         }
 
@@ -218,7 +244,8 @@ namespace Editor
                 }
 
                 // Check if we need to fix it
-                if (!oldPath.Contains(newPath))
+                // If the IUnit name has logic, then we are already up to date.
+                if (!prefabFileName.Contains("Logic") && !oldPath.Contains(newPath))
                 {
                     GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
                     GameObject newGameObject;
