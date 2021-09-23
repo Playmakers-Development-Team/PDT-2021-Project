@@ -12,12 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Melee Attack
   m_EditorClassIdentifier: 
-  description: A basic 1 tile enemy adjacent attack that deals 3 damage
+  description: '[Neutral Ability]
+
+    A basic 1 tile enemy adjacent attack that
+    deals 3 damage to an adjacent tile. '
   shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  targetEffects:
+  representedTenet: 0
+  effects:
   - name: Default, 3 Damage
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 3
     directDamage: 0
