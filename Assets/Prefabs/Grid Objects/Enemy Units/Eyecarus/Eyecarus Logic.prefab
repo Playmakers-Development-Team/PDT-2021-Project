@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SpecialMoveCount>k__BackingField: 2
-  safeDistanceRange: 2
-  rangedAttackAbility: {fileID: 11400000, guid: 01353218f04be05419463501f4caeaef, type: 2}
-  secondRangedAttackAbility: {fileID: 11400000, guid: 01353218f04be05419463501f4caeaef, type: 2}
+  safeDistanceRange: 3
+  rangedAttackAbility: {fileID: 11400000, guid: 2ab474fa2b3fc5a32a12f9d6f31e8df8, type: 2}
+  secondRangedAttackAbility: {fileID: 11400000, guid: 2ab474fa2b3fc5a32a12f9d6f31e8df8, type: 2}
   buffAbility: {fileID: 11400000, guid: 528d0c3989a04fc44b124a6a49f88607, type: 2}
+  onlyMoveInOneAxis: 1
+  targeting: 1
 --- !u!1001 &7361568539588277913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67,6 +69,10 @@ PrefabInstance:
     - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.name
+      value: Eyecarus
       objectReference: {fileID: 0}
     - target: {fileID: 7298577721533539764, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
       propertyPath: m_Name

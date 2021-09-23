@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
 using Abilities.Shapes;
+using Cysharp.Threading.Tasks;
 using Units;
 using Units.Commands;
 using Units.Players;
@@ -13,20 +15,23 @@ namespace AI
 {
     public class EnemyRangedAi : EnemyAi
     {
+        private enum Targeting
+        {
+            LowestHealth, Closest
+        }
+        
         [SerializeField] private int safeDistanceRange = 2;
 
         [SerializeField] private Ability rangedAttackAbility;
         [SerializeField] private Ability secondRangedAttackAbility;
         [SerializeField] private Ability buffAbility;
+
+        [Header("Additional Options")]
+        [SerializeField] private bool onlyMoveInOneAxis;
+        [SerializeField] private Targeting targeting;
         
-        protected override async void DecideEnemyIntention()
+        protected override async UniTask DecideEnemyIntention()
         {
-            if (playerManager.Units.Count <= 0)
-            {
-                Debug.LogWarning("No players remain, enemy intention is to do nothing");
-                return;
-            }
-            
             if (turnManager.RoundCount + 1 % SpecialMoveCount == 0) //EVEN TURNS
             {
                 if (ArePlayersClose())
@@ -44,16 +49,32 @@ namespace AI
             }
             else //ODD TURNS
             {
-                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange);
+                await MoveToTarget();
 
                 if (GetTargetsInRange(rangedAttackAbility).Count > 0)
                     await ShootPlayer(rangedAttackAbility);
                 else
                     await enemyManager.DoUnitAbility(enemyUnit, buffAbility, ShapeDirection.None);
             }
-            
-            // TODO: Move to superclass.
-            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
+        }
+
+        /// <summary>
+        /// Move closer towards a target
+        /// </summary>
+        private async UniTask MoveToTarget()
+        {
+            if (onlyMoveInOneAxis)
+            {
+                List<Vector2Int> allowedTiles = enemyUnit.GetAllReachableTiles()
+                    .Where(coor => coor.x == enemyUnit.Coordinate.x || coor.y == enemyUnit.Coordinate.y)
+                    .ToList();
+
+                await enemyManager.MoveToTargetRange(enemyUnit, rangedAttackAbility, safeDistanceRange, allowedTiles);
+            }
+            else
+            {
+                await enemyManager.MoveToTargetRange(enemyUnit, rangedAttackAbility, safeDistanceRange);
+            }
         }
 
         /// <summary>
@@ -75,11 +96,8 @@ namespace AI
         /// Returns all players within <c>shootingRange</c> tiles of the enemy.
         /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
-        private List<IUnit> GetTargetsInRange(Ability abilityType) => abilityType.Shape
-            .GetTargetsInAllDirections(enemyUnit.Coordinate)
-            .OfType<PlayerUnit>()
-            .OfType<IUnit>()
-            .ToList();
+        private List<IUnit> GetTargetsInRange(Ability ability) =>
+            enemyManager.GetTargetsInRange(enemyUnit.Coordinate, ability);
 
         /// <summary>
         /// Returns a player within shooting range. If there are multiple players, the player
@@ -94,14 +112,23 @@ namespace AI
                 return null;
             }
 
-            return enemyManager.GetLowestHealthPlayers(GetTargetsInRange(abilityType))[0];
+            var possibleTargets = GetTargetsInRange(abilityType);
+
+            if (targeting == Targeting.LowestHealth)
+            {
+                return enemyManager.GetLowestHealthPlayers(possibleTargets).First();
+            }
+            else
+            {
+                return enemyManager.GetClosestPlayers(enemyUnit, possibleTargets).First();
+            }
         }
         
         /// <summary>
         /// Returns true if a player is within <c>shootingRange</c> tiles of the enemy.
         /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
-        private async Task ShootPlayer(Ability abilityType)
+        private async UniTask ShootPlayer(Ability abilityType)
         {
             await enemyManager.DoUnitAbility(enemyUnit, abilityType, GetTargetUnit(abilityType));
         }
