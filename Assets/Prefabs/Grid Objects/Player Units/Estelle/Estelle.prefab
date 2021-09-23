@@ -174,6 +174,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8221394126870417837, guid: 7f163f14e21ff8f4396b9bad0dad2d57, type: 3}
   m_PrefabInstance: {fileID: 1440086236185360930}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5173866202875139962 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6066759002602368344, guid: 7f163f14e21ff8f4396b9bad0dad2d57, type: 3}
+  m_PrefabInstance: {fileID: 1440086236185360930}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de6d9cd98d7e421aa2f514b8aa59e9b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4751367985249950268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -181,6 +192,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4869564425208384771}
     m_Modifications:
+    - target: {fileID: -8816550093863040757, guid: eaefb409c332d5e42ac5199bf2751a1e, type: 3}
+      propertyPath: unitGridObject
+      value: 
+      objectReference: {fileID: 5173866202875139962}
     - target: {fileID: 1742233263652121712, guid: eaefb409c332d5e42ac5199bf2751a1e, type: 3}
       propertyPath: m_RootOrder
       value: 3
