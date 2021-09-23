@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Background;
 using Commands;
 using Cysharp.Threading.Tasks;
@@ -9,6 +12,7 @@ using UnityEngine;
 using Turn;
 using Units.Players;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Game
 {
@@ -18,6 +22,12 @@ namespace Game
         private BackgroundManager backgroundManager;
         private PlayerManager playerManager;
         private TurnManager turnManager;
+
+        /// <summary>
+        /// Keeps track of all the levels that we have already seen in each game's run. We don't want to see
+        /// the same level more than once.
+        /// </summary>
+        private HashSet<SceneReference> visitedLevels = new HashSet<SceneReference>();
 
         public EncounterData CurrentEncounterData { get; set; }
         public MapData CurrentMapData { get; set; }
@@ -83,6 +93,8 @@ namespace Game
                     break;
                 }
             }
+            
+            ResetVisitedLevels();
         }
 
         public void StopLinearMap() => CurrentMapData = null;
@@ -100,8 +112,8 @@ namespace Game
         public async UniTask LoadEncounterAsync(EncounterData encounterData, bool forceChangeScene = true)
         {
             Debug.Log($"Load asynchronously next encounter {encounterData.name}");
+            SceneReference nextScene = PullValidEncounterScene(encounterData);
             CurrentEncounterData = encounterData;
-            SceneReference nextScene = encounterData.PullEncounterScene();
             await LoadEncounterSceneAsync(nextScene, forceChangeScene);
         }
 
@@ -113,14 +125,15 @@ namespace Game
         public void LoadEncounter(EncounterData encounterData, bool forceChangeScene = true)
         {
             Debug.Log($"Load next encounter {encounterData.name}");
+            SceneReference nextScene = PullValidEncounterScene(encounterData);
             CurrentEncounterData = encounterData;
-            SceneReference nextScene = encounterData.PullEncounterScene();
             LoadEncounterScene(nextScene, forceChangeScene);
         }
 
         private void LoadEncounterScene(SceneReference nextScene, bool forceChangeScene = true)
         {
             encounterLoadedFromMap = true;
+            visitedLevels.Add(nextScene);
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 ChangeScene(nextScene);
@@ -129,9 +142,44 @@ namespace Game
         private async UniTask LoadEncounterSceneAsync(SceneReference nextScene, bool forceChangeScene = true)
         {
             encounterLoadedFromMap = true;
+            visitedLevels.Add(nextScene);
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 await ChangeSceneAsync(nextScene);
+        }
+
+        private SceneReference PullValidEncounterScene(EncounterData encounterData)
+        {
+            var currentScene = SceneManager.GetActiveScene().path;
+
+            if (encounterData.GetAllPossibleScenes().Count() == 1)
+            {
+                SceneReference onlyScene = encounterData.PullEncounterScene();
+
+                if (currentScene == onlyScene)
+                {
+                    throw new Exception(
+                        $"We cannot go to another scene since the next encounter {encounterData.name} only has one scene, and it is the current scene!");
+                }
+                else
+                {
+                    return onlyScene;
+                }
+            }
+
+            var foundScene = encounterData.PullEncounterScenes()
+                .Where((s) => !visitedLevels.Contains(s))
+                .FirstOrDefault((s) => s != currentScene);
+
+            if (foundScene == null)
+            {
+                Debug.LogWarning($"All scenes from the next encounter {encounterData.name} has been visited. Hence, we're going to get a random one anyways!");
+                return encounterData.PullEncounterScene();
+            }
+            else
+            {
+                return foundScene;
+            }
         }
 
         public void LoadMap()
@@ -180,6 +228,15 @@ namespace Game
                 EncounterEnded();
                 LoadMap();
             });
+        }
+        
+        /// <summary>
+        /// Should be called between each run of the game. Allows all levels to be visited again.
+        /// <see cref="visitedLevels"/> 
+        /// </summary>
+        private void ResetVisitedLevels()
+        {
+            visitedLevels.Clear();
         }
     }
 }

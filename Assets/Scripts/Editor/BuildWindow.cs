@@ -160,7 +160,8 @@ namespace Editor
                 // We need this for some reason, otherwise exiting an encounter won't work
                 .Append("Assets/Scenes/Developer/Map Test.unity") 
                 .Concat(mapData.encounterNodes
-                    .Select(n => n.EncounterData.encounterScene.ScenePath));
+                    .SelectMany(n => n.EncounterData.GetAllPossibleScenes()
+                        .Select(s => s.ScenePath)));
 
         /// <summary>
         /// Get an appropriate build location
