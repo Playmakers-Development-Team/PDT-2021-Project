@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Managers;
 using TenetStatuses;
 using UI.AbilityLoadout.Abilities;
 using UI.Core;
 using Units;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -113,7 +115,13 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
 
-            List<Ability> selectedAbilities = RandomiseAbilityOrder(abilityPool.PickAbilitiesByTenet(tenetType).ToList());
+            PlayerManager playerManager = ManagerLocator.Get<PlayerManager>();
+            AbilityPool poolToUse = playerManager.AbilityPickupPool;
+
+            if (poolToUse == null)
+                poolToUse = abilityPool;
+
+            List<Ability> selectedAbilities = RandomiseAbilityOrder(poolToUse.PickAbilitiesByTenet(tenetType).ToList());
 
             for (int i = 0; i < selectedAbilities.Count; ++i)
             {

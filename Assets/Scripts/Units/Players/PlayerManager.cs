@@ -1,12 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Abilities;
 using UnityEngine;
 
 namespace Units.Players
 {
     public class PlayerManager : UnitManager<PlayerUnitData>
     {
+        public AbilityPool AbilityPickupPool { get; internal set; }
+        
         public bool WaitForDeath { get; set; }
         
         public int DeathDelay { get; } = 1000;
