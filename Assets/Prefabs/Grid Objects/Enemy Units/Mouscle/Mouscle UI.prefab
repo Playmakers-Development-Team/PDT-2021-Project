@@ -51,9 +51,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6335751559900618981, guid: 3b1c21a71a1218841a83edeecbd58376, type: 3}
+      propertyPath: info.profileCropInfo
+      value: 
+      objectReference: {fileID: 11400000, guid: 437924777b606d34dbcbae6b93370106, type: 2}
+    - target: {fileID: 6335751559900618981, guid: 3b1c21a71a1218841a83edeecbd58376, type: 3}
+      propertyPath: info.timelineCropInfo
+      value: 
+      objectReference: {fileID: 11400000, guid: 437924777b606d34dbcbae6b93370106, type: 2}
     - target: {fileID: 6642890215116542084, guid: 3b1c21a71a1218841a83edeecbd58376, type: 3}
       propertyPath: m_Name
-      value: Unit UI
+      value: Mouscle UI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b1c21a71a1218841a83edeecbd58376, type: 3}
