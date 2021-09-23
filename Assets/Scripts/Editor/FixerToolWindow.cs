@@ -1,8 +1,10 @@
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using AI;
 using Grid.GridObjects;
 using Turn;
+using UI.Game;
 using Units;
 using Units.Enemies;
 using Units.Players;
@@ -27,7 +29,20 @@ namespace Editor
         {
             rootVisualElement.Add(new Button(OnFixSceneClicked)
             {
-                text = "Fix Scene",
+                text = "APPLY EVERY FIX WITH THE SCENE",
+                style =
+                {
+                    unityFontStyleAndWeight = FontStyle.Bold,
+                    marginBottom = 50,
+                    marginLeft = 30,
+                    marginRight = 30,
+                    marginTop = 20,
+                }
+            });
+            
+            rootVisualElement.Add(new Button(OnFixUnitStructure)
+            {
+                text = "Fix to new Unit Prefab Structure",
                 style =
                 {
                     marginBottom = 10,
@@ -37,6 +52,18 @@ namespace Editor
                 }
             });
             
+            rootVisualElement.Add(new Button(OnFixToGameLoader)
+            {
+                text = "Fix Game Dialogue to Game Loader",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+
             rootVisualElement.Add(new Button(OnFixMusicClicked)
             {
                 text = "Fix Music",
@@ -83,12 +110,30 @@ namespace Editor
             }
         }
 
+        private void OnFixUnitStructure()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            ReplaceAllUnits();
+            
+            Debug.Log("Unit fixing Successful!");
+        }
+
+        private void OnFixToGameLoader()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            ReplaceGameDialogue();
+            
+            Debug.Log("Game loader fixing Successful!");
+        }
+
         private void OnFixSceneClicked()
         {
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             
-            ReplaceGameDialogue();
-            ReplaceAllUnits();
+            OnFixToGameLoader();
+            OnFixUnitStructure();
+            OnFixPinkBackground();
+            OnFixMusicClicked();
             
             Debug.Log("Scene fixing Successful!");
         }
@@ -116,62 +161,119 @@ namespace Editor
 
         private void ReplaceGameDialogue()
         {
-            string fixedName = "Game Dialogue (Second Iteration)";
+            string fixedName = "Game Loader";
             
             if (!GameObject.Find(fixedName))
             {
-                GameObject oldDialogue = GameObject.Find("Game Dialogue");
+                GameDialogue oldDialogue = GameObject.FindObjectOfType<GameDialogue>();
                 GameObject updatedPrefab = AssetDatabase
-                    .LoadAssetAtPath<GameObject>($"Assets/Prefabs/UI/SecondIteration/{fixedName}.prefab");
+                    .LoadAssetAtPath<GameObject>($"Assets/Prefabs/UI/Game Loader.prefab");
             
                 string updatedPrefabStatus = updatedPrefab != null ? "FOUND" : "NOT FOUND";
                 Debug.Log($"Game Dialogue {updatedPrefabStatus}");
                 GameObject newDialogue = (GameObject) PrefabUtility.InstantiatePrefab(updatedPrefab, oldDialogue.transform.parent);
-                DestroyImmediate(oldDialogue);
+                DestroyImmediate(oldDialogue.gameObject);
 
-                var gridCanvas = newDialogue.transform.Find("Grid UI/Canvas").GetComponent<Canvas>();
-                var unitsCanvas = newDialogue.transform.Find("Units Canvas").GetComponent<Canvas>();
-
-                Camera mainCamera = Camera.main;
-                gridCanvas.worldCamera = mainCamera;
-                unitsCanvas.worldCamera = mainCamera;
+                // var gridCanvas = newDialogue.transform.Find("Grid UI/Canvas").GetComponent<Canvas>();
+                // var unitsCanvas = newDialogue.transform.Find("Units Canvas").GetComponent<Canvas>();
+                //
+                // Camera mainCamera = Camera.main;
+                // gridCanvas.worldCamera = mainCamera;
+                // unitsCanvas.worldCamera = mainCamera;
             }
         }
 
-        private void ReplaceAllUnits()
+        private void ReplaceAllUnits(bool keepParent = true)
         {
+            // Change the path here.
+            const string baseGridObjectsPath = "Assets/Prefabs/Grid Objects";
             var units = GameObject.FindObjectsOfType<GridObject>();
 
             foreach (var gridObject in units)
             {
+                if (!PrefabUtility.IsAnyPrefabInstanceRoot(gridObject.gameObject))
+                {
+                    Debug.LogWarning($"Skipping {gridObject.name}, it doesn't need to be replaced");
+                    continue;
+                }
+                
                 IUnit oldIUnit = gridObject.GetComponent<IUnit>();
+                Obstacle oldObstacle = gridObject.GetComponent<Obstacle>();
+                PlayerUnit oldPlayerUnit = gridObject.GetComponent<PlayerUnit>();
+                EnemyUnit oldEnemyUnit = gridObject.GetComponent<EnemyUnit>();
                 EnemyMeleeAi oldMeleeAi = gridObject.GetComponent<EnemyMeleeAi>();
                 EnemyRangedAi oldRangedAi = gridObject.GetComponent<EnemyRangedAi>();
+                EnemySpawnerAi oldEnemySpawnerAi = gridObject.GetComponent<EnemySpawnerAi>();
                 
                 string oldPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gridObject.gameObject);
-                const string fixedPath = "Assets/Prefabs/Units/Fixed/Fixed/";
+                
+                string prefabFileName = Path.GetFileName(oldPath);
+                string prefabFileNameWithoutExtension = prefabFileName.Replace(".prefab", "");
+                string newPath;
+                string filePath;
+
+                if (oldPlayerUnit != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Player Units/{prefabFileNameWithoutExtension}/";
+                    filePath = newPath + prefabFileName;
+                }
+                else if (oldMeleeAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Mouscle/";
+                    filePath = newPath + "Mouscle.prefab";
+                }
+                else if (oldRangedAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Stag of Grief/";
+                    filePath = newPath + "Stag of Grief.prefab";
+                }
+                else if (oldEnemySpawnerAi != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Enemy Units/Melee Spawner/";
+                    filePath = newPath + "Melee Spawner.prefab";
+                }
+                else if (oldObstacle != null)
+                {
+                    newPath = $"{baseGridObjectsPath}/Obstacles/Boulder 2a/";
+                    filePath = newPath + "Boulder 2a.prefab";
+                }
+                else
+                {
+                    Debug.LogWarning($"Cannot replace grid object {gridObject.name}, no equivalent prefab found!");
+                    continue;
+                }
 
                 // Check if we need to fix it
-                if (!oldPath.Contains(fixedPath))
+                // If the IUnit name has logic, then we are already up to date.
+                if (!prefabFileName.Contains("Logic") && !oldPath.Contains(newPath))
                 {
-                    string newPath = oldPath.Replace("Assets/Prefabs/Units/", fixedPath);
-                    GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(newPath);
+                    GameObject newPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(filePath);
+                    GameObject newGameObject;
+
+                    if (keepParent)
+                    {
+                        newGameObject = (GameObject) PrefabUtility.InstantiatePrefab(newPrefab, gridObject.transform.parent);
+                    }
+                    else
+                    {
+                        newGameObject = (GameObject) PrefabUtility.InstantiatePrefab(newPrefab);
+                    }
+
+                    // Undo.RegisterCreatedObjectUndo(newGameObject, $"Fixed {newGameObject.name}");
+                    GridObject newGridObject = newGameObject.GetComponentInChildren<GridObject>();
+                    IUnit newIUnit = newGameObject.GetComponentInChildren<IUnit>();
+                    EnemyMeleeAi newMeleeAi = newGameObject.GetComponentInChildren<EnemyMeleeAi>();
+                    EnemyRangedAi newRangedAi = newGameObject.GetComponentInChildren<EnemyRangedAi>();
                 
-                    GameObject newGridObject = (GameObject) PrefabUtility
-                        .InstantiatePrefab(newPrefab, gridObject.transform.parent);
-                    IUnit newIUnit = newGridObject.GetComponent<IUnit>();
-                    EnemyMeleeAi newMeleeAi = newGridObject.GetComponent<EnemyMeleeAi>();
-                    EnemyRangedAi newRangedAi = newGridObject.GetComponent<EnemyRangedAi>();
-                
-                    newGridObject.transform.position = gridObject.transform.position;
-                    newGridObject.name = gridObject.name;
+                    newGameObject.transform.position = gridObject.transform.position;
+                    newGameObject.name = gridObject.name;
 
                     if (oldIUnit != null && newIUnit != null)
                     {
-                        if (oldIUnit is PlayerUnit oldPlayerUnit && newIUnit is PlayerUnit newPlayerUnit)
+                        if (newIUnit is PlayerUnit newPlayerUnit)
                             EditorUtility.CopySerialized(oldPlayerUnit, newPlayerUnit);
 
-                        if (oldIUnit is EnemyUnit oldEnemyUnit && newIUnit is EnemyUnit newEnemyUnit)
+                        if (newIUnit is EnemyUnit newEnemyUnit)
                             EditorUtility.CopySerialized(oldEnemyUnit, newEnemyUnit);
                     }
 
@@ -181,7 +283,7 @@ namespace Editor
                     if (oldRangedAi != null)
                         EditorUtility.CopySerialized(oldRangedAi, newRangedAi);
 
-                    ReplaceGridObjectInTurn(gridObject, newGridObject.GetComponent<GridObject>());
+                    ReplaceGridObjectInTurn(gridObject, newGridObject);
                     // Replace it
                     DestroyImmediate(gridObject.gameObject);
                 }
