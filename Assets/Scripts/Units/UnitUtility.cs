@@ -15,7 +15,7 @@ namespace Units
                 Vector2 position = gridManager.ConvertCoordinateToPosition(coordinate);
                 
                 GameObject instance = Object.Instantiate(prefab, position, Quaternion.identity);
-                IUnit unit = instance.GetComponent<IUnit>();
+                IUnit unit = instance.GetComponentInChildren<IUnit>();
                 unit.gameObject.transform.position = gridManager.ConvertCoordinateToPosition(coordinate);
                 return unit;
             }
