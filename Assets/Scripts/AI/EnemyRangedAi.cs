@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,11 @@ namespace AI
 {
     public class EnemyRangedAi : EnemyAi
     {
+        private enum Targeting
+        {
+            LowestHealth, Closest
+        }
+        
         [SerializeField] private int safeDistanceRange = 2;
 
         [SerializeField] private Ability rangedAttackAbility;
@@ -22,6 +28,7 @@ namespace AI
 
         [Header("Additional Options")]
         [SerializeField] private bool onlyMoveInOneAxis;
+        [SerializeField] private Targeting targeting;
         
         protected override async UniTask DecideEnemyIntention()
         {
@@ -58,15 +65,15 @@ namespace AI
         {
             if (onlyMoveInOneAxis)
             {
-                List<Vector2Int> allowedTiles = enemyUnit.GetReachableOccupiedTiles()
+                List<Vector2Int> allowedTiles = enemyUnit.GetAllReachableTiles()
                     .Where(coor => coor.x == enemyUnit.Coordinate.x || coor.y == enemyUnit.Coordinate.y)
                     .ToList();
 
-                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange, allowedTiles);
+                await enemyManager.MoveToTargetRange(enemyUnit, rangedAttackAbility, safeDistanceRange, allowedTiles);
             }
             else
             {
-                await enemyManager.MoveToTargetRange(enemyUnit, safeDistanceRange);
+                await enemyManager.MoveToTargetRange(enemyUnit, rangedAttackAbility, safeDistanceRange);
             }
         }
 
@@ -89,11 +96,8 @@ namespace AI
         /// Returns all players within <c>shootingRange</c> tiles of the enemy.
         /// Assumes that all obstacles cannot be shot through for now
         /// </summary>
-        private List<IUnit> GetTargetsInRange(Ability abilityType) => abilityType.Shape
-            .GetTargetsInAllDirections(enemyUnit.Coordinate)
-            .OfType<PlayerUnit>()
-            .OfType<IUnit>()
-            .ToList();
+        private List<IUnit> GetTargetsInRange(Ability ability) =>
+            enemyManager.GetTargetsInRange(enemyUnit.Coordinate, ability);
 
         /// <summary>
         /// Returns a player within shooting range. If there are multiple players, the player
@@ -108,7 +112,16 @@ namespace AI
                 return null;
             }
 
-            return enemyManager.GetLowestHealthPlayers(GetTargetsInRange(abilityType))[0];
+            var possibleTargets = GetTargetsInRange(abilityType);
+
+            if (targeting == Targeting.LowestHealth)
+            {
+                return enemyManager.GetLowestHealthPlayers(possibleTargets).First();
+            }
+            else
+            {
+                return enemyManager.GetClosestPlayers(enemyUnit, possibleTargets).First();
+            }
         }
         
         /// <summary>

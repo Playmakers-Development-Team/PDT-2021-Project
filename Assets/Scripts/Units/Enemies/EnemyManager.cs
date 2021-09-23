@@ -45,17 +45,20 @@ namespace Units.Enemies
         public async Task DoUnitAbility(EnemyUnit enemyUnit, Ability ability, IUnit targetUnit) =>
             await DoUnitAbility(enemyUnit, ability, ShapeDirection.Towards(enemyUnit, targetUnit));
 
-        public async Task MoveUnitToTarget(EnemyUnit enemyUnit)
+        public async Task MoveUnitToTarget(EnemyUnit enemyUnit) =>
+            await MoveUnitToTarget(enemyUnit, enemyUnit.GetAllReachableTiles());
+
+        public async Task MoveUnitToTarget(EnemyUnit enemyUnit, IEnumerable<Vector2Int> reachableTiles)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
             
-            if (enemyUnit.GetAllReachableTiles().Count <= 0 || targetPlayerUnit is null)
+            if (!reachableTiles.Any() || targetPlayerUnit is null)
                 return;
             
             var moveCommand = new StartMoveCommand(
                 enemyUnit,
                 FindClosestPath(enemyUnit, targetPlayerUnit, (int) 
-                    enemyUnit.MovementPoints.Value)
+                    enemyUnit.MovementPoints.Value, reachableTiles)
             );
             
             if (moveCommand.TargetCoords == enemyUnit.Coordinate)
@@ -72,36 +75,44 @@ namespace Units.Enemies
                 await UniTask.Yield();
         }
 
-        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget)
+        /// <summary>
+        /// Similar to MoveUnitToTarget, but aims for tiles that are <c>distanceFromTarget</c>
+        /// away from the target.
+        /// </summary>
+        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, Ability abilityToHit, int distanceFromTarget)
         {
             List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
-            await MoveToTargetRange(enemyUnit, distanceFromTarget, reachableTiles);
+            await MoveToTargetRange(enemyUnit, abilityToHit, distanceFromTarget, reachableTiles);
         }
         
         /// <summary>
         /// Similar to MoveUnitToTarget, but aims for tiles that are <c>distanceFromTarget</c>
-        /// away from the target
+        /// away from the target.
+        /// Remember to include the starting coordinate if not moving should be an option. In most cases it should be an option.
         /// </summary>
-        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, int distanceFromTarget, ICollection<Vector2Int> reachableTiles)
+        public async UniTask MoveToTargetRange(EnemyUnit enemyUnit, Ability abilityToHit, int distanceFromTarget, ICollection<Vector2Int> reachableTiles)
         {
             IUnit targetPlayerUnit = GetTargetPlayer(enemyUnit);
-            Vector2Int targetTile = new Vector2Int();
 
-            if (reachableTiles.Count <= 0 || targetPlayerUnit is null)
+            if (reachableTiles.Count <= 0 || targetPlayerUnit is null || distanceFromTarget <= 1)
                 return;
 
-            foreach (var reachableTile in reachableTiles)
-            {
-                if(distanceFromTarget == ManhattanDistance
-                    .GetManhattanDistance(reachableTile, targetPlayerUnit.Coordinate))
-                {
-                    targetTile = reachableTile;
-                    break;
-                }
-            }
+            // Not moving is sometimes the best option.
+            reachableTiles.Add(enemyUnit.Coordinate);
 
-            if (reachableTiles.Contains(targetTile))
+            // We can only go to tile that is more than the distanceFromTarget, but we also the closest
+            var safestClosestTiles = reachableTiles
+                .Where(coor => ManhattanDistance.GetManhattanDistance(coor, targetPlayerUnit.Coordinate) >= distanceFromTarget)
+                .OrderBy(coor => ManhattanDistance.GetManhattanDistance(coor, targetPlayerUnit.Coordinate));
+
+            // Get tiles that if we were to move to, we can hit the target player
+            var tilesThatCanTargetPlayer = safestClosestTiles
+                .Where(coor => GetTargetsInRange(coor, abilityToHit).Contains(targetPlayerUnit));
+
+            if (tilesThatCanTargetPlayer.Any())
             {
+                var targetTile = tilesThatCanTargetPlayer.First();
+                
                 var moveCommand = new StartMoveCommand(
                     enemyUnit,
                     targetTile
@@ -122,23 +133,40 @@ namespace Units.Enemies
             }
             else
             {
-                // If the enemy can't reach the distanceFromTarget range, they will attempt
-                // to move closer to the target
-                await MoveUnitToTarget(enemyUnit);
+                // Can the player reach this enemy?
+                // We want to get the diamond shaped movement range from the player as an approximation for whether
+                // the enemy should try to stay away or get closer to the player
+                var hittableTilesFromPlayer = targetPlayerUnit.GetMaxReachableOccupiedTiles(); 
+                
+                // We move closer if we are far away from the target away
+                if (!hittableTilesFromPlayer.Contains(enemyUnit.Coordinate))
+                {
+                    // await MoveToTargetRange(enemyUnit, abilityToHit, distanceFromTarget - 1, reachableTiles);
+                    await MoveUnitToTarget(enemyUnit, reachableTiles);
+                }
+                else
+                {
+                    await MoveToDistantTile(enemyUnit, reachableTiles);
+                }
             }
         }
-        
+
         /// <summary>
         /// Finds the tile that is furthest from most players. Only uses reachable tiles.
         /// If there are no reachable tiles, then the enemy will not move.
         /// </summary>
-        /// /// <param name="enemyUnit"></param>
-        public async Task MoveToDistantTile(EnemyUnit enemyUnit)
+        public async UniTask MoveToDistantTile(EnemyUnit enemyUnit) =>
+            await MoveToDistantTile(enemyUnit, enemyUnit.GetAllReachableTiles());
+        
+        /// <summary>
+        /// Finds the tile that is furthest from most players given the set of reachable tiles
+        /// If there are no reachable tiles, then the enemy will not move.
+        /// </summary>
+        public async UniTask MoveToDistantTile(EnemyUnit enemyUnit, IEnumerable<Vector2Int> reachableTiles)
         {
-            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
             Dictionary<Vector2Int, int> totalTileDistance = new Dictionary<Vector2Int, int>();
 
-            if (reachableTiles.Count <= 0)
+            if (!reachableTiles.Any())
                 return;
             
             foreach (var reachableTile in reachableTiles)
@@ -179,8 +207,11 @@ namespace Units.Enemies
         #endregion
 
         #region ENEMY FINDING FUNCTIONS
+        
+        private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints) => 
+            FindClosestPath(enemyUnit, targetUnit, movementPoints, enemyUnit.GetAllReachableTiles());
 
-        private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints)
+        private Vector2Int FindClosestPath(EnemyUnit enemyUnit, IUnit targetUnit, int movementPoints, IEnumerable<Vector2Int> reachableTiles)
         {
             if (movementPoints <= 0)
             {
@@ -192,17 +223,29 @@ namespace Units.Enemies
             // Can uncomment if we want enemies to flank to free adjacent squares
             // List<Vector2Int> targetTiles = gridManager.GetAdjacentFreeSquares(targetUnit);
 
-            List<Vector2Int> reachableTiles = enemyUnit.GetAllReachableTiles();
+            // List<Vector2Int> reachableTilesList = enemyUnit.GetAllReachableTiles();
+            List<Vector2Int> reachableTilesList = reachableTiles.ToList();
+            
             // Add in the tile the enemy is on to reachableTiles so that GetClosestCoordinateFromList
             // can check if it's the closest tile to the target
-            reachableTiles.Add(enemyUnit.Coordinate);
+            reachableTilesList.Add(enemyUnit.Coordinate);
             
             // Can uncomment AND REPLACE THE FOLLOWING LINES if we want enemies to flank to free adjacent squares
             // Vector2Int chosenTargetTile = gridManager.GetClosestCoordinateFromList(targetTiles, enemyUnit.Coordinate);
 
-            Vector2Int chosenTargetTile = unitManager.GetClosestCoordinateFromList(reachableTiles, targetUnit.Coordinate, enemyUnit);
+            Vector2Int chosenTargetTile = unitManager.GetClosestCoordinateFromList(reachableTilesList, targetUnit.Coordinate, enemyUnit);
             return chosenTargetTile;
         }
+
+        /// <summary>
+        /// Returns all players within <c>shootingRange</c> tiles of the enemy.
+        /// Assumes that all obstacles cannot be shot through for now
+        /// </summary>
+        public List<IUnit> GetTargetsInRange(Vector2Int coordinate, Ability ability) => ability.Shape
+            .GetTargetsInAllDirections(coordinate)
+            .OfType<PlayerUnit>()
+            .OfType<IUnit>()
+            .ToList();
 
         public IUnit GetTargetPlayer(IUnit enemyUnit)
         {
@@ -237,7 +280,7 @@ namespace Units.Enemies
             return targetPlayerUnit;
         }
         
-        private List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
+        public List<IUnit> GetClosestPlayers(IUnit enemyUnit, IReadOnlyList<IUnit> playerUnits)
         {
             Dictionary<Vector2Int, int> distanceToAllCells = unitManager.GetDistanceToAllCells(enemyUnit.Coordinate);
             
