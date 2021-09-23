@@ -64,27 +64,30 @@ namespace Tests.AutomatedTests
         #region Unity Tests
 
         [UnityTest]
-        [Timeout(2000)]
+        [Timeout(5000)]
         [Order(0)]
         public IEnumerator BasicGameRun()
         {
             yield return PrepareAndActivateScene();
+            // Need a bit of time for the UI animations to catch up, particularly the ones in async functions
+            yield return new WaitForSeconds(5);
         }
 
         [UnityTest]
-        [Timeout(5000)]
+        [Timeout(10000)]
         [Order(1)]
         public IEnumerator SelectionTest()
         {
             yield return PrepareAndActivateScene();
             for (int i = 0; i < 10; i++)
             {
+                TestContext.Out.WriteLine($"Selecting trial {i}");
                 yield return BasicSelections();
             }
         }
         
         [UnityTest]
-        [Timeout(2000)]
+        [Timeout(5000)]
         [Order(2)]
         public IEnumerator MovePlayerUnit()
         {
@@ -93,7 +96,7 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest] 
-        [Timeout(2000)]
+        [Timeout(5000)]
         [Order(3)]
         public IEnumerator BasicEnemyMove()
         {
@@ -101,6 +104,9 @@ namespace Tests.AutomatedTests
             CommandTester.EndCurrentUnitTurn();
             yield return Beacon.WaitUntil(GridBeacons.B, Any.EnemyUnit);
             yield return TurnTester.WaitPlayerTurn();
+            
+            // Need a bit of time for the UI animations to catch up, particularly the ones in async functions
+            yield return new WaitForSeconds(5);
         }
 
         [UnityTest] 
@@ -124,7 +130,7 @@ namespace Tests.AutomatedTests
         }
         
         [UnityTest] 
-        [Timeout(5000)]
+        [Timeout(9000)]
         [Order(5)]
         public IEnumerator KillingEnemyUnits()
         {
@@ -146,7 +152,7 @@ namespace Tests.AutomatedTests
         }
         
         [UnityTest] 
-        [Timeout(5000)]
+        [Timeout(9000)]
         [Order(5)]
         public IEnumerator KillingPlayerUnits()
         {
