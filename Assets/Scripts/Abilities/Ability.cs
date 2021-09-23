@@ -88,6 +88,9 @@ namespace Abilities
             
             foreach (var target in targets)
             {
+                if(target.GetType() == typeof(Obstacle))
+                    continue;
+                
                 Vector2 targetPos = target.transform.position;
                 
                 Stroke strokeEffect = Instantiate(vfx).GetComponent<Stroke>();
