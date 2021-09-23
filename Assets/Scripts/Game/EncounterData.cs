@@ -8,8 +8,8 @@ namespace Game
     [CreateAssetMenu]
     public class EncounterData : ScriptableObject
     {
-        public SceneReference encounterScene;
-        public LevelPool levelPool;
+        [SerializeField] private SceneReference encounterScene;
+        [SerializeField] private LevelPool levelPool;
 
         /// <summary>
         /// Get all the scenes that is involved with this encounter data.
@@ -28,6 +28,17 @@ namespace Game
                 throw new Exception($"Encounter data {name} has no scene assigned!");
             
             return !string.IsNullOrEmpty(encounterScene?.ScenePath) ? encounterScene : levelPool.PullLevel();
+        }
+        
+        /// <summary>
+        /// Get a random arrangement of possible scenes for the encounter. It may be one from the level pool or a specific scene.
+        /// </summary>
+        public IEnumerable<SceneReference> PullEncounterScenes()
+        {
+            if (string.IsNullOrEmpty(encounterScene?.ScenePath) && levelPool == null)
+                throw new Exception($"Encounter data {name} has no scene assigned!");
+            
+            return !string.IsNullOrEmpty(encounterScene?.ScenePath) ? new [] { encounterScene } : levelPool.PullLevels();
         }
     }
 }
