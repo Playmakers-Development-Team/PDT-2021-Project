@@ -111,7 +111,7 @@ namespace UI.Game.Timeline
         private void CreatePortraits(List<IUnit> units, int startIndex)
         {
             int count = 0;
-            int roundcount = turnManager.RoundCount + 1;
+            int roundcount = turnManager.RoundCount + 2;
 
             while (count < timelineLength)
             {
