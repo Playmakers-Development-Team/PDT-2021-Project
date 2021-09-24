@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class EndEncounterOnNoEnemies : MonoBehaviour
+    public class EndEncounterOnNoEnemiesOrPlayers : MonoBehaviour
     {
         [SerializeField] private float delay = 2f;
         

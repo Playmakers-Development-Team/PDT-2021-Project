@@ -18,6 +18,11 @@ namespace Game
 {
     public class GameManager : Manager
     {
+        private enum EncounterResult
+        {
+            Won, Lost
+        }
+        
         private CommandManager commandManager;
         private BackgroundManager backgroundManager;
         private PlayerManager playerManager;
@@ -28,6 +33,10 @@ namespace Game
         /// the same level more than once.
         /// </summary>
         private HashSet<SceneReference> visitedLevels = new HashSet<SceneReference>();
+        /// <summary>
+        /// How long should we delay the game before we end the encounter after losing one.
+        /// </summary>
+        private const float delayAfterLostEncounter = 2f;
 
         public EncounterData CurrentEncounterData { get; set; }
         public MapData CurrentMapData { get; set; }
@@ -46,6 +55,13 @@ namespace Game
             turnManager = ManagerLocator.Get<TurnManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
+            
+            // Automatically end the encounter if there are no players remaining after a few seconds
+            commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(async (cmd) =>
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(delayAfterLostEncounter));
+                commandManager.ExecuteCommand(new EndEncounterCommand());
+            });
         }
 
         public async UniTaskVoid RunLinearMap(MapData mapDataAsset)
@@ -75,9 +91,14 @@ namespace Game
             {
                 LoadEncounter(encounterData, false);
                 await commandManager.WaitForCommand<EndEncounterCommand>();
-                EncounterEnded();
+                EncounterResult encounterResult = EncounterEnded();
 
-                if (encounterNode.ConnectedNodes.Count > 0)
+                if (encounterResult == EncounterResult.Lost)
+                {
+                    // For now, reset the scene
+                    ChangeScene(SceneManager.GetActiveScene().path);
+                }
+                else if (encounterNode.ConnectedNodes.Count > 0)
                 {
                     // Pick a random connected node
                     int randomIndex = UnityEngine.Random.Range(0, encounterNode.ConnectedNodes.Count);
@@ -99,11 +120,11 @@ namespace Game
 
         public void StopLinearMap() => CurrentMapData = null;
 
-        private static void ChangeScene(SceneReference sceneReference) =>
-            SceneManager.LoadScene(sceneReference);
+        private static void ChangeScene(string scene) =>
+            SceneManager.LoadScene(scene);
         
-        private static async UniTask ChangeSceneAsync(SceneReference sceneReference) =>
-            await SceneManager.LoadSceneAsync(sceneReference);
+        private static async UniTask ChangeSceneAsync(string scene) =>
+            await SceneManager.LoadSceneAsync(scene);
 
         /// <summary>
         /// Same thing as <see cref="LoadEncounter"/>, but async. Remember that once this is called, the scene
@@ -191,7 +212,7 @@ namespace Game
         private void EncounterLost()
         {
             // TODO: Exporting data here is temporary, should probably delete any saved data.
-            playerManager.ExportData();
+            // playerManager.ExportData();
             
             // TODO: Go back to the main menu?
             // LoadMap();
@@ -210,15 +231,21 @@ namespace Game
             commandManager.ExecuteCommand(new EncounterWonCommand());
         }
 
-        private void EncounterEnded()
+        private EncounterResult EncounterEnded()
         {
             // if (!encounterLoadedFromMap)
             //     return;
 
             if (turnManager.HasPlayerUnitInQueue())
+            {
                 EncounterWon();
-            else 
+                return EncounterResult.Won;
+            }
+            else
+            {
                 EncounterLost();
+                return EncounterResult.Lost;
+            }
         }
 
         public void SetEndEncounterToLoadMap()
