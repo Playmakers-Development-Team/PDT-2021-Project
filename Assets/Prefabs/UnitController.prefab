@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841d87e8d15de6e419c130983df0f4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilityPickupPool: {fileID: 0}
+  persistentUnitData: 1
 --- !u!114 &7228237224685345094
 MonoBehaviour:
   m_ObjectHideFlags: 0
