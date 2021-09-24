@@ -296,7 +296,7 @@ namespace Units
         public abstract bool IsSameTeamWith(IAbilityUser other);
 
         #endregion
-        
+
         /// <summary>
         /// Returns a list of all coordinates that are reachable from a given starting position
         /// within the given range.
@@ -304,9 +304,29 @@ namespace Units
         /// <returns>A list of the coordinates of reachable tiles.</returns>
         public List<Vector2Int> GetAllReachableTiles()
         {
-            Vector2Int startingCoordinate = Coordinate;
             int range = MovementPoints.Value;
-            
+            return GetAllReachableTiles(range);
+        }
+        
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position assuming
+        /// that the unit has max movement points.
+        /// </summary>
+        /// <returns></returns>
+        public List<Vector2Int> GetMaxReachableTiles()
+        {
+            int range = MovementPoints.BaseValue;
+            return GetAllReachableTiles(range);
+        }
+        
+        /// <summary>
+        /// Same thing as <see cref="GetAllReachableTiles()"/>, but you can specifiy a custom range.
+        /// This is useful for determining logic and stuff.
+        /// </summary>
+        public List<Vector2Int> GetAllReachableTiles(int range)
+        {
+            Vector2Int startingCoordinate = Coordinate;
+
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
@@ -353,14 +373,35 @@ namespace Units
         }
 
         /// <summary>
-        /// Returns a list of all coordinates that are in range but occupied by another
+        /// Returns a list of all coordinates that are within movement range but occupied by another
         /// unit/obstacle. Does not include it's own tile.
         /// </summary>
         /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
         public List<Vector2Int> GetReachableOccupiedTiles()
         {
-            Vector2Int startingCoordinate = Coordinate;
             int range = MovementPoints.Value;
+            return GetReachableOccupiedTiles(range);
+        }
+        
+        /// <summary>
+        /// Returns a list of all coordinates that are within movement range  assuming that the unit has max
+        /// movement points, but occupied by another unit/obstacle. Does not include it's own tile.
+        /// </summary>
+        /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
+        public List<Vector2Int> GetMaxReachableOccupiedTiles()
+        {
+            int range = MovementPoints.BaseValue;
+            return GetReachableOccupiedTiles(range);
+        }
+
+        /// <summary>
+        /// Same as <see cref="GetReachableOccupiedTiles()"/>, but you can specify a custom range.
+        /// </summary>
+        /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
+        public List<Vector2Int> GetReachableOccupiedTiles(int range)
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            
             
             List<Vector2Int> reachableOccupiedTiles = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
