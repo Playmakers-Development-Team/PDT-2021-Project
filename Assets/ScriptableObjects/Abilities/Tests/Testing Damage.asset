@@ -18,6 +18,7 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
@@ -35,4 +36,5 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

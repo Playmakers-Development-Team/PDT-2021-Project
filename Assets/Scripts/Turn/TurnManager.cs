@@ -558,7 +558,7 @@ namespace Turn
         /// <returns>
         /// True if there is at least one <c>EnemyUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
-        private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
+        public bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
 
         /// <summary>
         /// Checks if the acting unit can do the turn phase.
@@ -655,7 +655,7 @@ namespace Turn
         /// <returns>
         /// True if there is at least one <c>PlayerUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
-        private bool HasPlayerUnitInQueue() => currentTurnQueue.Any(u => u is PlayerUnit);
+        public bool HasPlayerUnitInQueue() => currentTurnQueue.Any(u => u is PlayerUnit);
 
         #endregion
 

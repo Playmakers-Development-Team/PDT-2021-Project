@@ -18,6 +18,8 @@ namespace Background.Masking
         [SerializeField] private Vector3 aspect = Vector3.one;
         
         [SerializeField] private GameObject maskPrefab;
+        
+        [SerializeField] private bool spreadOnStart;
 
         private Transform[] masks;
         
@@ -29,6 +31,11 @@ namespace Background.Masking
                 masks[i] = transform.GetChild(i);
                 masks[i].localScale = Vector3.zero;
             }
+
+            if (!spreadOnStart)
+                return;
+            
+            Spread();
         }
 
         public void Spread() => SpreadAsync(true);

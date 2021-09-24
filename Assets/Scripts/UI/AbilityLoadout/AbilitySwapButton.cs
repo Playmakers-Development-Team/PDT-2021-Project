@@ -1,3 +1,5 @@
+using Game;
+using Managers;
 using UI.Core;
 
 namespace UI.AbilityLoadout
@@ -17,6 +19,9 @@ namespace UI.AbilityLoadout
         public void OnPressed()
         {
             dialogue.abilitySwap.Invoke();
+            
+            // TODO: Temporary encounter end. May change as more encounter reward dialogues are added.
+            ManagerLocator.Get<GameManager>().EncounterEnded();
         
             manager.Pop();
         }
