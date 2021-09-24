@@ -109,7 +109,7 @@ namespace Turn
                     List<IUnit> units = unitManager.AllUnits
                         .Where(u => u != cmd.Unit)
                         .Where(u => isMovingUpQueue 
-                            ? u.SpeedStat.Value >= cmd.NewValue
+                            ? u.SpeedStat.Value >= cmd.NewValue  
                             : u.SpeedStat.Value <= cmd.NewValue)
                         .ToList();
             
@@ -318,7 +318,7 @@ namespace Turn
         /// Create a turn queue from every available <c>Unit</c> in <c>PlayerManager</c> and
         /// <c>EnemyManager</c>. Calculate the turn order based on the parameters.
         /// </summary>
-        private List<IUnit> CreateTurnQueue()
+        private List<IUnit>CreateTurnQueue()
         {
             if (!randomizedSpeed)
             {
@@ -385,8 +385,15 @@ namespace Turn
             if (targetIndex < 0 || targetIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
 
+
+            // bool isEnemySpawner = false;
+            //
+            // if (currentTurnQueue[targetIndex] is EnemySpawnerUnit)
+            //     isEnemySpawner = true;
+                
+            
+
             currentTurnQueue.RemoveAt(targetIndex);
-            UpdateNextTurnQueue();
 
             if (targetIndex < CurrentTurnIndex)
                 CurrentTurnIndex--;
@@ -397,7 +404,11 @@ namespace Turn
                 CurrentTurnIndex--;
                 
                 NextTurn();
-            }
+            } 
+            
+            UpdateNextTurnQueue();
+
+       
         }
 
         #endregion
@@ -547,7 +558,7 @@ namespace Turn
         /// <returns>
         /// True if there is at least one <c>EnemyUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
-        private bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
+        public bool HasEnemyUnitInQueue() => currentTurnQueue.Any(u => u is EnemyUnit);
 
         /// <summary>
         /// Checks if the acting unit can do the turn phase.
@@ -644,7 +655,7 @@ namespace Turn
         /// <returns>
         /// True if there is at least one <c>PlayerUnit</c> in the <c>currentTurnQueue</c>.
         /// </returns>
-        private bool HasPlayerUnitInQueue() => currentTurnQueue.Any(u => u is PlayerUnit);
+        public bool HasPlayerUnitInQueue() => currentTurnQueue.Any(u => u is PlayerUnit);
 
         #endregion
 

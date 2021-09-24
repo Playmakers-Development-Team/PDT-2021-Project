@@ -1,5 +1,4 @@
-﻿using System;
-using Commands;
+﻿using Commands;
 using Grid.Commands;
 using Managers;
 using Units.Commands;
@@ -21,11 +20,12 @@ namespace Units
             #endregion
         }
 
+        // TODO: Why is this in the controller rather than the manager?
         private void OnEnable() => commandManager.ListenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
 
         private void OnDisable() => commandManager.UnlistenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
 
-        private void OnGridObjectsReady(GridObjectsReadyCommand cmd)
+        protected virtual void OnGridObjectsReady(GridObjectsReadyCommand cmd)
         {
             unitManagerT.ClearUnits();
             

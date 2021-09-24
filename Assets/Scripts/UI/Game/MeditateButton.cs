@@ -7,9 +7,8 @@ namespace UI.Game
 {
     public class MeditateButton : PanelButton
     {
-        [Header("Meditate Button")]
-        
-        [SerializeField] private Image icon;
+        [Header("Meditate Button")] [SerializeField]
+        private Image icon;
 
         [SerializeField] private Sprite defaultSprite;
         [SerializeField] private Sprite activatedSprite;
@@ -38,28 +37,29 @@ namespace UI.Game
         protected override void OnSelected()
         {
             dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
+            turnManager.Meditate();
             dialogue.meditateConfirmed.Invoke(dialogue.SelectedUnit);
 
             icon.sprite = activatedSprite;
 
-            turnManager.Meditate();
+
             dialogue.buttonSelected.Invoke();
-            
+
             SetInteractable(false);
         }
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             SetInteractable(info.IsPlayer);
-            
+
             if (!info.IsPlayer || turnManager.ActingUnit == null)
                 return;
 
             bool unitCanMeditate = turnManager.UnitCanBeTurnManipulated(turnManager.ActingUnit);
-            
+
             interactable = unitCanMeditate;
             icon.sprite = unitCanMeditate ? defaultSprite : activatedSprite;
-            
+
             SetInteractable(unitCanMeditate);
         }
     }

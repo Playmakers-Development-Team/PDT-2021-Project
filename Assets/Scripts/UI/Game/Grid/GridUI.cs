@@ -251,7 +251,9 @@ namespace UI.Game.Grid
             TileBase tile = GetTile(selection.Type);
             foreach (Vector2Int coordinate in selection.Spaces)
             {
-                if (gridManager.GetGridObjectsByCoordinate(coordinate).All(g => g is IUnit))
+                // BUG: The `tilemap != null` check prevents an error when loading a second
+                // BUG: encounter. This needs to be checked.
+                if (gridManager.GetGridObjectsByCoordinate(coordinate).All(g => g is IUnit) && tilemap != null)
                     tilemap.SetTile((Vector3Int) coordinate, tile);
             }
         }
