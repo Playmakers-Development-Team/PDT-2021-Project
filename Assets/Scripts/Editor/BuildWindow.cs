@@ -7,11 +7,15 @@ using UnityEditor.Build.Reporting;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace Editor
 {
     public class BuildWindow : EditorWindow
     {
+        private const string lastBuildVersionKey = "PDT.LastBuild.Version";
+        private const string lastMapKey = "PDT.LastBuild.Map";
+        
         [MenuItem("Window/Build Tool")]
         private static void ShowWindow()
         {
@@ -37,13 +41,14 @@ namespace Editor
 
             TextField versionField = new TextField("Version")
             {
-                value = "0.X.X"
+                value = EditorPrefs.GetString(lastBuildVersionKey, "0.X.X") 
             };
             
             ObjectField objectField = new ObjectField("Map")
             {
                 objectType = typeof(MapData),
-                allowSceneObjects = false
+                allowSceneObjects = false,
+                value = AssetDatabase.LoadAssetAtPath<Object>(EditorPrefs.GetString(lastMapKey, ""))
             };
 
             Toggle devToggle = new Toggle("Development Build");
@@ -78,6 +83,9 @@ namespace Editor
 
             buildButtons.Add(new Button(() =>
             {
+                EditorPrefs.SetString(lastBuildVersionKey, versionField.value);
+                EditorPrefs.SetString(lastMapKey, AssetDatabase.GetAssetPath(objectField.value));
+                
                 if (buildWindows.value)
                     BuildPlatform(versionField.value, BuildTarget.StandaloneWindows64, objectField.value as MapData, devToggle.value);
                 
@@ -153,15 +161,25 @@ namespace Editor
                 Debug.LogError("Build Failed!");
         }
 
-        private static IEnumerable<string> GetRequiredScenes(MapData mapData) => 
-            Enumerable.Empty<string>()
-                // Make sure this is first, so it loads in first
-                .Append(mapData.mapScene.ScenePath)
-                // We need this for some reason, otherwise exiting an encounter won't work
-                .Append("Assets/Scenes/Developer/Map Test.unity") 
-                .Concat(mapData.encounterNodes
-                    .SelectMany(n => n.EncounterData.GetAllPossibleScenes()
-                        .Select(s => s.ScenePath)));
+        private static IEnumerable<string> GetRequiredScenes(MapData mapData)
+        {
+            var encounterScenes = Enumerable.Empty<string>()
+                .Concat(mapData.encounterNodes.SelectMany(n =>
+                    n.EncounterData.GetAllPossibleScenes().Select(s => s.ScenePath))).Distinct();
+
+            if (string.IsNullOrEmpty(mapData.mapScene.ScenePath))
+            {
+                return encounterScenes;
+            }
+            else
+            {
+                return encounterScenes
+                    // Make sure this is first, so it loads in first
+                    .Append(mapData.mapScene.ScenePath)
+                    // We need this for some reason, otherwise exiting an encounter won't work
+                    .Append("Assets/Scenes/Developer/Map Test.unity");
+            }
+        }
 
         /// <summary>
         /// Get an appropriate build location

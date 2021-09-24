@@ -17,7 +17,7 @@ namespace Game
         /// </summary>
         /// <returns></returns>
         public IEnumerable<SceneReference> GetAllPossibleScenes() =>
-            encounterScene != null ? new[] { encounterScene } : levelPool.LevelScenes;
+            !string.IsNullOrEmpty(encounterScene?.ScenePath) ? new[] { encounterScene } : levelPool.LevelScenes;
 
         /// <summary>
         /// Get the next scene for the encounter. It may be one from the level pool or a specific scene.
