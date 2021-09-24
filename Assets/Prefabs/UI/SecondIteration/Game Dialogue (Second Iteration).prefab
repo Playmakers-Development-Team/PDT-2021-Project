@@ -163,6 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18cf6a897e95473581c468c8714cf497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loseMenu: {fileID: 2039911028355950281, guid: 15e94d29b6ff624429c4477e57703f3e, type: 3}
 --- !u!1001 &547021094562806707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -184,23 +185,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1976926496659469617, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -463
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1976926496659469617, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -220,19 +221,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3479188694288460167, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3479188694288460167, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5284126044501123866, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5284126044501123866, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -17
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6969207551944411330, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_Pivot.x

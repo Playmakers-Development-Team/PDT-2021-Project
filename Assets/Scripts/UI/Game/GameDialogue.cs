@@ -18,6 +18,7 @@ namespace UI.Game
 {
     public class GameDialogue : Dialogue
     {
+        
         internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
         internal readonly Event<UnitInfo> unitKilled = new Event<UnitInfo>();
         internal readonly Event<UnitInfo> unitSelected = new Event<UnitInfo>();
@@ -58,6 +59,8 @@ namespace UI.Game
         internal Vector2 AbilityDirection { get; private set; }
 
         internal Mode DisplayMode { get; private set; }
+
+        [SerializeField] private GameObject loseMenu;
 
 
         internal enum Mode
@@ -147,6 +150,7 @@ namespace UI.Game
             commandManager.ListenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.ListenCommand((Action<KilledUnitCommand>) OnUnitKilled);
             commandManager.ListenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
+            commandManager.ListenCommand((Action<NoRemainingPlayerUnitsCommand>) OnGameLost);
         }
 
         private void OnDisable()
@@ -158,6 +162,8 @@ namespace UI.Game
             commandManager.UnlistenCommand((Action<StatChangedCommand>) OnUnitDamaged);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
             commandManager.UnlistenCommand((Action<TurnManipulatedCommand>) OnTurnManipulated);
+            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnGameLost);
+
         }
 
         #endregion
@@ -165,6 +171,14 @@ namespace UI.Game
 
         #region Command Listeners
 
+        private void OnGameLost(NoRemainingPlayerUnitsCommand cmd)
+        {
+            GameObject lose = Instantiate(loseMenu);
+            lose.GetComponent<LoseMenuDialogue>().enabled = true;
+            this.enabled = false;
+
+        }
+        
         private void OnStartTurn(StartTurnCommand cmd)
         {
             if (cmd.Unit == null)
