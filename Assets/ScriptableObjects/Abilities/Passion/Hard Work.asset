@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Slow Ability]
 
-    Deal 2 base damage and  1 damage per Passion
+    Deal 2 base damage and  1 damage per Passion.
 
-    >
-    Deal 4 extra damage if user has Pride
+    Deal
+    4 more damage if User has Pride.
 
 '
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
@@ -113,11 +113,11 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: 3 Damage IF User With 1 Pride
+  - name: "Target \u27A4 4 Damage IF User With 1 Pride"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 3
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
     attackValue: 0

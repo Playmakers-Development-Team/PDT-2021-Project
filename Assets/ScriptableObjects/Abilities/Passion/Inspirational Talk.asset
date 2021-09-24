@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Slow Ability]
 
-    Give 1 Defence and 1 Passion
+    Grant 1 Defence and 1 Passion
 
-    KINDLED 2 -
-    Give 3 Attack to Targets
+    KINDLED 2
+    on User - Grant 3 Attack
 
 '
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
@@ -25,7 +25,7 @@ MonoBehaviour:
   speed: -1
   representedTenet: 2
   effects:
-  - name: Default, 1 Defence and Provide 1 Passion
+  - name: "User and Target \u27A4 Default, 1 Defence and Provide 1 Passion"
     affectTargets: 1
     affectUser: 1
     effectOrder: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack WITH Kindled 2 to Targets
+  - name: "User and Target \u27A4 3 Attack WITH Kindled 2 to User"
     affectTargets: 1
     affectUser: 1
     effectOrder: 0
@@ -57,6 +57,6 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 0f4f3d49b52758b97b8908c502ae7ebb, type: 2}
+    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

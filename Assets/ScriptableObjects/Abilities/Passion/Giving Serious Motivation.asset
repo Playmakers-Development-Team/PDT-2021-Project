@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Very Slow Ability]
 
-    Give 3 Attack and 1 Passion
+    Give 3 Attack and 1 Passion.
 
-    >Target
-    gains 1 Passion with KINDLED 2
+    KINDLED
+    2 on Target - Grant 1 Passion.
 
-    >Target gains 3 Attack with KINDLED 4'
+    KINDLED 4 on Target - Grant 4 Attack.'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: -2
