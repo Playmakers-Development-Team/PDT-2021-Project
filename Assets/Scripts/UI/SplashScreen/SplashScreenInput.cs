@@ -1,4 +1,6 @@
-﻿using UI.Core;
+﻿using Game;
+using Managers;
+using UI.Core;
 using UI.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,7 +14,7 @@ namespace UI.SplashScreen
         [SerializeField] private DipFromWhiteComponent dipFromWhiteComponent;
         
          private PlayerControls controls;
-         
+
          #region InputDelegates
          
         private void OnClick(InputAction.CallbackContext context)
@@ -20,12 +22,13 @@ namespace UI.SplashScreen
             if (!context.performed)
                 return;
             
+            
             if (dipFromWhiteComponent.IsAnimating)
             {
                 dipFromWhiteComponent.CompleteAnimation();
                 return;
             }
-
+            
             //TODO: TEMP CODE SHOULD BE CHANGED TO THE APPROPRIATE SYSTEM FOR LOADING NEW SCENES AND BE DIRECTED TO THE MAIN MENU SCENE
             SceneManager.LoadScene("Scenes/Design/Playtest Beta Map");
         }
@@ -38,7 +41,8 @@ namespace UI.SplashScreen
         {
             base.OnComponentAwake();
             controls = new PlayerControls();
-            controls.UI.Click.performed += OnClick;
+            controls.UI.AnyKey.performed += OnClick;
+
         }
         
         protected override void OnComponentEnabled()

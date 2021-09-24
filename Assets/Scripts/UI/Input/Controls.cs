@@ -351,6 +351,14 @@ namespace UI.Input
                     ""expectedControlType"": ""Quaternion"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""AnyKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""f4840260-ee0e-4f14-82b2-eac0cbd93c20"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -771,6 +779,50 @@ namespace UI.Input
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""36714228-4412-4d63-a114-3f825cece789"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6bca30e7-162e-4c10-b387-4aececf1746b"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef702ed5-b637-4145-9efb-52e3c66e6011"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee13007b-ed25-470f-9c01-17bb5abc5a71"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -882,6 +934,7 @@ namespace UI.Input
             m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+            m_UI_AnyKey = m_UI.FindAction("AnyKey", throwIfNotFound: true);
             // Keyboard
             m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
             m_Keyboard_rotate = m_Keyboard.FindAction("rotate", throwIfNotFound: true);
@@ -993,6 +1046,7 @@ namespace UI.Input
         private readonly InputAction m_UI_RightClick;
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
+        private readonly InputAction m_UI_AnyKey;
         public struct UIActions
         {
             private @PlayerControls m_Wrapper;
@@ -1007,6 +1061,7 @@ namespace UI.Input
             public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+            public InputAction @AnyKey => m_Wrapper.m_UI_AnyKey;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1046,6 +1101,9 @@ namespace UI.Input
                     @TrackedDeviceOrientation.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTrackedDeviceOrientation;
+                    @AnyKey.started -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyKey;
+                    @AnyKey.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyKey;
+                    @AnyKey.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyKey;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1080,6 +1138,9 @@ namespace UI.Input
                     @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
                     @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+                    @AnyKey.started += instance.OnAnyKey;
+                    @AnyKey.performed += instance.OnAnyKey;
+                    @AnyKey.canceled += instance.OnAnyKey;
                 }
             }
         }
@@ -1180,6 +1241,7 @@ namespace UI.Input
             void OnRightClick(InputAction.CallbackContext context);
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+            void OnAnyKey(InputAction.CallbackContext context);
         }
         public interface IKeyboardActions
         {
