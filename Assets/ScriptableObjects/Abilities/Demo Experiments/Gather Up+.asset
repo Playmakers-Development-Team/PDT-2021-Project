@@ -12,24 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Gather Up+
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
-
-    Give 2 Defence
-
-    KINDLED 2 - Give 2 Attack
-    and 1 more Defence'
+  description: "[Slow Ability]\nGive 4 Defence to all units in range, including self.
+    \nKINDLED 2 - Give 2 Attack and 1 more Defence"
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: -1
   representedTenet: 2
   effects:
-  - name: Default, 2 Defence
+  - name: "User and Target \u27A4 Default, 4 Defence"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
+    defenceValue: 4
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -39,13 +35,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User and Target \u27A4 2 Attack WITH Kindled 2 to Targets"
+  - name: "User and Target \u27A4 2 Attack and 1 Defence WITH Kindled 2 to Target"
     affectTargets: 1
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 1
     attackValue: 2
     defenceForEncounter: 0
     attackForEncounter: 0
