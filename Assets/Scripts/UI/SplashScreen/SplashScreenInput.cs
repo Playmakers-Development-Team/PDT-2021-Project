@@ -12,7 +12,7 @@ namespace UI.SplashScreen
         [SerializeField] private DipFromWhiteComponent dipFromWhiteComponent;
         
          private PlayerControls controls;
-
+         
          #region InputDelegates
          
         private void OnClick(InputAction.CallbackContext context)
@@ -20,7 +20,7 @@ namespace UI.SplashScreen
             if (!context.performed)
                 return;
             
-            if (dipFromWhiteComponent.IsAnimationPlaying())
+            if (dipFromWhiteComponent.IsAnimating)
             {
                 dipFromWhiteComponent.CompleteAnimation();
                 return;

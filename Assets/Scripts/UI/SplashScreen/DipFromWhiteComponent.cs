@@ -12,9 +12,13 @@ namespace UI.SplashScreen
 
         [SerializeField] private Animator animator;
         [SerializeField] private Image image;
-
-        private bool animationCompleted = false;
-
+        
+        #region Properties
+        
+        public bool IsAnimating { get; private set; }
+        
+        #endregion
+        
         #region UIComponent
 
         protected override void Subscribe() {}
@@ -30,38 +34,31 @@ namespace UI.SplashScreen
         protected override void OnComponentAwake()
         {
             base.OnComponentAwake();
+            IsAnimating = true;
             animator.enabled = false;
         }
+
+        public void AnimationStarted() => IsAnimating = true;
+        
+        public void FadeCompleted() => IsAnimating = false;
 
         private async UniTask StartAnimation()
         {
             
             await UniTask.Delay(timeTillFade);
             
-            if (!animationCompleted)
+            if (IsAnimating)
                 animator.enabled = true;
         }
 
         public void CompleteAnimation()
         {
+            IsAnimating = false;
             animator.enabled = false;
             image.color = new Color(255, 255, 255, 0);
-            animationCompleted = true;
         }
 
         #endregion
-
-        #region Boolean Getters
-
-        public bool IsAnimationPlaying()
-        {
-            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1 || animationCompleted)
-                return false;
-
-            return true;
-
-        }
         
-        #endregion
     }
 }
