@@ -686,21 +686,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 405293668469983245, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: data.name
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
-      propertyPath: data.<SpeedStat>k__BackingField.<BaseValue>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
-      propertyPath: data.<KnockbackStat>k__BackingField.<BaseValue>k__BackingField
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_Name
@@ -1063,21 +1059,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 405293668469983245, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: data.name
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
-      propertyPath: data.<SpeedStat>k__BackingField.<BaseValue>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
-      propertyPath: data.<KnockbackStat>k__BackingField.<BaseValue>k__BackingField
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_Name
@@ -1288,6 +1280,11 @@ PrefabInstance:
 --- !u!4 &1375121745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5511968119123735640, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
+  m_PrefabInstance: {fileID: 1375121744}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1839735485 &1375121746 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 5511968119123735622, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
   m_PrefabInstance: {fileID: 1375121744}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1413847938
