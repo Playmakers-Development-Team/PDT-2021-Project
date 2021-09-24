@@ -77,7 +77,7 @@ namespace UI.Game
             // Listen to Events
             unitSpawned.AddListener(info =>
             {
-                units.Add(info);
+                units.Add(info); 
             });
 
             unitKilled.AddListener(info =>
@@ -268,7 +268,11 @@ namespace UI.Game
 
 
             internal void SetUnit(IUnit newUnit) => Unit = newUnit;
+            
+            
         }
+        
+        
 
         internal readonly struct TurnInfo
         {
