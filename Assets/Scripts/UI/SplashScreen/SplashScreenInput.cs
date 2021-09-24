@@ -1,6 +1,4 @@
-﻿using Game;
-using Managers;
-using UI.Core;
+﻿using UI.Core;
 using UI.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
