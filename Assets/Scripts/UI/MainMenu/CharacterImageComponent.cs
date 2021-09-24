@@ -20,20 +20,23 @@ namespace UI.MainMenu
     {
 
         [SerializeField] private Image characterImage;
-
         [SerializeField] private List<Character> characters = new List<Character>();
 
         internal int characterIndex;
+
+        #region UIComponent
         
         protected override void Subscribe() {}
         
         protected override void Unsubscribe() {}
         
+        #endregion
+        
 
-        public Character GetCharacter()
-        {
-            return characters[characterIndex];
-        }
+        #region CharacterComponent
+        
+        public Character GetCharacter() => characters[characterIndex];
+        
 
         public void RandomizeCharacterSprite()
         {
@@ -42,9 +45,7 @@ namespace UI.MainMenu
             characterIndex = random;
         }
         
-        
-        
-        
+        #endregion
     }
     
     

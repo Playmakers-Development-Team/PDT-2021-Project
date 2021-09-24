@@ -34,12 +34,14 @@ namespace UI.MainMenu
 
         #endregion
 
+        #region DialogueComponent
         protected override void OnClose() {}
 
         protected override void OnPromote() {}
 
         protected override void OnDemote() {}
 
+        #endregion
 
         protected override void OnDialogueAwake()
         { 
@@ -47,7 +49,9 @@ namespace UI.MainMenu
             mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
             characterImageComponent.RandomizeCharacterSprite();
             gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
-            
+
+            #region Listeners
+
             exitStarted.AddListener(() =>
             {
                 exitConfirmedPrefabInstance = Instantiate(exitConfirmationPrefab, mainMenuParent);
@@ -91,6 +95,8 @@ namespace UI.MainMenu
             {
                 //TODO: Close Credits Menu
             });
+            
+            #endregion
         }
         
         

@@ -1,4 +1,5 @@
-﻿using UI.Core;
+﻿using System;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,17 @@ namespace UI.MainMenu
     {
 
         [SerializeField] private Image gameTitle;
+        
+        #region UIComponent
+        
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
+        
+        #endregion
 
+
+        #region TitleHandling
    
         public void UpdateTitle(Character chosenCharacter)
         {
@@ -32,8 +40,12 @@ namespace UI.MainMenu
                 case CharacterTypes.EYE:
                     gameTitle.color = new Color32(110, 170, 250, 255);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             
         }
+        
+        #endregion
     }
 }

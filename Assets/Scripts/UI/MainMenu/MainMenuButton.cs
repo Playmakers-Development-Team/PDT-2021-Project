@@ -9,228 +9,229 @@ namespace UI.MainMenu
 {
     public class MainMenuButton : DialogueComponent<MainMenuDialogue>
     {
-           [SerializeField] protected EventTrigger trigger;
-    [SerializeField] protected Animator animator;
-    [SerializeField] protected TextMeshProUGUI labelText;
-    
-    [SerializeField] protected Image backgroundImage;
-    [SerializeField] protected Image borderImage;
+        [SerializeField] protected EventTrigger trigger;
+        [SerializeField] protected Animator animator;
+        [SerializeField] protected TextMeshProUGUI labelText;
 
-    [Header("Sprites")]
-    
-    [SerializeField] protected Sprite backgroundLight;
-    [SerializeField] protected Sprite backgroundDark;
-    
-    [SerializeField] protected Sprite borderLight;
-    [SerializeField] protected Sprite borderDark;
-        
-    [Header("Fonts")]
-        
-    [SerializeField] private TMP_FontAsset lightFont;
-    [SerializeField] private TMP_FontAsset darkFont;
-    
-    [SerializeField, Range(0f, 1f)] private float fill;
+        [SerializeField] protected Image backgroundImage;
+        [SerializeField] protected Image borderImage;
 
-    [SerializeField] protected bool interactable;
-    
-    private bool clicked;
-    private bool animating;
-    private bool wasInteractable;
+        [Header("Sprites")] [SerializeField]
+        protected Sprite backgroundLight;
 
-    private static readonly int borderFillId = Animator.StringToHash("Fill");
-    private static readonly int borderFadeId = Animator.StringToHash("Fade");
-    private static readonly int fillId = Shader.PropertyToID("_Fill");
-    
+        [SerializeField] protected Sprite backgroundDark;
 
-    private void LateUpdate()
-    {
-        if (!animating)
-            return;
+        [SerializeField] protected Sprite borderLight;
+        [SerializeField] protected Sprite borderDark;
 
-        borderImage.material.SetFloat(fillId, fill);
-    }
-    
+        [Header("Fonts")] [SerializeField]
+        private TMP_FontAsset lightFont;
 
-    public void AnimationStarted()
-    {
-        animating = true;
-    }
-    
-    public void FillComplete()
-    {
-        animating = false;
-        borderImage.material.SetFloat(fillId, 1.0f);
-    }
+        [SerializeField] private TMP_FontAsset darkFont;
 
-    public void FadeComplete()
-    {
-        animating = false;
-        borderImage.material.SetFloat(fillId, 0.0f);
-    }
+        [SerializeField, Range(0f, 1f)]
+        private float fill;
 
-    protected void SetInteractable(bool state)
-    {
-        if (interactable)
+        [SerializeField] protected bool interactable;
+
+        private bool clicked;
+        private bool animating;
+        private bool wasInteractable;
+
+        private static readonly int borderFillId = Animator.StringToHash("Fill");
+        private static readonly int borderFadeId = Animator.StringToHash("Fade");
+        private static readonly int fillId = Shader.PropertyToID("_Fill");
+
+        private void LateUpdate()
         {
-            wasInteractable = state;
-            interactable = state;
+            if (!animating)
+                return;
+
+            borderImage.material.SetFloat(fillId, fill);
         }
-        else
+
+        public void AnimationStarted()
         {
-            wasInteractable = state;
-            interactable = state;
+            animating = true;
         }
-    }
 
-    #region DialogueComponent
-
-    protected override void Subscribe()
-    {
-        dialogue.buttonSelected.AddListener(OnButtonSelected);
-        dialogue.promoted.AddListener(OnPromoted);
-        dialogue.demoted.AddListener(OnDemoted);
-    }
-
-    protected override void Unsubscribe()
-    {
-        dialogue.buttonSelected.AddListener(OnButtonSelected);
-        dialogue.promoted.RemoveListener(OnPromoted);
-        dialogue.demoted.RemoveListener(OnDemoted);
-    }
-
-    protected override void OnComponentAwake()
-    {
-        wasInteractable = interactable;
-        
-        backgroundImage.material = Instantiate(backgroundImage.material);
-        borderImage.material = Instantiate(borderImage.material);
-        
-        EventTrigger.Entry pointerEnter = new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
-        pointerEnter.callback.AddListener(info =>
+        public void FillComplete()
         {
-            OnHoverEnter();
-            
-            if (clicked || !interactable)
-                return;
-            
-            backgroundImage.sprite = backgroundLight;
-            
-            borderImage.sprite = borderDark;
-            animator.SetTrigger(borderFillId);
-            
-            labelText.font = darkFont;
-        });
-        trigger.triggers.Add(pointerEnter);
+            animating = false;
+            borderImage.material.SetFloat(fillId, 1.0f);
+        }
 
-        EventTrigger.Entry pointerExit = new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
-        pointerExit.callback.AddListener(info =>
+        public void FadeComplete()
         {
-            OnHoverExit();
-            
-            if (clicked || !interactable)
-                return;
-            
-            backgroundImage.sprite = backgroundLight;
-            
-            animator.SetTrigger(borderFadeId);
+            animating = false;
+            borderImage.material.SetFloat(fillId, 0.0f);
+        }
 
-            labelText.font = darkFont;
-        });
-        trigger.triggers.Add(pointerExit);
-
-        EventTrigger.Entry pointerClick = new EventTrigger.Entry {eventID = EventTriggerType.PointerClick};
-        pointerClick.callback.AddListener(info =>
+        protected void SetInteractable(bool state)
         {
-            if (!interactable)
-                return;
-            
-            if (!clicked)
-                Selected();
+            if (interactable)
+            {
+                wasInteractable = state;
+                interactable = state;
+            }
             else
-                Deselected();
-        });
-        trigger.triggers.Add(pointerClick);
-        
-        EventTrigger.Entry pointerDown = new EventTrigger.Entry {eventID = EventTriggerType.PointerDown};
-        pointerDown.callback.AddListener(info =>
+            {
+                wasInteractable = state;
+                interactable = state;
+            }
+        }
+
+        #region DialogueComponent
+
+        protected override void Subscribe()
         {
-            if (!interactable)
+            dialogue.buttonSelected.AddListener(OnButtonSelected);
+            dialogue.promoted.AddListener(OnPromoted);
+            dialogue.demoted.AddListener(OnDemoted);
+        }
+
+        protected override void Unsubscribe()
+        {
+            dialogue.buttonSelected.AddListener(OnButtonSelected);
+            dialogue.promoted.RemoveListener(OnPromoted);
+            dialogue.demoted.RemoveListener(OnDemoted);
+        }
+
+        protected override void OnComponentAwake()
+        {
+            wasInteractable = interactable;
+
+            backgroundImage.material = Instantiate(backgroundImage.material);
+            borderImage.material = Instantiate(borderImage.material);
+
+            EventTrigger.Entry pointerEnter =
+                new EventTrigger.Entry {eventID = EventTriggerType.PointerEnter};
+            pointerEnter.callback.AddListener(info =>
+            {
+                OnHoverEnter();
+
+                if (clicked || !interactable)
+                    return;
+
+                backgroundImage.sprite = backgroundLight;
+
+                borderImage.sprite = borderDark;
+                animator.SetTrigger(borderFillId);
+
+                labelText.font = darkFont;
+            });
+            trigger.triggers.Add(pointerEnter);
+
+            EventTrigger.Entry pointerExit =
+                new EventTrigger.Entry {eventID = EventTriggerType.PointerExit};
+            pointerExit.callback.AddListener(info =>
+            {
+                OnHoverExit();
+
+                if (clicked || !interactable)
+                    return;
+
+                backgroundImage.sprite = backgroundLight;
+
+                animator.SetTrigger(borderFadeId);
+
+                labelText.font = darkFont;
+            });
+            trigger.triggers.Add(pointerExit);
+
+            EventTrigger.Entry pointerClick =
+                new EventTrigger.Entry {eventID = EventTriggerType.PointerClick};
+            pointerClick.callback.AddListener(info =>
+            {
+                if (!interactable)
+                    return;
+
+                if (!clicked)
+                    Selected();
+                else
+                    Deselected();
+            });
+            trigger.triggers.Add(pointerClick);
+
+            EventTrigger.Entry pointerDown =
+                new EventTrigger.Entry {eventID = EventTriggerType.PointerDown};
+            pointerDown.callback.AddListener(info =>
+            {
+                if (!interactable)
+                    return;
+
+                backgroundImage.sprite = backgroundDark;
+                borderImage.sprite = borderLight;
+                labelText.font = lightFont;
+            });
+            trigger.triggers.Add(pointerDown);
+        }
+
+        #endregion
+
+        #region Listeners
+
+        private void OnButtonSelected()
+        {
+            if (!clicked)
                 return;
-            
-            backgroundImage.sprite = backgroundDark;
-            borderImage.sprite = borderLight;
-            labelText.font = lightFont;
-        });
-        trigger.triggers.Add(pointerDown);
-    }
 
-    #endregion
-    
-    
-    #region Listeners
+            Deselected();
+            animator.SetTrigger(borderFadeId);
+        }
 
-    private void OnButtonSelected()
-    {
-        if (!clicked)
-            return;
-        
-        Deselected();
-        animator.SetTrigger(borderFadeId);
-    }
+        private void OnTurnStarted(GameDialogue.TurnInfo info)
+        {
+            if (!clicked)
+                return;
 
-    private void OnTurnStarted(GameDialogue.TurnInfo info)
-    {
-        if (!clicked)
-            return;
-        
-        Deselected();
-        animator.SetTrigger(borderFadeId);
-    }
+            Deselected();
+            animator.SetTrigger(borderFadeId);
+        }
 
-    private void Selected()
-    {
-        clicked = true;
-        EventSystem.current.SetSelectedGameObject(gameObject);
-        
-        OnSelected();
-    }
+        private void Selected()
+        {
+            clicked = true;
+            EventSystem.current.SetSelectedGameObject(gameObject);
 
-    private void Deselected()
-    {
-        clicked = false;
-        EventSystem.current.SetSelectedGameObject(null);
-        
-        backgroundImage.sprite = backgroundLight;
-        borderImage.sprite = borderDark;
-        labelText.font = darkFont;
-        
-        OnDeselected();
-    }
+            OnSelected();
+        }
 
-    private void OnDemoted()
-    {
-        wasInteractable = interactable;
-        interactable = false;
-    }
+        private void Deselected()
+        {
+            clicked = false;
+            EventSystem.current.SetSelectedGameObject(null);
 
-    private void OnPromoted()
-    {
-        interactable = wasInteractable;
-    }
+            backgroundImage.sprite = backgroundLight;
+            borderImage.sprite = borderDark;
+            labelText.font = darkFont;
 
-    #endregion
+            OnDeselected();
+        }
 
-    
-    #region PanelButton
+        private void OnDemoted()
+        {
+            wasInteractable = interactable;
+            interactable = false;
+        }
 
-    protected virtual void OnSelected() {}
+        private void OnPromoted()
+        {
+            interactable = wasInteractable;
+        }
 
-    protected virtual void OnDeselected() {}
+        #endregion
 
-    protected virtual void OnHoverEnter() {}
+        #region PanelButton
 
-    protected virtual void OnHoverExit() {}
+        protected virtual void OnSelected() {}
 
-    #endregion
+        protected virtual void OnDeselected() {}
+
+        protected virtual void OnHoverEnter() {}
+
+        protected virtual void OnHoverExit() {}
+
+        #endregion
     }
 }

@@ -767,7 +767,7 @@ GameObject:
   - component: {fileID: 8370374911270203047}
   - component: {fileID: 8370374911270203042}
   - component: {fileID: 8370374911270203045}
-  - component: {fileID: 8370374911270203044}
+  - component: {fileID: 6156353790658449583}
   m_Layer: 5
   m_Name: Credits
   m_TagString: Untagged
@@ -805,7 +805,7 @@ Animator:
   m_GameObject: {fileID: 8370374911270203046}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fdd09a83944b1ce43ac18919af984126, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2a38b8b26927c4d47954fe2e7a570838, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &8370374911270203044
+--- !u!114 &6156353790658449583
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -836,7 +836,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8370374911270203046}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3fab373c1854b43ac3576c14979ec62, type: 3}
+  m_Script: {fileID: 11500000, guid: 5843175498d348aeb0492e0421fa9e29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   trigger: {fileID: 8370374911270203045}
