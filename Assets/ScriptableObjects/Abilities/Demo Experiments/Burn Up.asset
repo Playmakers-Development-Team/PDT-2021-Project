@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: '[Neutral Ability]
 
-    A weak test attack. Does 1 damage to a single
-    enemy. If you have Passion, deal 3 extra damage.'
+    Deal 1 damage
+
+    > Deal 3 extra damage with
+    Passion'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: 0
