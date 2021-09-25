@@ -5,6 +5,7 @@ using Grid.GridObjects;
 using Managers;
 using UI.Commands;
 using UI.Core;
+using UI.Game.Unit;
 using Units;
 using UnityEngine;
 
@@ -12,15 +13,23 @@ namespace UI.AbilityLoadout.Unit
 {
     public class UnitLoadoutUIWrapper : DialogueComponent<AbilityLoadoutDialogue>
     {
-        [SerializeField] private GridObject unitGridObject;
         [SerializeField] private AbilityLoadoutDialogue.UnitInfo info;
-        
+
+        private IUnit unit;
         private CommandManager commandManager;
         
         #region UIComponent
         
         protected override void OnComponentAwake()
         {
+            unit = transform.parent.GetComponentInChildren<IUnit>();
+            
+            if (unit == null)
+            {
+                Debug.LogError("Could not find IUnit among parent Transform's children.");
+                return;
+            }
+            
             commandManager = ManagerLocator.Get<CommandManager>();
             commandManager.CatchCommand((Action<AbilityLoadoutReadyCommand>) OnAbilityLoadoutReady);
         }
@@ -35,9 +44,6 @@ namespace UI.AbilityLoadout.Unit
 
         private void OnAbilityLoadoutReady(AbilityLoadoutReadyCommand cmd)
         {
-            if (!(unitGridObject is IUnit unit))
-                return;
-
             // Assign abilities
             List<AbilityLoadoutDialogue.AbilityInfo> abilityInfo = new List<AbilityLoadoutDialogue.AbilityInfo>();
             for (int i = 0; i < unit.Abilities.Count; ++i)

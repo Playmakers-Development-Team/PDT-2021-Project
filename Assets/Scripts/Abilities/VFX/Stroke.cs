@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,6 +30,11 @@ namespace Abilities.VFX
             TryGetComponent(out animator);
         }
 
+        // NOTE: This is called through an animation event at the end of the "Out" anim
+        public void EndAbilityEffect()
+        {
+            Destroy(gameObject);
+        }
 
         public void Execute(Vector3 position)
         {

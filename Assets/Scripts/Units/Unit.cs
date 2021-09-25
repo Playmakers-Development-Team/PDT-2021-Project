@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,32 +21,55 @@ using Random = UnityEngine.Random;
 
 namespace Units
 {
-    [RequireComponent(typeof(SnapToGrid))]
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
 
         private protected SpriteRenderer spriteRenderer;
+
+        #region Data Values
         
         public string Name
         {
             get => data.Name;
             set => data.Name = value;
         }
-        
-        public HealthStat HealthStat { get; private set; }
-        public Stat AttackStat { get; private set; }
-        public Stat DefenceStat { get; private set; }
-        public Stat MovementPoints { get; private set; }
-        public Stat SpeedStat { get; private set; }
-        public Stat KnockbackStat { get; private set; }
 
-        public bool Indestructible { get; set; }
+        public HealthStat HealthStat
+        {
+            get => data.HealthValue;
+            set => data.HealthValue = value;
+        }
 
-        public Animator UnitAnimator { get; private set; }
-        public Color UnitColor => spriteRenderer.color;
-        
-        public TenetType Tenet => data.Tenet;
+        public Stat AttackStat
+        {
+            get => data.AttackStat;
+            set => data.AttackStat = value;
+        }
+
+        public Stat DefenceStat
+        {
+            get => data.DefenceStat;
+            set => data.DefenceStat = value;
+        }
+
+        public Stat MovementPoints
+        {
+            get => data.MovementPoints;
+            set => data.MovementPoints = value;
+        }
+
+        public Stat SpeedStat
+        {
+            get => data.SpeedStat;
+            set => data.SpeedStat = value;
+        }
+
+        public Stat KnockbackStat
+        {
+            get => data.KnockbackStat;
+            set => data.KnockbackStat = value;
+        }
 
         public List<Ability> Abilities
         {
@@ -58,6 +81,14 @@ namespace Units
             }
         }
         
+        public TenetType Tenet => data.Tenet;
+        
+        #endregion
+
+        public bool Indestructible { get; set; }
+
+        public Animator UnitAnimator { get; private set; }
+        public Color UnitColor => spriteRenderer.color;
         public static Type DataType => typeof(T);
         
         private AnimationStates unitAnimationState;
@@ -81,7 +112,7 @@ namespace Units
             
             #endregion
             
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            spriteRenderer = transform.parent.GetComponentInChildren<SpriteRenderer>();
 
             HealthStat = new HealthStat(KillUnit,this,data.HealthValue.BaseValue, 
             StatTypes.Health);
@@ -92,7 +123,7 @@ namespace Units
             KnockbackStat = new Stat(this, data.KnockbackStat.BaseValue, StatTypes.Knockback);
             TenetStatusEffectsContainer.Initialise(data.StartingTenets);
 
-            UnitAnimator = GetComponentInChildren<Animator>();
+            UnitAnimator = transform.parent.GetComponentInChildren<Animator>();
         }
 
         #region ValueChanging
@@ -202,7 +233,7 @@ namespace Units
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
-            gameObject.SetActive(false);
+            transform.parent.gameObject.SetActive(false);
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
@@ -265,7 +296,7 @@ namespace Units
         public abstract bool IsSameTeamWith(IAbilityUser other);
 
         #endregion
-        
+
         /// <summary>
         /// Returns a list of all coordinates that are reachable from a given starting position
         /// within the given range.
@@ -273,9 +304,29 @@ namespace Units
         /// <returns>A list of the coordinates of reachable tiles.</returns>
         public List<Vector2Int> GetAllReachableTiles()
         {
-            Vector2Int startingCoordinate = Coordinate;
             int range = MovementPoints.Value;
-            
+            return GetAllReachableTiles(range);
+        }
+        
+        /// <summary>
+        /// Returns a list of all coordinates that are reachable from a given starting position assuming
+        /// that the unit has max movement points.
+        /// </summary>
+        /// <returns></returns>
+        public List<Vector2Int> GetMaxReachableTiles()
+        {
+            int range = MovementPoints.BaseValue;
+            return GetAllReachableTiles(range);
+        }
+        
+        /// <summary>
+        /// Same thing as <see cref="GetAllReachableTiles()"/>, but you can specifiy a custom range.
+        /// This is useful for determining logic and stuff.
+        /// </summary>
+        public List<Vector2Int> GetAllReachableTiles(int range)
+        {
+            Vector2Int startingCoordinate = Coordinate;
+
             List<Vector2Int> reachable = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
             Queue<Vector2Int> coordinateQueue = new Queue<Vector2Int>();
@@ -322,14 +373,35 @@ namespace Units
         }
 
         /// <summary>
-        /// Returns a list of all coordinates that are in range but occupied by another
+        /// Returns a list of all coordinates that are within movement range but occupied by another
         /// unit/obstacle. Does not include it's own tile.
         /// </summary>
         /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
         public List<Vector2Int> GetReachableOccupiedTiles()
         {
-            Vector2Int startingCoordinate = Coordinate;
             int range = MovementPoints.Value;
+            return GetReachableOccupiedTiles(range);
+        }
+        
+        /// <summary>
+        /// Returns a list of all coordinates that are within movement range  assuming that the unit has max
+        /// movement points, but occupied by another unit/obstacle. Does not include it's own tile.
+        /// </summary>
+        /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
+        public List<Vector2Int> GetMaxReachableOccupiedTiles()
+        {
+            int range = MovementPoints.BaseValue;
+            return GetReachableOccupiedTiles(range);
+        }
+
+        /// <summary>
+        /// Same as <see cref="GetReachableOccupiedTiles()"/>, but you can specify a custom range.
+        /// </summary>
+        /// <returns>A list of the coordinates of in range but occupied tiles.</returns>
+        public List<Vector2Int> GetReachableOccupiedTiles(int range)
+        {
+            Vector2Int startingCoordinate = Coordinate;
+            
             
             List<Vector2Int> reachableOccupiedTiles = new List<Vector2Int>();
             Dictionary<Vector2Int, int> visited = new Dictionary<Vector2Int, int>();
@@ -426,10 +498,10 @@ namespace Units
                 else if (movePath[i].y < currentCoordinate.y)
                     unit.ChangeAnimation(AnimationStates.Down);
 
-                await gridManager.MovementTween(unit.gameObject, 
+                await gridManager.MovementTween(unit.transform.parent.gameObject, 
                     gridManager.ConvertCoordinateToPosition(currentCoordinate),
                     gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
-                unit.gameObject.transform.position =
+                unit.transform.parent.position =
                     gridManager.ConvertCoordinateToPosition(movePath[i]);
                 currentCoordinate = movePath[i];
             }

@@ -33,7 +33,11 @@ namespace Units
         new void AddSpeed(int amount);
         
         List<Vector2Int> GetAllReachableTiles();
+        List<Vector2Int> GetMaxReachableTiles();
+        List<Vector2Int> GetAllReachableTiles(int range);
+        List<Vector2Int> GetMaxReachableOccupiedTiles();
         List<Vector2Int> GetReachableOccupiedTiles();
+        List<Vector2Int> GetReachableOccupiedTiles(int range);
 
         void MoveUnit(StartMoveCommand startMoveCommand);
 
