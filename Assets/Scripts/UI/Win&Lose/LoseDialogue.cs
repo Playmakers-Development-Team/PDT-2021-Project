@@ -9,8 +9,6 @@ public class LoseDialogue : Dialogue
     // Start is called before the first frame update
 
     // Update is called once per frame
-
-
     protected override void OnClose()
     {
     }
@@ -23,9 +21,7 @@ public class LoseDialogue : Dialogue
     {
     }
 
-    public void MainMenu() 
-    {
-        SceneManager.LoadScene(0); 
-    }
+    public void MainMenu() =>SceneManager.LoadScene(0); //TODO: Change to appropriate scene instead of zero
+    
     
 }

@@ -31,8 +31,6 @@ public class WinDialogue : Dialogue
     {
     }
 
-    public void Gain()
-    {
-        commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
-    }
+    public void Gain() => commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
+    
 }
