@@ -4,6 +4,11 @@ using Game.Map;
 namespace Game.Commands
 {
     /// <summary>
+    /// Should be executed when the player wants to play the game, like when pressing the play button.
+    /// </summary>
+    public class PlayGameCommand : Command {}
+
+    /// <summary>
     /// Executed when we are finished with this encounter, we picked all our upgrades and stuff,
     /// and that we should load the next encounter.
     /// </summary>

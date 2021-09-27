@@ -165,7 +165,8 @@ namespace Editor
         {
             var encounterScenes = Enumerable.Empty<string>()
                 .Concat(mapData.encounterNodes.SelectMany(n =>
-                    n.EncounterData.GetAllPossibleScenes().Select(s => s.ScenePath))).Distinct();
+                    n.EncounterData.GetAllPossibleScenes().Select(s => s.ScenePath))).Distinct()
+                .Prepend(mapData.mainMenuScene);
 
             if (string.IsNullOrEmpty(mapData.mapScene.ScenePath))
             {

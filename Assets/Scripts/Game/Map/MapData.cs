@@ -7,6 +7,7 @@ namespace Game.Map
     [CreateAssetMenu]
     public class MapData : ScriptableObject
     {
+        public SceneReference mainMenuScene;
         [Tooltip("This is completely optional, if there is map scene then it will load into the map scene")]
         public SceneReference mapScene;
         public List<EncounterNode> encounterNodes;

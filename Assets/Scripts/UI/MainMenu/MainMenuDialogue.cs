@@ -1,3 +1,6 @@
+using Commands;
+using Game.Commands;
+using Managers;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +19,7 @@ namespace UI.MainMenu
 
         private GameObject exitConfirmedPrefabInstance;
         private GameObject mainMenuPrefabInstance;
-
+        private CommandManager commandManager;
 
 
         #region Events
@@ -46,6 +49,7 @@ namespace UI.MainMenu
         protected override void OnDialogueAwake()
         { 
             base.OnDialogueAwake();
+            commandManager = ManagerLocator.Get<CommandManager>();
             mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
             characterImageComponent.RandomizeCharacterSprite();
             gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
@@ -72,8 +76,7 @@ namespace UI.MainMenu
             
             gameStarted.AddListener(() =>
             {
-                //TODO: CHANGE TO APPROPRIATE SCENE LOADER OR SCENE
-                SceneManager.LoadScene("Scenes/Design/Playtest Beta Map");
+                commandManager.ExecuteCommand(new PlayGameCommand());
             });
 
             settingConfirmed.AddListener(() =>
