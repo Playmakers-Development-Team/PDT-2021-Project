@@ -55,6 +55,7 @@ namespace Game
             turnManager = ManagerLocator.Get<TurnManager>();
 
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
+            commandManager.ListenCommand<RestartEncounterCommand>(cmd => RestartEncounter());
             
             // Automatically end the encounter if there are no players remaining after a few seconds
             commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(async (cmd) =>
@@ -96,7 +97,7 @@ namespace Game
                 if (encounterResult == EncounterResult.Lost)
                 {
                     // For now, reset the scene
-                    ChangeScene(SceneManager.GetActiveScene().path);
+                    commandManager.ExecuteCommand(new RestartEncounterCommand());
                 }
                 else if (encounterNode.ConnectedNodes.Count > 0)
                 {
@@ -207,6 +208,11 @@ namespace Game
         {
             if (CurrentMapData != null && !string.IsNullOrEmpty(CurrentMapData.mapScene?.ScenePath))
                 ChangeScene(CurrentMapData.mapScene);
+        }
+
+        private void RestartEncounter()
+        {
+            ChangeScene(SceneManager.GetActiveScene().path);
         }
         
         private void EncounterLost()

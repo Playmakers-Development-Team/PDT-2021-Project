@@ -18,6 +18,11 @@ namespace Game.Commands
     /// Executed when the player has lost a combat encounter.
     /// </summary>
     public class EncounterLostCommand : Command {}
+    
+    /// <summary>
+    /// Restart the encounter
+    /// </summary>
+    public class RestartEncounterCommand : Command {}
 
     /// <summary>
     /// Executed when map data is ready to be accessed.
