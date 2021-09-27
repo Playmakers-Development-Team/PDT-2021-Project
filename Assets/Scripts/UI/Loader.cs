@@ -13,6 +13,9 @@ namespace UI
         
         //TODO: THIS WILL LATER BE MOVED TO THE END SCREEN DIALOGUE SCRIPT
         [SerializeField] private GameObject abilityLoadoutDialogue;
+        [SerializeField] private GameObject loseDialogue;
+        [SerializeField] private GameObject winDialogue;
+
         
         private CommandManager commandManager;
 
@@ -30,6 +33,7 @@ namespace UI
             //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
             commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
+            commandManager.ListenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
         }
 
         private void OnDisable()
@@ -37,6 +41,7 @@ namespace UI
             //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
+            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
         }
 
         #endregion
@@ -48,7 +53,7 @@ namespace UI
         //TODO: THIS WILL LATER BE MOVED TO BE CALLED IN THE END SCREEN DIALOGUE SCRIPT
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
-            commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
+            LoadObject(winDialogue);
         }
         
         private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
@@ -56,6 +61,11 @@ namespace UI
             // Some levels may not have the ability loadout
             if (abilityLoadoutDialogue)
                 LoadObject(abilityLoadoutDialogue);
+        }
+
+        private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
+        {
+            LoadObject(loseDialogue); 
         }
 
         #endregion

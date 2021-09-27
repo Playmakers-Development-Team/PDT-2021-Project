@@ -17,6 +17,13 @@ namespace AI
                 if (enemySpawnerUnit.Turn())
                     await enemySpawnerUnit.Spawner();
             }
+            ///TODO BUG: PLEASE DO NOT REMOVE THIS, FOR THE LOVE OF GOD THE GAME WILL DIE DONT REMOVE THIS CODE AT 3AM PLEASE
+            await UniTask.Yield(); /// <----------------------------------------------------------------------------------
+          
+
+            
+            // TODO: Move to superclass.
+            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
     }
 }

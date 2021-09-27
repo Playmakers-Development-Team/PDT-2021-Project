@@ -446,6 +446,12 @@ namespace Turn
                 throw new IndexOutOfRangeException($"Could not remove unit at index {targetIndex}");
 
             IUnit unit = currentTurnQueue[targetIndex];
+
+            // bool isEnemySpawner = false;
+            //
+            // if (currentTurnQueue[targetIndex] is EnemySpawnerUnit)
+            //     isEnemySpawner = true;
+
             currentTurnQueue.RemoveAt(targetIndex);
             RemoveFromNextTurnQueue(unit);
             // UpdateNextTurnQueue();
@@ -459,7 +465,9 @@ namespace Turn
                 CurrentTurnIndex--;
                 
                 NextTurn();
-            }
+            } 
+            
+            UpdateNextTurnQueue();
         }
 
         #endregion
