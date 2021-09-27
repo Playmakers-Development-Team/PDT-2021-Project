@@ -428,6 +428,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 626789158}
     m_Modifications:
     - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
+      propertyPath: abilityPickupPool
+      value: 
+      objectReference: {fileID: 11400000, guid: c9b059de7b59ee42b9653a10a721a4fe, type: 2}
+    - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
       propertyPath: persistentUnitData
       value: 1
       objectReference: {fileID: 0}
@@ -949,7 +953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6568316841509824647, guid: ef0223d569e06b546b822ce2d3aafe4f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6568316841509824667, guid: ef0223d569e06b546b822ce2d3aafe4f, type: 3}
       propertyPath: m_Pivot.x
@@ -1761,7 +1765,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765857, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1688879978322765858, guid: 171287200d0e308409832ff393aaaf7a, type: 3}
       propertyPath: m_Pivot.x

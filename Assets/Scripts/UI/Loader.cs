@@ -53,7 +53,8 @@ namespace UI
         //TODO: THIS WILL LATER BE MOVED TO BE CALLED IN THE END SCREEN DIALOGUE SCRIPT
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
-            LoadObject(winDialogue);
+            if (winDialogue)
+                LoadObject(winDialogue);
         }
         
         private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
@@ -65,7 +66,8 @@ namespace UI
 
         private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
         {
-            LoadObject(loseDialogue); 
+            if (loseDialogue)
+                LoadObject(loseDialogue); 
         }
 
         #endregion
