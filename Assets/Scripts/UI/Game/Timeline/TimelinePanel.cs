@@ -72,14 +72,17 @@ namespace UI.Game.Timeline
         private void UpdatePortraits()
         {
             ClearPortraits();
-
-            List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
+            
             int startIndex = turnManager.CurrentTurnIndex;
+            var currentTurnQueue = turnManager.CurrentTurnQueue.Skip(startIndex);
+            var nextTurnQueue = turnManager.NextTurnQueue
+                .Where(u => !currentTurnQueue.Contains(u));
             //currentTurnQueue.RemoveRange(0, startIndex);
             if (drawInsightBtn)
                 CreateInsightButton();
 
-            CreatePortraits(currentTurnQueue, startIndex);
+            // CreatePortraits(currentTurnQueue, startIndex);
+            CreatePortraitsForOneRound(currentTurnQueue, nextTurnQueue);
         }
 
         private void maintainSelectedThroughTurns()
@@ -94,6 +97,21 @@ namespace UI.Game.Timeline
                 portraits[i].Destroy();
 
             portraits.Clear();
+        }
+
+        private void CreatePortraitsForOneRound(IEnumerable<IUnit> currentUnits, IEnumerable<IUnit> nextUnits)
+        {
+            foreach (IUnit unit in currentUnits)
+            {
+                CreatePortrait(unit);
+            }
+            
+            CreateDivider(turnManager.RoundCount + 2);
+
+            foreach (IUnit unit in nextUnits)
+            {
+                CreatePortrait(unit);
+            }
         }
 
         private void CreatePortraits(IEnumerable<IUnit> units)
