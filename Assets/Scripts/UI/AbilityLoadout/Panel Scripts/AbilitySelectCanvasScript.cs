@@ -42,6 +42,23 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         protected override void Unsubscribe() {}
         
+        protected override void OnComponentAwake()
+        {
+            abilityScrollView.onValueChanged.AddListener(UpdateAbilityScroll);
+        }
+        
+        private void UpdateAbilityScroll(Vector2 arg0)
+        {
+            if(currentSelectedAbility != null)
+                currentSelectedAbility.Deselect();
+                
+            // Make no ability selected
+            currentSelectedAbility = null;
+                
+            // Turn Off Visual Placeholder
+            selectedAbilityImage.enabled = false;
+        }
+        
         #endregion
         
         #region Listeners
