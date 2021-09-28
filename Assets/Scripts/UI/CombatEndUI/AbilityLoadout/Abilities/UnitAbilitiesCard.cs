@@ -4,7 +4,7 @@ using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Abilities
+namespace UI.CombatEndUI.AbilityLoadout.Abilities
 {
     public class UnitAbilitiesCard : DialogueComponent<AbilityLoadoutDialogue>
     {
@@ -16,7 +16,7 @@ namespace UI.AbilityLoadout.Abilities
         private AbilityButton currentSelectedAbility;
         
         // Stores the data for the current list of abilities
-        protected internal List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos;
+        protected internal List<LoadoutAbilityInfo> abilityInfos;
         
         // References the ability button scripts
         [SerializeField] protected List<AbilityButton> abilityButtons = new List<AbilityButton>();
@@ -93,7 +93,7 @@ namespace UI.AbilityLoadout.Abilities
 
         #region Drawing
         
-        internal void Redraw(List<AbilityLoadoutDialogue.AbilityInfo> newAbilityInfo)
+        internal void Redraw(List<LoadoutAbilityInfo> newAbilityInfo)
         {
             // Assign unit info
             abilityInfos = newAbilityInfo;

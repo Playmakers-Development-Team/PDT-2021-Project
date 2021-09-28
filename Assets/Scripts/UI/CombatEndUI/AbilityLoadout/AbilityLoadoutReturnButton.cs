@@ -2,7 +2,7 @@ using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout
+namespace UI.CombatEndUI.AbilityLoadout
 {
     public class AbilityLoadoutReturnButton : DialogueComponent<AbilityLoadoutDialogue>
     {
@@ -15,7 +15,7 @@ namespace UI.AbilityLoadout
             returnButton.interactable = true;
             
             // Listen to Events
-            dialogue.abilitySwap.AddListener(() =>
+            dialogue.abilitySwapConfirm.AddListener(() =>
             {
                 returnButton.interactable = false;
             });
@@ -24,7 +24,7 @@ namespace UI.AbilityLoadout
         protected override void Unsubscribe()
         {
             // Remove listening Events
-            dialogue.abilitySwap.RemoveListener(() =>
+            dialogue.abilitySwapConfirm.RemoveListener(() =>
             {
                 returnButton.interactable = false;
             });

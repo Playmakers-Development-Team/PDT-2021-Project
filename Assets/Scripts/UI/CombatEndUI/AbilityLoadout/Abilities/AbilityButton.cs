@@ -8,7 +8,7 @@ using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Abilities
+namespace UI.CombatEndUI.AbilityLoadout.Abilities
 {
     public class AbilityButton : DialogueComponent<AbilityLoadoutDialogue>
     {

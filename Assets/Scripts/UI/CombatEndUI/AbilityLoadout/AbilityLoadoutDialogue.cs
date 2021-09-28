@@ -4,25 +4,23 @@ using Abilities;
 using Commands;
 using Managers;
 using TenetStatuses;
-using Turn.Commands;
-using UI.AbilityLoadout.Abilities;
-using UI.AbilityLoadout.Panel_Scripts;
+using UI.CombatEndUI.AbilityLoadout.Abilities;
+using UI.CombatEndUI.AbilityLoadout.PanelScripts;
 using UI.Commands;
 using UI.Core;
-using Units;
 using Units.Players;
 using UnityEngine;
 using Event = UI.Core.Event;
 
-namespace UI.AbilityLoadout
+namespace UI.CombatEndUI.AbilityLoadout
 {
-    public class AbilityLoadoutDialogue : Dialogue
+    public partial class AbilityLoadoutDialogue : Dialogue
     {
         internal readonly Event showUnitSelectPanel = new Event();
-        internal readonly Event<UnitInfo> showAbilitySelectPanel = new Event<UnitInfo>();
+        internal readonly Event<LoadoutUnitInfo> showAbilitySelectPanel = new Event<LoadoutUnitInfo>();
         
-        internal readonly Event<UnitInfo> unitSpawned = new Event<UnitInfo>();
-        internal readonly Event abilitySwap = new Event();
+        internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
+        internal readonly Event abilitySwapConfirm = new Event();
         internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
         internal readonly Event<AbilityButton> drawNewAbilityDetails = new Event<AbilityButton>();
         internal readonly Event clearOldAbilityDetails = new Event();
@@ -39,7 +37,7 @@ namespace UI.AbilityLoadout
         [SerializeField] protected UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
         
-        private readonly List<UnitInfo> units = new List<UnitInfo>();
+        private readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         public List<Sprite> abilityImages = new List<Sprite>();
 
         #region Monobehaviour Events
@@ -109,7 +107,7 @@ namespace UI.AbilityLoadout
                 newAbilityDetailsPanel.ClearValues();
             });
             
-            abilitySwap.AddListener(() =>
+            abilitySwapConfirm.AddListener(() =>
             {
                 // Skip ability swap if there is an empty old or new ability
                 if (oldAbilityDetailsPanel.abilityName.text.Equals("") || 
@@ -119,11 +117,11 @@ namespace UI.AbilityLoadout
                 unitSelectCanvasScript.RemoveSelectedAbility();
                 
                 // Assumption that only 1 unit is in unitCards during ability swap
-                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].unitInfo.Unit);
+                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].loadoutUnitInfo.Unit);
             });
             
             // Execute ready command to inform UnitLoadoutUIWrapper
-            commandManager.ExecuteCommand(new AbilityLoadoutReadyCommand());
+            commandManager.ExecuteCommand(new AbilityRewardDialogueReadyCommand());
             
             // Show the unit select panel after the AbilityLoadoutReadyCommand
             // so that unit data from UnitLoadoutUIWrapper can be retrieved
@@ -152,19 +150,19 @@ namespace UI.AbilityLoadout
             unitSelectCanvasScript.Redraw(units);
         }
         
-        private void OnAbilitySelectPanel(UnitInfo unitInfo)
+        private void OnAbilitySelectPanel(LoadoutUnitInfo loadoutUnitInfo)
         {
             abilitySelectCanvas.enabled = true;
             
             // Clear the units so only the selected unit is shown
             units.Clear();
-            units.Add(unitInfo);
+            units.Add(loadoutUnitInfo);
             
             // Redraw the 1 ability, unit and new unit abilities
             unitSelectCanvasScript.Redraw(units);
-            abilitySelectCanvasScript.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
+            abilitySelectCanvasScript.Redraw(loadoutUnitInfo.Unit.Tenet, loadoutUnitInfo.AbilityInfo);
 
-            unitSelectCanvasScript.EnableAbilityButtons(unitInfo);
+            unitSelectCanvasScript.EnableAbilityButtons(loadoutUnitInfo);
         }
         
         private void OnAbilitySelect(AbilitySelectedCommand cmd)
@@ -193,74 +191,38 @@ namespace UI.AbilityLoadout
         #region Querying
         
         // TODO: Move into it's own thing later on
-        internal AbilityInfo GetInfo(Ability ability)
+        internal LoadoutAbilityInfo GetInfo(Ability ability)
         {
-            AbilityInfo abilityInfo = new AbilityInfo();
-            abilityInfo.Ability = ability;
+            LoadoutAbilityInfo loadoutAbilityInfo = new LoadoutAbilityInfo();
+            loadoutAbilityInfo.Ability = ability;
             
             switch (ability.RepresentedTenet)
             {
                 case TenetType.Apathy:
-                    abilityInfo.Render = abilityImages[0];
+                    loadoutAbilityInfo.Render = abilityImages[0];
                     break;
                 case TenetType.Humility:
-                    abilityInfo.Render = abilityImages[1];
+                    loadoutAbilityInfo.Render = abilityImages[1];
                     break;
                 case TenetType.Joy:
-                    abilityInfo.Render = abilityImages[2];
+                    loadoutAbilityInfo.Render = abilityImages[2];
                     break;
                 case TenetType.Passion:
-                    abilityInfo.Render = abilityImages[3];
+                    loadoutAbilityInfo.Render = abilityImages[3];
                     break;
                 case TenetType.Pride:
-                    abilityInfo.Render = abilityImages[4];
+                    loadoutAbilityInfo.Render = abilityImages[4];
                     break;
                 case TenetType.Sorrow:
-                    abilityInfo.Render = abilityImages[5];
+                    loadoutAbilityInfo.Render = abilityImages[5];
                     break;
                 default:
-                    throw new Exception($"Could not get {nameof(AbilityInfo)} for {ability}.");
+                    throw new Exception($"Could not get {nameof(LoadoutAbilityInfo)} for {ability}.");
             }
             
-            return abilityInfo;
+            return loadoutAbilityInfo;
         }
 
-        #endregion
-        
-        #region Structs
-        
-        [Serializable]
-        public class UnitInfo
-        {
-            [SerializeField] private CropInfo profileCropInfo;
-            [SerializeField] private List<AbilityInfo> abilityInfo;
-            
-            internal CropInfo ProfileCropInfo => profileCropInfo;
-
-            public IUnit Unit { get; private set; }
-            public List<AbilityInfo> AbilityInfo { get; private set; }
-            
-            internal void SetUnit(IUnit newUnit) => Unit = newUnit;
-            internal void SetAbilityInfo(List<AbilityInfo> newAbilityInfo) => AbilityInfo = newAbilityInfo;
-        }
-        
-        [Serializable]
-        public class AbilityInfo
-        {
-            [SerializeField] private Sprite render;
-            
-            internal Sprite Render
-            {
-                get => render;
-                set => render = value;
-            }
-
-            public Ability Ability { get; internal set; }
-            
-            internal void SetAbility(Ability newUnit) => Ability = newUnit;
-        }
-
-        
         #endregion
     }
 }

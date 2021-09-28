@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using Commands;
-using Grid.GridObjects;
 using Managers;
 using UI.Commands;
 using UI.Core;
-using UI.Game.Unit;
 using Units;
 using UnityEngine;
 
-namespace UI.AbilityLoadout.Unit
+namespace UI.CombatEndUI.AbilityLoadout.Unit
 {
     public class UnitLoadoutUIWrapper : DialogueComponent<AbilityLoadoutDialogue>
     {
-        [SerializeField] private AbilityLoadoutDialogue.UnitInfo info;
+        [SerializeField] private LoadoutUnitInfo info;
 
         private IUnit unit;
         private CommandManager commandManager;
@@ -31,7 +29,7 @@ namespace UI.AbilityLoadout.Unit
             }
             
             commandManager = ManagerLocator.Get<CommandManager>();
-            commandManager.CatchCommand((Action<AbilityLoadoutReadyCommand>) OnAbilityLoadoutReady);
+            commandManager.CatchCommand((Action<AbilityRewardDialogueReadyCommand>) OnAbilityRewardDialogueReady);
         }
         
         protected override void Subscribe() {}
@@ -42,10 +40,10 @@ namespace UI.AbilityLoadout.Unit
         
         #region Listeners
 
-        private void OnAbilityLoadoutReady(AbilityLoadoutReadyCommand cmd)
+        private void OnAbilityRewardDialogueReady(AbilityRewardDialogueReadyCommand cmd)
         {
             // Assign abilities
-            List<AbilityLoadoutDialogue.AbilityInfo> abilityInfo = new List<AbilityLoadoutDialogue.AbilityInfo>();
+            List<LoadoutAbilityInfo> abilityInfo = new List<LoadoutAbilityInfo>();
             for (int i = 0; i < unit.Abilities.Count; ++i)
             {
                 abilityInfo.Add(dialogue.GetInfo(unit.Abilities[i]));

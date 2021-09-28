@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using UI.AbilityLoadout.Abilities;
-using UI.AbilityLoadout.Unit;
+using UI.CombatEndUI.AbilityLoadout.Abilities;
+using UI.CombatEndUI.AbilityLoadout.Unit;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Panel_Scripts
+namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
 {
     public class UnitSelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
@@ -48,7 +48,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         // Same assumption stated previously for OnAbilityButtonPress applies here
         public void RemoveSelectedAbility()
         {
-            abilitiesCards[0].RemoveSelectedAbility(unitCards[0].unitInfo.Unit);
+            abilitiesCards[0].RemoveSelectedAbility(unitCards[0].loadoutUnitInfo.Unit);
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
@@ -56,11 +56,11 @@ namespace UI.AbilityLoadout.Panel_Scripts
             abilityScrollView.horizontalNormalizedPosition = unitScrollView.horizontalNormalizedPosition;
         }
 
-        public void EnableAbilityButtons(AbilityLoadoutDialogue.UnitInfo unitInfo)
+        public void EnableAbilityButtons(LoadoutUnitInfo loadoutUnitInfo)
         {
             foreach (var abilityCard in abilitiesCards)
             {
-                if (unitInfo.AbilityInfo == abilityCard.abilityInfos)
+                if (loadoutUnitInfo.AbilityInfo == abilityCard.abilityInfos)
                     abilityCard.EnableAbilityButtons();
             }
             
@@ -70,7 +70,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
 
         #region Drawing
         
-        internal void Redraw(List<AbilityLoadoutDialogue.UnitInfo> units)
+        internal void Redraw(List<LoadoutUnitInfo> units)
         {
             // STEP 1. Destroy UnitCards and UnitAbilityCards
             for (int i = unitCards.Count - 1; i >= 0; i--)
@@ -83,7 +83,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
             }
 
             // STEP 2. Instantiate new UnitCards and UnitAbilityCards for new units.
-            foreach (AbilityLoadoutDialogue.UnitInfo unit in units)
+            foreach (LoadoutUnitInfo unit in units)
             {
                 UnitCard newCard = Instantiate(unitCardPrefab, unitScrollView.content).GetComponent<UnitCard>();
                 newCard.Redraw(unit);

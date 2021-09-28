@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using TenetStatuses;
-using UI.AbilityLoadout.Abilities;
+using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.Core;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.AbilityLoadout.Panel_Scripts
+namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
 {
     public class AbilitySelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
@@ -31,10 +31,10 @@ namespace UI.AbilityLoadout.Panel_Scripts
         
         // Attributes of the selected unit
         private TenetType tenetType;
-        private List<AbilityLoadoutDialogue.AbilityInfo> currentAbilityInfos;
+        private List<LoadoutAbilityInfo> currentAbilityInfos;
         
         // Holds the info for the new abilities
-        private List<AbilityLoadoutDialogue.AbilityInfo> newAbilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
+        private List<LoadoutAbilityInfo> newAbilityInfos = new List<LoadoutAbilityInfo>();
 
         #region UIComponent
         
@@ -95,7 +95,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         
         #region Drawing
         
-        internal void Redraw(TenetType newTenetType, List<AbilityLoadoutDialogue.AbilityInfo> oldAbilityInfos)
+        internal void Redraw(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
         {
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
@@ -103,7 +103,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
             newAbilityInfos = GetAbilities(newAbilityCount, tenetType);
             
             // Instantiate new AbilityButtons
-            foreach (AbilityLoadoutDialogue.AbilityInfo abilityInfo in newAbilityInfos)
+            foreach (LoadoutAbilityInfo abilityInfo in newAbilityInfos)
             {
                 AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
                 newAbilityButton.Redraw(
@@ -132,22 +132,22 @@ namespace UI.AbilityLoadout.Panel_Scripts
             }
         }
         
-        private List<AbilityLoadoutDialogue.AbilityInfo> GetAbilities(int numberOfAbilities, TenetType tenetType)
+        private List<LoadoutAbilityInfo> GetAbilities(int numberOfAbilities, TenetType tenetType)
         {
-            List<AbilityLoadoutDialogue.AbilityInfo> abilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
+            List<LoadoutAbilityInfo> abilityInfos = new List<LoadoutAbilityInfo>();
 
             List<Ability> selectedAbilities = RandomiseAbilityOrder(abilityPool.PickAbilitiesByTenet(tenetType).ToList());
 
             for (int i = 0; i < selectedAbilities.Count; ++i)
             {
-                AbilityLoadoutDialogue.AbilityInfo newAbility =
+                LoadoutAbilityInfo newLoadoutAbility =
                     dialogue.GetInfo(selectedAbilities[i]);
                 
                 // Skip the current iteration if the character already owns the ability
-                if(currentAbilityInfos.Contains(newAbility))
+                if(currentAbilityInfos.Contains(newLoadoutAbility))
                     continue;
                 
-                abilityInfos.Add(newAbility);
+                abilityInfos.Add(newLoadoutAbility);
                 
                 numberOfAbilities--;
                 if (numberOfAbilities <= 0)
@@ -162,10 +162,10 @@ namespace UI.AbilityLoadout.Panel_Scripts
                 
                 for (int i = 0; i < selectedAbilities.Count; ++i)
                 {
-                    AbilityLoadoutDialogue.AbilityInfo newAbility =
+                    LoadoutAbilityInfo newLoadoutAbility =
                         dialogue.GetInfo(selectedAbilities[i]);
 
-                    abilityInfos.Add(newAbility);
+                    abilityInfos.Add(newLoadoutAbility);
                 
                     numberOfAbilities--;
                     if (numberOfAbilities <= 0)

@@ -2,11 +2,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.AbilityLoadout.Unit
+namespace UI.CombatEndUI.AbilityLoadout.Unit
 {
     public class UnitCard : DialogueComponent<AbilityLoadoutDialogue>
     {
-        protected internal AbilityLoadoutDialogue.UnitInfo unitInfo;
+        protected internal LoadoutUnitInfo loadoutUnitInfo;
         
         [SerializeField] protected RawImage renderImage;
 
@@ -22,25 +22,25 @@ namespace UI.AbilityLoadout.Unit
         
         public void OnPressed()
         {
-            dialogue.showAbilitySelectPanel.Invoke(unitInfo);
+            dialogue.showAbilitySelectPanel.Invoke(loadoutUnitInfo);
         }
         
         #endregion
         
         #region Drawing
         
-        internal void Redraw(AbilityLoadoutDialogue.UnitInfo newUnitInfo)
+        internal void Redraw(LoadoutUnitInfo newLoadoutUnitInfo)
         {
             // Assign unit info
-            unitInfo = newUnitInfo;
+            loadoutUnitInfo = newLoadoutUnitInfo;
             
-            if (unitInfo == null)
+            if (loadoutUnitInfo == null)
                 return;
             
             // Render image
-            renderImage.texture = unitInfo.ProfileCropInfo.Image;
-            renderImage.color = unitInfo.ProfileCropInfo.Colour;
-            renderImage.uvRect = unitInfo.ProfileCropInfo.UVRect;
+            renderImage.texture = loadoutUnitInfo.ProfileCropInfo.Image;
+            renderImage.color = loadoutUnitInfo.ProfileCropInfo.Colour;
+            renderImage.uvRect = loadoutUnitInfo.ProfileCropInfo.UVRect;
         }
 
         #endregion
