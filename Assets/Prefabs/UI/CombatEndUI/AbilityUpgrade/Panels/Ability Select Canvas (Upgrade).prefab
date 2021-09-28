@@ -348,8 +348,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6c47c8e5f01f22746888062f0a8a5f82, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3f3efdd85ad228c4e8465830b5e45479, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1011,7 +1011,7 @@ GameObject:
   - component: {fileID: 6709641043172175540}
   - component: {fileID: 3013589127380859624}
   m_Layer: 5
-  m_Name: Ability Select Canvas
+  m_Name: Ability Select Canvas (Upgrade)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1112,6 +1112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   newAbilityPrefab: {fileID: 108787045736060160, guid: 6afa377da79dfae419c255cf0a4d175c, type: 3}
   newAbilityCount: 3
+  upgradeAbilityCap: 2147483647
   abilityScrollView: {fileID: 5475317779970744653}
   selectedAbilityImage: {fileID: 3759389217051405547}
   selectedOffset: {x: 2, y: -2, z: 0}
@@ -1181,8 +1182,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 90e2187cde212174abf494cd324af9b7, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 21300000, guid: 3f3efdd85ad228c4e8465830b5e45479, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

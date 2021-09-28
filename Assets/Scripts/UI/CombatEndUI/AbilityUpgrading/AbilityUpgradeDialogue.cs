@@ -5,7 +5,7 @@ using Commands;
 using Managers;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
-using UI.CombatEndUI.AbilityLoadout.PanelScripts;
+using UI.CombatEndUI.PanelScripts;
 using UI.Commands;
 using UI.Core;
 using Units.Players;
@@ -160,7 +160,7 @@ namespace UI.CombatEndUI.AbilityUpgrading
             
             // Redraw the 1 ability, unit and new unit abilities
             unitSelectCanvasScript.Redraw(units);
-            upgradeSelectCanvasScript.Redraw(unitInfo.Unit.Tenet, unitInfo.AbilityInfo);
+            upgradeSelectCanvasScript.RedrawForUpgrade(unitInfo.AbilityInfo);
 
             unitSelectCanvasScript.EnableAbilityButtons(unitInfo);
         }
@@ -186,43 +186,6 @@ namespace UI.CombatEndUI.AbilityUpgrading
             canvasGroup.interactable = false;
         }
         
-        #endregion
-        
-        #region Querying
-        
-        // TODO: Move into it's own thing later on
-        internal LoadoutAbilityInfo GetInfo(Ability ability)
-        {
-            LoadoutAbilityInfo abilityInfo = new LoadoutAbilityInfo();
-            abilityInfo.Ability = ability;
-            
-            switch (ability.RepresentedTenet)
-            {
-                case TenetType.Apathy:
-                    abilityInfo.Render = abilityImages[0];
-                    break;
-                case TenetType.Humility:
-                    abilityInfo.Render = abilityImages[1];
-                    break;
-                case TenetType.Joy:
-                    abilityInfo.Render = abilityImages[2];
-                    break;
-                case TenetType.Passion:
-                    abilityInfo.Render = abilityImages[3];
-                    break;
-                case TenetType.Pride:
-                    abilityInfo.Render = abilityImages[4];
-                    break;
-                case TenetType.Sorrow:
-                    abilityInfo.Render = abilityImages[5];
-                    break;
-                default:
-                    throw new Exception($"Could not get {nameof(LoadoutAbilityInfo)} for {ability}.");
-            }
-            
-            return abilityInfo;
-        }
-
         #endregion
     }
 }

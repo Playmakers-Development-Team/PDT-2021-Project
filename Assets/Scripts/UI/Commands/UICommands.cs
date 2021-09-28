@@ -14,9 +14,14 @@ namespace UI.Commands
     }
     
     /// <summary>
-    /// Executed when an the ability loadout dialogue appears
+    /// Executed to spawn the ability loadout dialogue
     /// </summary>
     public class SpawnAbilityLoadoutUICommand : Command {}
+    
+    /// <summary>
+    /// Executed to spawn the ability upgrade dialogue
+    /// </summary>
+    public class SpawnAbilityUpgradeUICommand : Command {}
 
     /// <summary>
     /// Executed when an the ability loadout or upgrade dialogue is ready

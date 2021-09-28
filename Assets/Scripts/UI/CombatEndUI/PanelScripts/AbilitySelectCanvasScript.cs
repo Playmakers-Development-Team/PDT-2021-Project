@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
 using TenetStatuses;
+using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.Core;
 using Units;
@@ -9,13 +11,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
+namespace UI.CombatEndUI.PanelScripts
 {
     public class AbilitySelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
         // New ability buttons and script references
         [SerializeField] private GameObject newAbilityPrefab;
         [SerializeField] private int newAbilityCount = 3;
+        [SerializeField] private int upgradeAbilityCap = int.MaxValue;
         [SerializeField] private ScrollRect abilityScrollView;
         private List<AbilityButton> abilityButtons = new List<AbilityButton>();
         
@@ -95,12 +98,32 @@ namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
         
         #region Drawing
         
-        internal void Redraw(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
+        internal void RedrawForLoadout(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
         {
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
 
             newAbilityInfos = GetAbilities(newAbilityCount, tenetType);
+            
+            // Instantiate new AbilityButtons
+            foreach (LoadoutAbilityInfo abilityInfo in newAbilityInfos)
+            {
+                AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
+                newAbilityButton.Redraw(
+                    abilityInfo.Render,
+                    abilityInfo.Ability.name,
+                    abilityInfo.Ability.Description,
+                    false);
+
+                abilityButtons.Add(newAbilityButton);
+            }
+        }
+        
+        internal void RedrawForUpgrade(List<LoadoutAbilityInfo> oldAbilityInfos)
+        {
+            currentAbilityInfos = oldAbilityInfos;
+
+            newAbilityInfos = GetUpgrades(oldAbilityInfos);
             
             // Instantiate new AbilityButtons
             foreach (LoadoutAbilityInfo abilityInfo in newAbilityInfos)
@@ -174,6 +197,33 @@ namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
             }
             
             return abilityInfos;
+        }
+        
+        private List<LoadoutAbilityInfo> GetUpgrades(List<LoadoutAbilityInfo> oldAbilityInfos)
+        {
+            List<LoadoutAbilityInfo> upgradedAbilityInfos = new List<LoadoutAbilityInfo>();
+
+            for (int i = 0; i < oldAbilityInfos.Count; ++i)
+            {
+                String upgradedAbilityName = oldAbilityInfos[i].Ability.name + "+";
+
+                // Skip the current iteration if the character already owns the ability
+                Ability upgradedAbility = abilityPool.PickAbilitiesByName(upgradedAbilityName);
+                
+                if(upgradedAbility != null)
+                    upgradedAbilityInfos.Add(dialogue.GetInfo(upgradedAbility));
+
+                if (upgradedAbilityInfos.Count == upgradeAbilityCap)
+                    break;
+            }
+
+            if (upgradedAbilityInfos.Count == 0)
+            {
+                Debug.LogWarning("No ability upgrades found for the select unit." +
+                                 "Returning an empty ability upgrade list");
+            }
+
+            return upgradedAbilityInfos;
         }
 
         private List<Ability> RandomiseAbilityOrder(List<Ability> abilityList)

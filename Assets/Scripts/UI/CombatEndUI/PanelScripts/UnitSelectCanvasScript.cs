@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityLoadout.Unit;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.CombatEndUI.AbilityLoadout.PanelScripts
+namespace UI.CombatEndUI.PanelScripts
 {
     public class UnitSelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {

@@ -5,7 +5,7 @@ using Commands;
 using Managers;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
-using UI.CombatEndUI.AbilityLoadout.PanelScripts;
+using UI.CombatEndUI.PanelScripts;
 using UI.Commands;
 using UI.Core;
 using Units.Players;
@@ -160,7 +160,7 @@ namespace UI.CombatEndUI.AbilityLoadout
             
             // Redraw the 1 ability, unit and new unit abilities
             unitSelectCanvasScript.Redraw(units);
-            abilitySelectCanvasScript.Redraw(loadoutUnitInfo.Unit.Tenet, loadoutUnitInfo.AbilityInfo);
+            abilitySelectCanvasScript.RedrawForLoadout(loadoutUnitInfo.Unit.Tenet, loadoutUnitInfo.AbilityInfo);
 
             unitSelectCanvasScript.EnableAbilityButtons(loadoutUnitInfo);
         }

@@ -8,7 +8,6 @@ namespace UI.CombatEndUI
 {
     public class WinDialogue : Dialogue
     {
-        [SerializeField] private GameObject abilityLoadoutDialogue;
         private CommandManager commandManager;
 
         protected override void OnDialogueAwake()
@@ -31,6 +30,8 @@ namespace UI.CombatEndUI
         }
 
         public void Gain() => commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
+        
+        public void Upgrade() => commandManager.ExecuteCommand(new SpawnAbilityUpgradeUICommand());
     
     }
 }
