@@ -13,6 +13,12 @@ namespace UI.AbilityLoadout.Panel_Scripts
 {
     public class AbilitySelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
     {
+        // New ability buttons and script references
+        [SerializeField] private GameObject newAbilityPrefab;
+        [SerializeField] private int newAbilityCount = 3;
+        [SerializeField] private ScrollRect abilityScrollView;
+        private List<AbilityButton> abilityButtons = new List<AbilityButton>();
+        
         // Placeholder selection sprite and sprite offset
         [SerializeField] private Image selectedAbilityImage;
         [SerializeField] private Vector3 selectedOffset;
@@ -20,7 +26,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         // Used to identify the currently selected new ability
         private AbilityButton currentSelectedAbility;
         
-        // Holds data for all abilities, used to obtain new abilities
+        // Holds data for all abilities in the game, used to obtain new abilities
         [SerializeField] private AbilityPool abilityPool;
         
         // Attributes of the selected unit
@@ -29,9 +35,6 @@ namespace UI.AbilityLoadout.Panel_Scripts
         
         // Holds the info for the new abilities
         private List<AbilityLoadoutDialogue.AbilityInfo> newAbilityInfos = new List<AbilityLoadoutDialogue.AbilityInfo>();
-        
-        // References to the new ability buttons scripts
-        [SerializeField] private List<AbilityButton> abilityButtons = new List<AbilityButton>();
 
         #region UIComponent
         
@@ -80,16 +83,19 @@ namespace UI.AbilityLoadout.Panel_Scripts
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
 
-            newAbilityInfos = GetAbilities(3, tenetType);
+            newAbilityInfos = GetAbilities(newAbilityCount, tenetType);
             
-            // Assign ability images
-            for (int i = 0; i < newAbilityInfos.Count; ++i)
+            // Instantiate new AbilityButtons
+            foreach (AbilityLoadoutDialogue.AbilityInfo abilityInfo in newAbilityInfos)
             {
-                abilityButtons[i].Redraw(
-                    newAbilityInfos[i].Render,
-                    newAbilityInfos[i].Ability.name,
-                    newAbilityInfos[i].Ability.Description,
+                AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
+                newAbilityButton.Redraw(
+                    abilityInfo.Render,
+                    abilityInfo.Ability.name,
+                    abilityInfo.Ability.Description,
                     false);
+
+                abilityButtons.Add(newAbilityButton);
             }
         }
         
