@@ -59,11 +59,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSelectCanvas: {fileID: 2489416354394877661}
-  upgradeSelectCanvas: {fileID: 8485727021247227962}
-  currentAbilityDetailsPanel: {fileID: 6294554518885111808}
-  upgradedAbilityDetailsPanel: {fileID: 2394928166286839566}
+  abilitySelectCanvas: {fileID: 8485727021247227962}
   unitSelectCanvasScript: {fileID: 5969525612368800732}
-  upgradeSelectCanvasScript: {fileID: 75539089200561252}
+  abilitySelectCanvasScript: {fileID: 75539089200561252}
   abilityImages:
   - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
@@ -71,6 +69,8 @@ MonoBehaviour:
   - {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  currentAbilityDetailsPanel: {fileID: 6294554518885111808}
+  upgradedAbilityDetailsPanel: {fileID: 2394928166286839566}
 --- !u!1001 &2944849751028745868
 PrefabInstance:
   m_ObjectHideFlags: 0

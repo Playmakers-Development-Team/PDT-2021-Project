@@ -1,49 +1,34 @@
 using System;
-using System.Collections.Generic;
-using Abilities;
 using Commands;
 using Managers;
-using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
-using UI.CombatEndUI.PanelScripts;
 using UI.Commands;
 using UI.Core;
-using Units.Players;
 using UnityEngine;
 using Event = UI.Core.Event;
 
 namespace UI.CombatEndUI.AbilityUpgrading
 {
-    public class AbilityUpgradeDialogue : Dialogue
+    public class AbilityUpgradeDialogue : AbilityRewardDialogue
     {
-        internal readonly Event showUnitSelectPanel = new Event();
-        internal readonly Event<LoadoutUnitInfo> showUpgradeSelectPanel = new Event<LoadoutUnitInfo>();
-        
-        internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
         internal readonly Event abilityUpgradeConfirm = new Event();
         internal readonly Event<AbilityButton> drawCurrentAbilityDetails = new Event<AbilityButton>();
         internal readonly Event<AbilityButton> drawUpgradedAbilityDetails = new Event<AbilityButton>();
         internal readonly Event clearCurrentAbilityDetails = new Event();
         internal readonly Event clearUpgradedAbilityDetails = new Event();
-        internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
-        
+
         private CommandManager commandManager;
         private UIManager uiManager;
-
-        [SerializeField] private Canvas unitSelectCanvas;
-        [SerializeField] private Canvas upgradeSelectCanvas;
+        
         [SerializeField] private AbilityDetailsPanel currentAbilityDetailsPanel;
         [SerializeField] private AbilityDetailsPanel upgradedAbilityDetailsPanel;
-        [SerializeField] protected UnitSelectCanvasScript unitSelectCanvasScript;
-        [SerializeField] protected AbilitySelectCanvasScript upgradeSelectCanvasScript;
-        
-        private readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
-        public List<Sprite> abilityImages = new List<Sprite>();
 
         #region Monobehaviour Events
 
         protected override void OnDialogueAwake()
         {
+            base.OnDialogueAwake();
+            
             // Assign Managers
             commandManager = ManagerLocator.Get<CommandManager>();
             uiManager = ManagerLocator.Get<UIManager>();
@@ -53,30 +38,14 @@ namespace UI.CombatEndUI.AbilityUpgrading
 
             // Hide Panels
             unitSelectCanvas.enabled = false;
-            upgradeSelectCanvas.enabled = false;
+            abilitySelectCanvas.enabled = false;
 
             // Listen to Events
-            showUnitSelectPanel.AddListener(() =>
-            {
-                OnUnitSelectPanel();
-            });
-
-            showUpgradeSelectPanel.AddListener(unitInfo =>
-            {
-                OnUpgradeSelectPanel(unitInfo);
-            });
-
-            unitSpawned.AddListener(info =>
-            {
-                if (info.Unit is PlayerUnit)
-                    units.Add(info);
-            });
-            
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
             {
                 if (AbilitySelectedCommand.IsNewAbility)
                 {
-                    upgradeSelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.
+                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.
                         AbilityButton);
                 }
                 else
@@ -116,8 +85,8 @@ namespace UI.CombatEndUI.AbilityUpgrading
                 
                 unitSelectCanvasScript.RemoveSelectedAbility();
                 
-                // Assumption that only 1 unit is in unitCards during ability swap
-                upgradeSelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].loadoutUnitInfo.Unit);
+                // Assumption that only 1 unit is in unitCards during ability upgrade
+                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].loadoutUnitInfo.Unit);
             });
             
             // Execute ready command to inform UnitLoadoutUIWrapper
@@ -140,52 +109,19 @@ namespace UI.CombatEndUI.AbilityUpgrading
 
         #endregion
         
-        #region Panel Switching
-
-        private void OnUnitSelectPanel()
+        protected override void OnAbilitySelectPanel(LoadoutUnitInfo loadoutUnitInfo)
         {
-            unitSelectCanvas.enabled = true;
-            upgradeSelectCanvas.enabled = false;
-            
-            unitSelectCanvasScript.Redraw(units);
-        }
-        
-        private void OnUpgradeSelectPanel(LoadoutUnitInfo unitInfo)
-        {
-            upgradeSelectCanvas.enabled = true;
+            abilitySelectCanvas.enabled = true;
             
             // Clear the units so only the selected unit is shown
             units.Clear();
-            units.Add(unitInfo);
+            units.Add(loadoutUnitInfo);
             
-            // Redraw the 1 ability, unit and new unit abilities
+            // Redraw the 1 unit and unit abilities
             unitSelectCanvasScript.Redraw(units);
-            upgradeSelectCanvasScript.RedrawForUpgrade(unitInfo.AbilityInfo);
-
-            unitSelectCanvasScript.EnableAbilityButtons(unitInfo);
+            
+            // Redraw ability upgrade options
+            abilitySelectCanvasScript.RedrawForUpgrade(loadoutUnitInfo.AbilityInfo);
         }
-        
-        private void OnAbilitySelect(AbilitySelectedCommand cmd)
-        {
-            abilityButtonPress.Invoke(cmd);
-        }
-
-        #endregion
-
-        #region Dialogue
-        
-        protected override void OnClose() {}
-
-        protected override void OnPromote()
-        {
-            canvasGroup.interactable = true;
-        }
-
-        protected override void OnDemote()
-        {
-            canvasGroup.interactable = false;
-        }
-        
-        #endregion
     }
 }

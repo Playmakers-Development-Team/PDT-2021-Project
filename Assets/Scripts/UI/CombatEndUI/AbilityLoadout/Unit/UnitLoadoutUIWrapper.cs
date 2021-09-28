@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace UI.CombatEndUI.AbilityLoadout.Unit
 {
-    public class UnitLoadoutUIWrapper : DialogueComponent<AbilityLoadoutDialogue>
+    public class UnitLoadoutUIWrapper : DialogueComponent<AbilityRewardDialogue>
     {
         [SerializeField] private LoadoutUnitInfo info;
 

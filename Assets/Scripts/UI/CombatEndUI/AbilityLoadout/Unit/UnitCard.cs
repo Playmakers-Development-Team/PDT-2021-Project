@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace UI.CombatEndUI.AbilityLoadout.Unit
 {
-    public class UnitCard : DialogueComponent<AbilityLoadoutDialogue>
+    public class UnitCard : DialogueComponent<AbilityRewardDialogue>
     {
         protected internal LoadoutUnitInfo loadoutUnitInfo;
         
