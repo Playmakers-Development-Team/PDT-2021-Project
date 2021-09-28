@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Elite Melee Attack
   m_EditorClassIdentifier: 
-  description: "[Neutral Ability]\nA basic 1 tile enemy adjacent attack that deals
-    5 damage to an adjacent tile. \nIf this unit has Passion, it does an additional
-    2 damage. "
+  description: "[Neutral Ability]\nA basic 1 tile adjacent attack that deals 4 damage
+    to an adjacent tile.\nIf this unit has Pride, it does an additional 2 damage.
+    \nGives user 1 Pride after dealing damage. "
   shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 5 Damage"
+  - name: "Target \u27A4 Default, 4 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 5
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -89,4 +89,21 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
+  - name: "User \u27A4 Default, Provide 1 Pride"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  visualEffects: {fileID: 0}
   userEffects: []

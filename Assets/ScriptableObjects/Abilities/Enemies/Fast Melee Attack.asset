@@ -10,24 +10,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Ranged Attack
+  m_Name: Fast Melee Attack
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  description: '[Fast Ability]
 
-    An attack that can deals 2 damage to a tile
-    two tiles away from the unit, ignoring walls. Can only target cardinal directions. '
-  shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
+    A basic 1 tile adjacent attack that deals 3 damage
+    to an adjacent tile.
+
+    Also grants the user 1 Defense when used.'
+  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
+  speed: 1
   representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 Default, 1 Defence"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 1
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
