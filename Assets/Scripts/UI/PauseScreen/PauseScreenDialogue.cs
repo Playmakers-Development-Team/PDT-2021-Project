@@ -7,7 +7,7 @@ using Event = UI.Core.Event;
 using UI.Core;
 using UnityEngine.UI;
 
-namespace UI
+namespace UI.PauseScreen
 {
 public class PauseScreenDialogue : Dialogue
 {
@@ -15,8 +15,12 @@ public class PauseScreenDialogue : Dialogue
     [SerializeField] private GameObject exitConfirmationPrefab;
     private GameObject exitConfirmedPrefabInstance;
     [SerializeField] private GameObject pauseScreenInstance;
-
+    
     internal readonly Event buttonSelected = new Event();
+    internal readonly Event continueGame = new Event();
+    internal readonly Event settingsOpened = new Event();
+    internal readonly Event exitGame = new Event();
+
 
     public void Update()
     {
@@ -26,6 +30,18 @@ public class PauseScreenDialogue : Dialogue
             Promote();
         }
     }
+
+    protected override void OnDialogueAwake()
+    {
+        base.OnDialogueAwake();
+        continueGame.AddListener(() =>
+        {
+            Resume();
+        });
+        
+        
+    }
+
     protected override void OnClose()
     {
         
@@ -43,7 +59,7 @@ public class PauseScreenDialogue : Dialogue
     
     public void Resume()
     {
-        pauseScreenInstance.SetActive(false);
+       Destroy(this);
     }
 
     public void BackToMenu()

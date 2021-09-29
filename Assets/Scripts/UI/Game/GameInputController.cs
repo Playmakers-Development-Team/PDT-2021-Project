@@ -4,6 +4,7 @@ using Grid;
 using Managers;
 using Turn;
 using UI.Core;
+using UI.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +15,23 @@ namespace UI.Game
         private GridManager gridManager;
         private TurnManager turnManager;
         private CommandManager commandManager;
+        private PlayerControls playerControls;
 
+        [SerializeField] private GameObject PauseMenu;
+
+        #region DelegateFunctions
+
+        private void PauseGame(InputAction.CallbackContext ctx)
+        {
+            if (!ctx.performed)
+                return;
+            
+            Instantiate(PauseMenu);
+        }
+        
+        
+
+        #endregion
 
         #region MonoBehaviour
         
@@ -61,8 +78,13 @@ namespace UI.Game
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            playerControls = new PlayerControls();
+            playerControls.UI.Pause.performed += PauseGame;
+
         }
+
         
+
         #endregion
     }
 }
