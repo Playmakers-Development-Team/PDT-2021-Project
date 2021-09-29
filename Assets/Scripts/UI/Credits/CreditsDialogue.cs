@@ -14,7 +14,7 @@ namespace UI.Credits
         // TODO: Not sure if this is the standard for getting input.
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Escape))
                 manager.Pop();
         }
     }
