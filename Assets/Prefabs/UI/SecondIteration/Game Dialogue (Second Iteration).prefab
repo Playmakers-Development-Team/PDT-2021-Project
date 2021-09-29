@@ -911,6 +911,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 6487709696776052042}
     m_Modifications:
     - target: {fileID: 191491537133426882, guid: 6b71aaa2176eb4b48a1679474710569b, type: 3}
+      propertyPath: parent
+      value: 
+      objectReference: {fileID: 6487709696776052042}
+    - target: {fileID: 191491537133426882, guid: 6b71aaa2176eb4b48a1679474710569b, type: 3}
       propertyPath: PauseMenu
       value: 
       objectReference: {fileID: 7029170744339034616, guid: 75862a46b4530e64995626f181cd6c43, type: 3}

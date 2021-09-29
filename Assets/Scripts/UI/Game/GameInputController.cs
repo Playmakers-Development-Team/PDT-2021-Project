@@ -1,4 +1,5 @@
 ﻿using Abilities.Commands;
+using Audio;
 using Commands;
 using Grid;
 using Managers;
@@ -14,8 +15,13 @@ namespace UI.Game
     {
         private GridManager gridManager;
         private TurnManager turnManager;
+        private AudioManager audioManager;
         private CommandManager commandManager;
         private PlayerControls playerControls;
+        private GameObject pauseMenuInstance;
+
+        [SerializeField] private Transform parent;
+        
 
         [SerializeField] private GameObject PauseMenu;
 
@@ -25,8 +31,19 @@ namespace UI.Game
         {
             if (!ctx.performed)
                 return;
-            
-            Instantiate(PauseMenu);
+
+            if (pauseMenuInstance == null)
+            {
+                pauseMenuInstance = Instantiate(PauseMenu,parent);
+                audioManager.UpdateMusic("CombatState","InPauseMenu");
+            }
+            else
+            {
+                Destroy(pauseMenuInstance);
+                pauseMenuInstance = null;
+                audioManager.UpdateMusic("CombatState","In_Combat");
+
+            }
         }
         
         
@@ -75,6 +92,7 @@ namespace UI.Game
         
         protected override void OnComponentAwake()
         {
+            audioManager = ManagerLocator.Get<AudioManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -83,7 +101,15 @@ namespace UI.Game
 
         }
 
-        
+        protected override void OnComponentEnabled()
+        {
+            playerControls.Enable();
+        }
+
+        protected override void OnComponentDisabled()
+        {
+            playerControls.Disable();
+        }
 
         #endregion
     }
