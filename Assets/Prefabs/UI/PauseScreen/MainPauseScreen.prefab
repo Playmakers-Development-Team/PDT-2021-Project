@@ -322,7 +322,6 @@ GameObject:
   - component: {fileID: 1815189864091491561}
   - component: {fileID: 8069228310819267824}
   - component: {fileID: 7742233897737899605}
-  - component: {fileID: 1862199778460722376}
   m_Layer: 5
   m_Name: Exit
   m_TagString: Untagged
@@ -382,31 +381,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &1862199778460722376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2618396910031642737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72533f943d2a44b5a332b1b0bb1b72dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: {fileID: 7742233897737899605}
-  animator: {fileID: 8069228310819267824}
-  labelText: {fileID: 6144831545649165042}
-  backgroundImage: {fileID: 177302924965372036}
-  borderImage: {fileID: 5038284858419302101}
-  backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
-  backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
-  borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
-  lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
-  darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  fill: 0
-  interactable: 1
 --- !u!1 &3673698223703307942
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +467,6 @@ GameObject:
   - component: {fileID: 3938679732796011859}
   - component: {fileID: 220660517652376134}
   - component: {fileID: 3868873234533329102}
-  - component: {fileID: 352963163769486675}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -553,31 +526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &352963163769486675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3755579110440452836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72533f943d2a44b5a332b1b0bb1b72dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trigger: {fileID: 3868873234533329102}
-  animator: {fileID: 220660517652376134}
-  labelText: {fileID: 3742923474615551705}
-  backgroundImage: {fileID: 7365456858506546164}
-  borderImage: {fileID: 6783629594602277729}
-  backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
-  backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
-  borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
-  lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
-  darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  fill: 0
-  interactable: 1
 --- !u!1 &4026809337506190635
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,7 +1343,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1997323025171605749
 RectTransform:
   m_ObjectHideFlags: 0

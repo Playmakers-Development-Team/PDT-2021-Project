@@ -22,20 +22,6 @@
 							</PropertyList>
 						</State>
 					</ChildrenList>
-					<TransitionList>
-						<Transition>
-							<StartState Name="In_Combat" ID="{8943B03A-666A-4FF3-8A8F-A38460E4CCB3}"/>
-							<EndState Name="InPauseMenu" ID="{65629E26-989C-4BAC-BF59-5DF456A2CB3B}"/>
-							<Time>1</Time>
-							<IsShared>false</IsShared>
-						</Transition>
-						<Transition>
-							<StartState Name="InPauseMenu" ID="{65629E26-989C-4BAC-BF59-5DF456A2CB3B}"/>
-							<EndState Name="In_Combat" ID="{8943B03A-666A-4FF3-8A8F-A38460E4CCB3}"/>
-							<Time>1</Time>
-							<IsShared>false</IsShared>
-						</Transition>
-					</TransitionList>
 				</StateGroup>
 			</ChildrenList>
 		</WorkUnit>

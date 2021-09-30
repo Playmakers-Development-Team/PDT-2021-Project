@@ -42,24 +42,6 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="InPauseMenu" ID="{8FE16DE5-697F-47EA-8390-23540EB25437}">
-					<PropertyList>
-						<Property Name="Color" Type="int16" Value="27"/>
-						<Property Name="OverrideColor" Type="bool" Value="True"/>
-					</PropertyList>
-					<ChildrenList>
-						<Action Name="" ID="{2C2322A1-009F-49F9-AF9C-C920A9EA2FF7}" ShortID="268645758">
-							<PropertyList>
-								<Property Name="ActionType" Type="int16" Value="22"/>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Target">
-									<ObjectRef Name="InPauseMenu" ID="{65629E26-989C-4BAC-BF59-5DF456A2CB3B}" WorkUnitID="{CD48E433-1D3D-40D1-8DE4-3E7FF8AFA676}"/>
-								</Reference>
-							</ReferenceList>
-						</Action>
-					</ChildrenList>
-				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

@@ -19,6 +19,11 @@
 						<Action Name="" ID="{1C1D02B3-2BA9-418A-B0B8-17F994A9E216}" ShortID="849821598">
 							<PropertyList>
 								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="Inclusion" Type="bool">
+									<ValueList>
+										<Value>False</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
@@ -33,7 +38,7 @@
 						<Action Name="" ID="{5C992381-7C67-4EAA-B6E4-E43276DB48A4}" ShortID="647517526">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Mountain_Trail_Battle_Active_Piano_180_210428" ID="{B7F3D824-6432-4400-BEFC-981168C57944}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+									<ObjectRef Name="Mountain-Trail_70bpm6-8_L96M" ID="{5E8EDABB-3FA6-44CF-9232-F4DAEFD651FD}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
+using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using Event = UI.Core.Event;
 using UI.Core;
+using UI.Game;
 using UnityEngine.UI;
 
 namespace UI.PauseScreen
@@ -15,7 +18,9 @@ public class PauseScreenDialogue : Dialogue
     [SerializeField] private GameObject exitConfirmationPrefab;
     private GameObject exitConfirmedPrefabInstance;
     [SerializeField] private GameObject pauseScreenInstance;
-    
+
+    public Dialogue GameDialgoue { get; set; }
+
     internal readonly Event buttonSelected = new Event();
     internal readonly Event continueGame = new Event();
     internal readonly Event settingsOpened = new Event();
@@ -24,16 +29,18 @@ public class PauseScreenDialogue : Dialogue
 
     public void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            pauseScreenInstance.SetActive(!pauseScreenInstance.activeSelf);
-            Promote();
-        }
+        // if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        // {
+        //     pauseScreenInstance.SetActive(!pauseScreenInstance.activeSelf);
+        //     Promote();
+        // }
     }
 
     protected override void OnDialogueAwake()
     {
         base.OnDialogueAwake();
+       // Promote();
+        
         continueGame.AddListener(() =>
         {
             Resume();
@@ -59,7 +66,10 @@ public class PauseScreenDialogue : Dialogue
     
     public void Resume()
     {
-       Destroy(this);
+        ManagerLocator.Get<AudioManager>().UpdateMusic("CombatState","In_Combat");
+        GameDialgoue.Promote();
+        Destroy(this.gameObject);
+
     }
 
     public void BackToMenu()

@@ -6,6 +6,7 @@ using Managers;
 using Turn;
 using UI.Core;
 using UI.Input;
+using UI.PauseScreen;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -35,6 +36,7 @@ namespace UI.Game
             if (pauseMenuInstance == null)
             {
                 pauseMenuInstance = Instantiate(PauseMenu,parent);
+                pauseMenuInstance.GetComponent<PauseScreenDialogue>().GameDialgoue = dialogue;
                 audioManager.UpdateMusic("CombatState","InPauseMenu");
             }
             else
@@ -42,6 +44,7 @@ namespace UI.Game
                 Destroy(pauseMenuInstance);
                 pauseMenuInstance = null;
                 audioManager.UpdateMusic("CombatState","In_Combat");
+                dialogue.Promote();
 
             }
         }

@@ -8,8 +8,12 @@ State Group	ID	Name			Wwise Object Path	Notes
 State	ID	Name	State Group			Notes
 	748895195	None	CombatState			
 	2116791127	In_Combat	CombatState			
+	2876317275	InPauseMenu	CombatState			
 	3162566204	Out_Of_Combat	CombatState			
 
+Custom State	ID	Name	State Group	Owner		Notes
+	405140092	InPauseMenu	CombatState	\Interactive Music Hierarchy\Music\Mountain Trail		
+
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	588934760	MountainTrail_70bpm_6_8_L96M	C:\Users\Sam\Desktop\Stuff\Game Dev\PDT\2021\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Windows\SFX\MountainTrail_70bpm_6_8_L96M_V2_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Mountain Trail\Combat\Mountain-Trail_70bpm6-8_L96M\MountainTrail_70bpm_6_8_L96M		44027108
+	588934760	MountainTrail_70bpm_6_8_L96M	C:\Users\Owner\Documents\PDT 2020\PDT-2021-Project\PDT-2021-Project_WwiseProject\.cache\Windows\SFX\MountainTrail_70bpm_6_8_L96M_V2_D79FB2B7.wem		\Interactive Music Hierarchy\Music\Mountain Trail\Combat\Mountain-Trail_70bpm6-8_L96M\MountainTrail_70bpm_6_8_L96M		11283684
 
