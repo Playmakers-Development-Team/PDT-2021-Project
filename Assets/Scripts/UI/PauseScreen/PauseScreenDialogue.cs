@@ -17,7 +17,12 @@ public class PauseScreenDialogue : Dialogue
 
     [SerializeField] private GameObject exitConfirmationPrefab;
     private GameObject exitConfirmedPrefabInstance;
+    
+    [SerializeField] private GameObject pauseMenuButtonsPrefab;
+    private GameObject pauseMenuButtonsInstance;
+    
     [SerializeField] private GameObject pauseScreenInstance;
+    [SerializeField] private Transform parent;
 
     public Dialogue GameDialgoue { get; set; }
 
@@ -25,6 +30,9 @@ public class PauseScreenDialogue : Dialogue
     internal readonly Event continueGame = new Event();
     internal readonly Event settingsOpened = new Event();
     internal readonly Event exitGame = new Event();
+    internal readonly Event cancelExit = new Event();
+    internal readonly Event exitToDesktop = new Event();
+    internal readonly Event exitToMainMenu = new Event();
 
 
     public void Update()
@@ -40,12 +48,39 @@ public class PauseScreenDialogue : Dialogue
     {
         base.OnDialogueAwake();
        // Promote();
-        
-        continueGame.AddListener(() =>
+
+       pauseMenuButtonsInstance = Instantiate(pauseMenuButtonsPrefab, parent);
+
+
+       continueGame.AddListener(() =>
         {
             Resume();
         });
         
+        exitGame.AddListener(() =>
+        {
+            Destroy(pauseMenuButtonsInstance);
+            exitConfirmedPrefabInstance = Instantiate(exitConfirmationPrefab, parent);
+        });
+        
+        cancelExit.AddListener(() =>
+        {
+            pauseMenuButtonsInstance = Instantiate(pauseMenuButtonsPrefab, parent);
+            Destroy(exitConfirmedPrefabInstance);
+        });
+
+        
+        exitToDesktop.AddListener(() =>
+        {
+            Application.Quit();
+            Debug.Log($"Game Quit");
+        });
+        
+        exitToMainMenu.AddListener(() =>
+        {
+            //TEMP CODE
+            SceneManager.LoadScene("Scenes/Developer/UI/MainMenuTest");
+        });
         
     }
 
