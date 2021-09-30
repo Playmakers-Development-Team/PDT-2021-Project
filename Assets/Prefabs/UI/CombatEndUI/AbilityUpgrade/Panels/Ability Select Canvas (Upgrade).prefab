@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 5335252783670019727}
   - component: {fileID: 4791585664769338830}
   - component: {fileID: 7816718674654758790}
-  - component: {fileID: 5588280978336198257}
+  - component: {fileID: 3262279074732974026}
   m_Layer: 5
   m_Name: Continue Button
   m_TagString: Untagged
@@ -402,8 +402,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5588280978336198257}
-        m_TargetAssemblyTypeName: UI.AbilityLoadout.AbilitySwapButton, UISystem
+      - m_Target: {fileID: 3262279074732974026}
+        m_TargetAssemblyTypeName: UI.CombatEndUI.AbilityUpgrading.UpgradeButton,
+          UISystem
         m_MethodName: OnPressed
         m_Mode: 1
         m_Arguments:
@@ -414,7 +415,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &5588280978336198257
+--- !u!114 &3262279074732974026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -423,7 +424,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2890539493111819007}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42eca0029df84e2419e8d0fba9a4fbae, type: 3}
+  m_Script: {fileID: 11500000, guid: d8ee8adc9ae2bad4793b18f237cf7665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3818567598861130556
@@ -533,19 +534,7 @@ MonoBehaviour:
   m_VerticalScrollbarSpacing: -3
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6709641043172175563}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &4661586927394848541
 GameObject:
   m_ObjectHideFlags: 0

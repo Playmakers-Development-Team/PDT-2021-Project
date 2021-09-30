@@ -12,10 +12,6 @@ namespace UI.CombatEndUI.AbilityLoadout
     public class AbilityLoadoutDialogue : AbilityRewardDialogue
     {
         internal readonly Event abilitySwapConfirm = new Event();
-        internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
-        internal readonly Event<AbilityButton> drawNewAbilityDetails = new Event<AbilityButton>();
-        internal readonly Event clearOldAbilityDetails = new Event();
-        internal readonly Event clearNewAbilityDetails = new Event();
 
         private CommandManager commandManager;
         private UIManager uiManager;

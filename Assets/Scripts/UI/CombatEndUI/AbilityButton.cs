@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using Commands;
 using Managers;
 using TMPro;
+using UI.CombatEndUI.AbilityLoadout;
+using UI.CombatEndUI.AbilityUpgrading;
 using UI.Commands;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.CombatEndUI.AbilityLoadout.Abilities
+namespace UI.CombatEndUI
 {
-    public class AbilityButton : DialogueComponent<AbilityLoadoutDialogue>
+    public class AbilityButton : DialogueComponent<AbilityRewardDialogue>
     {
         // Must be set to true if it's one of the new abilities to choose from
-        [SerializeField] private bool isNewAbility = false;
-        
+        [SerializeField] protected bool isNewAbility = false;
+
         public Image AbilityRender { get; private set; }
         public String AbilityName { get; private set; }
         public String AbilityDescription { get; private set; }
@@ -34,7 +36,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         protected override void OnComponentAwake()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
-            
+
             // Get reference to ability render
             AbilityRender = GetComponentInChildren<Image>();
 
@@ -50,7 +52,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
                     abilityDescriptionText = abilityText;
             }
         }
-        
+
         #endregion
 
         #region Drawing
@@ -84,20 +86,62 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         
         public void MakeSelected()
         {
-            if (isNewAbility)
-                dialogue.drawNewAbilityDetails.Invoke(this);
-            else
-                dialogue.drawOldAbilityDetails.Invoke(this);
+            if(dialogue.GetType() == typeof(AbilityLoadoutDialogue))
+            {
+                if (isNewAbility)
+                    dialogue.drawNewAbilityDetails.Invoke(this);
+                else
+                    dialogue.drawOldAbilityDetails.Invoke(this);
+            }
+            else if(dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+            {
+                if (isNewAbility)
+                {
+                    dialogue.drawNewAbilityDetails.Invoke(this);
+                    
+                    dialogue.drawOldAbilityDetails.Invoke(GetNonUpgradedAbility());
+                }
+            }
         }
         
         public void Deselect()
         {
-            if (isNewAbility)
-                dialogue.clearNewAbilityDetails.Invoke();
-            else
-                dialogue.clearOldAbilityDetails.Invoke();
+            if (dialogue.GetType() == typeof(AbilityLoadoutDialogue))
+            {
+                if (isNewAbility)
+                    dialogue.clearNewAbilityDetails.Invoke();
+                else
+                    dialogue.clearOldAbilityDetails.Invoke();
+            }
+            else if(dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+            {
+                if (isNewAbility)
+                {
+                    dialogue.clearNewAbilityDetails.Invoke();
+                    dialogue.clearOldAbilityDetails.Invoke();
+                }
+            }
         }
         
+        // Search through the selected unit's abilities to find the NonUpgraded ability
+        private AbilityButton GetNonUpgradedAbility()
+        {
+            List<AbilityButton> currentAbilityButtons = dialogue.unitSelectCanvasScript.abilitiesCards[0].abilityButtons;
+            
+            foreach (AbilityButton nonUpgradedAbility in currentAbilityButtons)
+            {
+                if (this.AbilityName.Equals(nonUpgradedAbility.AbilityName + "+"))
+                {
+                    dialogue.unitSelectCanvasScript.OnAbilityButtonPress(nonUpgradedAbility);
+                    return nonUpgradedAbility;
+                }
+            }
+            
+            Debug.LogError("Could not find NonUpgraded ability for " + AbilityName);
+
+            return null;
+        }
+
         #endregion
     }
 }

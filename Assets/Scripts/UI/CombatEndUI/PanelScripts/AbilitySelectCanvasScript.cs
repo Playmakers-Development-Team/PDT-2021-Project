@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 
 namespace UI.CombatEndUI.PanelScripts
 {
-    public class AbilitySelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
+    public class AbilitySelectCanvasScript : DialogueComponent<AbilityRewardDialogue>
     {
         // New ability buttons and script references
         [SerializeField] private GameObject newAbilityPrefab;
@@ -206,8 +206,7 @@ namespace UI.CombatEndUI.PanelScripts
             for (int i = 0; i < oldAbilityInfos.Count; ++i)
             {
                 String upgradedAbilityName = oldAbilityInfos[i].Ability.name + "+";
-
-                // Skip the current iteration if the character already owns the ability
+                
                 Ability upgradedAbility = abilityPool.PickAbilitiesByName(upgradedAbilityName);
                 
                 if(upgradedAbility != null)
@@ -219,7 +218,7 @@ namespace UI.CombatEndUI.PanelScripts
 
             if (upgradedAbilityInfos.Count == 0)
             {
-                Debug.LogWarning("No ability upgrades found for the select unit." +
+                Debug.LogWarning("No ability upgrades found for the select unit. " +
                                  "Returning an empty ability upgrade list");
             }
 

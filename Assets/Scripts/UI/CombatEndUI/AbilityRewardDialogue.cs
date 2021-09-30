@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Abilities;
 using TenetStatuses;
-using UI.CombatEndUI.AbilityLoadout;
-using UI.CombatEndUI.AbilityUpgrading;
 using UI.CombatEndUI.PanelScripts;
 using UI.Commands;
 using UI.Core;
@@ -18,11 +16,16 @@ namespace UI.CombatEndUI
         internal readonly Event<LoadoutUnitInfo> showAbilitySelectPanel = new Event<LoadoutUnitInfo>();
         internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
         internal readonly Event showUnitSelectPanel = new Event();
+        
         internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
+        internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
+        internal readonly Event<AbilityButton> drawNewAbilityDetails = new Event<AbilityButton>();
+        internal readonly Event clearOldAbilityDetails = new Event();
+        internal readonly Event clearNewAbilityDetails = new Event();
         
         [SerializeField] protected Canvas unitSelectCanvas;
         [SerializeField] protected Canvas abilitySelectCanvas;
-        [SerializeField] protected UnitSelectCanvasScript unitSelectCanvasScript;
+        [SerializeField] protected internal UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
         protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();

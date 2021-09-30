@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.CombatEndUI.AbilityLoadout.Abilities
 {
-    public class UnitAbilitiesCard : DialogueComponent<AbilityLoadoutDialogue>
+    public class UnitAbilitiesCard : DialogueComponent<AbilityRewardDialogue>
     {
         // Placeholder selection sprite and sprite offset
         [SerializeField] private Image selectedAbilityImage;
@@ -19,7 +19,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         protected internal List<LoadoutAbilityInfo> abilityInfos;
         
         // References the ability button scripts
-        [SerializeField] protected List<AbilityButton> abilityButtons = new List<AbilityButton>();
+        [SerializeField] protected internal List<AbilityButton> abilityButtons = new List<AbilityButton>();
         private List<Button> unityAbilityButtons = new List<Button>();
 
         #region UIComponent

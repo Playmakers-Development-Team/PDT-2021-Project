@@ -14,7 +14,7 @@ namespace UI.CombatEndUI.PanelScripts
         [SerializeField] private GameObject unitAbilityCardPrefab;
         
         public List<UnitCard> unitCards;
-        [SerializeField] private List<UnitAbilitiesCard> abilitiesCards;
+        [SerializeField] protected internal List<UnitAbilitiesCard> abilitiesCards;
 
         [SerializeField] private ScrollRect unitScrollView;
         [SerializeField] private ScrollRect abilityScrollView;

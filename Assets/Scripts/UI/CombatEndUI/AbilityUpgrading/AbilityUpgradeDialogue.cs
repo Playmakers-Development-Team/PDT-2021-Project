@@ -12,10 +12,6 @@ namespace UI.CombatEndUI.AbilityUpgrading
     public class AbilityUpgradeDialogue : AbilityRewardDialogue
     {
         internal readonly Event abilityUpgradeConfirm = new Event();
-        internal readonly Event<AbilityButton> drawCurrentAbilityDetails = new Event<AbilityButton>();
-        internal readonly Event<AbilityButton> drawUpgradedAbilityDetails = new Event<AbilityButton>();
-        internal readonly Event clearCurrentAbilityDetails = new Event();
-        internal readonly Event clearUpgradedAbilityDetails = new Event();
 
         private CommandManager commandManager;
         private UIManager uiManager;
@@ -56,22 +52,22 @@ namespace UI.CombatEndUI.AbilityUpgrading
                 }
             });
 
-            drawCurrentAbilityDetails.AddListener(AbilityButton => 
+            drawOldAbilityDetails.AddListener(AbilityButton => 
             {
                 currentAbilityDetailsPanel.Redraw(AbilityButton);
             });
             
-            drawUpgradedAbilityDetails.AddListener(AbilityButton => 
+            drawNewAbilityDetails.AddListener(AbilityButton => 
             {
                 upgradedAbilityDetailsPanel.Redraw(AbilityButton);
             });
             
-            clearCurrentAbilityDetails.AddListener(() => 
+            clearOldAbilityDetails.AddListener(() => 
             {
                 currentAbilityDetailsPanel.ClearValues();
             });
             
-            clearUpgradedAbilityDetails.AddListener(() => 
+            clearNewAbilityDetails.AddListener(() => 
             {
                 upgradedAbilityDetailsPanel.ClearValues();
             });

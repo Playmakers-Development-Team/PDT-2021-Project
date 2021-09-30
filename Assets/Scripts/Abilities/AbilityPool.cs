@@ -22,7 +22,7 @@ namespace Abilities
         {
             foreach (var ability in abilities)
             {
-                if (ability.name == name)
+                if (ability.name.Equals(name))
                     return ability;
             }
 
