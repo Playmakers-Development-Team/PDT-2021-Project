@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{55CA2086-35ED-485C-896A-0DFFEF079016}" SchemaVersion="103">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{55CA2086-35ED-485C-896A-0DFFEF079016}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{55CA2086-35ED-485C-896A-0DFFEF079016}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Mountain Trail Theme" ID="{0EF7092C-199E-44F4-A2FD-C1A3806651F3}" ShortID="370577165">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Mountain Trail Theme" ID="{6EDA26E0-997E-490D-8890-C07FD8A2F98B}">
+							<Language>SFX</Language>
+							<AudioFile>Mountain Trail Theme.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="843750129"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Mountain Trail Theme" ID="{6EDA26E0-997E-490D-8890-C07FD8A2F98B}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>

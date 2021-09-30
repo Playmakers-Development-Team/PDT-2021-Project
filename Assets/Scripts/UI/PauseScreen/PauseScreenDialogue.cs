@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Audio;
@@ -42,6 +43,12 @@ public class PauseScreenDialogue : Dialogue
         //     pauseScreenInstance.SetActive(!pauseScreenInstance.activeSelf);
         //     Promote();
         // }
+    }
+
+    private void OnDestroy()
+    {
+        if (exitConfirmedPrefabInstance != null)
+            Destroy(exitConfirmedPrefabInstance);
     }
 
     protected override void OnDialogueAwake()
