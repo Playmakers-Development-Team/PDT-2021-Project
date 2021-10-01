@@ -34,16 +34,12 @@ namespace UI.Game.Unit
         {
             dialogue.unitSpawned.AddListener(OnUnitSpawned);
             dialogue.unitKilled.AddListener(OnUnitKilled);
-            dialogue.unitApplyAbilityProjection.AddListener(OnUnitProjected);
-            dialogue.unitCancelAbilityProjection.AddListener(OnCancelUnitProjected);
         }
 
         protected override void Unsubscribe()
         {
             dialogue.unitSpawned.RemoveListener(OnUnitSpawned);
             dialogue.unitKilled.RemoveListener(OnUnitKilled);
-            dialogue.unitApplyAbilityProjection.RemoveListener(OnUnitProjected);
-            dialogue.unitCancelAbilityProjection.RemoveListener(OnCancelUnitProjected);
         }
 
         private void OnUnitSpawned(GameDialogue.UnitInfo info)
@@ -63,20 +59,6 @@ namespace UI.Game.Unit
                 return;
 
             displays.RemoveAt(index);
-        }
-
-        private void OnUnitProjected(GameDialogue.ProjectedUnitInfo info)
-        {
-            UnitDisplay display = displays.Find(u => u.UnitInfo == info.UnitInfo);
-            display.UpdateStatDisplays(info.VirtualUnit);
-            display.UpdateHealthBarProjection(info.VirtualUnit);
-        }
-
-        private void OnCancelUnitProjected(GameDialogue.ProjectedUnitInfo info)
-        {
-            UnitDisplay display = displays.Find(u => u.UnitInfo == info.UnitInfo);
-            display.UpdateStatDisplays();
-            display.UpdateHealthBar();
         }
     }
 }

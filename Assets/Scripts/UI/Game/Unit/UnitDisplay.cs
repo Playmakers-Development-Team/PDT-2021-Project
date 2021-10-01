@@ -107,8 +107,11 @@ namespace UI.Game.Unit
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.unitSelected.AddListener(OnUnitSelected);
             dialogue.unitDeselected.AddListener(OnUnitDeselected);
+            
             dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
             dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
+            dialogue.unitApplyAbilityProjection.AddListener(OnUnitProjected);
+            dialogue.unitCancelAbilityProjection.AddListener(OnCancelUnitProjected);
         }
 
         protected override void Unsubscribe()
@@ -120,8 +123,11 @@ namespace UI.Game.Unit
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.unitSelected.RemoveListener(OnUnitSelected);
             dialogue.unitDeselected.RemoveListener(OnUnitDeselected);
+            
             dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
             dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
+            dialogue.unitApplyAbilityProjection.RemoveListener(OnUnitProjected);
+            dialogue.unitCancelAbilityProjection.RemoveListener(OnCancelUnitProjected);
         }
 
         #endregion
@@ -235,6 +241,24 @@ namespace UI.Game.Unit
 
         private void OnAbilityDeselected(Ability ability)
         {
+            UpdateStatDisplays();
+            UpdateHealthBar();
+        }
+        
+        private void OnUnitProjected(GameDialogue.ProjectedUnitInfo info)
+        {
+            if (info.UnitInfo != unitInfo)
+                return;
+
+            UpdateStatDisplays(info.VirtualUnit);
+            UpdateHealthBarProjection(info.VirtualUnit);
+        }
+
+        private void OnCancelUnitProjected(GameDialogue.ProjectedUnitInfo info)
+        {
+            if (info.UnitInfo != unitInfo)
+                return;
+            
             UpdateStatDisplays();
             UpdateHealthBar();
         }
