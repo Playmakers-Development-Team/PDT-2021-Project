@@ -37,13 +37,13 @@ namespace UI.Game
             {
                 pauseMenuInstance = Instantiate(PauseMenu,parent);
                 pauseMenuInstance.GetComponent<PauseScreenDialogue>().GameDialgoue = dialogue;
-                audioManager.UpdateMusic("CombatState","InPauseMenu");
+                audioManager.ChangeMusicState("CombatState","InPauseMenu");
             }
             else
             {
                 Destroy(pauseMenuInstance);
                 pauseMenuInstance = null;
-                audioManager.UpdateMusic("CombatState","In_Combat");
+                audioManager.ChangeMusicState("CombatState","In_Combat");
                 dialogue.Promote();
 
             }

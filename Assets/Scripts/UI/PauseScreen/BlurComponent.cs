@@ -34,11 +34,8 @@ public class BlurComponent : DialogueComponent<PauseScreenDialogue>
 
     private void Update() => blurImage.material.SetFloat("Amount",fill);
 
-    public void OnStartBlurComplete()
-    {
-        animator.SetTrigger(blurAnim);
-    }
-    
+    public void OnStartBlurComplete() => animator.SetTrigger(blurAnim);
+
     #endregion
 
 }

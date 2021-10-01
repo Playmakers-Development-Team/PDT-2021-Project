@@ -1,5 +1,4 @@
-using System;
-using Audio.Commands;
+﻿using Audio.Commands;
 using Commands;
 using Managers;
 using UnityEngine;
@@ -7,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 namespace Audio
 {
-    public class TempMusic : MonoBehaviour
+    public class AudioController : MonoBehaviour
     {
-        
         private CommandManager commandManager;
-        
-        private static TempMusic Instance { get; set; }
+        private static AudioController Instance { get; set; }
 
         private void Awake()
         {
@@ -32,15 +29,13 @@ namespace Audio
         private void Start()
         {
             commandManager.ListenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
-            cmd.StateName));
-            
+                cmd.StateName));
         }
 
         private void OnDisable()
         {
             commandManager.UnlistenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
                 cmd.StateName));
-            
         }
 
         private void ChangeMusic(Scene scene, LoadSceneMode loadSceneMode)
@@ -52,6 +47,7 @@ namespace Audio
         }
     
         private static void ChangeMusicState(string Group, string Name) => AkSoundEngine.SetState(Group, Name);
+        
         
     }
 }

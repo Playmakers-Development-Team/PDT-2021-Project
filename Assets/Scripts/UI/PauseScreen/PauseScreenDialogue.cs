@@ -35,16 +35,6 @@ public class PauseScreenDialogue : Dialogue
     internal readonly Event exitToDesktop = new Event();
     internal readonly Event exitToMainMenu = new Event();
 
-
-    public void Update()
-    {
-        // if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        // {
-        //     pauseScreenInstance.SetActive(!pauseScreenInstance.activeSelf);
-        //     Promote();
-        // }
-    }
-
     private void OnDestroy()
     {
         if (exitConfirmedPrefabInstance != null)
@@ -54,7 +44,6 @@ public class PauseScreenDialogue : Dialogue
     protected override void OnDialogueAwake()
     {
         base.OnDialogueAwake();
-       // Promote();
 
        pauseMenuButtonsInstance = Instantiate(pauseMenuButtonsPrefab, parent);
 
@@ -75,7 +64,6 @@ public class PauseScreenDialogue : Dialogue
             pauseMenuButtonsInstance = Instantiate(pauseMenuButtonsPrefab, parent);
             Destroy(exitConfirmedPrefabInstance);
         });
-
         
         exitToDesktop.AddListener(() =>
         {
@@ -91,27 +79,20 @@ public class PauseScreenDialogue : Dialogue
         
     }
 
-    protected override void OnClose()
-    {
-        
-    }
-
-    protected override void OnPromote()
-    {
-        
-    }
-
-    protected override void OnDemote()
-    {
-        
-    }    
+    #region UIComponent
     
+    protected override void OnClose() {}
+
+    protected override void OnPromote() {}
+
+    protected override void OnDemote() {}
+        
+    #endregion
     public void Resume()
     {
-        ManagerLocator.Get<AudioManager>().UpdateMusic("CombatState","In_Combat");
+        ManagerLocator.Get<AudioManager>().ChangeMusicState("CombatState","In_Combat");
         GameDialgoue.Promote();
         Destroy(this.gameObject);
-
     }
 
     public void BackToMenu()
@@ -138,9 +119,7 @@ public class PauseScreenDialogue : Dialogue
         UnityEditor.EditorApplication.isPlaying = false;
     }
 
-    public void Settings()
-    {
-        //fuck if i know
-    }
+    //TODO: Settings Menu
+    public void Settings() {}
 }
 }
