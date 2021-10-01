@@ -1,11 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Background;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Game.Commands;
 using Game.Map;
 using Managers;
+using Turn.Commands;
+using UnityEngine;
 using Turn;
 using Units.Players;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Game
 {
@@ -15,6 +22,12 @@ namespace Game
         private BackgroundManager backgroundManager;
         private PlayerManager playerManager;
         private TurnManager turnManager;
+
+        /// <summary>
+        /// Keeps track of all the levels that we have already seen in each game's run. We don't want to see
+        /// the same level more than once.
+        /// </summary>
+        private HashSet<SceneReference> visitedLevels = new HashSet<SceneReference>();
 
         public EncounterData CurrentEncounterData { get; set; }
         public MapData CurrentMapData { get; set; }
@@ -35,26 +48,144 @@ namespace Game
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
         }
 
-        // TODO: Replace with a scene transition manager
-        private static void ChangeScene(int buildIndex) =>
-            SceneManager.LoadScene(buildIndex);
+        public async UniTaskVoid RunLinearMap(MapData mapDataAsset)
+        {
+            // If we are already running map, don't run again
+            if (CurrentMapData != null)
+            {
+                Debug.LogWarning($"Skipping linear map run because we are already running a map!");
+                return;
+            }
+            
+            Debug.Log("Running linear map...");
+
+            CurrentMapData = Object.Instantiate(mapDataAsset);
+            CurrentMapData.Initialise();
+            EncounterNode encounterNode = CurrentMapData.GetFirstAvailableNodeOrNull();
+            
+            if (encounterNode == null)
+            {
+                Debug.LogError("Cannot run linear map, map does not have a starting node!");
+                return;
+            }
+            
+            var encounterData = encounterNode.EncounterData;
+
+            while (CurrentMapData != null && encounterData != null)
+            {
+                LoadEncounter(encounterData, false);
+                await commandManager.WaitForCommand<EndEncounterCommand>();
+                EncounterEnded();
+
+                if (encounterNode.ConnectedNodes.Count > 0)
+                {
+                    // Pick a random connected node
+                    int randomIndex = UnityEngine.Random.Range(0, encounterNode.ConnectedNodes.Count);
+                    encounterNode = encounterNode.ConnectedNodes[randomIndex];
+                    
+                    if (CurrentEncounterData == encounterNode.EncounterData)
+                        Debug.LogWarning($"The next encounter for {CurrentEncounterData} is itself. Is something wrong with the map?");
+                    
+                    encounterData = encounterNode.EncounterData;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            
+            ResetVisitedLevels();
+        }
+
+        public void StopLinearMap() => CurrentMapData = null;
 
         private static void ChangeScene(SceneReference sceneReference) =>
             SceneManager.LoadScene(sceneReference);
+        
+        private static async UniTask ChangeSceneAsync(SceneReference sceneReference) =>
+            await SceneManager.LoadSceneAsync(sceneReference);
 
-        public void LoadEncounter(EncounterData encounterData)
+        /// <summary>
+        /// Same thing as <see cref="LoadEncounter"/>, but async. Remember that once this is called, the scene
+        /// is loaded in background rather than instantly.
+        /// </summary>
+        public async UniTask LoadEncounterAsync(EncounterData encounterData, bool forceChangeScene = true)
         {
-            encounterLoadedFromMap = true;
-            
+            Debug.Log($"Load asynchronously next encounter {encounterData.name}");
+            SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
             CurrentEncounterData = encounterData;
-
-            ChangeScene(encounterData.encounterScene);
+            await LoadEncounterSceneAsync(nextScene, forceChangeScene);
         }
 
-        private void LoadMap()
+        /// <summary>
+        /// Load the encounter from the encounter data
+        /// </summary>
+        /// <param name="encounterData">The encounter data which contains one or more scenes</param>
+        /// <param name="forceChangeScene">Do we always have to change the scene regardless if we are already in the correct scene?</param>
+        public void LoadEncounter(EncounterData encounterData, bool forceChangeScene = true)
         {
-            // TODO: Magic number
-            ChangeScene(1);
+            Debug.Log($"Load next encounter {encounterData.name}");
+            SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
+            CurrentEncounterData = encounterData;
+            LoadEncounterScene(nextScene, forceChangeScene);
+        }
+
+        private void LoadEncounterScene(SceneReference nextScene, bool forceChangeScene = true)
+        {
+            encounterLoadedFromMap = true;
+            visitedLevels.Add(nextScene);
+            
+            if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
+                ChangeScene(nextScene);
+        }
+        
+        private async UniTask LoadEncounterSceneAsync(SceneReference nextScene, bool forceChangeScene = true)
+        {
+            encounterLoadedFromMap = true;
+            visitedLevels.Add(nextScene);
+            
+            if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
+                await ChangeSceneAsync(nextScene);
+        }
+
+        private SceneReference PullValidEncounterScene(EncounterData encounterData, bool forceChangeScene = true)
+        {
+            var currentScene = SceneManager.GetActiveScene().path;
+
+            if (encounterData.GetAllPossibleScenes().Count() == 1)
+            {
+                SceneReference onlyScene = encounterData.PullEncounterScene();
+
+                if (currentScene == onlyScene && forceChangeScene)
+                {
+                    throw new Exception(
+                        $"We cannot go to another scene since the next encounter {encounterData.name} only has one scene, and it is the current scene!");
+                }
+                else
+                {
+                    return onlyScene;
+                }
+            }
+
+            var foundScene = encounterData.PullEncounterScenes()
+                .Where((s) => !visitedLevels.Contains(s))
+                .FirstOrDefault((s) => s != currentScene);
+
+            if (foundScene == null)
+            {
+                Debug.LogWarning($"All scenes from the next encounter {encounterData.name} has been visited. Hence, we're going to get a random one anyways!");
+                return encounterData.PullEncounterScene();
+            }
+            else
+            {
+                return foundScene;
+            }
+        }
+
+        public void LoadMap()
+        {
+            if (CurrentMapData != null && !string.IsNullOrEmpty(CurrentMapData.mapScene?.ScenePath))
+                ChangeScene(CurrentMapData.mapScene);
         }
         
         private void EncounterLost()
@@ -63,7 +194,7 @@ namespace Game
             playerManager.ExportData();
             
             // TODO: Go back to the main menu?
-            LoadMap();
+            // LoadMap();
             
             commandManager.ExecuteCommand(new EncounterLostCommand());
         }
@@ -72,22 +203,38 @@ namespace Game
         {
             playerManager.ExportData();
             
-            LoadMap();
+            // LoadMap();
 
             CurrentMapData.EncounterCompleted(CurrentEncounterData);
             
             commandManager.ExecuteCommand(new EncounterWonCommand());
         }
 
-        public void EncounterEnded()
+        private void EncounterEnded()
         {
-            if (!encounterLoadedFromMap)
-                return;
+            // if (!encounterLoadedFromMap)
+            //     return;
 
             if (turnManager.HasPlayerUnitInQueue())
                 EncounterWon();
             else 
                 EncounterLost();
         }
+
+        public void SetEndEncounterToLoadMap()
+        {
+            commandManager.ListenCommand<EndEncounterCommand>((cmd) =>
+            {
+                EncounterEnded();
+                LoadMap();
+            });
+        }
+        
+        /// <summary>
+        /// Should be called between each run of the game. Allows all levels to be visited again.
+        /// <see cref="visitedLevels"/> 
+        /// </summary>
+        private void ResetVisitedLevels() => 
+            visitedLevels.Clear();
     }
 }

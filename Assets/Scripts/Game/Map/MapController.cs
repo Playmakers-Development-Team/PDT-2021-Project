@@ -20,7 +20,8 @@ namespace Game.Map
             commandManager = ManagerLocator.Get<CommandManager>();
         }
         
-        private void Start() {
+        private void Start() 
+        {
             // Uses the mapData stored in GameManager where possible. Serialised mapData can still
             // be used for testing purposes.
             if (gameManager.CurrentMapData != null)

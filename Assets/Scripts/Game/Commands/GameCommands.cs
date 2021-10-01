@@ -4,6 +4,12 @@ using Game.Map;
 namespace Game.Commands
 {
     /// <summary>
+    /// Executed when we are finished with this encounter, we picked all our upgrades and stuff,
+    /// and that we should load the next encounter.
+    /// </summary>
+    public class EndEncounterCommand : Command {}
+    
+    /// <summary>
     /// Executed when the player has won a combat encounter.
     /// </summary>
     public class EncounterWonCommand : Command {}
