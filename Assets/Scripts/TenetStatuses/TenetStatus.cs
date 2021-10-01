@@ -59,5 +59,11 @@ namespace TenetStatuses
         
         public static TenetStatus operator /(TenetStatus first, int amount) => 
             new TenetStatus(first.TenetType, first.StackCount / amount);
+
+        public static bool operator ==(TenetStatus first, TenetStatus second) =>
+            first.TenetType == second.TenetType && first.StackCount == second.StackCount;
+
+        public static bool operator !=(TenetStatus first, TenetStatus second) => 
+            first.TenetType != second.TenetType || first.StackCount != second.StackCount;
     }
 }

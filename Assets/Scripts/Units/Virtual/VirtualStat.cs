@@ -17,6 +17,11 @@ namespace Units.Virtual
         public int ValueDelta { get; set; }
 
         /// <summary>
+        /// Will be true, if there is a change in the stat.
+        /// </summary>
+        public bool HasDelta => ValueDelta != 0;
+
+        /// <summary>
         /// The final value after the change is applied.
         /// </summary>
         public int TotalValue => stat.Value + ValueDelta;
