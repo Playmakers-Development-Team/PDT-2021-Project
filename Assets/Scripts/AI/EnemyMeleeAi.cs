@@ -1,5 +1,6 @@
 using Abilities;
 using Abilities.Shapes;
+using Cysharp.Threading.Tasks;
 using Units;
 using Units.Commands;
 using UnityEngine;
@@ -16,14 +17,8 @@ namespace AI
         [Tooltip("If set to 1, enemy will start retreating on the second round, if set to 0 on the first round")]
         [SerializeField] private int specialMoveOffset = 1;
         
-        protected override async void DecideEnemyIntention()
+        protected override async UniTask DecideEnemyIntention()
         {
-            if (playerManager.Units.Count <= 0)
-            {
-                Debug.LogWarning("No players remain, enemy intention is to do nothing");
-                return;
-            }
-
             if (specialMoveCount != 0 &&
                 (turnManager.RoundCount + specialMoveOffset) % specialMoveCount == 0)
             {
@@ -53,9 +48,6 @@ namespace AI
                             ShapeDirection.None);
                 }
             }
-            
-            // TODO: Move to superclass.
-            commandManager.ExecuteCommand(new EnemyActionsCompletedCommand(enemyUnit));
         }
     }
 }

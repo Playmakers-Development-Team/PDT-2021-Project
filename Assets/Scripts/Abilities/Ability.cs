@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Abilities.Parsing;
 using Abilities.Shapes;
+using Abilities.VFX;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace Abilities
 {
@@ -25,6 +27,7 @@ namespace Abilities
 
         [FormerlySerializedAs("targetEffects")]
         [SerializeField] private List<Effect> effects;
+        [SerializeField] private GameObject visualEffects;
         // We're not using this anymore, but we are supporting backwards compat so keep it here
         [HideInInspector, SerializeField] private List<Effect> userEffects;
 
@@ -72,6 +75,30 @@ namespace Abilities
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
             abilityParser.ApplyChanges();
+            SpawnVisualEffects(visualEffects, targets);
+        }
+
+        private void SpawnVisualEffects(GameObject vfx, IEnumerable<GridObject> targets)
+        {
+            if (vfx == null)
+            {
+                Debug.LogWarning(this.name + " does not have an assigned visual ability" +
+                                 "effect. No ability vfx will play");
+                return;
+            }
+            
+            foreach (var target in targets)
+            {
+                if(target.GetType() == typeof(Obstacle))
+                    continue;
+                
+                Vector2 targetPos = target.transform.position;
+                Vector2 startPos = Vector2.up + targetPos;
+
+                Stroke strokeEffect = Instantiate(vfx, startPos, Quaternion.identity)
+                    .GetComponent<Stroke>();
+                strokeEffect.Execute(targetPos);
+            }
         }
         
         public IEnumerable<IVirtualAbilityUser> ProjectAbilityUsers(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
