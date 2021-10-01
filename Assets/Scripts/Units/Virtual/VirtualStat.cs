@@ -1,10 +1,17 @@
+using System;
 using Units.Stats;
 
 namespace Units.Virtual
 {
     public class VirtualStat
     {
+        /// <summary>
+        /// Takes the current value and delta value to output a total value.
+        /// </summary>
+        public delegate int TotalValueModifierDelegate(int current, int delta);
+        
         private readonly Stat stat;
+        private readonly TotalValueModifierDelegate totalValueModifier;
         
         /// <summary>
         /// The change that is added on top of the base value.
@@ -23,8 +30,11 @@ namespace Units.Virtual
 
         /// <summary>
         /// The final value after the change is applied.
+        /// A custom offset function may modify the final value after other stats are applied.
         /// </summary>
-        public int TotalValue => stat.Value + ValueDelta;
+        public int TotalValue => totalValueModifier != null 
+            ? totalValueModifier(stat.Value, ValueDelta) 
+            : stat.Value + ValueDelta;
 
         /// <summary>
         /// The final base value after the change is applied.
@@ -32,6 +42,12 @@ namespace Units.Virtual
         public int TotalBaseValue => stat.BaseValue + BaseValueDelta;
 
         public VirtualStat(Stat stat) => this.stat = stat;
+        
+        public VirtualStat(Stat stat, TotalValueModifierDelegate totalValueModifier)
+        {
+            this.stat = stat;
+            this.totalValueModifier = totalValueModifier;
+        }
 
         /// <summary>
         /// Apply the change in values into the stat. The deltas are reset to 0 after they are applied.
