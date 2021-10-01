@@ -7,11 +7,15 @@ namespace Game.Map
     [CreateAssetMenu]
     public class MapData : ScriptableObject
     {
+        [Tooltip("This is completely optional, if there is map scene then it will load into the map scene")]
         public SceneReference mapScene;
         public List<EncounterNode> encounterNodes;
         
         public void Initialise() =>
             encounterNodes.ForEach(encounterNode => encounterNode.Initialise(encounterNodes));
+
+        public EncounterNode GetFirstAvailableNodeOrNull() => 
+            encounterNodes.FirstOrDefault(n => n.State == EncounterNodeState.Available);
 
         public void EncounterCompleted(EncounterData encounterData)
         {
