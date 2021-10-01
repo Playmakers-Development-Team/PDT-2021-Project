@@ -1,5 +1,6 @@
 using UI.Core;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI.Credits
 {
@@ -14,7 +15,7 @@ namespace UI.Credits
         // TODO: Not sure if this is the standard for getting input.
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 manager.Pop();
         }
     }
