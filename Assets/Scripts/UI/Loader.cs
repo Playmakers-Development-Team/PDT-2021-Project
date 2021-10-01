@@ -24,7 +24,6 @@ namespace UI
         private void Awake()
         {
             Instantiate(dialogue, transform);
-
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
