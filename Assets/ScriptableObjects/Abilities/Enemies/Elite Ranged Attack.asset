@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Elite Ranged Attack
+  m_EditorClassIdentifier: 
+  description: "[Neutral Ability]\nAn attack that deals 3 damage to a tile two tiles
+    away from the unit, ignoring walls. Can only target cardinal directions. \nUpon
+    use, user gains 1 Sorrow.\nIf user has 3 Sorrow, gain 3 defense for the rest
+    of the encounter. \n"
+  shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
+  excludeUserFromTargets: 1
+  speed: 0
+  representedTenet: 0
+  effects:
+  - name: "Target \u27A4 Default, 3 Damage"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 1
+    damageValue: 3
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 Default, Provide 1 Sorrow"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 3 Defence for the encounter WITH Catharsis 3 to User"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 3
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
+  visualEffects: {fileID: 0}
+  userEffects: []
