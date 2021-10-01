@@ -642,6 +642,10 @@ PrefabInstance:
       value: Enemy 2
       objectReference: {fileID: 0}
     - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: data.abilities.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
       objectReference: {fileID: 0}
