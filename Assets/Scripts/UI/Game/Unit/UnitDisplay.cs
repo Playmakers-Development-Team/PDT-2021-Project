@@ -35,6 +35,7 @@ namespace UI.Game.Unit
         
         [SerializeField] private Image healthBarCurrent;
         [SerializeField] private Image healthBarDifference;
+        [SerializeField] private Image healthBarProjection;
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
 
@@ -185,6 +186,7 @@ namespace UI.Game.Unit
             
             UpdateDamageText(info);
             UpdateHealthBar(info);
+            UpdateStatDisplays();
         }
 
         private void OnUnitKilled(GameDialogue.UnitInfo info)
@@ -198,7 +200,6 @@ namespace UI.Game.Unit
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             indicatorAnimator.gameObject.SetActive(info.CurrentUnitInfo.Unit == unitInfo.Unit);
-            UpdateStatDisplays();
 
             if (info.CurrentUnitInfo.Unit == unitInfo.Unit)
                 indicatorImage.color = defaultIndicatorColour;
@@ -229,11 +230,13 @@ namespace UI.Game.Unit
         private void OnAbilityConfirmed()
         {
             UpdateStatDisplays();
+            UpdateHealthBar();
         }
 
         private void OnAbilityDeselected(Ability ability)
         {
             UpdateStatDisplays();
+            UpdateHealthBar();
         }
         
         #endregion
@@ -245,6 +248,8 @@ namespace UI.Game.Unit
         {
             unitInfo = info;
             rectTransform.position = unitInfo.Unit.transform.position;
+            
+            UpdateHealthBar();
         }
 
         private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
@@ -258,6 +263,31 @@ namespace UI.Game.Unit
                 return;
             
             damageText.enabled = false;
+        }
+        
+        private void SetHealthBarProjection(float percentage)
+        {
+            if (healthBarProjection != null)
+                healthBarProjection.fillAmount = percentage;
+                // healthBarProjection.material.SetFloat(fillId, currentHealth);
+        }
+
+        internal void UpdateHealthBarProjection(VirtualUnit virtualUnit)
+        {
+            float currentHealth = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
+            float healthAfter = (float) virtualUnit.Health.TotalValue / virtualUnit.Health.TotalBaseValue;
+            healthBarCurrent.material.SetFloat(fillId, healthAfter);
+            SetHealthBarProjection(currentHealth);
+        }
+
+        /// <summary>
+        /// Instantly update the health bar to what it's supposed to be.
+        /// </summary>
+        internal void UpdateHealthBar()
+        {
+            float percentage = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
+            healthBarCurrent.material.SetFloat(fillId, percentage);
+            SetHealthBarProjection(0);
         }
 
         private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)

@@ -69,12 +69,14 @@ namespace UI.Game.Unit
         {
             UnitDisplay display = displays.Find(u => u.UnitInfo == info.UnitInfo);
             display.UpdateStatDisplays(info.VirtualUnit);
+            display.UpdateHealthBarProjection(info.VirtualUnit);
         }
 
         private void OnCancelUnitProjected(GameDialogue.ProjectedUnitInfo info)
         {
             UnitDisplay display = displays.Find(u => u.UnitInfo == info.UnitInfo);
             display.UpdateStatDisplays();
+            display.UpdateHealthBar();
         }
     }
 }
