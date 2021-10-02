@@ -72,20 +72,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 81dbbde15d5646c138b079576dae00c9, type: 2}
     - target: {fileID: 2517594717045473454, guid: 7cd8fdbe986206d42a6760b83d057ede, type: 3}
-      propertyPath: data.movementPoints.<BaseValue>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2517594717045473454, guid: 7cd8fdbe986206d42a6760b83d057ede, type: 3}
       propertyPath: data.<SpeedStat>k__BackingField.<BaseValue>k__BackingField
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2517594717045473454, guid: 7cd8fdbe986206d42a6760b83d057ede, type: 3}
       propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 2517594717045473454, guid: 7cd8fdbe986206d42a6760b83d057ede, type: 3}
-      propertyPath: data.<KnockbackStat>k__BackingField.<BaseValue>k__BackingField
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7298577721533539764, guid: 7cd8fdbe986206d42a6760b83d057ede, type: 3}
       propertyPath: m_Name
