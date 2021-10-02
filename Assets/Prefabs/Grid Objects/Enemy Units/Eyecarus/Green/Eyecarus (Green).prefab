@@ -1,0 +1,300 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2724407955521944140
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2761775109851361033}
+  - component: {fileID: 6492187429966612124}
+  m_Layer: 0
+  m_Name: Eyecarus (Green)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2761775109851361033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2724407955521944140}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 3806895958467263183}
+  - {fileID: 6899126937087704280}
+  - {fileID: 6672063817801914460}
+  - {fileID: 6152073457713157046}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6492187429966612124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2724407955521944140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110c333121b44419a5b92eb58df8fc70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoSetTilemap: 1
+  levelTilemap: {fileID: 0}
+  coordinate: {x: 0, y: 0}
+--- !u!1001 &4496590683971343006
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2761775109851361033}
+    m_Modifications:
+    - target: {fileID: 243276095763223341, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_Name
+      value: Eyecarus (Green) Logic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+--- !u!4 &6672063817801914460 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7129470708633078466, guid: 22632cc1fafa1b64bbf68fed012be8fd, type: 3}
+  m_PrefabInstance: {fileID: 4496590683971343006}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5115396793175990003
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2761775109851361033}
+    m_Modifications:
+    - target: {fileID: 4187371800312136771, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_Name
+      value: Eyecarus (Green) Audio
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+--- !u!4 &3806895958467263183 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8226183107353699388, guid: 8ad9d83ba4910ef4d86449cb59afa134, type: 3}
+  m_PrefabInstance: {fileID: 5115396793175990003}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6023142454849574414
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2761775109851361033}
+    m_Modifications:
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4908310921893890729, guid: e65de57615deb794495b38880bd027c1, type: 3}
+      propertyPath: m_Name
+      value: Eyecarus (Green) Graphics
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e65de57615deb794495b38880bd027c1, type: 3}
+--- !u!4 &6899126937087704280 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 875984504401095382, guid: e65de57615deb794495b38880bd027c1, type: 3}
+  m_PrefabInstance: {fileID: 6023142454849574414}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6161332513216613790
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2761775109851361033}
+    m_Modifications:
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247873294240611927, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+      propertyPath: m_Name
+      value: Eyecarus (Green) UI
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+--- !u!4 &6152073457713157046 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 63610527880666664, guid: 749a2bd3ac2a23649841ad818ec62bd9, type: 3}
+  m_PrefabInstance: {fileID: 6161332513216613790}
+  m_PrefabAsset: {fileID: 0}
