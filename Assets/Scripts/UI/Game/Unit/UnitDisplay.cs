@@ -1,11 +1,15 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Abilities;
+using Commands;
 using Managers;
 using TenetStatuses;
 using TMPro;
 using Turn;
 using UI.Core;
+using Units;
 using Units.Stats;
+using Units.Virtual;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -31,6 +35,7 @@ namespace UI.Game.Unit
         
         [SerializeField] private Image healthBarCurrent;
         [SerializeField] private Image healthBarDifference;
+        [SerializeField] private Image healthBarProjection;
         [SerializeField] private float differenceDuration = 5;
         [SerializeField] private float differenceDelay = 1;
 
@@ -53,6 +58,7 @@ namespace UI.Game.Unit
 
         private GameDialogue.UnitInfo unitInfo;
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
         private RectTransform rectTransform;
         private bool moving;
@@ -82,6 +88,7 @@ namespace UI.Game.Unit
         {
             TryGetComponent(out rectTransform);
             turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         protected override void OnComponentStart()
@@ -100,6 +107,11 @@ namespace UI.Game.Unit
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.unitSelected.AddListener(OnUnitSelected);
             dialogue.unitDeselected.AddListener(OnUnitDeselected);
+            
+            dialogue.abilityDeselected.AddListener(OnAbilityDeselected);
+            dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
+            dialogue.unitApplyAbilityProjection.AddListener(OnUnitProjected);
+            dialogue.unitCancelAbilityProjection.AddListener(OnCancelUnitProjected);
         }
 
         protected override void Unsubscribe()
@@ -111,6 +123,11 @@ namespace UI.Game.Unit
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.unitSelected.RemoveListener(OnUnitSelected);
             dialogue.unitDeselected.RemoveListener(OnUnitDeselected);
+            
+            dialogue.abilityDeselected.RemoveListener(OnAbilityDeselected);
+            dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
+            dialogue.unitApplyAbilityProjection.RemoveListener(OnUnitProjected);
+            dialogue.unitCancelAbilityProjection.RemoveListener(OnCancelUnitProjected);
         }
 
         #endregion
@@ -175,6 +192,7 @@ namespace UI.Game.Unit
             
             UpdateDamageText(info);
             UpdateHealthBar(info);
+            UpdateStatDisplays();
         }
 
         private void OnUnitKilled(GameDialogue.UnitInfo info)
@@ -188,7 +206,6 @@ namespace UI.Game.Unit
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             indicatorAnimator.gameObject.SetActive(info.CurrentUnitInfo.Unit == unitInfo.Unit);
-            UpdateStatDisplays();
 
             if (info.CurrentUnitInfo.Unit == unitInfo.Unit)
                 indicatorImage.color = defaultIndicatorColour;
@@ -216,6 +233,36 @@ namespace UI.Game.Unit
                 indicatorImage.gameObject.SetActive(false);
         }
         
+        private void OnAbilityConfirmed()
+        {
+            UpdateStatDisplays();
+            UpdateHealthBar();
+        }
+
+        private void OnAbilityDeselected(Ability ability)
+        {
+            UpdateStatDisplays();
+            UpdateHealthBar();
+        }
+        
+        private void OnUnitProjected(GameDialogue.ProjectedUnitInfo info)
+        {
+            if (info.UnitInfo != unitInfo)
+                return;
+
+            UpdateStatDisplays(info.VirtualUnit);
+            UpdateHealthBarProjection(info.VirtualUnit);
+        }
+
+        private void OnCancelUnitProjected(GameDialogue.ProjectedUnitInfo info)
+        {
+            if (info.UnitInfo != unitInfo)
+                return;
+            
+            UpdateStatDisplays();
+            UpdateHealthBar();
+        }
+        
         #endregion
         
         
@@ -225,6 +272,8 @@ namespace UI.Game.Unit
         {
             unitInfo = info;
             rectTransform.position = unitInfo.Unit.transform.position;
+            
+            UpdateHealthBar();
         }
 
         private async void UpdateDamageText(GameDialogue.StatChangeInfo data)
@@ -238,6 +287,31 @@ namespace UI.Game.Unit
                 return;
             
             damageText.enabled = false;
+        }
+        
+        private void SetHealthBarProjection(float percentage)
+        {
+            if (healthBarProjection != null)
+                healthBarProjection.fillAmount = percentage;
+                // healthBarProjection.material.SetFloat(fillId, currentHealth);
+        }
+
+        internal void UpdateHealthBarProjection(VirtualUnit virtualUnit)
+        {
+            float currentHealth = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
+            float healthAfter = (float) virtualUnit.Health.TotalValue / virtualUnit.Health.TotalBaseValue;
+            healthBarCurrent.material.SetFloat(fillId, healthAfter);
+            SetHealthBarProjection(currentHealth);
+        }
+
+        /// <summary>
+        /// Instantly update the health bar to what it's supposed to be.
+        /// </summary>
+        internal void UpdateHealthBar()
+        {
+            float percentage = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
+            healthBarCurrent.material.SetFloat(fillId, percentage);
+            SetHealthBarProjection(0);
         }
 
         private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)
@@ -275,53 +349,88 @@ namespace UI.Game.Unit
             // healthBarDifference.fillAmount = 0.0f;
         }
 
-        private void UpdateStatDisplays()
+        /// <summary>
+        /// Update the stat display of a Unit.
+        /// </summary>
+        /// <param name="projectedUnit">When not null, it will display the projected stat</param>
+        internal void UpdateStatDisplays(VirtualUnit projectedUnit = null)
         {
-            if (unitInfo.Unit.AttackStat.Value == 0)
+            // Start with the base color
+            attackDisplay.ResetTint();
+            defenceDisplay.ResetTint();
+            primaryTenetDisplay.ResetTint();
+            secondaryTenetDisplay.ResetTint();
+
+            if (unitInfo.Unit.AttackStat.Value == 0 && (projectedUnit == null || !projectedUnit.Attack.HasDelta))
             {
                 attackDisplay.gameObject.SetActive(false);
             }
             else
             {
                 attackDisplay.gameObject.SetActive(true);
-                attackDisplay.Assign(unitInfo.Unit.AttackStat.Value);
+
+                if (projectedUnit != null && projectedUnit.Attack.HasDelta)
+                {
+                    attackDisplay.Assign(projectedUnit.Attack.TotalValue);
+                    attackDisplay.SetProjectedTint();
+                }
+                else
+                {
+                    attackDisplay.Assign(unitInfo.Unit.AttackStat.Value);
+                }
             }
             
-            if (unitInfo.Unit.DefenceStat.Value == 0)
+            if (unitInfo.Unit.DefenceStat.Value == 0 && (projectedUnit == null || !projectedUnit.Defence.HasDelta))
             {
                 defenceDisplay.gameObject.SetActive(false);
             }
             else
             {
                 defenceDisplay.gameObject.SetActive(true);
-                defenceDisplay.Assign(unitInfo.Unit.DefenceStat.Value);
+
+                if (projectedUnit != null && projectedUnit.Defence.HasDelta)
+                {
+                    defenceDisplay.Assign(projectedUnit.Defence.TotalValue);
+                    defenceDisplay.SetProjectedTint();
+                }
+                else
+                {
+                    defenceDisplay.Assign(unitInfo.Unit.DefenceStat.Value);
+                }
             }
 
-            TenetStatus[] statuses = unitInfo.Unit.TenetStatuses.ToArray();
-
-            if (statuses.Length > 0 && !statuses[0].IsEmpty)
-            {
-                primaryTenetDisplay.gameObject.SetActive(true);
-                primaryTenetDisplay.Assign(statuses[0].StackCount);
-                primaryTenetDisplay.SetTenet(statuses[0].TenetType);
-            }
-            else
-            {
-                primaryTenetDisplay.gameObject.SetActive(false);
-            }
-
-            if (statuses.Length > 1 && !statuses[1].IsEmpty)
-            {
-                secondaryTenetDisplay.gameObject.SetActive(true);
-                secondaryTenetDisplay.Assign(statuses[1].StackCount);
-                secondaryTenetDisplay.SetTenet(statuses[1].TenetType);
-            }
-            else
-            {
-                secondaryTenetDisplay.gameObject.SetActive(false);
-            }
-            
+            AssignTenetDisplay(0, primaryTenetDisplay, projectedUnit);
+            AssignTenetDisplay(1, secondaryTenetDisplay, projectedUnit);
             RepositionStatDisplays();
+        }
+
+        private void AssignTenetDisplay(int index, TenetDisplay tenetDisplay, VirtualUnit projectedUnit = null)
+        {
+            TenetStatus tenetStatus = unitInfo.Unit.TenetStatuses.ElementAtOrDefault(index);
+            TenetStatus projectedStatus = (projectedUnit?.TenetStatuses.ElementAtOrDefault(index))
+                .GetValueOrDefault(new TenetStatus());
+
+            if (!tenetStatus.IsEmpty || !projectedStatus.IsEmpty)
+            {
+                tenetDisplay.gameObject.SetActive(true);
+
+                // Check that if there is a projected unit and there is a change
+                if (projectedUnit != null && projectedStatus != tenetStatus)
+                {
+                    tenetDisplay.Assign(projectedStatus.StackCount);
+                    tenetDisplay.SetTenet(projectedStatus.TenetType);
+                    tenetDisplay.SetProjectedTint();
+                }
+                else
+                {
+                    tenetDisplay.Assign(tenetStatus.StackCount);
+                    tenetDisplay.SetTenet(tenetStatus.TenetType);
+                }
+            }
+            else
+            {
+                tenetDisplay.gameObject.SetActive(false);
+            }
         }
         
         private void RepositionStatDisplays()

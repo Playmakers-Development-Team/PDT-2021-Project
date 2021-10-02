@@ -33,6 +33,7 @@ namespace Abilities.Parsing
                 .Where(e => e.affectUser)
                 .ToList();
             this.targets = targets
+                .Where(t => t != user)
                 .Select(t => t.CreateVirtualAbilityUser())
                 .ToList();
             this.abilityContextHandler = new AbilityContextHandler(this.user, this.targets.Append(this.user));
