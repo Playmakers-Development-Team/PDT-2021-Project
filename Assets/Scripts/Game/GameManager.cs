@@ -269,9 +269,7 @@ namespace Game
         /// Should be called between each run of the game. Allows all levels to be visited again.
         /// <see cref="visitedLevels"/> 
         /// </summary>
-        private void ResetVisitedLevels()
-        {
+        private void ResetVisitedLevels() => 
             visitedLevels.Clear();
-        }
     }
 }

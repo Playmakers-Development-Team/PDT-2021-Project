@@ -148,7 +148,7 @@ namespace Turn
         #region Turn Queue Manipulation
 
         /// <summary>
-        /// Assign a turn speed for all the units that exist based on the index
+        /// Assign a turn speed for all the units that exist
         /// </summary>
         private void CalculateUnitSpeedsRandom()
         {
