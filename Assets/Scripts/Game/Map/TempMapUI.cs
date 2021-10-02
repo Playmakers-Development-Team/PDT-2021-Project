@@ -21,6 +21,7 @@ namespace Game.Map
             gameManager = ManagerLocator.Get<GameManager>();
 
             commandManager.ListenCommand<MapReadyCommand>(cmd => DisplayMap(cmd.MapData));
+            gameManager.SetEndEncounterToLoadMap();
         }
 
         private void DisplayMap(MapData mapData)

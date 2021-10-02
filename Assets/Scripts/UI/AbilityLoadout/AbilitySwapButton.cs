@@ -1,4 +1,6 @@
-using Game;
+using Managers;
+using Commands;
+using Game.Commands;
 using Managers;
 using UI.Core;
 
@@ -6,8 +8,15 @@ namespace UI.AbilityLoadout
 {
     public class AbilitySwapButton : DialogueComponent<AbilityLoadoutDialogue>
     {
-        #region UIComponent
+        private CommandManager commandManager;
         
+        #region UIComponent
+
+        protected override void OnComponentAwake()
+        {
+            commandManager = ManagerLocator.Get<CommandManager>();
+        }
+
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
@@ -19,11 +28,10 @@ namespace UI.AbilityLoadout
         public void OnPressed()
         {
             dialogue.abilitySwap.Invoke();
-            
-            // TODO: Temporary encounter end. May change as more encounter reward dialogues are added.
-            ManagerLocator.Get<GameManager>().EncounterEnded();
         
             manager.Pop();
+            
+            commandManager.ExecuteCommand(new EndEncounterCommand());
         }
         
         #endregion
