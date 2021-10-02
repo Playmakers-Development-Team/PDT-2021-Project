@@ -13,6 +13,7 @@ namespace UI
         
         //TODO: THIS WILL LATER BE MOVED TO THE END SCREEN DIALOGUE SCRIPT
         [SerializeField] private GameObject abilityLoadoutDialogue;
+        [SerializeField] private GameObject tutorialDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
 
@@ -24,6 +25,9 @@ namespace UI
         private void Awake()
         {
             Instantiate(dialogue, transform);
+            
+            if (tutorialDialogue)
+                LoadObject(tutorialDialogue);
 
             commandManager = ManagerLocator.Get<CommandManager>();
         }
