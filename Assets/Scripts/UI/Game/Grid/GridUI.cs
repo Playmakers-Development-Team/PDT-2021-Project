@@ -104,7 +104,7 @@ namespace UI.Game.Grid
         protected override void OnComponentDisabled()
         {
             base.OnComponentDisabled();
-            commandManager.ListenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
+            commandManager.UnlistenCommand<GridObjectsReadyCommand>(OnGridObjectsReady);
         }
 
         protected override void Subscribe()

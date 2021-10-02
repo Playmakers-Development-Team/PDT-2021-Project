@@ -39,7 +39,11 @@ namespace Units.Virtual
         // All the stats are Lazy, so that we save on memory and performance when processing/parsing
         public VirtualStat Attack => attack ??= new VirtualStat(Unit.AttackStat);
         public VirtualStat Defence => defence ??= new VirtualStat(Unit.DefenceStat);
-        public VirtualStat Health => health ??= new VirtualStat(Unit.HealthStat);
+        public VirtualStat Health => health ??= new VirtualStat(Unit.HealthStat, (current, delta) => 
+            delta < 0 
+                ? current + Mathf.Min(0, delta + Defence.TotalValue)
+                : current + delta
+            );
         public VirtualStat Knockback => knockback ??= new VirtualStat(Unit.KnockbackStat);
         public VirtualStat Speed => speed ??= new VirtualStat(Unit.SpeedStat);
         public VirtualStat MovementPoints => movementPoints ??= new VirtualStat(Unit.MovementPoints);

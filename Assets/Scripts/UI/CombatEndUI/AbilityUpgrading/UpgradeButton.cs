@@ -1,4 +1,6 @@
+using Commands;
 using Game;
+using Game.Commands;
 using Managers;
 using UI.Core;
 
@@ -6,6 +8,17 @@ namespace UI.CombatEndUI.AbilityUpgrading
 {
     public class UpgradeButton : DialogueComponent<AbilityUpgradeDialogue>
     {
+        private CommandManager commandManager;
+
+        #region Monobehavior Events
+
+        protected override void OnComponentAwake()
+        {
+            commandManager = ManagerLocator.Get<CommandManager>();
+        }
+
+        #endregion
+        
         #region UIComponent
         
         protected override void Subscribe() {}
@@ -20,10 +33,9 @@ namespace UI.CombatEndUI.AbilityUpgrading
         {
             dialogue.abilityUpgradeConfirm.Invoke();
             
-            // TODO: Temporary encounter end. May change as more encounter reward dialogues are added.
-            ManagerLocator.Get<GameManager>().EncounterEnded();
-        
             manager.Pop();
+            
+            commandManager.ExecuteCommand(new EndEncounterCommand());
         }
         
         #endregion

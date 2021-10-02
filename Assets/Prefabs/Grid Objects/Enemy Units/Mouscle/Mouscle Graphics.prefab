@@ -51,9 +51,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6466294267436515060, guid: 0ec4305ecb61dc14f930b40deec5a022, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466294267436515060, guid: 0ec4305ecb61dc14f930b40deec5a022, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 1509445146213546994, guid: 81a37a3666091fe40b81eb769f59ecac, type: 3}
     - target: {fileID: 6642890215116542084, guid: 0ec4305ecb61dc14f930b40deec5a022, type: 3}
       propertyPath: m_Name
-      value: Unit Graphics
+      value: Mouscle Graphics
       objectReference: {fileID: 0}
+    - target: {fileID: 7169400402080724939, guid: 0ec4305ecb61dc14f930b40deec5a022, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 88cca1b54dd8cf446a2659c4e7c0521a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ec4305ecb61dc14f930b40deec5a022, type: 3}
