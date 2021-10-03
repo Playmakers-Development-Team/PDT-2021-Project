@@ -428,6 +428,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 626789158}
     m_Modifications:
     - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
+      propertyPath: abilityPickupPool
+      value: 
+      objectReference: {fileID: 11400000, guid: c9b059de7b59ee42b9653a10a721a4fe, type: 2}
+    - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
       propertyPath: persistentUnitData
       value: 1
       objectReference: {fileID: 0}
@@ -593,10 +597,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Loader
       objectReference: {fileID: 0}
-    - target: {fileID: 8300312957143157284, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
-      propertyPath: abilityLoadoutDialogue
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
 --- !u!4 &351824544 stripped
@@ -604,24 +604,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6419465001682721050, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
   m_PrefabInstance: {fileID: 351824543}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &351824545 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7195098752907857375, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
-  m_PrefabInstance: {fileID: 351824543}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &351824546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 351824545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a512d0c953b486dbd9ad369531b6bdb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 2
 --- !u!1001 &372025151
 PrefabInstance:
   m_ObjectHideFlags: 0
