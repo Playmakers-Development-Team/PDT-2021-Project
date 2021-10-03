@@ -35,12 +35,16 @@ namespace UI.Game.Timeline
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.meditateConfirmed.AddListener(MeditateConfirmed);
+            dialogue.unitSelected.AddListener(unitSelected);
+            dialogue.unitDeselected.AddListener(unitDeselected);
         }
 
         protected override void Unsubscribe()
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.meditateConfirmed.RemoveListener(MeditateConfirmed);
+            dialogue.unitSelected.RemoveListener(unitSelected);
+            dialogue.unitDeselected.RemoveListener(unitDeselected);
         }
 
         #endregion
@@ -57,6 +61,15 @@ namespace UI.Game.Timeline
         private void MeditateConfirmed(GameDialogue.UnitInfo unitInfo)
         {
             UpdateText();
+        }
+
+        private void unitSelected(GameDialogue.UnitInfo unitInfo)
+        {
+            btn.interactable = true;
+        }
+        private void unitDeselected()
+        {
+            btn.interactable = false;
         }
 
         #endregion

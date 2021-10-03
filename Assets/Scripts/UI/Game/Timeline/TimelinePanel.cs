@@ -17,7 +17,7 @@ namespace UI.Game.Timeline
         [SerializeField] private GameObject dividerPrefab;
         [SerializeField] private GameObject insightButtonPrefab;
         [SerializeField] private int timelineLength = 7;
-        [SerializeField] private bool drawInsightBtn = false;
+        [SerializeField] private bool drawInsightBtn = true;
 
         private TurnManager turnManager;
 
