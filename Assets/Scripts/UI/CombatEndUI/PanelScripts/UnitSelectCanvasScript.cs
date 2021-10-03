@@ -15,6 +15,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         public List<UnitCard> unitCards;
         [SerializeField] protected internal List<UnitAbilitiesCard> abilitiesCards;
+        private UnitCard activeUnitCard;
+        private UnitAbilitiesCard activeAbilitiesCard;
 
         [SerializeField] private ScrollRect unitScrollView;
         [SerializeField] private ScrollRect abilityScrollView;
@@ -33,23 +35,65 @@ namespace UI.CombatEndUI.PanelScripts
         #endregion
 
         #region Listeners
-
-        // Assumption is that the ability card will always be the first in the list
-        // since this function will only be called when there is only 1 unit on screen
-        // (ability buttons shouldn't be interactable otherwise)
+        
         public void OnAbilityButtonPress(AbilityButton abilityButton)
         {
-            abilitiesCards[0].OnAbilityButtonPress(abilityButton);
+            activeAbilitiesCard.OnAbilityButtonPress(abilityButton);
         }
         
         #endregion
 
         #region Utility Functions
 
+        public void SetActiveUnit(LoadoutUnitInfo activeLoadoutUnitInfo)
+        {
+            // Get unit card spawn position
+            Vector3 unitSpawnPosition = Vector3.zero;
+
+            foreach (var unitCard in unitCards)
+            {
+                if (unitCard.loadoutUnitInfo == activeLoadoutUnitInfo)
+                {
+                    unitSpawnPosition = unitCard.transform.position;
+                    break;
+                }
+            }
+
+            // Instantiate and draw active unit
+            activeUnitCard = Instantiate(unitCardPrefab,
+                unitSpawnPosition,
+                Quaternion.identity,
+                transform)
+                .GetComponent<UnitCard>();
+            activeUnitCard.Redraw(activeLoadoutUnitInfo);
+            
+            
+            // Get abilities card spawn position
+            Vector3 abilitiesSpawnPosition = Vector3.zero;
+
+            foreach (var abilitiesCard in abilitiesCards)
+            {
+                if (abilitiesCard.abilityInfos == activeLoadoutUnitInfo.AbilityInfo)
+                {
+                    abilitiesSpawnPosition = abilitiesCard.transform.position;
+                    break;
+                }
+            }
+
+            // Instantiate and draw abilities
+            UnitAbilitiesCard abilityCard = Instantiate(
+                unitAbilityCardPrefab,
+                abilitiesSpawnPosition,
+                Quaternion.identity,
+                transform)
+                .GetComponent<UnitAbilitiesCard>();
+            abilityCard.Redraw(activeLoadoutUnitInfo.AbilityInfo);
+        }
+        
         // Same assumption stated previously for OnAbilityButtonPress applies here
         public void RemoveSelectedAbility()
         {
-            abilitiesCards[0].RemoveSelectedAbility(unitCards[0].loadoutUnitInfo.Unit);
+            activeAbilitiesCard.RemoveSelectedAbility(activeUnitCard.loadoutUnitInfo.Unit);
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
@@ -64,30 +108,19 @@ namespace UI.CombatEndUI.PanelScripts
                 if (loadoutUnitInfo.AbilityInfo == abilityCard.abilityInfos)
                     abilityCard.EnableAbilityButtons();
             }
-            
         }
 
         #endregion
 
         #region Drawing
 
-        internal void Redraw(List<LoadoutUnitInfo> units, List<LoadoutUnitInfo> fadeOutUnits)
+        internal void FadeOutUnits(float fadeOutTime)
         {
-            Redraw(units);
-
             foreach (var unit in unitCards)
-            {
-                if (fadeOutUnits.Contains(unit.loadoutUnitInfo))
-                {
-                    unit.FadeOut();
-                    
-                    foreach (var abilityCard in abilitiesCards)
-                    {
-                        if (unit.loadoutUnitInfo.AbilityInfo == abilityCard.abilityInfos)
-                            abilityCard.FadeOut();
-                    }
-                }
-            }
+                unit.FadeOut(fadeOutTime);
+
+            foreach (var abilitiesCard in abilitiesCards)
+                abilitiesCard.FadeOut(fadeOutTime);
         }
 
         internal void Redraw(List<LoadoutUnitInfo> units)

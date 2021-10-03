@@ -29,6 +29,8 @@ namespace UI.CombatEndUI
         [SerializeField] protected internal UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
+        [SerializeField] private float fadeOutTime = 0.5f;
+
         protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         
         public List<Sprite> abilityImages = new List<Sprite>();
@@ -95,11 +97,9 @@ namespace UI.CombatEndUI
 
         private void OnUnitFade(LoadoutUnitInfo selectedUnit)
         {
-            List<LoadoutUnitInfo> fadeOutUnits = new List<LoadoutUnitInfo>();
-            fadeOutUnits.AddRange(units);
-            fadeOutUnits.Remove(selectedUnit);
+            unitSelectCanvasScript.SetActiveUnit(selectedUnit);
             
-            unitSelectCanvasScript.Redraw(units, fadeOutUnits);
+            unitSelectCanvasScript.FadeOutUnits(fadeOutTime);
         }
 
         

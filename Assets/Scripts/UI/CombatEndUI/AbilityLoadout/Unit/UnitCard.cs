@@ -45,9 +45,9 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
             renderImage.uvRect = loadoutUnitInfo.ProfileCropInfo.UVRect;
         }
 
-        internal void FadeOut()
+        internal void FadeOut(float fadeOutTime)
         {
-            renderImage.CrossFadeAlpha(0, .5f, true);
+            renderImage.CrossFadeAlpha(0, fadeOutTime, true);
         }
 
         #endregion

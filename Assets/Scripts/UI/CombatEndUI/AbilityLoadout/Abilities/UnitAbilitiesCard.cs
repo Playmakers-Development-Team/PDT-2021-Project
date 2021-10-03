@@ -111,11 +111,11 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
             }
         }
         
-        internal void FadeOut()
+        internal void FadeOut(float fadeOutTime)
         {
             foreach (var abilityButton in abilityButtons)
             {
-                abilityButton.FadeOut();
+                abilityButton.FadeOut(fadeOutTime);
             }
         }
 
