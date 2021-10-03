@@ -443,7 +443,7 @@ MonoBehaviour:
   dividerPrefab: {fileID: 1789053312244162028, guid: 81614539140db674e95bc05ec61d4a6a, type: 3}
   insightButtonPrefab: {fileID: 1569788653794262997, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
   timelineLength: 9
-  drawInsightBtn: 1
+  multiTurnTimeline: 0
 --- !u!1 &6881319126922021532
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,7 +977,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1569788653794262997, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 128573901325267537, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}

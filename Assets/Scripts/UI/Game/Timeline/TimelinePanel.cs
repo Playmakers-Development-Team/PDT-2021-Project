@@ -16,8 +16,8 @@ namespace UI.Game.Timeline
         [SerializeField] private GameObject portraitPrefab;
         [SerializeField] private GameObject dividerPrefab;
         [SerializeField] private GameObject insightButtonPrefab;
-        [SerializeField] private int timelineLength = 7;
-        [SerializeField] private bool drawInsightBtn = true;
+        [SerializeField] private int timelineLength = 7; //Length of MultiTurn timeline
+        [SerializeField] private bool multiTurnTimeline = true;
 
         private TurnManager turnManager;
 
@@ -74,11 +74,23 @@ namespace UI.Game.Timeline
 
             List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
             int startIndex = turnManager.CurrentTurnIndex;
-            //currentTurnQueue.RemoveRange(0, startIndex);
-            if (drawInsightBtn)
-                CreateInsightButton();
+            if (multiTurnTimeline)
+            {
+                CreatePortraits(currentTurnQueue, startIndex);
+            }
+            else
+            {
+                //CreateInsightButton();
+                currentTurnQueue.RemoveRange(0, startIndex);
+                List<IUnit> appendTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
+                appendTurnQueue.RemoveRange(startIndex, appendTurnQueue.Count - startIndex);
+                currentTurnQueue.AddRange(appendTurnQueue);
+                CreatePortraits(currentTurnQueue);
+            }
+            
+            
 
-            CreatePortraits(currentTurnQueue, startIndex);
+            
         }
 
         private void maintainSelectedThroughTurns()

@@ -45,6 +45,9 @@ namespace UI.Game
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
         internal readonly Event buttonSelected = new Event();
+        
+        internal readonly Event<UnitInfo> turnManipulationStarted = new Event<UnitInfo>();
+        internal readonly Event turnManipulationEnded = new Event();
 
         internal readonly Event<Mode> modeChanged = new Event<Mode>();
 

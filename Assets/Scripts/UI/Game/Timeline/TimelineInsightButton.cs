@@ -13,6 +13,7 @@ namespace UI.Game.Timeline
         [SerializeField] private Button btn;
         [SerializeField] private TextMeshProUGUI text;
         private TurnManager turnManager;
+        private GameDialogue.UnitInfo selectedUnit;
 
         #region Drawing
 
@@ -66,10 +67,12 @@ namespace UI.Game.Timeline
         private void unitSelected(GameDialogue.UnitInfo unitInfo)
         {
             btn.interactable = true;
+            selectedUnit = unitInfo;
         }
         private void unitDeselected()
         {
             btn.interactable = false;
+            selectedUnit = null;
         }
 
         #endregion
@@ -78,7 +81,9 @@ namespace UI.Game.Timeline
 
         public void OnClick()
         {
-            Debug.Log("insightClicked");
+            if (selectedUnit != null)
+                dialogue.turnManipulationStarted.Invoke(selectedUnit);
+
         }
 
         private void EnableBtn(GameDialogue.TurnInfo info)
