@@ -70,7 +70,26 @@ namespace UI.CombatEndUI.PanelScripts
         #endregion
 
         #region Drawing
-        
+
+        internal void Redraw(List<LoadoutUnitInfo> units, List<LoadoutUnitInfo> fadeOutUnits)
+        {
+            Redraw(units);
+
+            foreach (var unit in unitCards)
+            {
+                if (fadeOutUnits.Contains(unit.loadoutUnitInfo))
+                {
+                    unit.FadeOut();
+                    
+                    foreach (var abilityCard in abilitiesCards)
+                    {
+                        if (unit.loadoutUnitInfo.AbilityInfo == abilityCard.abilityInfos)
+                            abilityCard.FadeOut();
+                    }
+                }
+            }
+        }
+
         internal void Redraw(List<LoadoutUnitInfo> units)
         {
             // STEP 1. Destroy UnitCards and UnitAbilityCards

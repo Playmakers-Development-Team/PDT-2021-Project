@@ -71,6 +71,11 @@ namespace UI.CombatEndUI
             abilityDescriptionText.text = AbilityDescription;
         }
 
+        public void FadeOut()
+        {
+            AbilityRender.CrossFadeAlpha(0, .5f, true);
+        }
+
         #endregion
 
         #region Listeners

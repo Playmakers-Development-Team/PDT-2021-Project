@@ -16,6 +16,7 @@ namespace UI.CombatEndUI
         internal readonly Event<LoadoutUnitInfo> showAbilitySelectPanel = new Event<LoadoutUnitInfo>();
         internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
         internal readonly Event showUnitSelectPanel = new Event();
+        internal readonly Event<LoadoutUnitInfo> fadeOtherUnits = new Event<LoadoutUnitInfo>();
         
         internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
         internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
@@ -46,6 +47,11 @@ namespace UI.CombatEndUI
             showAbilitySelectPanel.AddListener(unitInfo =>
             {
                 OnAbilitySelectPanel(unitInfo);
+            });
+            
+            fadeOtherUnits.AddListener(unitInfo =>
+            {
+                OnUnitFade(unitInfo);
             });
             
             unitSpawned.AddListener(info =>
@@ -87,6 +93,16 @@ namespace UI.CombatEndUI
 
         #region Utility Functions
 
+        private void OnUnitFade(LoadoutUnitInfo selectedUnit)
+        {
+            List<LoadoutUnitInfo> fadeOutUnits = new List<LoadoutUnitInfo>();
+            fadeOutUnits.AddRange(units);
+            fadeOutUnits.Remove(selectedUnit);
+            
+            unitSelectCanvasScript.Redraw(units, fadeOutUnits);
+        }
+
+        
         protected void OnAbilitySelect(AbilitySelectedCommand cmd)
         {
             abilityButtonPress.Invoke(cmd);

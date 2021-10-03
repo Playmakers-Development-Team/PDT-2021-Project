@@ -20,7 +20,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         
         // References the ability button scripts
         [SerializeField] protected internal List<AbilityButton> abilityButtons = new List<AbilityButton>();
-        private List<Button> unityAbilityButtons = new List<Button>();
+        private List<Button> unitAbilityButtons = new List<Button>();
 
         #region UIComponent
 
@@ -32,7 +32,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         {
             // Assign unity buttons from scripts
             foreach (var abilityButton in abilityButtons)
-                unityAbilityButtons.Add(abilityButton.GetComponent<Button>());
+                unitAbilityButtons.Add(abilityButton.GetComponent<Button>());
         }
         
         #endregion
@@ -85,7 +85,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
 
         public void EnableAbilityButtons()
         {
-            foreach (var unityAbilityButton in unityAbilityButtons)
+            foreach (var unityAbilityButton in unitAbilityButtons)
                 unityAbilityButton.enabled = true;
         }
 
@@ -108,6 +108,14 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
                     abilityInfos[i].Ability.name,
                     abilityInfos[i].Ability.Description,
                     true);
+            }
+        }
+        
+        internal void FadeOut()
+        {
+            foreach (var abilityButton in abilityButtons)
+            {
+                abilityButton.FadeOut();
             }
         }
 

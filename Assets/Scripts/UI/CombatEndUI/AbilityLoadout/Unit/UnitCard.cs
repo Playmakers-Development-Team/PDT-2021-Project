@@ -1,4 +1,5 @@
-﻿using UI.Core;
+﻿using System;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,7 +23,8 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
         
         public void OnPressed()
         {
-            dialogue.showAbilitySelectPanel.Invoke(loadoutUnitInfo);
+            dialogue.fadeOtherUnits.Invoke(loadoutUnitInfo);
+            //dialogue.showAbilitySelectPanel.Invoke(loadoutUnitInfo);
         }
         
         #endregion
@@ -41,6 +43,11 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
             renderImage.texture = loadoutUnitInfo.ProfileCropInfo.Image;
             renderImage.color = loadoutUnitInfo.ProfileCropInfo.Colour;
             renderImage.uvRect = loadoutUnitInfo.ProfileCropInfo.UVRect;
+        }
+
+        internal void FadeOut()
+        {
+            renderImage.CrossFadeAlpha(0, .5f, true);
         }
 
         #endregion
