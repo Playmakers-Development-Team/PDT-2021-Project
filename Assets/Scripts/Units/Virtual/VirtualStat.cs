@@ -64,5 +64,7 @@ namespace Units.Virtual
             BaseValueDelta = 0;
             ValueDelta = 0;
         }
+
+        public void ResetValues() => stat.Reset();
     }
 }

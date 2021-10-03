@@ -728,8 +728,12 @@ namespace Turn
             foreach (IUnit unit in unitManager.AllUnits)
             {
                 unit.MovementPoints.Reset();
-                unit.AttackStat.Reset();
-                unit.DefenceStat.Reset();
+                // unit.AttackStat.Reset();
+                // unit.DefenceStat.Reset();
+                
+                // What if Attack and Defence on decreases by a little instead of a complete reset?
+                unit.AttackStat.ReduceToBaseValue();
+                unit.DefenceStat.ReduceToBaseValue();
             }
         }
         

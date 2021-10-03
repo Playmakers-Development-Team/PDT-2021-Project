@@ -35,6 +35,7 @@ namespace Units.Virtual
         private VirtualStat speed;
         private VirtualStat movementPoints;
         private ITenetBearer tenetBearer;
+        private bool isDealingDamage;
 
         // All the stats are Lazy, so that we save on memory and performance when processing/parsing
         public VirtualStat Attack => attack ??= new VirtualStat(Unit.AttackStat);
@@ -72,6 +73,7 @@ namespace Units.Virtual
             {
                 int damage = amount + Attack.TotalValue;
                 other.TakeDamage(damage);
+                isDealingDamage = true;
             }
         }
 
@@ -130,9 +132,13 @@ namespace Units.Virtual
             if (movementPoints != null)
                 MovementPoints.SetValues();
             
-            if (health != null)
+            if (health != null && Health.ValueDelta < 0)
                 Unit.HealthStat.TakeDamage(-Health.ValueDelta);
             
+            // Reset attack after dealing damage
+            if (attack != null && isDealingDamage)
+                Attack.ResetValues();
+
             if (tenetBearer != null)
                 Unit.SetTenets(TenetBearer);
         }
