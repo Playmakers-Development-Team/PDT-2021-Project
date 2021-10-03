@@ -121,7 +121,8 @@ namespace UI.AbilityLoadout.Panel_Scripts
             if (poolToUse == null)
                 poolToUse = abilityPool;
 
-            List<Ability> selectedAbilities = RandomiseAbilityOrder(poolToUse.PickAbilitiesByTenet(tenetType).ToList());
+            // List<Ability> selectedAbilities = RandomiseAbilityOrder(poolToUse.PickAbilitiesByTenet(tenetType).ToList());
+            List<Ability> selectedAbilities = poolToUse.PickAbilitiesByTenet(tenetType).ToList();
 
             for (int i = 0; i < selectedAbilities.Count; ++i)
             {
