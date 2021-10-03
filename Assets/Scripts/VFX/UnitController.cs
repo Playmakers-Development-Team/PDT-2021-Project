@@ -67,14 +67,7 @@ namespace VFX.VFX
 
         private void OnPlayersReady(UnitsReadyCommand<PlayerUnitData> cmd)
         {
-            IUnit[] units = playerManager.Units.ToArray();
-            for (int i = units.Length - 1; i >= 0; i--)
-            {
-                int j = Random.Range(0, i);
-                (units[i], units[j]) = (units[j], units[i]);
-            }
-
-            foreach (IUnit unit in units)
+            foreach (IUnit unit in Shuffle(playerManager.Units.ToArray()))
             {
                 Animator animator = unit.transform.parent.GetComponentInChildren<Animator>();
                 if (!animator)
@@ -86,14 +79,7 @@ namespace VFX.VFX
         
         private void OnEnemiesReady(UnitsReadyCommand<EnemyUnitData> cmd)
         {
-            IUnit[] units = enemyManager.Units.ToArray();
-            for (int i = units.Length - 1; i >= 0; i--)
-            {
-                int j = Random.Range(0, i);
-                (units[i], units[j]) = (units[j], units[i]);
-            }
-
-            foreach (IUnit unit in units)
+            foreach (IUnit unit in Shuffle(enemyManager.Units.ToArray()))
             {
                 Animator animator = unit.transform.parent.GetComponentInChildren<Animator>();
                 if (!animator)
@@ -105,12 +91,11 @@ namespace VFX.VFX
 
         private void OnGridObjectsReady(GridObjectsReadyCommand cmd)
         {
-            foreach (GridObject gridObject in gridManager.tileDatas.Values.SelectMany(t =>
-                t.GridObjects))
-            {
-                if (gridObject is IUnit)
-                    continue;
+            GridObject[] gridObjects = gridManager.tileDatas.Values.SelectMany(t => t.GridObjects).
+                Where(go => !(go is IUnit)).ToArray();
 
+            foreach (GridObject gridObject in Shuffle(gridObjects))
+            {
                 Animator animator = gridObject.transform.parent.GetComponentInChildren<Animator>();
                 if (!animator)
                     continue;
@@ -137,6 +122,17 @@ namespace VFX.VFX
                 return;
             
             unitAnimators.Add*/
+        }
+
+        private static T[] Shuffle<T>(T[] array)
+        {
+            for (int i = array.Length - 1; i >= 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                (array[i], array[j]) = (array[j], array[i]);
+            }
+
+            return array;
         }
 
         private async Task SpawnUnits(IEnumerable<Animator> animators)
