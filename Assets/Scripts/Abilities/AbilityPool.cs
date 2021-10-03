@@ -2,6 +2,7 @@
 using System.Linq;
 using TenetStatuses;
 using UnityEngine;
+using Utilities;
 
 namespace Abilities
 {
@@ -30,16 +31,9 @@ namespace Abilities
         }
 
         private IEnumerable<Ability> GetAbilitiesWithTenetBias(TenetType tenetType) =>
-            abilities
-                .Select(ability =>
-                {
-                    const float randomScale = 20;
-                    float bias = ability.RepresentedTenet == tenetType ? Mathf.Max(1, pickTenetBias) : 1;
-                    float score = UnityEngine.Random.Range(0, randomScale * bias);
-                    return (ability, score);
-                })
-                .OrderBy(p => p.score)
-                .Select(p => p.ability);
+            new WeightedBag<Ability>()
+                .AddRange(Abilities, ability => (int)(ability.RepresentedTenet == tenetType ? Mathf.Max(1, pickTenetBias) : 1))
+                .PullSortedOrder();
 
         private IEnumerable<Ability> GetAbilitiesFromTenet(TenetType tenetType) =>
             abilities.Where(a => a.RepresentedTenet == tenetType);
