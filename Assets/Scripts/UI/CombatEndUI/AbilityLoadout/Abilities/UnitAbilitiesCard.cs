@@ -21,6 +21,9 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         // References the ability button scripts
         [SerializeField] protected internal List<AbilityButton> abilityButtons = new List<AbilityButton>();
         private List<Button> unitAbilityButtons = new List<Button>();
+        
+        // Used to slide into the correct position when selected
+        internal bool isSliding = false;
 
         #region UIComponent
 
@@ -35,6 +38,29 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
                 unitAbilityButtons.Add(abilityButton.GetComponent<Button>());
         }
         
+        #endregion
+        
+        #region Monobehavior Events
+
+        private void Update()
+        {
+            if (isSliding)
+            {
+                // Move our position a step closer to the target.
+                float step =  dialogue.selectedUnitSlideSpeed * Time.deltaTime; // calculate distance to move
+                transform.position -= new Vector3(step, 0, 0);
+
+                // Check if the position of the unit card and final position are approximately equal.
+                if (transform.position.x - dialogue.selectedUnitPosition < 0.001f)
+                {
+                    // Set the final position
+                    transform.position = new Vector3(dialogue.selectedUnitPosition, transform.position.y, transform.position.z);
+                    
+                    isSliding = false;
+                }
+            }
+        }
+
         #endregion
         
         #region Listeners

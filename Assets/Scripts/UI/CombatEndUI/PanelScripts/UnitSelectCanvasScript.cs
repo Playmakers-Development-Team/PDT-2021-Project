@@ -81,16 +81,21 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             // Instantiate and draw abilities
-            UnitAbilitiesCard abilityCard = Instantiate(
+            activeAbilitiesCard = Instantiate(
                 unitAbilityCardPrefab,
                 abilitiesSpawnPosition,
                 Quaternion.identity,
                 transform)
                 .GetComponent<UnitAbilitiesCard>();
-            abilityCard.Redraw(activeLoadoutUnitInfo.AbilityInfo);
+            activeAbilitiesCard.Redraw(activeLoadoutUnitInfo.AbilityInfo);
+        }
+
+        public void SlideActiveUnit()
+        {
+            activeUnitCard.isSliding = true;
+            activeAbilitiesCard.isSliding = true;
         }
         
-        // Same assumption stated previously for OnAbilityButtonPress applies here
         public void RemoveSelectedAbility()
         {
             activeAbilitiesCard.RemoveSelectedAbility(activeUnitCard.loadoutUnitInfo.Unit);

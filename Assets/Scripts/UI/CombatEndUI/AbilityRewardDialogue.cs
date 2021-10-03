@@ -17,6 +17,7 @@ namespace UI.CombatEndUI
         internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
         internal readonly Event showUnitSelectPanel = new Event();
         internal readonly Event<LoadoutUnitInfo> fadeOtherUnits = new Event<LoadoutUnitInfo>();
+        internal readonly Event slideActiveUnit = new Event();
         
         internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
         internal readonly Event<AbilityButton> drawOldAbilityDetails = new Event<AbilityButton>();
@@ -29,18 +30,20 @@ namespace UI.CombatEndUI
         [SerializeField] protected internal UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
-        [SerializeField] private float fadeOutTime = 0.5f;
+        [SerializeField] protected internal float fadeOutTime = 0.5f;
+        [SerializeField] protected internal float selectedUnitSlideSpeed = 2000f;
+        [SerializeField] protected internal float selectedUnitPosition = 400f;
 
         protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         
         public List<Sprite> abilityImages = new List<Sprite>();
 
         #region Monobehaviour Events
-        
+
         protected override void OnDialogueAwake()
         {
             base.OnDialogueAwake();
-            
+
             showUnitSelectPanel.AddListener(() =>
             {
                 OnUnitSelectPanel();
@@ -54,6 +57,11 @@ namespace UI.CombatEndUI
             fadeOtherUnits.AddListener(unitInfo =>
             {
                 OnUnitFade(unitInfo);
+            });
+            
+            slideActiveUnit.AddListener(() =>
+            {
+                OnUnitSlide();
             });
             
             unitSpawned.AddListener(info =>
@@ -102,6 +110,10 @@ namespace UI.CombatEndUI
             unitSelectCanvasScript.FadeOutUnits(fadeOutTime);
         }
 
+        private void OnUnitSlide()
+        {
+            unitSelectCanvasScript.SlideActiveUnit();
+        }
         
         protected void OnAbilitySelect(AbilitySelectedCommand cmd)
         {
