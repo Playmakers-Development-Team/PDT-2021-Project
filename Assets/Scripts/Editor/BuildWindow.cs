@@ -125,6 +125,33 @@ namespace Editor
             rootVisualElement.Add(openFolderButton);
         }
 
+        private const string defaultMapPath =
+            "Assets/ScriptableObjects/Maps/Rework Tutorial Map/Rework Tutorial Map.asset";
+        
+        /// <summary>
+        /// Build game, useful for build automation and build scripts
+        /// </summary>
+        public static void BuildStandaloneWindows64()
+        {
+            BuildPlatform("DEV", BuildTarget.StandaloneWindows64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+        }
+        
+        /// <summary>
+        /// Build game, useful for build automation and build scripts
+        /// </summary>
+        public static void BuildStandaloneOSX()
+        {
+            BuildPlatform("DEV", BuildTarget.StandaloneOSX, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+        }
+        
+        /// <summary>
+        /// Build game, useful for build automation and build scripts
+        /// </summary>
+        public static void BuildStandaloneLinux64()
+        {
+            BuildPlatform("DEV", BuildTarget.StandaloneLinux64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+        }
+
         /// <summary>
         /// Create a build.
         /// Kept as a static function so that we can make automated builds.
