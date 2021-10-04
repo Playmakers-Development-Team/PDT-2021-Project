@@ -57,7 +57,7 @@ namespace Game
             commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
             commandManager.ListenCommand<RestartEncounterCommand>(cmd => RestartEncounter());
             // TODO keep map information somewhere and call run linear map directly
-            commandManager.ListenCommand<PlayGameCommand>(cmd => ChangeScene("Assets/Scenes/Design/Playtest MVP-1/INTRO/INTRO 1.unity"));
+            commandManager.ListenCommand<PlayGameCommand>(cmd => ChangeScene("Assets/Scenes/Design/Gold/EMBARK/EMBARK 1.unity"));
             
             // Automatically end the encounter if there are no players remaining after a few seconds
             commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(async (cmd) =>
