@@ -37,6 +37,7 @@ namespace VFX.VFX
         private TurnManager turnManager;
         
         private static readonly int spawn = Animator.StringToHash("spawn");
+        private static readonly int death = Animator.StringToHash("death");
 
         private void Awake()
         {
@@ -118,10 +119,15 @@ namespace VFX.VFX
 
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
-            /*if (!unitAnimators.ContainsKey(cmd.Unit))
+            players.TryGetValue(cmd.Unit, out Animator animator);
+            
+            if (!animator)
+                enemies.TryGetValue(cmd.Unit, out animator);
+
+            if (!animator)
                 return;
             
-            unitAnimators.Add*/
+            animator.SetTrigger(death);
         }
 
         private static T[] Shuffle<T>(T[] array)
