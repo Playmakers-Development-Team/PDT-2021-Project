@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Game.Map;
 using UnityEditor;
@@ -133,7 +134,7 @@ namespace Editor
         /// </summary>
         public static void BuildStandaloneWindows64()
         {
-            BuildPlatform("DEV", BuildTarget.StandaloneWindows64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+            BuildPlatform("DEV", BuildTarget.StandaloneWindows64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath), buildPath: "build");
         }
         
         /// <summary>
@@ -141,7 +142,7 @@ namespace Editor
         /// </summary>
         public static void BuildStandaloneOSX()
         {
-            BuildPlatform("DEV", BuildTarget.StandaloneOSX, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+            BuildPlatform("DEV", BuildTarget.StandaloneOSX, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath), buildPath: "build");
         }
         
         /// <summary>
@@ -149,14 +150,14 @@ namespace Editor
         /// </summary>
         public static void BuildStandaloneLinux64()
         {
-            BuildPlatform("DEV", BuildTarget.StandaloneLinux64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath));
+            BuildPlatform("DEV", BuildTarget.StandaloneLinux64, AssetDatabase.LoadAssetAtPath<MapData>(defaultMapPath), buildPath: "build");
         }
 
         /// <summary>
         /// Create a build.
         /// Kept as a static function so that we can make automated builds.
         /// </summary>
-        public static void BuildPlatform(string version, BuildTarget buildTarget, MapData mapData, bool developmentBuild = false)
+        public static void BuildPlatform(string version, BuildTarget buildTarget, MapData mapData, bool developmentBuild = false, string buildPath = "")
         {
             if (mapData == null)
             {
@@ -167,9 +168,18 @@ namespace Editor
             BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
             buildPlayerOptions.scenes = GetRequiredScenes(mapData).ToArray();
             buildPlayerOptions.target = buildTarget;
-            buildPlayerOptions.locationPathName = buildTarget == BuildTarget.StandaloneOSX
-                ? $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher"
-                : $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
+            
+            if (string.IsNullOrEmpty(buildPath))
+            {
+                buildPlayerOptions.locationPathName = buildTarget == BuildTarget.StandaloneOSX
+                    ? $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher"
+                    : $"{GetBuildPath(buildTarget)}-v{version}/Soul Searcher-v{version}";
+            }
+            else
+            {
+                buildPlayerOptions.locationPathName = Path.Combine(buildPath, $"Soul Searcher-v{version}");
+            }
+
             buildPlayerOptions.options = developmentBuild 
                 ? BuildOptions.Development | BuildOptions.AllowDebugging 
                 : BuildOptions.None;
