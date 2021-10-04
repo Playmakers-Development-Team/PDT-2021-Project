@@ -143,7 +143,7 @@ namespace VFX.VFX
                     return;
                 
                 animator.SetTrigger(spawn);
-                await Task.Delay((int) (spawnPeriod * 1000.0f));
+                // await Task.Delay((int) (spawnPeriod * 1000.0f));
             }
         }
     }

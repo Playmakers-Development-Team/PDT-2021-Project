@@ -1576,6 +1576,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2260388112391797651, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
+      propertyPath: typeDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2260388112391797651, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
+      propertyPath: spawnDelay
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2260388112391797653, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
       propertyPath: m_Name
       value: GridObject VFX Controller
