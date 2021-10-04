@@ -32,7 +32,7 @@ namespace Abilities.Parsing
             target.TakeAttack(attack);
             target.TakeDefence(defence);
             target.TakeDamage(directDamage);
-            User.DealDamageTo(target, damage > 0 ? UnityEngine.Random.Range(damage - 1, damage + 2) : 0);
+            User.DealDamageTo(target, damage);
                 
             target.TakeAttackForEncounter(attackForEncounter);
             target.TakeDefenceForEncounter(defenceForEncounter);
