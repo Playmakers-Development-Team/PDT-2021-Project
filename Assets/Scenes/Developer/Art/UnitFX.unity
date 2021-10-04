@@ -936,11 +936,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2761775109851361033, guid: 2f2930071bf2ac64a8fc65a1c90e6872, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2761775109851361033, guid: 2f2930071bf2ac64a8fc65a1c90e6872, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.25
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2761775109851361033, guid: 2f2930071bf2ac64a8fc65a1c90e6872, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1518,6 +1518,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Loader
       objectReference: {fileID: 0}
+    - target: {fileID: 7195098752907857375, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
 --- !u!4 &2122247977 stripped
@@ -1575,14 +1579,6 @@ PrefabInstance:
     - target: {fileID: 2260388112391797650, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2260388112391797651, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
-      propertyPath: typeDelay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2260388112391797651, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
-      propertyPath: spawnDelay
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2260388112391797653, guid: 9aa6eacc28b5aa24fa3781ef3d0255f0, type: 3}
       propertyPath: m_Name
