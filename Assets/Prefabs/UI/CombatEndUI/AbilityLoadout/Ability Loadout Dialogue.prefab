@@ -62,6 +62,9 @@ MonoBehaviour:
   abilitySelectCanvas: {fileID: 4856606846227675085}
   unitSelectCanvasScript: {fileID: 9153771416057584424}
   abilitySelectCanvasScript: {fileID: 4010780455514809235}
+  fadeOutTime: 0.5
+  selectedUnitSlideSpeed: 1000
+  selectedUnitPosition: -180
   abilityImages:
   - {fileID: -4221612612571876572, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 4285166265872742160, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}

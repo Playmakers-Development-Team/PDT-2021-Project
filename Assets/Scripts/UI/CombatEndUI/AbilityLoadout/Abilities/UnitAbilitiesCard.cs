@@ -23,6 +23,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         private List<Button> unitAbilityButtons = new List<Button>();
         
         // Used to slide into the correct position when selected
+        private RectTransform rectTransform;
         internal bool isSliding = false;
 
         #region UIComponent
@@ -33,6 +34,8 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         
         protected override void OnComponentAwake()
         {
+            rectTransform = GetComponent<RectTransform>();
+            
             // Assign unity buttons from scripts
             foreach (var abilityButton in abilityButtons)
                 unitAbilityButtons.Add(abilityButton.GetComponent<Button>());
@@ -48,13 +51,13 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
             {
                 // Move our position a step closer to the target.
                 float step =  dialogue.selectedUnitSlideSpeed * Time.deltaTime; // calculate distance to move
-                transform.position -= new Vector3(step, 0, 0);
+                rectTransform.anchoredPosition -= new Vector2(step, 0);
 
                 // Check if the position of the unit card and final position are approximately equal.
-                if (transform.position.x - dialogue.selectedUnitPosition < 0.001f)
+                if (rectTransform.anchoredPosition.x - dialogue.selectedUnitPosition < 0.001f)
                 {
                     // Set the final position
-                    transform.position = new Vector3(dialogue.selectedUnitPosition, transform.position.y, transform.position.z);
+                    rectTransform.anchoredPosition = new Vector2(dialogue.selectedUnitPosition, rectTransform.anchoredPosition.y);
                     
                     isSliding = false;
                 }

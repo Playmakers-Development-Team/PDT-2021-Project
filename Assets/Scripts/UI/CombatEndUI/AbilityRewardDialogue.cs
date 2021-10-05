@@ -31,8 +31,8 @@ namespace UI.CombatEndUI
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
         [SerializeField] protected internal float fadeOutTime = 0.5f;
-        [SerializeField] protected internal float selectedUnitSlideSpeed = 2000f;
-        [SerializeField] protected internal float selectedUnitPosition = 400f;
+        [SerializeField] protected internal float selectedUnitSlideSpeed = 1000f;
+        [SerializeField] protected internal float selectedUnitPosition = -180f;
 
         protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         
