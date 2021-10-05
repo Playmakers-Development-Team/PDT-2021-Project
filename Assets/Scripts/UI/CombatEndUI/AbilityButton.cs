@@ -131,7 +131,7 @@ namespace UI.CombatEndUI
         // Search through the selected unit's abilities to find the NonUpgraded ability
         private AbilityButton GetNonUpgradedAbility()
         {
-            List<AbilityButton> currentAbilityButtons = dialogue.unitSelectCanvasScript.abilitiesCards[0].abilityButtons;
+            List<AbilityButton> currentAbilityButtons = dialogue.unitSelectCanvasScript.activeAbilitiesCard.abilityButtons;
             
             foreach (AbilityButton nonUpgradedAbility in currentAbilityButtons)
             {

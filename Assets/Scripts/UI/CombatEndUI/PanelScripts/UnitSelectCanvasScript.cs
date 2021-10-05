@@ -16,7 +16,7 @@ namespace UI.CombatEndUI.PanelScripts
         public List<UnitCard> unitCards;
         [SerializeField] protected internal List<UnitAbilitiesCard> abilitiesCards;
         private UnitCard activeUnitCard;
-        private UnitAbilitiesCard activeAbilitiesCard;
+        internal UnitAbilitiesCard activeAbilitiesCard;
 
         [SerializeField] private ScrollRect unitScrollView;
         [SerializeField] private ScrollRect abilityScrollView;
@@ -106,13 +106,9 @@ namespace UI.CombatEndUI.PanelScripts
             abilityScrollView.horizontalNormalizedPosition = unitScrollView.horizontalNormalizedPosition;
         }
 
-        public void EnableAbilityButtons(LoadoutUnitInfo loadoutUnitInfo)
+        public void EnableAbilityButtons()
         {
-            foreach (var abilityCard in abilitiesCards)
-            {
-                if (loadoutUnitInfo.AbilityInfo == abilityCard.abilityInfos)
-                    abilityCard.EnableAbilityButtons();
-            }
+            activeAbilitiesCard.EnableAbilityButtons();
         }
 
         #endregion

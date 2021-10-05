@@ -114,11 +114,11 @@ namespace UI.CombatEndUI.AbilityLoadout
             units.Add(loadoutUnitInfo);
             
             // Redraw the 1 unit and unit abilities
-            unitSelectCanvasScript.Redraw(units);
+            //unitSelectCanvasScript.Redraw(units);
             
             // Redraw new abilities and enable current ability buttons
             abilitySelectCanvasScript.RedrawForLoadout(loadoutUnitInfo.Unit.Tenet, loadoutUnitInfo.AbilityInfo);
-            unitSelectCanvasScript.EnableAbilityButtons(loadoutUnitInfo);
+            unitSelectCanvasScript.EnableAbilityButtons();
         }
     }
 }

@@ -114,7 +114,7 @@ namespace UI.CombatEndUI.AbilityUpgrading
             units.Add(loadoutUnitInfo);
             
             // Redraw the 1 unit and unit abilities
-            unitSelectCanvasScript.Redraw(units);
+            //unitSelectCanvasScript.Redraw(units);
             
             // Redraw ability upgrade options
             abilitySelectCanvasScript.RedrawForUpgrade(loadoutUnitInfo.AbilityInfo);
