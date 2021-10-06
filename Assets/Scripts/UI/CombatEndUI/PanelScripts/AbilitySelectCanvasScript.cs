@@ -5,6 +5,7 @@ using Abilities;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
+using UI.CombatEndUI.AbilityUpgrading;
 using UI.Core;
 using Units;
 using UnityEngine;
@@ -43,6 +44,7 @@ namespace UI.CombatEndUI.PanelScripts
         [SerializeField] private Animator panelSlideAnim;
         [SerializeField] private Animator panelFadeAnim;
         [SerializeField] private Animator buttonFadeAnim;
+        [SerializeField] private Animator returnButtonFadeAnim;
 
         #region UIComponent
         
@@ -160,6 +162,11 @@ namespace UI.CombatEndUI.PanelScripts
         {
             panelFadeAnim.SetTrigger("Play");
             buttonFadeAnim.SetTrigger("Play");
+
+            // The return button should only be available if we're ability upgrading
+            // Temp disabled since it's broken
+            /* if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+                returnButtonFadeAnim.SetTrigger("Play"); */
         }
         
         public void AddSelectedAbility()
