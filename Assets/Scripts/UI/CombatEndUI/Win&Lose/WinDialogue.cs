@@ -16,18 +16,11 @@ namespace UI.CombatEndUI
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
-        protected override void OnClose()
-        {
-        }
+        protected override void OnClose() {}
 
-        protected override void OnPromote()
-        {
+        protected override void OnPromote() {}
         
-        }
-
-        protected override void OnDemote()
-        {
-        }
+        protected override void OnDemote() {}
 
         public void Gain() => commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
         
