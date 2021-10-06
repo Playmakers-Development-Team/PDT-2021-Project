@@ -1295,6 +1295,7 @@ GameObject:
   - component: {fileID: 7862664228888083443}
   - component: {fileID: 7862664228888083440}
   - component: {fileID: 7862664228888083441}
+  - component: {fileID: 7591279150736671730}
   - component: {fileID: 2110471215425322738}
   m_Layer: 5
   m_Name: Unit Select Canvas (Loadout)
@@ -1384,6 +1385,25 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!95 &7591279150736671730
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7862664228888083454}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2311611b1b49aa54f8401b2dbe5db93a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2110471215425322738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1402,6 +1422,7 @@ MonoBehaviour:
   abilitiesCards: []
   unitScrollView: {fileID: 8894961071222381535}
   abilityScrollView: {fileID: 184025699921714383}
+  fadeOutTextAnim: {fileID: 7591279150736671730}
 --- !u!1 &8939000111963999845
 GameObject:
   m_ObjectHideFlags: 0

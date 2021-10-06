@@ -19,6 +19,8 @@ namespace UI.CombatEndUI.PanelScripts
         [SerializeField] private ScrollRect unitScrollView;
         [SerializeField] private ScrollRect abilityScrollView;
 
+        [SerializeField] private Animator fadeOutTextAnim;
+
         #region UIComponent
         
         protected override void Subscribe() {}
@@ -107,6 +109,11 @@ namespace UI.CombatEndUI.PanelScripts
         public void EnableAbilityButtons()
         {
             dialogue.activeAbilitiesCard.EnableAbilityButtons();
+        }
+
+        public void FadeOutText()
+        {
+            fadeOutTextAnim.SetTrigger("Play");
         }
 
         #endregion

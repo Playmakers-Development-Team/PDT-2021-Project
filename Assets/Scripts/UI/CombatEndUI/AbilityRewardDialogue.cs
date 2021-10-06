@@ -113,6 +113,7 @@ namespace UI.CombatEndUI
             unitSelectCanvasScript.SetActiveUnit(selectedUnit);
             
             unitSelectCanvasScript.FadeOutUnits(fadeOutTime);
+            unitSelectCanvasScript.FadeOutText();
         }
 
         private void OnUnitSlide()
