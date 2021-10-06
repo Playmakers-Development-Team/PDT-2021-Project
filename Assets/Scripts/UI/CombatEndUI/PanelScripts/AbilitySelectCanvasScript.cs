@@ -39,6 +39,11 @@ namespace UI.CombatEndUI.PanelScripts
         // Holds the info for the new abilities
         private List<LoadoutAbilityInfo> newAbilityInfos = new List<LoadoutAbilityInfo>();
 
+        [Header("Animators")]
+        [SerializeField] private Animator panelSlideAnim;
+        [SerializeField] private Animator panelFadeAnim;
+        [SerializeField] private Animator buttonFadeAnim;
+
         #region UIComponent
         
         protected override void Subscribe() {}
@@ -117,6 +122,9 @@ namespace UI.CombatEndUI.PanelScripts
 
                 abilityButtons.Add(newAbilityButton);
             }
+            
+            panelSlideAnim.SetTrigger("Play");
+            Invoke("FadeInElements", 0.5f);
         }
         
         internal void RedrawForUpgrade(List<LoadoutAbilityInfo> oldAbilityInfos)
@@ -137,12 +145,21 @@ namespace UI.CombatEndUI.PanelScripts
 
                 abilityButtons.Add(newAbilityButton);
             }
+            
+            panelSlideAnim.SetTrigger("Play");
+            Invoke("FadeInElements", 1.5f);
         }
         
         #endregion
 
         #region Utility Functions
-
+        
+        private void FadeInElements()
+        {
+            panelFadeAnim.SetTrigger("Play");
+            buttonFadeAnim.SetTrigger("Play");
+        }
+        
         public void AddSelectedAbility(IUnit unit)
         {
             foreach (var abilityInfo in newAbilityInfos)

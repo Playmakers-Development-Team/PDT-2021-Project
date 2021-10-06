@@ -27,6 +27,7 @@ namespace UI.CombatEndUI
         
         [SerializeField] protected Canvas unitSelectCanvas;
         [SerializeField] protected Canvas abilitySelectCanvas;
+        [SerializeField] protected Canvas finalAbilitiesCanvas;
         [SerializeField] protected internal UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
@@ -95,6 +96,7 @@ namespace UI.CombatEndUI
         {
             unitSelectCanvas.enabled = true;
             abilitySelectCanvas.enabled = false;
+            finalAbilitiesCanvas.enabled = false;
             
             unitSelectCanvasScript.Redraw(units);
         }
@@ -121,7 +123,12 @@ namespace UI.CombatEndUI
         }
 
         // Overriden in inherited classes
-        protected virtual void OnAbilitySelectPanel (LoadoutUnitInfo loadoutUnitInfo){}
+        protected virtual void OnAbilitySelectPanel(LoadoutUnitInfo loadoutUnitInfo)
+        {
+            abilitySelectCanvas.enabled = true;
+            finalAbilitiesCanvas.enabled = true;
+            units.Clear();
+        }
 
         #endregion
 

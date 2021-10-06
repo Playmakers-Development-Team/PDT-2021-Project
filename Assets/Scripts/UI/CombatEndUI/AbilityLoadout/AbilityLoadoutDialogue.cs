@@ -35,6 +35,7 @@ namespace UI.CombatEndUI.AbilityLoadout
             // Hide Panels
             unitSelectCanvas.enabled = false;
             abilitySelectCanvas.enabled = false;
+            finalAbilitiesCanvas.enabled = false;
 
             // Listen to Events
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
@@ -107,14 +108,7 @@ namespace UI.CombatEndUI.AbilityLoadout
 
         protected override void OnAbilitySelectPanel(LoadoutUnitInfo loadoutUnitInfo)
         {
-            abilitySelectCanvas.enabled = true;
-            
-            // Clear the units so only the selected unit is shown
-            units.Clear();
-            units.Add(loadoutUnitInfo);
-            
-            // Redraw the 1 unit and unit abilities
-            //unitSelectCanvasScript.Redraw(units);
+            base.OnAbilitySelectPanel(loadoutUnitInfo);
             
             // Redraw new abilities and enable current ability buttons
             abilitySelectCanvasScript.RedrawForLoadout(loadoutUnitInfo.Unit.Tenet, loadoutUnitInfo.AbilityInfo);

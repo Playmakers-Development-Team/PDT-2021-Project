@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSelectCanvas: {fileID: 2489416354394877661}
   abilitySelectCanvas: {fileID: 8485727021247227962}
+  finalAbilitiesCanvas: {fileID: 1849839492150383573}
   unitSelectCanvasScript: {fileID: 5969525612368800732}
   abilitySelectCanvasScript: {fileID: 75539089200561252}
   fadeOutTime: 0.5
@@ -120,14 +121,6 @@ PrefabInstance:
     - target: {fileID: 4690031453985991137, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 185
-      objectReference: {fileID: 0}
-    - target: {fileID: 4774631829695038760, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 240
-      objectReference: {fileID: 0}
-    - target: {fileID: 5644200595381759219, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 6709641043172175543, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
       propertyPath: m_Pivot.x
@@ -248,6 +241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe66f0d204bd5e41b61dd442bf37f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!223 &1849839492150383573 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 3563972423767004505, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
+  m_PrefabInstance: {fileID: 2944849751028745868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6294554518885111808 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9188621709254418060, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
@@ -303,7 +301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5057231180467869189, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.000045776367
       objectReference: {fileID: 0}
     - target: {fileID: 5936680237227182988, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_AnchorMax.x
@@ -319,7 +317,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7058882546192751906, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7066808434531635963, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_AnchorMax.x
@@ -335,7 +333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7300960954249754471, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000015258789
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 7862664228888083442, guid: 49685e1d0ffde5047b948cba92684125, type: 3}
       propertyPath: m_Pivot.x

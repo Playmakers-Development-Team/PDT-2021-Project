@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitSelectCanvas: {fileID: 1106926236349439529}
   abilitySelectCanvas: {fileID: 4856606846227675085}
+  finalAbilitiesCanvas: {fileID: 4258808486652613992}
   unitSelectCanvasScript: {fileID: 9153771416057584424}
   abilitySelectCanvasScript: {fileID: 4010780455514809235}
   fadeOutTime: 0.5
@@ -228,6 +229,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe66f0d204bd5e41b61dd442bf37f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!223 &4258808486652613992 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 2693468180404292627, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
+  m_PrefabInstance: {fileID: 2196433679101319547}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7061580486522734583 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9188621709254418060, guid: e6de75265e57f864ba294fdfb95ec9c2, type: 3}
@@ -283,7 +289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5057231180467869189, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.000045776367
       objectReference: {fileID: 0}
     - target: {fileID: 5936680237227182988, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_AnchorMax.x
@@ -299,7 +305,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7058882546192751906, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7066808434531635963, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_AnchorMax.x
@@ -315,7 +321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7300960954249754471, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000015258789
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 7862664228888083442, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_Pivot.x
@@ -407,7 +413,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8167849229976839242, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
       propertyPath: m_Value
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8705b5769bdad14f87d9625d5f0aaec, type: 3}
