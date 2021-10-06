@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Commands;
 using Managers;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
@@ -42,14 +43,8 @@ namespace UI.CombatEndUI.AbilityUpgrading
             {
                 if (AbilitySelectedCommand.IsNewAbility)
                 {
-                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.
-                        AbilityButton);
-                }
-                else
-                {
-                    unitSelectCanvasScript.OnAbilityButtonPress(
+                    abilitySelectCanvasScript.OnAbilityButtonPress(
                         AbilitySelectedCommand.AbilityButton);
-                    
                 }
             });
 
@@ -82,8 +77,7 @@ namespace UI.CombatEndUI.AbilityUpgrading
                 
                 unitSelectCanvasScript.RemoveSelectedAbility();
                 
-                // Assumption that only 1 unit is in unitCards during ability upgrade
-                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].loadoutUnitInfo.Unit);
+                abilitySelectCanvasScript.AddSelectedAbility();
             });
             
             // Execute ready command to inform UnitLoadoutUIWrapper

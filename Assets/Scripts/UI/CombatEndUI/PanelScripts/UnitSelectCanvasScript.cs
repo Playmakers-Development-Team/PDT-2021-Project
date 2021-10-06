@@ -8,15 +8,13 @@ using UnityEngine.UI;
 
 namespace UI.CombatEndUI.PanelScripts
 {
-    public class UnitSelectCanvasScript : DialogueComponent<AbilityLoadoutDialogue>
+    public class UnitSelectCanvasScript : DialogueComponent<AbilityRewardDialogue>
     {
         [SerializeField] private GameObject unitCardPrefab;
         [SerializeField] private GameObject unitAbilityCardPrefab;
         
         public List<UnitCard> unitCards;
         [SerializeField] protected internal List<UnitAbilitiesCard> abilitiesCards;
-        private UnitCard activeUnitCard;
-        internal UnitAbilitiesCard activeAbilitiesCard;
 
         [SerializeField] private ScrollRect unitScrollView;
         [SerializeField] private ScrollRect abilityScrollView;
@@ -38,7 +36,7 @@ namespace UI.CombatEndUI.PanelScripts
         
         public void OnAbilityButtonPress(AbilityButton abilityButton)
         {
-            activeAbilitiesCard.OnAbilityButtonPress(abilityButton);
+            dialogue.activeAbilitiesCard.OnAbilityButtonPress(abilityButton);
         }
         
         #endregion
@@ -60,12 +58,12 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             // Instantiate and draw active unit
-            activeUnitCard = Instantiate(unitCardPrefab,
+            dialogue.SetActiveUnitCard(Instantiate(unitCardPrefab,
                 unitSpawnPosition,
                 Quaternion.identity,
                 transform)
-                .GetComponent<UnitCard>();
-            activeUnitCard.Redraw(activeLoadoutUnitInfo);
+                .GetComponent<UnitCard>());
+            dialogue.activeUnitCard.Redraw(activeLoadoutUnitInfo);
             
             
             // Get abilities card spawn position
@@ -81,24 +79,24 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             // Instantiate and draw abilities
-            activeAbilitiesCard = Instantiate(
+            dialogue.activeAbilitiesCard = Instantiate(
                 unitAbilityCardPrefab,
                 abilitiesSpawnPosition,
                 Quaternion.identity,
                 transform)
                 .GetComponent<UnitAbilitiesCard>();
-            activeAbilitiesCard.Redraw(activeLoadoutUnitInfo.AbilityInfo);
+            dialogue.activeAbilitiesCard.Redraw(activeLoadoutUnitInfo.AbilityInfo);
         }
 
         public void SlideActiveUnit()
         {
-            activeUnitCard.isSliding = true;
-            activeAbilitiesCard.isSliding = true;
+            dialogue.activeUnitCard.isSliding = true;
+            dialogue.activeAbilitiesCard.isSliding = true;
         }
         
         public void RemoveSelectedAbility()
         {
-            activeAbilitiesCard.RemoveSelectedAbility(activeUnitCard.loadoutUnitInfo.Unit);
+            dialogue.activeAbilitiesCard.RemoveSelectedAbility(dialogue.activeUnitCard.loadoutUnitInfo.Unit);
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
@@ -108,7 +106,7 @@ namespace UI.CombatEndUI.PanelScripts
 
         public void EnableAbilityButtons()
         {
-            activeAbilitiesCard.EnableAbilityButtons();
+            dialogue.activeAbilitiesCard.EnableAbilityButtons();
         }
 
         #endregion

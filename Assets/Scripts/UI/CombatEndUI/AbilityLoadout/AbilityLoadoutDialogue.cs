@@ -42,14 +42,13 @@ namespace UI.CombatEndUI.AbilityLoadout
             {
                 if (AbilitySelectedCommand.IsNewAbility)
                 {
-                    abilitySelectCanvasScript.OnAbilityButtonPress(AbilitySelectedCommand.
-                        AbilityButton);
+                    abilitySelectCanvasScript.OnAbilityButtonPress(
+                        AbilitySelectedCommand.AbilityButton);
                 }
                 else
                 {
                     unitSelectCanvasScript.OnAbilityButtonPress(
                         AbilitySelectedCommand.AbilityButton);
-                    
                 }
             });
 
@@ -82,8 +81,7 @@ namespace UI.CombatEndUI.AbilityLoadout
                 
                 unitSelectCanvasScript.RemoveSelectedAbility();
                 
-                // Assumption that only 1 unit is in unitCards during ability swap
-                abilitySelectCanvasScript.AddSelectedAbility(unitSelectCanvasScript.unitCards[0].loadoutUnitInfo.Unit);
+                abilitySelectCanvasScript.AddSelectedAbility();
             });
             
             // Execute ready command to inform UnitLoadoutUIWrapper

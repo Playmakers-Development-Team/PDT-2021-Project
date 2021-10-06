@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using Abilities;
 using TenetStatuses;
+using UI.CombatEndUI.AbilityLoadout.Abilities;
+using UI.CombatEndUI.AbilityLoadout.Unit;
 using UI.CombatEndUI.PanelScripts;
 using UI.Commands;
 using UI.Core;
@@ -34,9 +36,10 @@ namespace UI.CombatEndUI
         [SerializeField] protected internal float fadeOutTime = 0.5f;
         [SerializeField] protected internal float selectedUnitSlideSpeed = 1000f;
         [SerializeField] protected internal float selectedUnitPosition = -180f;
-
-        protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         
+        protected internal UnitCard activeUnitCard;
+        protected internal UnitAbilitiesCard activeAbilitiesCard;
+        protected readonly List<LoadoutUnitInfo> units = new List<LoadoutUnitInfo>();
         public List<Sprite> abilityImages = new List<Sprite>();
 
         #region Monobehaviour Events
@@ -128,6 +131,30 @@ namespace UI.CombatEndUI
             abilitySelectCanvas.enabled = true;
             finalAbilitiesCanvas.enabled = true;
             units.Clear();
+        }
+
+        protected internal void SetActiveUnitCard(UnitCard unitCard)
+        {
+            activeUnitCard = unitCard;
+        }
+        
+        // Search through the selected unit's abilities to find the NonUpgraded ability
+        // Only useful for ability upgrading (obviously)
+        protected internal AbilityButton GetNonUpgradedAbility(string abilityName)
+        {
+            List<AbilityButton> currentAbilityButtons = activeAbilitiesCard.abilityButtons;
+            
+            foreach (AbilityButton nonUpgradedAbility in currentAbilityButtons)
+            {
+                if (abilityName.Equals(nonUpgradedAbility.AbilityName + "+"))
+                {
+                    return nonUpgradedAbility;
+                }
+            }
+            
+            Debug.LogError("Could not find NonUpgraded ability for " + abilityName);
+
+            return null;
         }
 
         #endregion

@@ -104,7 +104,12 @@ namespace UI.CombatEndUI
                 {
                     dialogue.drawNewAbilityDetails.Invoke(this);
                     
-                    dialogue.drawOldAbilityDetails.Invoke(GetNonUpgradedAbility());
+                    // Select the ability for upgrading that the unit owns
+                    // by having the code "click the button"
+                    AbilityButton nonUpgradedAbility = dialogue.GetNonUpgradedAbility(AbilityName);
+                    dialogue.unitSelectCanvasScript.OnAbilityButtonPress(nonUpgradedAbility);
+                    // Draw for old ability panel details
+                    dialogue.drawOldAbilityDetails.Invoke(nonUpgradedAbility);
                 }
             }
         }
@@ -123,28 +128,16 @@ namespace UI.CombatEndUI
                 if (isNewAbility)
                 {
                     dialogue.clearNewAbilityDetails.Invoke();
-                    dialogue.clearOldAbilityDetails.Invoke();
-                }
-            }
-        }
-        
-        // Search through the selected unit's abilities to find the NonUpgraded ability
-        private AbilityButton GetNonUpgradedAbility()
-        {
-            List<AbilityButton> currentAbilityButtons = dialogue.unitSelectCanvasScript.activeAbilitiesCard.abilityButtons;
-            
-            foreach (AbilityButton nonUpgradedAbility in currentAbilityButtons)
-            {
-                if (this.AbilityName.Equals(nonUpgradedAbility.AbilityName + "+"))
-                {
+                    
+                    // Deselect the ability for upgrading that the unit owns
+                    // by having the code "click the button"
+                    AbilityButton nonUpgradedAbility = dialogue.GetNonUpgradedAbility(AbilityName);
                     dialogue.unitSelectCanvasScript.OnAbilityButtonPress(nonUpgradedAbility);
-                    return nonUpgradedAbility;
+                    // Remove info from the old ability panel details
+                    dialogue.clearOldAbilityDetails.Invoke();
+                    
                 }
             }
-            
-            Debug.LogError("Could not find NonUpgraded ability for " + AbilityName);
-
-            return null;
         }
 
         #endregion

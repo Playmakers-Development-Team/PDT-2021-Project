@@ -77,6 +77,8 @@ namespace UI.CombatEndUI.PanelScripts
             {
                 currentSelectedAbility.Deselect();
                 
+                //dialogue.GetNonUpgradedAbility()
+                
                 // Make no ability selected
                 currentSelectedAbility = null;
                 
@@ -160,13 +162,13 @@ namespace UI.CombatEndUI.PanelScripts
             buttonFadeAnim.SetTrigger("Play");
         }
         
-        public void AddSelectedAbility(IUnit unit)
+        public void AddSelectedAbility()
         {
             foreach (var abilityInfo in newAbilityInfos)
             {
                 if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
                 {
-                    unit.Abilities.Add(abilityInfo.Ability);
+                    dialogue.activeUnitCard.loadoutUnitInfo.Unit.Abilities.Add(abilityInfo.Ability);
                     break;
                 }
             }
