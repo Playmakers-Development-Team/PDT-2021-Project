@@ -12,6 +12,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
         [SerializeField] protected RawImage renderImage;
         
         private RectTransform rectTransform;
+        private Button button;
         internal bool isSliding = false;
 
         #region UIComponent
@@ -19,6 +20,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
         protected override void OnComponentAwake()
         {
             rectTransform = GetComponent<RectTransform>();
+            button = GetComponentInChildren<Button>();
         }
 
         protected override void Subscribe() {}
@@ -55,7 +57,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
         
         public void OnPressed()
         {
-            dialogue.fadeOtherUnits.Invoke(loadoutUnitInfo);
+            dialogue.unitSelected.Invoke(loadoutUnitInfo);
             Invoke(nameof(SlideIntoPosition), dialogue.fadeOutTime);
         }
         
@@ -71,6 +73,11 @@ namespace UI.CombatEndUI.AbilityLoadout.Unit
         private void ShowAbilitySelectPanel()
         {
             dialogue.showAbilitySelectPanel.Invoke(loadoutUnitInfo);
+        }
+
+        public void DisableUnitButton()
+        {
+            button.interactable = false;
         }
         
         #endregion

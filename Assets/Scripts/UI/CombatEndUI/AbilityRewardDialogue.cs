@@ -18,7 +18,7 @@ namespace UI.CombatEndUI
         internal readonly Event<LoadoutUnitInfo> showAbilitySelectPanel = new Event<LoadoutUnitInfo>();
         internal readonly Event<LoadoutUnitInfo> unitSpawned = new Event<LoadoutUnitInfo>();
         internal readonly Event showUnitSelectPanel = new Event();
-        internal readonly Event<LoadoutUnitInfo> fadeOtherUnits = new Event<LoadoutUnitInfo>();
+        internal readonly Event<LoadoutUnitInfo> unitSelected = new Event<LoadoutUnitInfo>();
         internal readonly Event slideActiveUnit = new Event();
         
         internal readonly Event<AbilitySelectedCommand> abilityButtonPress = new Event<AbilitySelectedCommand>();
@@ -58,9 +58,9 @@ namespace UI.CombatEndUI
                 OnAbilitySelectPanel(unitInfo);
             });
             
-            fadeOtherUnits.AddListener(unitInfo =>
+            unitSelected.AddListener(unitInfo =>
             {
-                OnUnitFade(unitInfo);
+                OnUnitSelected(unitInfo);
             });
             
             slideActiveUnit.AddListener(() =>
@@ -108,9 +108,11 @@ namespace UI.CombatEndUI
 
         #region Utility Functions
 
-        private void OnUnitFade(LoadoutUnitInfo selectedUnit)
+        private void OnUnitSelected(LoadoutUnitInfo selectedUnit)
         {
             unitSelectCanvasScript.SetActiveUnit(selectedUnit);
+
+            unitSelectCanvasScript.DisableUnitButtons();
             
             unitSelectCanvasScript.FadeOutUnits(fadeOutTime);
             unitSelectCanvasScript.FadeOutText();
@@ -131,7 +133,6 @@ namespace UI.CombatEndUI
         {
             abilitySelectCanvas.enabled = true;
             finalAbilitiesCanvas.enabled = true;
-            units.Clear();
         }
 
         protected internal void SetActiveUnitCard(UnitCard unitCard)

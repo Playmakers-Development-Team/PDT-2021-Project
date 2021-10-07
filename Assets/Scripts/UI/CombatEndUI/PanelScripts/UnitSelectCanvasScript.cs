@@ -65,6 +65,7 @@ namespace UI.CombatEndUI.PanelScripts
                 Quaternion.identity,
                 transform)
                 .GetComponent<UnitCard>());
+            dialogue.activeUnitCard.GetComponentInChildren<Button>().interactable = false;
             dialogue.activeUnitCard.Redraw(activeLoadoutUnitInfo);
             
             
@@ -114,6 +115,14 @@ namespace UI.CombatEndUI.PanelScripts
         public void FadeOutText()
         {
             fadeOutTextAnim.SetTrigger("Play");
+        }
+
+        public void DisableUnitButtons()
+        {
+            foreach (var unitCard in unitCards)
+            {
+                unitCard.DisableUnitButton();
+            }
         }
 
         #endregion
