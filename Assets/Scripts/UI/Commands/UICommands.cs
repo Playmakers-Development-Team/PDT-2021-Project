@@ -1,5 +1,6 @@
 using Commands;
-using UI.AbilityLoadout.Abilities;
+using UI.CombatEndUI;
+using UI.CombatEndUI.AbilityLoadout.Abilities;
 using Units;
 using Units.Commands;
 
@@ -14,15 +15,20 @@ namespace UI.Commands
     }
     
     /// <summary>
-    /// Executed when an the ability loadout dialogue appears
+    /// Executed to spawn the ability loadout dialogue
     /// </summary>
     public class SpawnAbilityLoadoutUICommand : Command {}
+    
+    /// <summary>
+    /// Executed to spawn the ability upgrade dialogue
+    /// </summary>
+    public class SpawnAbilityUpgradeUICommand : Command {}
 
     /// <summary>
-    /// Executed when an the ability loadout dialogue is ready
-    /// i.e. when Awake() finishes in AbilityLoadoutDialogue
+    /// Executed when an the ability loadout or upgrade dialogue is ready
+    /// i.e. when Awake() finishes in AbilityLoadoutDialogue/AbilityUpgradeDialogue
     /// </summary>
-    public class AbilityLoadoutReadyCommand : Command {}
+    public class AbilityRewardDialogueReadyCommand : Command {}
 
     /// <summary>
     /// Executed when an ability button is clicked for new ability selection
