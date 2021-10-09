@@ -2,6 +2,13 @@
 <WwiseDocument Type="WorkUnit" ID="{1BA31B0B-4451-4246-BC6D-9A080E4196C3}" SchemaVersion="103">
 	<InteractiveMusic>
 		<WorkUnit Name="Ambience" ID="{1BA31B0B-4451-4246-BC6D-9A080E4196C3}" PersistMode="Standalone">
+			<PropertyList>
+				<Property Name="Inclusion" Type="bool">
+					<ValueList>
+						<Value>False</Value>
+					</ValueList>
+				</Property>
+			</PropertyList>
 			<ChildrenList>
 				<MusicPlaylistContainer Name="Mountain_Trail" ID="{14406D11-58B3-4E60-B3AC-D8AD78351214}" ShortID="340568499">
 					<ReferenceList>
