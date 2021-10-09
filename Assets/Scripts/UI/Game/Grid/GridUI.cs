@@ -2,6 +2,7 @@
 using System.Linq;
 using Abilities;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.Commands;
 using Grid.GridObjects;
@@ -10,7 +11,6 @@ using Turn;
 using UI.Core;
 using Units;
 using Units.Players;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
@@ -37,7 +37,7 @@ namespace UI.Game.Grid
         [SerializeField] private TileBase invalidTile;
         [SerializeField] private TileBase selectedTile;
         
-        [Header("Masking")]
+        [Header("Obstacle Masking")]
         
         [SerializeField] private Color defaultColour;
         [SerializeField] private Color maskColour;
@@ -47,9 +47,17 @@ namespace UI.Game.Grid
         
         [SerializeField] private Tilemap tilemap;
         
+        [Header("Transition")]
+        
+        [SerializeField] private Animator animator;
+        [SerializeField] private float delay;
+        
         private GridManager gridManager;
         private TurnManager turnManager;
         private CommandManager commandManager;
+        
+        private static readonly int promoted = Animator.StringToHash("promoted");
+        private static readonly int demoted = Animator.StringToHash("demoted");
 
 
         #region MonoBehaviour
@@ -94,7 +102,13 @@ namespace UI.Game.Grid
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
         }
-        
+
+        protected override void OnComponentStart()
+        {
+            if (manager.Peek() == dialogue)
+                TransitionIn();
+        }
+
         protected override void OnComponentEnabled()
         {
             base.OnComponentEnabled();
@@ -114,6 +128,9 @@ namespace UI.Game.Grid
             dialogue.abilityRotated.AddListener(OnAbilityRotated);
             dialogue.abilityConfirmed.AddListener(OnAbilityConfirmed);
             dialogue.modeChanged.AddListener(OnModeChanged);
+            
+            dialogue.promoted.AddListener(OnPromoted);
+            dialogue.demoted.AddListener(OnDemoted);
         }
 
         protected override void Unsubscribe()
@@ -123,6 +140,9 @@ namespace UI.Game.Grid
             dialogue.abilityRotated.RemoveListener(OnAbilityRotated);
             dialogue.abilityConfirmed.RemoveListener(OnAbilityConfirmed);
             dialogue.modeChanged.RemoveListener(OnModeChanged);
+            
+            dialogue.promoted.RemoveListener(OnPromoted);
+            dialogue.demoted.RemoveListener(OnDemoted);
         }
         
         #endregion
@@ -351,6 +371,20 @@ namespace UI.Game.Grid
             
             FillAll();
         }
+        
+        #endregion
+        
+        #region Transition
+        
+        private async void TransitionIn()
+        {
+            await UniTask.Delay((int) (delay * 1000.0f));
+            OnPromoted();
+        }
+
+        private void OnPromoted() => animator.SetTrigger(promoted);
+
+        private void OnDemoted() => animator.SetTrigger(demoted);
         
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Cysharp.Threading.Tasks;
 using TenetStatuses;
 using TMPro;
 using UI.Core;
@@ -38,21 +39,54 @@ namespace UI.Game.UnitPanels
         [SerializeField] protected Color enemyFillColour;
         [SerializeField] protected Color enemyBackgroundColour;
         [SerializeField] protected Color enemyBorderColour;
+
+        [Header("Transition")]
+        
+        [SerializeField] private Animator animator;
+        [SerializeField] private float delay;
         
         protected GameDialogue.UnitInfo unitInfo;
         
         private static readonly int fillId = Shader.PropertyToID("_Fill");
         private static readonly int dividerColorId = Shader.PropertyToID("_DividerColor");
+        
+        private static readonly int promoted = Animator.StringToHash("promoted");
+        private static readonly int demoted = Animator.StringToHash("demoted");
 
 
         #region DialogueComponent
+
+        protected override void OnComponentStart()
+        {
+            if (manager.Peek() == dialogue)
+                TransitionIn();
+        }
 
         protected override void OnComponentAwake()
         {
             healthFillImage.material = Instantiate(healthFillImage.material);
         }
 
+        protected override void Subscribe()
+        {
+            dialogue.promoted.AddListener(OnPromoted);
+            dialogue.demoted.AddListener(OnDemoted);
+        }
+
+        protected override void Unsubscribe()
+        {
+            dialogue.promoted.RemoveListener(OnPromoted);
+            dialogue.demoted.RemoveListener(OnDemoted);
+        }
+
         #endregion
+
+
+        private async void TransitionIn()
+        {
+            await UniTask.Delay((int) (delay * 1000.0f));
+            OnPromoted();
+        }
         
 
         #region Drawing
@@ -110,6 +144,21 @@ namespace UI.Game.UnitPanels
             abilityCards.Redraw(unitInfo.Unit);
         }
         
+        #endregion
+        
+        
+        #region Listeners
+
+        private void OnPromoted()
+        {
+            animator.SetTrigger(promoted);
+        }
+
+        private void OnDemoted()
+        {
+            animator.SetTrigger(demoted);
+        }
+
         #endregion
     }
 }

@@ -397,6 +397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1925355044633352975}
   - component: {fileID: 5262119305880962376}
+  - component: {fileID: 4145150595700758233}
   m_Layer: 5
   m_Name: Timeline Panel
   m_TagString: Untagged
@@ -444,6 +445,27 @@ MonoBehaviour:
   insightButtonPrefab: {fileID: 1569788653794262997, guid: ea473fc14bd52374aa41f5991a9326bb, type: 3}
   timelineLength: 9
   drawInsightBtn: 0
+  animator: {fileID: 4145150595700758233}
+  delay: 5
+--- !u!95 &4145150595700758233
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5877050488744526533}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6e20cdad517f7a14c90a88dd857ec849, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6881319126922021532
 GameObject:
   m_ObjectHideFlags: 0
