@@ -56,10 +56,7 @@ namespace UI.Game
             }
         }
         
-        
-
         #endregion
-
 
         #region MonoBehaviour
         
