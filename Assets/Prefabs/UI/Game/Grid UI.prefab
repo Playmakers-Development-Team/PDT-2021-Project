@@ -137,6 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9091031311383675862}
   - component: {fileID: 9091031311383675857}
+  - component: {fileID: 2123205028614444088}
   m_Layer: 5
   m_Name: Grid UI
   m_TagString: Untagged
@@ -175,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32
   line: {fileID: 8119744712412664197}
   defaultTile: {fileID: 11400000, guid: 9c6965a19c54fea4887f02ec9642fe94, type: 2}
   validTile: {fileID: 11400000, guid: bcc862c008ef86d488e4dd87a979da31, type: 2}
@@ -185,6 +186,27 @@ MonoBehaviour:
   maskColour: {r: 0, g: 0, b: 0, a: 0.4}
   fadeDuration: 0.2
   tilemap: {fileID: 9091031311659349673}
+  animator: {fileID: 2123205028614444088}
+  delay: 5
+--- !u!95 &2123205028614444088
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9091031311383675856}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 82ac5bb64d0fa7f4fa7142bfe8ff84e8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &9091031311613332642
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,11 +6,13 @@
         
         protected override void Subscribe()
         {
+            base.Subscribe();
             dialogue.turnStarted.AddListener(OnTurnStarted);
         }
 
         protected override void Unsubscribe()
         {
+            base.Unsubscribe();
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
         }
 
