@@ -11,6 +11,7 @@ using UI.Game.UnitPanels.Abilities;
 using Units;
 using Units.Commands;
 using Units.Stats;
+using Units.Virtual;
 using UnityEngine;
 using Event = UI.Core.Event;
 
@@ -33,6 +34,8 @@ namespace UI.Game
         internal readonly Event<AbilityCard> abilityHoverExit = new Event<AbilityCard>();
         internal readonly Event<Vector2> abilityRotated = new Event<Vector2>();
         internal readonly Event abilityConfirmed = new Event();
+        internal readonly Event<ProjectedUnitInfo> unitApplyAbilityProjection = new Event<ProjectedUnitInfo>();
+        internal readonly Event<ProjectedUnitInfo> unitCancelAbilityProjection = new Event<ProjectedUnitInfo>();
 
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
 
@@ -317,6 +320,18 @@ namespace UI.Game
             public MoveInfo(Vector2Int destination, UnitInfo unitInfo)
             {
                 Destination = destination;
+                UnitInfo = unitInfo;
+            }
+        }
+
+        internal readonly struct ProjectedUnitInfo
+        {
+            internal VirtualUnit VirtualUnit { get; }
+            internal UnitInfo UnitInfo { get; }
+
+            public ProjectedUnitInfo(VirtualUnit virtualUnit, UnitInfo unitInfo)
+            {
+                VirtualUnit = virtualUnit;
                 UnitInfo = unitInfo;
             }
         }

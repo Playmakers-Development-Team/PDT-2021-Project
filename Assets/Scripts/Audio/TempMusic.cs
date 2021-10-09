@@ -29,7 +29,7 @@ namespace Audio
             }
         }
 
-        private void Start()
+        private void OnEnable()
         {
             commandManager.ListenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
             cmd.StateName));
@@ -40,7 +40,6 @@ namespace Audio
         {
             commandManager.UnlistenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
                 cmd.StateName));
-            
         }
 
         private void ChangeMusic(Scene scene, LoadSceneMode loadSceneMode)
