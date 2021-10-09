@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Grid;
 using Grid.Commands;
 using Grid.GridObjects;
 using Managers;
-using Turn;
 using Turn.Commands;
 using Units;
 using Units.Commands;
@@ -22,9 +21,9 @@ namespace VFX.VFX
     {
         [Header("Spawn Parameters")]
         
-        [SerializeField] private float spawnDelay;
-        [SerializeField] private float typeDelay;
-        [SerializeField] private float spawnPeriod;
+        [SerializeField] private float playerDelay;
+        [SerializeField] private float obstacleDelay;
+        [SerializeField] private float enemyDelay;
 
         private readonly Dictionary<IUnit, Animator> players = new Dictionary<IUnit, Animator>();
         private readonly Dictionary<IUnit, Animator> enemies = new Dictionary<IUnit, Animator>();
@@ -34,8 +33,7 @@ namespace VFX.VFX
         private PlayerManager playerManager;
         private EnemyManager enemyManager;
         private GridManager gridManager;
-        private TurnManager turnManager;
-        
+
         private static readonly int spawn = Animator.StringToHash("spawn");
         private static readonly int death = Animator.StringToHash("death");
 
@@ -45,7 +43,6 @@ namespace VFX.VFX
             playerManager = ManagerLocator.Get<PlayerManager>();
             enemyManager = ManagerLocator.Get<EnemyManager>();
             gridManager = ManagerLocator.Get<GridManager>();
-            turnManager = ManagerLocator.Get<TurnManager>();
         }
 
         private void OnEnable()
@@ -55,6 +52,8 @@ namespace VFX.VFX
             commandManager.ListenCommand((Action<GridObjectsReadyCommand>) OnGridObjectsReady);
             commandManager.ListenCommand((Action<TurnQueueCreatedCommand>) OnTurnQueueCreated);
             commandManager.ListenCommand((Action<KilledUnitCommand>) OnUnitKilled);
+            commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnEncounterWon);
+            commandManager.ListenCommand((Action<NoRemainingPlayerUnitsCommand>) OnEncounterLost);
         }
 
         private void OnDisable()
@@ -64,6 +63,8 @@ namespace VFX.VFX
             commandManager.UnlistenCommand((Action<GridObjectsReadyCommand>) OnGridObjectsReady);
             commandManager.UnlistenCommand((Action<TurnQueueCreatedCommand>) OnTurnQueueCreated);
             commandManager.UnlistenCommand((Action<KilledUnitCommand>) OnUnitKilled);
+            commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnEncounterWon);
+            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnEncounterLost);
         }
 
         private void OnPlayersReady(UnitsReadyCommand<PlayerUnitData> cmd)
@@ -105,16 +106,11 @@ namespace VFX.VFX
             }
         }
 
-        private async void OnTurnQueueCreated(TurnQueueCreatedCommand cmd)
+        private void OnTurnQueueCreated(TurnQueueCreatedCommand cmd)
         {
-            await Task.Delay((int) (spawnDelay * 1000.0f));
-            await SpawnUnits(obstacles.Values);
-            
-            await Task.Delay((int) (typeDelay * 1000.0f));
-            await SpawnUnits(enemies.Values);
-            
-            await Task.Delay((int) (typeDelay * 1000.0f));
-            await SpawnUnits(players.Values);
+            SpawnUnits(obstacles.Values, obstacleDelay);
+            SpawnUnits(enemies.Values, enemyDelay);
+            SpawnUnits(players.Values, playerDelay);
         }
 
         private void OnUnitKilled(KilledUnitCommand cmd)
@@ -141,16 +137,42 @@ namespace VFX.VFX
             return array;
         }
 
-        private async Task SpawnUnits(IEnumerable<Animator> animators)
+        private async void SpawnUnits(IEnumerable<Animator> animators, float delay = 0.0f)
         {
+            await UniTask.Delay((int) (delay * 1000.0f));
+            
             foreach (Animator animator in animators)
             {
                 if (!Application.isPlaying)
                     return;
                 
                 animator.SetTrigger(spawn);
-                // await Task.Delay((int) (spawnPeriod * 1000.0f));
             }
+        }
+
+        private async void HideUnits(IEnumerable<Animator> animators, float delay = 0.0f)
+        {
+            await UniTask.Delay((int) (delay * 1000.0f));
+            
+            foreach (Animator animator in animators)
+            {
+                if (!Application.isPlaying)
+                    return;
+                
+                animator.SetTrigger(death);
+            }
+        }
+
+        private void OnEncounterWon(NoRemainingEnemyUnitsCommand cmd)
+        {
+            HideUnits(players.Values);
+            HideUnits(obstacles.Values);
+        }
+
+        private void OnEncounterLost(NoRemainingPlayerUnitsCommand cmd)
+        {
+            HideUnits(enemies.Values);
+            HideUnits(obstacles.Values);
         }
     }
 }
