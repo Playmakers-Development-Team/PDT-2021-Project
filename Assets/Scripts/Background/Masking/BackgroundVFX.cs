@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using Background.Pipeline;
 using Commands;
 using Cysharp.Threading.Tasks;
-using Game.Commands;
 using Managers;
 using Turn.Commands;
 using Unity.Collections;
 using Unity.Jobs;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Jobs;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Background.Masking
 {
