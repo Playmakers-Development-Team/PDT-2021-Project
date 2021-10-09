@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Abilities;
 using Abilities.Shapes;
 using Audio;
@@ -27,13 +27,12 @@ namespace UI.Game
 
         private List<GameDialogue.ProjectedUnitInfo> lastProjected =
             new List<GameDialogue.ProjectedUnitInfo>();
-        [SerializeField] private Transform parent;
-        
 
         private bool CanUseAbility => turnManager.CanUseAbility;
 
         [SerializeField] private GameObject PauseMenu;
-
+        [SerializeField] private Transform parent;
+ 
         #region DelegateFunctions
 
         private void PauseGame(InputAction.CallbackContext ctx)
@@ -60,6 +59,7 @@ namespace UI.Game
         
 
         #endregion
+
 
         #region MonoBehaviour
         
