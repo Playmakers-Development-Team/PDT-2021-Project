@@ -33,6 +33,9 @@ namespace Background.Pipeline
         private RenderTexture washTexture;
         private RenderTexture lineTexture;
 
+        public Material LineMaterial =>
+            Application.isPlaying ? lineRenderer.material : lineRenderer.sharedMaterial;
+
         private void Awake()
         {
             // Right now, there is the option to render when the camera is loaded (or on camera Awake),

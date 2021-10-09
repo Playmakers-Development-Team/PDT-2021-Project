@@ -43,6 +43,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd478a3ff9004ecbab8bd7f0b2fd4a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnDelay: 2
-  typeDelay: 1
-  spawnPeriod: 0.25
+  playerDelay: 4
+  obstacleDelay: 2
+  enemyDelay: 3

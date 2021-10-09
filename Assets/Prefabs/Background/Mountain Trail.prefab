@@ -3041,6 +3041,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7694296866473946609, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
   m_PrefabInstance: {fileID: 6636473242450552743}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3953843243379247697 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7694296866473946614, guid: 4fdd094b735102f488eafb04707f5e5e, type: 3}
+  m_PrefabInstance: {fileID: 6636473242450552743}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28b0722a92e24e408547e79ea91b4b87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8277523637170708089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3050,8 +3061,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2087250788214907645, guid: 782640da165ba694ea6c91d9696a7fa5, type: 3}
       propertyPath: m_Name
-      value: Mask Controller
+      value: Background VFX Controller
       objectReference: {fileID: 0}
+    - target: {fileID: 2537115019410917883, guid: 782640da165ba694ea6c91d9696a7fa5, type: 3}
+      propertyPath: washDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2537115019410917883, guid: 782640da165ba694ea6c91d9696a7fa5, type: 3}
+      propertyPath: backgroundCamera
+      value: 
+      objectReference: {fileID: 3953843243379247697}
     - target: {fileID: 4326403527520372894, guid: 782640da165ba694ea6c91d9696a7fa5, type: 3}
       propertyPath: m_RootOrder
       value: 2
