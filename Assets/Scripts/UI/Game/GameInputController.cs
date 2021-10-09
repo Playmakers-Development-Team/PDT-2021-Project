@@ -27,8 +27,6 @@ namespace UI.Game
 
         private List<GameDialogue.ProjectedUnitInfo> lastProjected =
             new List<GameDialogue.ProjectedUnitInfo>();
-        [SerializeField] private Transform parent;
-        
 
         private bool CanUseAbility => turnManager.CanUseAbility;
 
@@ -60,6 +58,8 @@ namespace UI.Game
         
 
         #endregion
+
+        private bool CanUseAbility => turnManager.CanUseAbility;
 
         #region MonoBehaviour
         
