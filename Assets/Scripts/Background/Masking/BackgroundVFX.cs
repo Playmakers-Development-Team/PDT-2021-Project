@@ -38,6 +38,11 @@ namespace Background.Masking
         [SerializeField] private float lineDuration;
         [SerializeField] private float lineDelay;
 
+        [Header("Particles")]
+        
+        [SerializeField] private ParticleSystem system;
+        
+
         private Transform[] masks;
 
         private void OnEnable()
@@ -75,6 +80,7 @@ namespace Background.Masking
 
         private void OnStart()
         {
+            system.Play();
             backgroundCamera.LineMaterial.color = gradient.Evaluate(0);
             
             LineAsync(true, lineDelay);
@@ -139,6 +145,7 @@ namespace Background.Masking
 
         private void OnGameFinished()
         {
+            system.Stop();
             LineAsync(false);
             WashAsync(false);
         }
