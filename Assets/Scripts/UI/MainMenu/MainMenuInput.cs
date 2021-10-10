@@ -1,16 +1,54 @@
 ﻿using UI.Core;
+using UI.Input;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UI.MainMenu
-{
-    //IN-CASE ADDITIONAL INPUT IS NEEDED OTHERWISE CAN BE DELETED
+{ 
     public class MainMenuInput : DialogueComponent<MainMenuDialogue>
     {
-        #region UIComponent
-        protected override void Subscribe() {}
+        
 
-        protected override void Unsubscribe() {}
+        private PlayerControls controls;
+        
+        #region InputDelegates
+         
+        private void OnClick(InputAction.CallbackContext context)
+        {
+            if (!context.performed  || !dialogue.isOnSplashScreen)
+                return;
+
+            dialogue.startTitleAnimation.Invoke();
+        }
         
         #endregion
 
+        
+        #region OverrideFunctions
+        protected override void OnComponentAwake()
+        {
+            base.OnComponentAwake();
+            controls = new PlayerControls();
+            controls.UI.AnyButton.performed += OnClick;
+        }
+        
+        protected override void OnComponentEnabled()
+        {
+            base.OnComponentEnabled();
+            controls.Enable();
+            
+        }
+
+        protected override void OnComponentDisabled()
+        {
+            base.OnComponentDisabled();
+            controls.Disable();
+        }
+        
+        #endregion
+
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
     }
 }

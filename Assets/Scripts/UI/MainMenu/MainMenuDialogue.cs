@@ -8,17 +8,19 @@ namespace UI.MainMenu
     public class MainMenuDialogue : Dialogue
     {
 
-        [SerializeField] private GameTitleComponent gameTitleComponent;
+        [SerializeField] private GameObject gameTitle;
         [SerializeField] private CharacterImageComponent characterImageComponent;
         [SerializeField] private Transform mainMenuParent;
         [SerializeField] private GameObject exitConfirmationPrefab;
         [SerializeField] private GameObject MainMenuButtonPrefab;
+        [SerializeField] private GameObject splashScreenPrefab;
 
         private GameObject exitConfirmedPrefabInstance;
         private GameObject mainMenuPrefabInstance;
+        private GameObject splashScreenInstance;
 
-
-
+        [SerializeField]internal bool isOnSplashScreen;
+        
         #region Events
 
         internal readonly Event settingConfirmed = new Event();
@@ -30,8 +32,10 @@ namespace UI.MainMenu
         internal readonly Event exitStarted = new Event();
         internal readonly Event cancelExit = new Event();
         internal readonly Event buttonSelected = new Event();
+        internal readonly Event splashScreenEnded = new Event();
+        internal readonly Event splashScreenStart = new Event();
+        internal readonly Event startTitleAnimation = new Event();
         
-
         #endregion
 
         #region DialogueComponent
@@ -46,10 +50,12 @@ namespace UI.MainMenu
         protected override void OnDialogueAwake()
         { 
             base.OnDialogueAwake();
-            mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
-            characterImageComponent.RandomizeCharacterSprite();
-            gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
-
+            isOnSplashScreen = true;
+            splashScreenInstance = Instantiate(splashScreenPrefab, mainMenuParent);
+           // mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
+        //    characterImageComponent.RandomizeCharacterSprite();
+//            gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
+            Instantiate(gameTitle, mainMenuParent);
             #region Listeners
 
             exitStarted.AddListener(() =>
@@ -60,8 +66,9 @@ namespace UI.MainMenu
 
             exitConfirmed.AddListener(() =>
             {
+                
                 Application.Quit();
-                UnityEditor.EditorApplication.isPlaying = false;
+               // UnityEditor.EditorApplication.isPlaying = false;
             });
             
             cancelExit.AddListener(() =>
@@ -74,6 +81,20 @@ namespace UI.MainMenu
             {
                 //TODO: CHANGE TO APPROPRIATE SCENE LOADER OR SCENE
                 SceneManager.LoadScene("Scenes/Design/Playtest Beta Map");
+            });
+            
+            splashScreenEnded.AddListener(() =>
+            {
+                mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
+                Destroy(splashScreenInstance);
+                isOnSplashScreen = false;
+            });
+            
+            splashScreenStart.AddListener(() =>
+            {
+                splashScreenInstance = Instantiate(splashScreenPrefab, mainMenuParent);
+                Destroy(mainMenuPrefabInstance);
+                isOnSplashScreen = true;
             });
 
             settingConfirmed.AddListener(() =>

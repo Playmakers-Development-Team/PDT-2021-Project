@@ -12,32 +12,48 @@ Material:
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _GradientTex:
-        m_Texture: {fileID: 2800000, guid: 2091ddf7b232c8c408a7baa80fd271d5, type: 3}
+    - _DetailTex:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GradientTex:
+        m_Texture: {fileID: 2800000, guid: 2091ddf7b232c8c408a7baa80fd271d5, type: 3}
+        m_Scale: {x: 8.33, y: 26.82}
+        m_Offset: {x: 5.17, y: 2.83}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NoiseTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _ColorMask: 15
+    - _ColorMask: 45.45
+    - _Cull: -0.27
     - _Fill: 0
     - _FillAmount: 0
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
+    - _LineSharpness: 0.78
+    - _LineWeight: 0.65
+    - _ParallelDisplacement: 0
+    - _PerpendicularDisplacement: 0
+    - _Stencil: 347.4
+    - _StencilComp: 1010.6
+    - _StencilOp: 29.09
+    - _StencilReadMask: 4868.1
+    - _StencilWriteMask: 1105.6
+    - _Strength: 0.17
     - _UseUIAlphaClip: 0
     m_Colors:
+    - _Albedo: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DividerColor: {r: 1, g: 1, b: 1, a: 1}
+    - _DividerColor: {r: 0.61503696, g: 0, b: 1, a: 1}
+    - _Line: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -359,6 +359,14 @@ namespace UI.Input
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""AnyButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""7d8506a2-5cde-4869-931c-caee3aa9da8d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -790,6 +798,50 @@ namespace UI.Input
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""101b1a33-c2d7-4b7e-9d03-ebd83f083d06"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17e8145a-fca9-4fbd-a5ad-5afb177be3a9"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnyButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f15ff4bd-c353-4ff0-a268-8da0419c30f8"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7d1e4b72-c354-4658-b4a2-8b2c941ee981"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""AnyButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -902,6 +954,7 @@ namespace UI.Input
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
             m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
+            m_UI_AnyButton = m_UI.FindAction("AnyButton", throwIfNotFound: true);
             // Keyboard
             m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
             m_Keyboard_rotate = m_Keyboard.FindAction("rotate", throwIfNotFound: true);
@@ -1014,6 +1067,7 @@ namespace UI.Input
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
         private readonly InputAction m_UI_Pause;
+        private readonly InputAction m_UI_AnyButton;
         public struct UIActions
         {
             private @PlayerControls m_Wrapper;
@@ -1029,6 +1083,7 @@ namespace UI.Input
             public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
             public InputAction @Pause => m_Wrapper.m_UI_Pause;
+            public InputAction @AnyButton => m_Wrapper.m_UI_AnyButton;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1071,6 +1126,9 @@ namespace UI.Input
                     @Pause.started -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnPause;
+                    @AnyButton.started -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyButton;
+                    @AnyButton.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyButton;
+                    @AnyButton.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnAnyButton;
                 }
                 m_Wrapper.m_UIActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1108,6 +1166,9 @@ namespace UI.Input
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
+                    @AnyButton.started += instance.OnAnyButton;
+                    @AnyButton.performed += instance.OnAnyButton;
+                    @AnyButton.canceled += instance.OnAnyButton;
                 }
             }
         }
@@ -1209,6 +1270,7 @@ namespace UI.Input
             void OnTrackedDevicePosition(InputAction.CallbackContext context);
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnAnyButton(InputAction.CallbackContext context);
         }
         public interface IKeyboardActions
         {
