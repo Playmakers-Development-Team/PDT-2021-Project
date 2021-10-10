@@ -30,8 +30,8 @@ Transform:
   m_Children:
   - {fileID: 6587733633422109074}
   - {fileID: 1735305783809241823}
-  - {fileID: 724683604126568829}
   - {fileID: 189777351138654647}
+  - {fileID: 5394139572968793452}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -59,7 +59,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 63610527880666664, guid: 47e1778edc9033a4e9a5e30d6617d175, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 63610527880666664, guid: 47e1778edc9033a4e9a5e30d6617d175, type: 3}
       propertyPath: m_LocalPosition.x
@@ -174,6 +174,68 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 875984504401095382, guid: 235cead3fd42fe54ebc97cac4b387352, type: 3}
   m_PrefabInstance: {fileID: 1458344022429112329}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2894445164754775982
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2761775109851361033}
+    m_Modifications:
+    - target: {fileID: 243276095763223341, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_Name
+      value: Stag of Grief (Cyan) Logic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+--- !u!4 &5394139572968793452 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7129470708633078466, guid: 71c217745c89b4449a63ba1f922bd34b, type: 3}
+  m_PrefabInstance: {fileID: 2894445164754775982}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2973801982313516462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -235,66 +297,4 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8226183107353699388, guid: 6d7c41bd7f9edf149aa2cf9573458dda, type: 3}
   m_PrefabInstance: {fileID: 2973801982313516462}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7565590200452324287
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2761775109851361033}
-    m_Modifications:
-    - target: {fileID: 243276095763223341, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_Name
-      value: Stag of Grief (Cyan) Logic
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
---- !u!4 &724683604126568829 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7129470708633078466, guid: 0f68527d0a803e641bcd370b2c45f426, type: 3}
-  m_PrefabInstance: {fileID: 7565590200452324287}
   m_PrefabAsset: {fileID: 0}
