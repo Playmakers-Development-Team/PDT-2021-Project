@@ -8,7 +8,9 @@ namespace UI.MainMenu
     public class GameTitleComponent : DialogueComponent<MainMenuDialogue>
     {
         private static readonly int TitleTransition = Animator.StringToHash("ToMainMenu");
+        private static readonly int Intro = Animator.StringToHash("Intro");
 
+        
         [SerializeField] private Image gameTitle;
         
         #region UIComponent
@@ -18,14 +20,6 @@ namespace UI.MainMenu
         protected override void Unsubscribe() {}
         
         #endregion
-        
-        protected override void OnComponentStart()
-        {
-            dialogue.startTitleAnimation.AddListener(() =>
-            {
-                GetComponent<Animator>().SetTrigger(TitleTransition);
-            });   
-        }
 
         #region TitleHandling
    
@@ -53,7 +47,6 @@ namespace UI.MainMenu
             }
             
         }
-        public void AnimationEnded() => dialogue.splashScreenEnded.Invoke();
         
         #endregion
     }

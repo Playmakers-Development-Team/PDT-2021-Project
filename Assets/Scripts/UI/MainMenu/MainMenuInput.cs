@@ -18,7 +18,7 @@ namespace UI.MainMenu
             if (!context.performed  || !dialogue.isOnSplashScreen)
                 return;
 
-            dialogue.startTitleAnimation.Invoke();
+            dialogue.splashScreenEnded.Invoke();
         }
         
         #endregion

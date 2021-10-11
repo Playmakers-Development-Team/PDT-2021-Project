@@ -19,7 +19,8 @@ namespace UI.MainMenu
         private GameObject mainMenuPrefabInstance;
         private GameObject splashScreenInstance;
 
-        [SerializeField]internal bool isOnSplashScreen;
+        internal bool isOnSplashScreen;
+        internal bool hasSpawnedMainMenuOnce;
         
         #region Events
 
@@ -52,6 +53,7 @@ namespace UI.MainMenu
             base.OnDialogueAwake();
             isOnSplashScreen = true;
             splashScreenInstance = Instantiate(splashScreenPrefab, mainMenuParent);
+            hasSpawnedMainMenuOnce = false;
            // mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
         //    characterImageComponent.RandomizeCharacterSprite();
 //            gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
@@ -75,6 +77,10 @@ namespace UI.MainMenu
             {
                mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
                Destroy(exitConfirmedPrefabInstance);
+               
+               if (hasSpawnedMainMenuOnce)
+                   mainMenuPrefabInstance.GetComponent<Animator>().SetTrigger("Normal");
+               
             });
             
             gameStarted.AddListener(() =>
@@ -88,6 +94,14 @@ namespace UI.MainMenu
                 mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
                 Destroy(splashScreenInstance);
                 isOnSplashScreen = false;
+
+                if (hasSpawnedMainMenuOnce)
+                {
+                    mainMenuPrefabInstance.GetComponent<Animator>().SetTrigger("Normal");
+                    return;
+                }
+                
+                hasSpawnedMainMenuOnce = true;
             });
             
             splashScreenStart.AddListener(() =>
@@ -95,6 +109,7 @@ namespace UI.MainMenu
                 splashScreenInstance = Instantiate(splashScreenPrefab, mainMenuParent);
                 Destroy(mainMenuPrefabInstance);
                 isOnSplashScreen = true;
+                
             });
 
             settingConfirmed.AddListener(() =>

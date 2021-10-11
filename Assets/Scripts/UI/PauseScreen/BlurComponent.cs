@@ -12,10 +12,10 @@ public class BlurComponent : DialogueComponent<PauseScreenDialogue>
     private float fill;
 
     [SerializeField] private Animator animator;
+    [SerializeField] private bool isAnimated = true;
     
     private static readonly int startBlurID = Animator.StringToHash("StartBlurAnim");
     private static readonly int blurAnim = Animator.StringToHash("BlurAnim");
-
     
     #region UIComponent
     
@@ -32,9 +32,16 @@ public class BlurComponent : DialogueComponent<PauseScreenDialogue>
     
     #region AnimationHandling
 
-    private void Update() => blurImage.material.SetFloat("Amount",fill);
+    private void Update()
+    {
+            blurImage.material.SetFloat("Amount",fill);
+    }
 
-    public void OnStartBlurComplete() => animator.SetTrigger(blurAnim);
+    public void OnStartBlurComplete()
+    {
+        if(isAnimated)
+            animator.SetTrigger(blurAnim);
+    }
 
     #endregion
 
