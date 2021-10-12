@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Background.Editor
 {
-    [CustomEditor(typeof(MaskController))]
+    [CustomEditor(typeof(BackgroundVFX))]
     public class MaskControllerEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
@@ -18,7 +18,7 @@ namespace Background.Editor
             
             GUI.enabled = true;
             
-            MaskController controller = target as MaskController;
+            BackgroundVFX controller = target as BackgroundVFX;
             if (!controller)
                 return;
 

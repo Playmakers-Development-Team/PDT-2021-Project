@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Background;
 using Commands;
 using Cysharp.Threading.Tasks;
 using Game.Commands;
 using Game.Map;
 using Managers;
-using Turn.Commands;
 using UnityEngine;
 using Turn;
+using Turn.Commands;
 using Units.Players;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -24,7 +23,6 @@ namespace Game
         }
         
         private CommandManager commandManager;
-        private BackgroundManager backgroundManager;
         private PlayerManager playerManager;
         private TurnManager turnManager;
 
@@ -50,11 +48,9 @@ namespace Game
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
-            backgroundManager = ManagerLocator.Get<BackgroundManager>();
             playerManager = ManagerLocator.Get<PlayerManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
 
-            commandManager.ListenCommand<BackgroundCameraReadyCommand>(cmd => backgroundManager.Render());
             commandManager.ListenCommand<RestartEncounterCommand>(cmd => RestartEncounter());
             // TODO keep map information somewhere and call run linear map directly
             commandManager.ListenCommand<PlayGameCommand>(cmd => ChangeScene("Assets/Scenes/Design/Gold/EMBARK/EMBARK 1.unity"));

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Turn;
@@ -19,10 +20,17 @@ namespace UI.Game.Timeline
         [SerializeField] private GameObject insightButtonPrefab;
         [SerializeField] private int timelineLength = 7;
         [SerializeField] private bool drawInsightBtn = false;
+        
+        [Header("Transition")]
+        
+        [SerializeField] private Animator animator;
+        [SerializeField] private float delay;
 
         private TurnManager turnManager;
 
         private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
+        private static readonly int promoted = Animator.StringToHash("promoted");
+        private static readonly int demoted = Animator.StringToHash("demoted");
 
 
         #region UIComponent
@@ -36,12 +44,24 @@ namespace UI.Game.Timeline
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.turnManipulated.AddListener(OnTurnManipulated);
+            
+            dialogue.promoted.AddListener(OnPromoted);
+            dialogue.demoted.AddListener(OnDemoted);
         }
 
         protected override void Unsubscribe()
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.turnManipulated.RemoveListener(OnTurnManipulated);
+            
+            dialogue.promoted.RemoveListener(OnPromoted);
+            dialogue.demoted.RemoveListener(OnDemoted);
+        }
+
+        protected override void OnComponentStart()
+        {
+            if (manager.Peek() == dialogue)
+                TransitionIn();
         }
 
         #endregion
@@ -181,6 +201,20 @@ namespace UI.Game.Timeline
             portraits.Add(portrait);
         }
 
+        #endregion
+        
+        #region Transition
+        
+        private async void TransitionIn()
+        {
+            await UniTask.Delay((int) (delay * 1000.0f));
+            OnPromoted();
+        }
+
+        private void OnPromoted() => animator.SetTrigger(promoted);
+
+        private void OnDemoted() => animator.SetTrigger(demoted);
+        
         #endregion
     }
 }
