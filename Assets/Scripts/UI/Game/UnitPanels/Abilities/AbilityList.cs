@@ -11,54 +11,21 @@ namespace UI.Game.UnitPanels.Abilities
     {
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private List<AbilityCard> cards;
-        
-        [SerializeField] protected GameObject tooltipPanel;
-        [SerializeField] protected TextMeshProUGUI tooltipDescription;
-        
-        
+
+        public IReadOnlyList<AbilityCard> Cards => cards.AsReadOnly();
+
         #region UIComponent
 
-        protected override void OnComponentStart()
-        {
-            tooltipPanel.SetActive(false);
-        }
+        protected override void OnComponentStart() {}
 
-        protected override void Subscribe()
-        {
-            dialogue.abilityHoverEnter.AddListener(OnAbilityHoverEnter);
-            dialogue.abilityHoverExit.AddListener(OnAbilityHoverExit);
-        }
+        protected override void Subscribe() {}
 
-        protected override void Unsubscribe()
-        {
-            dialogue.abilityHoverEnter.RemoveListener(OnAbilityHoverEnter);
-            dialogue.abilityHoverExit.RemoveListener(OnAbilityHoverExit);
-        }
+        protected override void Unsubscribe() {}
 
         #endregion
         
         
         #region Listeners
-
-        private void OnAbilityHoverEnter(AbilityCard card)
-        {
-            if (!cards.Contains(card))
-                return;
-
-            tooltipPanel.SetActive(true);
-            tooltipDescription.text = card.Ability.Description + "\n\n";
-
-            foreach (Keyword keyword in card.Ability.AllKeywords)
-                tooltipDescription.text += $"{keyword.DisplayName}: {keyword.Description}\n\n";
-        }
-
-        private void OnAbilityHoverExit(AbilityCard card)
-        {
-            if (!cards.Contains(card))
-                return;
-
-            tooltipPanel.SetActive(false);
-        }
 
         #endregion
         
