@@ -59,12 +59,12 @@ namespace UI.Game.Timeline
         {
             
             EnableBtn(info);
-            UpdateText();
+            UpdateText(new GameDialogue.UnitInfo());
         }
 
         private void MeditateConfirmed(GameDialogue.UnitInfo unitInfo)
         {
-            UpdateText();
+            UpdateText(new GameDialogue.UnitInfo());
             EnableBtn();
         }
 
@@ -108,7 +108,7 @@ namespace UI.Game.Timeline
             btn.interactable = (selectedUnit != null);
         }
 
-        private void UpdateText() => text.text = turnManager.Insight.Value.ToString();
+        private void UpdateText(GameDialogue.UnitInfo unitInfo) => text.text = turnManager.Insight.Value.ToString();
 
         #endregion
     }

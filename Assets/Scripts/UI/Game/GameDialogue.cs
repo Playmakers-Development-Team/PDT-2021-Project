@@ -39,7 +39,7 @@ namespace UI.Game
 
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
 
-        internal readonly Event turnManipulated = new Event();
+        internal readonly Event<UnitInfo> turnManipulated = new Event<UnitInfo>();
 
 
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
@@ -188,7 +188,7 @@ namespace UI.Game
             if (info == null)
                 throw new Exception("ActingUnit was not in GameDialogue.units.");
 
-            turnManipulated.Invoke();
+            turnManipulated.Invoke(info);
         }
 
         private void OnStartMove(StartMoveCommand cmd)

@@ -53,7 +53,7 @@ namespace UI.Game.Timeline
             UpdatePortraits();
         }
 
-        private void OnTurnManipulated()
+        private void OnTurnManipulated(GameDialogue.UnitInfo unitInfo)
         {
             UpdatePortraits();
             dialogue.unitDeselected.Invoke();
