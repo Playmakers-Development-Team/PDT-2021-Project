@@ -34,7 +34,7 @@ namespace UI.Game.UnitPanels.Abilities
         internal void Assign(Ability ability)
         {
             Ability = ability;
-            labelText.text = ability.name;
+            labelText.text = ability.DisplayName;
             tenetIcon.sprite = tenetIcons[(int) ability.RepresentedTenet];
         }
         

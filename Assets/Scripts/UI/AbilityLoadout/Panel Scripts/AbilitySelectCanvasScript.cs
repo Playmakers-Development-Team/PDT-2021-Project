@@ -103,7 +103,7 @@ namespace UI.AbilityLoadout.Panel_Scripts
         {
             foreach (var abilityInfo in newAbilityInfos)
             {
-                if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
+                if (abilityInfo.Ability.DisplayName.Equals(currentSelectedAbility.AbilityName))
                 {
                     unit.Abilities.Add(abilityInfo.Ability);
                     break;
