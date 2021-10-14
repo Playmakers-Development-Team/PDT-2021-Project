@@ -27,6 +27,11 @@ namespace Turn.Commands
     }
 
     /// <summary>
+    /// Executed for when the round 0 visuals should play
+    /// </summary>
+    public class RoundZeroCommand : Command {}
+
+    /// <summary>
     /// Executed before a new round starts.
     /// </summary>
     public class PrepareRoundCommand : Command {}
@@ -34,7 +39,13 @@ namespace Turn.Commands
     /// <summary>
     /// Executed after a new round starts.
     /// </summary>
-    public class StartRoundCommand : Command {}
+    public class StartRoundCommand : Command
+    {
+        public int RoundCount { get; }
+
+        public StartRoundCommand(int roundCount) =>
+            RoundCount = roundCount;
+    }
 
     /// <summary>
     /// Executed when the order of the turn queue is changed.

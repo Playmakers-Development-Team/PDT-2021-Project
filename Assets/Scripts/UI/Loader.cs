@@ -1,6 +1,7 @@
 using System;
 using Commands;
 using Managers;
+using TMPro;
 using Turn.Commands;
 using UI.Commands;
 using UnityEngine;
@@ -15,6 +16,9 @@ namespace UI
         [SerializeField] private GameObject abilityUpgradeDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
+        [SerializeField] private GameObject endOfRoundBannerPrefab;
+        private GameObject endOfRoundBanner;
+        private float bannerActiveTime = 2.0f;
         
         private CommandManager commandManager;
 
@@ -23,6 +27,10 @@ namespace UI
         private void Awake()
         {
             Instantiate(dialogue, transform);
+            
+            endOfRoundBanner = Instantiate(endOfRoundBannerPrefab, transform);
+            endOfRoundBanner.SetActive(false);
+            
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
@@ -33,6 +41,9 @@ namespace UI
             
             commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.ListenCommand<RoundZeroCommand>(OnRoundZeroCommand);
+            commandManager.ListenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         private void OnDisable()
@@ -42,6 +53,8 @@ namespace UI
             
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         #endregion
@@ -69,6 +82,26 @@ namespace UI
         {
             LoadObject(abilityUpgradeDialogue);
         }
+        
+        private void OnRoundZeroCommand(RoundZeroCommand cmd)
+        {
+            ShowStartRoundBanner(0);
+        }
+        
+        private void OnStartRoundCommand(StartRoundCommand cmd)
+        {
+            ShowStartRoundBanner(cmd.RoundCount);
+        }
+
+        private void ShowStartRoundBanner(int roundCount)
+        {
+            endOfRoundBanner.SetActive(true);
+            endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round: " + roundCount;
+            
+            Invoke("HideStartRoundBanner", bannerActiveTime);
+        }
+
+        private void HideStartRoundBanner() => endOfRoundBanner.SetActive(false);
 
         #endregion
     }
