@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using Commands;
 using Managers;
+using TMPro;
 using Turn;
 using Turn.Commands;
+using Units.Players;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.TempUI
 {
@@ -11,6 +14,8 @@ namespace UI.TempUI
     public class TurnManipulationUI : MonoBehaviour
     {
         public GameObject turnManipulateButton;
+        [SerializeField] private TextMeshProUGUI manipulateBeforeText;
+        [SerializeField] private TextMeshProUGUI manipulateAfterText;
         [SerializeField] private Transform parent;
 
         private TurnManager turnManager;
@@ -24,11 +29,33 @@ namespace UI.TempUI
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
-        private void OnEnable() =>
+        private void OnEnable()
+        {
+            commandManager.ListenCommand<StartTurnCommand>(OnStartTurn);
+            commandManager.ListenCommand<EndTurnCommand>(OnEndTurn);
             commandManager.ListenCommand<TurnManipulatedCommand>(OnTurnManipulated);
+        }
 
-        private void OnDisable() =>
+        private void OnDisable()
+        {
+            commandManager.UnlistenCommand<StartTurnCommand>(OnStartTurn);
+            commandManager.UnlistenCommand<EndTurnCommand>(OnEndTurn);
             commandManager.UnlistenCommand<TurnManipulatedCommand>(OnTurnManipulated);
+        }
+        
+        private void OnStartTurn(StartTurnCommand cmd)
+        {
+            if (!(cmd.Unit is PlayerUnit))
+                return;
+            
+            if (manipulateBeforeText != null)
+                manipulateBeforeText.text = $"Move a unit's turn to before {cmd.Unit.Name}";
+            
+            if (manipulateAfterText != null)
+                manipulateAfterText.text = $"Move a unit's turn to after {cmd.Unit.Name}";
+        }
+        
+        private void OnEndTurn(EndTurnCommand cmd) => DestroyButtons();
 
         private void OnTurnManipulated(TurnManipulatedCommand cmd) => DestroyButtons();
 
