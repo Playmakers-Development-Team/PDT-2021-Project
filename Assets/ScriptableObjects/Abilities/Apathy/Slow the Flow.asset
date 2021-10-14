@@ -12,17 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Slow the Flow
   m_EditorClassIdentifier: 
-  description: '[Very Slow Ability]
+  displayName: 
+  description: 'Give +3 Defence and +1 Apathy.
 
-    Applies 3 defence to all targets.
-
-    ENNUI
-    3 - Subtract 5 Attack
-
-    Apply 1 Apathy to all targets.'
+    Target has ENNUI 1: Give -5 Attack.'
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: -2
+  speedType: 3
   representedTenet: 0
   effects:
   - name: Default, 3 Defence and Provide 1 Apathy

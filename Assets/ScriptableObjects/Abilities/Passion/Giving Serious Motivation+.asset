@@ -10,67 +10,70 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Taking the Bullet for Someone
+  m_Name: Giving Serious Motivation+
   m_EditorClassIdentifier: 
   displayName: 
-  description: 'Give +6 Defence but take 2 damage.
+  description: 'Give +4 Attack and +1 Passion.
 
-    Target has Affinity: Take
-    1 less damage.'
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+    Target has KINDLED 1: Give +4
+    Attack.
+
+    Target has KINDLED 3: Give +4 Attack.'
+  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  speedType: 4
-  representedTenet: 1
+  speed: -1
+  speedType: 1
+  representedTenet: 2
   effects:
-  - name: "Target \u27A4 Default, 6 Defence"
+  - name: "Target \u27A4 Default, 4 Attack and Provide 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 6
-    attackValue: 0
+    defenceValue: 0
+    attackValue: 4
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 2
+      stackCount: 1
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 Default, 2 Damage"
-    affectTargets: 0
-    affectUser: 1
+  - name: "Target \u27A4 4 Attack WITH Kindled 1 to Target"
+    affectTargets: 1
+    affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 0
+    attackValue: 4
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "User \u27A4 -1 Damage WITH Affinity to User"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: -1
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
+      tenetType: 2
       stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
-  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
+    - {fileID: 11400000, guid: dbb3a2e84b896aae09c7c74a1f4f3bc3, type: 2}
+  - name: "Target \u27A4 4 Attack WITH Kindled 3 to Target"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 4
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 22d44edf0cb876118957ab9e9a014c24, type: 2}
+  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
   userEffects: []

@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Burn Up
+  m_Name: Shun
   m_EditorClassIdentifier: 
-  description: 'Deal 1 damage
-
-    > Deal 3 extra damage with Passion'
-  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
+  displayName: 
+  description: "Deal +3 damage \nUser has Apathy: Deal +3 damage"
+  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
-  representedTenet: 2
+  speed: -1
+  speedType: 1
+  representedTenet: 3
   effects:
-  - name: Default, 1 Damage
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 1
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack IF User With 1 Passion
+  - name: "User \u27A4 3 Attack IF User With 1 Apathy"
     affectTargets: 0
     affectUser: 1
     effectOrder: 1
@@ -51,14 +51,14 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With 1 Passion
+    - name: User With 1 Apathy
       affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 0
         count: 1
-        tenetType: 2
+        tenetType: 3
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0

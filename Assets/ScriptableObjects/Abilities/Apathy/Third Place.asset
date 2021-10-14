@@ -12,20 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Third Place
   m_EditorClassIdentifier: 
-  description: '[Extremely Fast Ability]
+  displayName: 
+  description: 'Give +3 Defence.
 
-    Grant 3 Defence to surrounding targets.
-
-    ENNUI
-    2 - Grant 3 Defence and 3 Attack.'
-  shape: {fileID: 11400000, guid: 0fa25ce7eee052580b13ef055dc3ea95, type: 2}
+    Target has ENNUI 1: Give +3 Defence, +3 Attack.'
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
-  speed: 3
+  speed: -1
+  speedType: 1
   representedTenet: 3
   effects:
-  - name: "Target \u27A4 Default, 3 Defence"
+  - name: "User and Target \u27A4 Default, 3 Defence"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -39,9 +38,10 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 3 Attack and 3 Defence WITH Ennui 2 to Target"
+  - name: "User and Target \u27A4 3 Attack and 3 Defence and Provide 1 Apathy WITH
+      Ennui 1 to Target"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -50,11 +50,11 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 3
+      stackCount: 1
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: e3ef0e8fc7537b83dbd4aca0797f0af0, type: 2}
+    - {fileID: 11400000, guid: 08f797524f749e487bbd974647bca7b7, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

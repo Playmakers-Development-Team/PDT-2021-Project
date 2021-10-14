@@ -10,54 +10,72 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Pep Talk+
+  m_Name: Overwhelm
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nGrant adjacent units 3 attack and 1 passion. \nIf
-    they have Humility, spend it to gain 3 defence"
-  shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
+  displayName: 
+  description: "Deal +2 damage. \nUser has ENNUI 3: Give -2 Defence. "
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
-  speed: -1
-  representedTenet: 2
+  speed: 1
+  speedType: 2
+  representedTenet: 0
   effects:
-  - name: Default, 3 Attack and Provide 1 Passion
+  - name: Default, 2 Damage
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 0
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
-    attackValue: 3
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 2
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: 3 Defence IF Target Spend 1 Humility
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 2
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: -2 Defence WITH Ennui 3
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: -2
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 30a4117a82e57e6b3b0d7f023512be6e, type: 2}
+  - name: 2 Attack IF User Spend 1 Pride
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 2
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
       stackCount: 0
     bonuses: []
     costs:
-    - name: Target Spend 1 Humility
-      affectType: 1
+    - name: User Spend 1 Pride
+      affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 2
         count: 1
-        tenetType: 1
+        tenetType: 0
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -88,5 +106,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
+  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []
