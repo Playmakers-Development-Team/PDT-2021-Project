@@ -1,5 +1,6 @@
 ﻿using Managers;
 using Turn;
+using Units.Players;
 
 namespace UI.Game.UnitPanels
 {
@@ -30,8 +31,11 @@ namespace UI.Game.UnitPanels
         }
         private void OnTurnManipulated(GameDialogue.UnitInfo unitInfo)
         {
-            this.unitInfo = unitInfo;
-            Redraw();
+            if (unitInfo.Unit.Equals(typeof(PlayerUnit)))
+            {
+                this.unitInfo = unitInfo;
+                Redraw();
+            }
         }
         
         #endregion

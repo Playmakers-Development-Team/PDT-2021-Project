@@ -100,13 +100,11 @@ namespace UI.Game.Timeline
         }
         private void prepareForManipulation()
         {
-            //remove arrow
             turnManager.turnManipulating = true;
         }
 
         private void exitManipulation()
         {
-            //remove arrow
             turnManager.turnManipulating = false;
         }
 

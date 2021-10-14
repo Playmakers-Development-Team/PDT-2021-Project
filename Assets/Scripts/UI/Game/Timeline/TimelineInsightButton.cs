@@ -2,6 +2,7 @@ using Managers;
 using TMPro;
 using Turn;
 using UI.Core;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -104,8 +105,8 @@ namespace UI.Game.Timeline
         }
         private void EnableBtn()
         {
-            //btn.interactable = (selectedUnit != null && (turnManager.Insight.Value >= 2));
-            btn.interactable = (selectedUnit != null);
+            btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null && (turnManager.Insight.Value >= 2));
+            //btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null);
         }
 
         private void UpdateText(GameDialogue.UnitInfo unitInfo) => text.text = turnManager.Insight.Value.ToString();
