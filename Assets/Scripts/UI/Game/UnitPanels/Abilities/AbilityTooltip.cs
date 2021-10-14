@@ -15,8 +15,10 @@ namespace UI.Game.UnitPanels.Abilities
         [SerializeField] private AbilityList abilityList;
         [SerializeField] private GameObject tooltipPanel;
         [SerializeField] private GameObject keywordPanel;
+        [SerializeField] private GameObject speedPanel;
         [SerializeField] private TextMeshProUGUI tooltipDescription;
         [SerializeField] private TextMeshProUGUI keywordDescription;
+        [SerializeField] private TextMeshProUGUI speedDescription;
         [SerializeField] private Image shapeIcon;
 
         [Header("Tooltip Sprites")]
@@ -25,6 +27,7 @@ namespace UI.Game.UnitPanels.Abilities
 
         [Header("Configurable")]
         [SerializeField] private bool descriptiveIcons;
+        [SerializeField] private bool showAbilitySpeed = true;
 
         protected override void OnComponentAwake()
         {
@@ -64,11 +67,16 @@ namespace UI.Game.UnitPanels.Abilities
             keywordPanel.SetActive(card.Ability.AllKeywords.Any());
             keywordDescription.text = string.Empty;
 
+            // Shape icons
             Sprite shapeSprite = card.Ability.Shape.DisplayIcon;
             shapeIcon.gameObject.SetActive(shapeSprite != null);
             
             if (card.Ability.Shape.DisplayIcon != null)
                 shapeIcon.sprite = shapeSprite;
+            
+            // Ability speed
+            speedPanel.SetActive(showAbilitySpeed);
+            speedDescription.text = card.Ability.SpeedType.DisplayName();
 
             foreach (Keyword keyword in card.Ability.AllKeywords)
                 keywordDescription.text += PrettyKeywordDescription(keyword);
