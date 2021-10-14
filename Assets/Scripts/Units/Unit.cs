@@ -24,6 +24,7 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        [SerializeField] private float moveTweenDuration = 1f;
 
         private protected SpriteRenderer spriteRenderer;
 
@@ -501,7 +502,7 @@ namespace Units
 
                 await gridManager.MovementTween(unit.transform.parent.gameObject, 
                     gridManager.ConvertCoordinateToPosition(currentCoordinate),
-                    gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
+                    gridManager.ConvertCoordinateToPosition(movePath[i]), moveTweenDuration);
                 unit.transform.parent.position =
                     gridManager.ConvertCoordinateToPosition(movePath[i]);
                 currentCoordinate = movePath[i];
