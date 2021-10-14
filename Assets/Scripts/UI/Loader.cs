@@ -1,5 +1,6 @@
 using System;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Turn.Commands;
@@ -31,9 +32,6 @@ namespace UI
             
             endOfRoundBanner = Instantiate(endOfRoundBannerPrefab, transform);
             endOfRoundBanner.SetActive(false);
-            
-            if (tutorialDialogue)
-                LoadObject(tutorialDialogue);
 
             commandManager = ManagerLocator.Get<CommandManager>();
         }
@@ -62,6 +60,15 @@ namespace UI
         }
 
         #endregion
+
+        private async void ShowTutorial()
+        {
+            await UniTask.Yield();
+            await UniTask.WaitWhile(() => endOfRoundBanner.gameObject.activeSelf);
+            
+            if (tutorialDialogue)
+                LoadObject(tutorialDialogue);
+        }
 
         public void LoadObject(GameObject obj) => Instantiate(obj, transform);
 
@@ -94,6 +101,9 @@ namespace UI
         private void OnRoundZeroCommand(RoundZeroCommand cmd)
         {
             ShowStartRoundBanner(0);
+            
+            // NOTE: If you are moving this somewhere else, put the code below into its own function in the Loader.cs
+            ShowTutorial();
         }
         
         private void OnStartRoundCommand(StartRoundCommand cmd)

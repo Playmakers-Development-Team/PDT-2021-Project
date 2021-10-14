@@ -13,7 +13,7 @@ namespace UI
             uiManager = ManagerLocator.Get<UIManager>();
             
             // Add to UI manager and show starting panel
-            uiManager.Add(this);
+            uiManager.Add(this, false);
         }
 
         public void CloseTutorial()
