@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Gather Up
+  m_Name: Amplify
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
-
-    Give 2 Defence to surrounding units. '
-  shape: {fileID: 11400000, guid: 0fa25ce7eee052580b13ef055dc3ea95, type: 2}
+  displayName: 
+  description: Give +1 Defence and +3 Attack.
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
-  speed: -1
-  representedTenet: 2
+  speed: 0
+  speedType: 0
+  representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 2 Defence"
+  - name: "Target \u27A4 Default, 3 Attack and 1 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
-    attackValue: 0
+    defenceValue: 1
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
