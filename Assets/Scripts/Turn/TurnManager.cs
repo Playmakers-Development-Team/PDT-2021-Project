@@ -223,6 +223,9 @@ namespace Turn
             TotalTurnCount = 0;
             CurrentTurnIndex = 0;
             Insight = new Stat(null, 0, StatTypes.Insight);
+            
+            // Start the game with 2 insight
+            Insight.Value += 2;
 
             previousTurnQueue = new List<IUnit>();
             currentTurnQueue = CreateTurnQueue();
