@@ -155,7 +155,13 @@ namespace Editor
             BuildSummary summary = report.summary;
 
             if (summary.result == BuildResult.Succeeded)
+            {
+#if UNITY_EDITOR_OSX
+                if (buildTarget == BuildTarget.StandaloneOSX)
+                    UnityEditor.OSXStandalone.MacOSCodeSigning.CodeSignAppBundle(buildPlayerOptions.locationPathName);
+#endif
                 Debug.Log("Build Succeeded: " + summary.totalSize / 1000000 + " megabytes");
+            }
 
             if (summary.result == BuildResult.Failed)
                 Debug.LogError("Build Failed!");
