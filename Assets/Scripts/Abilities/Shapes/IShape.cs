@@ -8,6 +8,11 @@ namespace Abilities.Shapes
     public interface IShape
     {
         /// <summary>
+        /// An icon that can be displayed in the UI representing the shape. MAY BE NULL if the shape does not have one.
+        /// </summary>
+        public Sprite DisplayIcon { get; }
+        
+        /// <summary>
         /// Should there be a line visual connecting all the affected tiles.
         /// Abilities such as Line of sight typically want this to be the case.
         /// </summary>

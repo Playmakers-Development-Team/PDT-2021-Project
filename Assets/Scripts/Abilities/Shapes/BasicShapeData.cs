@@ -34,7 +34,8 @@ namespace Abilities.Shapes
                 && ((toDirection.IsDiagonal() && direction == OrdinalDirectionMask.NorthEast)
                                || direction == OrdinalDirectionMask.North);
         }
-
+        
+        [SerializeField] private Sprite displayIcon;
         [SerializeField] private List<ShapePart> shapeParts;
 
         // TODO Incomplete feature, See todo in GetAffectedCoordinates().
@@ -43,6 +44,7 @@ namespace Abilities.Shapes
         [SerializeField, HideInInspector]
         private bool shouldFollowMouse;
 
+        public Sprite DisplayIcon => displayIcon;
         private bool HasShapeParts => shapeParts.Count > 0;
         public bool IsDiagonalShape => HasShapeParts && shapeParts
             .Any(p => p.direction.HasDiagonal());

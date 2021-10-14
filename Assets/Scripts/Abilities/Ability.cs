@@ -23,6 +23,7 @@ namespace Abilities
         [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
+        [SerializeField] private AbilitySpeedType speedType;
         [SerializeField] private TenetType representedTenet;
 
         [FormerlySerializedAs("targetEffects")]
@@ -40,9 +41,13 @@ namespace Abilities
         /// </summary>
         public IShape Shape => shape;
         /// <summary>
-        /// The speed which will be added on top of Abilities
+        /// The speed which will be added on top of Abilities.
         /// </summary>
         public int Speed => speed;
+        /// <summary>
+        /// The type of speed which will be shown in the UI.
+        /// </summary>
+        public AbilitySpeedType SpeedType => speedType;
         /// <summary>
         /// The tenet that this ability represents. This would be shown in the UI.
         /// </summary>
