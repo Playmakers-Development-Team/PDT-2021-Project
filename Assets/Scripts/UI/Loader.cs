@@ -11,11 +11,10 @@ namespace UI
     {
         [SerializeField] private GameObject dialogue;
         
-        //TODO: THIS WILL LATER BE MOVED TO THE END SCREEN DIALOGUE SCRIPT
         [SerializeField] private GameObject abilityLoadoutDialogue;
+        [SerializeField] private GameObject abilityUpgradeDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
-
         
         private CommandManager commandManager;
 
@@ -24,24 +23,25 @@ namespace UI
         private void Awake()
         {
             Instantiate(dialogue, transform);
-
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         private void OnEnable()
         {
-            //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
-            commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
+            
+            commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
+            commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
         }
 
         private void OnDisable()
         {
-            //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
+            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers);
+            
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
-            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
+            commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
         }
 
         #endregion
@@ -49,11 +49,15 @@ namespace UI
         public void LoadObject(GameObject obj) => Instantiate(obj, transform);
 
         #region MOVE TO ENDSCREENDIALOGUE
-
-        //TODO: THIS WILL LATER BE MOVED TO BE CALLED IN THE END SCREEN DIALOGUE SCRIPT
+        
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
             LoadObject(winDialogue);
+        }
+        
+        private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
+        {
+            LoadObject(loseDialogue); 
         }
         
         private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
@@ -61,9 +65,9 @@ namespace UI
             LoadObject(abilityLoadoutDialogue);
         }
 
-        private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
+        private void SpawnAbilityUpgrade(SpawnAbilityUpgradeUICommand cmd)
         {
-            LoadObject(loseDialogue); 
+            LoadObject(abilityUpgradeDialogue);
         }
 
         #endregion

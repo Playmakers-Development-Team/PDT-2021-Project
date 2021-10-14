@@ -47,6 +47,7 @@ namespace Tests
             yield return new WaitUntil(() => task.Status.IsCompleted());
             InputBeacon.PrepareVirtualDevices();
             Time.timeScale = TimeScale;
+            yield return new WaitForSeconds(2f); // Wait for UI to show up
         }
 
         [TearDown] 

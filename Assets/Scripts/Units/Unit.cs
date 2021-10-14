@@ -233,7 +233,8 @@ namespace Units
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
-            transform.parent.gameObject.SetActive(false);
+            enabled = false;
+            //transform.parent.gameObject.SetActive(false);
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }

@@ -10,12 +10,14 @@ namespace UI.Game.UnitPanels
         
         protected override void Subscribe()
         {
+            base.Subscribe();
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.turnManipulated.AddListener(OnTurnManipulated);
         }
 
         protected override void Unsubscribe()
         {
+            base.Unsubscribe();
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
         }
 
