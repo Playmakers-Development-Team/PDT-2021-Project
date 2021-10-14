@@ -27,7 +27,7 @@ namespace UI.Game.Timeline
 
         private TurnManager turnManager;
 
-        private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
+        private readonly List<GameObject> portraits = new List<GameObject>();
         private static readonly int promoted = Animator.StringToHash("promoted");
         private static readonly int demoted = Animator.StringToHash("demoted");
 
@@ -99,19 +99,15 @@ namespace UI.Game.Timeline
 
             List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
             int startIndex = turnManager.CurrentTurnIndex;
-            if (multiTurnTimeline)
-            {
-                CreatePortraits(currentTurnQueue, startIndex);
-            }
-            else
-            {
+            
+            
                 CreateInsightButton();
                 currentTurnQueue.RemoveRange(0, startIndex);
                 List<IUnit> appendTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
                 appendTurnQueue.RemoveRange(startIndex, appendTurnQueue.Count - startIndex);
                 currentTurnQueue.AddRange(appendTurnQueue);
                 CreatePortraits(currentTurnQueue);
-            }
+
         }
 
         private void ClearPortraits()
@@ -135,6 +131,7 @@ namespace UI.Game.Timeline
             }
         }
 
+        //used for old multi turn
         private void CreatePortraits(List<IUnit> units, int startIndex)
         {
             int count = 0;

@@ -105,8 +105,8 @@ namespace UI.Game.Timeline
         }
         private void EnableBtn()
         {
-            btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null && (turnManager.Insight.Value >= 2));
-            //btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null);
+            //btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null && (turnManager.Insight.Value >= 2));
+            btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null);
         }
 
         private void UpdateText(GameDialogue.UnitInfo unitInfo) => text.text = turnManager.Insight.Value.ToString();
