@@ -96,7 +96,7 @@ namespace UI
         private void ShowStartRoundBanner(int roundCount)
         {
             endOfRoundBanner.SetActive(true);
-            endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round: " + roundCount;
+            endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round " + roundCount;
             
             Invoke("HideStartRoundBanner", bannerActiveTime);
         }
