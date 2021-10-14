@@ -54,6 +54,15 @@ namespace Game
             commandManager.ListenCommand<RestartEncounterCommand>(cmd => RestartEncounter());
             // TODO keep map information somewhere and call run linear map directly
             commandManager.ListenCommand<PlayGameCommand>(cmd => ChangeScene("Assets/Scenes/Design/Gold/EMBARK/EMBARK 1.unity"));
+            commandManager.ListenCommand<MainMenuCommand>(cmd =>
+            {
+                if (CurrentMapData == null)
+                    Debug.LogError($"There is no map data being run! {nameof(LinearMapRunner)} script or something.");
+                else if (string.IsNullOrEmpty(CurrentMapData.mainMenuScene))
+                    Debug.LogError($"The main menu scene is not assigned in the running map data {CurrentMapData.name}");
+                else
+                    ChangeScene(CurrentMapData.mainMenuScene);
+            });
             
             // Automatically end the encounter if there are no players remaining after a few seconds
             commandManager.ListenCommand<NoRemainingPlayerUnitsCommand>(async (cmd) =>

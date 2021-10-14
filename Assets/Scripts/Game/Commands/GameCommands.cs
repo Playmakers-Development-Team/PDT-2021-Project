@@ -9,6 +9,11 @@ namespace Game.Commands
     public class PlayGameCommand : Command {}
 
     /// <summary>
+    /// Execute to go back to the main menu.
+    /// </summary>
+    public class MainMenuCommand : Command {}
+
+    /// <summary>
     /// Executed when we are finished with this encounter, we picked all our upgrades and stuff,
     /// and that we should load the next encounter.
     /// </summary>
