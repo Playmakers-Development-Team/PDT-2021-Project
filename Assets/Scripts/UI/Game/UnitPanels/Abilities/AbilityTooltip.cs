@@ -6,6 +6,7 @@ using Abilities;
 using TMPro;
 using UI.Core;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Game.UnitPanels.Abilities
 {
@@ -16,6 +17,7 @@ namespace UI.Game.UnitPanels.Abilities
         [SerializeField] private GameObject keywordPanel;
         [SerializeField] private TextMeshProUGUI tooltipDescription;
         [SerializeField] private TextMeshProUGUI keywordDescription;
+        [SerializeField] private Image shapeIcon;
 
         [Header("Tooltip Sprites")]
         [SerializeField] private string spriteAssetPrefix;
@@ -24,13 +26,17 @@ namespace UI.Game.UnitPanels.Abilities
         [Header("Configurable")]
         [SerializeField] private bool descriptiveIcons;
 
+        protected override void OnComponentAwake()
+        {
+            // Just include every darn text okay
+            foreach (var textComponent in GetComponentsInChildren<TextMeshProUGUI>())
+                textComponent.spriteAsset = spriteAsset;
+        }
+
         protected override void OnComponentStart()
         {
             tooltipPanel.gameObject.SetActive(false);
             keywordPanel.gameObject.SetActive(false);
-
-            tooltipDescription.spriteAsset = spriteAsset;
-            keywordDescription.spriteAsset = spriteAsset;
         }
 
         protected override void Subscribe()
@@ -57,7 +63,13 @@ namespace UI.Game.UnitPanels.Abilities
 
             keywordPanel.SetActive(card.Ability.AllKeywords.Any());
             keywordDescription.text = string.Empty;
+
+            Sprite shapeSprite = card.Ability.Shape.DisplayIcon;
+            shapeIcon.gameObject.SetActive(shapeSprite != null);
             
+            if (card.Ability.Shape.DisplayIcon != null)
+                shapeIcon.sprite = shapeSprite;
+
             foreach (Keyword keyword in card.Ability.AllKeywords)
                 keywordDescription.text += PrettyKeywordDescription(keyword);
         }
