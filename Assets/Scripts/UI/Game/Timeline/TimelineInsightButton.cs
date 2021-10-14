@@ -13,8 +13,8 @@ namespace UI.Game.Timeline
         [SerializeField] private Button btn;
         [SerializeField] private TextMeshProUGUI text;
         private TurnManager turnManager;
-        private GameDialogue.UnitInfo selectedUnit;
-
+        private GameDialogue.UnitInfo selectedUnit = null;
+        
         #region Drawing
 
         internal void Destroy()
@@ -38,6 +38,7 @@ namespace UI.Game.Timeline
             dialogue.meditateConfirmed.AddListener(MeditateConfirmed);
             dialogue.unitSelected.AddListener(unitSelected);
             dialogue.unitDeselected.AddListener(unitDeselected);
+            dialogue.turnManipulated.AddListener(UpdateText);
         }
 
         protected override void Unsubscribe()
@@ -46,6 +47,7 @@ namespace UI.Game.Timeline
             dialogue.meditateConfirmed.RemoveListener(MeditateConfirmed);
             dialogue.unitSelected.RemoveListener(unitSelected);
             dialogue.unitDeselected.RemoveListener(unitDeselected);
+            dialogue.turnManipulated.RemoveListener(UpdateText);
         }
 
         #endregion
@@ -55,6 +57,7 @@ namespace UI.Game.Timeline
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
+            
             EnableBtn(info);
             UpdateText();
         }
@@ -62,18 +65,19 @@ namespace UI.Game.Timeline
         private void MeditateConfirmed(GameDialogue.UnitInfo unitInfo)
         {
             UpdateText();
+            EnableBtn();
         }
 
         private void unitSelected(GameDialogue.UnitInfo unitInfo)
         {
-            btn.interactable = true;
             selectedUnit = unitInfo;
-        }
+            EnableBtn();
+            }
         private void unitDeselected()
         {
-            btn.interactable = false;
             selectedUnit = null;
-        }
+            EnableBtn();
+            }
 
         #endregion
 
@@ -81,14 +85,27 @@ namespace UI.Game.Timeline
 
         public void OnClick()
         {
-            if (selectedUnit != null)
+            if (turnManager.turnManipulating)
+            {
+                turnManager.turnManipulating = false;
+                dialogue.turnManipulationEnded.Invoke();
+            }
+            else if (selectedUnit != null)
+            {
                 dialogue.turnManipulationStarted.Invoke(selectedUnit);
+                turnManager.turnManipulating = true;
+            }
 
         }
 
         private void EnableBtn(GameDialogue.TurnInfo info)
         {
-            btn.interactable = info.IsPlayer;
+            btn.interactable = (info.IsPlayer && selectedUnit != null && (turnManager.Insight.Value >= 2));
+        }
+        private void EnableBtn()
+        {
+            //btn.interactable = (selectedUnit != null && (turnManager.Insight.Value >= 2));
+            btn.interactable = (selectedUnit != null);
         }
 
         private void UpdateText() => text.text = turnManager.Insight.Value.ToString();

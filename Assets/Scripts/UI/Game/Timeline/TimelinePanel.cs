@@ -21,7 +21,7 @@ namespace UI.Game.Timeline
 
         private TurnManager turnManager;
 
-        private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
+        private readonly List<GameObject> portraits = new List<GameObject>();
 
 
         #region UIComponent
@@ -53,7 +53,12 @@ namespace UI.Game.Timeline
             UpdatePortraits();
         }
 
-        private void OnTurnManipulated(GameDialogue.TurnInfo info) => UpdatePortraits();
+        private void OnTurnManipulated()
+        {
+            UpdatePortraits();
+            dialogue.unitDeselected.Invoke();
+            dialogue.turnManipulationEnded.Invoke();
+        }
 
         public void OnDelayButtonPressed()
         {
@@ -80,29 +85,19 @@ namespace UI.Game.Timeline
             }
             else
             {
-                //CreateInsightButton();
+                CreateInsightButton();
                 currentTurnQueue.RemoveRange(0, startIndex);
                 List<IUnit> appendTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
                 appendTurnQueue.RemoveRange(startIndex, appendTurnQueue.Count - startIndex);
                 currentTurnQueue.AddRange(appendTurnQueue);
                 CreatePortraits(currentTurnQueue);
             }
-            
-            
-
-            
-        }
-
-        private void maintainSelectedThroughTurns()
-        {
-            if (dialogue.SelectedUnit != null)
-                dialogue.unitSelected.Invoke(dialogue.SelectedUnit);
         }
 
         private void ClearPortraits()
         {
             for (int i = portraits.Count - 1; i >= 0; i--)
-                portraits[i].Destroy();
+                Destroy(portraits[i]);
 
             portraits.Clear();
         }
@@ -116,7 +111,7 @@ namespace UI.Game.Timeline
 
                 GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
                 portrait.Assign(info);
-                portraits.Add(portrait);
+                portraits.Add(obj);
             }
         }
 
@@ -152,7 +147,7 @@ namespace UI.Game.Timeline
 
             GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
             portrait.Assign(info);
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         private void CreateDivider(int round)
@@ -161,7 +156,7 @@ namespace UI.Game.Timeline
             obj.GetComponentInChildren<TextMeshProUGUI>().text = round.ToString();
             TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
 
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         private void CreateInsightButton()
@@ -171,7 +166,7 @@ namespace UI.Game.Timeline
             obj.GetComponentInChildren<TextMeshProUGUI>().text =
                 turnManager.Insight.Value.ToString();
 
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         #endregion

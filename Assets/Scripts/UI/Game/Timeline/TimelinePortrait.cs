@@ -1,4 +1,8 @@
-﻿using UI.Core;
+﻿using Commands;
+using Managers;
+using Turn;
+using Turn.Commands;
+using UI.Core;
 using Units;
 using Units.Enemies;
 using UnityEngine;
@@ -12,14 +16,20 @@ namespace UI.Game.Timeline
         [SerializeField] private RawImage image;
         [SerializeField] private Sprite enemyBackground;
         [SerializeField] private Button btn;
-        private bool turnManipulating = false;
+        private TurnManager turnManager;
 
         private GameDialogue.UnitInfo unitInfo;
+        private GameDialogue.UnitInfo selectedUnit;
 
         public GameDialogue.UnitInfo UnitInfo => unitInfo;
 
 
         #region UIComponent
+        
+        protected override void OnComponentAwake()
+        {
+            turnManager = ManagerLocator.Get<TurnManager>();
+        }
 
         protected override void Subscribe()
         {
@@ -36,6 +46,7 @@ namespace UI.Game.Timeline
             dialogue.turnManipulationStarted.RemoveListener(TurnManipulationStart);
             dialogue.turnManipulationEnded.RemoveListener(TurnManipulationEnd);
         }
+        
 
         #endregion
 
@@ -44,9 +55,10 @@ namespace UI.Game.Timeline
 
         public void OnClick()
         {
-            if (turnManipulating)
+            if (turnManager.turnManipulating)
             {
-                
+                TurnManipulate();
+                TurnManipulationEnd();
             }else
                 dialogue.unitSelected.Invoke(unitInfo);
         }
@@ -54,21 +66,57 @@ namespace UI.Game.Timeline
         private void SelectUnit(GameDialogue.UnitInfo info)
         {
             btn.interactable = !(info == unitInfo);
+            selectedUnit = info;
         }
 
         private void DeselectUnit()
         {
             btn.interactable = true;
+            selectedUnit = null;
         }
 
-        private void TurnManipulationStart(GameDialogue.UnitInfo)
+        private void TurnManipulate()
         {
+            int selectedIndex = turnManager.FindTurnIndexFromCurrentQueue(selectedUnit.Unit);
+            int thisIndex = turnManager.FindTurnIndexFromCurrentQueue(unitInfo.Unit);
+
+            if(selectedIndex == 0)
+                turnManager.MoveTargetBeforeCurrent(selectedIndex);
+            else
+                turnManager.ShiftTurnQueue(thisIndex,selectedIndex);
             
+        }
+
+        private void TurnManipulationStart(GameDialogue.UnitInfo info)
+        {
+            btn.interactable = !(info == unitInfo);
+            if(info != unitInfo)
+                prepareForManipulation();
         }
         
         private void TurnManipulationEnd()
         {
-            
+           exitManipulation();
+        }
+        private void prepareForManipulation()
+        {
+            //remove arrow
+            turnManager.turnManipulating = true;
+        }
+
+        private void exitManipulation()
+        {
+            //remove arrow
+            turnManager.turnManipulating = false;
+        }
+
+        #endregion
+
+        #region Utility
+
+        public bool isSelected()
+        {
+            return unitInfo == selectedUnit;
         }
 
         #endregion

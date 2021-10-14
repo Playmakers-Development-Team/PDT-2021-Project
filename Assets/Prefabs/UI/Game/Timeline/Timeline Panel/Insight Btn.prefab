@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 316025502372874549}
   - component: {fileID: 293189522730991658}
   - component: {fileID: 131118945724889109}
-  - component: {fileID: 128573901325267537}
   - component: {fileID: 7743237961260172334}
   - component: {fileID: 1441666477512935825}
   m_Layer: 5
@@ -88,7 +87,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 6434498268822729001}
   m_OnClick:
     m_PersistentCalls:
@@ -105,21 +104,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &128573901325267537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1569788653794262997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e92caaebb9d54be8aaacfb5fe74ffc67, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image: {fileID: 0}
-  enemyBackground: {fileID: 0}
-  btn: {fileID: 0}
 --- !u!114 &7743237961260172334
 MonoBehaviour:
   m_ObjectHideFlags: 0

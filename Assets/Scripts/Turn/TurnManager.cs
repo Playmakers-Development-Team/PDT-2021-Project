@@ -36,6 +36,8 @@ namespace Turn
 
         public Stat Insight { get; set; }
         
+        public bool turnManipulating { get; set; }
+        
         /// <summary>
         /// The unit that is currently taking its turn. Returns null if no unit is taking its turn.
         /// </summary>
@@ -486,11 +488,11 @@ namespace Turn
         /// <exception cref="IndexOutOfRangeException">If the index is not valid.</exception>
         public void ShiftTurnQueue(int startIndex, int endIndex)
         {
-            if (!UnitCanDoTurnManipulation(ActingUnit))
-            {
-                Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
-                return;
-            }
+            // if (!UnitCanDoTurnManipulation(ActingUnit))
+            // {
+            //     Debug.LogWarning($"{ActingUnit} cannot turn manipulate.");
+            //     return;
+            // }
 
             if (endIndex < 0 || endIndex >= CurrentTurnQueue.Count)
                 throw new IndexOutOfRangeException($"Could not move unit at index {endIndex}");
