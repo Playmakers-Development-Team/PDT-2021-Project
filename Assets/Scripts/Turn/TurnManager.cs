@@ -306,7 +306,7 @@ namespace Turn
             unitsTurnManipulatedThisRound.Clear();
             
             ResetUnitStatsAfterRound();
-            commandManager.ExecuteCommand(new StartRoundCommand());
+            commandManager.ExecuteCommand(new StartRoundCommand(RoundCount));
         }
 
         private bool CheckUnitsRemaining()

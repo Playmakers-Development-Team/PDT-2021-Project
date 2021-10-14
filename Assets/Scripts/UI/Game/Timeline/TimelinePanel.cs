@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Commands;
 using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Turn;
+using Turn.Commands;
 using UI.Core;
 using Units;
 using UnityEngine;
@@ -27,6 +29,7 @@ namespace UI.Game.Timeline
         [SerializeField] private float delay;
 
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
         private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
         private static readonly int promoted = Animator.StringToHash("promoted");
@@ -38,6 +41,7 @@ namespace UI.Game.Timeline
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         protected override void Subscribe()
@@ -209,6 +213,7 @@ namespace UI.Game.Timeline
         {
             await UniTask.Delay((int) (delay * 1000.0f));
             OnPromoted();
+            commandManager.ExecuteCommand(new RoundZeroCommand());
         }
 
         private void OnPromoted() => animator.SetTrigger(promoted);
