@@ -98,9 +98,12 @@ namespace UI.Game.Timeline
             ClearPortraits();
             
             int startIndex = turnManager.CurrentTurnIndex;
-            var currentTurnQueue = turnManager.CurrentTurnQueue.Skip(startIndex);
+            var currentTurnQueue = turnManager.CurrentTurnQueue
+                .Skip(startIndex)
+                .Where(u => !u.IsDead);
             var nextTurnQueue = turnManager.NextTurnQueue
-                .Where(u => !currentTurnQueue.Contains(u));
+                .Where(u => !currentTurnQueue.Contains(u))
+                .Where(u => !u.IsDead);
             //currentTurnQueue.RemoveRange(0, startIndex);
             if (drawInsightBtn)
                 CreateInsightButton();

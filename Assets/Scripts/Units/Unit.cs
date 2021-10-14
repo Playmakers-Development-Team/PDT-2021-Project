@@ -87,6 +87,7 @@ namespace Units
         #endregion
 
         public bool Indestructible { get; set; }
+        public bool IsDead { get; private set; }
 
         public Animator UnitAnimator { get; private set; }
         public Color UnitColor => spriteRenderer.color;
@@ -234,8 +235,12 @@ namespace Units
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
-            enabled = false;
+            // enabled = false;
             //transform.parent.gameObject.SetActive(false);
+            // Keep the parent object because we need VFX. BUT also disable this game object so that
+            // commands, coroutines and awaits are unregistered and stopped.
+            gameObject.SetActive(false);
+            IsDead = true;
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }

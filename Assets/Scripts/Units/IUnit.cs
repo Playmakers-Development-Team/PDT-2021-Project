@@ -21,6 +21,8 @@ namespace Units
         public List<Ability> Abilities { get; }
 
         public new Vector2Int Coordinate { get; }
+        
+        bool IsDead { get; }
 
         Color UnitColor { get; }
 
