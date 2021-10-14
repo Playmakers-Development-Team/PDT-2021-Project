@@ -222,7 +222,7 @@ Transform:
   m_Children:
   - {fileID: 776032590}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &93206385
 PrefabInstance:
@@ -640,7 +640,7 @@ Transform:
   m_Children:
   - {fileID: 1176409463}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &678505452
 PrefabInstance:
@@ -653,6 +653,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Estelle
       objectReference: {fileID: 0}
+    - target: {fileID: 2175725976106958922, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 4869564425208384771, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -709,10 +713,6 @@ PrefabInstance:
       propertyPath: data.abilities.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: 6286e85532539de499098a858aba8e55, type: 2}
-    - target: {fileID: 5173866202875139962, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
-      propertyPath: data.movementPoints.<BaseValue>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
 --- !u!1 &678505453 stripped
@@ -857,7 +857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1202,6 +1202,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 144604618587635537, guid: 345142f207f191540b37bee25048ad9d, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 496988326439623276, guid: 345142f207f191540b37bee25048ad9d, type: 3}
       propertyPath: data.abilities.Array.size
       value: 2
@@ -1214,10 +1218,6 @@ PrefabInstance:
       propertyPath: data.abilities.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: a54069f8d01c435f9b7b70866ca2859c, type: 2}
-    - target: {fileID: 496988326439623276, guid: 345142f207f191540b37bee25048ad9d, type: 3}
-      propertyPath: data.movementPoints.<BaseValue>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 496988326439623276, guid: 345142f207f191540b37bee25048ad9d, type: 3}
       propertyPath: data.<KnockbackStat>k__BackingField.<BaseValue>k__BackingField
       value: 1
@@ -1346,6 +1346,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 270710925029494461, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
+      propertyPath: levelTilemap
+      value: 
+      objectReference: {fileID: 1375121746}
     - target: {fileID: 1316045247946802828, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
       propertyPath: m_Name
       value: Niles
@@ -1362,10 +1366,6 @@ PrefabInstance:
       propertyPath: data.abilities.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 24f2be989b06533b384069766e834e32, type: 2}
-    - target: {fileID: 4207220006372852487, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
-      propertyPath: data.movementPoints.<BaseValue>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4869564425208384771, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1430,7 +1430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1680,6 +1680,11 @@ PrefabInstance:
 --- !u!4 &1375121745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5511968119123735640, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
+  m_PrefabInstance: {fileID: 1375121744}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1839735485 &1375121746 stripped
+Tilemap:
+  m_CorrespondingSourceObject: {fileID: 5511968119123735622, guid: 213922fed6704a16aa1fb8aa490f4e8d, type: 3}
   m_PrefabInstance: {fileID: 1375121744}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1426975301
@@ -2003,7 +2008,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7917514001545178903, guid: d253c2f87166b5b48bc8f046194db640, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2212,5 +2217,5 @@ Transform:
   m_Children:
   - {fileID: 1833760611}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
