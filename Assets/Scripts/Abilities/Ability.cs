@@ -17,6 +17,8 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject, ISerializationCallbackReceiver
     {
+        [Tooltip("The name of the ability shown to player, in the UI. If left empty, the file name will be used.")]
+        [SerializeField] private string displayName;
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
@@ -32,6 +34,10 @@ namespace Abilities
         // We're not using this anymore, but we are supporting backwards compat so keep it here
         [HideInInspector, SerializeField] private List<Effect> userEffects;
 
+        /// <summary>
+        /// The name of the ability, that the player can refer to. And shown in the UI.
+        /// </summary>
+        public string DisplayName => string.IsNullOrEmpty(displayName) ? name : displayName;
         /// <summary>
         /// A complete description of the ability.
         /// </summary>

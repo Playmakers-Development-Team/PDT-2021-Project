@@ -12,24 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Success Through Adversity
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
+  displayName: 
+  description: 'Deal +5 damage and gain +1 Sorrow.
 
-    Deal 3 damage. Gain 1 Sorrow.
-
-    CATHARSIS
-    3 - Deal 6 additional damage, gain 3 Defence.
-
-'
-  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+    User has Catharsis 3 - Gain
+    +6 Attack that lasts for the rest of the encounter.'
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 2
   representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 3 Damage"
+  - name: "Target \u27A4 Default, 5 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 3
+    damageValue: 5
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -57,16 +55,16 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 6 Damage and 3 Defence WITH Catharsis 3 to User"
+  - name: "User \u27A4 6 Attack for the encounter WITH Catharsis 3 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 6
+    damageValue: 0
     directDamage: 0
-    defenceValue: 3
+    defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 0
+    attackForEncounter: 6
     providingTenet:
       tenetType: 5
       stackCount: 0
@@ -74,5 +72,22 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
+  - name: "Target \u27A4 6 Attack for the encounter WITH Catharsis 3 to Target"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 6
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 452af93c1a17bec9abce18c6c0c1cb2e, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

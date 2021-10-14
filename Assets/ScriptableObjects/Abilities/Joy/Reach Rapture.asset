@@ -12,20 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Reach Rapture
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nGrant all targets 4 Defense when the User spends
-    Joy. \nDeal 2 damage to all targets."
-  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
+  displayName: 
+  description: Give +3 Defence and consume all Joy.
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: -1
+  speedType: 1
   representedTenet: 4
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
+  - name: "User and Target \u27A4 Default, 3 Defence"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
-    damageValue: 2
+    damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -35,13 +36,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 4 Defence IF User Spend 1 Joy"
-    affectTargets: 1
-    affectUser: 0
+  - name: "User \u27A4 Nothing IF User Consume 1 Joy"
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 1
     damageValue: 0
     directDamage: 0
-    defenceValue: 4
+    defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -50,12 +51,65 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User Spend 1 Joy
+    - name: User Consume 1 Joy
       affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 2
+        tenetCostType: 1
+        count: 1
+        tenetType: 4
+        tenetConstraint: 0
+      tenetGroupCost:
+        forceApplyCost: 0
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
+      shapeCost:
+        forceApplyCost: 0
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            forceApplyCost: 0
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            forceApplyCost: 0
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
+    keywords: []
+  - name: "Target \u27A4 Nothing IF Target Consume 1 Joy"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 1
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs:
+    - name: Target Consume 1 Joy
+      affectType: 1
+      costType: 1
+      tenetCost:
+        forceApplyCost: 0
+        tenetCostType: 1
         count: 1
         tenetType: 4
         tenetConstraint: 0

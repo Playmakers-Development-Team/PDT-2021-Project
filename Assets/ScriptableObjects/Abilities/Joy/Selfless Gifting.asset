@@ -12,23 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Selfless Gifting
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  displayName: 
+  description: 'Give +3 Attack and +3 Defence. Gain +1 Joy.
 
-    Grant target 3 attack, 3 defense. Grant self
-    1 Joy.
-
-    Remove 1 Joy by spending Humility [CURRENTLY DOES NOT WORK]
-
-    REPRESSION
-    2 - Subtract 2 Attack and 2 Defence from target
+    User has Repression
+    2 - Give -4 Defence.
 
 '
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 4
   effects:
-  - name: Default, 3 Attack and 3 Defence
+  - name: "Target \u27A4 Default, 3 Attack and 3 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -44,7 +41,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: Default, Provide 1 Joy
+  - name: "User \u27A4 Default, Provide 1 Joy"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
@@ -60,13 +57,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Damage WITH Repression 2 to User"
+  - name: "User \u27A4 -4 Defence WITH Repression 2 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 3
+    damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: -4
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0

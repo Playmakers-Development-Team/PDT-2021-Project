@@ -12,27 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Stoke the Flames
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
+  displayName: 
+  description: 'Give +3 Attack.
 
-    Give 2 Attack.
-
-    Give 5 more Attack if target
-    can spend Passion.
+    Target has Kindled 1: +5 Attack.
 
 '
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
-  speed: -1
+  speed: -2
+  speedType: 3
   representedTenet: 2
   effects:
-  - name: "Target \u27A4 Default, 2 Attack"
+  - name: "Target \u27A4 Default, 3 Attack"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 2
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -41,7 +40,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 5 Attack IF Target Spend 1 Passion"
+  - name: "Target \u27A4 5 Attack WITH Kindled 1 to Target"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -55,44 +54,8 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: Target Spend 1 Passion
-      affectType: 1
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 2
-        count: 1
-        tenetType: 2
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: dbb3a2e84b896aae09c7c74a1f4f3bc3, type: 2}
   visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
   userEffects: []

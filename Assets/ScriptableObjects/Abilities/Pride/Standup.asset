@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Standup
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
+  displayName: 
+  description: 'Deal +3 damage.
 
-    Deals 1 damage
-
-    >When user has Pride and
-    is INDEPENDENT, deal +3 damage'
+    Target has Pride: Deal +5 damage.'
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 2
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 1 Damage"

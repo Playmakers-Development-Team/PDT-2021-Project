@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Slack Off
   m_EditorClassIdentifier: 
-  description: "[Extremely Slow Ability]\nGain 4 Defence. \n>Gain 3 additional Defence
-    with Sorrow"
+  displayName: 
+  description: "Gain +4 Defence. \nUser has Sorrow: Gain +3 Attack and +3 Defence."
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: -3
+  speedType: 0
   representedTenet: 5
   effects:
-  - name: Default, 4 Defence
+  - name: "User \u27A4 Default, 4 Defence"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
@@ -35,14 +36,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Defence IF User With 1 Sorrow"
+  - name: "User \u27A4 3 Attack and 3 Defence IF User With 1 Sorrow"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 3
-    attackValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:

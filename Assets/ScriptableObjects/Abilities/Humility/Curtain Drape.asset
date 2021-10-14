@@ -10,38 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: A Common Strive
+  m_Name: Curtain Drape
   m_EditorClassIdentifier: 
-  description: "[Fast Ability]\nEveryone in radius gains 1 Attack and 1 Defense.
-    \n>Targets may Spend Passion, gain 2 Attack."
-  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  displayName: 
+  description: 'Give +2 Defence and +2 Attack.
+
+    Target spends 1 Humility: Give
+    +6 Attack.'
+  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
-  representedTenet: 0
+  speed: -2
+  speedType: 3
+  representedTenet: 1
   effects:
-  - name: "User and Target \u27A4 Default, 1 Attack and 1 Defence and Provide 1 Pride"
+  - name: "Target \u27A4 Default, 2 Attack and 2 Defence"
     affectTargets: 1
-    affectUser: 1
+    affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 1
-    attackValue: 1
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "User and Target \u27A4 2 Attack IF Target Spend 1 Passion"
-    affectTargets: 1
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
+    defenceValue: 2
     attackValue: 2
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -49,15 +37,31 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
+    costs: []
+    keywords: []
+  - name: "Target \u27A4 6 Attack IF Target Spend 1 Pride"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 6
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
     costs:
-    - name: Target Spend 1 Passion
+    - name: Target Spend 1 Pride
       affectType: 1
       costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 2
         count: 1
-        tenetType: 2
+        tenetType: 0
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -88,5 +92,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

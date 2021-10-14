@@ -9,20 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Shun
+  m_Script: {fileID: 11500000, guid: 9ec24a570b524b8bab6902638965efbd, type: 3}
+  m_Name: Affinity to Target
   m_EditorClassIdentifier: 
-  description: "Deals 3 damage \nIf you have Apathy, does 3 extra damage"
-  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
-  excludeUserFromTargets: 1
-  speed: 0
-  representedTenet: 3
-  effects:
-  - name: "Target \u27A4 Default, 3 Damage"
+  displayName: Affinity
+  isVisibleInGame: 1
+  description: Activate an effect when an ally is adjacent (one movement point away).
+  effect:
+    name: "Target \u27A4 Nothing IF Target finds At Least 1 Same Team in Adjacent
+      Shape"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 3
+    damageValue: 0
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -32,31 +31,15 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs: []
-    keywords: []
-  - name: "User \u27A4 3 Attack IF User With 1 Apathy"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 1
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 3
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
     costs:
-    - name: User With 1 Apathy
-      affectType: 0
-      costType: 1
+    - name: Target finds At Least 1 Same Team in Adjacent Shape
+      affectType: 1
+      costType: 2
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 0
         count: 1
-        tenetType: 3
+        tenetType: 0
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -66,12 +49,12 @@ MonoBehaviour:
         tenetFilter: 0
       shapeCost:
         forceApplyCost: 0
-        shape: {fileID: 0}
+        shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
         countConstraint: 0
-        count: 0
-        shapeFilter: 0
+        count: 1
+        shapeFilter: 1
         cost:
-          name: 
+          name: User....
           affectType: 0
           costType: 0
           tenetCost:
@@ -87,5 +70,3 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
-  userEffects: []
