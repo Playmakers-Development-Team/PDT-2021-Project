@@ -129,8 +129,7 @@ namespace UI.CombatEndUI.PanelScripts
                 AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
                 newAbilityButton.Redraw(
                     abilityInfo.Render,
-                    abilityInfo.Ability.name,
-                    abilityInfo.Ability.Description,
+                    abilityInfo.Ability,
                     false);
 
                 abilityButtons.Add(newAbilityButton);
@@ -152,8 +151,7 @@ namespace UI.CombatEndUI.PanelScripts
                 AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
                 newAbilityButton.Redraw(
                     abilityInfo.Render,
-                    abilityInfo.Ability.name,
-                    abilityInfo.Ability.Description,
+                    abilityInfo.Ability,
                     false);
 
                 abilityButtons.Add(newAbilityButton);

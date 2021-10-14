@@ -133,10 +133,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
             // Assign ability images
             for (int i = 0; i < abilityInfos.Count; ++i)
             {
-                abilityButtons[i].Redraw(abilityInfos[i].Render,
-                    abilityInfos[i].Ability.DisplayName,
-                    abilityInfos[i].Ability.Description,
-                    true);
+                abilityButtons[i].Redraw(abilityInfos[i].Render, abilityInfos[i].Ability, true);
             }
         }
         

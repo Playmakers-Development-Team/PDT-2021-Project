@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,16 +29,14 @@ namespace UI.Game.UnitPanels.Abilities
         [Header("Configurable")]
         [SerializeField] private bool descriptiveIcons;
         [SerializeField] private bool showAbilitySpeed = true;
+        [SerializeField] private bool showKeywords = true;
 
         protected override void OnComponentAwake()
         {
             // Just include every darn text okay
             foreach (var textComponent in GetComponentsInChildren<TextMeshProUGUI>())
                 textComponent.spriteAsset = spriteAsset;
-        }
-
-        protected override void OnComponentStart()
-        {
+            
             tooltipPanel.gameObject.SetActive(false);
             keywordPanel.gameObject.SetActive(false);
         }
@@ -58,40 +57,50 @@ namespace UI.Game.UnitPanels.Abilities
 
         private void OnAbilityHoverEnter(AbilityCard card)
         {
-            if (!abilityList.Cards.Contains(card))
+            if (abilityList != null && !abilityList.Cards.Contains(card))
                 return;
 
-            tooltipPanel.SetActive(true);
-            tooltipDescription.text = PrettyAbilityDescription(card.Ability);
-
-            keywordPanel.SetActive(card.Ability.AllKeywords.Any());
-            keywordDescription.text = string.Empty;
-
-            // Shape icons
-            Sprite shapeSprite = card.Ability.Shape.DisplayIcon;
-            shapeIcon.gameObject.SetActive(shapeSprite != null);
-            
-            if (card.Ability.Shape.DisplayIcon != null)
-                shapeIcon.sprite = shapeSprite;
-            
-            // Ability speed
-            speedPanel.SetActive(showAbilitySpeed);
-            speedDescription.text = card.Ability.SpeedType.DisplayName();
-
-            foreach (Keyword keyword in card.Ability.AllKeywords)
-                keywordDescription.text += PrettyKeywordDescription(keyword);
+            DrawAbility(card.Ability);
         }
 
         private void OnAbilityHoverExit(AbilityCard card)
         {
-            if (!abilityList.Cards.Contains(card))
+            if (abilityList == null || !abilityList.Cards.Contains(card))
                 return;
 
-            tooltipPanel.SetActive(false);
-            keywordPanel.SetActive(false);
+            HideAbilities();
         }
         
         #endregion
+
+        internal void DrawAbility(Ability ability)
+        {
+            tooltipPanel.SetActive(true);
+            tooltipDescription.text = PrettyAbilityDescription(ability);
+
+            keywordPanel.SetActive(showKeywords && ability.AllKeywords.Any());
+            keywordDescription.text = string.Empty;
+
+            // Shape icons
+            Sprite shapeSprite = ability.Shape.DisplayIcon;
+            shapeIcon.gameObject.SetActive(shapeSprite != null);
+            
+            if (ability.Shape.DisplayIcon != null)
+                shapeIcon.sprite = shapeSprite;
+            
+            // Ability speed
+            speedPanel.SetActive(showAbilitySpeed);
+            speedDescription.text = ability.SpeedType.DisplayName();
+
+            foreach (Keyword keyword in ability.AllKeywords)
+                keywordDescription.text += PrettyKeywordDescription(keyword);
+        }
+
+        internal void HideAbilities()
+        {
+            tooltipPanel.SetActive(false);
+            keywordPanel.SetActive(false);
+        }
 
         private string PrettyKeywordDescription(Keyword keyword)
         {

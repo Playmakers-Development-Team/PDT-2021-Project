@@ -168,7 +168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.15380096, y: -0.30750084}
+  m_AnchoredPosition: {x: -0.1538086, y: -0.30750084}
   m_SizeDelta: {x: -15.2286, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2141915184436929089
@@ -798,7 +798,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.31420135, y: -15.6311}
+  m_AnchoredPosition: {x: 0.31420898, y: -15.6311}
   m_SizeDelta: {x: -14.1029, y: -41.2622}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7993309381072416142
@@ -933,10 +933,10 @@ RectTransform:
   m_Father: {fileID: 8048967408153214315}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 81.54439, y: 103.27689}
-  m_SizeDelta: {x: -163.0896, y: 16.9125}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -38.455612, y: 9.924492}
+  m_SizeDelta: {x: 76.9104, y: 16.912498}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &7799717732223939709
 GameObject:
@@ -1000,6 +1000,7 @@ MonoBehaviour:
   spriteAsset: {fileID: 11400000, guid: ca5baf1026bff9f5980ffad80aff3f4f, type: 2}
   descriptiveIcons: 1
   showAbilitySpeed: 1
+  showKeywords: 1
 --- !u!1 &8533937798924412111
 GameObject:
   m_ObjectHideFlags: 0
