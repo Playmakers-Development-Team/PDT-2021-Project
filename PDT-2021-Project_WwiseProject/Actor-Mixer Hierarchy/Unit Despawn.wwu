@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{036D9DEB-C4FC-47A3-94F3-02F7791AD57B}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Unit Despawn" ID="{036D9DEB-C4FC-47A3-94F3-02F7791AD57B}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Unit_Despawn" ID="{69822CA1-58BD-433E-B0C3-DB0311451B1E}" ShortID="1071130967">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Unit_Despawn" ID="{C818C6A2-1CED-4C82-92AC-8A8B6FC1A55E}">
+							<Language>SFX</Language>
+							<AudioFile>Unit_Despawn.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="270173784"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Unit_Despawn" ID="{C818C6A2-1CED-4C82-92AC-8A8B6FC1A55E}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

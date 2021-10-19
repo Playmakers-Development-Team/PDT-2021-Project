@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{65196DA9-29A6-4ECD-AFA2-BA80103734E0}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Menu Select" ID="{65196DA9-29A6-4ECD-AFA2-BA80103734E0}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Menu_Select" ID="{5A56A3E2-BC97-45CD-94F7-36980B5090B5}" ShortID="353938984">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Menu_Select" ID="{3D697202-C74F-4936-87EB-0C972CD7FC12}">
+							<Language>SFX</Language>
+							<AudioFile>Menu_Select.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="662570779"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Menu_Select" ID="{3D697202-C74F-4936-87EB-0C972CD7FC12}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
