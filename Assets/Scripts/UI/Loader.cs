@@ -46,7 +46,10 @@ namespace UI
 
         #endregion
 
-        public void LoadObject(GameObject obj) => Instantiate(obj, transform);
+        public void LoadObject(GameObject obj)
+        {
+            /*Instantiate(obj, transform);*/
+        }
 
         #region MOVE TO ENDSCREENDIALOGUE
         
