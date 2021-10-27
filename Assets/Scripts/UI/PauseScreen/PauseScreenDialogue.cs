@@ -118,7 +118,9 @@ public class PauseScreenDialogue : Dialogue
     public void ConfirmExit()
     {
         Application.Quit();
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 
     //TODO: Settings Menu
