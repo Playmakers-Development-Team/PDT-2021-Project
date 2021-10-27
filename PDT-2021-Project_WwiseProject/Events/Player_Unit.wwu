@@ -157,6 +157,72 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_Brush_Stroke" ID="{A3E5ED9D-7DDB-4244-A1C2-FB27F6A8DC13}">
+					<ChildrenList>
+						<Action Name="" ID="{63BDA05E-98D0-48BD-871A-D895A28ADFE8}" ShortID="372962060">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Brush Stroke" ID="{91D96831-0EA3-4D4F-996B-4E4857EE2736}" WorkUnitID="{0661B727-564E-4F24-BBB5-F3EB174FC7B4}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Estelle_Ability" ID="{248778BF-AB0A-44C2-9C30-D2EFF8ABC8CA}">
+					<ChildrenList>
+						<Action Name="" ID="{5E69A30D-BC71-4E61-9EAF-C84EFED5ED9E}" ShortID="190874192">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Estelle_Ability" ID="{E554E8E6-B893-487F-B4E8-A63839FBD8B4}" WorkUnitID="{9B088D89-EFD0-4BE6-8CCB-42B56BB0D955}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Helena_Ability" ID="{D9724CD4-18A7-4FB7-BA83-72D8BE5D78DD}">
+					<ChildrenList>
+						<Action Name="" ID="{986D182C-C902-4AC2-BC8F-F279C292CA47}" ShortID="238214526">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Helena_Ability" ID="{C4AC2FCA-A5BF-4022-B2ED-D602AD654946}" WorkUnitID="{74A68B22-5E3A-4E0C-925D-D3318F9B228E}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Niles_Ability" ID="{490C4655-DEA3-4911-AD24-B9C8BE1F8C43}">
+					<ChildrenList>
+						<Action Name="" ID="{5E82BB2F-36DA-4A84-9DE1-C6CADD85D56F}" ShortID="137294725">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Niles_Ability" ID="{5EA4C41E-751D-42A1-89C4-F22DE3C88E0F}" WorkUnitID="{CEE799F7-F411-4BA3-AFCA-86073919BF2C}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Turn_Manipulation_Toggle" ID="{2C565594-49CF-4CEE-9F17-350B6C4E2878}">
+					<ChildrenList>
+						<Action Name="" ID="{2DE810A0-493E-4A1E-9EDD-B6B7FBEDC94B}" ShortID="448937649">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Turn_Manipulation" ID="{28047542-4ACB-448F-A716-FDC500CBA6A0}" WorkUnitID="{0E84B3E1-158B-4211-9F7E-B108B0461AF8}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Unit_Walking" ID="{7DD13289-1D6B-49A0-9B08-161DFFD309B0}">
+					<ChildrenList>
+						<Action Name="" ID="{5123E8EA-DBFA-41F6-9269-EE84F029D814}" ShortID="358067818">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Unit Walking" ID="{A9D327CB-E4C6-4864-9056-905EB1834408}" WorkUnitID="{219023BC-DA3F-4BB8-A593-A12CA8063ADD}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

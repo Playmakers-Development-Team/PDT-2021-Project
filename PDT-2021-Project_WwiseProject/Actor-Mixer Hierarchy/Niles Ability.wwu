@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{CEE799F7-F411-4BA3-AFCA-86073919BF2C}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Niles Ability" ID="{CEE799F7-F411-4BA3-AFCA-86073919BF2C}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Niles_Ability" ID="{5EA4C41E-751D-42A1-89C4-F22DE3C88E0F}" ShortID="689140608">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Niles_Ability" ID="{138C93BE-8019-40EE-8998-76BCFD35D4F0}">
+							<Language>SFX</Language>
+							<AudioFile>Niles_Ability.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="537033124"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Niles_Ability" ID="{138C93BE-8019-40EE-8998-76BCFD35D4F0}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

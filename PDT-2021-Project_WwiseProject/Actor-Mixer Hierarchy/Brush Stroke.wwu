@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{0661B727-564E-4F24-BBB5-F3EB174FC7B4}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Brush Stroke" ID="{0661B727-564E-4F24-BBB5-F3EB174FC7B4}" PersistMode="Standalone">
+			<ChildrenList>
+				<RandomSequenceContainer Name="Brush Stroke" ID="{91D96831-0EA3-4D4F-996B-4E4857EE2736}" ShortID="1051810613">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Brush_Stroke-01" ID="{DD4DB32C-F76C-4DAB-B8BC-B7E88CE0A30C}" ShortID="633458253">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Brush_Stroke-01" ID="{83A59B5F-E4EA-488A-AC4C-3597D1DA638A}">
+									<Language>SFX</Language>
+									<AudioFile>Brush_Stroke-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="902104133"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists/>
+							<ActiveSourceList>
+								<ActiveSource Name="Brush_Stroke-01" ID="{83A59B5F-E4EA-488A-AC4C-3597D1DA638A}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Brush_Stroke-02" ID="{87F0DCC2-36EE-40D6-8106-E5FD66726086}" ShortID="1016275545">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Brush_Stroke-02" ID="{8A20FC50-5DCD-4F58-9941-0C97A60E4DF9}">
+									<Language>SFX</Language>
+									<AudioFile>Brush_Stroke-02.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="733188717"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists/>
+							<ActiveSourceList>
+								<ActiveSource Name="Brush_Stroke-02" ID="{8A20FC50-5DCD-4F58-9941-0C97A60E4DF9}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+					<ObjectLists/>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
