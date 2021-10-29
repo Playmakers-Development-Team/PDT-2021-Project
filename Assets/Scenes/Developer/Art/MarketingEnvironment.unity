@@ -279,6 +279,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 545605560}
     m_Modifications:
+    - target: {fileID: 234206475871496285, guid: df3fd9623c946a74e8488ca01a5540a7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 234206475871496286, guid: df3fd9623c946a74e8488ca01a5540a7, type: 3}
       propertyPath: m_Name
       value: Game Camera
@@ -1053,7 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5172bd93400d74ea804c101f87f05d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delay: 10
+  delay: 7.5
 --- !u!4 &1641328740
 Transform:
   m_ObjectHideFlags: 0
