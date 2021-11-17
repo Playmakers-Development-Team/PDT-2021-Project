@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Sense of Humility
+  m_Name: Sense of Humility+
   m_EditorClassIdentifier: 
   description: '[Neutral Ability]
 
-    Targets gain 3 Defense and 1 Humility
+    Targets gain 4 Defense and 1 Humility
 
     User
-    gains 2 Defense and 1 Humility.'
+    gains 3 Defense and 1 Humility.'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   representedTenet: 1
   effects:
-  - name: Default, 3 Defence and Provide 1 Humility
+  - name: "User and Target \u27A4 Default, 4 Defence and Provide 1 Humility"
     affectTargets: 1
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 3
+    defenceValue: 4
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -39,13 +39,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: Default, 2 Defence and Provide 1 Humility
+  - name: "User \u27A4 Default, 3 Defence and Provide 1 Humility"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0

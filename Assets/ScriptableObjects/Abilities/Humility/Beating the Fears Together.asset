@@ -116,7 +116,7 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: 2 Damage IF User With 1 Pride
+  - name: "Target \u27A4 2 Damage IF Target With 1 Pride"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -131,8 +131,8 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With 1 Pride
-      affectType: 0
+    - name: Target With 1 Pride
+      affectType: 1
       costType: 1
       tenetCost:
         forceApplyCost: 0

@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Staying Calm
+  m_Name: Caring for Others+
   m_EditorClassIdentifier: 
-  description: "[Neutral Ability]\nTargets gain 1 Defence. \n>Targets may Spend Humility
-    to gain 4 Defence"
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+  description: "[Very Fast Ability]\nTargets gain 3 Defense\n >Targets that have
+    AFFINITY and can Spend Humility gain +3 Defense\n"
+  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
+  speed: 2
   representedTenet: 1
   effects:
-  - name: Default, 1 Defence
+  - name: "Target \u27A4 Default, 3 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 1
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -35,13 +35,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 4 Defence IF Target Spend 1 Humility"
+  - name: "Target \u27A4 3 Defence IF Target Spend 1 Humility WITH Affinity"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 4
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -87,6 +87,7 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetFilter: 0
-    keywords: []
-  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
+    keywords:
+    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
+  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

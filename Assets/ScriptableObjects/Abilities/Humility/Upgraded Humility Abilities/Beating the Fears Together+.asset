@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Beating the Fears Together
+  m_Name: Beating the Fears Together+
   m_EditorClassIdentifier: 
   description: '[Fast Ability]
 
-    Deal 1 damage
+    Deal 2 damage
 
     >When user has AFFINITY, deal
-    +3 damage.
+    +4 damage.
 
-    >When user is with Joy, deal +3 damage
+    >When user is with Joy, deal +4 damage
 
     >Target with Pride
     take 2 extra damage
@@ -30,11 +30,11 @@ MonoBehaviour:
   speed: 1
   representedTenet: 1
   effects:
-  - name: Default, 1 Damage
+  - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 1
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -63,11 +63,11 @@ MonoBehaviour:
     costs: []
     keywords:
     - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
-  - name: 3 Damage IF User With Joy
+  - name: "Target \u27A4 4 Damage IF User With Joy"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 3
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  - name: 2 Damage IF User With 1 Pride
+  - name: "Target \u27A4 2 Damage IF Target With 1 Pride"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -131,8 +131,8 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: User With 1 Pride
-      affectType: 0
+    - name: Target With 1 Pride
+      affectType: 1
       costType: 1
       tenetCost:
         forceApplyCost: 0
