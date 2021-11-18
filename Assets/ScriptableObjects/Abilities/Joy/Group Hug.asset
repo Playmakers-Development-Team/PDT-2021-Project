@@ -12,85 +12,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Group Hug
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  displayName: 
+  description: 'Give +6 Defence and +1 Joy.
 
-    Grant all targets 2 Defence
-
-    >Grant
-    all targets 3 Additional Defense with Humility'
+    Target has Repression 3: Give -3
+    Defence and -3 Attack.'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 0
   representedTenet: 4
   effects:
-  - name: Default, 2 Defence
+  - name: "User and Target \u27A4 Default, 6 Defence and Provide 1 Joy"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
+    defenceValue: 6
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 4
+      stackCount: 1
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Defence IF User With 1 Humility
+  - name: "User and Target \u27A4 -3 Attack and -3 Defence WITH Repression 3 to Target"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 3
-    attackValue: 0
+    defenceValue: -3
+    attackValue: -3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
+      tenetType: 4
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User With 1 Humility
-      affectType: 0
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 0
-        count: 1
-        tenetType: 1
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 07f3e23c4601678e3a24c8715baaf4c7, type: 2}
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

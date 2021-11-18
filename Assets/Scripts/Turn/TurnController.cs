@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Commands;
 using Grid.GridObjects;
 using Managers;
@@ -21,6 +23,8 @@ namespace Turn
         [Tooltip("If ability speed is enabled, the pre made timeline will only be used for the" +
                  "first round. Disabling ability speed can be useful for testing purposes.")]
         [SerializeField] private bool disableAbilitySpeed;
+        [Tooltip("The player unit with the most amount of abilities will go first, this is useful specifically for the tutorial")]
+        [SerializeField] private bool preMadeBiggestPlayerLoadoutFirst;
        
         private TurnManager turnManager;
         private UnitManager unitManager;
@@ -55,9 +59,40 @@ namespace Turn
             }
         
             if (isTimelineRandomised)
+            {
                 turnManager.SetupTurnQueue(turnPhases);
-            else 
-                turnManager.SetupTurnQueue(preMadeTimeline,turnPhases);
+            }
+            else
+            {
+                var timeline = preMadeTimeline;
+
+                if (preMadeBiggestPlayerLoadoutFirst)
+                    timeline = SortPlayerWithBiggestLoadout(preMadeTimeline.AsEnumerable()).ToArray();
+                
+                turnManager.SetupTurnQueue(timeline, turnPhases);
+            }
+        }
+
+        /// <summary>
+        /// Make the first player with the highest number of abilities to go first.
+        /// Useful for tutorials.
+        /// </summary>
+        private List<GameObject> SortPlayerWithBiggestLoadout(IEnumerable<GameObject> timeline)
+        {
+            var copy = timeline.ToList();
+            PlayerUnit playerUnit = copy
+                .Select(g => g.GetComponent<PlayerUnit>())
+                .Where(p => p != null)
+                .OrderByDescending(p => p.Abilities.Count)
+                .FirstOrDefault();
+
+            if (playerUnit != null)
+            {
+                copy.Remove(playerUnit.gameObject);
+                copy.Insert(0, playerUnit.gameObject);
+            }
+
+            return copy;
         }
 
         // TODO: Can be removed once proper UI is in place

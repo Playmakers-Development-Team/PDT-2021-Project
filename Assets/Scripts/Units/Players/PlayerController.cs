@@ -1,3 +1,4 @@
+using Abilities;
 using Grid.Commands;
 using Managers;
 using Units.Commands;
@@ -7,6 +8,8 @@ namespace Units.Players
 {
     public class PlayerController : UnitController<PlayerUnitData>
     {
+        [Tooltip("The ability pool which will be used to pickup new ability at the end of encounter")]
+        [SerializeField] private AbilityPool abilityPickupPool;
         [SerializeField] private bool persistentUnitData = false;
 
         private PlayerManager PlayerManager => (PlayerManager) unitManagerT;
@@ -22,6 +25,7 @@ namespace Units.Players
             #endregion
 
             PlayerManager.IsUnitDataPersistent = persistentUnitData;
+            PlayerManager.AbilityPickupPool = abilityPickupPool;
         }
         
         // TODO: Repeated code. See UnitController.OnGridObjectsReady.

@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &611884883809632699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 243276095763223341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6eadb95572e0c24e978a4636b59350f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <SpecialMoveCount>k__BackingField: 3
+  meleeAttackAbility: {fileID: 11400000, guid: 7cc4676df48776645ab2a40c27161d77, type: 2}
+  buffAbility: {fileID: 11400000, guid: 528d0c3989a04fc44b124a6a49f88607, type: 2}
+  actionDelay: 1.5
+  specialMoveCount: 0
+  specialMoveOffset: 1
+--- !u!1001 &7361568539588277913
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 349447074904357979, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.<DefenceStat>k__BackingField.<BaseValue>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.<HealthValue>k__BackingField.<BaseValue>k__BackingField
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7298577721533539764, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: m_Name
+      value: Mouscle (Green) Logic
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+--- !u!1 &243276095763223341 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7298577721533539764, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+  m_PrefabInstance: {fileID: 7361568539588277913}
+  m_PrefabAsset: {fileID: 0}

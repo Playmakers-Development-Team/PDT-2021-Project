@@ -1,6 +1,8 @@
 using System;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
+using TMPro;
 using Turn.Commands;
 using UI.Commands;
 using UnityEngine;
@@ -12,9 +14,13 @@ namespace UI
         [SerializeField] private GameObject dialogue;
         
         [SerializeField] private GameObject abilityLoadoutDialogue;
+        [SerializeField] private GameObject tutorialDialogue;
         [SerializeField] private GameObject abilityUpgradeDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
+        [SerializeField] private GameObject endOfRoundBannerPrefab;
+        private GameObject endOfRoundBanner;
+        private float bannerActiveTime = 2.0f;
         
         private CommandManager commandManager;
 
@@ -23,6 +29,10 @@ namespace UI
         private void Awake()
         {
             Instantiate(dialogue, transform);
+            
+            endOfRoundBanner = Instantiate(endOfRoundBannerPrefab, transform);
+            endOfRoundBanner.SetActive(false);
+
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
@@ -33,6 +43,9 @@ namespace UI
             
             commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.ListenCommand<RoundZeroCommand>(OnRoundZeroCommand);
+            commandManager.ListenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         private void OnDisable()
@@ -42,9 +55,20 @@ namespace UI
             
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         #endregion
+
+        private async void ShowTutorial()
+        {
+            await UniTask.Yield();
+            await UniTask.WaitWhile(() => endOfRoundBanner.gameObject.activeSelf);
+            
+            if (tutorialDialogue)
+                LoadObject(tutorialDialogue);
+        }
 
         public void LoadObject(GameObject obj) => Instantiate(obj, transform);
 
@@ -52,23 +76,50 @@ namespace UI
         
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
-            LoadObject(winDialogue);
+            if (winDialogue)
+                LoadObject(winDialogue);
         }
         
         private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
         {
-            LoadObject(loseDialogue); 
+            if (loseDialogue)
+                LoadObject(loseDialogue); 
         }
         
         private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
         {
-            LoadObject(abilityLoadoutDialogue);
+            if (abilityLoadoutDialogue)
+                LoadObject(abilityLoadoutDialogue);
         }
 
         private void SpawnAbilityUpgrade(SpawnAbilityUpgradeUICommand cmd)
         {
-            LoadObject(abilityUpgradeDialogue);
+            if (abilityUpgradeDialogue)
+                LoadObject(abilityUpgradeDialogue);
         }
+        
+        private void OnRoundZeroCommand(RoundZeroCommand cmd)
+        {
+            ShowStartRoundBanner(0);
+            
+            // NOTE: If you are moving this somewhere else, put the code below into its own function in the Loader.cs
+            ShowTutorial();
+        }
+        
+        private void OnStartRoundCommand(StartRoundCommand cmd)
+        {
+            ShowStartRoundBanner(cmd.RoundCount);
+        }
+
+        private void ShowStartRoundBanner(int roundCount)
+        {
+            endOfRoundBanner.SetActive(true);
+            endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round " + roundCount;
+            
+            Invoke("HideStartRoundBanner", bannerActiveTime);
+        }
+
+        private void HideStartRoundBanner() => endOfRoundBanner.SetActive(false);
 
         #endregion
     }

@@ -17,6 +17,9 @@ namespace Units.Stats
             int initialDamageTaken = amount - unit.DefenceStat.Value;
             int calculatedDamageTaken = Mathf.Max(0, initialDamageTaken);
             
+            // Decrease defence by amount of damage taken
+            unit.DefenceStat.Value = Mathf.Max(0, unit.DefenceStat.Value - amount);
+            
             Value -= calculatedDamageTaken;
             CheckDeath();
             return calculatedDamageTaken;

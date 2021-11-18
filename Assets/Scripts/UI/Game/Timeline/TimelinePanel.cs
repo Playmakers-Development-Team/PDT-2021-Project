@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Commands;
 using Cysharp.Threading.Tasks;
 using Managers;
 using TMPro;
 using Turn;
+using Turn.Commands;
 using UI.Core;
 using Units;
 using UnityEngine;
@@ -26,6 +29,7 @@ namespace UI.Game.Timeline
         [SerializeField] private float delay;
 
         private TurnManager turnManager;
+        private CommandManager commandManager;
 
         private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
         private static readonly int promoted = Animator.StringToHash("promoted");
@@ -37,6 +41,7 @@ namespace UI.Game.Timeline
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         protected override void Subscribe()
@@ -91,14 +96,20 @@ namespace UI.Game.Timeline
         private void UpdatePortraits()
         {
             ClearPortraits();
-
-            List<IUnit> currentTurnQueue = new List<IUnit>(turnManager.CurrentTurnQueue);
+            
             int startIndex = turnManager.CurrentTurnIndex;
+            var currentTurnQueue = turnManager.CurrentTurnQueue
+                .Skip(startIndex)
+                .Where(u => !u.IsDead);
+            var nextTurnQueue = turnManager.NextTurnQueue
+                .Where(u => !currentTurnQueue.Contains(u))
+                .Where(u => !u.IsDead);
             //currentTurnQueue.RemoveRange(0, startIndex);
             if (drawInsightBtn)
                 CreateInsightButton();
 
-            CreatePortraits(currentTurnQueue, startIndex);
+            // CreatePortraits(currentTurnQueue, startIndex);
+            CreatePortraitsForOneRound(currentTurnQueue, nextTurnQueue);
         }
 
         private void maintainSelectedThroughTurns()
@@ -113,6 +124,21 @@ namespace UI.Game.Timeline
                 portraits[i].Destroy();
 
             portraits.Clear();
+        }
+
+        private void CreatePortraitsForOneRound(IEnumerable<IUnit> currentUnits, IEnumerable<IUnit> nextUnits)
+        {
+            foreach (IUnit unit in currentUnits)
+            {
+                CreatePortrait(unit);
+            }
+            
+            CreateDivider(turnManager.RoundCount + 2);
+
+            foreach (IUnit unit in nextUnits)
+            {
+                CreatePortrait(unit);
+            }
         }
 
         private void CreatePortraits(IEnumerable<IUnit> units)
@@ -190,6 +216,7 @@ namespace UI.Game.Timeline
         {
             await UniTask.Delay((int) (delay * 1000.0f));
             OnPromoted();
+            commandManager.ExecuteCommand(new RoundZeroCommand());
         }
 
         private void OnPromoted() => animator.SetTrigger(promoted);

@@ -12,42 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Overcome
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  displayName: 
+  description: 'Give +3 Attack, +3 Defence and +1 Sorrow.
 
-    Deal 2 damage. Apply 1 Sorrow to self.
-
-
-    Catharsis
-    3 - Gain 3 Attack permanently for the rest of the encounter. '
-  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+    Target has Catharsis
+    2: Give +5 Attack that lasts the entire encounter.'
+  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
+  speed: -3
+  speedType: 3
   representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
+  - name: "User and Target \u27A4 Default, 3 Attack and 3 Defence and Provide 1 Sorrow"
     affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 2
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: Default, Provide 1 Sorrow
-    affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 0
-    attackValue: 0
+    defenceValue: 3
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -56,7 +39,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack for the encounter WITH Catharsis 3
+  - name: "User \u27A4 5 Attack for the encounter WITH Catharsis 2 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 2
@@ -65,49 +48,30 @@ MonoBehaviour:
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 3
+    attackForEncounter: 5
     providingTenet:
       tenetType: 5
       stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
-  - name: "User \u27A4 1 Attack BONUSED BY User Sorrow WITH Catharsis 3 to User"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 1
+    - {fileID: 11400000, guid: 243aae2bfdc19e3b297431e500545dfd, type: 2}
+  - name: "Target \u27A4 5 Attack for the encounter WITH Catharsis 2 to Target"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 2
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 1
+    attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 0
+    attackForEncounter: 5
     providingTenet:
       tenetType: 5
       stackCount: 0
-    bonuses:
-    - name: User Sorrow
-      affectType: 0
-      bonusType: 1
-      tenetBonus:
-        tenetType: 5
-        tenetConstraint: 0
-      shapeBonus:
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        bonusByCount: 0
-        bonus:
-          name: 
-          affectType: 0
-          bonusType: 0
-          tenetBonus:
-            tenetType: 0
-            tenetConstraint: 0
+    bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
+    - {fileID: 11400000, guid: b20b5ab580387108392b80ecb59d2ed0, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

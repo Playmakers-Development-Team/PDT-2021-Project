@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Ranged Attack
   m_EditorClassIdentifier: 
-  description: An attack that can be engaged from a distince, firing in either a
-    cardinal (NESW) or ordinal (NE, NW, SE, SW) direction. The range of the attack
-    is dependant on the LineOfSight range (e.g. A player 2 tiles NE can be hit with
-    a range of 2).
-  shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
+  description: '[Neutral Ability]
+
+    An attack that can deals 2 damage to a tile
+    two tiles away from the unit, ignoring walls. Can only target cardinal directions. '
+  shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
   excludeUserFromTargets: 1
   speed: 0
   representedTenet: 0
@@ -37,5 +37,5 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+  visualEffects: {fileID: 0}
   userEffects: []

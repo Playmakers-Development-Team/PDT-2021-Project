@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Managers;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityUpgrading;
 using UI.Core;
 using Units;
+using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -46,6 +48,12 @@ namespace UI.CombatEndUI.PanelScripts
         [SerializeField] private Animator buttonFadeAnim;
         [SerializeField] private Animator returnButtonFadeAnim;
 
+        private PlayerManager playerManager;
+        
+        private AbilityPool PreferredAbilityPool => playerManager.AbilityPickupPool != null
+            ? playerManager.AbilityPickupPool
+            : abilityPool;
+
         #region UIComponent
         
         protected override void Subscribe() {}
@@ -55,6 +63,7 @@ namespace UI.CombatEndUI.PanelScripts
         protected override void OnComponentAwake()
         {
             abilityScrollView.onValueChanged.AddListener(UpdateAbilityScroll);
+            playerManager = ManagerLocator.Get<PlayerManager>();
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
@@ -120,8 +129,7 @@ namespace UI.CombatEndUI.PanelScripts
                 AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
                 newAbilityButton.Redraw(
                     abilityInfo.Render,
-                    abilityInfo.Ability.name,
-                    abilityInfo.Ability.Description,
+                    abilityInfo.Ability,
                     false);
 
                 abilityButtons.Add(newAbilityButton);
@@ -143,8 +151,7 @@ namespace UI.CombatEndUI.PanelScripts
                 AbilityButton newAbilityButton = Instantiate(newAbilityPrefab, abilityScrollView.content).GetComponent<AbilityButton>();
                 newAbilityButton.Redraw(
                     abilityInfo.Render,
-                    abilityInfo.Ability.name,
-                    abilityInfo.Ability.Description,
+                    abilityInfo.Ability,
                     false);
 
                 abilityButtons.Add(newAbilityButton);
@@ -184,8 +191,7 @@ namespace UI.CombatEndUI.PanelScripts
         private List<LoadoutAbilityInfo> GetAbilities(int numberOfAbilities, TenetType tenetType)
         {
             List<LoadoutAbilityInfo> abilityInfos = new List<LoadoutAbilityInfo>();
-
-            List<Ability> selectedAbilities = RandomiseAbilityOrder(abilityPool.PickAbilitiesByTenet(tenetType).ToList());
+            List<Ability> selectedAbilities = PreferredAbilityPool.PickAbilitiesByTenet(tenetType).ToList();
 
             for (int i = 0; i < selectedAbilities.Count; ++i)
             {
@@ -233,7 +239,7 @@ namespace UI.CombatEndUI.PanelScripts
             {
                 String upgradedAbilityName = oldAbilityInfos[i].Ability.name + "+";
                 
-                Ability upgradedAbility = abilityPool.PickAbilitiesByName(upgradedAbilityName);
+                Ability upgradedAbility = PreferredAbilityPool.PickAbilitiesByName(upgradedAbilityName);
                 
                 if(upgradedAbility != null)
                     upgradedAbilityInfos.Add(dialogue.GetInfo(upgradedAbility));

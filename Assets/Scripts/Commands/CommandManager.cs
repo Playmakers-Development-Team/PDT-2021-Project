@@ -105,8 +105,26 @@ namespace Commands
                 
                 foreach (var action in actions)
                 {
+                    bool isCatchListener = caughtCommands.ContainsKey(action);
+                    
+                    // We need to actually cast it first before checking null to see if its destroyed
+                    if (action.Target is Component component && component == null)
+                    {
+                        if (isCatchListener)
+                            Debug.Log($"Removing catch listener for command {commandType} because it belongs to a GameObject that has been destroyed!");
+                        else
+                            Debug.LogWarning($"Removing listener for command {commandType} because it belongs to a GameObject that has been destroyed! It should probably be Unlistened!");
+                        
+                        if (isCatchListener)
+                            RemoveCatchListener(action);
+                        else
+                            RemoveListener(commandType, action);
+                        
+                        continue;
+                    }
+                    
                     // Check if the action is a catch listener
-                    if (caughtCommands.ContainsKey(action))
+                    if (isCatchListener)
                     {
                         // If there is already a command with the current command type, remove it
                         caughtCommands[action].RemoveAll(c => c.GetType() == commandType);

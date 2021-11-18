@@ -12,111 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Beating the Fears Together
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
+  displayName: 
+  description: 'Deal +2 damage
 
-    Deal 1 damage
-
-    >When user has AFFINITY, deal
-    +3 damage.
-
-    >When user is with Joy, deal +3 damage
-
-    >Target with Pride
-    take 2 extra damage
+    User has Affinity: Deal +5 damage.
 
 '
   shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
+  speed: 2
+  speedType: 4
   representedTenet: 1
   effects:
-  - name: Default, 1 Damage
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 1
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: 4 Damage WITH Affinity
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 4
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
-  - name: 3 Damage IF User With Joy
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs:
-    - name: User With Joy
-      affectType: 0
-      costType: 0
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 0
-        count: 1
-        tenetType: 4
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
-  - name: 2 Damage IF User With 1 Pride
+  - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -130,44 +38,24 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User With 1 Pride
-      affectType: 0
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 0
-        count: 1
-        tenetType: 0
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
+    costs: []
     keywords: []
+  - name: "Target \u27A4 5 Damage WITH Affinity to User"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 5
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

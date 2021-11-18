@@ -20,7 +20,9 @@ namespace Units.Players
 
         public void ImportData(PlayerUnitData playerUnitData)
         {
-            HealthStat = playerUnitData.HealthValue;
+            // TODO temporarily keep health between levels.
+            // TODO Also this is currently broken, we can't just copy it because HealthValue keeps reference to the unit from the last scene, not the new one
+            // HealthStat = playerUnitData.HealthValue;
             Abilities = playerUnitData.Abilities;
         }
     }

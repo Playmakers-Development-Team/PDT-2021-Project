@@ -8,10 +8,14 @@ namespace Playtest
     [ExecuteAlways]
     public class Playtest : MonoBehaviour
     {
-
+#if !UNITY_EDITOR
+        // When not in the editor, always have playtest data enabled
+        private const bool canRecordPlaytestData = true;
+#else
         [Tooltip("Determines whether or not it will record the data from the game")]
         [SerializeField] private bool canRecordPlaytestData;
-        
+#endif
+
         [SerializeField] private PlaytestData data;
         
         private DataCollection collection;
@@ -40,7 +44,7 @@ namespace Playtest
 
         private void OnEnable()
         {
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || !canRecordPlaytestData)
                 return;
            
             commandManager.ListenCommand<TurnQueueCreatedCommand>(OnTurnQueueCreated);

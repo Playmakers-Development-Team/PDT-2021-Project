@@ -1,5 +1,7 @@
 ﻿using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +36,7 @@ namespace UI
             rawImage.uvRect = uvRect;
         }
 
+#if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Rect rawImageRect = rawImage.rectTransform.rect;
@@ -61,8 +64,10 @@ namespace UI
             
             Handles.DrawLines(maskCorners, new [] {0, 1, 1, 2, 2, 3, 3, 0});
         }
+#endif
     }
     
+#if UNITY_EDITOR
     [CustomEditor(typeof(CropGenerator))]
     public class CropGeneratorEditor : UnityEditor.Editor
     {
@@ -155,4 +160,5 @@ namespace UI
                 t.UpdateParameters();
         }
     }
+#endif
 }

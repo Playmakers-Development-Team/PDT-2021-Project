@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Third Place
   m_EditorClassIdentifier: 
-  description: "[Extremely Fast Ability]\nApplies 3 defense to surrounding targets.\n>Spend
-    1 Apathy - Grant targets 3 attack. \nENNUI 3 - Grant 3 Defence."
+  displayName: 
+  description: 'Give +3 Defence.
+
+    Target has ENNUI 1: Give +3 Defence, +3 Attack.'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
-  speed: 3
-  representedTenet: 0
+  speed: -1
+  speedType: 1
+  representedTenet: 3
   effects:
-  - name: Default, 3 Defence
+  - name: "User and Target \u27A4 Default, 3 Defence"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
@@ -35,75 +38,23 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 3 Attack IF User Spend 1 Apathy
+  - name: "User and Target \u27A4 3 Attack and 3 Defence and Provide 1 Apathy WITH
+      Ennui 1 to Target"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 3
     attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs:
-    - name: User Spend 1 Apathy
-      affectType: 0
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 2
-        count: 1
-        tenetType: 3
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
-  - name: "Target \u27A4 3 Defence WITH Ennui 3 to Target"
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 3
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 3
+      stackCount: 1
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 9093bcbc9e5c4606494772a9a7cbdbb8, type: 2}
+    - {fileID: 11400000, guid: 08f797524f749e487bbd974647bca7b7, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []
