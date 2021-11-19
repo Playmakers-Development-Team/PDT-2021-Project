@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Close Off
+  m_EditorClassIdentifier: 
+  description: '[Slow Ability]
+
+    Gain 2 Defence and 1 Sorrow
+
+    CATHARSIS 2
+    - Gain 2 Attack that lasts the entire encounter'
+  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
+  excludeUserFromTargets: 1
+  speed: 0
+  representedTenet: 5
+  effects:
+  - name: "User \u27A4 Default, 2 Defence and Provide 1 Sorrow"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 2
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 2 Attack for the encounter WITH Catharsis 2"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 2
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 243aae2bfdc19e3b297431e500545dfd, type: 2}
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
+  userEffects: []
