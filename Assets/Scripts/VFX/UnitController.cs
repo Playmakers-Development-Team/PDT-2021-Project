@@ -139,7 +139,7 @@ namespace VFX.VFX
 
         private async void SpawnUnits(IEnumerable<Animator> animators, float delay = 0.0f)
         {
-            await UniTask.Delay((int) (delay * 1000.0f));
+            await UniTask.Delay((int) (delay * 1000.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
             
             foreach (Animator animator in animators)
             {
@@ -152,7 +152,7 @@ namespace VFX.VFX
 
         private async void HideUnits(IEnumerable<Animator> animators, float delay = 0.0f)
         {
-            await UniTask.Delay((int) (delay * 1000.0f));
+            await UniTask.Delay((int) (delay * 1000.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
             
             foreach (Animator animator in animators)
             {

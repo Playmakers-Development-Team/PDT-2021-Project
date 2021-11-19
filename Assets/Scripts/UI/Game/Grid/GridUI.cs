@@ -378,7 +378,7 @@ namespace UI.Game.Grid
         
         private async void TransitionIn()
         {
-            await UniTask.Delay((int) (delay * 1000.0f));
+            await UniTask.Delay((int) (delay * 1000.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
             OnPromoted();
         }
 

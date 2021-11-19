@@ -214,7 +214,7 @@ namespace UI.Game.Timeline
         
         private async void TransitionIn()
         {
-            await UniTask.Delay((int) (delay * 1000.0f));
+            await UniTask.Delay((int) (delay * 1000.0f), cancellationToken: this.GetCancellationTokenOnDestroy());
             OnPromoted();
             commandManager.ExecuteCommand(new RoundZeroCommand());
         }
