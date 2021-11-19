@@ -34,7 +34,7 @@ namespace Tests.AutomatedTests
         }
 
         [UnityTest, Order(1)] 
-        [Timeout(12000)]
+        [Timeout(20000)]
         public IEnumerator AbilityCosts()
         {
             yield return PrepareAndActivateScene();
