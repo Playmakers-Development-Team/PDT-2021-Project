@@ -52,8 +52,12 @@ namespace Game
             turnManager = ManagerLocator.Get<TurnManager>();
 
             commandManager.ListenCommand<RestartEncounterCommand>(cmd => RestartEncounter());
+            
             // TODO keep map information somewhere and call run linear map directly
             commandManager.ListenCommand<PlayGameCommand>(cmd => ChangeScene("Assets/Scenes/Design/Gold/EMBARK/EMBARK 1.unity"));
+            
+            commandManager.ListenCommand<ContinueGameCommand>(cmd => LoadGame());
+            
             commandManager.ListenCommand<MainMenuCommand>(cmd =>
             {
                 if (CurrentMapData == null)
@@ -157,12 +161,16 @@ namespace Game
             SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
             CurrentEncounterData = encounterData;
             LoadEncounterScene(nextScene, forceChangeScene);
+            
+            SaveGame();
         }
 
         private void LoadEncounterScene(SceneReference nextScene, bool forceChangeScene = true)
         {
             encounterLoadedFromMap = true;
-            visitedLevels.Add(nextScene);
+            
+            // if (!visitedLevels.Contains(nextScene))
+                visitedLevels.Add(nextScene);
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 ChangeScene(nextScene);
@@ -171,7 +179,9 @@ namespace Game
         private async UniTask LoadEncounterSceneAsync(SceneReference nextScene, bool forceChangeScene = true)
         {
             encounterLoadedFromMap = true;
-            visitedLevels.Add(nextScene);
+            
+            // if (!visitedLevels.Contains(nextScene))
+                visitedLevels.Add(nextScene);
             
             if (forceChangeScene || SceneManager.GetActiveScene().path != nextScene.ScenePath)
                 await ChangeSceneAsync(nextScene);
@@ -276,5 +286,47 @@ namespace Game
         /// </summary>
         private void ResetVisitedLevels() => 
             visitedLevels.Clear();
+
+        private void SaveGame()
+        {
+            Debug.LogWarning("Saving Game");
+            
+            List<PlayerUnitData> unitData = playerManager.ExportData();
+
+            SaveData saveData = new SaveData(unitData, visitedLevels.ToList());
+            
+            // Save data to PlayerPrefs
+            PlayerPrefs.SetString("SaveData", JsonUtility.ToJson(saveData));
+            PlayerPrefs.SetString("CurrentEncounter", JsonUtility.ToJson(CurrentEncounterData));
+            
+            PlayerPrefs.Save();
+        }
+
+        private void LoadGame()
+        {
+            Debug.LogWarning("Loading Game");
+            
+            // Retrieve data from PlayerPrefs
+            SaveData saveData = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString("SaveData"));
+           
+            CurrentEncounterData = ScriptableObject.CreateInstance<EncounterData>();
+            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("CurrentEncounter"), CurrentEncounterData);
+
+            playerManager.SetSavedUnitData(saveData.GetUnitData());
+            
+            visitedLevels.Clear();
+            
+            visitedLevels.UnionWith(saveData.GetVisitedLevels());
+
+            LoadEncounter(CurrentEncounterData);
+        }
+
+        // TODO: Hook this up to something in settings.
+        private void ClearSavedGame()
+        {
+            PlayerPrefs.DeleteKey("UnitData");
+            PlayerPrefs.DeleteKey("VisitedLevels");
+            PlayerPrefs.DeleteKey("CurrentEncounter");
+        }
     }
 }

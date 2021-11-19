@@ -9,6 +9,11 @@ namespace Game.Commands
     public class PlayGameCommand : Command {}
 
     /// <summary>
+    /// Should be executed when the player wants to continue a saved game, like when pressing the continue button.
+    /// </summary>
+    public class ContinueGameCommand : Command {}
+
+    /// <summary>
     /// Execute to go back to the main menu.
     /// </summary>
     public class MainMenuCommand : Command {}
@@ -18,7 +23,7 @@ namespace Game.Commands
     /// and that we should load the next encounter.
     /// </summary>
     public class EndEncounterCommand : Command {}
-    
+
     /// <summary>
     /// Executed when the player has won a combat encounter.
     /// </summary>
@@ -28,7 +33,7 @@ namespace Game.Commands
     /// Executed when the player has lost a combat encounter.
     /// </summary>
     public class EncounterLostCommand : Command {}
-    
+
     /// <summary>
     /// Restart the encounter
     /// </summary>
