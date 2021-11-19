@@ -15,6 +15,11 @@ namespace Audio
         {
             commandManager = ManagerLocator.Get<CommandManager>();
 
+            // Moved here from OnEnable. Prevents error where the Destroy call below executes
+            // OnDisable before OnEnable. And on that note:
+            // TODO: Attempting to unlisten a non-existent command should not throw an error.
+            commandManager.ListenCommand<ChangeMusicStateCommand>(OnChangeMusicState);
+
             if (Instance != null)
                 Destroy(gameObject);
             else
@@ -26,16 +31,14 @@ namespace Audio
             }
         }
 
-        private void Start()
-        {
-            commandManager.ListenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
-                cmd.StateName));
-        }
-
         private void OnDisable()
         {
-            commandManager.UnlistenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
-                cmd.StateName));
+            commandManager.UnlistenCommand<ChangeMusicStateCommand>(OnChangeMusicState);
+        }
+        
+        private void OnChangeMusicState(ChangeMusicStateCommand cmd)
+        {
+            ChangeMusicState(cmd.StateGroup, cmd.StateName);
         }
 
         private void ChangeMusic(Scene scene, LoadSceneMode loadSceneMode)
