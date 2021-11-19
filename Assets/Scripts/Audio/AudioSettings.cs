@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
 namespace Audio
 {
     [Serializable]
     public class AudioSettings
     {
-        [SerializeField] private Dictionary<VolumeParameter, float> volumes = new Dictionary<VolumeParameter, float>();
+        [SerializeField] private SerializableDictionary<VolumeParameter, float> volumes = new SerializableDictionary<VolumeParameter, float>();
 
         public void SetVolume(VolumeParameter volumeParameter, float volume)
         {
