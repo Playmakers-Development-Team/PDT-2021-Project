@@ -16,7 +16,6 @@ namespace UI.GameSettings.Volume
 
         #region UIComponent
         
-        // TODO: Assign slider value once AudioManager.GetVolume() implemented...
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
@@ -25,7 +24,7 @@ namespace UI.GameSettings.Volume
         {
             audioManager = ManagerLocator.Get<AudioManager>();
 
-            slider.value = audioManager.GetVolume(volumeParameter.ToString());
+            slider.value = audioManager.GetVolume(volumeParameter);
         }
 
         #endregion
@@ -35,7 +34,7 @@ namespace UI.GameSettings.Volume
         
         public void OnValueChanged(float volume)
         {
-            audioManager.ChangeVolume(volumeParameter.ToString(), volume);
+            audioManager.SetVolume(volumeParameter, volume);
         }
         
         #endregion

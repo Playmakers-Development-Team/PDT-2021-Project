@@ -6,24 +6,24 @@ namespace Audio
 {
     public class AudioManager : Manager
     {
-
         private CommandManager commandManager;
-        
+
+        private AudioSettings audioSettings = new AudioSettings();
+
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
-        public void ChangeVolume(string volume, float value) => AkSoundEngine.SetRTPCValue(volume, value);
-
-        public float GetVolume(string volume)
+        public void SetVolume(VolumeParameter volumeParameter, float value)
         {
-            int type = 1;
+            audioSettings.SetVolume(volumeParameter, value);
 
-            AkSoundEngine.GetRTPCValue(volume, null, 0, out var value, ref type);
-
-            return value;
+            AkSoundEngine.SetRTPCValue(volumeParameter.ToString(), value);
         }
+
+        public float GetVolume(VolumeParameter volumeParameter) =>
+            audioSettings.GetVolume(volumeParameter);
 
         /// <summary>
         /// Update the current music of the game
