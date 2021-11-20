@@ -16,26 +16,27 @@ namespace Utilities
 
         [SerializeField] private List<TValue> values = new List<TValue>();
 
-        // save the dictionary to lists
+        // Save the dictionary to lists
         public void OnBeforeSerialize()
         {
             keys.Clear();
             values.Clear();
-            foreach (KeyValuePair<TKey, TValue> pair in this)
+            
+            foreach (var (key, value) in this)
             {
-                keys.Add(pair.Key);
-                values.Add(pair.Value);
+                keys.Add(key);
+                values.Add(value);
             }
         }
 
-        // load dictionary from lists
+        // Load dictionary from lists
         public void OnAfterDeserialize()
         {
             Clear();
 
             if (keys.Count != values.Count)
             {
-                throw new Exception($"there are {keys.Count} keys and {values.Count}" +
+                throw new Exception($"There are {keys.Count} keys and {values.Count}" +
                                     $"values after deserialization. Make sure that both key and" +
                                     $"value types are serializable.");
             }
