@@ -21,17 +21,14 @@ namespace UI.Game
         private GridManager gridManager;
         private TurnManager turnManager;
         private AudioManager audioManager;
-        private CommandManager commandManager;
         private PlayerControls playerControls;
-        private GameObject pauseMenuInstance;
 
         private List<GameDialogue.ProjectedUnitInfo> lastProjected =
             new List<GameDialogue.ProjectedUnitInfo>();
 
         private bool CanUseAbility => turnManager.CanUseAbility;
 
-        [SerializeField] private GameObject PauseMenu;
-        [SerializeField] private Transform parent;
+        [SerializeField] private GameObject pauseMenu;
  
         #region DelegateFunctions
 
@@ -39,21 +36,10 @@ namespace UI.Game
         {
             if (!ctx.performed)
                 return;
-
-            if (pauseMenuInstance == null)
-            {
-                pauseMenuInstance = Instantiate(PauseMenu,parent);
-                pauseMenuInstance.GetComponent<PauseScreenDialogue>().GameDialgoue = dialogue;
-                audioManager.ChangeMusicState("CombatState","InPauseMenu");
-            }
-            else
-            {
-                Destroy(pauseMenuInstance);
-                pauseMenuInstance = null;
-                audioManager.ChangeMusicState("CombatState","In_Combat");
-                dialogue.Promote();
-
-            }
+            
+            audioManager.ChangeMusicState("CombatState","InPauseMenu");
+            
+            Instantiate(pauseMenu, dialogue.transform.parent);
         }
         
         #endregion
@@ -140,10 +126,8 @@ namespace UI.Game
             audioManager = ManagerLocator.Get<AudioManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             playerControls = new PlayerControls();
             playerControls.UI.Pause.performed += PauseGame;
-
         }
 
         protected override void OnComponentEnabled()
