@@ -39,5 +39,59 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  - name: "Target \u27A4 -2 Attack and -2 Defence and Provide 1 Sorrow IF User With
+      1 Sorrow"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: -2
+    attackValue: -2
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
+    costs:
+    - name: User With 1 Sorrow
+      affectType: 0
+      costType: 1
+      tenetCost:
+        forceApplyCost: 0
+        tenetCostType: 0
+        count: 1
+        tenetType: 5
+        tenetConstraint: 0
+      tenetGroupCost:
+        forceApplyCost: 0
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
+      shapeCost:
+        forceApplyCost: 0
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            forceApplyCost: 0
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            forceApplyCost: 0
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
+    keywords: []
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

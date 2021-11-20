@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Stay Ahead
+  m_Name: Success Through Adversity+
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  description: '[Fast Ability]
 
-    Deal 2 damage
+    Deal 3 damage. Gain 1 Sorrow.
 
-    Gain 2 Defence.
+    CATHARSIS
+    3 - Deal 8 additional damage, gain 3 Defence and 1 Defence for the rest of the
+    encounter.
 
-    >When
-    User is INDEPENDENT, gain 2 Pride'
-  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
+'
+  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  representedTenet: 0
+  speed: 1
+  representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -41,10 +42,10 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: Provide 2 Pride WITH Independent
+  - name: Default, Provide 1 Sorrow
     affectTargets: 0
     affectUser: 1
-    effectOrder: 0
+    effectOrder: 1
     damageValue: 0
     directDamage: 0
     defenceValue: 0
@@ -52,27 +53,28 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 2
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 8 Damage and 1 Defence for the encounter and 3 Defence WITH
+      Catharsis 3 to User"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 8
+    directDamage: 0
+    defenceValue: 3
+    attackValue: 0
+    defenceForEncounter: 1
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
-  - name: "User \u27A4 Default, 2 Defence"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 2
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
+    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

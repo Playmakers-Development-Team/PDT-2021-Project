@@ -10,54 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: A Common Strive+
+  m_Name: Lose Yourself+
   m_EditorClassIdentifier: 
-  description: "[Very Fast Ability]\nEveryone in radius gains 2 Attack and 2 Defense.
-    \n>Targets may Spend Passion, gain 2 Attack."
-  shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
+  description: '[Very Slow Ability]
+
+    Grant self 3 Defence and 1 Sorrow.
+
+    If
+    have Sorrow, gain additional Sorrow
+
+    CATHARSIS 4 - Remove all Sorrow'
+  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  representedTenet: 0
+  speed: -2
+  representedTenet: 5
   effects:
-  - name: "User and Target \u27A4 Default, 1 Attack and 1 Defence and Provide 1 Pride"
-    affectTargets: 1
+  - name: Default, 1 Defence and Provide 1 Sorrow
+    affectTargets: 0
     affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 1
-    attackValue: 1
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
+      tenetType: 5
       stackCount: 1
     bonuses: []
     costs: []
     keywords: []
-  - name: "User and Target \u27A4 2 Attack IF Target Spend 1 Passion"
-    affectTargets: 1
+  - name: Provide 1 Sorrow IF User With 1 Sorrow
+    affectTargets: 0
     affectUser: 1
-    effectOrder: 0
+    effectOrder: 1
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 2
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 5
+      stackCount: 1
     bonuses: []
     costs:
-    - name: Target Spend 1 Passion
-      affectType: 1
+    - name: User With 1 Sorrow
+      affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 2
+        tenetCostType: 0
         count: 1
-        tenetType: 2
+        tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -88,5 +94,22 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
+  - name: "User \u27A4 Nothing WITH Catharsis 4 to User"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: a1746836bae41724d97191b43c1ed93b, type: 2}
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

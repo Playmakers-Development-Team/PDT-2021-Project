@@ -10,41 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Success Through Adversity
+  m_Name: Sad Story+
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
-
-    Deal 3 damage. Gain 1 Sorrow.
-
-    CATHARSIS
-    3 - Deal 6 additional damage, gain 3 Defence.
-
-'
-  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
+  description: "[Neutral Ability]\nGrant user and adjacent targets 1 Sorrow. \nUser
+    gains 4 Defense. \nTarget gains 2 Attack."
+  shape: {fileID: 11400000, guid: 0e61956d37e53c6df823ccf583872b44, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
+  speed: 0
   representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 3 Damage"
+  - name: "User and Target \u27A4 Default, Provide 1 Sorrow"
     affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: Default, Provide 1 Sorrow
-    affectTargets: 0
     affectUser: 1
-    effectOrder: 1
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
     defenceValue: 0
@@ -57,13 +35,29 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 6 Damage and 3 Defence WITH Catharsis 3 to User"
+  - name: "Target \u27A4 Default, 2 Attack"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 2
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User \u27A4 Default, 4 Defence"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 6
+    damageValue: 0
     directDamage: 0
-    defenceValue: 3
+    defenceValue: 4
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -72,7 +66,6 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+    keywords: []
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

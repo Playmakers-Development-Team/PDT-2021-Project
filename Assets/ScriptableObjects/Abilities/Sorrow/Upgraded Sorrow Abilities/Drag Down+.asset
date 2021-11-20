@@ -10,44 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Rewarding Bravery
+  m_Name: Drag Down+
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  description: '[Slow Ability]
 
-    Target gains 2 Attack, 1 Defense and 1 Pride
+    Deal 3 Damage.
 
-    >Target
-    may Spend Humility to gain 3 Defense
-
-'
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+    >If user currently has Sorrow,
+    subtact 3 attack and 3 defense from target. Applies 1 Sorrow to target. '
+  shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
-  representedTenet: 0
+  speed: -1
+  representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 2 Attack and 1 Defence and Provide 1 Pride"
+  - name: Default, 3 Damage
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 0
+    damageValue: 3
     directDamage: 0
-    defenceValue: 1
-    attackValue: 2
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "Target \u27A4 3 Defence IF Target Spend 1 Humility"
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 3
+    defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -55,15 +37,32 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
+    costs: []
+    keywords: []
+  - name: "Target \u27A4 -3 Attack and -3 Defence and Provide 1 Sorrow IF User With
+      1 Sorrow"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: -3
+    attackValue: -3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 5
+      stackCount: 1
+    bonuses: []
     costs:
-    - name: Target Spend 1 Humility
-      affectType: 1
+    - name: User With 1 Sorrow
+      affectType: 0
       costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 2
+        tenetCostType: 0
         count: 1
-        tenetType: 1
+        tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -94,5 +93,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
+  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

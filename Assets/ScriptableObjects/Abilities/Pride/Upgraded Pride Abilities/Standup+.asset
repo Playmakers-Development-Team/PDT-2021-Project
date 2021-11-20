@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Unleashing Magnificence
+  m_Name: Standup+
   m_EditorClassIdentifier: 
-  description: '[Extremely Fast Ability]
+  description: '[Fast Ability]
 
     Deals 2 damage
 
-    Deals 5 extra damage
-    if user is INDEPENDENT'
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+    >When user has Pride and
+    is INDEPENDENT, deal +4 damage'
+  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
-  speed: 3
+  speed: 1
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 2 Damage"
@@ -39,11 +39,11 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 5 Damage WITH Independent"
+  - name: "Target \u27A4 4 Damage IF User With 1 Pride WITH Independent"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 5
+    damageValue: 4
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -53,7 +53,44 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs: []
+    costs:
+    - name: User With 1 Pride
+      affectType: 0
+      costType: 1
+      tenetCost:
+        forceApplyCost: 0
+        tenetCostType: 0
+        count: 1
+        tenetType: 0
+        tenetConstraint: 0
+      tenetGroupCost:
+        forceApplyCost: 0
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
+      shapeCost:
+        forceApplyCost: 0
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            forceApplyCost: 0
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            forceApplyCost: 0
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
     keywords:
     - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
