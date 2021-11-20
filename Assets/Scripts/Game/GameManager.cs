@@ -45,6 +45,9 @@ namespace Game
         /// </summary>
         private bool encounterLoadedFromMap = false;
 
+        private const string encounterPrefKey = "CurrentEncounter";
+        private const string saveDataPrefKey = "SaveData";
+
         public override void ManagerStart()
         {
             commandManager = ManagerLocator.Get<CommandManager>();
@@ -296,8 +299,8 @@ namespace Game
             SaveData saveData = new SaveData(unitData, visitedLevels.ToList());
             
             // Save data to PlayerPrefs
-            PlayerPrefs.SetString("SaveData", JsonUtility.ToJson(saveData));
-            PlayerPrefs.SetString("CurrentEncounter", JsonUtility.ToJson(CurrentEncounterData));
+            PlayerPrefs.SetString(saveDataPrefKey, JsonUtility.ToJson(saveData));
+            PlayerPrefs.SetString(encounterPrefKey, JsonUtility.ToJson(CurrentEncounterData));
             
             PlayerPrefs.Save();
         }
@@ -307,10 +310,10 @@ namespace Game
             Debug.LogWarning("Loading Game");
             
             // Retrieve data from PlayerPrefs
-            SaveData saveData = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString("SaveData"));
+            SaveData saveData = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(saveDataPrefKey));
            
             CurrentEncounterData = ScriptableObject.CreateInstance<EncounterData>();
-            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("CurrentEncounter"), CurrentEncounterData);
+            JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString(encounterPrefKey), CurrentEncounterData);
 
             playerManager.SetSavedUnitData(saveData.GetUnitData());
             
@@ -324,9 +327,10 @@ namespace Game
         // TODO: Hook this up to something in settings.
         private void ClearSavedGame()
         {
-            PlayerPrefs.DeleteKey("UnitData");
-            PlayerPrefs.DeleteKey("VisitedLevels");
-            PlayerPrefs.DeleteKey("CurrentEncounter");
+            PlayerPrefs.DeleteKey(saveDataPrefKey);
+            PlayerPrefs.DeleteKey(encounterPrefKey);
         }
+
+        public static bool HasSavedGame() => PlayerPrefs.HasKey(encounterPrefKey);
     }
 }
