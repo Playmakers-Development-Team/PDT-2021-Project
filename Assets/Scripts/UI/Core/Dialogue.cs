@@ -16,6 +16,7 @@ namespace UI.Core
         protected UIManager manager;
         protected CanvasGroup canvasGroup;
         
+        public bool IsPromoted { get; private set; }
         
         #region MonoBehaviour
 
@@ -39,14 +40,16 @@ namespace UI.Core
 
         internal void Promote()
         {
+            IsPromoted = true;
             canvasGroup.interactable = true;
-            
+
             OnPromote();
             promoted.Invoke();
         }
 
         internal void Demote()
         {
+            IsPromoted = false;
             canvasGroup.interactable = false;
             
             OnDemote();
