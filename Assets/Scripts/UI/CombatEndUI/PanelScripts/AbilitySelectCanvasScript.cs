@@ -109,6 +109,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForLoadout(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
 
@@ -133,6 +135,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForUpgrade(List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             currentAbilityInfos = oldAbilityInfos;
 
             newAbilityInfos = GetUpgrades(oldAbilityInfos);
@@ -153,6 +157,15 @@ namespace UI.CombatEndUI.PanelScripts
             panelSlideAnim.SetTrigger("Play");
             Invoke("FadeInElements", 1.5f);
         }
+
+        private void DestroyAbilityList()
+        {
+            for (int i = abilityButtons.Count - 1; i >= 0; i--)
+            {
+                Destroy(abilityButtons[i].gameObject);
+                abilityButtons.RemoveAt(i);
+            }
+        }
         
         #endregion
 
@@ -164,9 +177,8 @@ namespace UI.CombatEndUI.PanelScripts
             buttonFadeAnim.SetTrigger("Play");
 
             // The return button should only be available if we're ability upgrading
-            // Temp disabled since it's broken
-            /* if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
-                returnButtonFadeAnim.SetTrigger("Play"); */
+            if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+                returnButtonFadeAnim.SetTrigger("Play");
         }
         
         public void AddSelectedAbility()

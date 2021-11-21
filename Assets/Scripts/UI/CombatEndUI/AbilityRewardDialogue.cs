@@ -137,6 +137,13 @@ namespace UI.CombatEndUI
 
         protected internal void SetActiveUnitCard(UnitCard unitCard)
         {
+            if (unitCard == null)
+            {
+                Destroy(activeUnitCard.gameObject);
+                Destroy(activeAbilitiesCard.gameObject);
+                return;
+            }
+
             activeUnitCard = unitCard;
         }
         
