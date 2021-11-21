@@ -1,11 +1,14 @@
+using System;
 using Managers;
 using UI.Core;
 using UnityEngine;
 
-namespace UI
+namespace UI.Tutorial
 {
     public class TutorialDialogue : Dialogue
     {
+        [SerializeField] private TutorialDialogue nextTutorial;
+        
         private UIManager uiManager;
         
         protected override void OnDialogueAwake()
@@ -21,7 +24,15 @@ namespace UI
             Close();
         }
 
-        protected override void OnClose() {}
+        protected override void OnClose()
+        {
+            if (nextTutorial != null)
+            {
+                Debug.Log($"Loading next tutorial '{nextTutorial.name}'");
+                TutorialDialogue nextTutorialDialogue = Instantiate(nextTutorial, transform.parent); 
+                uiManager.Add(nextTutorialDialogue, false);
+            }
+        }
 
         protected override void OnPromote() {}
 
