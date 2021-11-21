@@ -2,10 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Commands;
+using Managers;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityUpgrading;
+using UI.Commands;
 using UI.Core;
 using Units;
 using UnityEngine;
@@ -255,10 +258,9 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             if (upgradedAbilityInfos.Count == 0)
-            {
-                Debug.LogWarning("No ability upgrades found for the select unit. " +
-                                 "Returning an empty ability upgrade list");
-            }
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new NoUpgradesCommand());
+            else
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new UpgradesAvailableCommand());
 
             return upgradedAbilityInfos;
         }

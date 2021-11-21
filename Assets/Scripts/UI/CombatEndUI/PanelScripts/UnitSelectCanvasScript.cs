@@ -116,6 +116,13 @@ namespace UI.CombatEndUI.PanelScripts
         {
             fadeOutTextAnim.SetTrigger("Play");
         }
+        
+        // NOTE: Despite the name it doesn't fade in, it just makes it's alpha opaque
+        // The FadeIn term is just used for consistency sake
+        public void FadeInText()
+        {
+            fadeOutTextAnim.SetTrigger("PlayReverse");
+        }
 
         public void DisableUnitButtons()
         {

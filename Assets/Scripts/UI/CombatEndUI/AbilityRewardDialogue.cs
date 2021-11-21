@@ -102,6 +102,7 @@ namespace UI.CombatEndUI
             finalAbilitiesCanvas.enabled = false;
             
             unitSelectCanvasScript.Redraw(units);
+            unitSelectCanvasScript.FadeInText();
         }
 
         #endregion
