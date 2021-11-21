@@ -45,6 +45,13 @@ namespace Units.Stats
 
         public void Reset() => Value = BaseValue;
 
+        /// <summary>
+        /// Reduce this stat's value closer to the base value. We might want to do this maybe after a round
+        /// ends if that is how the mechanic will be set up.
+        /// </summary>
+        public void ReduceToBaseValue() => 
+            Value = Mathf.Max(BaseValue, Value - 2);
+
         public override string ToString() => $"{Value}/{BaseValue}";
     }
 }

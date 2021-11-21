@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Caring for Others
   m_EditorClassIdentifier: 
-  description: "[Fast Ability]\nTargets gain 2 Defense\n >Targets that have AFFINITY
-    and can Spend Humility gain +3 Defense\n"
+  displayName: 
+  description: "Give +2 Defence\n Targets has Affinity: Give +5 Defence.\n"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 2
   representedTenet: 1
   effects:
-  - name: Default, 2 Defence
+  - name: "Target \u27A4 Default, 2 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -35,13 +36,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 3 Defence IF Target Spend 1 Humility WITH Affinity"
+  - name: "Target \u27A4 5 Defence WITH Affinity to Target"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 3
+    defenceValue: 5
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -49,45 +50,8 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: Target Spend 1 Humility
-      affectType: 1
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 2
-        count: 1
-        tenetType: 1
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
+    costs: []
     keywords:
-    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
+    - {fileID: 11400000, guid: 6a607730de077e537b1a5d31493d76b9, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

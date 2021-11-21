@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Audio;
+using Commands;
+using Game;
+using Game.Commands;
 using Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -73,8 +76,7 @@ public class PauseScreenDialogue : Dialogue
         
         exitToMainMenu.AddListener(() =>
         {
-            //TEMP CODE
-            SceneManager.LoadScene("Scenes/Developer/UI/MainMenuTest");
+            ManagerLocator.Get<CommandManager>().ExecuteCommand(new MainMenuCommand());
         });
         
     }
@@ -116,7 +118,9 @@ public class PauseScreenDialogue : Dialogue
     public void ConfirmExit()
     {
         Application.Quit();
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 
     //TODO: Settings Menu

@@ -69,6 +69,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.abilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.abilities.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3369e02bbc3677d4c92e11d599922ad1, type: 2}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.abilities.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 528d0c3989a04fc44b124a6a49f88607, type: 2}
     - target: {fileID: 7298577721533539764, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
       propertyPath: m_Name
       value: Mouscle Logic

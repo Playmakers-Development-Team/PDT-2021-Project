@@ -47,7 +47,7 @@ MonoBehaviour:
     name: 
     tenet: 0
     movementPoints:
-      <BaseValue>k__BackingField: 0
+      <BaseValue>k__BackingField: 3
     abilities: []
     <HealthValue>k__BackingField:
       <BaseValue>k__BackingField: 0
@@ -60,3 +60,4 @@ MonoBehaviour:
     <KnockbackStat>k__BackingField:
       <BaseValue>k__BackingField: 0
     <StartingTenets>k__BackingField: []
+  moveTweenDuration: 0.6

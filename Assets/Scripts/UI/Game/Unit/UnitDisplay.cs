@@ -30,6 +30,7 @@ namespace UI.Game.Unit
         [Header("Health Bar")]
         
         [SerializeField] private Image healthBarContainer;
+        [SerializeField] private TextMeshProUGUI healthText;
         [SerializeField] private Color hoverHealthColour;
         [SerializeField] private Color defaultHealthColour;
         
@@ -300,7 +301,7 @@ namespace UI.Game.Unit
         {
             float currentHealth = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
             float healthAfter = (float) virtualUnit.Health.TotalValue / virtualUnit.Health.TotalBaseValue;
-            healthBarCurrent.material.SetFloat(fillId, healthAfter);
+            SetHealthBar(healthAfter, virtualUnit.Health.TotalValue);
             SetHealthBarProjection(currentHealth);
         }
 
@@ -310,8 +311,16 @@ namespace UI.Game.Unit
         internal void UpdateHealthBar()
         {
             float percentage = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
-            healthBarCurrent.material.SetFloat(fillId, percentage);
+            SetHealthBar(percentage, unitInfo.Unit.HealthStat.Value);
             SetHealthBarProjection(0);
+        }
+
+        private void SetHealthBar(float percentage, int currentValue)
+        {
+            healthBarCurrent.material.SetFloat(fillId, percentage);
+            
+            if (healthText)
+                healthText.text = currentValue.ToString();
         }
 
         private async void UpdateHealthBar(GameDialogue.StatChangeInfo data)
@@ -327,7 +336,7 @@ namespace UI.Game.Unit
             float tOld = oldAmount / baseAmount;
             float tCurrent = currentAmount / baseAmount;
 
-            healthBarCurrent.material.SetFloat(fillId, tCurrent);
+            SetHealthBar(tCurrent, data.NewValue);
             // healthBarDifference.material.SetFloat(fillId, tOld);
             
             await Task.Delay((int) (differenceDelay * 1000));

@@ -1,3 +1,6 @@
+using Commands;
+using Game.Commands;
+using Managers;
 using UI.Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,7 +19,7 @@ namespace UI.MainMenu
 
         private GameObject exitConfirmedPrefabInstance;
         private GameObject mainMenuPrefabInstance;
-
+        private CommandManager commandManager;
 
 
         #region Events
@@ -26,6 +29,7 @@ namespace UI.MainMenu
         internal readonly Event creditsConfirmed = new Event();
         internal readonly Event creditsClosed = new Event();
         internal readonly Event gameStarted = new Event();
+        internal readonly Event gameContinued = new Event();
         internal readonly Event exitConfirmed = new Event();
         internal readonly Event exitStarted = new Event();
         internal readonly Event cancelExit = new Event();
@@ -46,6 +50,7 @@ namespace UI.MainMenu
         protected override void OnDialogueAwake()
         { 
             base.OnDialogueAwake();
+            commandManager = ManagerLocator.Get<CommandManager>();
             mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
             characterImageComponent.RandomizeCharacterSprite();
             gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
@@ -61,7 +66,9 @@ namespace UI.MainMenu
             exitConfirmed.AddListener(() =>
             {
                 Application.Quit();
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
+#endif
             });
             
             cancelExit.AddListener(() =>
@@ -72,8 +79,12 @@ namespace UI.MainMenu
             
             gameStarted.AddListener(() =>
             {
-                //TODO: CHANGE TO APPROPRIATE SCENE LOADER OR SCENE
-                SceneManager.LoadScene("Scenes/Design/Playtest Beta Map");
+                commandManager.ExecuteCommand(new PlayGameCommand());
+            });
+            
+            gameContinued.AddListener(() =>
+            {
+                commandManager.ExecuteCommand(new ContinueGameCommand());
             });
 
             settingConfirmed.AddListener(() =>
@@ -98,9 +109,5 @@ namespace UI.MainMenu
             
             #endregion
         }
-        
-        
-
-
     }
 }

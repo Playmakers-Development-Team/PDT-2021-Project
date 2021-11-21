@@ -17,12 +17,15 @@ namespace Abilities
     [CreateAssetMenu(menuName = "Ability", fileName = "New Ability", order = 250)]
     public class Ability : ScriptableObject, ISerializationCallbackReceiver
     {
+        [Tooltip("The name of the ability shown to player, in the UI. If left empty, the file name will be used.")]
+        [SerializeField] private string displayName;
         [Tooltip("Complete description of the ability")]
         [SerializeField, TextArea(4, 8)] private string description;
         [SerializeField] private BasicShapeData shape;
         [HideInInspector, SerializeField] private bool excludeUserFromTargets = true;
         // [SerializeField] private int knockback;
         [SerializeField] [Range(-5,5)] private int speed;
+        [SerializeField] private AbilitySpeedType speedType;
         [SerializeField] private TenetType representedTenet;
 
         [FormerlySerializedAs("targetEffects")]
@@ -32,6 +35,10 @@ namespace Abilities
         [HideInInspector, SerializeField] private List<Effect> userEffects;
 
         /// <summary>
+        /// The name of the ability, that the player can refer to. And shown in the UI.
+        /// </summary>
+        public string DisplayName => string.IsNullOrEmpty(displayName) ? name : displayName;
+        /// <summary>
         /// A complete description of the ability.
         /// </summary>
         public string Description => description;
@@ -40,9 +47,13 @@ namespace Abilities
         /// </summary>
         public IShape Shape => shape;
         /// <summary>
-        /// The speed which will be added on top of Abilities
+        /// The speed which will be added on top of Abilities.
         /// </summary>
         public int Speed => speed;
+        /// <summary>
+        /// The type of speed which will be shown in the UI.
+        /// </summary>
+        public AbilitySpeedType SpeedType => speedType;
         /// <summary>
         /// The tenet that this ability represents. This would be shown in the UI.
         /// </summary>
@@ -70,7 +81,7 @@ namespace Abilities
 
         internal void Use(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
-            user.AddSpeed(speed);
+            // user.AddSpeed(speed);
             var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.ParseAll();
@@ -111,7 +122,7 @@ namespace Abilities
         
         internal void Undo(IAbilityUser user, Vector2Int originCoordinate, ShapeDirection direction)
         {
-            user.AddSpeed(-speed);
+            // user.AddSpeed(-speed);
             var targets = shape.GetTargets(originCoordinate, direction);
             AbilityParser abilityParser = new AbilityParser(user, effects, targets.OfType<IAbilityUser>());
             abilityParser.UndoAll();

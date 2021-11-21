@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Buff Attack
   m_EditorClassIdentifier: 
-  description: An ability that raises an enemy's attack by 1 for the rest of the
-    encounter
+  description: '[Neutral Ability]
+
+    Raise enemy Attack by 1 for the rest of the
+    encounter'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: 0
@@ -35,5 +37,5 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
   userEffects: []

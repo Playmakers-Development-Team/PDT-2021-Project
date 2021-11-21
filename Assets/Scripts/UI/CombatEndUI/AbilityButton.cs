@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Abilities;
 using Commands;
 using Managers;
 using TMPro;
@@ -7,6 +8,7 @@ using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityUpgrading;
 using UI.Commands;
 using UI.Core;
+using UI.Game.UnitPanels.Abilities;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,14 +18,16 @@ namespace UI.CombatEndUI
     {
         // Must be set to true if it's one of the new abilities to choose from
         [SerializeField] protected bool isNewAbility = false;
+        [SerializeField] private AbilityTooltip abilityTooltip;
 
         public Image AbilityRender { get; private set; }
         public String AbilityName { get; private set; }
         public String AbilityDescription { get; private set; }
+        public Ability Ability { get; private set; }
         
         private Button button;
         private TextMeshProUGUI abilityNameText;
-        private TextMeshProUGUI abilityDescriptionText;
+        // private TextMeshProUGUI abilityDescriptionText;
 
         private CommandManager commandManager;
         
@@ -48,8 +52,8 @@ namespace UI.CombatEndUI
             {
                 if (abilityText.text.Equals("ABILITY NAME"))
                     abilityNameText = abilityText;
-                else
-                    abilityDescriptionText = abilityText;
+                // else
+                    // abilityDescriptionText = abilityText;
             }
         }
 
@@ -57,18 +61,21 @@ namespace UI.CombatEndUI
 
         #region Drawing
         
-        public void Redraw(Sprite render, string name, string description, bool renderOnly)
+        public void Redraw(Sprite render, Ability ability, bool renderOnly)
         {
             AbilityRender.sprite = render;
-            AbilityName = name;
-            AbilityDescription = description;
+            AbilityName = ability.DisplayName;
+            AbilityDescription = ability.Description;
+            Ability = ability;
             
             // Used for the ability icons the player already has
             if (renderOnly)
                 return;
 
+            if (abilityTooltip != null)
+                abilityTooltip.DrawAbility(ability);
             abilityNameText.text = AbilityName;
-            abilityDescriptionText.text = AbilityDescription;
+            // abilityDescriptionText.text = AbilityDescription;
         }
 
         public void FadeOut(float fadeOutTime)

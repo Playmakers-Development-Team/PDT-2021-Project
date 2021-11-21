@@ -12,24 +12,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Stay Ahead
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  displayName: 
+  description: 'Deal +3 damage and gain +2 Defence.
 
-    Deal 2 damage
-
-    Gain 2 Defence.
-
-    >When
-    User is INDEPENDENT, gain 2 Pride'
+    User is Independent: Give
+    and gain +1 Pride.'
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 4
   representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 2 Damage and 2 Defence"
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 2
+    damageValue: 3
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "User and Target \u27A4 Provide 1 Pride WITH Independent"
+    affectTargets: 1
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
+  - name: "User \u27A4 Default, 2 Defence"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
     directDamage: 0
     defenceValue: 2
     attackValue: 0
@@ -41,22 +72,5 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: Provide 2 Pride WITH Independent
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 2
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

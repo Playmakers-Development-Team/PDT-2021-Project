@@ -12,20 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Staying Calm
   m_EditorClassIdentifier: 
-  description: "[Neutral Ability]\nTargets gain 1 Defence. \n>Targets may Spend Humility
-    to gain 4 Defence"
+  displayName: 
+  description: 'Give +2 Defence.
+
+    Target spends 1 Humility: +7 Defence.'
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
-  speed: 0
+  speed: 2
+  speedType: 4
   representedTenet: 1
   effects:
-  - name: Default, 1 Defence
+  - name: "Target \u27A4 Default, 2 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 1
+    defenceValue: 2
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -35,13 +38,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 4 Defence IF Target Spend 1 Humility"
+  - name: "Target \u27A4 7 Defence IF Target Spend 1 Humility"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 4
+    defenceValue: 7
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -88,5 +91,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+  visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

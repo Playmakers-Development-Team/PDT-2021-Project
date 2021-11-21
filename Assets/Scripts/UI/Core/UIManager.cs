@@ -19,10 +19,10 @@ namespace UI.Core
         /// </summary>
         /// <param name="dialogue">The <see cref="Dialogue"/> to be added.</param>
         /// <typeparam name="T">The type of <see cref="Dialogue"/>.</typeparam>
-        internal void Add<T>(T dialogue) where T : Dialogue
+        internal void Add<T>(T dialogue, bool demoteOthers = true) where T : Dialogue
         {
             Dialogue front = dialogues.FirstOrDefault();
-            if (front != null)
+            if (front != null && demoteOthers)
                 front.Demote();
 
             dialogues.Insert(0, dialogue);

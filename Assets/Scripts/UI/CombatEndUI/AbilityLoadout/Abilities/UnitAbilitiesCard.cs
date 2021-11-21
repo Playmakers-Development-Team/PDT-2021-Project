@@ -104,7 +104,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
         {
             foreach (var ability in unit.Abilities)
             {
-                if (ability.name.Equals(currentSelectedAbility.AbilityName))
+                if (ability.DisplayName.Equals(currentSelectedAbility.AbilityName))
                 {
                     unit.Abilities.Remove(ability);
                     break;
@@ -133,10 +133,7 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
             // Assign ability images
             for (int i = 0; i < abilityInfos.Count; ++i)
             {
-                abilityButtons[i].Redraw(abilityInfos[i].Render,
-                    abilityInfos[i].Ability.name,
-                    abilityInfos[i].Ability.Description,
-                    true);
+                abilityButtons[i].Redraw(abilityInfos[i].Render, abilityInfos[i].Ability, true);
             }
         }
         
