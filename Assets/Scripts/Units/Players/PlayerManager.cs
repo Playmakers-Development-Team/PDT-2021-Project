@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Abilities;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace Units.Players
         
         #region Persistent Unit Data
         
-        public bool IsUnitDataPersistent { get; set; } = false;
+        public bool IsUnitDataPersistent { get; set; }
 
         private readonly List<PlayerUnitData> savedUnitData = new List<PlayerUnitData>();
         
@@ -39,12 +38,19 @@ namespace Units.Players
             }
         }
 
+        public void SetSavedUnitData(List<PlayerUnitData> unitData)
+        {
+            savedUnitData.Clear();
+
+            savedUnitData.AddRange(unitData);
+        }
+
         // Called by the GameManager when the encounter ends. Could also be called by the
         // TurnManager, but this way makes it possible to test with the NoRemainingEnemyUnitsCommand
-        public void ExportData()
+        public List<PlayerUnitData> ExportData()
         {
             if (!IsUnitDataPersistent)
-                return;
+                return savedUnitData;
             
             savedUnitData.Clear();
             
@@ -56,6 +62,8 @@ namespace Units.Players
                 else
                     Debug.LogWarning($"{nameof(PlayerManager)} contains non-{nameof(PlayerUnit)}s.");
             }
+
+            return savedUnitData;
         }
         
         #endregion
