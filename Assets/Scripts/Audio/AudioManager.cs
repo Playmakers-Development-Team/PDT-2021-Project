@@ -2,6 +2,7 @@ using Audio.Commands;
 using Commands;
 using Managers;
 using UnityEngine;
+using Utilities;
 
 namespace Audio
 {
@@ -46,6 +47,11 @@ namespace Audio
         private void LoadVolumeSettings()
         {
             JsonUtility.FromJsonOverwrite(PlayerPrefs.GetString("AudioSettings"), audioSettings);
+
+            foreach (var (volumeParameter, value) in audioSettings.GetVolumes())
+            {
+                AkSoundEngine.SetRTPCValue(volumeParameter.ToString(), value);
+            }
         }
     }
 }
