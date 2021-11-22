@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{219023BC-DA3F-4BB8-A593-A12CA8063ADD}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Unit Walking" ID="{219023BC-DA3F-4BB8-A593-A12CA8063ADD}" PersistMode="Standalone">
+			<ChildrenList>
+				<RandomSequenceContainer Name="Unit Walking" ID="{A9D327CB-E4C6-4864-9056-905EB1834408}" ShortID="255842008">
+					<PropertyList>
+						<Property Name="PlayMechanismLoop" Type="bool" Value="True"/>
+						<Property Name="PlayMechanismStepOrContinuous" Type="int16" Value="0"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<Sound Name="Walking-01" ID="{59773399-BE6E-4884-9652-DA5FA0DF7755}" ShortID="252061043">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Walking-01" ID="{B4764CA7-603F-415E-BAE8-74109BBA3513}">
+									<Language>SFX</Language>
+									<AudioFile>Walking-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="722917784"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists/>
+							<ActiveSourceList>
+								<ActiveSource Name="Walking-01" ID="{B4764CA7-603F-415E-BAE8-74109BBA3513}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Walking-02" ID="{D07AEE0C-9C79-4058-89BF-B2B74F0703E3}" ShortID="548342314">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Walking-02" ID="{0EA82949-F3CC-4340-B2B7-0A6CC7515F21}">
+									<Language>SFX</Language>
+									<AudioFile>Walking-02.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="670289359"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists/>
+							<ActiveSourceList>
+								<ActiveSource Name="Walking-02" ID="{0EA82949-F3CC-4340-B2B7-0A6CC7515F21}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Walking-03" ID="{6AEBDA23-8CF3-4F68-B544-4E6621829E4B}" ShortID="1027950371">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Walking-03" ID="{50BF2CB9-339C-4FCD-98F3-14FB856A5424}">
+									<Language>SFX</Language>
+									<AudioFile>Walking-03.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="997976312"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists/>
+							<ActiveSourceList>
+								<ActiveSource Name="Walking-03" ID="{50BF2CB9-339C-4FCD-98F3-14FB856A5424}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+					<StateInfo>
+						<StateGroupList>
+							<StateGroupInfo>
+								<StateGroupRef Name="WalkingState" ID="{9E5BA2A1-BD74-4D4D-BAEC-B212255BE138}"/>
+							</StateGroupInfo>
+						</StateGroupList>
+						<CustomStateList>
+							<CustomState>
+								<StateRef Name="Not_Walking" ID="{1ED10C31-9736-44F5-8B7B-2605F40236C7}"/>
+								<CustomState Name="" ID="{3C76D000-5495-4708-95C6-1ECE9CBDA8D2}" ShortID="328445671"/>
+							</CustomState>
+							<CustomState>
+								<StateRef Name="Walking" ID="{831CC496-89A9-4BBF-9FB9-EA0CFBBF0EBA}"/>
+								<CustomState Name="" ID="{3145434D-ED4E-4FA4-B60B-2457DAA3AD1C}" ShortID="988606034"/>
+							</CustomState>
+						</CustomStateList>
+					</StateInfo>
+					<ObjectLists/>
+				</RandomSequenceContainer>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
