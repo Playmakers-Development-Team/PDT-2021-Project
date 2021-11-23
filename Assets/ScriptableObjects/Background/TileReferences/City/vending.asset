@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189c832e3cc34bafa2d88409b1b82d5f, type: 3}
+  m_Name: vending
+  m_EditorClassIdentifier: 
+  line: {fileID: 11400000, guid: 3793ca32c1c61ad4f8703c4ac0a5de11, type: 2}
+  colour: {fileID: 11400000, guid: 06789ad1add2aa94f80499e4be978167, type: 2}
+  fill: {fileID: 11400000, guid: 1bef0fbfcd54d3c4a8d3f00f9a4ac35a, type: 2}
+  preview: {fileID: 11400000, guid: 77a29455cc1a25943b851bcd05126701, type: 2}
