@@ -26,13 +26,13 @@ namespace UI.Game.Timeline
 
         protected override void Subscribe()
         {
-            dialogue.turnManipulationStarted.AddListener(IndicatorOn);
+            dialogue.turnManipulationChosen.AddListener(IndicatorOn);
             dialogue.turnManipulationEnded.AddListener(IndicatorOff);
         }
 
         protected override void Unsubscribe()
         {
-            dialogue.turnManipulationStarted.RemoveListener(IndicatorOn);
+            dialogue.turnManipulationChosen.RemoveListener(IndicatorOn);
             dialogue.turnManipulationEnded.RemoveListener(IndicatorOff);
         }
 

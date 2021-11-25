@@ -35,7 +35,8 @@ namespace UI.Game.Timeline
         {
             dialogue.unitSelected.AddListener(SelectUnit);
             dialogue.unitDeselected.AddListener(DeselectUnit);
-            dialogue.turnManipulationStarted.AddListener(TurnManipulationStart);
+            dialogue.turnManipulationStarted.AddListener(TurnManipulationStarted);
+            dialogue.turnManipulationChosen.AddListener(TurnManipulationChosen);
             dialogue.turnManipulationEnded.AddListener(TurnManipulationEnd);
         }
 
@@ -43,7 +44,8 @@ namespace UI.Game.Timeline
         {
             dialogue.unitSelected.RemoveListener(SelectUnit);
             dialogue.unitDeselected.RemoveListener(DeselectUnit);
-            dialogue.turnManipulationStarted.RemoveListener(TurnManipulationStart);
+            dialogue.turnManipulationStarted.AddListener(TurnManipulationStarted);
+            dialogue.turnManipulationChosen.RemoveListener(TurnManipulationChosen);
             dialogue.turnManipulationEnded.RemoveListener(TurnManipulationEnd);
         }
         
@@ -55,23 +57,32 @@ namespace UI.Game.Timeline
 
         public void OnClick()
         {
-            if (turnManager.turnManipulating)
+            if (turnManager.turnManipulating && selectedUnit != null)
             {
                 TurnManipulate();
                 TurnManipulationEnd();
-            }else
+            }
+            else
+            {
                 dialogue.unitSelected.Invoke(unitInfo);
+            }
         }
 
         private void SelectUnit(GameDialogue.UnitInfo info)
         {
-            btn.interactable = !(info == unitInfo);
-            selectedUnit = info;
+            // btn.interactable = !(info == unitInfo);
+            // selectedUnit = info;
+
+            if (turnManager.turnManipulating && (selectedUnit == null || selectedUnit.Unit != info.Unit))
+            {
+                dialogue.turnManipulationChosen.Invoke(info);
+                selectedUnit = info;
+            }
         }
 
         private void DeselectUnit()
         {
-            btn.interactable = true;
+            // btn.interactable = true;
             selectedUnit = null;
         }
 
@@ -80,42 +91,43 @@ namespace UI.Game.Timeline
             int selectedIndex = turnManager.FindTurnIndexFromCurrentQueue(selectedUnit.Unit);
             int thisIndex = turnManager.FindTurnIndexFromCurrentQueue(unitInfo.Unit);
 
-            if(selectedIndex == 0)
+            if (thisIndex == 0)
                 turnManager.MoveTargetBeforeCurrent(selectedIndex);
             else
-                turnManager.ShiftTurnQueue(thisIndex,selectedIndex);
-            
+                turnManager.MoveTargetAfterCurrent(selectedIndex);
         }
 
-        private void TurnManipulationStart(GameDialogue.UnitInfo info)
+        private void TurnManipulationStarted()
         {
-            btn.interactable = !(info == unitInfo);
-            if(info != unitInfo)
-                prepareForManipulation();
+            btn.interactable = unitInfo != null && unitInfo.Unit != turnManager.ActingUnit;
+        }
+
+        private void TurnManipulationChosen(GameDialogue.UnitInfo info)
+        {
+            // btn.interactable = !(info == unitInfo);
+            // if(info != unitInfo)
+            //     PrepareForManipulation();
+
+            // For some reason, unit info can be null
+            if (unitInfo == null) return;
+
+            int actingUnitIndex = turnManager.FindTurnIndexFromCurrentQueue(turnManager.ActingUnit);
+            int unitIndex = turnManager.FindTurnIndexFromCurrentQueue(unitInfo.Unit);
+
+            btn.interactable = Mathf.Abs(unitIndex) - Mathf.Abs(actingUnitIndex) <= 1;
         }
         
         private void TurnManipulationEnd()
-        {
-           exitManipulation();
-        }
-        private void prepareForManipulation()
-        {
-            turnManager.turnManipulating = true;
-        }
-
-        private void exitManipulation()
-        {
-            turnManager.turnManipulating = false;
+        { 
+            btn.interactable = true;
+            selectedUnit = null;
         }
 
         #endregion
 
         #region Utility
 
-        public bool isSelected()
-        {
-            return unitInfo == selectedUnit;
-        }
+        public bool IsSelected() => unitInfo == selectedUnit;
 
         #endregion
 

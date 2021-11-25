@@ -1,3 +1,4 @@
+using System;
 using Managers;
 using TMPro;
 using Turn;
@@ -13,6 +14,7 @@ namespace UI.Game.Timeline
     {
         [SerializeField] private Button btn;
         [SerializeField] private TextMeshProUGUI text;
+        
         private TurnManager turnManager;
         private GameDialogue.UnitInfo selectedUnit = null;
         
@@ -33,12 +35,20 @@ namespace UI.Game.Timeline
             turnManager = ManagerLocator.Get<TurnManager>();
         }
 
+        protected override void OnComponentStart()
+        {
+            base.OnComponentStart();
+            
+            // We need to enable button assuming that the turn already started
+            TryEnableBtn();
+        }
+
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
             dialogue.meditateConfirmed.AddListener(MeditateConfirmed);
-            dialogue.unitSelected.AddListener(unitSelected);
-            dialogue.unitDeselected.AddListener(unitDeselected);
+            dialogue.unitSelected.AddListener(UnitSelected);
+            dialogue.unitDeselected.AddListener(UnitDeselected);
             dialogue.turnManipulated.AddListener(UpdateText);
         }
 
@@ -46,8 +56,8 @@ namespace UI.Game.Timeline
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
             dialogue.meditateConfirmed.RemoveListener(MeditateConfirmed);
-            dialogue.unitSelected.RemoveListener(unitSelected);
-            dialogue.unitDeselected.RemoveListener(unitDeselected);
+            dialogue.unitSelected.RemoveListener(UnitSelected);
+            dialogue.unitDeselected.RemoveListener(UnitDeselected);
             dialogue.turnManipulated.RemoveListener(UpdateText);
         }
 
@@ -58,27 +68,28 @@ namespace UI.Game.Timeline
 
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
-            
-            EnableBtn(info);
+            TryEnableBtn();
             UpdateText(new GameDialogue.UnitInfo());
         }
 
+        [Obsolete("I don't think we need this anymore")]
         private void MeditateConfirmed(GameDialogue.UnitInfo unitInfo)
         {
             UpdateText(new GameDialogue.UnitInfo());
             EnableBtn();
         }
 
-        private void unitSelected(GameDialogue.UnitInfo unitInfo)
+        private void UnitSelected(GameDialogue.UnitInfo unitInfo)
         {
-            selectedUnit = unitInfo;
-            EnableBtn();
-            }
-        private void unitDeselected()
+            // selectedUnit = unitInfo;
+            // EnableBtn();
+        }
+        
+        private void UnitDeselected()
         {
-            selectedUnit = null;
-            EnableBtn();
-            }
+            // selectedUnit = null;
+            // EnableBtn();
+        }
 
         #endregion
 
@@ -91,18 +102,31 @@ namespace UI.Game.Timeline
                 turnManager.turnManipulating = false;
                 dialogue.turnManipulationEnded.Invoke();
             }
-            else if (selectedUnit != null)
+            // else if (selectedUnit != null)
+            // {
+            //     dialogue.turnManipulationChosen.Invoke(selectedUnit);
+            //     turnManager.turnManipulating = true;
+            // }
+            else
             {
-                dialogue.turnManipulationStarted.Invoke(selectedUnit);
+                dialogue.turnManipulationStarted.Invoke();
                 turnManager.turnManipulating = true;
             }
-
         }
 
+        private void TryEnableBtn()
+        {
+            btn.interactable = turnManager.UnitCanDoTurnManipulation(turnManager.ActingUnit);
+        }
+
+        [Obsolete("Use TryEnableBtn instead")]
         private void EnableBtn(GameDialogue.TurnInfo info)
         {
-            btn.interactable = (info.IsPlayer && selectedUnit != null && (turnManager.Insight.Value >= 2));
+            // btn.interactable = (info.IsPlayer && selectedUnit != null && (turnManager.Insight.Value >= 2));
+            btn.interactable = turnManager.UnitCanDoTurnManipulation(info.CurrentUnitInfo.Unit);
         }
+        
+        [Obsolete("Use TryEnableBtn instead")]
         private void EnableBtn()
         {
             //btn.interactable = (turnManager.ActingPlayerUnit != null && selectedUnit != null && (turnManager.Insight.Value >= 2));

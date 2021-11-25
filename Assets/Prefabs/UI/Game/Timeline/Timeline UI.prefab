@@ -213,7 +213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2760773566113225655, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2950935464749070291, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_Pivot.x
@@ -253,18 +253,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4037067332713444446, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4037067332713444446, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4968782464792668670, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4968782464792668670, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5262119305880962376, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
+      propertyPath: drawInsightBtn
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5877050488744526533, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
@@ -273,7 +277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6881319126922021532, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8847423323553440248, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.x
