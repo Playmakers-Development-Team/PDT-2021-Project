@@ -15,6 +15,7 @@ namespace UI.Game.Timeline
     {
         [SerializeField] private RawImage image;
         [SerializeField] private Sprite enemyBackground;
+        [SerializeField] private Image selectableFrame;
         [SerializeField] private Button btn;
         private TurnManager turnManager;
 
@@ -29,6 +30,13 @@ namespace UI.Game.Timeline
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+        }
+
+        protected override void OnComponentStart()
+        {
+            // For some reason, sometimes we get an uninitialised portrait?
+            if (selectableFrame != null)
+                selectableFrame.gameObject.SetActive(false);
         }
 
         protected override void Subscribe()
@@ -77,6 +85,10 @@ namespace UI.Game.Timeline
             {
                 dialogue.turnManipulationChosen.Invoke(info);
                 selectedUnit = info;
+                
+                // For some reason, sometimes we get an uninitialised portrait?
+                if (selectableFrame)
+                    selectableFrame.gameObject.SetActive(false);
             }
         }
 
@@ -100,6 +112,10 @@ namespace UI.Game.Timeline
         private void TurnManipulationStarted()
         {
             btn.interactable = unitInfo != null && unitInfo.Unit != turnManager.ActingUnit;
+            
+            // For some reason, sometimes we get an uninitialised portrait?
+            if (selectableFrame)
+                selectableFrame.gameObject.SetActive(btn.interactable);
         }
 
         private void TurnManipulationChosen(GameDialogue.UnitInfo info)
@@ -122,6 +138,10 @@ namespace UI.Game.Timeline
             turnManager.turnManipulating = false;
             btn.interactable = true;
             selectedUnit = null;
+            
+            // For some reason, sometimes we get an uninitialised portrait?
+            if (selectableFrame)
+                selectableFrame.gameObject.SetActive(false);
         }
 
         #endregion
