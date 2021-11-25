@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Commands;
 using Managers;
 using TenetStatuses;
 using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityUpgrading;
+using UI.Commands;
 using UI.Core;
 using Units;
 using Units.Players;
@@ -118,6 +120,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForLoadout(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
 
@@ -141,6 +145,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForUpgrade(List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             currentAbilityInfos = oldAbilityInfos;
 
             newAbilityInfos = GetUpgrades(oldAbilityInfos);
@@ -160,6 +166,15 @@ namespace UI.CombatEndUI.PanelScripts
             panelSlideAnim.SetTrigger("Play");
             Invoke("FadeInElements", 1.5f);
         }
+
+        private void DestroyAbilityList()
+        {
+            for (int i = abilityButtons.Count - 1; i >= 0; i--)
+            {
+                Destroy(abilityButtons[i].gameObject);
+                abilityButtons.RemoveAt(i);
+            }
+        }
         
         #endregion
 
@@ -171,9 +186,8 @@ namespace UI.CombatEndUI.PanelScripts
             buttonFadeAnim.SetTrigger("Play");
 
             // The return button should only be available if we're ability upgrading
-            // Temp disabled since it's broken
-            /* if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
-                returnButtonFadeAnim.SetTrigger("Play"); */
+            if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+                returnButtonFadeAnim.SetTrigger("Play");
         }
         
         public void AddSelectedAbility()
@@ -249,10 +263,9 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             if (upgradedAbilityInfos.Count == 0)
-            {
-                Debug.LogWarning("No ability upgrades found for the select unit. " +
-                                 "Returning an empty ability upgrade list");
-            }
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new NoUpgradesCommand());
+            else
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new UpgradesAvailableCommand());
 
             return upgradedAbilityInfos;
         }
