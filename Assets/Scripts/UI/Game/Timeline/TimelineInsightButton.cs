@@ -5,6 +5,7 @@ using Turn;
 using UI.Core;
 using Units.Players;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Game.Timeline
@@ -17,6 +18,7 @@ namespace UI.Game.Timeline
         
         private TurnManager turnManager;
         private GameDialogue.UnitInfo selectedUnit = null;
+        private Animator animator;
         
         #region Drawing
 
@@ -33,6 +35,7 @@ namespace UI.Game.Timeline
         protected override void OnComponentAwake()
         {
             turnManager = ManagerLocator.Get<TurnManager>();
+            animator = GetComponent<Animator>();
         }
 
         protected override void OnComponentStart()
@@ -111,6 +114,19 @@ namespace UI.Game.Timeline
             {
                 dialogue.turnManipulationStarted.Invoke();
                 turnManager.turnManipulating = true;
+            }
+            
+            HandleButtonAnimation();
+        }
+
+        private void HandleButtonAnimation()
+        {
+            animator.SetBool("Toggled", turnManager.turnManipulating);
+
+            if (!turnManager.turnManipulating)
+            {
+                // This is sort of a hack, but there's not really any other way besides manually doing custom animation
+                EventSystem.current.SetSelectedGameObject(null);
             }
         }
 

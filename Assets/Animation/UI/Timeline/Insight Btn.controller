@@ -991,19 +991,19 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -8953171382277622728}
-    m_Position: {x: 200, y: 0, z: 0}
+    m_Position: {x: 240, y: -20, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7047369514398619390}
-    m_Position: {x: 235, y: 65, z: 0}
+    m_Position: {x: 270, y: 50, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3851776140496539830}
-    m_Position: {x: 270, y: 130, z: 0}
+    m_Position: {x: 300, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8309834279718680216}
-    m_Position: {x: 305, y: 195, z: 0}
+    m_Position: {x: 360, y: 190, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7445082966432699155}
-    m_Position: {x: 340, y: 260, z: 0}
+    m_Position: {x: 430, y: 270, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -241815483883350088}
@@ -1081,6 +1081,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Normal
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Toggled
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8953171382277622728}
   m_Solo: 0
@@ -1105,6 +1108,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Pressed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Toggled
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3851776140496539830}
@@ -1159,6 +1165,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: Toggled
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1182,6 +1194,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Highlighted
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: Toggled
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7047369514398619390}
@@ -1413,6 +1428,9 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Selected
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: Toggled
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8309834279718680216}

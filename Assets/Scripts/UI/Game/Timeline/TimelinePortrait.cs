@@ -118,7 +118,8 @@ namespace UI.Game.Timeline
         }
         
         private void TurnManipulationEnd()
-        { 
+        {
+            turnManager.turnManipulating = false;
             btn.interactable = true;
             selectedUnit = null;
         }
