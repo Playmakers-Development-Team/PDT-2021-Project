@@ -16,7 +16,8 @@ namespace UI.Game.Timeline
     public class TimelinePanel : DialogueComponent<GameDialogue>
     {
         [SerializeField] private ScrollRect scrollRect;
-
+        [SerializeField] private TextMeshProUGUI helpfulText;
+        
         [SerializeField] private GameObject portraitPrefab;
         [SerializeField] private GameObject dividerPrefab;
         [SerializeField] private GameObject insightButtonPrefab;
@@ -42,12 +43,18 @@ namespace UI.Game.Timeline
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+
+            helpfulText.text = string.Empty;
         }
 
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
+            
             dialogue.turnManipulated.AddListener(OnTurnManipulated);
+            dialogue.turnManipulationStarted.AddListener(OnTurnManipulationStarted);
+            dialogue.turnManipulationChosen.AddListener(OnTurnManipulationChosen);
+            dialogue.turnManipulationEnded.AddListener(OnTurnManipulationEnded);
             
             dialogue.promoted.AddListener(OnPromoted);
             dialogue.demoted.AddListener(OnDemoted);
@@ -56,7 +63,11 @@ namespace UI.Game.Timeline
         protected override void Unsubscribe()
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
+            
             dialogue.turnManipulated.RemoveListener(OnTurnManipulated);
+            dialogue.turnManipulationStarted.AddListener(OnTurnManipulationStarted);
+            dialogue.turnManipulationChosen.AddListener(OnTurnManipulationChosen);
+            dialogue.turnManipulationEnded.AddListener(OnTurnManipulationEnded);
             
             dialogue.promoted.RemoveListener(OnPromoted);
             dialogue.demoted.RemoveListener(OnDemoted);
@@ -76,6 +87,21 @@ namespace UI.Game.Timeline
         private void OnTurnStarted(GameDialogue.TurnInfo info)
         {
             UpdatePortraits();
+        }
+
+        private void OnTurnManipulationStarted()
+        {
+            helpfulText.text = "Choose a character to move";
+        }
+
+        private void OnTurnManipulationChosen(GameDialogue.UnitInfo unitInfo)
+        {
+            helpfulText.text = "Place that character before another";
+        }
+
+        private void OnTurnManipulationEnded()
+        {
+            helpfulText.text = string.Empty;
         }
 
         private void OnTurnManipulated(GameDialogue.UnitInfo unitInfo)

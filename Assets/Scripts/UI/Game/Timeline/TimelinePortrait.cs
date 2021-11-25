@@ -121,16 +121,16 @@ namespace UI.Game.Timeline
 
         private void TurnManipulationChosen(GameDialogue.UnitInfo info)
         {
-            // For some reason, sometimes we get an uninitialised portrait?
-            if (selectableFrame)
-                selectableFrame.gameObject.SetActive(false);
-            
             // btn.interactable = !(info == unitInfo);
             // if(info != unitInfo)
             //     PrepareForManipulation();
 
             // For some reason, unit info can be null
             if (unitInfo == null) return;
+            
+            // For some reason, sometimes we get an uninitialised portrait?
+            if (selectableFrame && info.Unit != unitInfo.Unit)
+                selectableFrame.gameObject.SetActive(false);
 
             int actingUnitIndex = turnManager.FindTurnIndexFromCurrentQueue(turnManager.ActingUnit);
             int unitIndex = turnManager.FindTurnIndexFromCurrentQueue(unitInfo.Unit);
