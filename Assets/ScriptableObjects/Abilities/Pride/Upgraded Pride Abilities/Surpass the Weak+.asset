@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Surpass the Weak+
   m_EditorClassIdentifier: 
+  displayName: 
   description: '[Slow Ability]
 
     Deal 3 damage and User gains 1 Pride.
@@ -20,9 +21,10 @@ MonoBehaviour:
     Target has Humility, it takes 6 additional damage.
 
 '
-  shape: {fileID: 0}
+  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: -1
+  speedType: 0
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 3 Damage"
