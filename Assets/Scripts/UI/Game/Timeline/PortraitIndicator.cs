@@ -1,3 +1,4 @@
+using System;
 using Commands;
 using Managers;
 using Turn;
@@ -14,25 +15,40 @@ namespace UI.Game.Timeline
     public class PortraitIndicator : DialogueComponent<GameDialogue>
     {
         [SerializeField] TimelinePortrait timelinePortrait;
+
+        private TurnManager turnManager;
+
+        protected override void OnComponentAwake()
+        {
+            base.OnComponentAwake();
+            turnManager = ManagerLocator.Get<TurnManager>();
+        }
+
         protected override void Subscribe()
         {
-            dialogue.turnManipulationStarted.AddListener(indicatorOn);
-            dialogue.turnManipulationEnded.AddListener(indicatorOff);
+            dialogue.turnManipulationStarted.AddListener(IndicatorOn);
+            dialogue.turnManipulationEnded.AddListener(IndicatorOff);
         }
 
         protected override void Unsubscribe()
         {
-            dialogue.turnManipulationStarted.RemoveListener(indicatorOn);
-            dialogue.turnManipulationEnded.RemoveListener(indicatorOff);
+            dialogue.turnManipulationStarted.RemoveListener(IndicatorOn);
+            dialogue.turnManipulationEnded.RemoveListener(IndicatorOff);
         }
 
-        private void indicatorOn(GameDialogue.UnitInfo unitInfo)
+        private void IndicatorOn(GameDialogue.UnitInfo unitInfo)
         {
-            if(!timelinePortrait.isSelected())
+            if (turnManager.ActingUnit == null)
+                return;
+            
+            int actingUnitIndex = turnManager.FindTurnIndexFromCurrentQueue(turnManager.ActingUnit);
+            int unitIndex = turnManager.FindTurnIndexFromCurrentQueue(timelinePortrait.UnitInfo.Unit);
+
+            if (Mathf.Abs(unitIndex) - Mathf.Abs(actingUnitIndex) <= 1 && !timelinePortrait.IsSelected())
                 transform.localScale = new Vector3(1, 1, 1);
         }
 
-        private void indicatorOff()
+        private void IndicatorOff()
         {
             transform.localScale = new Vector3(0, 0, 0);
         }
