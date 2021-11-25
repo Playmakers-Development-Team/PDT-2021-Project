@@ -10,25 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Terrible Secret
+  m_Name: Drag Down+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Give +5 Attack and -3 Defence.
+  description: '[Slow Ability]
 
-    Target has Apathy: Give 5 Defence.'
+    Deal 3 Damage.
+
+    >If user currently has Sorrow,
+    subtact 3 attack and 3 defense from target. Applies 1 Sorrow to target. '
   shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
-  representedTenet: 0
+  speed: -1
+  representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 5 Attack and -3 Defence"
+  - name: Default, 3 Damage
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 0
+    damageValue: 3
     directDamage: 0
-    defenceValue: -3
-    attackValue: 5
+    defenceValue: 0
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -37,36 +39,37 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 5 Defence IF Target With Newest from any 1 of Apathy, Sorrow"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 2
+  - name: "Target \u27A4 -3 Attack and -3 Defence and Provide 1 Sorrow IF User With
+      1 Sorrow"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 5
-    attackValue: 0
+    defenceValue: -3
+    attackValue: -3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 5
+      stackCount: 1
     bonuses: []
     costs:
-    - name: Target With Newest from any 1 of Apathy, Sorrow
-      affectType: 1
-      costType: 3
+    - name: User With 1 Sorrow
+      affectType: 0
+      costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 2
+        tenetCostType: 0
         count: 1
-        tenetType: 3
+        tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
-        tenetTarget: 3
+        tenetTarget: 0
         tenetCostType: 0
         count: 1
-        tenetFilter: 40
+        tenetFilter: 0
       shapeCost:
         forceApplyCost: 0
         shape: {fileID: 0}

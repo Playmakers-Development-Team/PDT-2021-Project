@@ -10,66 +10,53 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Selfless Gifting
+  m_Name: Inspirational Talk+
   m_EditorClassIdentifier: 
-  description: "[Neutral Ability]\nGrant target 2 attack, 2 defense. Grant opponent
-    1 Joy.\n\nREPRESSION 2 (Opponent)- Subtract 2 Attack and 2 Defence from target,
-    inflict 5 damage directly. \n"
+  description: '[Neutral Ability]
+
+    Grant 3 Defence and 1 Passion to user and
+    targets
+
+    KINDLED 2 on User - Grant 3 Attack
+
+'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  speedType: 0
-  representedTenet: 4
+  representedTenet: 2
   effects:
-  - name: "Target \u27A4 Default, 2 Attack and 2 Defence"
+  - name: "User and Target \u27A4 Default, 3 Defence and Provide 1 Passion"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 2
-    attackValue: 2
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "Target \u27A4 Default, Provide 1 Joy"
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 4
+      tenetType: 2
       stackCount: 1
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 5 Damage Directly and -2 Attack and -2 Defence WITH Repression
-      2 to Target"
+  - name: "User and Target \u27A4 3 Attack WITH Kindled 2 to User"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
-    damageValue: 5
-    directDamage: 1
-    defenceValue: -2
-    attackValue: -2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 4
+      tenetType: 2
       stackCount: 0
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 689384322b6fb85279e8c462ab20a16e, type: 2}
+    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

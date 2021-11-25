@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Erosion
+  m_Name: Overcome+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Deal +5 damage.
+  description: '[Neutral Ability]
 
-    User has ENNUI 2: Take +3 damage.'
-  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
+    Deal 3 damage. Apply 1 Sorrow to self.
+
+
+    Catharsis
+    3 - Gain 5 Attack permanently for the rest of the encounter. '
+  shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  speedType: 4
-  representedTenet: 3
+  speed: 0
+  representedTenet: 5
   effects:
-  - name: "Target \u27A4 Default, 6 Damage"
+  - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 5
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -38,24 +40,23 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Damage Directly WITH Ennui 2 to User"
+  - name: Default, Provide 1 Sorrow
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 3
-    directDamage: 1
+    damageValue: 0
+    directDamage: 0
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 5
+      stackCount: 1
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
-  - name: Default, Provide 1 Apathy
+    keywords: []
+  - name: "User \u27A4 4 Attack for the encounter WITH Catharsis 3 to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 2
@@ -64,12 +65,13 @@ MonoBehaviour:
     defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
-    attackForEncounter: 0
+    attackForEncounter: 4
     providingTenet:
-      tenetType: 3
-      stackCount: 1
+      tenetType: 5
+      stackCount: 0
     bonuses: []
     costs: []
-    keywords: []
+    keywords:
+    - {fileID: 11400000, guid: 66e30f78cec5e5130ae91f9c0c445e48, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

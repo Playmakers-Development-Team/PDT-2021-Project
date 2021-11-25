@@ -10,25 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Terrible Secret
+  m_Name: Stoke the Flames+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Give +5 Attack and -3 Defence.
+  description: '[Fast Ability]
 
-    Target has Apathy: Give 5 Defence.'
-  shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
+    Give 3 Attack.
+
+    Give 5 more Attack if target
+    can spend Passion.
+
+'
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 1
-  representedTenet: 0
+  representedTenet: 2
   effects:
-  - name: "Target \u27A4 Default, 5 Attack and -3 Defence"
+  - name: "Target \u27A4 Default, 3 Attack"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: -3
-    attackValue: 5
+    defenceValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -37,14 +41,14 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 5 Defence IF Target With Newest from any 1 of Apathy, Sorrow"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 2
+  - name: "Target \u27A4 5 Attack IF Target Spend 1 Passion"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 5
-    attackValue: 0
+    defenceValue: 0
+    attackValue: 5
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -52,21 +56,21 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: Target With Newest from any 1 of Apathy, Sorrow
+    - name: Target Spend 1 Passion
       affectType: 1
-      costType: 3
+      costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 2
         count: 1
-        tenetType: 3
+        tenetType: 2
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
-        tenetTarget: 3
+        tenetTarget: 0
         tenetCostType: 0
         count: 1
-        tenetFilter: 40
+        tenetFilter: 0
       shapeCost:
         forceApplyCost: 0
         shape: {fileID: 0}
@@ -90,5 +94,5 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
   userEffects: []

@@ -39,7 +39,8 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 -2 Attack and -2 Defence IF User With 1 Sorrow"
+  - name: "Target \u27A4 -2 Attack and -2 Defence and Provide 1 Sorrow IF User With
+      1 Sorrow"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -51,7 +52,7 @@ MonoBehaviour:
     attackForEncounter: 0
     providingTenet:
       tenetType: 5
-      stackCount: 0
+      stackCount: 1
     bonuses: []
     costs:
     - name: User With 1 Sorrow

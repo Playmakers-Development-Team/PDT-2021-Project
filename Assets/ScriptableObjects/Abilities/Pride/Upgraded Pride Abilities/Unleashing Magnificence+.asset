@@ -10,25 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Terrible Secret
+  m_Name: Unleashing Magnificence+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Give +5 Attack and -3 Defence.
+  description: '[Extremely Fast Ability]
 
-    Target has Apathy: Give 5 Defence.'
-  shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
+    Deals 3 damage
+
+    Deals 5 extra damage
+    if user is INDEPENDENT
+
+    Gain 3 Defense when Spending Pride'
+  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
+  speed: 3
   representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 5 Attack and -3 Defence"
+  - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 0
+    damageValue: 3
     directDamage: 0
-    defenceValue: -3
-    attackValue: 5
+    defenceValue: 0
+    attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
@@ -37,13 +41,30 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 5 Defence IF Target With Newest from any 1 of Apathy, Sorrow"
+  - name: "Target \u27A4 5 Damage WITH Independent"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 5
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
+  - name: "User \u27A4 3 Defence IF User Spend 1 Pride WITH "
     affectTargets: 0
     affectUser: 1
-    effectOrder: 2
+    effectOrder: 0
     damageValue: 0
     directDamage: 0
-    defenceValue: 5
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -52,21 +73,21 @@ MonoBehaviour:
       stackCount: 0
     bonuses: []
     costs:
-    - name: Target With Newest from any 1 of Apathy, Sorrow
-      affectType: 1
-      costType: 3
+    - name: User Spend 1 Pride
+      affectType: 0
+      costType: 1
       tenetCost:
         forceApplyCost: 0
         tenetCostType: 2
         count: 1
-        tenetType: 3
+        tenetType: 0
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
-        tenetTarget: 3
+        tenetTarget: 0
         tenetCostType: 0
         count: 1
-        tenetFilter: 40
+        tenetFilter: 0
       shapeCost:
         forceApplyCost: 0
         shape: {fileID: 0}
@@ -89,6 +110,7 @@ MonoBehaviour:
             tenetCostType: 0
             count: 1
             tenetFilter: 0
-    keywords: []
+    keywords:
+    - {fileID: 0}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

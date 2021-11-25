@@ -10,58 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Erosion
+  m_Name: Slow the Flow+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Deal +5 damage.
+  description: '[Neutral Ability]
 
-    User has ENNUI 2: Take +3 damage.'
-  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
+    Applies 4 defence to all targets.
+
+    ENNUI
+    3 - Subtract 5 Attack
+
+    Apply 1 Apathy to all targets.'
+  shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  speedType: 4
+  speed: 0
   representedTenet: 3
   effects:
-  - name: "Target \u27A4 Default, 6 Damage"
+  - name: Default, 3 Defence and Provide 1 Apathy
     affectTargets: 1
     affectUser: 0
-    effectOrder: 0
-    damageValue: 5
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: "User \u27A4 3 Damage Directly WITH Ennui 2 to User"
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 1
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
-  - name: Default, Provide 1 Apathy
-    affectTargets: 0
-    affectUser: 1
     effectOrder: 2
     damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -71,5 +41,22 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
+  - name: -5 Attack WITH Ennui 3
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: -5
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 30a4117a82e57e6b3b0d7f023512be6e, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

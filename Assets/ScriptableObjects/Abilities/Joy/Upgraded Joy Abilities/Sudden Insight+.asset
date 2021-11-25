@@ -10,129 +10,60 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Beating the Fears Together
+  m_Name: Sudden Insight+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Deal +2 damage
+  description: '[Extremely Fast Ability]
 
-    User has Affinity: Deal +5 damage.
+    Give self 5 Defense.
 
-'
-  shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
+    Spend 1 Sorrow
+    to gain 2 Passion and 3 Attack.
+
+    Spend 1 Humility to gain 2 Pride and 3 Attack.'
+  shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  speedType: 4
-  representedTenet: 1
+  speed: 3
+  representedTenet: 4
   effects:
-  - name: "Target \u27A4 Default, 2 Damage"
-    affectTargets: 1
-    affectUser: 0
+  - name: "User \u27A4 Default, 5 Defence"
+    affectTargets: 0
+    affectUser: 1
     effectOrder: 0
-    damageValue: 2
+    damageValue: 0
     directDamage: 0
-    defenceValue: 0
+    defenceValue: 5
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
+      tenetType: 4
       stackCount: 0
     bonuses: []
     costs: []
     keywords: []
-  - name: "Target \u27A4 5 Damage WITH Affinity to User"
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 5
+  - name: "User \u27A4 3 Attack and Provide 2 Passion IF User Spend 1 Sorrow"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 0
+    attackValue: 3
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
-  - name: 3 Damage IF User With Joy
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 3
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
+      tenetType: 2
+      stackCount: 2
     bonuses: []
     costs:
-    - name: User With Joy
+    - name: User Spend 1 Sorrow
       affectType: 0
-      costType: 0
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 0
-        count: 1
-        tenetType: 4
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
-  - name: "Target \u27A4 2 Damage IF Target With 1 Pride"
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 2
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs:
-    - name: Target With 1 Pride
-      affectType: 1
       costType: 1
       tenetCost:
         forceApplyCost: 0
-        tenetCostType: 0
+        tenetCostType: 2
         count: 1
-        tenetType: 0
+        tenetType: 5
         tenetConstraint: 0
       tenetGroupCost:
         forceApplyCost: 0
@@ -163,5 +94,58 @@ MonoBehaviour:
             count: 1
             tenetFilter: 0
     keywords: []
-  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
+  - name: "User \u27A4 3 Attack and Provide 2 Pride IF User Spend 1 Humility"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 2
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 2
+    bonuses: []
+    costs:
+    - name: User Spend 1 Humility
+      affectType: 0
+      costType: 1
+      tenetCost:
+        forceApplyCost: 0
+        tenetCostType: 2
+        count: 1
+        tenetType: 1
+        tenetConstraint: 0
+      tenetGroupCost:
+        forceApplyCost: 0
+        tenetTarget: 0
+        tenetCostType: 0
+        count: 1
+        tenetFilter: 0
+      shapeCost:
+        forceApplyCost: 0
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        cost:
+          name: 
+          affectType: 0
+          costType: 0
+          tenetCost:
+            forceApplyCost: 0
+            tenetCostType: 0
+            count: 1
+            tenetType: 0
+            tenetConstraint: 0
+          tenetGroupCost:
+            forceApplyCost: 0
+            tenetTarget: 0
+            tenetCostType: 0
+            count: 1
+            tenetFilter: 0
+    keywords: []
+  visualEffects: {fileID: 0}
   userEffects: []

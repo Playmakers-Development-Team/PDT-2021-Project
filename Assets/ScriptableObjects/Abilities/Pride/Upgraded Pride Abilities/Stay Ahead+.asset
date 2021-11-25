@@ -10,23 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Erosion
+  m_Name: Stay Ahead+
   m_EditorClassIdentifier: 
-  displayName: 
-  description: 'Deal +5 damage.
+  description: '[Extremely Fast Ability]
 
-    User has ENNUI 2: Take +3 damage.'
-  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
+    Deal 3 damage
+
+    Gain 3 Defence.
+
+    >When
+    User is INDEPENDENT, gain 2 Pride'
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
-  speedType: 4
-  representedTenet: 3
+  speed: 3
+  representedTenet: 0
   effects:
-  - name: "Target \u27A4 Default, 6 Damage"
+  - name: "Target \u27A4 Default, 2 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 5
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -38,27 +41,10 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Damage Directly WITH Ennui 2 to User"
+  - name: Provide 2 Pride WITH Independent
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 3
-    directDamage: 1
-    defenceValue: 0
-    attackValue: 0
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 0
-      stackCount: 0
-    bonuses: []
-    costs: []
-    keywords:
-    - {fileID: 11400000, guid: 97eedb5ff536c08c093926167522abb7, type: 2}
-  - name: Default, Provide 1 Apathy
-    affectTargets: 0
-    affectUser: 1
-    effectOrder: 2
     damageValue: 0
     directDamage: 0
     defenceValue: 0
@@ -66,8 +52,25 @@ MonoBehaviour:
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 3
-      stackCount: 1
+      tenetType: 0
+      stackCount: 2
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 3acb38556af7d2b178d0974680390e75, type: 2}
+  - name: "User \u27A4 Default, 2 Defence"
+    affectTargets: 0
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 2
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
     bonuses: []
     costs: []
     keywords: []

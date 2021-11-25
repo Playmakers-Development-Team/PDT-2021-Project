@@ -10,32 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
-  m_Name: Spread Misery
+  m_Name: Shield From Dangers+
   m_EditorClassIdentifier: 
-  description: '[Very Slow Ability]
-
-    Deals 2 damage directly to target (ignores
-    defense). Grant 2 Sorrow and 3 defense. '
+  description: Give 4 Defence to a single person.
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
-  speed: -2
-  representedTenet: 5
+  speed: 0
+  representedTenet: 1
   effects:
-  - name: "Target \u27A4 Default, 2 Damage Directly and 3 Defence and Provide 2 Sorrow"
+  - name: "User and Target \u27A4 Default, 3 Defence"
     affectTargets: 1
-    affectUser: 0
+    affectUser: 1
     effectOrder: 0
-    damageValue: 2
-    directDamage: 1
+    damageValue: 0
+    directDamage: 0
     defenceValue: 3
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:
-      tenetType: 5
-      stackCount: 2
+      tenetType: 0
+      stackCount: 0
     bonuses: []
     costs: []
     keywords: []
-  visualEffects: {fileID: 0}
+  visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []
