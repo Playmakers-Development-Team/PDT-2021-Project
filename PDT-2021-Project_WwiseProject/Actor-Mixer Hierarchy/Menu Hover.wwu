@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{BF67256F-4D23-4FCE-A28D-D096406BE39F}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Menu Hover" ID="{BF67256F-4D23-4FCE-A28D-D096406BE39F}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Menu_Hover" ID="{5CDB48B9-54EE-4C54-BC2F-A2783682D86E}" ShortID="175637283">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Menu Hover" ID="{890194AD-5A40-49F4-9D45-C930EE8B966A}">
+							<Language>SFX</Language>
+							<AudioFile>Menu Hover.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="673428913"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Menu Hover" ID="{890194AD-5A40-49F4-9D45-C930EE8B966A}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

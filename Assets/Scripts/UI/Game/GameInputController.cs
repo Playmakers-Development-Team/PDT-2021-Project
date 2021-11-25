@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Abilities;
-using Abilities.Commands;
 using Abilities.Shapes;
+using Audio;
 using Commands;
 using Grid;
 using Managers;
@@ -9,6 +9,8 @@ using Turn;
 using UI.Core;
 using Units;
 using Units.Virtual;
+using UI.Input;
+using UI.PauseScreen;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,12 +20,43 @@ namespace UI.Game
     {
         private GridManager gridManager;
         private TurnManager turnManager;
+        private AudioManager audioManager;
         private CommandManager commandManager;
+        private PlayerControls playerControls;
+        private GameObject pauseMenuInstance;
 
         private List<GameDialogue.ProjectedUnitInfo> lastProjected =
             new List<GameDialogue.ProjectedUnitInfo>();
 
         private bool CanUseAbility => turnManager.CanUseAbility;
+
+        [SerializeField] private GameObject PauseMenu;
+        [SerializeField] private Transform parent;
+ 
+        #region DelegateFunctions
+
+        private void PauseGame(InputAction.CallbackContext ctx)
+        {
+            if (!ctx.performed)
+                return;
+
+            if (pauseMenuInstance == null)
+            {
+                pauseMenuInstance = Instantiate(PauseMenu,parent);
+                pauseMenuInstance.GetComponent<PauseScreenDialogue>().GameDialgoue = dialogue;
+                audioManager.ChangeMusicState("CombatState","InPauseMenu");
+            }
+            else
+            {
+                Destroy(pauseMenuInstance);
+                pauseMenuInstance = null;
+                audioManager.ChangeMusicState("CombatState","In_Combat");
+                dialogue.Promote();
+
+            }
+        }
+        
+        #endregion
 
         #region MonoBehaviour
         
@@ -104,11 +137,25 @@ namespace UI.Game
         
         protected override void OnComponentAwake()
         {
+            audioManager = ManagerLocator.Get<AudioManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+            playerControls = new PlayerControls();
+            playerControls.UI.Pause.performed += PauseGame;
+
         }
-        
+
+        protected override void OnComponentEnabled()
+        {
+            playerControls.Enable();
+        }
+
+        protected override void OnComponentDisabled()
+        {
+            playerControls.Disable();
+        }
+
         #endregion
     }
 }

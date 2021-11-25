@@ -12,18 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Taking the Bullet for Someone
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  displayName: 
+  description: 'Give +6 Defence but take 2 damage.
 
-    User deals 3 damage to self to give target
-    6 Defence.
-
-    >User gains 3 Defense before taking damage with Humility.'
+    Target has Affinity: Take
+    1 less damage.'
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 4
   representedTenet: 1
   effects:
-  - name: Default, 6 Defence
+  - name: "Target \u27A4 Default, 6 Defence"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -39,11 +39,11 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: Default, 3 Damage
+  - name: "User \u27A4 Default, 2 Damage"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 3
+    damageValue: 2
     directDamage: 0
     defenceValue: 0
     attackValue: 0
@@ -55,13 +55,13 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 3 Defence IF User Spend 1 Humility"
+  - name: "User \u27A4 -1 Damage WITH Affinity to User"
     affectTargets: 0
     affectUser: 1
     effectOrder: 0
-    damageValue: 0
+    damageValue: -1
     directDamage: 0
-    defenceValue: 3
+    defenceValue: 0
     attackValue: 0
     defenceForEncounter: 0
     attackForEncounter: 0
@@ -69,44 +69,8 @@ MonoBehaviour:
       tenetType: 0
       stackCount: 0
     bonuses: []
-    costs:
-    - name: User Spend 1 Humility
-      affectType: 0
-      costType: 1
-      tenetCost:
-        forceApplyCost: 0
-        tenetCostType: 2
-        count: 1
-        tenetType: 1
-        tenetConstraint: 0
-      tenetGroupCost:
-        forceApplyCost: 0
-        tenetTarget: 0
-        tenetCostType: 0
-        count: 1
-        tenetFilter: 0
-      shapeCost:
-        forceApplyCost: 0
-        shape: {fileID: 0}
-        countConstraint: 0
-        count: 0
-        shapeFilter: 0
-        cost:
-          name: 
-          affectType: 0
-          costType: 0
-          tenetCost:
-            forceApplyCost: 0
-            tenetCostType: 0
-            count: 1
-            tenetType: 0
-            tenetConstraint: 0
-          tenetGroupCost:
-            forceApplyCost: 0
-            tenetTarget: 0
-            tenetCostType: 0
-            count: 1
-            tenetFilter: 0
-    keywords: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: b28896db88e66a9ea9d570b64c42d425, type: 2}
   visualEffects: {fileID: 3444841008798590005, guid: 6cd0749cbe35cb7cba73a5956b7ecd98, type: 3}
   userEffects: []

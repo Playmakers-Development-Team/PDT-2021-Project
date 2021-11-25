@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TenetStatuses;
 using UnityEngine;
@@ -37,5 +38,16 @@ namespace Abilities
 
         private IEnumerable<Ability> GetAbilitiesFromTenet(TenetType tenetType) =>
             abilities.Where(a => a.RepresentedTenet == tenetType);
+        
+        public Ability PickAbilitiesByName(string name)
+        {
+            foreach (var ability in abilities)
+            {
+                if (ability.name.Equals(name))
+                    return ability;
+            }
+
+            return null;
+        }
     }
 }

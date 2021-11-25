@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 9218347394412763074}
   - component: {fileID: 9218347394412763075}
   - component: {fileID: 9218347394412763076}
+  - component: {fileID: 202688900540841522}
+  - component: {fileID: 2645029885421622175}
   m_Layer: 5
   m_Name: Units Canvas
   m_TagString: Untagged
@@ -82,7 +84,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &9218347394412763075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,3 +116,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerUIPrefab: {fileID: 5704961542752533424, guid: 286e7e98c6680b14ca29c50dcbe376ad, type: 3}
   enemyUIPrefab: {fileID: 5704961542752533424, guid: 58c209255d3de554ba40fe8fedeb7f7d, type: 3}
+  animator: {fileID: 2645029885421622175}
+  delay: 5
+--- !u!225 &202688900540841522
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218347394412763078}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!95 &2645029885421622175
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9218347394412763078}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7c5c7574c87baf34e8d988372d194104, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

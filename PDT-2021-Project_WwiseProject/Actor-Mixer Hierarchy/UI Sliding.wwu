@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{1C9A05CE-F341-4246-B9E2-7DA0BB368A2C}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="UI Sliding" ID="{1C9A05CE-F341-4246-B9E2-7DA0BB368A2C}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="UI_Sliding" ID="{5C121CD7-1791-4363-8C3D-5A64D159BA68}" ShortID="956393678">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="UI_Sliding" ID="{DE5E85FC-5252-434C-AEDD-611ADB29EAC3}">
+							<Language>SFX</Language>
+							<AudioFile>UI_Sliding.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="287664202"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="UI_Sliding" ID="{DE5E85FC-5252-434C-AEDD-611ADB29EAC3}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

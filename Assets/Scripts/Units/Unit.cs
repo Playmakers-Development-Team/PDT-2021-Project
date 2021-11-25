@@ -24,6 +24,7 @@ namespace Units
     public abstract class Unit<T> : GridObject, IUnit where T : UnitData
     {
         [SerializeField] protected T data;
+        [SerializeField] private float moveTweenDuration = 1f;
 
         private protected SpriteRenderer spriteRenderer;
 
@@ -86,6 +87,7 @@ namespace Units
         #endregion
 
         public bool Indestructible { get; set; }
+        public bool IsDead { get; private set; }
 
         public Animator UnitAnimator { get; private set; }
         public Color UnitColor => spriteRenderer.color;
@@ -233,7 +235,12 @@ namespace Units
             }
 
             // "Delete" the gridObject (setting it to inactive just in case we still need it)
-            transform.parent.gameObject.SetActive(false);
+            // enabled = false;
+            //transform.parent.gameObject.SetActive(false);
+            // Keep the parent object because we need VFX. BUT also disable this game object so that
+            // commands, coroutines and awaits are unregistered and stopped.
+            gameObject.SetActive(false);
+            IsDead = true;
             
             commandManager.ExecuteCommand(new KilledUnitCommand(this));
         }
@@ -500,7 +507,7 @@ namespace Units
 
                 await gridManager.MovementTween(unit.transform.parent.gameObject, 
                     gridManager.ConvertCoordinateToPosition(currentCoordinate),
-                    gridManager.ConvertCoordinateToPosition(movePath[i]), 1f);
+                    gridManager.ConvertCoordinateToPosition(movePath[i]), moveTweenDuration);
                 unit.transform.parent.position =
                     gridManager.ConvertCoordinateToPosition(movePath[i]);
                 currentCoordinate = movePath[i];

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{769B9CD2-D8B7-4964-A270-63F76854A377}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Unit Spawn" ID="{769B9CD2-D8B7-4964-A270-63F76854A377}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Unit_Spawn" ID="{A5D33728-EE0A-4D47-AC01-9FC1E4E4CF06}" ShortID="143664324">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Unit_Spawn" ID="{40753B50-55BF-43BF-81BD-05953EA819AA}">
+							<Language>SFX</Language>
+							<AudioFile>Unit_Spawn.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="862604217"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Unit_Spawn" ID="{40753B50-55BF-43BF-81BD-05953EA819AA}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

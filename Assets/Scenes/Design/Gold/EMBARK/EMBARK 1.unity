@@ -191,6 +191,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Loader
       objectReference: {fileID: 0}
+    - target: {fileID: 8300312957143157284, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
+      propertyPath: tutorialDialogue
+      value: 
+      objectReference: {fileID: 1910249615669780458, guid: 146baac0e78676405b45382274cd420e, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1046b39799eba4a419f3a7acaeb5bf00, type: 3}
 --- !u!4 &34788965 stripped
@@ -259,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shouldRunLinearMap: 1
-  map: {fileID: 11400000, guid: 922a03c3d0902e655a4a622328f7291b, type: 2}
+  map: {fileID: 11400000, guid: d5731e0900a57874fb7cb36ddb37d926, type: 2}
 --- !u!4 &52719983
 Transform:
   m_ObjectHideFlags: 0

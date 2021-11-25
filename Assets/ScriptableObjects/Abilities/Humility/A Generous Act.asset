@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: A Generous Act
   m_EditorClassIdentifier: 
-  description: "[Slow Ability]\nTarget gains 4 Defense\n >When user or target has
-    AFFINITY, they gain 1 Humility"
-  shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
+  displayName: 
+  description: 'Give +4 Defence.
+
+    User has Affinity: Give +1 Humility.'
+  shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: -1
+  speedType: 1
   representedTenet: 1
   effects:
   - name: "Target \u27A4 Default, 4 Defence"
@@ -35,8 +38,8 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: "User \u27A4 Provide 1 Humility WITH Affinity"
-    affectTargets: 0
+  - name: "User and Target \u27A4 Provide 1 Humility WITH Affinity"
+    affectTargets: 1
     affectUser: 1
     effectOrder: 0
     damageValue: 0

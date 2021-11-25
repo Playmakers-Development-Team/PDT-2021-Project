@@ -12,34 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Ignite the Heart
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
-
-    Give 2 Attack and 1 Passion.
-
-    KINDLED 3 -
-    Grant 3 Attack.'
+  displayName: 
+  description: Give +3 Attack, 1 Passion and +4 per Passion.
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
-  speed: 1
+  speed: -2
+  speedType: 3
   representedTenet: 2
   effects:
-  - name: Default, 2 Attack and Provide 1 Passion
-    affectTargets: 1
-    affectUser: 0
-    effectOrder: 0
-    damageValue: 0
-    directDamage: 0
-    defenceValue: 0
-    attackValue: 2
-    defenceForEncounter: 0
-    attackForEncounter: 0
-    providingTenet:
-      tenetType: 2
-      stackCount: 1
-    bonuses: []
-    costs: []
-    keywords: []
-  - name: 3 Attack WITH Kindled 3 to User
+  - name: "Target \u27A4 Default, 3 Attack and Provide 1 Passion"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -51,10 +32,45 @@ MonoBehaviour:
     attackForEncounter: 0
     providingTenet:
       tenetType: 2
-      stackCount: 0
+      stackCount: 1
     bonuses: []
     costs: []
-    keywords:
-    - {fileID: 11400000, guid: 435dfb9e92bac9eee810448f42a97ce6, type: 2}
+    keywords: []
+  - name: "Target \u27A4 Default, 4 Attack and Provide 1 Passion BONUSED BY Target
+      Passion"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 4
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 1
+    bonuses:
+    - name: Target Passion
+      affectType: 1
+      bonusType: 1
+      tenetBonus:
+        tenetType: 2
+        tenetConstraint: 0
+      shapeBonus:
+        shape: {fileID: 0}
+        countConstraint: 0
+        count: 0
+        shapeFilter: 0
+        bonusByCount: 0
+        bonus:
+          name: 
+          affectType: 0
+          bonusType: 0
+          tenetBonus:
+            tenetType: 0
+            tenetConstraint: 0
+    costs: []
+    keywords: []
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

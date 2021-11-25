@@ -12,31 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Get Over It
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  displayName: 
+  description: 'Give +1 Joy and +7 Attack
 
-    Give target 1 Joy and 5 Attack
-
-    Repression
-    3 - Subtract 3 Attack and 3 Defense
-
-
-    [BELOW CURRENTLY DOESN''T WORK]
-
-    Spend
-    1 Apathy - Subtract 1 Joy from Target'
+    Target has Repression 3 - Give -3
+    Attack and -3 Defence'
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
+  speed: -2
+  speedType: 3
   representedTenet: 4
   effects:
-  - name: Default, 5 Attack and Provide 1 Joy
+  - name: "Target \u27A4 Default, 7 Attack and Provide 1 Joy"
     affectTargets: 1
     affectUser: 0
     effectOrder: 1
     damageValue: 0
     directDamage: 0
     defenceValue: 0
-    attackValue: 5
+    attackValue: 7
     defenceForEncounter: 0
     attackForEncounter: 0
     providingTenet:

@@ -1,6 +1,8 @@
 using System;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
+using TMPro;
 using Turn.Commands;
 using UI.Commands;
 using UnityEngine;
@@ -11,12 +13,14 @@ namespace UI
     {
         [SerializeField] private GameObject dialogue;
         
-        //TODO: THIS WILL LATER BE MOVED TO THE END SCREEN DIALOGUE SCRIPT
         [SerializeField] private GameObject abilityLoadoutDialogue;
         [SerializeField] private GameObject tutorialDialogue;
+        [SerializeField] private GameObject abilityUpgradeDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
-
+        [SerializeField] private GameObject endOfRoundBannerPrefab;
+        private GameObject endOfRoundBanner;
+        private float bannerActiveTime = 2.0f;
         
         private CommandManager commandManager;
 
@@ -26,53 +30,96 @@ namespace UI
         {
             Instantiate(dialogue, transform);
             
-            if (tutorialDialogue)
-                LoadObject(tutorialDialogue);
+            endOfRoundBanner = Instantiate(endOfRoundBannerPrefab, transform);
+            endOfRoundBanner.SetActive(false);
 
             commandManager = ManagerLocator.Get<CommandManager>();
         }
 
         private void OnEnable()
         {
-            //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.ListenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
-            commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
+            
+            commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
+            commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.ListenCommand<RoundZeroCommand>(OnRoundZeroCommand);
+            commandManager.ListenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         private void OnDisable()
         {
-            //TODO: MOVE TO ENDSCREENDIALOGUE
             commandManager.UnlistenCommand((Action<NoRemainingEnemyUnitsCommand>) OnNoRemainingEnemies);
+            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers);
+            
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
-            commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers); 
+            commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            
+            commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
 
         #endregion
 
+        private async void ShowTutorial()
+        {
+            await UniTask.Yield();
+            await UniTask.WaitWhile(() => endOfRoundBanner.gameObject.activeSelf);
+            
+            if (tutorialDialogue)
+                LoadObject(tutorialDialogue);
+        }
+
         public void LoadObject(GameObject obj) => Instantiate(obj, transform);
 
         #region MOVE TO ENDSCREENDIALOGUE
-
-        //TODO: THIS WILL LATER BE MOVED TO BE CALLED IN THE END SCREEN DIALOGUE SCRIPT
+        
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
             if (winDialogue)
                 LoadObject(winDialogue);
         }
         
-        private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
-        {
-            // Some levels may not have the ability loadout
-            if (abilityLoadoutDialogue)
-                LoadObject(abilityLoadoutDialogue);
-        }
-
         private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
         {
             if (loseDialogue)
                 LoadObject(loseDialogue); 
         }
+        
+        private void SpawnAbilityLoadout(SpawnAbilityLoadoutUICommand cmd)
+        {
+            if (abilityLoadoutDialogue)
+                LoadObject(abilityLoadoutDialogue);
+        }
+
+        private void SpawnAbilityUpgrade(SpawnAbilityUpgradeUICommand cmd)
+        {
+            if (abilityUpgradeDialogue)
+                LoadObject(abilityUpgradeDialogue);
+        }
+        
+        private void OnRoundZeroCommand(RoundZeroCommand cmd)
+        {
+            ShowStartRoundBanner(0);
+            
+            // NOTE: If you are moving this somewhere else, put the code below into its own function in the Loader.cs
+            ShowTutorial();
+        }
+        
+        private void OnStartRoundCommand(StartRoundCommand cmd)
+        {
+            ShowStartRoundBanner(cmd.RoundCount);
+        }
+
+        private void ShowStartRoundBanner(int roundCount)
+        {
+            endOfRoundBanner.SetActive(true);
+            endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round " + roundCount;
+            
+            Invoke("HideStartRoundBanner", bannerActiveTime);
+        }
+
+        private void HideStartRoundBanner() => endOfRoundBanner.SetActive(false);
 
         #endregion
     }

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Rewarding Bravery
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  displayName: 
+  description: 'Give +3 Attack and +1 Defence.
 
-    Target gains 2 Attack, 1 Defense and 1 Pride
-
-    >Target
-    may Spend Humility to gain 3 Defense
+    Target is Independent: Give +5
+    Attack.
 
 '
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 2 Attack and 1 Defence and Provide 1 Pride"

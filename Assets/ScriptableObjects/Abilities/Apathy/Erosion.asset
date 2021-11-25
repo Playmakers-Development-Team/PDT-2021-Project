@@ -12,22 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Erosion
   m_EditorClassIdentifier: 
-  description: '[Very Fast Ability]
+  displayName: 
+  description: 'Deal +5 damage.
 
-    Deal 6 damage to target and gain 1 Apathy.
-
-    ENNUI
-    2 (SELF) - Inflict 3 damage to user. '
-  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
+    User has ENNUI 2: Take +3 damage.'
+  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 4
   representedTenet: 3
   effects:
   - name: "Target \u27A4 Default, 6 Damage"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
-    damageValue: 6
+    damageValue: 5
     directDamage: 0
     defenceValue: 0
     attackValue: 0

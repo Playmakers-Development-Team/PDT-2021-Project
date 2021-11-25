@@ -29,6 +29,7 @@ namespace UI.MainMenu
         internal readonly Event creditsConfirmed = new Event();
         internal readonly Event creditsClosed = new Event();
         internal readonly Event gameStarted = new Event();
+        internal readonly Event gameContinued = new Event();
         internal readonly Event exitConfirmed = new Event();
         internal readonly Event exitStarted = new Event();
         internal readonly Event cancelExit = new Event();
@@ -80,6 +81,11 @@ namespace UI.MainMenu
             {
                 commandManager.ExecuteCommand(new PlayGameCommand());
             });
+            
+            gameContinued.AddListener(() =>
+            {
+                commandManager.ExecuteCommand(new ContinueGameCommand());
+            });
 
             settingConfirmed.AddListener(() =>
             {
@@ -103,9 +109,5 @@ namespace UI.MainMenu
             
             #endregion
         }
-        
-        
-
-
     }
 }

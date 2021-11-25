@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Outburst
   m_EditorClassIdentifier: 
+  displayName: 
   description: '[Very Fast Ability]
 
-    Deal 4 Damage
+    Deal +4 damage.
 
-    KINDLED 2 on User - Deal
-    2 more damage
+    KINDLED 1 on User -
+    Deal +3 damage
 
-    KINDLED 4 on User - Deal 4 more damage'
+    KINDLED 3 on User - Deal +3 damage'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
-  speed: 2
+  speed: -1
+  speedType: 1
   representedTenet: 2
   effects:
   - name: "Target \u27A4 Default, 4 Damage"
@@ -41,7 +43,7 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords: []
-  - name: 2 Damage WITH Kindled 2 to User
+  - name: "Target \u27A4 2 Damage WITH Kindled 1 to User"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -57,8 +59,8 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
-  - name: 4 Damage WITH Kindled 4 to User
+    - {fileID: 11400000, guid: 37c9757a544d453aea6425d395c65b3b, type: 2}
+  - name: "Target \u27A4 4 Damage WITH Kindled 3 to User"
     affectTargets: 1
     affectUser: 0
     effectOrder: 0
@@ -74,6 +76,6 @@ MonoBehaviour:
     bonuses: []
     costs: []
     keywords:
-    - {fileID: 11400000, guid: bb9a22fa5778078b69c278f620873233, type: 2}
+    - {fileID: 11400000, guid: 435dfb9e92bac9eee810448f42a97ce6, type: 2}
   visualEffects: {fileID: 2449271663171376190, guid: 736fa57f062441f4b97f6e5287c44967, type: 3}
   userEffects: []

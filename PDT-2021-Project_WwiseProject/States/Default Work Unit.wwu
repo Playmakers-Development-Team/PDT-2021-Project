@@ -15,6 +15,19 @@
 						<State Name="None" ID="{D6603252-6CB3-4125-BB14-F49BF3F01D7F}"/>
 						<State Name="In_Combat" ID="{8943B03A-666A-4FF3-8A8F-A38460E4CCB3}"/>
 						<State Name="Out_Of_Combat" ID="{CE5A1A55-B175-42C4-BCB0-392FD06D90D2}"/>
+						<State Name="InPauseMenu" ID="{65629E26-989C-4BAC-BF59-5DF456A2CB3B}">
+							<PropertyList>
+								<Property Name="Color" Type="int16" Value="1"/>
+								<Property Name="OverrideColor" Type="bool" Value="True"/>
+							</PropertyList>
+						</State>
+					</ChildrenList>
+				</StateGroup>
+				<StateGroup Name="WalkingState" ID="{9E5BA2A1-BD74-4D4D-BAEC-B212255BE138}">
+					<ChildrenList>
+						<State Name="None" ID="{F9A6B3B1-6221-43E7-8096-179778EBA7E6}"/>
+						<State Name="Walking" ID="{831CC496-89A9-4BBF-9FB9-EA0CFBBF0EBA}"/>
+						<State Name="Not_Walking" ID="{1ED10C31-9736-44F5-8B7B-2605F40236C7}"/>
 					</ChildrenList>
 				</StateGroup>
 			</ChildrenList>

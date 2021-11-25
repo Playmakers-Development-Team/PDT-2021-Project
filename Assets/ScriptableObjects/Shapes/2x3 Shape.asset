@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5361d2ab6eb043c999fac9b4ec270061, type: 3}
   m_Name: 2x3 Shape
   m_EditorClassIdentifier: 
+  displayIcon: {fileID: 21300000, guid: 0f906681665990c67a226996a09cdac4, type: 3}
   shapeParts:
   - direction: 85
     coordinates:
@@ -23,4 +24,5 @@ MonoBehaviour:
     - {x: -1, y: 2}
     autoRotate: 1
     isLineOfSight: 0
+    lineOfSightRange: 0
   shouldFollowMouse: 0
