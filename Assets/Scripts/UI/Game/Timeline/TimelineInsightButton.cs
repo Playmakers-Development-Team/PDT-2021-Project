@@ -112,7 +112,9 @@ namespace UI.Game.Timeline
             // }
             else
             {
+                // Start turn manipulating
                 dialogue.turnManipulationStarted.Invoke();
+                dialogue.unitDeselected.Invoke();
                 turnManager.turnManipulating = true;
             }
             

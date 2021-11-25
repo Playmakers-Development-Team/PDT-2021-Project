@@ -84,12 +84,13 @@ namespace UI.Game.Timeline
             if (turnManager.turnManipulating && (selectedUnit == null || selectedUnit.Unit != info.Unit))
             {
                 dialogue.turnManipulationChosen.Invoke(info);
-                selectedUnit = info;
                 
                 // For some reason, sometimes we get an uninitialised portrait?
                 if (selectableFrame)
                     selectableFrame.gameObject.SetActive(false);
             }
+
+            selectedUnit = info;
         }
 
         private void DeselectUnit()
@@ -120,6 +121,10 @@ namespace UI.Game.Timeline
 
         private void TurnManipulationChosen(GameDialogue.UnitInfo info)
         {
+            // For some reason, sometimes we get an uninitialised portrait?
+            if (selectableFrame)
+                selectableFrame.gameObject.SetActive(false);
+            
             // btn.interactable = !(info == unitInfo);
             // if(info != unitInfo)
             //     PrepareForManipulation();
@@ -130,7 +135,9 @@ namespace UI.Game.Timeline
             int actingUnitIndex = turnManager.FindTurnIndexFromCurrentQueue(turnManager.ActingUnit);
             int unitIndex = turnManager.FindTurnIndexFromCurrentQueue(unitInfo.Unit);
 
-            btn.interactable = Mathf.Abs(unitIndex) - Mathf.Abs(actingUnitIndex) <= 1;
+            btn.interactable = Mathf.Abs(unitIndex) - Mathf.Abs(actingUnitIndex) <= 1 && !IsSelected();
+            // We may or may not want to fake the selected unit below
+            selectedUnit = info;
         }
         
         private void TurnManipulationEnd()
