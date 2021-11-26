@@ -2,21 +2,11 @@
 
 namespace Audio.Commands
 {
-    public class PlaySoundCommand : Command
+    public class PostSound : Command
     {
         public string SoundName { get; }
 
-        public PlaySoundCommand(string soundName)
-        {
-            this.SoundName = soundName;
-        }
-    }
-    
-    public class StopSoundCommand : Command
-    {
-        public string SoundName { get; }
-
-        public StopSoundCommand(string soundName)
+        public PostSound(string soundName)
         {
             this.SoundName = soundName;
         }

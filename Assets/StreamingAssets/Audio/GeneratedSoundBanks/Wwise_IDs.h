@@ -19,7 +19,19 @@ namespace AK
         static const AkUniqueID OUT_OF_COMBAT = 3162566204U;
         static const AkUniqueID PLAY_MARIE_ATTACK = 822824111U;
         static const AkUniqueID PLAY_MOUNTAIN_TRAIL_THEME = 3399001768U;
-        static const AkUniqueID PLAY_NILES_ATTACK = 1713481986U;
+        static const AkUniqueID PLAY_NEGATIVE_HIT = 2406652529U;
+        static const AkUniqueID PLAY_NILES_ABILITY = 290037920U;
+        static const AkUniqueID PLAY_OPENING_THEME = 491678864U;
+        static const AkUniqueID PLAY_PAGE_TURN = 786024383U;
+        static const AkUniqueID PLAY_POSITIVE_HIT = 2175118573U;
+        static const AkUniqueID PLAY_RUINED_CITY_THEME = 1017112381U;
+        static const AkUniqueID PLAY_TURN_MANIPULATION_TOGGLE = 495033984U;
+        static const AkUniqueID PLAY_UI_SLIDING = 3062144419U;
+        static const AkUniqueID PLAY_UNIT_DESPAWN = 3788644491U;
+        static const AkUniqueID PLAY_UNIT_SPAWN = 4133036576U;
+        static const AkUniqueID PLAY_UNIT_WALKING = 143520528U;
+        static const AkUniqueID PLAY_WATERCOLOUR = 990444947U;
+        static const AkUniqueID STOP_UNIT_WALKING = 1987360222U;
     } // namespace EVENTS
 
     namespace STATES

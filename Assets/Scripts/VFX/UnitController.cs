@@ -116,7 +116,7 @@ namespace VFX.VFX
 
         private void OnUnitKilled(KilledUnitCommand cmd)
         {
-            commandManager.ExecuteCommand(new PlaySoundCommand("Play_Unit_Despawn"));
+            commandManager.ExecuteCommand(new PostSound("Play_Unit_Despawn"));
             
             players.TryGetValue(cmd.Unit, out Animator animator);
             
@@ -144,7 +144,7 @@ namespace VFX.VFX
         {
             await UniTask.Delay((int) (delay * 1000.0f));
             
-            commandManager.ExecuteCommand(new PlaySoundCommand("Play_Unit_Spawn"));
+            commandManager.ExecuteCommand(new PostSound("Play_Unit_Spawn"));
             
             foreach (Animator animator in animators)
             {

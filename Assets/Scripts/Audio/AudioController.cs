@@ -33,8 +33,7 @@ namespace Audio
             
             commandManager.ListenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd.IsWalking));
             
-            commandManager.ListenCommand<PlaySoundCommand>(cmd => PlaySound(cmd.SoundName));
-            commandManager.ListenCommand<StopSoundCommand>(cmd => StopSound(cmd.SoundName));
+            commandManager.ListenCommand<PostSound>(cmd => PostSound(cmd.SoundName));
         }
 
         private void OnDisable()
@@ -44,33 +43,29 @@ namespace Audio
             
             commandManager.UnlistenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd.IsWalking));
             
-            commandManager.UnlistenCommand<PlaySoundCommand>(cmd => PlaySound(cmd.SoundName));
-            commandManager.UnlistenCommand<StopSoundCommand>(cmd => StopSound(cmd.SoundName));
+            commandManager.UnlistenCommand<PostSound>(cmd => PostSound(cmd.SoundName));
         }
 
-        private void PlaySound(string soundName)
+        private void PostSound(string soundName)
         {
             uint soundID = AkSoundEngine.GetIDFromString(soundName);
             AkSoundEngine.PostEvent(soundID, gameObject);
         }
 
-        private void StopSound(string soundName)
-        {
-            uint soundID = AkSoundEngine.GetIDFromString(soundName);
-            AkSoundEngine.StopPlayingID(soundID);
-        }
-
+        /// <summary>
+        /// Could not figure out how states worked for walking so instead I made a work around
+        /// </summary>
         private void ChangeWalkingState(bool isWalking)
         {
             if (isWalking)
             {
-                AkSoundEngine.SetState("WalkingState", "Walking");
-                PlaySound("Play_Unit_Walking");
+                //AkSoundEngine.SetState("WalkingState", "Walking");
+                PostSound("Play_Unit_Walking");
             }
             else
             {
-                AkSoundEngine.SetState("WalkingState", "Not_Walking");
-                StopSound("Play_Unit_Walking");
+                //AkSoundEngine.SetState("WalkingState", "Not_Walking");
+                PostSound("Stop_Unit_Walking");
             }
         }
 

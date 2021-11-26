@@ -89,6 +89,26 @@ namespace Abilities
             SpawnVisualEffects(visualEffects, targets);
         }
 
+        private void PlayAudioEffects(IAbilityUser user)
+        {
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            
+            switch (user.Name)
+            {
+                case "Niles":
+                    commandManager.ExecuteCommand(new PostSound("Play_Niles_Ability"));
+                    break;
+                case "Helena":
+                    commandManager.ExecuteCommand(new PostSound("Play_Helena_Ability"));
+                    break;
+                case "Estelle":
+                    commandManager.ExecuteCommand(new PostSound("Play_Estelle_Ability"));
+                    break;
+                default:
+                    return;
+            }
+        }
+
         private void SpawnVisualEffects(GameObject vfx, IEnumerable<GridObject> targets)
         {
             if (vfx == null)
