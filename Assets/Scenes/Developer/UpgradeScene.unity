@@ -958,11 +958,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1237483445262862636, guid: b9242501ccd7e3f4585ccbcc55abc060, type: 3}
   m_PrefabInstance: {fileID: 617768944}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &752162880 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1316045247946802828, guid: 345142f207f191540b37bee25048ad9d, type: 3}
-  m_PrefabInstance: {fileID: 1364543667}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &752162881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4869564425208384771, guid: 345142f207f191540b37bee25048ad9d, type: 3}
@@ -1352,6 +1347,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1349521202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4709677746698092406, guid: 345142f207f191540b37bee25048ad9d, type: 3}
+  m_PrefabInstance: {fileID: 1364543667}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1358866328
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1569,7 +1569,7 @@ PrefabInstance:
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[3]
       value: 
-      objectReference: {fileID: 752162880}
+      objectReference: {fileID: 1349521202}
     - target: {fileID: 5753839982009922167, guid: 7419cf7eae8911644903f5c98574ab7a, type: 3}
       propertyPath: preMadeTimeline.Array.data[4]
       value: 
@@ -2084,7 +2084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2761775109851361033, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.63111144
+      value: 1.6311114
       objectReference: {fileID: 0}
     - target: {fileID: 2761775109851361033, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_LocalPosition.y

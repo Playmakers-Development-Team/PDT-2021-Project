@@ -11,6 +11,8 @@ namespace UI.MainMenu
         
          protected override void OnSelected()
          {
+             base.OnSelected();
+             
              dialogue.buttonSelected.Invoke();
              dialogue.cancelExit.Invoke();
          }

@@ -17,9 +17,17 @@ namespace UI.Game.UnitPanels.Abilities
         
         #region UIComponent
 
-        protected override void OnSelected() => dialogue.abilitySelected.Invoke(Ability);
+        protected override void OnSelected()
+        {
+            base.OnSelected();
+            dialogue.abilitySelected.Invoke(Ability);
+        }
 
-        protected override void OnDeselected() => dialogue.abilityDeselected.Invoke(Ability);
+        protected override void OnDeselected()
+        {
+            base.OnSelected();
+            dialogue.abilityDeselected.Invoke(Ability);
+        } 
 
         #endregion
         

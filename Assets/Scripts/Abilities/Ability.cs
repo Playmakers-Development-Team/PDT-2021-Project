@@ -105,7 +105,8 @@ namespace Abilities
                     commandManager.ExecuteCommand(new PostSound("Play_Estelle_Ability"));
                     break;
                 default:
-                    return;
+                    commandManager.ExecuteCommand(new PostSound("Play_Brush_Stroke"));
+                    break;
             }
         }
 

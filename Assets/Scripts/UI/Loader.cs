@@ -1,4 +1,5 @@
 using System;
+using Audio.Commands;
 using Commands;
 using Cysharp.Threading.Tasks;
 using Managers;
@@ -76,12 +77,16 @@ namespace UI
         
         private void OnNoRemainingEnemies(NoRemainingEnemyUnitsCommand cmd)
         {
+            commandManager.ExecuteCommand(new PostSound("Play_Positive_Hit"));
+            
             if (winDialogue)
                 LoadObject(winDialogue);
         }
         
         private void OnNoRemainingPlayers(NoRemainingPlayerUnitsCommand cmd)
         {
+            commandManager.ExecuteCommand(new PostSound("Play_Negative_Hit"));
+            
             if (loseDialogue)
                 LoadObject(loseDialogue); 
         }
@@ -117,6 +122,8 @@ namespace UI
             endOfRoundBanner.GetComponentInChildren<TextMeshProUGUI>().text = "Round " + roundCount;
             
             Invoke("HideStartRoundBanner", bannerActiveTime);
+            
+            commandManager.ExecuteCommand(new PostSound("Play_UI_Sliding"));
         }
 
         private void HideStartRoundBanner() => endOfRoundBanner.SetActive(false);

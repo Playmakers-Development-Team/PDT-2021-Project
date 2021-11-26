@@ -36,6 +36,8 @@ namespace UI.Game
 
         protected override void OnSelected()
         {
+            base.OnSelected();
+            
             dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
             turnManager.Meditate();
             dialogue.meditateConfirmed.Invoke(dialogue.SelectedUnit);

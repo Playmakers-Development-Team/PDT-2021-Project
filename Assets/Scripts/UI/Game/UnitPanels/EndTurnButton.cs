@@ -1,4 +1,5 @@
-﻿using Commands;
+﻿using Audio.Commands;
+using Commands;
 using Managers;
 using Turn;
 using Turn.Commands;
@@ -40,6 +41,8 @@ namespace UI.Game.UnitPanels
                     return;
                 
                 commandManager.ExecuteCommand(new EndTurnCommand(turnManager.ActingPlayerUnit));
+                
+                commandManager.ExecuteCommand(new PostSound("Play_Page_Turn"));
             });
             eventTrigger.triggers.Add(pointerClick);
         }

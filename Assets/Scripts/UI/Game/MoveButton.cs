@@ -32,6 +32,8 @@ namespace UI.Game
 
         protected override void OnSelected()
         {
+            base.OnSelected();
+            
             dialogue.abilityDeselected.Invoke(dialogue.SelectedAbility);
             
             if (turnManager.ActingPlayerUnit != null && turnManager.IsMovementPhase())

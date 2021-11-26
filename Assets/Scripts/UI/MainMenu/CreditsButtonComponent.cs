@@ -14,6 +14,8 @@
         
         protected override void OnSelected()
         {
+            base.OnSelected();
+            
             dialogue.buttonSelected.Invoke();
             dialogue.creditsConfirmed.Invoke();
         }
