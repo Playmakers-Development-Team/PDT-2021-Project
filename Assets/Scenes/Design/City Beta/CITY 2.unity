@@ -348,6 +348,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: data.name
+      value: Mouscle 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_Name
       value: Mouscle
@@ -702,6 +706,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6812065770848189092, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
+      propertyPath: data.name
+      value: Stag of Grief 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812065770848189092, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
+      propertyPath: data.tenet
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
 --- !u!1 &545605559
@@ -877,6 +889,14 @@ PrefabInstance:
     - target: {fileID: 2761775109851361033, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812065770848189092, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
+      propertyPath: data.name
+      value: Stag of Grief 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6812065770848189092, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
+      propertyPath: data.tenet
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 40a6160897d83944b8d80c435350bea1, type: 3}
@@ -1582,6 +1602,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: data.name
+      value: Mouscle 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_Name
       value: Mouscle

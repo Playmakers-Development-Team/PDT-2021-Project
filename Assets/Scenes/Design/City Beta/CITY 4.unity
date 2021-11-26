@@ -457,6 +457,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2815294620146319130, guid: baed1f8f5c00d794784bbe387a4c239e, type: 3}
+      propertyPath: data.name
+      value: Mouscle 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: baed1f8f5c00d794784bbe387a4c239e, type: 3}
 --- !u!1001 &294978175
@@ -466,6 +470,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1375121745}
     m_Modifications:
+    - target: {fileID: 1466168586308096629, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
+      propertyPath: data.name
+      value: Stag of Grief 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1466168586308096629, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
+      propertyPath: data.tenet
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
       propertyPath: m_Name
       value: Stag of Grief
@@ -535,6 +547,14 @@ PrefabInstance:
       propertyPath: levelTilemap
       value: 
       objectReference: {fileID: 1375121746}
+    - target: {fileID: 1466168586308096629, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
+      propertyPath: data.name
+      value: Stag of Grief 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1466168586308096629, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
+      propertyPath: data.tenet
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: b118b840f436deb4b8d619c9018a0989, type: 3}
       propertyPath: m_Name
       value: Stag of Grief
@@ -647,6 +667,10 @@ PrefabInstance:
     - target: {fileID: 2761775109851361033, guid: ca34e66368aeaca428bdbab54d4b1298, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8612348757809484075, guid: ca34e66368aeaca428bdbab54d4b1298, type: 3}
+      propertyPath: data.name
+      value: Mouscle 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca34e66368aeaca428bdbab54d4b1298, type: 3}
@@ -4080,6 +4104,10 @@ PrefabInstance:
       propertyPath: levelTilemap
       value: 
       objectReference: {fileID: 1375121746}
+    - target: {fileID: 2061249703385516939, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
+      propertyPath: data.name
+      value: Mouscle 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2724407955521944140, guid: 9363de21bd8fe3d48a6d04965a7d80b1, type: 3}
       propertyPath: m_Name
       value: Mouscle
