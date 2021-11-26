@@ -232,8 +232,9 @@ namespace UI.CombatEndUI.PanelScripts
                 LoadoutAbilityInfo newLoadoutAbility =
                     dialogue.GetInfo(selectedAbilities[i]);
                 
-                // Skip the current iteration if the character already owns the ability
-                if(currentAbilityInfos.Contains(newLoadoutAbility))
+                // Skip the current iteration if the character already owns the ability OR
+                // Skip the current iteration if the ability is an upgrade
+                if(currentAbilityInfos.Contains(newLoadoutAbility) || newLoadoutAbility.Ability.name.Contains("+"))
                     continue;
                 
                 abilityInfos.Add(newLoadoutAbility);
