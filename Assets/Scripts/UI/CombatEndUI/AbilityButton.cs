@@ -123,6 +123,10 @@ namespace UI.CombatEndUI
         
         public void Deselect()
         {
+            // Sometimes deselect is called after the dialogue is null
+            if (dialogue == null)
+                return;
+                
             if (dialogue.GetType() == typeof(AbilityLoadoutDialogue))
             {
                 if (isNewAbility)
@@ -140,6 +144,7 @@ namespace UI.CombatEndUI
                     // by having the code "click the button"
                     AbilityButton nonUpgradedAbility = dialogue.GetNonUpgradedAbility(AbilityName);
                     dialogue.unitSelectCanvasScript.OnAbilityButtonPress(nonUpgradedAbility);
+                    
                     // Remove info from the old ability panel details
                     dialogue.clearOldAbilityDetails.Invoke();
                     

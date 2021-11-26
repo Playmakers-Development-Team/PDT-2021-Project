@@ -35,8 +35,7 @@ namespace UI.CombatEndUI.AbilityUpgrading
 
             // Hide Panels
             unitSelectCanvas.enabled = false;
-            abilitySelectCanvas.enabled = false;
-            finalAbilitiesCanvas.enabled = false;
+            abilitySelectCanvasScript.HideAbilitySelectCanvas();
 
             // Listen to Events
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
