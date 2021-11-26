@@ -5,12 +5,9 @@ using Abilities;
 using Commands;
 using Managers;
 using TenetStatuses;
-using UI.CombatEndUI.AbilityLoadout;
-using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityUpgrading;
 using UI.Commands;
 using UI.Core;
-using Units;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +17,10 @@ namespace UI.CombatEndUI.PanelScripts
 {
     public class AbilitySelectCanvasScript : DialogueComponent<AbilityRewardDialogue>
     {
+        [Header("Canvas")]
+        [SerializeField] protected Canvas abilitySelectCanvas;
+        [SerializeField] protected Canvas finalAbilitiesCanvas;
+        
         // New ability buttons and script references
         [SerializeField] private GameObject newAbilityPrefab;
         [SerializeField] private int newAbilityCount = 3;
@@ -70,14 +71,7 @@ namespace UI.CombatEndUI.PanelScripts
         
         private void UpdateAbilityScroll(Vector2 arg0)
         {
-            if(currentSelectedAbility != null)
-                currentSelectedAbility.Deselect();
-                
-            // Make no ability selected
-            currentSelectedAbility = null;
-                
-            // Turn Off Visual Placeholder
-            selectedAbilityImage.enabled = false;
+            DeselectAbility();
         }
         
         #endregion
@@ -179,6 +173,32 @@ namespace UI.CombatEndUI.PanelScripts
         #endregion
 
         #region Utility Functions
+
+        public void ShowAbilitySelectCanvas()
+        {
+            abilitySelectCanvas.enabled = true;
+            finalAbilitiesCanvas.enabled = true;
+        }
+
+        public void HideAbilitySelectCanvas()
+        {
+            DeselectAbility();
+            
+            abilitySelectCanvas.enabled = false;
+            finalAbilitiesCanvas.enabled = false;
+        }
+
+        private void DeselectAbility()
+        {
+            if(currentSelectedAbility != null)
+                currentSelectedAbility.Deselect();
+                
+            // Make no ability selected
+            currentSelectedAbility = null;
+                
+            // Turn Off Visual Placeholder
+            selectedAbilityImage.enabled = false;
+        }
         
         private void FadeInElements()
         {
