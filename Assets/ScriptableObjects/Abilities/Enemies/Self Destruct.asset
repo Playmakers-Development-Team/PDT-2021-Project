@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Self Destruct
+  m_EditorClassIdentifier: 
+  displayName: 
+  description: '[Neutral Ability]
+
+    An ability that inflicts heavy damages the
+    user and those surronding it'
+  shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
+  excludeUserFromTargets: 1
+  speed: 0
+  speedType: 0
+  representedTenet: 5
+  effects:
+  - name: "User and Target \u27A4 Default, 10 Damage"
+    affectTargets: 1
+    affectUser: 1
+    effectOrder: 0
+    damageValue: 10
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 0
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords: []
+  visualEffects: {fileID: 0}
+  userEffects: []

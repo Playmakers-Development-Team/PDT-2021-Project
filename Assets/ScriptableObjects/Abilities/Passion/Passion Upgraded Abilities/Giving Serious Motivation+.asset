@@ -12,17 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Giving Serious Motivation+
   m_EditorClassIdentifier: 
+  displayName: 
   description: '[Very Slow Ability]
 
     Give 3 Attack and 1 Passion.
 
     KINDLED
-    2 on Target - Grant 2Passion.
+    2 on Target - Grant 2 Passion.
 
     KINDLED 4 on Target - Grant 5 Attack.'
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
   excludeUserFromTargets: 1
   speed: -2
+  speedType: 0
   representedTenet: 2
   effects:
   - name: Default, 3 Attack and Provide 1 Passion
