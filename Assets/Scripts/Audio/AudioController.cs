@@ -22,7 +22,11 @@ namespace Audio
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
                 SceneManager.sceneLoaded += ChangeMusic;
-                AkSoundEngine.PostEvent("Play_Mountain_Trail_Theme", gameObject);
+                
+                if(SceneManager.GetActiveScene().name.Contains("City"))
+                    AkSoundEngine.PostEvent("Play_Ruined_City_Theme", gameObject);
+                else
+                    AkSoundEngine.PostEvent("Play_Mountain_Trail_Theme", gameObject);
             }
         }
 
