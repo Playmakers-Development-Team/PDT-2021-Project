@@ -54,7 +54,7 @@ namespace UI
             commandManager.UnlistenCommand((Action<NoRemainingPlayerUnitsCommand>) OnNoRemainingPlayers);
             
             commandManager.UnlistenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
-            commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            commandManager.UnlistenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
             
             commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
         }
