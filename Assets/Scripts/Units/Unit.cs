@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Abilities;
 using Abilities.Commands;
 using Abilities.Shapes;
+using Audio.Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
 using Grid.Tiles;
@@ -454,6 +455,8 @@ namespace Units
 
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
+            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(true));
+            
             IUnit unit = this;
             Vector2Int newCoordinate = moveCommand.TargetCoords;
 
@@ -527,6 +530,7 @@ namespace Units
             
             // Should be called when all the movement and tweening has been completed
             commandManager.ExecuteCommand(new EndMoveCommand(moveCommand));
+            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(false));
         }
 
         #region RandomizeNames
