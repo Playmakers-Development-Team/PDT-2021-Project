@@ -764,8 +764,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "This is <b>Insight</b>. \nYou start with 2 Insight. \nYou gain 1 Insight
-    per round."
+  m_text: You may click this button to <b>spend 2 Insight</b> and <b>manipulate turn
+    the order</b>.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   m_sharedMaterial: {fileID: -8874399076141909124, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
@@ -792,8 +792,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 22
+  m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1763,12 +1763,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8252457047199993692, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
       propertyPath: m_Name
-      value: Turn Manipulation TutorialDialogue
+      value: Turn Manipulation 2 TutorialDialogue
       objectReference: {fileID: 0}
-    - target: {fileID: 8783311049191805258, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
-      propertyPath: nextTutorial
-      value: 
-      objectReference: {fileID: 1288199700666892796, guid: d49554c53417e3a67aab72d610b899dc, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
 --- !u!114 &1288199700666892796 stripped
