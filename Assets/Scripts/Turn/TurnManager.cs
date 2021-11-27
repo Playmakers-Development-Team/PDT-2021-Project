@@ -35,7 +35,8 @@ namespace Turn
         public int PhaseIndex { get; set; }
 
         public Stat Insight { get; set; }
-        
+
+        public bool CanPlayerTurnManipulate { get; set; } = true;
         public bool turnManipulating { get; set; }
         
         /// <summary>

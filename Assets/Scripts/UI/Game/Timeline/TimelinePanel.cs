@@ -136,7 +136,7 @@ namespace UI.Game.Timeline
                 .Where(u => !currentTurnQueue.Contains(u))
                 .Where(u => !u.IsDead);
             //currentTurnQueue.RemoveRange(0, startIndex);
-            if (drawInsightBtn)
+            if (drawInsightBtn && turnManager.CanPlayerTurnManipulate)
                 CreateInsightButton();
 
             // CreatePortraits(currentTurnQueue, startIndex);
