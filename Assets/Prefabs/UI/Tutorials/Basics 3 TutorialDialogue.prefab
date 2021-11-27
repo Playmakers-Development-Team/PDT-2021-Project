@@ -207,8 +207,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 209, y: 14.1225}
-  m_SizeDelta: {x: 159.9138, y: 126.9875}
+  m_AnchoredPosition: {x: 474.38544, y: 11}
+  m_SizeDelta: {x: 339.2502, y: 120.1735}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &602367675350116504
 CanvasRenderer:
@@ -309,7 +309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5832441607970413069}
   m_Layer: 5
-  m_Name: Insight Description
+  m_Name: Description
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -621,7 +621,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 101, y: -160.76}
+  m_AnchoredPosition: {x: 105, y: -182.57}
   m_SizeDelta: {x: 166.4086, y: 146.2696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9182725682088757263
@@ -733,8 +733,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.000011921, y: -82}
-  m_SizeDelta: {x: 338.9489, y: 137.0872}
+  m_AnchoredPosition: {x: 0.000031412, y: -94.887276}
+  m_SizeDelta: {x: 464.3852, y: 162.8618}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4069161624264156704
 CanvasRenderer:
@@ -764,8 +764,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You may click this button to <b>spend 2 Insight</b> and <b>manipulate turn
-    the order</b>.
+  m_text: 'Keep track of <b>the order in which your characters play out</b> by looking
+    at the timeline.
+
+
+    It flows from <b>left to right</b>.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   m_sharedMaterial: {fileID: -8874399076141909124, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
@@ -792,8 +795,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1148,8 +1151,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -44.6015, y: -217.19669}
-  m_SizeDelta: {x: 390.1092, y: 191.9535}
+  m_AnchoredPosition: {x: 114, y: -158.23953}
+  m_SizeDelta: {x: 501.799, y: 231.4745}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2951502119227194835
 CanvasRenderer:
@@ -1261,7 +1264,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -209.00003, y: -14.1224785}
+  m_AnchoredPosition: {x: -447, y: -307}
   m_SizeDelta: {x: 2600, y: 1800}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &6407328773306053440
@@ -1763,7 +1766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8252457047199993692, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
       propertyPath: m_Name
-      value: Turn Manipulation 2 TutorialDialogue
+      value: Basics 3 TutorialDialogue
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
