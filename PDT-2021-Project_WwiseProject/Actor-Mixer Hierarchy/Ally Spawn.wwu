@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}" SchemaVersion="103">
+<WwiseDocument Type="WorkUnit" ID="{05D0DDC7-0A10-446E-A43B-6B457EE767EC}" SchemaVersion="103">
 	<AudioObjects>
-		<WorkUnit Name="Negative Hit" ID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}" PersistMode="Standalone">
+		<WorkUnit Name="Ally Spawn" ID="{05D0DDC7-0A10-446E-A43B-6B457EE767EC}" PersistMode="Standalone">
 			<ChildrenList>
-				<Sound Name="Negative_Hit-02" ID="{3066D13C-5109-4749-8DD4-BB222948D008}" ShortID="348374910">
+				<Sound Name="Ally Spawn" ID="{55091FAB-EBF0-4EA8-A127-4A1218D1B49D}" ShortID="679950467">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
@@ -13,17 +13,17 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<AudioFileSource Name="Negative_Hit-02" ID="{0C28940D-7614-4870-82DC-3859D7B62DE1}">
+						<AudioFileSource Name="Ally Spawn" ID="{6CE95274-E3D4-48AD-A297-38A5966BBE97}">
 							<Language>SFX</Language>
-							<AudioFile>Negative_Hit-02.wav</AudioFile>
+							<AudioFile>Ally Spawn.wav</AudioFile>
 							<MediaIDList>
-								<MediaID ID="316638233"/>
+								<MediaID ID="14108913"/>
 							</MediaIDList>
 						</AudioFileSource>
 					</ChildrenList>
 					<ObjectLists/>
 					<ActiveSourceList>
-						<ActiveSource Name="Negative_Hit-02" ID="{0C28940D-7614-4870-82DC-3859D7B62DE1}" Platform="Linked"/>
+						<ActiveSource Name="Ally Spawn" ID="{6CE95274-E3D4-48AD-A297-38A5966BBE97}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 			</ChildrenList>
