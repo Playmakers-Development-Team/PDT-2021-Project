@@ -25,12 +25,14 @@ namespace AK
         static const AkUniqueID PLAY_ESTELLE_ABILITY = 701627935U;
         static const AkUniqueID PLAY_GRASS_FOOTSTEPS = 546793308U;
         static const AkUniqueID PLAY_HELENA_ABILITY = 2350892418U;
+        static const AkUniqueID PLAY_MARIE_ATTACK = 822824111U;
         static const AkUniqueID PLAY_MENU_DESELECT = 3771192879U;
         static const AkUniqueID PLAY_MENU_HOVER = 3835684012U;
         static const AkUniqueID PLAY_MENU_SELECT = 2167056030U;
         static const AkUniqueID PLAY_MOUNTAIN_TRAIL_THEME = 3399001768U;
         static const AkUniqueID PLAY_NEGATIVE_HIT = 2406652529U;
         static const AkUniqueID PLAY_NILES_ABILITY = 290037920U;
+        static const AkUniqueID PLAY_NILES_ATTACK = 1713481986U;
         static const AkUniqueID PLAY_OPENING_THEME = 491678864U;
         static const AkUniqueID PLAY_PAGE_TURN = 786024383U;
         static const AkUniqueID PLAY_POSITIVE_HIT = 2175118573U;
@@ -42,6 +44,10 @@ namespace AK
         static const AkUniqueID PLAY_UNIT_SPAWN = 4133036576U;
         static const AkUniqueID PLAY_UNIT_WALKING = 143520528U;
         static const AkUniqueID PLAY_WATERCOLOUR = 990444947U;
+        static const AkUniqueID STOP_CREDITS_THEME = 3722690752U;
+        static const AkUniqueID STOP_MOUNTAIN_TRAIL_THEME = 1697649638U;
+        static const AkUniqueID STOP_OPENING_THEME = 3300588166U;
+        static const AkUniqueID STOP_RUINED_CITY_THEME = 1288752611U;
         static const AkUniqueID STOP_UNIT_WALKING = 1987360222U;
     } // namespace EVENTS
 
@@ -59,6 +65,20 @@ namespace AK
                 static const AkUniqueID OUT_OF_COMBAT = 3162566204U;
             } // namespace STATE
         } // namespace COMBATSTATE
+
+        namespace LEVELSTATE
+        {
+            static const AkUniqueID GROUP = 3473087568U;
+
+            namespace STATE
+            {
+                static const AkUniqueID CITYSCAPE = 2337594226U;
+                static const AkUniqueID CREDITS = 2201105581U;
+                static const AkUniqueID MAINMENU = 3604647259U;
+                static const AkUniqueID MOUNTAINTRAIL = 730363388U;
+                static const AkUniqueID NONE = 748895195U;
+            } // namespace STATE
+        } // namespace LEVELSTATE
 
         namespace PLAYERLIFE
         {

@@ -2,6 +2,7 @@ State Group	ID	Name			Wwise Object Path	Notes
 	444815956	PlayerLife			\Default Work Unit\PlayerLife	
 	979933241	WalkingState			\Default Work Unit\WalkingState	
 	1071758680	CombatState			\Default Work Unit\CombatState	
+	3473087568	LevelState			\Default Work Unit\LevelState	
 
 State	ID	Name	State Group			Notes
 	655265632	Alive	PlayerLife			
@@ -14,6 +15,11 @@ State	ID	Name	State Group			Notes
 	2116791127	In_Combat	CombatState			
 	2876317275	InPauseMenu	CombatState			
 	3162566204	Out_Of_Combat	CombatState			
+	730363388	MountainTrail	LevelState			
+	748895195	None	LevelState			
+	2201105581	Credits	LevelState			
+	2337594226	CityScape	LevelState			
+	3604647259	MainMenu	LevelState			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
 	988953028	SFXVolume			\In-game Settings\Volume\SFXVolume	

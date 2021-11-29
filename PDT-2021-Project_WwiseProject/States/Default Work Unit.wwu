@@ -30,6 +30,15 @@
 						<State Name="Not_Walking" ID="{1ED10C31-9736-44F5-8B7B-2605F40236C7}"/>
 					</ChildrenList>
 				</StateGroup>
+				<StateGroup Name="LevelState" ID="{83DB7326-A750-478C-B4C6-50EC712D3924}">
+					<ChildrenList>
+						<State Name="None" ID="{590C2B15-BA4E-4D9B-9DA7-3E36500510DC}"/>
+						<State Name="MainMenu" ID="{143FA80B-D6E7-4FE0-A3AE-76463BF18888}"/>
+						<State Name="Credits" ID="{D604BFB1-EE7C-4985-A68F-526F7400F97D}"/>
+						<State Name="MountainTrail" ID="{CCE17AA7-809C-4FCD-8F03-8D215B7ED702}"/>
+						<State Name="CityScape" ID="{4C3B58A1-6B5B-44E0-8FDA-7B8490E57213}"/>
+					</ChildrenList>
+				</StateGroup>
 			</ChildrenList>
 		</WorkUnit>
 	</States>

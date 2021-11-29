@@ -1,4 +1,7 @@
-﻿using UI.Core;
+﻿using Audio.Commands;
+using Commands;
+using Managers;
+using UI.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +16,13 @@ namespace UI.Demo.Scripts
 
         protected override void Unsubscribe() => button.onClick.RemoveListener(OnClick);
 
-        private void OnClick() => manager.Pop();
+        private void OnClick()
+        {
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            commandManager.ExecuteCommand(new PostSound("Stop_Credits_Theme"));
+            commandManager.ExecuteCommand(new PostSound("Play_Opening_Theme"));
+            
+            manager.Pop();
+        }
     }
 }

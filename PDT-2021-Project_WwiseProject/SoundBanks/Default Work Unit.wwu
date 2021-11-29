@@ -18,34 +18,8 @@
 				</SoundBank>
 				<SoundBank Name="Placeholder" ID="{D5D7A619-F6DE-4B49-8839-80CAAA1D38AE}">
 					<ObjectInclusionList>
-						<ObjectRef Name="Play_Credits_Theme" ID="{3D797050-D98A-4095-93C7-CB7D66FEA5AB}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Ruined_City_Theme" ID="{0C0ECBD9-FC8C-4124-B6A2-BDEA14DF076B}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Menu_Select" ID="{DF50052F-9C5F-4146-B7ED-3E06A0A646F6}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Ally_Spawn" ID="{3F34AFE7-F11A-416B-8917-070951A76598}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_UI_Sliding" ID="{D4D89B3A-340F-41F2-9E40-0215B2EF21D2}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Brush_Stroke" ID="{A3E5ED9D-7DDB-4244-A1C2-FB27F6A8DC13}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Menu_Hover" ID="{1C5FC4CA-4014-4382-8F14-CF4516529CEE}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Estelle_Ability" ID="{248778BF-AB0A-44C2-9C30-D2EFF8ABC8CA}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Grass_Footsteps" ID="{A2015316-E4A3-459E-A5C2-FE68D0D85D0F}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Battlefield_Cursor" ID="{3C70720C-6091-4616-8D06-D64394FB62FD}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="In_Combat" ID="{43A14AEE-4F7B-467F-895D-1630731482C6}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Opening_Theme" ID="{C1E70F97-E09D-4682-B3DD-B559B5FF1383}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Unit_Despawn" ID="{05EB0DAA-E33D-46CF-A5CB-5E8269C4B721}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Page_Turn" ID="{4E77175A-FECC-4715-BCF6-C1AADB5C0773}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Unit_Spawn" ID="{269298B9-6A0C-4764-BFF0-4C649EDE7549}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Terrain_Spawn" ID="{077EF7F2-D4FE-4795-A2A9-A2F56AD989B5}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Niles_Ability" ID="{490C4655-DEA3-4911-AD24-B9C8BE1F8C43}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Unit_Walking" ID="{7DD13289-1D6B-49A0-9B08-161DFFD309B0}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Campfire_Ambience" ID="{AB3ABA94-9F08-4ACE-ADF3-2D9D4A5E7D35}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Mountain_Trail_Theme" ID="{9F56617C-A450-4AFD-8A5E-BD1AF41805E4}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Negative_Hit" ID="{0DB646E3-1EBF-4B5C-A035-3ACEF7048A07}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Stop_Unit_Walking" ID="{76C366C5-D999-4C75-AEB9-DF44E8B89C08}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Turn_Manipulation_Toggle" ID="{2C565594-49CF-4CEE-9F17-350B6C4E2878}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Out_Of_Combat" ID="{CC1AAC98-15A2-4DB5-A60C-FA1E5B0769E7}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Positive_Hit" ID="{4B1345F2-C41B-4E19-A995-D54903C99119}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Watercolour" ID="{A9A6A6D9-E2EA-4E31-AFE8-3EDF56069EF5}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Menu_Deselect" ID="{2B46D290-DFB9-4E70-AAEB-F46BA3D0D48E}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="Play_Helena_Ability" ID="{D9724CD4-18A7-4FB7-BA83-72D8BE5D78DD}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Music" ID="{EC853D31-F662-40A8-983D-88A4A56758DE}" WorkUnitID="{EC853D31-F662-40A8-983D-88A4A56758DE}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Player_Unit" ID="{0A334EA1-F366-422F-A755-6722C06BA33D}" WorkUnitID="{0A334EA1-F366-422F-A755-6722C06BA33D}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>
