@@ -4,8 +4,11 @@ using System.Linq;
 using Abilities.Parsing;
 using Abilities.Shapes;
 using Abilities.VFX;
+using Audio.Commands;
+using Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
+using Managers;
 using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -87,6 +90,7 @@ namespace Abilities
             abilityParser.ParseAll();
             abilityParser.ApplyChanges();
             SpawnVisualEffects(visualEffects, targets);
+            PlayAudioEffects(user);
         }
 
         private void PlayAudioEffects(IAbilityUser user)
