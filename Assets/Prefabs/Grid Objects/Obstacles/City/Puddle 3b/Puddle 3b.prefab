@@ -25,11 +25,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4499342509938275811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 9151238030908387515}
-  - {fileID: 1635287897533781641}
+  - {fileID: 8658041798582952392}
+  - {fileID: 3680439142150547883}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,8 +47,70 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSetTilemap: 1
   levelTilemap: {fileID: 0}
-  coordinate: {x: -2, y: -3}
---- !u!1001 &1576792973085086571
+  coordinate: {x: 0, y: 0}
+--- !u!1001 &781292899633797125
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 2677976333220894548}
+    m_Modifications:
+    - target: {fileID: 3155771397333712178, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_Name
+      value: Puddle 3b Logic
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+--- !u!4 &3680439142150547883 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
+  m_PrefabInstance: {fileID: 781292899633797125}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1385373100174082584
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -57,7 +119,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2284143464575257637, guid: ac1261bb32a2e8241be90e5eda66a3c0, type: 3}
       propertyPath: m_Name
-      value: Puddle 3a Graphics
+      value: Puddle 3b Graphics
       objectReference: {fileID: 0}
     - target: {fileID: 7718710552574780368, guid: ac1261bb32a2e8241be90e5eda66a3c0, type: 3}
       propertyPath: m_RootOrder
@@ -105,70 +167,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ac1261bb32a2e8241be90e5eda66a3c0, type: 3}
---- !u!4 &9151238030908387515 stripped
+--- !u!4 &8658041798582952392 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7718710552574780368, guid: ac1261bb32a2e8241be90e5eda66a3c0, type: 3}
-  m_PrefabInstance: {fileID: 1576792973085086571}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &3419792922996483879
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2677976333220894548}
-    m_Modifications:
-    - target: {fileID: 3155771397333712178, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_Name
-      value: Puddle 3a Logic
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
---- !u!4 &1635287897533781641 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4162520292040028590, guid: f45937c886512374ba9d61f88c0f638c, type: 3}
-  m_PrefabInstance: {fileID: 3419792922996483879}
+  m_PrefabInstance: {fileID: 1385373100174082584}
   m_PrefabAsset: {fileID: 0}
