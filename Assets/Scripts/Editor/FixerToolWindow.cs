@@ -40,6 +40,18 @@ namespace Editor
                 }
             });
             
+            rootVisualElement.Add(new Button(OnFixVFX)
+            {
+                text = "Fix VFX (Adds Unit Controller)",
+                style =
+                {
+                    marginBottom = 10,
+                    marginLeft = 10,
+                    marginRight = 10,
+                    marginTop = 10
+                }
+            });
+            
             rootVisualElement.Add(new Button(OnFixUnitStructure)
             {
                 text = "Fix to new Unit Prefab Structure",
@@ -108,6 +120,22 @@ namespace Editor
                 var musicPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Audio/Music.prefab");
                 PrefabUtility.InstantiatePrefab(musicPrefab);
             }
+        }
+        
+        private void OnFixVFX()
+        {
+            EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+            
+            const string unitControllerPath = "Assets/Prefabs/VFX/GridObject VFX Controller.prefab";
+
+            if (!GameObject.Find("--- VFX ---"))
+            {
+                GameObject vfx = new GameObject("--- VFX ---");
+                GameObject vfxControllerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(unitControllerPath);
+                GameObject vfxController = (GameObject) PrefabUtility.InstantiatePrefab(vfxControllerPrefab, vfx.transform);
+            }
+            
+            Debug.Log("VFX fixing Successful! Unit controller is added!");
         }
 
         private void OnFixUnitStructure()
