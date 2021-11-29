@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Abilities;
 using Commands;
+using Cysharp.Threading.Tasks;
 using Managers;
 using TenetStatuses;
 using TMPro;
@@ -90,12 +91,12 @@ namespace UI.Game.Unit
             TryGetComponent(out rectTransform);
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+
+            healthBarCurrent.material = Instantiate(healthBarCurrent.material);
         }
 
         protected override void OnComponentStart()
         {
-            healthBarCurrent.material = Instantiate(healthBarCurrent.material);
-
             UpdateStatDisplays();
         }
 
@@ -311,6 +312,7 @@ namespace UI.Game.Unit
         internal void UpdateHealthBar()
         {
             float percentage = (float) unitInfo.Unit.HealthStat.Value / unitInfo.Unit.HealthStat.BaseValue;
+            Debug.Log($"health setting {unitInfo.Unit.Name} of {percentage} for value {unitInfo.Unit.HealthStat.Value}");
             SetHealthBar(percentage, unitInfo.Unit.HealthStat.Value);
             SetHealthBarProjection(0);
         }
@@ -339,7 +341,7 @@ namespace UI.Game.Unit
             SetHealthBar(tCurrent, data.NewValue);
             // healthBarDifference.material.SetFloat(fillId, tOld);
             
-            await Task.Delay((int) (differenceDelay * 1000));
+            await UniTask.Delay((int) (differenceDelay * 1000));
 
             float start = Time.time;
             float duration = (tOld - tCurrent) * differenceDuration;
@@ -352,7 +354,7 @@ namespace UI.Game.Unit
                     return;
                     
                 // healthBarDifference.fillAmount = Mathf.Lerp(tOld, tCurrent, t);
-                await Task.Yield();
+                await UniTask.Yield();
             }
 
             // healthBarDifference.fillAmount = 0.0f;

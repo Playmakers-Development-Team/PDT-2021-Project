@@ -15,6 +15,18 @@ namespace Units.Players
         public bool WaitForDeath { get; set; }
         
         public int DeathDelay { get; } = 1000;
+
+        public IEnumerable<PlayerUnit> PlayerUnits => AllUnits.OfType<PlayerUnit>();
+
+        public void HealAllPlayers()
+        {
+            foreach (var playerUnit in PlayerUnits)
+            {
+                playerUnit.HealthStat.Reset();
+            }
+            
+            Debug.Log("All players has been healed!");
+        }
         
         #region Persistent Unit Data
         

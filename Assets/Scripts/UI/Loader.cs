@@ -14,9 +14,10 @@ namespace UI
     {
         [SerializeField] private GameObject dialogue;
         
-        [SerializeField] private GameObject abilityLoadoutDialogue;
         [SerializeField] private GameObject tutorialDialogue;
+        [SerializeField] private GameObject abilityLoadoutDialogue;
         [SerializeField] private GameObject abilityUpgradeDialogue;
+        [SerializeField] private GameObject abilityHealDialogue;
         [SerializeField] private GameObject loseDialogue;
         [SerializeField] private GameObject winDialogue;
         [SerializeField] private GameObject endOfRoundBannerPrefab;
@@ -44,6 +45,7 @@ namespace UI
             
             commandManager.ListenCommand((Action<SpawnAbilityLoadoutUICommand>) SpawnAbilityLoadout);
             commandManager.ListenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
+            commandManager.ListenCommand<HealPartyCommand>(SpawnHeal);
             
             commandManager.ListenCommand<RoundZeroCommand>(OnRoundZeroCommand);
             commandManager.ListenCommand<StartRoundCommand>(OnStartRoundCommand);
@@ -111,6 +113,12 @@ namespace UI
         {
             if (abilityUpgradeDialogue)
                 LoadObject(abilityUpgradeDialogue);
+        }
+
+        private void SpawnHeal(HealPartyCommand cmd)
+        {
+            if (abilityHealDialogue)
+                LoadObject(abilityHealDialogue);
         }
         
         private void OnRoundZeroCommand(RoundZeroCommand cmd)

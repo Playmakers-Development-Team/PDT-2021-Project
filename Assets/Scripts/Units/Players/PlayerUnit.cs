@@ -1,5 +1,6 @@
 using Abilities;
 using Managers;
+using Units.Stats;
 
 namespace Units.Players
 {
@@ -20,9 +21,9 @@ namespace Units.Players
 
         public void ImportData(PlayerUnitData playerUnitData)
         {
-            // TODO temporarily keep health between levels.
-            // TODO Also this is currently broken, we can't just copy it because HealthValue keeps reference to the unit from the last scene, not the new one
-            // HealthStat = playerUnitData.HealthValue;
+            // We need to specifically copy the value here because HealthValue keeps reference to the unit from the last scene, not the new one for some reason
+            // Comment this out if we want to disable health
+            HealthStat.Value = playerUnitData.HealthValue.Value;
             Abilities = playerUnitData.Abilities;
         }
     }
