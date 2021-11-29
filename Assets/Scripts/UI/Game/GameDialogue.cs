@@ -40,12 +40,16 @@ namespace UI.Game
 
         internal readonly Event<TurnInfo> turnStarted = new Event<TurnInfo>();
 
-        internal readonly Event<TurnInfo> turnManipulated = new Event<TurnInfo>();
+        internal readonly Event<UnitInfo> turnManipulated = new Event<UnitInfo>();
 
 
         internal readonly Event<UnitInfo> meditateConfirmed = new Event<UnitInfo>();
         internal readonly Event<MoveInfo> moveConfirmed = new Event<MoveInfo>();
         internal readonly Event buttonSelected = new Event();
+
+        internal readonly Event turnManipulationStarted = new Event();
+        internal readonly Event<UnitInfo> turnManipulationChosen = new Event<UnitInfo>();
+        internal readonly Event turnManipulationEnded = new Event();
 
         internal readonly Event<Mode> modeChanged = new Event<Mode>();
 
@@ -186,7 +190,7 @@ namespace UI.Game
             if (info == null)
                 throw new Exception("ActingUnit was not in GameDialogue.units.");
 
-            turnManipulated.Invoke(new TurnInfo(info, turnManager.ActingPlayerUnit != null));
+            turnManipulated.Invoke(info);
             
             commandManager.ExecuteCommand(new PostSound("Play_Turn_Manipulation_Toggle"));
         }

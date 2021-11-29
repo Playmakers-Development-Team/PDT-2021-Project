@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f9a095da9a42e99f6906027b30c9c3, type: 3}
   m_Name: Rework Tutorial Encounter 1
   m_EditorClassIdentifier: 
+  tutorialDialogue: {fileID: 0}
   encounterScene:
     sceneAsset: {fileID: 102900000, guid: 2d8489c5817927eee8886a0e6e0f6b54, type: 3}
     scenePath: Assets/Scenes/Design/Gold/EMBARK/EMBARK 1.unity

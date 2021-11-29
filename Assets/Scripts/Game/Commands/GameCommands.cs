@@ -1,5 +1,6 @@
 using Commands;
 using Game.Map;
+using UnityEngine;
 
 namespace Game.Commands
 {
@@ -38,6 +39,16 @@ namespace Game.Commands
     /// Restart the encounter
     /// </summary>
     public class RestartEncounterCommand : Command {}
+
+    /// <summary>
+    /// Launch a tutorial with the appropriate tutorial object, which is usually a tutorial dialogue
+    /// </summary>
+    public class LaunchTutorialCommand : Command
+    {
+        public GameObject tutorialObject;
+
+        public LaunchTutorialCommand(GameObject tutorialObject) => this.tutorialObject = tutorialObject;
+    }
 
     /// <summary>
     /// Executed when map data is ready to be accessed.

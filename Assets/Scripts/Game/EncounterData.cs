@@ -8,8 +8,15 @@ namespace Game
     [CreateAssetMenu]
     public class EncounterData : ScriptableObject
     {
+        [Tooltip("The tutorial for this encounter, if there should be any")]
+        [SerializeField] private GameObject tutorialDialogue;
         [SerializeField] private SceneReference encounterScene;
         [SerializeField] private LevelPool levelPool;
+
+        /// <summary>
+        /// An object that forms a tutorial, usually a tutorial dialogue. May be Null!
+        /// </summary>
+        public GameObject TutorialObject => tutorialDialogue;
 
         /// <summary>
         /// Get all the scenes that is involved with this encounter data.

@@ -227,7 +227,7 @@ namespace Editor
             var orderedAbilities = abilities
                 .OrderBy(a => a.RepresentedTenet);
 
-            TenetType lastTenet = TenetType.Pride;
+            TenetType lastTenet = TenetType.Neutral;
             stringBuilder.AppendLine(divider);
 
             foreach (Ability ability in orderedAbilities)
