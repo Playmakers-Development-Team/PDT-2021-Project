@@ -1,4 +1,5 @@
 ﻿using System;
+using Audio.Commands;
 using Commands;
 using Managers;
 using UnityEngine;
@@ -32,12 +33,15 @@ namespace Background.Pipeline
         private new Camera camera;
         private RenderTexture washTexture;
         private RenderTexture lineTexture;
+        private CommandManager commandManager;
 
         public Material LineMaterial =>
             Application.isPlaying ? lineRenderer.material : lineRenderer.sharedMaterial;
 
         private void Awake()
         {
+            commandManager = ManagerLocator.Get<CommandManager>();
+            
             // Right now, there is the option to render when the camera is loaded (or on camera Awake),
             // though we usually want to render as the level is loaded which is before the scene is actually loaded.
             if (renderOnAwake)
@@ -45,7 +49,7 @@ namespace Background.Pipeline
 
             ManagerLocator.Get<BackgroundManager>().BackgroundCamera = this;
             
-            ManagerLocator.Get<CommandManager>().ExecuteCommand(new BackgroundCameraReadyCommand());
+            commandManager.ExecuteCommand(new BackgroundCameraReadyCommand());
         }
 
         /// <summary>
@@ -66,6 +70,8 @@ namespace Background.Pipeline
             else
                 BackgroundManager.Execute(lineTexture, washTexture);
 
+            commandManager.ExecuteCommand(new PostSound("Play_Watercolour"));
+            
             Apply();
         }
 

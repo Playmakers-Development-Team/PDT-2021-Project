@@ -1,4 +1,7 @@
-﻿using TMPro;
+﻿using Audio.Commands;
+using Commands;
+using Managers;
+using TMPro;
 using UI.Core;
 using UI.Game;
 using UnityEngine;
@@ -35,6 +38,8 @@ namespace UI.MainMenu
 
         [SerializeField] protected bool interactable;
 
+        private CommandManager commandManager;
+        
         private bool clicked;
         private bool animating;
         private bool wasInteractable;
@@ -100,6 +105,8 @@ namespace UI.MainMenu
 
         protected override void OnComponentAwake()
         {
+            commandManager = ManagerLocator.Get<CommandManager>();
+            
             wasInteractable = interactable;
 
             backgroundImage.material = Instantiate(backgroundImage.material);
@@ -227,11 +234,11 @@ namespace UI.MainMenu
 
         #region PanelButton
 
-        protected virtual void OnSelected() {}
+        protected virtual void OnSelected() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Select")); }
 
-        protected virtual void OnDeselected() {}
+        protected virtual void OnDeselected() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Deselect")); }
 
-        protected virtual void OnHoverEnter() {}
+        protected virtual void OnHoverEnter() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Hover")); }
 
         protected virtual void OnHoverExit() {}
 

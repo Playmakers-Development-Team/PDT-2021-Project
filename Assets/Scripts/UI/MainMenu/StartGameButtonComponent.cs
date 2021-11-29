@@ -8,6 +8,8 @@
         
         protected override void OnSelected()
         {
+            base.OnSelected();
+            
             dialogue.buttonSelected.Invoke();
             dialogue.gameStarted.Invoke();
         }

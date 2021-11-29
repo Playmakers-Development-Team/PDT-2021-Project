@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Abilities;
+using Audio.Commands;
 using Commands;
 using Managers;
 using Turn;
@@ -189,6 +190,8 @@ namespace UI.Game
                 throw new Exception("ActingUnit was not in GameDialogue.units.");
 
             turnManipulated.Invoke(info);
+            
+            commandManager.ExecuteCommand(new PostSound("Play_Turn_Manipulation_Toggle"));
         }
 
         private void OnStartMove(StartMoveCommand cmd)
