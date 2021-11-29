@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189c832e3cc34bafa2d88409b1b82d5f, type: 3}
+  m_Name: puddle-2
+  m_EditorClassIdentifier: 
+  line: {fileID: 11400000, guid: d00623666add5d744adb5e3d541d527f, type: 2}
+  colour: {fileID: 11400000, guid: e257eba5ab8ba0d4e81e3d84b484977c, type: 2}
+  fill: {fileID: 11400000, guid: b3b21b32f22446046b873656107d1466, type: 2}
+  preview: {fileID: 11400000, guid: cef2fe9b0ec8b4240a34eb7bf26f50ef, type: 2}
