@@ -5,10 +5,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI.MainMenu
+namespace UI.PauseScreen.ExitQuery
 {
-    // TODO: Duplicate code. See PauseScreenButton.
-    public class MainMenuButton : DialogueComponent<MainMenuDialogue>
+    // TODO: Duplicate code. See MainMenuButton.
+    public class ExitQueryButton : DialogueComponent<ExitQueryDialogue>
     {
         [SerializeField] protected EventTrigger trigger;
         [SerializeField] protected Animator animator;
@@ -196,8 +196,6 @@ namespace UI.MainMenu
             EventSystem.current.SetSelectedGameObject(gameObject);
 
             OnSelected();
-            
-            Deselected();
         }
 
         private void Deselected()

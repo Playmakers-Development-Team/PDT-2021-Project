@@ -18,6 +18,7 @@ namespace UI.Core
 
         protected virtual bool ShouldDemoteOtherDialogues => true;
         
+        public bool IsPromoted { get; private set; }
         
         #region MonoBehaviour
 
@@ -41,6 +42,7 @@ namespace UI.Core
 
         internal void Promote()
         {
+            IsPromoted = true;
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
             
@@ -50,6 +52,7 @@ namespace UI.Core
 
         internal void Demote()
         {
+            IsPromoted = false;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
             

@@ -1,24 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UI;
-using UI.Core;
-using UI.PauseScreen;
-
-
-public class ExitGameButton : PauseScreenButton
+namespace UI.PauseScreen
 {
-   
-    #region UIComponent
-    
-    protected override void Subscribe() {}
-
-    protected override void Unsubscribe() {}
-    
-    #endregion
-
-    protected override void OnSelected()
+    public class ExitGameButton : PauseScreenButton
     {
-        dialogue.buttonSelected.Invoke();
-        dialogue.exitGame.Invoke();
+   
+        #region UIComponent
+    
+        protected override void Subscribe() {}
+
+        protected override void Unsubscribe() {}
+    
+        #endregion
+
+        protected override void OnSelected()
+        {
+            dialogue.buttonSelected.Invoke();
+            dialogue.exitGame.Invoke();
+        }
     }
 }

@@ -1,8 +1,6 @@
-﻿using UI.Core;
-
-namespace UI.PauseScreen
+﻿namespace UI.PauseScreen.ExitQuery
 {
-    public class CancelExitButtonComponent : PauseScreenButton
+    public class ExitToMainMenuButtonComponent : ExitQueryButton
     {
         #region UIComponent
     
@@ -15,7 +13,7 @@ namespace UI.PauseScreen
         protected override void OnSelected()
         {
             dialogue.buttonSelected.Invoke();
-            dialogue.cancelExit.Invoke();
+            dialogue.exitToMainMenu.Invoke();
         }
     }
 }
