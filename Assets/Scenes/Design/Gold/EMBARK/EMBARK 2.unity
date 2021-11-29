@@ -510,6 +510,10 @@ PrefabInstance:
       propertyPath: abilityPickupPool
       value: 
       objectReference: {fileID: 11400000, guid: 0535d06dd9b1092cbbdf26e4f71a6cce, type: 2}
+    - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
+      propertyPath: allowsAbilityUpgrade
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7228237224685345093, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
       propertyPath: m_RootOrder
       value: 0
