@@ -375,7 +375,7 @@ MonoBehaviour:
   backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
   backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
   borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  borderDark: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
@@ -414,8 +414,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.09049988, y: -0.30020142}
-  m_SizeDelta: {x: 6.6958, y: 7.0004}
+  m_AnchoredPosition: {x: 2.5, y: 5}
+  m_SizeDelta: {x: 4.9999995, y: -0.00000023841858}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5365052649606786248
 CanvasRenderer:
@@ -445,7 +445,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -639,8 +639,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.09049988, y: -0.30020142}
-  m_SizeDelta: {x: 6.6958, y: 7.0004}
+  m_AnchoredPosition: {x: 2.5, y: 5.0000005}
+  m_SizeDelta: {x: 5, y: 0.0000009536743}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8370374910476325471
 CanvasRenderer:
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -864,8 +864,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.09049988, y: -0.30020142}
-  m_SizeDelta: {x: 6.6958, y: 7.0004}
+  m_AnchoredPosition: {x: 2.5, y: 5}
+  m_SizeDelta: {x: 5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8370374910937994551
 CanvasRenderer:
@@ -895,7 +895,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -996,7 +996,7 @@ MonoBehaviour:
   backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
   backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
   borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  borderDark: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
@@ -1206,7 +1206,7 @@ MonoBehaviour:
   backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
   backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
   borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  borderDark: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
@@ -1302,7 +1302,7 @@ MonoBehaviour:
   backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
   backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
   borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  borderDark: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
@@ -1971,8 +1971,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.09049988, y: -0.30020142}
-  m_SizeDelta: {x: 6.6958, y: 7.0004}
+  m_AnchoredPosition: {x: 2.5, y: 5.0000005}
+  m_SizeDelta: {x: 5, y: 0.0000009536743}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8370374911972026111
 CanvasRenderer:
@@ -2002,7 +2002,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2210,7 +2210,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8370374912341298033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -37.352806}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.99780065, y: 0.99780065, z: 0.99780065}
   m_Children:
   - {fileID: 8370374911060251117}
@@ -2223,8 +2223,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -135.32672, y: -70}
-  m_SizeDelta: {x: 310.6918, y: 212.9392}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 339.1017, y: 319.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8370374912341298031
 MonoBehaviour:
@@ -2243,10 +2243,10 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 150, y: 100}
+  m_CellSize: {x: 158, y: 100}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -2416,7 +2416,7 @@ MonoBehaviour:
   backgroundLight: {fileID: 21300000, guid: 17cf355d865feea48bd00570e94ea89c, type: 3}
   backgroundDark: {fileID: 21300000, guid: 554d47d3330262e4fa574534c15ec9cf, type: 3}
   borderLight: {fileID: 21300000, guid: a3c62bdb648227042a239a61213ba84f, type: 3}
-  borderDark: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  borderDark: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   lightFont: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
   darkFont: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
   fill: 0
@@ -2455,8 +2455,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.09049988, y: -0.30020142}
-  m_SizeDelta: {x: 6.6958, y: 7.0004}
+  m_AnchoredPosition: {x: 2.5, y: 5.0000005}
+  m_SizeDelta: {x: 5, y: 0.0000009536743}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8370374912447668283
 CanvasRenderer:
@@ -2486,7 +2486,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 121da1b771d97ac46b0aa613de0888a5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3f58f5b9c066414ebdb4721c2f99580, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
