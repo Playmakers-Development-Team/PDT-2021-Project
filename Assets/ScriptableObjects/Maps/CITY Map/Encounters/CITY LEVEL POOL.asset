@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 750685a80eb84aa68bd79e51f89d8ffb, type: 3}
+  m_Name: CITY LEVEL POOL
+  m_EditorClassIdentifier: 
+  levelScenes:
+  - sceneAsset: {fileID: 102900000, guid: d77f2a8c06c6f354eaf118977dd287e3, type: 3}
+    scenePath: Assets/Scenes/Design/City Beta/CITY 1.unity
+  - sceneAsset: {fileID: 102900000, guid: f9a26b8e55beb6846949877157306c26, type: 3}
+    scenePath: Assets/Scenes/Design/City Beta/CITY 2.unity
+  - sceneAsset: {fileID: 102900000, guid: 5cebd30e218b48e45ad6a53b58bc3635, type: 3}
+    scenePath: Assets/Scenes/Design/City Beta/CITY 3.unity
+  - sceneAsset: {fileID: 102900000, guid: 0ee2ce56eb2f964409bb274a3734dda4, type: 3}
+    scenePath: Assets/Scenes/Design/City Beta/CITY 4.unity
+  - sceneAsset: {fileID: 102900000, guid: 3fe250881e4b462418292c0416d74ac8, type: 3}
+    scenePath: Assets/Scenes/Design/City Beta/CITY 5.unity
