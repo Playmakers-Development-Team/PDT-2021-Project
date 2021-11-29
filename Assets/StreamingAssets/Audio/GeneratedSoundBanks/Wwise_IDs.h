@@ -17,7 +17,15 @@ namespace AK
         static const AkUniqueID FRANCISCO_SUCKS = 3610251637U;
         static const AkUniqueID IN_COMBAT = 2116791127U;
         static const AkUniqueID OUT_OF_COMBAT = 3162566204U;
-        static const AkUniqueID PLAY_MARIE_ATTACK = 822824111U;
+        static const AkUniqueID PLAY_BATTLEFIELD_CURSOR = 1114270429U;
+        static const AkUniqueID PLAY_BRUSH_STROKE = 4184699073U;
+        static const AkUniqueID PLAY_CAMPFIRE_AMBIENCE = 2984727828U;
+        static const AkUniqueID PLAY_CREDITS_THEME = 4043016790U;
+        static const AkUniqueID PLAY_ESTELLE_ABILITY = 701627935U;
+        static const AkUniqueID PLAY_HELENA_ABILITY = 2350892418U;
+        static const AkUniqueID PLAY_MENU_DESELECT = 3771192879U;
+        static const AkUniqueID PLAY_MENU_HOVER = 3835684012U;
+        static const AkUniqueID PLAY_MENU_SELECT = 2167056030U;
         static const AkUniqueID PLAY_MOUNTAIN_TRAIL_THEME = 3399001768U;
         static const AkUniqueID PLAY_NEGATIVE_HIT = 2406652529U;
         static const AkUniqueID PLAY_NILES_ABILITY = 290037920U;
@@ -60,6 +68,18 @@ namespace AK
                 static const AkUniqueID NONE = 748895195U;
             } // namespace STATE
         } // namespace PLAYERLIFE
+
+        namespace WALKINGSTATE
+        {
+            static const AkUniqueID GROUP = 979933241U;
+
+            namespace STATE
+            {
+                static const AkUniqueID NONE = 748895195U;
+                static const AkUniqueID NOT_WALKING = 1093676608U;
+                static const AkUniqueID WALKING = 340271938U;
+            } // namespace STATE
+        } // namespace WALKINGSTATE
 
     } // namespace STATES
 

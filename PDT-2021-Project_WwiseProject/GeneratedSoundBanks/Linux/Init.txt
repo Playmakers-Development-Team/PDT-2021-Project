@@ -1,15 +1,18 @@
 State Group	ID	Name			Wwise Object Path	Notes
 	444815956	PlayerLife			\Default Work Unit\PlayerLife	
+	979933241	WalkingState			\Default Work Unit\WalkingState	
 	1071758680	CombatState			\Default Work Unit\CombatState	
 
 State	ID	Name	State Group			Notes
 	655265632	Alive	PlayerLife			
 	748895195	None	PlayerLife			
 	2044049779	Dead	PlayerLife			
+	340271938	Walking	WalkingState			
+	748895195	None	WalkingState			
+	1093676608	Not_Walking	WalkingState			
 	748895195	None	CombatState			
 	2116791127	In_Combat	CombatState			
 	2876317275	InPauseMenu	CombatState			
-	3092587493	Pause	CombatState			
 	3162566204	Out_Of_Combat	CombatState			
 
 Game Parameter	ID	Name			Wwise Object Path	Notes
