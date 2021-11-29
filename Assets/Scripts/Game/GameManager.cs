@@ -150,7 +150,12 @@ namespace Game
             Debug.Log($"Load asynchronously next encounter {encounterData.name}");
             SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
             CurrentEncounterData = encounterData;
+            
+            SaveGame();
             await LoadEncounterSceneAsync(nextScene, forceChangeScene);
+            
+            if (encounterData.TutorialObject)
+                commandManager.ExecuteCommand(new LaunchTutorialCommand(encounterData.TutorialObject));
         }
 
         /// <summary>
@@ -160,12 +165,18 @@ namespace Game
         /// <param name="forceChangeScene">Do we always have to change the scene regardless if we are already in the correct scene?</param>
         public void LoadEncounter(EncounterData encounterData, bool forceChangeScene = true)
         {
-            Debug.Log($"Load next encounter {encounterData.name}");
-            SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
-            CurrentEncounterData = encounterData;
-            LoadEncounterScene(nextScene, forceChangeScene);
-            
-            SaveGame();
+            // Debug.Log($"Load next encounter {encounterData.name}");
+            // SceneReference nextScene = PullValidEncounterScene(encounterData, forceChangeScene);
+            // CurrentEncounterData = encounterData;
+            // LoadEncounterScene(nextScene, forceChangeScene);
+            //
+            // if (encounterData.TutorialObject)
+            //     commandManager.ExecuteCommand(new LaunchTutorialCommand(encounterData.TutorialObject));
+            //
+            // SaveGame();
+
+            // We have to make it async, so that tutorial loading can be done 
+            LoadEncounterAsync(encounterData, forceChangeScene).Forget();
         }
 
         private void LoadEncounterScene(SceneReference nextScene, bool forceChangeScene = true)

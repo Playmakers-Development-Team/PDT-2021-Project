@@ -34,10 +34,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1081, y: 608}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -2262.6, y: 0}
+  m_SizeDelta: {x: 1084.56, y: 608}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1196538852140218357
 Canvas:
@@ -211,6 +211,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2760773566113225655, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2950935464749070291, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_Pivot.x
       value: 1
@@ -263,9 +267,17 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5262119305880962376, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
+      propertyPath: drawInsightBtn
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5877050488744526533, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_Name
       value: Timeline Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6881319126922021532, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8847423323553440248, guid: dbfdaf227d29b824da828b35415aa8f1, type: 3}
       propertyPath: m_AnchorMax.x

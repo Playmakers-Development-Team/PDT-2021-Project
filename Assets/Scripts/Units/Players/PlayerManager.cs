@@ -8,6 +8,9 @@ namespace Units.Players
     public class PlayerManager : UnitManager<PlayerUnitData>
     {
         public AbilityPool AbilityPickupPool { get; internal set; }
+        public bool AllowAbilityGain { get; internal set; }
+        public bool AllowAbilityUpgrade { get; internal set; }
+        public bool AllowAbilityHeal { get; internal set; }
         
         public bool WaitForDeath { get; set; }
         

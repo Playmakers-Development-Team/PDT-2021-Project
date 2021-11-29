@@ -18,7 +18,8 @@ namespace Turn
         
         [Tooltip("The global turn phase for every player unit")]
         [SerializeField] private GameObject[] preMadeTimeline;
-        
+
+        [SerializeField] private bool canPlayerTurnManipulate = true;
         [SerializeField] private bool isTimelineRandomised;
         [Tooltip("If ability speed is enabled, the pre made timeline will only be used for the" +
                  "first round. Disabling ability speed can be useful for testing purposes.")]
@@ -43,6 +44,7 @@ namespace Turn
                 });
             
             turnManager.Reset();
+            turnManager.CanPlayerTurnManipulate = canPlayerTurnManipulate;
         }
 
         /// <summary>
