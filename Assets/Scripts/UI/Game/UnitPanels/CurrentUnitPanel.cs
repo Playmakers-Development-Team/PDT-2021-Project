@@ -1,4 +1,8 @@
-﻿namespace UI.Game.UnitPanels
+﻿using Managers;
+using Turn;
+using Units.Players;
+
+namespace UI.Game.UnitPanels
 {
     internal class CurrentUnitPanel : UnitPanel
     {
@@ -8,6 +12,7 @@
         {
             base.Subscribe();
             dialogue.turnStarted.AddListener(OnTurnStarted);
+            dialogue.turnManipulated.AddListener(OnTurnManipulated);
         }
 
         protected override void Unsubscribe()
@@ -25,6 +30,14 @@
         {
             unitInfo = turnInfo.CurrentUnitInfo;
             Redraw();
+        }
+        private void OnTurnManipulated(GameDialogue.UnitInfo unitInfo)
+        {
+            if (unitInfo.Unit.Equals(typeof(PlayerUnit)))
+            {
+                this.unitInfo = unitInfo;
+                Redraw();
+            }
         }
         
         #endregion

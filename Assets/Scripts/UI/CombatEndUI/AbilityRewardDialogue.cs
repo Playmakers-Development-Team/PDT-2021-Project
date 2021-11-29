@@ -187,6 +187,9 @@ namespace UI.CombatEndUI
                 case TenetType.Sorrow:
                     loadoutAbilityInfo.Render = abilityImages[5];
                     break;
+                case TenetType.Neutral:
+                    loadoutAbilityInfo.Render = abilityImages[6];
+                    break;
                 default:
                     throw new Exception($"Could not get {nameof(LoadoutAbilityInfo)} for {ability}.");
             }
