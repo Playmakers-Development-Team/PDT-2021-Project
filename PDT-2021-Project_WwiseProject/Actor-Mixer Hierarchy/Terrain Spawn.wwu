@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WwiseDocument Type="WorkUnit" ID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}" SchemaVersion="103">
+<WwiseDocument Type="WorkUnit" ID="{2F94C62C-E950-48CE-AF3F-46B611820302}" SchemaVersion="103">
 	<AudioObjects>
-		<WorkUnit Name="Negative Hit" ID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}" PersistMode="Standalone">
+		<WorkUnit Name="Terrain Spawn" ID="{2F94C62C-E950-48CE-AF3F-46B611820302}" PersistMode="Standalone">
 			<ChildrenList>
-				<Sound Name="Negative_Hit-02" ID="{3066D13C-5109-4749-8DD4-BB222948D008}" ShortID="348374910">
+				<Sound Name="Terrain Spawn" ID="{4E4DFDA4-1971-46B1-A1AE-A6F34012E3D7}" ShortID="204739965">
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
@@ -13,17 +13,17 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
-						<AudioFileSource Name="Negative_Hit-02" ID="{0C28940D-7614-4870-82DC-3859D7B62DE1}">
+						<AudioFileSource Name="Terrain Spawn" ID="{6D986A56-F3CF-40E9-A605-ACDB8BDE78FF}">
 							<Language>SFX</Language>
-							<AudioFile>Negative_Hit-02.wav</AudioFile>
+							<AudioFile>Terrain Spawn.wav</AudioFile>
 							<MediaIDList>
-								<MediaID ID="316638233"/>
+								<MediaID ID="785053139"/>
 							</MediaIDList>
 						</AudioFileSource>
 					</ChildrenList>
 					<ObjectLists/>
 					<ActiveSourceList>
-						<ActiveSource Name="Negative_Hit-02" ID="{0C28940D-7614-4870-82DC-3859D7B62DE1}" Platform="Linked"/>
+						<ActiveSource Name="Terrain Spawn" ID="{6D986A56-F3CF-40E9-A605-ACDB8BDE78FF}" Platform="Linked"/>
 					</ActiveSourceList>
 				</Sound>
 			</ChildrenList>

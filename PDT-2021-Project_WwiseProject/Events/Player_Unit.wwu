@@ -85,7 +85,7 @@
 						<Action Name="" ID="{CB02515F-931E-4DE9-80FB-44BD323096FA}" ShortID="48951653">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Negative Hit" ID="{C2894707-2ED5-49FD-B09F-6E55C7FC9595}" WorkUnitID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}"/>
+									<ObjectRef Name="Negative_Hit-02" ID="{3066D13C-5109-4749-8DD4-BB222948D008}" WorkUnitID="{10FA7758-9A1F-4A20-A443-13E4A19F4F0B}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
@@ -232,6 +232,39 @@
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="Unit Walking" ID="{A9D327CB-E4C6-4864-9056-905EB1834408}" WorkUnitID="{219023BC-DA3F-4BB8-A593-A12CA8063ADD}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Grass_Footsteps" ID="{A2015316-E4A3-459E-A5C2-FE68D0D85D0F}">
+					<ChildrenList>
+						<Action Name="" ID="{28B71A3A-CFCB-4670-8855-65DE7891017A}" ShortID="36780164">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Grass Footsteps" ID="{E6AB1BC7-C0CA-4431-816D-44334FB0D9D3}" WorkUnitID="{AE0B19C4-DC5B-438C-A704-9B570E90E460}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Terrain_Spawn" ID="{077EF7F2-D4FE-4795-A2A9-A2F56AD989B5}">
+					<ChildrenList>
+						<Action Name="" ID="{AF2343BF-F821-43E2-A5A8-32EB5E39F9CB}" ShortID="266639505">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Terrain Spawn" ID="{4E4DFDA4-1971-46B1-A1AE-A6F34012E3D7}" WorkUnitID="{2F94C62C-E950-48CE-AF3F-46B611820302}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Ally_Spawn" ID="{3F34AFE7-F11A-416B-8917-070951A76598}">
+					<ChildrenList>
+						<Action Name="" ID="{429DBE4C-8B3B-4FA6-8EE3-FD08DA94DD62}" ShortID="858221335">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Ally Spawn" ID="{55091FAB-EBF0-4EA8-A127-4A1218D1B49D}" WorkUnitID="{05D0DDC7-0A10-446E-A43B-6B457EE767EC}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
