@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Elite Melee Attack
   m_EditorClassIdentifier: 
+  displayName: 
   description: "[Neutral Ability]\nA basic 1 tile adjacent attack that deals 4 damage
     to an adjacent tile.\nIf this unit has Pride, it does an additional 2 damage.
     \nGives user 1 Pride after dealing damage. "
   shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 4 Damage"

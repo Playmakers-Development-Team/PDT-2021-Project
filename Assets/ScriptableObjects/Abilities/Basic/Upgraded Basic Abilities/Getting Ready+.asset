@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Getting Ready+
   m_EditorClassIdentifier: 
+  displayName: 
   description: Give 4 Attack in a 3x3 area.
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  representedTenet: 2
+  speedType: 0
+  representedTenet: 6
   effects:
   - name: "User and Target \u27A4 Default, 3 Attack"
     affectTargets: 1

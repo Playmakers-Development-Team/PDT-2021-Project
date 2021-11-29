@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Elite Long Ranged Attack
   m_EditorClassIdentifier: 
+  displayName: 
   description: '[Neutral Ability]
 
     A long ranged attack that deals 3 damage to
@@ -21,7 +22,8 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 0375928e37e451652ae5f991e80e7baf, type: 2}
   excludeUserFromTargets: 1
   speed: 1
-  representedTenet: 2
+  speedType: 0
+  representedTenet: 6
   effects:
   - name: "Target \u27A4 Default, 3 Damage and Provide 2 Passion"
     affectTargets: 1
