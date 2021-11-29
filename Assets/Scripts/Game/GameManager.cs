@@ -276,5 +276,12 @@ namespace Game
         /// </summary>
         private void ResetVisitedLevels() => 
             visitedLevels.Clear();
+        
+        // TODO: Sort
+        public bool IsPaused { get; private set; }
+
+        public void Pause() => IsPaused = true;
+
+        public void Resume() => IsPaused = false;
     }
 }

@@ -205,19 +205,19 @@ namespace Grid
                 if (tileData.GridObjects.Count > 0)
                 {
                     // Can change this later if we want to allow multiple grid objects on a tile
-                    Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
-                                     coordinate.y + " due to tile being occupied by " +
-                                     tileData.GridObjects[0]);
+                    // Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
+                    //                  coordinate.y + " due to tile being occupied by " +
+                    //                  tileData.GridObjects[0]);
                     return false;
                 }
 
                 tileData.AddGridObjects(gridObject);
-                Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
+                // Debug.Log(gridObject + " added to tile " + coordinate.x + ", " + coordinate.y);
                 return true;
             }
 
-            Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
-                             coordinate.y + " due to null tileData");
+            // Debug.LogWarning("Failed to add " + gridObject + " at " + coordinate.x + ", " +
+            //                  coordinate.y + " due to null tileData");
 
             return false;
         }

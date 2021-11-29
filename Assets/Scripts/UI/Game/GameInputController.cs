@@ -3,7 +3,9 @@ using Abilities;
 using Abilities.Shapes;
 using Audio;
 using Commands;
+using Game;
 using Grid;
+using ICSharpCode.NRefactory.Ast;
 using Managers;
 using Turn;
 using UI.Core;
@@ -18,6 +20,7 @@ namespace UI.Game
 {
     internal class GameInputController : DialogueComponent<GameDialogue>
     {
+        private GameManager gameManager;
         private GridManager gridManager;
         private TurnManager turnManager;
         private AudioManager audioManager;
@@ -39,15 +42,19 @@ namespace UI.Game
             if (!ctx.performed)
                 return;
 
-            if (paused)
+            if (gameManager.IsPaused)
             {
                 manager.Pop();
+
+                gameManager.Resume();
             }
             else
             {
                 audioManager.ChangeMusicState("CombatState", "InPauseMenu");
-
+            
                 Instantiate(pauseMenu, dialogue.transform.parent);
+                
+                gameManager.Pause();
             }
 
             paused = !paused;
@@ -144,6 +151,7 @@ namespace UI.Game
 
         protected override void OnComponentAwake()
         {
+            gameManager = ManagerLocator.Get<GameManager>();
             audioManager = ManagerLocator.Get<AudioManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();

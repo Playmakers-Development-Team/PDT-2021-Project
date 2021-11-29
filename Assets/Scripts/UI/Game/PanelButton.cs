@@ -197,6 +197,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
         EventSystem.current.SetSelectedGameObject(gameObject);
         
         OnSelected();
+        
+        // Prevents button having to be clicked twice after closing a dialogue
+        Deselected();
     }
 
     private void Deselected()
