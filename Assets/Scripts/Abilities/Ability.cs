@@ -4,8 +4,11 @@ using System.Linq;
 using Abilities.Parsing;
 using Abilities.Shapes;
 using Abilities.VFX;
+using Audio.Commands;
+using Commands;
 using Cysharp.Threading.Tasks;
 using Grid.GridObjects;
+using Managers;
 using TenetStatuses;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -87,6 +90,28 @@ namespace Abilities
             abilityParser.ParseAll();
             abilityParser.ApplyChanges();
             SpawnVisualEffects(visualEffects, targets);
+            PlayAudioEffects(user);
+        }
+
+        private void PlayAudioEffects(IAbilityUser user)
+        {
+            CommandManager commandManager = ManagerLocator.Get<CommandManager>();
+            
+            switch (user.Name)
+            {
+                case "Niles":
+                    commandManager.ExecuteCommand(new PostSound("Play_Niles_Ability"));
+                    break;
+                case "Helena":
+                    commandManager.ExecuteCommand(new PostSound("Play_Helena_Ability"));
+                    break;
+                case "Estelle":
+                    commandManager.ExecuteCommand(new PostSound("Play_Estelle_Ability"));
+                    break;
+                default:
+                    commandManager.ExecuteCommand(new PostSound("Play_Brush_Stroke"));
+                    break;
+            }
         }
 
         private void SpawnVisualEffects(GameObject vfx, IEnumerable<GridObject> targets)

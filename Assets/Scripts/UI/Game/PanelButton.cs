@@ -1,4 +1,7 @@
 using System;
+using Audio.Commands;
+using Commands;
+using Managers;
 using TMPro;
 using UI.Core;
 using UI.Game;
@@ -39,8 +42,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
     private static readonly int borderFillId = Animator.StringToHash("Fill");
     private static readonly int borderFadeId = Animator.StringToHash("Fade");
     private static readonly int fillId = Shader.PropertyToID("_Fill");
-    
 
+    private CommandManager commandManager;
+    
     private void LateUpdate()
     {
         if (!animating)
@@ -102,6 +106,8 @@ public class PanelButton : DialogueComponent<GameDialogue>
 
     protected override void OnComponentAwake()
     {
+        commandManager = ManagerLocator.Get<CommandManager>();
+        
         wasInteractable = interactable;
         
         backgroundImage.material = Instantiate(backgroundImage.material);
@@ -231,9 +237,9 @@ public class PanelButton : DialogueComponent<GameDialogue>
     
     #region PanelButton
 
-    protected virtual void OnSelected() {}
+    protected virtual void OnSelected() { commandManager.ExecuteCommand(new PostSound("Play_Battlefield_Cursor"));}
 
-    protected virtual void OnDeselected() {}
+    protected virtual void OnDeselected() { commandManager.ExecuteCommand(new PostSound("Play_Battlefield_Cursor"));}
 
     protected virtual void OnHoverEnter() {}
 

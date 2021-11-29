@@ -56,9 +56,13 @@
 				<Event Name="Play_Opening_Theme" ID="{C1E70F97-E09D-4682-B3DD-B559B5FF1383}">
 					<ChildrenList>
 						<Action Name="" ID="{1BAF9AFD-005A-48E4-BC84-3A5E36FCE96B}" ShortID="1025295928">
+							<PropertyList>
+								<Property Name="Delay" Type="Real64" Value="2.5"/>
+								<Property Name="FadeTime" Type="Real64" Value="5"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Opening Theme" ID="{C570B1D1-05F2-4EAF-8ABE-ADE281C8F929}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+									<ObjectRef Name="Opening Theme" ID="{41750B99-44A3-4063-A516-788E2F00EA28}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
@@ -67,9 +71,82 @@
 				<Event Name="Play_Credits_Theme" ID="{3D797050-D98A-4095-93C7-CB7D66FEA5AB}">
 					<ChildrenList>
 						<Action Name="" ID="{2C833997-0AEC-4B7B-8AF8-86C0197A77A2}" ShortID="841427868">
+							<PropertyList>
+								<Property Name="Delay" Type="Real64" Value="2.5"/>
+								<Property Name="FadeInCurve" Type="int16" Value="1"/>
+								<Property Name="FadeTime" Type="Real64" Value="5"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Credits Theme" ID="{395478B8-54EE-43AE-81A8-EEA776ACF46F}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+									<ObjectRef Name="Credits-Theme" ID="{B4E27D70-CFE4-48F3-A5B3-BBD7888379B6}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Opening_Theme" ID="{950FCBE8-B069-404E-8B1C-553AAB6710D1}">
+					<ChildrenList>
+						<Action Name="" ID="{AA3972A9-53A5-4D6C-9D2A-9BAE6A953213}" ShortID="733375162">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="Delay" Type="Real64" Value="1"/>
+								<Property Name="FadeOutCurve" Type="int16" Value="1"/>
+								<Property Name="FadeTime" Type="Real64" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Opening Theme" ID="{41750B99-44A3-4063-A516-788E2F00EA28}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Mountain_Trail_Theme" ID="{A7F79AAA-19C2-49DB-97C3-29B04F6C54E0}">
+					<ChildrenList>
+						<Action Name="" ID="{660F3BA4-4A7C-4DB5-A104-3E81D44F2674}" ShortID="515024686">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="Delay" Type="Real64" Value="2.5"/>
+								<Property Name="FadeOutCurve" Type="int16" Value="1"/>
+								<Property Name="FadeTime" Type="Real64" Value="2.5"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Mountain Trail" ID="{31C9AA65-5E18-4394-811D-9F3F14EDB9D8}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Ruined_City_Theme" ID="{2407C7AB-A6F2-4CEF-91A3-57F4B4E707EA}">
+					<ChildrenList>
+						<Action Name="" ID="{0EE9F0C8-AE88-4005-8833-3D7A2DB3F66D}" ShortID="1002300999">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="Delay" Type="Real64" Value="2.5"/>
+								<Property Name="FadeOutCurve" Type="int16" Value="1"/>
+								<Property Name="FadeTime" Type="Real64" Value="2.5"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Ruined City" ID="{A33EBA59-64A2-4906-9E88-ECB4A397BCA5}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Credits_Theme" ID="{B0B1EA04-6222-4C54-BAD8-A8D6D4B27920}">
+					<ChildrenList>
+						<Action Name="" ID="{D97870FA-EF8A-4732-BAF1-3E21A727CEA4}" ShortID="950763698">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="Delay" Type="Real64" Value="1"/>
+								<Property Name="FadeOutCurve" Type="int16" Value="1"/>
+								<Property Name="FadeTime" Type="Real64" Value="2.5"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Credits-Theme" ID="{B4E27D70-CFE4-48F3-A5B3-BBD7888379B6}" WorkUnitID="{5E430D93-294F-45CC-9DE4-50331F741933}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>

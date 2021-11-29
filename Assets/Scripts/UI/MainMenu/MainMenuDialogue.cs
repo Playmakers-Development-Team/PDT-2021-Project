@@ -1,3 +1,4 @@
+using Audio.Commands;
 using Commands;
 using Game.Commands;
 using Managers;
@@ -70,6 +71,8 @@ namespace UI.MainMenu
             creditsConfirmed.AddListener(() =>
             {
                 Instantiate(creditsDialoguePrefab, transform.parent);
+                commandManager.ExecuteCommand(new PostSound("Stop_Opening_Theme"));
+                commandManager.ExecuteCommand(new PostSound("Play_Credits_Theme"));
             });
             
             exitStarted.AddListener(() =>
