@@ -42,6 +42,7 @@ namespace UI.Core
         internal void Promote()
         {
             canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
             
             OnPromote();
             promoted.Invoke();
@@ -50,6 +51,7 @@ namespace UI.Core
         internal void Demote()
         {
             canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
             
             OnDemote();
             demoted.Invoke();

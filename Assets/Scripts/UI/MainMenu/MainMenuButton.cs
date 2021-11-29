@@ -195,6 +195,8 @@ namespace UI.MainMenu
             EventSystem.current.SetSelectedGameObject(gameObject);
 
             OnSelected();
+            
+            Deselected();
         }
 
         private void Deselected()
