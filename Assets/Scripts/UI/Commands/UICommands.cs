@@ -54,4 +54,10 @@ namespace UI.Commands
             IsNewAbility = isNewAbility;
         }
     }
+    
+        
+    /// <summary>
+    /// Executed after the win dialogue if the user selects the heal option
+    /// </summary>
+    public class HealPartyCommand : Command {}
 }

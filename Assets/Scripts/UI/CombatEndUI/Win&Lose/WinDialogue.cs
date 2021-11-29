@@ -1,4 +1,5 @@
 using Commands;
+using Game.Commands;
 using Managers;
 using UI.Commands;
 using UI.Core;
@@ -38,6 +39,8 @@ namespace UI.CombatEndUI
         public void Gain() => commandManager.ExecuteCommand(new SpawnAbilityLoadoutUICommand());
         
         public void Upgrade() => commandManager.ExecuteCommand(new SpawnAbilityUpgradeUICommand());
-    
+
+        public void Heal() => commandManager.ExecuteCommand(new HealPartyCommand());
+
     }
 }

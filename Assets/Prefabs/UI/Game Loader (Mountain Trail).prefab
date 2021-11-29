@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6419465001682721050}
   - component: {fileID: 8300312957143157284}
   m_Layer: 0
-  m_Name: Game Loader
+  m_Name: Game Loader (Mountain Trail)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,8 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 7312701980012198095, guid: d8ff1d573030f7548b99bb926911b717, type: 3}
+  tutorialDialogue: {fileID: 0}
   abilityLoadoutDialogue: {fileID: 6325284682806283632, guid: 70391c88789ce1e448e243f8b7981347, type: 3}
   abilityUpgradeDialogue: {fileID: 6325284682806283632, guid: 3cc0c5309d52b3f4facc9f08e04e7eb6, type: 3}
+  abilityHealDialogue: {fileID: 7862664228888083454, guid: 2c69d4ddb66e4b6449b4c02600404638, type: 3}
   loseDialogue: {fileID: 6138416899017563420, guid: 047ae3e74657174439e33ec98e3327b9, type: 3}
   winDialogue: {fileID: 2694076728214041893, guid: 784adb70b1fc81b40969e9c300edfa78, type: 3}
   endOfRoundBannerPrefab: {fileID: 2131512404962312442, guid: 012024bff47f03b4a892def8b179ca6b, type: 3}
