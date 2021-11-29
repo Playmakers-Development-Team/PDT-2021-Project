@@ -4,7 +4,6 @@ using Abilities;
 using Audio.Commands;
 using Commands;
 using Managers;
-using TenetStatuses;
 using Turn;
 using Turn.Commands;
 using UI.Core;
@@ -226,12 +225,12 @@ namespace UI.Game
 
         protected override void OnPromote()
         {
-            canvasGroup.interactable = true;
+            Debug.Log("Game Dialogue Promoted");
         }
-
+        
         protected override void OnDemote()
         {
-            canvasGroup.interactable = false;
+            Debug.Log("Game Dialogue Demoted");
         }
 
         #endregion

@@ -3,7 +3,9 @@ using Abilities;
 using Abilities.Shapes;
 using Audio;
 using Commands;
+using Game;
 using Grid;
+using ICSharpCode.NRefactory.Ast;
 using Managers;
 using Turn;
 using UI.Core;
@@ -18,21 +20,21 @@ namespace UI.Game
 {
     internal class GameInputController : DialogueComponent<GameDialogue>
     {
+        private GameManager gameManager;
         private GridManager gridManager;
         private TurnManager turnManager;
         private AudioManager audioManager;
-        private CommandManager commandManager;
         private PlayerControls playerControls;
-        private GameObject pauseMenuInstance;
 
         private List<GameDialogue.ProjectedUnitInfo> lastProjected =
             new List<GameDialogue.ProjectedUnitInfo>();
 
         private bool CanUseAbility => turnManager.CanUseAbility;
 
-        [SerializeField] private GameObject PauseMenu;
-        [SerializeField] private Transform parent;
- 
+        [SerializeField] private GameObject pauseMenu;
+
+        private bool paused;
+
         #region DelegateFunctions
 
         private void PauseGame(InputAction.CallbackContext ctx)
@@ -40,31 +42,36 @@ namespace UI.Game
             if (!ctx.performed)
                 return;
 
-            if (pauseMenuInstance == null)
+            if (gameManager.IsPaused)
             {
-                pauseMenuInstance = Instantiate(PauseMenu,parent);
-                pauseMenuInstance.GetComponent<PauseScreenDialogue>().GameDialgoue = dialogue;
-                audioManager.ChangeMusicState("CombatState","InPauseMenu");
+                manager.Pop();
+
+                gameManager.Resume();
             }
             else
             {
-                Destroy(pauseMenuInstance);
-                pauseMenuInstance = null;
-                audioManager.ChangeMusicState("CombatState","In_Combat");
-                dialogue.Promote();
-
+                audioManager.ChangeMusicState("CombatState", "InPauseMenu");
+            
+                Instantiate(pauseMenu, dialogue.transform.parent);
+                
+                gameManager.Pause();
             }
+
+            paused = !paused;
         }
-        
+
         #endregion
 
         #region MonoBehaviour
-        
+
         private void Update()
         {
-            if ((Mouse.current.rightButton.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame) && dialogue.DisplayMode == GameDialogue.Mode.Aiming)
+            if ((Mouse.current.rightButton.wasPressedThisFrame ||
+                 Keyboard.current.spaceKey.wasPressedThisFrame) &&
+                dialogue.DisplayMode == GameDialogue.Mode.Aiming)
             {
-                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null || !CanUseAbility)
+                if (turnManager.ActingPlayerUnit == null || dialogue.SelectedAbility == null ||
+                    !CanUseAbility)
                     return;
 
                 UseAbility(turnManager.ActingPlayerUnit, dialogue.SelectedAbility,
@@ -74,25 +81,31 @@ namespace UI.Game
             if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 dialogue.unitDeselected.Invoke();
 
-            if (turnManager.ActingPlayerUnit != null &&  Mouse.current.wasUpdatedThisFrame && Camera.main)
+            if (turnManager.ActingPlayerUnit != null && Mouse.current.wasUpdatedThisFrame &&
+                Camera.main)
             {
                 Ray worldRay = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-                Plane plane = new Plane(-Camera.main.transform.forward, gridManager.LevelTilemap.transform.position.z);
-                
+                Plane plane = new Plane(-Camera.main.transform.forward,
+                    gridManager.LevelTilemap.transform.position.z);
+
                 if (!plane.Raycast(worldRay, out float distance))
                     return;
-            
+
                 Vector2 worldPosition = worldRay.GetPoint(distance);
-                Vector2 direction = (worldPosition - gridManager.ConvertCoordinateToPosition(turnManager.ActingPlayerUnit.Coordinate)).normalized;
+                Vector2 direction =
+                    (worldPosition -
+                     gridManager.ConvertCoordinateToPosition(
+                         turnManager.ActingPlayerUnit.Coordinate)).normalized;
                 ShapeDirection shapeDirection = ShapeDirection.FromIsometric(direction);
-                
+
                 dialogue.abilityRotated.Invoke(direction);
-                
+
                 if (dialogue.SelectedAbility != null && CanUseAbility)
-                    ProjectAbility(turnManager.ActingPlayerUnit, dialogue.SelectedAbility, shapeDirection);
+                    ProjectAbility(turnManager.ActingPlayerUnit, dialogue.SelectedAbility,
+                        shapeDirection);
             }
         }
-        
+
         #endregion
 
         #region Abilities
@@ -105,7 +118,8 @@ namespace UI.Game
             foreach (VirtualUnit virtualUnit in virtualUnits)
             {
                 GameDialogue.ProjectedUnitInfo projectedUnitInfo =
-                    new GameDialogue.ProjectedUnitInfo(virtualUnit, dialogue.GetInfo(virtualUnit.Unit));
+                    new GameDialogue.ProjectedUnitInfo(virtualUnit,
+                        dialogue.GetInfo(virtualUnit.Unit));
                 dialogue.unitApplyAbilityProjection.Invoke(projectedUnitInfo);
                 lastProjected.Add(projectedUnitInfo);
             }
@@ -123,10 +137,10 @@ namespace UI.Game
             {
                 dialogue.unitCancelAbilityProjection.Invoke(projectedUnitInfo);
             }
-            
+
             lastProjected.Clear();
         }
-        
+
         #endregion
 
         #region UIComponent
@@ -134,16 +148,15 @@ namespace UI.Game
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
-        
+
         protected override void OnComponentAwake()
         {
+            gameManager = ManagerLocator.Get<GameManager>();
             audioManager = ManagerLocator.Get<AudioManager>();
             gridManager = ManagerLocator.Get<GridManager>();
             turnManager = ManagerLocator.Get<TurnManager>();
-            commandManager = ManagerLocator.Get<CommandManager>();
             playerControls = new PlayerControls();
             playerControls.UI.Pause.performed += PauseGame;
-
         }
 
         protected override void OnComponentEnabled()

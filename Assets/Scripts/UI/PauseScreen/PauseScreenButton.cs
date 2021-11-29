@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace UI.PauseScreen
 {
+    // TODO: Duplicate code. See MainMenuButton.
     public class PauseScreenButton : DialogueComponent<PauseScreenDialogue>
     {
         [SerializeField] protected EventTrigger trigger;
@@ -196,6 +197,9 @@ namespace UI.PauseScreen
             EventSystem.current.SetSelectedGameObject(gameObject);
 
             OnSelected();
+            
+            // Prevents button having to be clicked twice after closing a dialogue
+            Deselected();
         }
 
         private void Deselected()

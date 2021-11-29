@@ -343,5 +343,12 @@ namespace Game
         }
 
         public static bool HasSavedGame() => PlayerPrefs.HasKey(encounterPrefKey);
+        
+        // TODO: Sort
+        public bool IsPaused { get; private set; }
+
+        public void Pause() => IsPaused = true;
+
+        public void Resume() => IsPaused = false;
     }
 }

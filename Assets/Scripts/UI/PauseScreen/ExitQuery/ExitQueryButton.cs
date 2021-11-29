@@ -1,17 +1,14 @@
-﻿using Audio.Commands;
-using Commands;
-using Managers;
-using TMPro;
+﻿using TMPro;
 using UI.Core;
 using UI.Game;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace UI.MainMenu
+namespace UI.PauseScreen.ExitQuery
 {
-    // TODO: Duplicate code. See PauseScreenButton.
-    public class MainMenuButton : DialogueComponent<MainMenuDialogue>
+    // TODO: Duplicate code. See MainMenuButton.
+    public class ExitQueryButton : DialogueComponent<ExitQueryDialogue>
     {
         [SerializeField] protected EventTrigger trigger;
         [SerializeField] protected Animator animator;
@@ -38,8 +35,6 @@ namespace UI.MainMenu
 
         [SerializeField] protected bool interactable;
 
-        private CommandManager commandManager;
-        
         private bool clicked;
         private bool animating;
         private bool wasInteractable;
@@ -105,8 +100,6 @@ namespace UI.MainMenu
 
         protected override void OnComponentAwake()
         {
-            commandManager = ManagerLocator.Get<CommandManager>();
-            
             wasInteractable = interactable;
 
             backgroundImage.material = Instantiate(backgroundImage.material);
@@ -203,8 +196,6 @@ namespace UI.MainMenu
             EventSystem.current.SetSelectedGameObject(gameObject);
 
             OnSelected();
-            
-            Deselected();
         }
 
         private void Deselected()
@@ -234,11 +225,11 @@ namespace UI.MainMenu
 
         #region PanelButton
 
-        protected virtual void OnSelected() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Select")); }
+        protected virtual void OnSelected() {}
 
-        protected virtual void OnDeselected() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Deselect")); }
+        protected virtual void OnDeselected() {}
 
-        protected virtual void OnHoverEnter() { commandManager.ExecuteCommand(new PostSound("Play_Menu_Hover")); }
+        protected virtual void OnHoverEnter() {}
 
         protected virtual void OnHoverExit() {}
 
