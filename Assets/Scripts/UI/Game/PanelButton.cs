@@ -199,7 +199,8 @@ public class PanelButton : DialogueComponent<GameDialogue>
         OnSelected();
         
         // Prevents button having to be clicked twice after closing a dialogue
-        Deselected();
+        // Breaks standard test
+        // Deselected();
     }
 
     private void Deselected()
