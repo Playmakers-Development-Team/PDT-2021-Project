@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 3462641353360193913}
   - component: {fileID: 1640794242405646836}
   m_Layer: 0
-  m_Name: Game Dialogue (Second Iteration)
+  m_Name: Game Dialogue (FINAL - MOUNTAIN TRAIL)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -465,23 +465,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 1833121968823920050, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 1976926496659469617, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -463
       objectReference: {fileID: 0}
     - target: {fileID: 1976926496659469617, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -501,19 +501,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3479188694288460167, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3479188694288460167, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 5284126044501123866, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5284126044501123866, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 6969207551944411330, guid: 75c6cd29b0dab534faafa11130baa3bc, type: 3}
       propertyPath: m_Pivot.x
@@ -779,18 +779,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6487709696776052042}
     m_Modifications:
-    - target: {fileID: 4405854865013119687, guid: 08f8e34ba0505a047a3983d26b63526f, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 240
-      objectReference: {fileID: 0}
-    - target: {fileID: 4405854865013119687, guid: 08f8e34ba0505a047a3983d26b63526f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 267.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 4405854865013119687, guid: 08f8e34ba0505a047a3983d26b63526f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -173
-      objectReference: {fileID: 0}
     - target: {fileID: 6505086531459775862, guid: 08f8e34ba0505a047a3983d26b63526f, type: 3}
       propertyPath: m_Pivot.x
       value: 0

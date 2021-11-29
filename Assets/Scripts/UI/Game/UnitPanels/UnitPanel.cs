@@ -14,6 +14,8 @@ namespace UI.Game.UnitPanels
     internal abstract class UnitPanel : DialogueComponent<GameDialogue>
     {
         [SerializeField] protected RawImage renderImage;
+
+        [SerializeField] private TextMeshProUGUI nameText;
         
         [SerializeField] protected TextMeshProUGUI currentHealthText;
         [SerializeField] protected TextMeshProUGUI baseHealthText;
@@ -116,6 +118,9 @@ namespace UI.Game.UnitPanels
             
             healthFillImage.material.SetFloat(fillId,
                 unitInfo.Unit.HealthStat.Value / (float) unitInfo.Unit.HealthStat.BaseValue);
+
+            if (nameText)
+                nameText.text = unitInfo.Unit.Name;
             
             currentHealthText.text = unitInfo.Unit.HealthStat.Value.ToString();
             baseHealthText.text = unitInfo.Unit.HealthStat.BaseValue.ToString();

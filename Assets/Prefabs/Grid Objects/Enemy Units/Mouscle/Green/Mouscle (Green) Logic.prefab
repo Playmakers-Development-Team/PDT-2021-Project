@@ -69,9 +69,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5791270803152197506, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
+      propertyPath: data.name
+      value: Mouscle
+      objectReference: {fileID: 0}
     - target: {fileID: 7298577721533539764, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
       propertyPath: m_Name
-      value: Mouscle Logic
+      value: Mouscle (Green) Logic
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4429028080c9f5440a901160d4cdd04e, type: 3}
