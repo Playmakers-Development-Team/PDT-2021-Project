@@ -1,6 +1,7 @@
 using System;
 using Commands;
 using Cysharp.Threading.Tasks;
+using Game.Commands;
 using Managers;
 using TMPro;
 using Turn.Commands;
@@ -46,6 +47,8 @@ namespace UI
             
             commandManager.ListenCommand<RoundZeroCommand>(OnRoundZeroCommand);
             commandManager.ListenCommand<StartRoundCommand>(OnStartRoundCommand);
+            
+            commandManager.ListenCommand<LaunchTutorialCommand>(OnLaunchTutorial);
         }
 
         private void OnDisable()
@@ -57,9 +60,21 @@ namespace UI
             commandManager.UnlistenCommand((Action<SpawnAbilityUpgradeUICommand>) SpawnAbilityUpgrade);
             
             commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
+            
+            commandManager.UnlistenCommand<LaunchTutorialCommand>(OnLaunchTutorial);
         }
 
         #endregion
+
+        private void OnLaunchTutorial(LaunchTutorialCommand cmd)
+        {
+            if (!cmd.tutorialObject)
+                return;
+
+            // We just force change the tutorial dialogue, should work well enough
+            tutorialDialogue = cmd.tutorialObject;
+            Debug.Log($"Replacing tutorial with {tutorialDialogue.name}");
+        }
 
         private async void ShowTutorial()
         {

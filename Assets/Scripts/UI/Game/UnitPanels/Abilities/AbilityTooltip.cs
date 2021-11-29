@@ -29,6 +29,7 @@ namespace UI.Game.UnitPanels.Abilities
         [Header("Configurable")]
         [SerializeField] private bool descriptiveIcons;
         [SerializeField] private bool showAbilitySpeed = true;
+        [SerializeField] private bool showAverageAbilitySpeed;
         [SerializeField] private bool showKeywords = true;
 
         protected override void OnComponentAwake()
@@ -89,7 +90,7 @@ namespace UI.Game.UnitPanels.Abilities
                 shapeIcon.sprite = shapeSprite;
             
             // Ability speed
-            speedPanel.SetActive(showAbilitySpeed);
+            speedPanel.SetActive(showAbilitySpeed && (ability.SpeedType != AbilitySpeedType.Average || showAverageAbilitySpeed));
             speedDescription.text = ability.SpeedType.DisplayName();
 
             foreach (Keyword keyword in ability.AllKeywords)

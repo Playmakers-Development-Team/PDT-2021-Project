@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Fast Melee Attack
   m_EditorClassIdentifier: 
+  displayName: 
   description: '[Fast Ability]
 
     A basic 1 tile adjacent attack that deals 3 damage
@@ -21,6 +22,7 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: dde0eaecae798164997efb8cbbf5c7ff, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 2
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 3 Damage"

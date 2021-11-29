@@ -15,6 +15,8 @@ namespace UI.Core
         
         protected UIManager manager;
         protected CanvasGroup canvasGroup;
+
+        protected virtual bool ShouldDemoteOtherDialogues => true;
         
         
         #region MonoBehaviour
@@ -29,7 +31,7 @@ namespace UI.Core
 
             OnDialogueAwake();
             
-            manager.Add(this);
+            manager.Add(this, ShouldDemoteOtherDialogues);
         }
 
         #endregion

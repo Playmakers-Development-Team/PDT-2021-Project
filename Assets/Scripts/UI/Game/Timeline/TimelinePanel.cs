@@ -16,7 +16,8 @@ namespace UI.Game.Timeline
     public class TimelinePanel : DialogueComponent<GameDialogue>
     {
         [SerializeField] private ScrollRect scrollRect;
-
+        [SerializeField] private TextMeshProUGUI helpfulText;
+        
         [SerializeField] private GameObject portraitPrefab;
         [SerializeField] private GameObject dividerPrefab;
         [SerializeField] private GameObject insightButtonPrefab;
@@ -31,7 +32,7 @@ namespace UI.Game.Timeline
         private TurnManager turnManager;
         private CommandManager commandManager;
 
-        private readonly List<TimelinePortrait> portraits = new List<TimelinePortrait>();
+        private readonly List<GameObject> portraits = new List<GameObject>();
         private static readonly int promoted = Animator.StringToHash("promoted");
         private static readonly int demoted = Animator.StringToHash("demoted");
 
@@ -42,12 +43,18 @@ namespace UI.Game.Timeline
         {
             turnManager = ManagerLocator.Get<TurnManager>();
             commandManager = ManagerLocator.Get<CommandManager>();
+
+            helpfulText.text = string.Empty;
         }
 
         protected override void Subscribe()
         {
             dialogue.turnStarted.AddListener(OnTurnStarted);
+            
             dialogue.turnManipulated.AddListener(OnTurnManipulated);
+            dialogue.turnManipulationStarted.AddListener(OnTurnManipulationStarted);
+            dialogue.turnManipulationChosen.AddListener(OnTurnManipulationChosen);
+            dialogue.turnManipulationEnded.AddListener(OnTurnManipulationEnded);
             
             dialogue.promoted.AddListener(OnPromoted);
             dialogue.demoted.AddListener(OnDemoted);
@@ -56,7 +63,11 @@ namespace UI.Game.Timeline
         protected override void Unsubscribe()
         {
             dialogue.turnStarted.RemoveListener(OnTurnStarted);
+            
             dialogue.turnManipulated.RemoveListener(OnTurnManipulated);
+            dialogue.turnManipulationStarted.AddListener(OnTurnManipulationStarted);
+            dialogue.turnManipulationChosen.AddListener(OnTurnManipulationChosen);
+            dialogue.turnManipulationEnded.AddListener(OnTurnManipulationEnded);
             
             dialogue.promoted.RemoveListener(OnPromoted);
             dialogue.demoted.RemoveListener(OnDemoted);
@@ -78,7 +89,27 @@ namespace UI.Game.Timeline
             UpdatePortraits();
         }
 
-        private void OnTurnManipulated(GameDialogue.TurnInfo info) => UpdatePortraits();
+        private void OnTurnManipulationStarted()
+        {
+            helpfulText.text = "Choose a character to move";
+        }
+
+        private void OnTurnManipulationChosen(GameDialogue.UnitInfo unitInfo)
+        {
+            helpfulText.text = "Place that character before another";
+        }
+
+        private void OnTurnManipulationEnded()
+        {
+            helpfulText.text = string.Empty;
+        }
+
+        private void OnTurnManipulated(GameDialogue.UnitInfo unitInfo)
+        {
+            UpdatePortraits();
+            dialogue.unitDeselected.Invoke();
+            dialogue.turnManipulationEnded.Invoke();
+        }
 
         public void OnDelayButtonPressed()
         {
@@ -105,23 +136,17 @@ namespace UI.Game.Timeline
                 .Where(u => !currentTurnQueue.Contains(u))
                 .Where(u => !u.IsDead);
             //currentTurnQueue.RemoveRange(0, startIndex);
-            if (drawInsightBtn)
+            if (drawInsightBtn && turnManager.CanPlayerTurnManipulate)
                 CreateInsightButton();
 
             // CreatePortraits(currentTurnQueue, startIndex);
             CreatePortraitsForOneRound(currentTurnQueue, nextTurnQueue);
         }
 
-        private void maintainSelectedThroughTurns()
-        {
-            if (dialogue.SelectedUnit != null)
-                dialogue.unitSelected.Invoke(dialogue.SelectedUnit);
-        }
-
         private void ClearPortraits()
         {
             for (int i = portraits.Count - 1; i >= 0; i--)
-                portraits[i].Destroy();
+                Destroy(portraits[i]);
 
             portraits.Clear();
         }
@@ -150,10 +175,11 @@ namespace UI.Game.Timeline
 
                 GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
                 portrait.Assign(info);
-                portraits.Add(portrait);
+                portraits.Add(obj);
             }
         }
 
+        //used for old multi turn
         private void CreatePortraits(List<IUnit> units, int startIndex)
         {
             int count = 0;
@@ -186,7 +212,7 @@ namespace UI.Game.Timeline
 
             GameDialogue.UnitInfo info = dialogue.GetInfo(unit);
             portrait.Assign(info);
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         private void CreateDivider(int round)
@@ -195,7 +221,7 @@ namespace UI.Game.Timeline
             obj.GetComponentInChildren<TextMeshProUGUI>().text = round.ToString();
             TimelinePortrait portrait = obj.GetComponent<TimelinePortrait>();
 
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         private void CreateInsightButton()
@@ -205,7 +231,7 @@ namespace UI.Game.Timeline
             obj.GetComponentInChildren<TextMeshProUGUI>().text =
                 turnManager.Insight.Value.ToString();
 
-            portraits.Add(portrait);
+            portraits.Add(obj);
         }
 
         #endregion
