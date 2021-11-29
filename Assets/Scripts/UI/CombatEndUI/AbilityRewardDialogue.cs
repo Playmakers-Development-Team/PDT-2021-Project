@@ -127,6 +127,11 @@ namespace UI.CombatEndUI
             abilitySelectCanvasScript.ShowAbilitySelectCanvas();
         }
 
+        protected internal void UpdateCurrentAbilities()
+        {
+            abilitySelectCanvasScript.UpdateCurrentAbilities(activeUnitCard.loadoutUnitInfo.AbilityInfo);
+        }
+
         protected internal void SetActiveUnitCard(UnitCard unitCard)
         {
             if (unitCard == null)

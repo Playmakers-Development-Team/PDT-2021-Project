@@ -108,7 +108,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         public void RemoveSelectedAbility()
         {
-            dialogue.activeAbilitiesCard.RemoveSelectedAbility(dialogue.activeUnitCard.loadoutUnitInfo.Unit);
+            dialogue.activeAbilitiesCard.RemoveSelectedAbility(dialogue.activeUnitCard.loadoutUnitInfo);
+            dialogue.UpdateCurrentAbilities();
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
