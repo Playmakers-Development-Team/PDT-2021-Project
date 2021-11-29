@@ -15,10 +15,13 @@ namespace Audio.Commands
     public class ChangeWalkingStateCommand : Command
     {
         public bool IsWalking { get; }
+        
+        public bool IsGrass { get; }
 
-        public ChangeWalkingStateCommand(bool isWalking)
+        public ChangeWalkingStateCommand(bool isWalking, bool isGrass)
         {
             this.IsWalking = isWalking;
+            this.IsGrass = isGrass;
         }
     }
     

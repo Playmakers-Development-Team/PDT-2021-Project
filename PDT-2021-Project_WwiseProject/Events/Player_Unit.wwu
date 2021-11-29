@@ -235,6 +235,16 @@
 								</Reference>
 							</ReferenceList>
 						</Action>
+						<Action Name="" ID="{F21E0C24-AF45-407A-85D4-070DEEBA657B}" ShortID="533439544">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Grass Footsteps" ID="{E6AB1BC7-C0CA-4431-816D-44334FB0D9D3}" WorkUnitID="{AE0B19C4-DC5B-438C-A704-9B570E90E460}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
 					</ChildrenList>
 				</Event>
 				<Event Name="Play_Grass_Footsteps" ID="{A2015316-E4A3-459E-A5C2-FE68D0D85D0F}">

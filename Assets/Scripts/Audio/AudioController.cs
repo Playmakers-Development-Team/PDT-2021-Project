@@ -23,7 +23,7 @@ namespace Audio
                 DontDestroyOnLoad(gameObject);
                 SceneManager.sceneLoaded += ChangeMusic;
                 
-                if(SceneManager.GetActiveScene().name.Contains("City"))
+                if(SceneManager.GetActiveScene().name.ToUpper().Contains("CITY"))
                     AkSoundEngine.PostEvent("Play_Ruined_City_Theme", gameObject);
                 else
                     AkSoundEngine.PostEvent("Play_Mountain_Trail_Theme", gameObject);
@@ -35,7 +35,7 @@ namespace Audio
             commandManager.ListenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
                 cmd.StateName));
             
-            commandManager.ListenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd.IsWalking));
+            commandManager.ListenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd));
             
             commandManager.ListenCommand<PostSound>(cmd => PostSound(cmd.SoundName));
         }
@@ -45,7 +45,7 @@ namespace Audio
             commandManager.UnlistenCommand<ChangeMusicStateCommand>(cmd => ChangeMusicState(cmd.StateGroup,
                 cmd.StateName));
             
-            commandManager.UnlistenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd.IsWalking));
+            commandManager.UnlistenCommand<ChangeWalkingStateCommand>(cmd => ChangeWalkingState(cmd));
             
             commandManager.UnlistenCommand<PostSound>(cmd => PostSound(cmd.SoundName));
         }
@@ -59,12 +59,14 @@ namespace Audio
         /// <summary>
         /// Could not figure out how states worked for walking so instead I made a work around
         /// </summary>
-        private void ChangeWalkingState(bool isWalking)
+        private void ChangeWalkingState(ChangeWalkingStateCommand cmd)
         {
-            if (isWalking)
+            if (cmd.IsWalking)
             {
-                //AkSoundEngine.SetState("WalkingState", "Walking");
-                PostSound("Play_Unit_Walking");
+                if(cmd.IsGrass)
+                    PostSound("Play_Grass_Footsteps");
+                else
+                    PostSound("Play_Unit_Walking");
             }
             else
             {

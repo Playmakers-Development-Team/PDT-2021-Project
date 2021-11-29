@@ -17,6 +17,7 @@ using Units.Stats;
 using TenetStatuses;
 using Units.Virtual;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utilities;
 using Random = UnityEngine.Random;
 
@@ -455,7 +456,8 @@ namespace Units
 
         public async void MoveUnit(StartMoveCommand moveCommand)
         {
-            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(true));
+            bool isGrassWalking = !SceneManager.GetActiveScene().name.ToUpper().Contains("CITY");
+            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(true, isGrassWalking));
             
             IUnit unit = this;
             Vector2Int newCoordinate = moveCommand.TargetCoords;
@@ -530,7 +532,7 @@ namespace Units
             
             // Should be called when all the movement and tweening has been completed
             commandManager.ExecuteCommand(new EndMoveCommand(moveCommand));
-            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(false));
+            commandManager.ExecuteCommand(new ChangeWalkingStateCommand(false, isGrassWalking));
         }
 
         #region RandomizeNames
