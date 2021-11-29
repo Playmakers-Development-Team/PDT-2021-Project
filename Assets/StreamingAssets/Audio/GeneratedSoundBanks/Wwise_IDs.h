@@ -17,11 +17,13 @@ namespace AK
         static const AkUniqueID FRANCISCO_SUCKS = 3610251637U;
         static const AkUniqueID IN_COMBAT = 2116791127U;
         static const AkUniqueID OUT_OF_COMBAT = 3162566204U;
+        static const AkUniqueID PLAY_ALLY_SPAWN = 1515718740U;
         static const AkUniqueID PLAY_BATTLEFIELD_CURSOR = 1114270429U;
         static const AkUniqueID PLAY_BRUSH_STROKE = 4184699073U;
         static const AkUniqueID PLAY_CAMPFIRE_AMBIENCE = 2984727828U;
         static const AkUniqueID PLAY_CREDITS_THEME = 4043016790U;
         static const AkUniqueID PLAY_ESTELLE_ABILITY = 701627935U;
+        static const AkUniqueID PLAY_GRASS_FOOTSTEPS = 546793308U;
         static const AkUniqueID PLAY_HELENA_ABILITY = 2350892418U;
         static const AkUniqueID PLAY_MENU_DESELECT = 3771192879U;
         static const AkUniqueID PLAY_MENU_HOVER = 3835684012U;
@@ -33,6 +35,7 @@ namespace AK
         static const AkUniqueID PLAY_PAGE_TURN = 786024383U;
         static const AkUniqueID PLAY_POSITIVE_HIT = 2175118573U;
         static const AkUniqueID PLAY_RUINED_CITY_THEME = 1017112381U;
+        static const AkUniqueID PLAY_TERRAIN_SPAWN = 643292685U;
         static const AkUniqueID PLAY_TURN_MANIPULATION_TOGGLE = 495033984U;
         static const AkUniqueID PLAY_UI_SLIDING = 3062144419U;
         static const AkUniqueID PLAY_UNIT_DESPAWN = 3788644491U;

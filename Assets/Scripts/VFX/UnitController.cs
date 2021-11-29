@@ -109,9 +109,9 @@ namespace VFX.VFX
 
         private void OnTurnQueueCreated(TurnQueueCreatedCommand cmd)
         {
-            SpawnUnits(obstacles.Values, obstacleDelay);
-            SpawnUnits(enemies.Values, enemyDelay);
-            SpawnUnits(players.Values, playerDelay);
+            SpawnUnits(obstacles, obstacleDelay);
+            SpawnUnits(enemies, enemyDelay);
+            SpawnUnits(players, playerDelay);
         }
 
         private void OnUnitKilled(KilledUnitCommand cmd)
@@ -139,13 +139,34 @@ namespace VFX.VFX
 
             return array;
         }
-
-        private async void SpawnUnits(IEnumerable<Animator> animators, float delay = 0.0f)
+        
+        private async void SpawnUnits(Dictionary<GridObject, Animator> unitDictionary, float delay = 0.0f)
         {
+            Dictionary<GridObject, Animator>.ValueCollection animators = unitDictionary.Values;
+            
             await UniTask.Delay((int) (delay * 1000.0f));
             
-            commandManager.ExecuteCommand(new PostSound("Play_Unit_Spawn"));
+            commandManager.ExecuteCommand(new PostSound("Play_Terrain_Spawn"));
             
+            foreach (Animator animator in animators)
+            {
+                if (!Application.isPlaying)
+                    return;
+                
+                animator.SetTrigger(spawn);
+            }
+        }
+
+        private async void SpawnUnits(Dictionary<IUnit, Animator> unitDictionary, float delay = 0.0f)
+        {
+            Dictionary<IUnit, Animator>.ValueCollection animators = unitDictionary.Values;
+            
+            await UniTask.Delay((int) (delay * 1000.0f));
+
+            commandManager.ExecuteCommand(unitDictionary == players
+                ? new PostSound("Play_Ally_Spawn")
+                : new PostSound("Play_Unit_Spawn"));
+
             foreach (Animator animator in animators)
             {
                 if (!Application.isPlaying)
