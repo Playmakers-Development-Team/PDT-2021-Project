@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Abilities;
+using Commands;
 using Managers;
 using TenetStatuses;
-using UI.CombatEndUI.AbilityLoadout;
-using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityUpgrading;
+using UI.Commands;
 using UI.Core;
-using Units;
 using Units.Players;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +17,10 @@ namespace UI.CombatEndUI.PanelScripts
 {
     public class AbilitySelectCanvasScript : DialogueComponent<AbilityRewardDialogue>
     {
+        [Header("Canvas")]
+        [SerializeField] protected Canvas abilitySelectCanvas;
+        [SerializeField] protected Canvas finalAbilitiesCanvas;
+        
         // New ability buttons and script references
         [SerializeField] private GameObject newAbilityPrefab;
         [SerializeField] private int newAbilityCount = 3;
@@ -68,14 +71,7 @@ namespace UI.CombatEndUI.PanelScripts
         
         private void UpdateAbilityScroll(Vector2 arg0)
         {
-            if(currentSelectedAbility != null)
-                currentSelectedAbility.Deselect();
-                
-            // Make no ability selected
-            currentSelectedAbility = null;
-                
-            // Turn Off Visual Placeholder
-            selectedAbilityImage.enabled = false;
+            DeselectAbility();
         }
         
         #endregion
@@ -118,6 +114,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForLoadout(TenetType newTenetType, List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             tenetType = newTenetType;
             currentAbilityInfos = oldAbilityInfos;
 
@@ -141,6 +139,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         internal void RedrawForUpgrade(List<LoadoutAbilityInfo> oldAbilityInfos)
         {
+            DestroyAbilityList();
+            
             currentAbilityInfos = oldAbilityInfos;
 
             newAbilityInfos = GetUpgrades(oldAbilityInfos);
@@ -160,10 +160,50 @@ namespace UI.CombatEndUI.PanelScripts
             panelSlideAnim.SetTrigger("Play");
             Invoke("FadeInElements", 1.5f);
         }
+
+        private void DestroyAbilityList()
+        {
+            for (int i = abilityButtons.Count - 1; i >= 0; i--)
+            {
+                Destroy(abilityButtons[i].gameObject);
+                abilityButtons.RemoveAt(i);
+            }
+        }
         
         #endregion
 
         #region Utility Functions
+
+        public void UpdateCurrentAbilities(List<LoadoutAbilityInfo> abilityInfos)
+        {
+            currentAbilityInfos = abilityInfos;
+        }
+        
+        public void ShowAbilitySelectCanvas()
+        {
+            abilitySelectCanvas.enabled = true;
+            finalAbilitiesCanvas.enabled = true;
+        }
+
+        public void HideAbilitySelectCanvas()
+        {
+            DeselectAbility();
+            
+            abilitySelectCanvas.enabled = false;
+            finalAbilitiesCanvas.enabled = false;
+        }
+
+        private void DeselectAbility()
+        {
+            if(currentSelectedAbility != null)
+                currentSelectedAbility.Deselect();
+                
+            // Make no ability selected
+            currentSelectedAbility = null;
+                
+            // Turn Off Visual Placeholder
+            selectedAbilityImage.enabled = false;
+        }
         
         private void FadeInElements()
         {
@@ -171,13 +211,16 @@ namespace UI.CombatEndUI.PanelScripts
             buttonFadeAnim.SetTrigger("Play");
 
             // The return button should only be available if we're ability upgrading
-            // Temp disabled since it's broken
-            /* if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
-                returnButtonFadeAnim.SetTrigger("Play"); */
+            if (dialogue.GetType() == typeof(AbilityUpgradeDialogue))
+                returnButtonFadeAnim.SetTrigger("Play");
         }
         
         public void AddSelectedAbility()
         {
+            // Don't add a new ability if the user has more than 4 abilities
+            if (currentAbilityInfos.Count >= 4)
+                return;
+            
             foreach (var abilityInfo in newAbilityInfos)
             {
                 if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
@@ -198,8 +241,9 @@ namespace UI.CombatEndUI.PanelScripts
                 LoadoutAbilityInfo newLoadoutAbility =
                     dialogue.GetInfo(selectedAbilities[i]);
                 
-                // Skip the current iteration if the character already owns the ability
-                if(currentAbilityInfos.Contains(newLoadoutAbility))
+                // Skip the current iteration if the character already owns the ability OR
+                // Skip the current iteration if the ability is an upgrade
+                if(currentAbilityInfos.Contains(newLoadoutAbility) || newLoadoutAbility.Ability.name.Contains("+"))
                     continue;
                 
                 abilityInfos.Add(newLoadoutAbility);
@@ -249,10 +293,9 @@ namespace UI.CombatEndUI.PanelScripts
             }
 
             if (upgradedAbilityInfos.Count == 0)
-            {
-                Debug.LogWarning("No ability upgrades found for the select unit. " +
-                                 "Returning an empty ability upgrade list");
-            }
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new NoUpgradesCommand());
+            else
+                ManagerLocator.Get<CommandManager>().ExecuteCommand(new UpgradesAvailableCommand());
 
             return upgradedAbilityInfos;
         }

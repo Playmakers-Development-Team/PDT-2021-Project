@@ -1517,7 +1517,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_TargetDisplay: 0
 --- !u!114 &6709641043172175541
 MonoBehaviour:
@@ -1571,16 +1571,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe66f0d204bd5e41b61dd442bf37f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilitySelectCanvas: {fileID: 6709641043172175542}
+  finalAbilitiesCanvas: {fileID: 2693468180404292627}
   newAbilityPrefab: {fileID: 108787045736060160, guid: 6afa377da79dfae419c255cf0a4d175c, type: 3}
   newAbilityCount: 3
   upgradeAbilityCap: 2147483647
   abilityScrollView: {fileID: 5475317779970744653}
   selectedAbilityImage: {fileID: 3759389217051405547}
   selectedOffset: {x: 2, y: -2, z: 0}
-  abilityPool: {fileID: 11400000, guid: d91dc7ebe45588c4ebfe6d3641f677e2, type: 2}
+  abilityPool: {fileID: 11400000, guid: f26ebd83b3dbefd418384cab3e81c998, type: 2}
   panelSlideAnim: {fileID: 7019124565549394758}
   panelFadeAnim: {fileID: 2081630687781245622}
   buttonFadeAnim: {fileID: 437122127601176348}
+  returnButtonFadeAnim: {fileID: 0}
 --- !u!1 &7673897555564349645
 GameObject:
   m_ObjectHideFlags: 0

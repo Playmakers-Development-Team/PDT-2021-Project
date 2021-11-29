@@ -14,26 +14,22 @@ namespace UI.MainMenu
         [SerializeField] private GameTitleComponent gameTitleComponent;
         [SerializeField] private CharacterImageComponent characterImageComponent;
         [SerializeField] private Transform mainMenuParent;
+        [SerializeField] private GameObject settingsMenuPrefab;
         [SerializeField] private GameObject exitConfirmationPrefab;
-        [SerializeField] private GameObject MainMenuButtonPrefab;
+        [SerializeField] private GameObject creditsDialoguePrefab;
 
-        private GameObject exitConfirmedPrefabInstance;
-        private GameObject mainMenuPrefabInstance;
+
         private CommandManager commandManager;
 
 
         #region Events
 
         internal readonly Event settingConfirmed = new Event();
-        internal readonly Event settingsClosed = new Event();
         internal readonly Event creditsConfirmed = new Event();
-        internal readonly Event creditsClosed = new Event();
         internal readonly Event gameStarted = new Event();
-        internal readonly Event exitConfirmed = new Event();
+        internal readonly Event gameContinued = new Event();
         internal readonly Event exitStarted = new Event();
-        internal readonly Event cancelExit = new Event();
         internal readonly Event buttonSelected = new Event();
-        
 
         #endregion
 
@@ -50,62 +46,38 @@ namespace UI.MainMenu
         { 
             base.OnDialogueAwake();
             commandManager = ManagerLocator.Get<CommandManager>();
-            mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
             characterImageComponent.RandomizeCharacterSprite();
             gameTitleComponent.UpdateTitle(characterImageComponent.GetCharacter());
 
             #region Listeners
 
-            exitStarted.AddListener(() =>
-            {
-                exitConfirmedPrefabInstance = Instantiate(exitConfirmationPrefab, mainMenuParent);
-                Destroy(mainMenuPrefabInstance);
-            });
-
-            exitConfirmed.AddListener(() =>
-            {
-                Application.Quit();
-#if UNITY_EDITOR
-                UnityEditor.EditorApplication.isPlaying = false;
-#endif
-            });
-            
-            cancelExit.AddListener(() =>
-            {
-               mainMenuPrefabInstance = Instantiate(MainMenuButtonPrefab, mainMenuParent);
-               Destroy(exitConfirmedPrefabInstance);
-            });
-            
+            // TODO: These can be moved to the buttons.
             gameStarted.AddListener(() =>
             {
                 commandManager.ExecuteCommand(new PlayGameCommand());
             });
+            
+            gameContinued.AddListener(() =>
+            {
+                commandManager.ExecuteCommand(new ContinueGameCommand());
+            });
 
             settingConfirmed.AddListener(() =>
             {
-                //TODO: Open Settings Menu
+                Instantiate(settingsMenuPrefab, transform.parent);
             });
-            
-            settingsClosed.AddListener(() =>
-            {
-                //TODO: Close Settings Menu
-            });
-            
+
             creditsConfirmed.AddListener(() =>
             {
-                //TODO: Open Credits Menu
+                Instantiate(creditsDialoguePrefab, transform.parent);
             });
             
-            creditsClosed.AddListener(() =>
+            exitStarted.AddListener(() =>
             {
-                //TODO: Close Credits Menu
+                Instantiate(exitConfirmationPrefab, transform.parent);
             });
-            
+
             #endregion
         }
-        
-        
-
-
     }
 }

@@ -34,8 +34,7 @@ namespace UI.CombatEndUI.AbilityLoadout
 
             // Hide Panels
             unitSelectCanvas.enabled = false;
-            abilitySelectCanvas.enabled = false;
-            finalAbilitiesCanvas.enabled = false;
+            abilitySelectCanvasScript.HideAbilitySelectCanvas();
 
             // Listen to Events
             abilityButtonPress.AddListener(AbilitySelectedCommand =>
@@ -75,11 +74,12 @@ namespace UI.CombatEndUI.AbilityLoadout
             abilitySwapConfirm.AddListener(() =>
             {
                 // Skip ability swap if there is an empty old or new ability
-                if (oldAbilityDetailsPanel.abilityName.text.Equals("") || 
-                    newAbilityDetailsPanel.abilityName.text.Equals(""))
+                if (newAbilityDetailsPanel.abilityName.text.Equals(""))
                     return;
                 
-                unitSelectCanvasScript.RemoveSelectedAbility();
+                // Only remove old selected ability if it is selected
+                if (!oldAbilityDetailsPanel.abilityName.text.Equals(""))
+                    unitSelectCanvasScript.RemoveSelectedAbility();
                 
                 abilitySelectCanvasScript.AddSelectedAbility();
             });

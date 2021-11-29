@@ -28,8 +28,6 @@ namespace UI.CombatEndUI
         internal readonly Event clearNewAbilityDetails = new Event();
         
         [SerializeField] protected Canvas unitSelectCanvas;
-        [SerializeField] protected Canvas abilitySelectCanvas;
-        [SerializeField] protected Canvas finalAbilitiesCanvas;
         [SerializeField] protected internal UnitSelectCanvasScript unitSelectCanvasScript;
         [SerializeField] protected AbilitySelectCanvasScript abilitySelectCanvasScript;
 
@@ -98,10 +96,10 @@ namespace UI.CombatEndUI
         private void OnUnitSelectPanel()
         {
             unitSelectCanvas.enabled = true;
-            abilitySelectCanvas.enabled = false;
-            finalAbilitiesCanvas.enabled = false;
+            abilitySelectCanvasScript.HideAbilitySelectCanvas();
             
             unitSelectCanvasScript.Redraw(units);
+            unitSelectCanvasScript.FadeInText();
         }
 
         #endregion
@@ -110,12 +108,7 @@ namespace UI.CombatEndUI
 
         private void OnUnitSelected(LoadoutUnitInfo selectedUnit)
         {
-            unitSelectCanvasScript.SetActiveUnit(selectedUnit);
-
-            unitSelectCanvasScript.DisableUnitButtons();
-            
-            unitSelectCanvasScript.FadeOutUnits(fadeOutTime);
-            unitSelectCanvasScript.FadeOutText();
+            unitSelectCanvasScript.ShowUnitSelectCanvas(selectedUnit, fadeOutTime);
         }
 
         private void OnUnitSlide()
@@ -131,12 +124,23 @@ namespace UI.CombatEndUI
         // Overriden in inherited classes
         protected virtual void OnAbilitySelectPanel(LoadoutUnitInfo loadoutUnitInfo)
         {
-            abilitySelectCanvas.enabled = true;
-            finalAbilitiesCanvas.enabled = true;
+            abilitySelectCanvasScript.ShowAbilitySelectCanvas();
+        }
+
+        protected internal void UpdateCurrentAbilities()
+        {
+            abilitySelectCanvasScript.UpdateCurrentAbilities(activeUnitCard.loadoutUnitInfo.AbilityInfo);
         }
 
         protected internal void SetActiveUnitCard(UnitCard unitCard)
         {
+            if (unitCard == null)
+            {
+                Destroy(activeUnitCard.gameObject);
+                Destroy(activeAbilitiesCard.gameObject);
+                return;
+            }
+
             activeUnitCard = unitCard;
         }
         
@@ -187,6 +191,9 @@ namespace UI.CombatEndUI
                     break;
                 case TenetType.Sorrow:
                     loadoutAbilityInfo.Render = abilityImages[5];
+                    break;
+                case TenetType.Neutral:
+                    loadoutAbilityInfo.Render = abilityImages[6];
                     break;
                 default:
                     throw new Exception($"Could not get {nameof(LoadoutAbilityInfo)} for {ability}.");

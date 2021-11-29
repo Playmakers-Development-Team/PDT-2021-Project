@@ -16,6 +16,7 @@ namespace UI
         [SerializeField] private Sprite humilityIcon;
         [SerializeField] private Sprite joyIcon;
         [SerializeField] private Sprite sorrowIcon;
+        [SerializeField] private Sprite neutralIcon;
         
         [SerializeField, ColorUsage(true, true)] private Color attackColour;
         [SerializeField, ColorUsage(true, true)] private Color defenceColour;
@@ -26,6 +27,7 @@ namespace UI
         [SerializeField, ColorUsage(true, true)] private Color humilityColour;
         [SerializeField, ColorUsage(true, true)] private Color joyColour;
         [SerializeField, ColorUsage(true, true)] private Color sorrowColour;
+        [SerializeField, ColorUsage(true, true)] private Color neutralColor;
         
         
         #region Singleton
@@ -73,6 +75,7 @@ namespace UI
                 TenetType.Apathy => Instance.apathyIcon,
                 TenetType.Joy => Instance.joyIcon,
                 TenetType.Sorrow => Instance.sorrowIcon,
+                TenetType.Neutral => Instance.neutralIcon,
                 _ => null
             };
         }
@@ -91,6 +94,7 @@ namespace UI
                 TenetType.Apathy => Instance.apathyColour,
                 TenetType.Joy => Instance.joyColour,
                 TenetType.Sorrow => Instance.sorrowColour,
+                TenetType.Neutral => Instance.neutralColor,
                 _ => Color.black
             };
         }

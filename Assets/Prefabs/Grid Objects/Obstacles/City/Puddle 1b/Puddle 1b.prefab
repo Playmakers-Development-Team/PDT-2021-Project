@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8014570699194010391
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7340816970708198078}
+  - component: {fileID: 8023587513310500842}
+  m_Layer: 0
+  m_Name: Puddle 1b
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7340816970708198078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8014570699194010391}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2209087757687450858}
+  - {fileID: 5871441107198428767}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8023587513310500842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8014570699194010391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110c333121b44419a5b92eb58df8fc70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoSetTilemap: 1
+  levelTilemap: {fileID: 0}
+  coordinate: {x: 0, y: 0}
+--- !u!1001 &302711829814732162
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7340816970708198078}
+    m_Modifications:
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6282274383927626336, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+      propertyPath: m_Name
+      value: Puddle 1a Logic
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+--- !u!4 &5871441107198428767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6145441354170901469, guid: bfb2f6695b29ebd4eb0b373c0ea641b6, type: 3}
+  m_PrefabInstance: {fileID: 302711829814732162}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3250209019862961720
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7340816970708198078}
+    m_Modifications:
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7616056939281036732, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+      propertyPath: m_Name
+      value: Puddle 1a Graphics
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+--- !u!4 &2209087757687450858 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3725407622391407314, guid: 93cb2788d6aee4e4696a6a43a6947d57, type: 3}
+  m_PrefabInstance: {fileID: 3250209019862961720}
+  m_PrefabAsset: {fileID: 0}

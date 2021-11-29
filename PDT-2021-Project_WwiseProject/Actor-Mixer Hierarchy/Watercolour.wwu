@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{E8968A01-F977-4EE3-895A-108D2C43EAD8}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Watercolour" ID="{E8968A01-F977-4EE3-895A-108D2C43EAD8}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Watercolour" ID="{D59B32E4-661C-4FB3-A377-4714743C245C}" ShortID="491892061">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Watercolour" ID="{4EFE299A-CBD5-4129-886A-D16E4EF8F1FC}">
+							<Language>SFX</Language>
+							<AudioFile>Watercolour.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="40395153"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Watercolour" ID="{4EFE299A-CBD5-4129-886A-D16E4EF8F1FC}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

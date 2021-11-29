@@ -10,6 +10,9 @@ namespace Units.Players
     {
         [Tooltip("The ability pool which will be used to pickup new ability at the end of encounter")]
         [SerializeField] private AbilityPool abilityPickupPool;
+        [SerializeField] private bool allowsAbilityGain = true;
+        [SerializeField] private bool allowsAbilityUpgrade = true;
+        [SerializeField] private bool allowsAbilityHeal = true;
         [SerializeField] private bool persistentUnitData = false;
 
         private PlayerManager PlayerManager => (PlayerManager) unitManagerT;
@@ -26,6 +29,17 @@ namespace Units.Players
 
             PlayerManager.IsUnitDataPersistent = persistentUnitData;
             PlayerManager.AbilityPickupPool = abilityPickupPool;
+            PlayerManager.AllowAbilityGain = allowsAbilityGain;
+            PlayerManager.AllowAbilityUpgrade = allowsAbilityUpgrade;
+            PlayerManager.AllowAbilityHeal = allowsAbilityHeal;
+
+            if (!PlayerManager.AllowAbilityGain
+                && !PlayerManager.AllowAbilityUpgrade
+                && !PlayerManager.AllowAbilityHeal)
+            {
+                Debug.LogWarning("We probably don't want to prevent players from doing any "
+                                 + "ability pickup, ability upgrade and healing. They will literally be stuck!!");
+            }
         }
         
         // TODO: Repeated code. See UnitController.OnGridObjectsReady.

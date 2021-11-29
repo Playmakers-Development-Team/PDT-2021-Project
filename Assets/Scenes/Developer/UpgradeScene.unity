@@ -303,13 +303,17 @@ PrefabInstance:
       value: Niles
       objectReference: {fileID: 0}
     - target: {fileID: 4207220006372852487, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
+      propertyPath: data.abilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4207220006372852487, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: e41d43a2bac9b0b4ba5f9c3bdc51e6ef, type: 2}
     - target: {fileID: 4207220006372852487, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 5b696d7d7795b5746b15393306e4fa0e, type: 2}
+      objectReference: {fileID: 11400000, guid: 2d536796daea3e4aca17b47b0f614615, type: 2}
     - target: {fileID: 4869564425208384771, guid: 6f218ad45a6b21c42b7dce97c9cd2cea, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -378,6 +382,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 626789158}
     m_Modifications:
+    - target: {fileID: 7228237224685345092, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
+      propertyPath: persistentUnitData
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7228237224685345093, guid: 359b1b9504ab233449e86481bdfc0166, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1903,13 +1911,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5173866202875139962, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
+      propertyPath: data.abilities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5173866202875139962, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
       propertyPath: data.abilities.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 9cdef02563ed7364e8517376ef2ce814, type: 2}
+      objectReference: {fileID: 11400000, guid: 81dbbde15d5646c138b079576dae00c9, type: 2}
     - target: {fileID: 5173866202875139962, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
       propertyPath: data.abilities.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: d0994a0cd410ec840adb269d1da1a79c, type: 2}
+      objectReference: {fileID: 11400000, guid: 8d3d437d1fea409dba9214ab462e5a34, type: 2}
     - target: {fileID: 5173866202875139962, guid: 3398441b0e9db9343bf9bc617e2ca309, type: 3}
       propertyPath: data.abilities.Array.data[2]
       value: 

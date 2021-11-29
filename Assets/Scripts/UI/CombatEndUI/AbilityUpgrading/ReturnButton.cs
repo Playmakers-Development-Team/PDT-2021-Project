@@ -8,6 +8,7 @@ namespace UI.CombatEndUI.AbilityUpgrading
     {
         public void OnPressed()
         {
+            dialogue.SetActiveUnitCard(null);
             dialogue.showUnitSelectPanel.Invoke();
         }
 

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
+  m_Name: Giving Serious Motivation+
+  m_EditorClassIdentifier: 
+  displayName: 
+  description: '[Very Slow Ability]
+
+    Give 3 Attack and 1 Passion.
+
+    KINDLED
+    2 on Target - Grant 2 Passion.
+
+    KINDLED 4 on Target - Grant 5 Attack.'
+  shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}
+  excludeUserFromTargets: 1
+  speed: -2
+  speedType: 0
+  representedTenet: 2
+  effects:
+  - name: Default, 3 Attack and Provide 1 Passion
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 3
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 1
+    bonuses: []
+    costs: []
+    keywords: []
+  - name: "Target \u27A4 Provide 2 Passion WITH Kindled 2 to User"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 0
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 2
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 0d09ef5187cb68bd1ab56f9bda424844, type: 2}
+  - name: "Target \u27A4 5 Attack WITH Kindled 4 to Target"
+    affectTargets: 1
+    affectUser: 0
+    effectOrder: 0
+    damageValue: 0
+    directDamage: 0
+    defenceValue: 0
+    attackValue: 5
+    defenceForEncounter: 0
+    attackForEncounter: 0
+    providingTenet:
+      tenetType: 2
+      stackCount: 0
+    bonuses: []
+    costs: []
+    keywords:
+    - {fileID: 11400000, guid: 065ed2fc5868e9086a8aa24584e5cd34, type: 2}
+  visualEffects: {fileID: 3444841008798590005, guid: 44d71dfcfb00987f5957ac886f83ad3e, type: 3}
+  userEffects: []

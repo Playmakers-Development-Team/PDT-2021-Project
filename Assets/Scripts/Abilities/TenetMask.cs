@@ -13,7 +13,8 @@ namespace Abilities
         Passion = 4, 
         Apathy = 8, 
         Joy = 16, 
-        Sorrow = 32
+        Sorrow = 32,
+        Neutral = 64
     }
 
     public static class TenetMaskExtensions
@@ -26,6 +27,7 @@ namespace Abilities
             TenetType.Apathy => (tenetMask & TenetMask.Apathy) != 0,
             TenetType.Joy => (tenetMask & TenetMask.Joy) != 0,
             TenetType.Sorrow => (tenetMask & TenetMask.Sorrow) != 0,
+            TenetType.Neutral => (tenetMask & TenetMask.Neutral) != 0,
             _ => throw new ArgumentOutOfRangeException(nameof(tenetType), tenetType, null)
         };
 
@@ -42,6 +44,7 @@ namespace Abilities
                 GetIndividualDisplayName(tenetMask, TenetType.Apathy),
                 GetIndividualDisplayName(tenetMask, TenetType.Joy),
                 GetIndividualDisplayName(tenetMask, TenetType.Sorrow),
+                GetIndividualDisplayName(tenetMask, TenetType.Neutral),
             };
             
             return string.Join(", ", displayNames.Where(s => !string.IsNullOrEmpty(s)));

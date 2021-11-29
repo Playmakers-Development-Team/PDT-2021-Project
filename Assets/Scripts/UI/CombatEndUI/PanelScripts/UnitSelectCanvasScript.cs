@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UI.CombatEndUI.AbilityLoadout;
 using UI.CombatEndUI.AbilityLoadout.Abilities;
 using UI.CombatEndUI.AbilityLoadout.Unit;
 using UI.Core;
@@ -45,7 +44,17 @@ namespace UI.CombatEndUI.PanelScripts
 
         #region Utility Functions
 
-        public void SetActiveUnit(LoadoutUnitInfo activeLoadoutUnitInfo)
+        public void ShowUnitSelectCanvas(LoadoutUnitInfo selectedUnit, float fadeOutTime)
+        {
+            SetActiveUnit(selectedUnit);
+            
+            DisableUnitButtons();
+            
+            FadeOutUnits(fadeOutTime);
+            FadeOutText();
+        }
+
+        private void SetActiveUnit(LoadoutUnitInfo activeLoadoutUnitInfo)
         {
             // Get unit card spawn position
             Vector3 unitSpawnPosition = Vector3.zero;
@@ -99,7 +108,8 @@ namespace UI.CombatEndUI.PanelScripts
         
         public void RemoveSelectedAbility()
         {
-            dialogue.activeAbilitiesCard.RemoveSelectedAbility(dialogue.activeUnitCard.loadoutUnitInfo.Unit);
+            dialogue.activeAbilitiesCard.RemoveSelectedAbility(dialogue.activeUnitCard.loadoutUnitInfo);
+            dialogue.UpdateCurrentAbilities();
         }
         
         private void UpdateAbilityScroll(Vector2 arg0)
@@ -112,12 +122,19 @@ namespace UI.CombatEndUI.PanelScripts
             dialogue.activeAbilitiesCard.EnableAbilityButtons();
         }
 
-        public void FadeOutText()
+        private void FadeOutText()
         {
             fadeOutTextAnim.SetTrigger("Play");
         }
+        
+        // NOTE: Despite the name it doesn't fade in, it just makes it's alpha opaque
+        // The FadeIn term is just used for consistency sake
+        public void FadeInText()
+        {
+            fadeOutTextAnim.SetTrigger("PlayReverse");
+        }
 
-        public void DisableUnitButtons()
+        private void DisableUnitButtons()
         {
             foreach (var unitCard in unitCards)
             {
@@ -129,7 +146,7 @@ namespace UI.CombatEndUI.PanelScripts
 
         #region Drawing
 
-        internal void FadeOutUnits(float fadeOutTime)
+        private void FadeOutUnits(float fadeOutTime)
         {
             foreach (var unit in unitCards)
                 unit.FadeOut(fadeOutTime);

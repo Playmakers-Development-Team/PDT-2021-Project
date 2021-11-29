@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{74A68B22-5E3A-4E0C-925D-D3318F9B228E}" SchemaVersion="103">
+	<AudioObjects>
+		<WorkUnit Name="Helena Ability" ID="{74A68B22-5E3A-4E0C-925D-D3318F9B228E}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Helena_Ability" ID="{C4AC2FCA-A5BF-4022-B2ED-D602AD654946}" ShortID="965088689">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{2F296924-9AB4-42D6-8554-954824AA4E2B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{16C33EB0-6B43-49B0-A04F-E981517F2D9B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Helena_Ability" ID="{1B64DDF2-315E-4282-BD74-6704EB5A3C29}">
+							<Language>SFX</Language>
+							<AudioFile>Helena_Ability.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="318590596"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="Helena_Ability" ID="{1B64DDF2-315E-4282-BD74-6704EB5A3C29}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>

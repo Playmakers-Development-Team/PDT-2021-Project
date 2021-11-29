@@ -59,8 +59,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSelectCanvas: {fileID: 2489416354394877661}
-  abilitySelectCanvas: {fileID: 8485727021247227962}
-  finalAbilitiesCanvas: {fileID: 1849839492150383573}
   unitSelectCanvasScript: {fileID: 5969525612368800732}
   abilitySelectCanvasScript: {fileID: 75539089200561252}
   fadeOutTime: 0.5
@@ -73,6 +71,8 @@ MonoBehaviour:
   - {fileID: -1939642024752953982, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 5651957320319128758, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   - {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: 2278098388819872255, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
+  - {fileID: -5635869078064584240, guid: 88ae3e8229a38334ea52719115b41cf2, type: 3}
   currentAbilityDetailsPanel: {fileID: 6294554518885111808}
   upgradedAbilityDetailsPanel: {fileID: 2394928166286839566}
 --- !u!1001 &2944849751028745868
@@ -216,18 +216,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8473837695765199500, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
+      value: -0.000061035156
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
 --- !u!224 &8485727021247227963 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6709641043172175543, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
-  m_PrefabInstance: {fileID: 2944849751028745868}
-  m_PrefabAsset: {fileID: 0}
---- !u!223 &8485727021247227962 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 6709641043172175542, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
   m_PrefabInstance: {fileID: 2944849751028745868}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &75539089200561252 stripped
@@ -241,11 +236,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebe66f0d204bd5e41b61dd442bf37f4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!223 &1849839492150383573 stripped
-Canvas:
-  m_CorrespondingSourceObject: {fileID: 3563972423767004505, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}
-  m_PrefabInstance: {fileID: 2944849751028745868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6294554518885111808 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9188621709254418060, guid: b51af29919de22c4d9e2f2eea1912d9b, type: 3}

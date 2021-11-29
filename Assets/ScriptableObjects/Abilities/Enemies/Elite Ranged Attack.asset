@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Elite Ranged Attack
   m_EditorClassIdentifier: 
+  displayName: 
   description: "[Neutral Ability]\nAn attack that deals 3 damage to a tile two tiles
     away from the unit, ignoring walls. Can only target cardinal directions. \nUpon
     use, user gains 1 Sorrow.\nIf user has 3 Sorrow, gain 3 defense for the rest
@@ -19,7 +20,8 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: dcf90b71bdc855b68884f63b97843ea7, type: 2}
   excludeUserFromTargets: 1
   speed: 0
-  representedTenet: 0
+  speedType: 0
+  representedTenet: 5
   effects:
   - name: "Target \u27A4 Default, 3 Damage"
     affectTargets: 1

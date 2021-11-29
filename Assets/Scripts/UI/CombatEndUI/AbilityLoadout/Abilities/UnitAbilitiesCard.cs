@@ -100,13 +100,14 @@ namespace UI.CombatEndUI.AbilityLoadout.Abilities
 
         #region Utility Functions
         
-        public void RemoveSelectedAbility(IUnit unit)
+        public void RemoveSelectedAbility(LoadoutUnitInfo unitInfo)
         {
-            foreach (var ability in unit.Abilities)
+            foreach (var abilityInfo in unitInfo.AbilityInfo)
             {
-                if (ability.DisplayName.Equals(currentSelectedAbility.AbilityName))
+                if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
                 {
-                    unit.Abilities.Remove(ability);
+                    unitInfo.AbilityInfo.Remove(abilityInfo);
+                    unitInfo.Unit.Abilities.Remove(abilityInfo.Ability);
                     break;
                 }
             }

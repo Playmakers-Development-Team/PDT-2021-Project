@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Utilities;
 
@@ -21,5 +22,7 @@ namespace Audio
             
             return 50f;
         }
+
+        public Dictionary<VolumeParameter, float> GetVolumes() => volumes;
     }
 }

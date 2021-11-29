@@ -15,6 +15,8 @@ namespace UI.Core
         
         protected UIManager manager;
         protected CanvasGroup canvasGroup;
+
+        protected virtual bool ShouldDemoteOtherDialogues => true;
         
         public bool IsPromoted { get; private set; }
         
@@ -30,7 +32,7 @@ namespace UI.Core
 
             OnDialogueAwake();
             
-            manager.Add(this);
+            manager.Add(this, ShouldDemoteOtherDialogues);
         }
 
         #endregion
@@ -42,7 +44,8 @@ namespace UI.Core
         {
             IsPromoted = true;
             canvasGroup.interactable = true;
-
+            canvasGroup.blocksRaycasts = true;
+            
             OnPromote();
             promoted.Invoke();
         }
@@ -51,6 +54,7 @@ namespace UI.Core
         {
             IsPromoted = false;
             canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
             
             OnDemote();
             demoted.Invoke();
