@@ -1,27 +1,28 @@
-﻿using UI.Core;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
-namespace UI.MainMenu
+namespace UI.MainMenu.ExitConfirmation
 {
+    // TODO: Not technically inheriting from the right class.
     public class ExitGameButtonComponent : MainMenuButton
     {
-        
         #region UIComponent
+
         protected override void Subscribe() {}
 
         protected override void Unsubscribe() {}
-        
+
         #endregion
 
         #region ButtonHandling
-        
+
         protected override void OnSelected()
         {
-            dialogue.buttonSelected.Invoke();
-            dialogue.exitConfirmed.Invoke();
+            Application.Quit();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
         }
-        
+
         #endregion
     }
 }
