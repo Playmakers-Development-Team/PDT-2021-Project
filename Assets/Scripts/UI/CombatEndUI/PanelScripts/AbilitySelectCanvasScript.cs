@@ -174,6 +174,11 @@ namespace UI.CombatEndUI.PanelScripts
 
         #region Utility Functions
 
+        public void UpdateCurrentAbilities(List<LoadoutAbilityInfo> abilityInfos)
+        {
+            currentAbilityInfos = abilityInfos;
+        }
+        
         public void ShowAbilitySelectCanvas()
         {
             abilitySelectCanvas.enabled = true;
@@ -212,6 +217,10 @@ namespace UI.CombatEndUI.PanelScripts
         
         public void AddSelectedAbility()
         {
+            // Don't add a new ability if the user has more than 4 abilities
+            if (currentAbilityInfos.Count >= 4)
+                return;
+            
             foreach (var abilityInfo in newAbilityInfos)
             {
                 if (abilityInfo.Ability.name.Equals(currentSelectedAbility.AbilityName))
