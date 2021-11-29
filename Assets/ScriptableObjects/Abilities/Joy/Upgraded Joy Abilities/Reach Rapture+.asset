@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Reach Rapture+
   m_EditorClassIdentifier: 
-  description: "[Neutral Ability]\nGrant all targets 4 Defense when the User spends
-    Joy. \nDeal 3 damage to all targets."
+  displayName: 
+  description: "Grant all targets 4 Defense when the User spends Joy. \nDeal 3 damage
+    to all targets."
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 4
   effects:
   - name: "Target \u27A4 Default, 3 Damage"

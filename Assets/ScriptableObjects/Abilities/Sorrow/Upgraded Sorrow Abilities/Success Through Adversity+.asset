@@ -12,18 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Success Through Adversity+
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
+  displayName: 
+  description: 'Deal 3 damage. Gain 1 Sorrow.
 
-    Deal 3 damage. Gain 1 Sorrow.
-
-    CATHARSIS
-    3 - Deal 8 additional damage, gain 3 Defence and 1 Defence for the rest of the
-    encounter.
+    CATHARSIS 3 - Deal 8 additional
+    damage, gain 3 Defence and 1 Defence for the rest of the encounter.
 
 '
   shape: {fileID: 11400000, guid: afe2c53cb35eb1eacae1f81cc5501355, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 0
   representedTenet: 5
   effects:
   - name: "Target \u27A4 Default, 3 Damage"

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Drag Down+
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
+  displayName: 
+  description: 'Deal 3 Damage.
 
-    Deal 3 Damage.
-
-    >If user currently has Sorrow,
-    subtact 3 attack and 3 defense from target. Applies 1 Sorrow to target. '
+    >If user currently has Sorrow, subtact 3 attack
+    and 3 defense from target. Applies 1 Sorrow to target. '
   shape: {fileID: 11400000, guid: a1c5ad9b53c440048bc0c01475cb1192, type: 2}
   excludeUserFromTargets: 1
   speed: -1
+  speedType: 0
   representedTenet: 5
   effects:
   - name: Default, 3 Damage

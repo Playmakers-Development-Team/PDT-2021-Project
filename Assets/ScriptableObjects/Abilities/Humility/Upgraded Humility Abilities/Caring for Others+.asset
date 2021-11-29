@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Caring for Others+
   m_EditorClassIdentifier: 
-  description: "[Very Fast Ability]\nTargets gain 3 Defense\n >Targets that have
-    AFFINITY and can Spend Humility gain +3 Defense\n"
+  displayName: 
+  description: "Targets gain 3 Defense\n >Targets that have AFFINITY and can Spend
+    Humility gain +3 Defense\n"
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 0
   representedTenet: 1
   effects:
   - name: "Target \u27A4 Default, 3 Defence"

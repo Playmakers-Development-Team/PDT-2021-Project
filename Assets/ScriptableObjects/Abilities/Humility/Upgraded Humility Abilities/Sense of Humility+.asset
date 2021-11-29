@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Sense of Humility+
   m_EditorClassIdentifier: 
-  description: '[Neutral Ability]
+  displayName: 
+  description: 'Targets gain 4 Defense and 1 Humility
 
-    Targets gain 4 Defense and 1 Humility
-
-    User
-    gains 3 Defense and 1 Humility.'
+    User gains 3 Defense and
+    1 Humility.'
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 1
   effects:
   - name: "User and Target \u27A4 Default, 4 Defence and Provide 1 Humility"

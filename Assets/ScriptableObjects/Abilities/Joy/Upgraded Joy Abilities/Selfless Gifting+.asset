@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Selfless Gifting+
   m_EditorClassIdentifier: 
-  description: "[Fast Ability]\nGrant target 1 attack, 1 defense. Grant opponent
-    1 Joy.\n\nREPRESSION 2 (Opponent)- Subtract 2 Attack and 2 Defence from target,
-    inflict 5 damage directly. \n"
+  displayName: 
+  description: "Grant target 1 attack, 1 defense. Grant opponent 1 Joy.\n\nREPRESSION
+    2 (Opponent)- Subtract 2 Attack and 2 Defence from target, inflict 5 damage directly.
+    \n"
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 0
   representedTenet: 4
   effects:
   - name: "Target \u27A4 Default, 1 Attack and 1 Defence"

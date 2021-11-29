@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Close Off+
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
+  displayName: 
+  description: 'Gain 3 Defence and 1 Sorrow
 
-    Gain 3 Defence and 1 Sorrow
-
-    CATHARSIS 2
-    - Gain 3 Attack that lasts the entire encounter'
+    CATHARSIS 2 - Gain 3 Attack that
+    lasts the entire encounter'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: 0
+  speedType: 0
   representedTenet: 5
   effects:
   - name: "User \u27A4 Default, 3 Defence and Provide 1 Sorrow"

@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: All Out Attack+
   m_EditorClassIdentifier: 
-  description: '[Slow Ability]
+  displayName: 
+  description: 'Give target 2 Attack.
 
-    Give target 2 Attack.
+    Give targets 2 Attack if they spend Passion.
 
-    Give targets 2 Attack
-    if they spend Passion.
-
-    KINDLED 2 on Targets - Grant 4 Attack.
+    KINDLED
+    2 on Targets - Grant 4 Attack.
 
 '
   shape: {fileID: 11400000, guid: 758aba3583cba762388937814642384d, type: 2}
   excludeUserFromTargets: 1
   speed: -1
+  speedType: 0
   representedTenet: 2
   effects:
   - name: Default, 1 Attack

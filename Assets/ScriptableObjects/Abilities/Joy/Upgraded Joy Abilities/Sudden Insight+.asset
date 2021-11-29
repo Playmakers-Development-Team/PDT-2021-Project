@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Sudden Insight+
   m_EditorClassIdentifier: 
-  description: '[Extremely Fast Ability]
+  displayName: 
+  description: 'Give self 5 Defense.
 
-    Give self 5 Defense.
-
-    Spend 1 Sorrow
-    to gain 2 Passion and 3 Attack.
+    Spend 1 Sorrow to gain 2 Passion and 3
+    Attack.
 
     Spend 1 Humility to gain 2 Pride and 3 Attack.'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: 3
+  speedType: 0
   representedTenet: 4
   effects:
   - name: "User \u27A4 Default, 5 Defence"

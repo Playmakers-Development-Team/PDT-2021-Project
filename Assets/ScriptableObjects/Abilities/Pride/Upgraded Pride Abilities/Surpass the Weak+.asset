@@ -13,12 +13,10 @@ MonoBehaviour:
   m_Name: Surpass the Weak+
   m_EditorClassIdentifier: 
   displayName: 
-  description: '[Slow Ability]
+  description: 'Deal 3 damage and User gains 1 Pride.
 
-    Deal 3 damage and User gains 1 Pride.
-
-    >If
-    Target has Humility, it takes 6 additional damage.
+    >If Target has Humility,
+    it takes 6 additional damage.
 
 '
   shape: {fileID: 11400000, guid: b6c6492ef27a02f49bafb6f36bf578c4, type: 2}

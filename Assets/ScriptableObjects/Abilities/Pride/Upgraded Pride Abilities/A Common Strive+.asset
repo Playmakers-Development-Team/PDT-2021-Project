@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: A Common Strive+
   m_EditorClassIdentifier: 
-  description: "[Very Fast Ability]\nEveryone in radius gains 2 Attack and 2 Defense.
-    \n>Targets may Spend Passion, gain 2 Attack."
+  displayName: 
+  description: "Everyone in radius gains 2 Attack and 2 Defense. \n>Targets may Spend
+    Passion, gain 2 Attack."
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 0
   representedTenet: 0
   effects:
   - name: "User and Target \u27A4 Default, 1 Attack and 1 Defence and Provide 1 Pride"

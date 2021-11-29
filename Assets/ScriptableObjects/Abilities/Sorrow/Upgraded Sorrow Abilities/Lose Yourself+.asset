@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Lose Yourself+
   m_EditorClassIdentifier: 
-  description: '[Very Slow Ability]
+  displayName: 
+  description: 'Grant self 3 Defence and 1 Sorrow.
 
-    Grant self 3 Defence and 1 Sorrow.
-
-    If
-    have Sorrow, gain additional Sorrow
+    If have Sorrow, gain additional
+    Sorrow
 
     CATHARSIS 4 - Remove all Sorrow'
   shape: {fileID: 11400000, guid: e9972f28d5f410a07bbf7c8735dc7192, type: 2}
   excludeUserFromTargets: 1
   speed: -2
+  speedType: 0
   representedTenet: 5
   effects:
   - name: Default, 1 Defence and Provide 1 Sorrow

@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Ignite the Heart+
   m_EditorClassIdentifier: 
-  description: '[Fast Ability]
+  displayName: 
+  description: 'Give 3 Attack and 2 Passion.
 
-    Give 3 Attack and 2 Passion.
-
-    KINDLED 3 -
-    Grant 3 Attack.'
+    KINDLED 3 - Grant 3 Attack.'
   shape: {fileID: 11400000, guid: 5cbfe2021bf12425e9ee8940d33e31a2, type: 2}
   excludeUserFromTargets: 1
   speed: 1
+  speedType: 0
   representedTenet: 2
   effects:
   - name: "Target \u27A4 Default, 3 Attack and Provide 2 Passion"

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Group Hug+
   m_EditorClassIdentifier: 
-  description: "[Very Fast Ability]\nGrant all targets 4 Defence\n>Grant all targets
-    with Humility, 4 extra Defense \n>Grant all targets with Sorrow, 4 extra Defense"
+  displayName: 
+  description: "Grant all targets 4 Defence\n>Grant all targets with Humility, 4
+    extra Defense \n>Grant all targets with Sorrow, 4 extra Defense"
   shape: {fileID: 11400000, guid: b17dd59356d19ef16909b2cf9609b684, type: 2}
   excludeUserFromTargets: 1
   speed: 2
+  speedType: 0
   representedTenet: 4
   effects:
   - name: "User and Target \u27A4 Default, 4 Defence"

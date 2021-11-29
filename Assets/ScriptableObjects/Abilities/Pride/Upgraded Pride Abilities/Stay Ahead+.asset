@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3d937f2c9444fab1347449058c0a8a, type: 3}
   m_Name: Stay Ahead+
   m_EditorClassIdentifier: 
-  description: '[Extremely Fast Ability]
-
-    Deal 3 damage
+  displayName: 
+  description: 'Deal 3 damage
 
     Gain 3 Defence.
 
-    >When
-    User is INDEPENDENT, gain 2 Pride'
+    >When User is INDEPENDENT,
+    gain 2 Pride'
   shape: {fileID: 11400000, guid: aa8ed96dcc7051187a7805cad0691534, type: 2}
   excludeUserFromTargets: 1
   speed: 3
+  speedType: 0
   representedTenet: 0
   effects:
   - name: "Target \u27A4 Default, 2 Damage"
