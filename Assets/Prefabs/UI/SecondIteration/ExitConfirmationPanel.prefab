@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 1601927617062394340}
   - component: {fileID: 1601927617062394337}
   - component: {fileID: 1601927617062394342}
-  - component: {fileID: 831501070742742091}
+  - component: {fileID: 1469224634061154539}
   m_Layer: 5
   m_Name: CancelExitButton
   m_TagString: Untagged
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &831501070742742091
+--- !u!114 &1469224634061154539
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1601927617062394341}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a113f8265194f2b802d3678abde8402, type: 3}
+  m_Script: {fileID: 11500000, guid: ed0674f17da148ccab8523de2eae80b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   trigger: {fileID: 1601927617062394342}
@@ -806,7 +806,7 @@ GameObject:
   - component: {fileID: 3279154792625411118}
   - component: {fileID: 3168981052522987885}
   - component: {fileID: 981652619068089890}
-  - component: {fileID: 6645950205052080764}
+  - component: {fileID: 3247659682650965403}
   m_Layer: 5
   m_Name: ConfirmButton
   m_TagString: Untagged
@@ -866,7 +866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Delegates: []
---- !u!114 &6645950205052080764
+--- !u!114 &3247659682650965403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -875,7 +875,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3238310922610954858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 548a70d2e35a4fe4a1dad9b1d246ec74, type: 3}
+  m_Script: {fileID: 11500000, guid: e3a7cddaabf940b6946a8e98ce591e44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   trigger: {fileID: 981652619068089890}
