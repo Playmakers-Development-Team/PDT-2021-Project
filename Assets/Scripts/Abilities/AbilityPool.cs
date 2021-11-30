@@ -49,5 +49,9 @@ namespace Abilities
 
             return null;
         }
+        
+        public Ability PickUpgrade(Ability ability) => PickAbilitiesByName(ability.DisplayName);
+
+        public Ability PickUpgradeForName(string name) => PickAbilitiesByName(name + "+");
     }
 }

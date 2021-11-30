@@ -402,8 +402,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Ok
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
-  m_sharedMaterial: {fileID: -8874399076141909124, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
+  m_sharedMaterial: {fileID: 2333189704881498254, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -770,8 +770,8 @@ MonoBehaviour:
 
     It flows from <b>left to right</b>.'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  m_sharedMaterial: {fileID: -8874399076141909124, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
+  m_sharedMaterial: {fileID: 2333189704881498254, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1770,6 +1770,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
+--- !u!224 &5218596713957711745 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2335153920808898359, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
+  m_PrefabInstance: {fileID: 7495128949300957366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1288199700666892796 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8783311049191805258, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
@@ -1781,8 +1786,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19609576a57415a807ce68502e2ce0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &5218596713957711745 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2335153920808898359, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
-  m_PrefabInstance: {fileID: 7495128949300957366}
-  m_PrefabAsset: {fileID: 0}

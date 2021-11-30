@@ -45,7 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841d87e8d15de6e419c130983df0f4e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityPickupPool: {fileID: 0}
+  abilityPickupPool: {fileID: 11400000, guid: f26ebd83b3dbefd418384cab3e81c998, type: 2}
+  allowsAbilityGain: 1
+  allowsAbilityUpgrade: 1
+  allowsAbilityHeal: 1
   persistentUnitData: 1
 --- !u!114 &7228237224685345094
 MonoBehaviour:

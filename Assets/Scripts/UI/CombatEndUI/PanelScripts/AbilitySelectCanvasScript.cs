@@ -281,9 +281,7 @@ namespace UI.CombatEndUI.PanelScripts
 
             for (int i = 0; i < oldAbilityInfos.Count; ++i)
             {
-                String upgradedAbilityName = oldAbilityInfos[i].Ability.name + "+";
-                
-                Ability upgradedAbility = PreferredAbilityPool.PickAbilitiesByName(upgradedAbilityName);
+                Ability upgradedAbility = PreferredAbilityPool.PickUpgrade(oldAbilityInfos[i].Ability);
                 
                 if(upgradedAbility != null)
                     upgradedAbilityInfos.Add(dialogue.GetInfo(upgradedAbility));

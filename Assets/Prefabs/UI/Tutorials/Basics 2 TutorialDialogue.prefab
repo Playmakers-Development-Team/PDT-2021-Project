@@ -402,8 +402,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Ok
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
-  m_sharedMaterial: {fileID: -8874399076141909124, guid: fc05b1d9513448e449ff0dd02f8bb231, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
+  m_sharedMaterial: {fileID: 2333189704881498254, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -764,10 +764,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You can <b>move your characters and use Abilities</b>
+  m_text: 'You can <b>move your characters and use Abilities</b>
+
+
+    Click an Ability,
+    then <b>Right Click</b> to cast it!'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
-  m_sharedMaterial: {fileID: -8874399076141909124, guid: b4037f38a27abf442841dd4e5925a6eb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
+  m_sharedMaterial: {fileID: 2333189704881498254, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1147,8 +1151,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 460, y: -20.215}
-  m_SizeDelta: {x: 390.1092, y: 191.9535}
+  m_AnchoredPosition: {x: 462.3213, y: -14.9922}
+  m_SizeDelta: {x: 394.7518, y: 202.3992}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2951502119227194835
 CanvasRenderer:

@@ -131,6 +131,8 @@ namespace Game
             }
             
             ResetVisitedLevels();
+            // Go back to the main menu after finishing
+            commandManager.ExecuteCommand(new MainMenuCommand());
         }
 
         public void StopLinearMap() => CurrentMapData = null;

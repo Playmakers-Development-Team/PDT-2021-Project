@@ -1,3 +1,4 @@
+using System.Linq;
 using Commands;
 using Game.Commands;
 using Managers;
@@ -30,7 +31,7 @@ namespace UI.CombatEndUI
         protected override void OnPromote()
         {
             gainButton.interactable = playerManager.AllowAbilityGain;
-            upgradeButton.interactable = playerManager.AllowAbilityUpgrade;
+            upgradeButton.interactable = playerManager.AllowAbilityUpgrade && HasUpgradableAbilities();
             healButton.interactable = playerManager.AllowAbilityHeal;
         }
         
@@ -42,5 +43,7 @@ namespace UI.CombatEndUI
 
         public void Heal() => commandManager.ExecuteCommand(new HealPartyCommand());
 
+        private bool HasUpgradableAbilities() =>
+            playerManager.GetUpgradablePlayerAbilities(playerManager.AbilityPickupPool).Any();
     }
 }
