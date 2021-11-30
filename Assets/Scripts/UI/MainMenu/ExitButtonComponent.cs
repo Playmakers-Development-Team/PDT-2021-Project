@@ -1,12 +1,4 @@
-﻿using Commands;
-using Managers;
-using Turn;
-using Turn.Commands;
-using UI.Core;
-using UnityEngine;
-using UnityEngine.EventSystems;
-
-namespace UI.MainMenu
+﻿namespace UI.MainMenu
 {
     public class ExitButtonComponent : MainMenuButton
     {
@@ -20,7 +12,6 @@ namespace UI.MainMenu
             dialogue.buttonSelected.Invoke();
             dialogue.exitStarted.Invoke();
         }
-        
 
         #endregion
            
