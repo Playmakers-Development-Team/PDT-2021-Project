@@ -27,6 +27,20 @@ namespace Units.Players
             
             Debug.Log("All players has been healed!");
         }
+
+        public IEnumerable<Ability> GetUpgradablePlayerAbilities(AbilityPool pool)
+        {
+            foreach (PlayerUnit playerUnit in PlayerUnits)
+            {
+                foreach (Ability ability in playerUnit.Abilities)
+                {
+                    Ability upgradedAbility = pool.PickUpgrade(ability);
+
+                    if (upgradedAbility != null)
+                        yield return ability;
+                }
+            }
+        }
         
         #region Persistent Unit Data
         
