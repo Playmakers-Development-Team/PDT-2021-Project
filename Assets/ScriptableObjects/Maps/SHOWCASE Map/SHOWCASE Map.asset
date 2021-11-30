@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 336639fbb74a4db4a4e42a8b5afbccf9, type: 3}
+  m_Name: SHOWCASE Map
+  m_EditorClassIdentifier: 
+  mainMenuScene:
+    sceneAsset: {fileID: 102900000, guid: 8272e08e8b60654b791ee943995e9d99, type: 3}
+    scenePath: Assets/Scenes/Design/Playtest MVP-1/Main Menu.unity
+  mapScene:
+    sceneAsset: {fileID: 0}
+    scenePath: 
+  encounterNodes:
+  - encounterData: {fileID: 11400000, guid: dea4a3e0c54f636c79a486da3c7fa6e8, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 8cde57049018ff6e0a207cef8cc259bf, type: 2}
+    startingNode: 1
+  - encounterData: {fileID: 11400000, guid: 8cde57049018ff6e0a207cef8cc259bf, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 463192ec6116b5a03a897c24418daa62, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 463192ec6116b5a03a897c24418daa62, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: d6f807a704e6311739f6e9d4724c4e16, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: d6f807a704e6311739f6e9d4724c4e16, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 4e84757f69e84992ea41e4482f231a78, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 4e84757f69e84992ea41e4482f231a78, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 658478a7b19179bbeae1867662d26c38, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 658478a7b19179bbeae1867662d26c38, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: bef83155fd4050808846919d75ef4331, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: bef83155fd4050808846919d75ef4331, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: dd25ae6d14fc3227aaefb33f5e6a38d6, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: dd25ae6d14fc3227aaefb33f5e6a38d6, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 17abc7a96293b2f46a8d0bbd858f9bf6, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 17abc7a96293b2f46a8d0bbd858f9bf6, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 3ca07540993351ed285e507ebdf14acb, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 3ca07540993351ed285e507ebdf14acb, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: 308285a7e5713d349a6522ae37031ce2, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: 308285a7e5713d349a6522ae37031ce2, type: 2}
+    connectedEncounters:
+    - {fileID: 11400000, guid: bfe398b1d4c61d4499c33a367e888082, type: 2}
+    startingNode: 0
+  - encounterData: {fileID: 11400000, guid: bfe398b1d4c61d4499c33a367e888082, type: 2}
+    connectedEncounters: []
+    startingNode: 0
