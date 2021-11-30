@@ -764,7 +764,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You can <b>move your characters and use Abilities</b>
+  m_text: 'You can <b>move your characters and use Abilities</b>
+
+
+    Click an Ability,
+    then <b>Right Click</b> to cast it!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
   m_sharedMaterial: {fileID: 2333189704881498254, guid: 3beb56e6acba1b94dbb12194918bed59, type: 2}
@@ -1147,8 +1151,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 460, y: -20.215}
-  m_SizeDelta: {x: 390.1092, y: 191.9535}
+  m_AnchoredPosition: {x: 462.3213, y: -14.9922}
+  m_SizeDelta: {x: 394.7518, y: 202.3992}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2951502119227194835
 CanvasRenderer:
@@ -1770,11 +1774,6 @@ PrefabInstance:
       objectReference: {fileID: 1288199700666892796, guid: c95063abdd0625a12a19f6c44f3943c0, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
---- !u!224 &5218596713957711745 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2335153920808898359, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
-  m_PrefabInstance: {fileID: 7495128949300957366}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1288199700666892796 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8783311049191805258, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
@@ -1786,3 +1785,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19609576a57415a807ce68502e2ce0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &5218596713957711745 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2335153920808898359, guid: e720b1cce3f9771feb9c77df7ca464a3, type: 3}
+  m_PrefabInstance: {fileID: 7495128949300957366}
+  m_PrefabAsset: {fileID: 0}
