@@ -8,6 +8,7 @@ using TMPro;
 using Turn.Commands;
 using UI.Commands;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace UI
 {
@@ -65,6 +66,16 @@ namespace UI
             commandManager.UnlistenCommand<StartRoundCommand>(OnStartRoundCommand);
             
             commandManager.UnlistenCommand<LaunchTutorialCommand>(OnLaunchTutorial);
+        }
+
+        private void Update()
+        {
+#if UNITY_STANDALONE_LINUX
+            // We need this because for some reason, due to Unity issue in 2020.3.16f, cannot use Vulkan and Vsync in build, it creates input lag
+            // And yes, we need to do this every frame, so that even if you tab out, it doesn't  reset the vsync settings
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Vulkan)
+                QualitySettings.vSyncCount = 0;
+#endif
         }
 
         #endregion
